@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="ArduinoHub — Arduino პროექტების აღმოჩენისა და სწავლის პლატფორმა">
   <title>ArduinoChemistryHub</title>
-
   <link rel="icon" type="image/png" href="arduinuhub-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
@@ -19,7 +17,6 @@
 <body data-page="home">
 
   <header class="site-header">
-
     <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
       <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
     </a>
@@ -33,19 +30,14 @@
       <a href="projects.html">პროექტები</a>
       <a href="#how-it-works">როგორ მუშაობს</a>
       <a href="team.html">ჩვენი გუნდი</a>
-
       <a class="nav-admin" href="admin.html">
         ადმინისტრატორი
         <i data-lucide="shield"></i>
       </a>
     </nav>
-
   </header>
 
-
   <main>
-
-    <!-- HERO -->
 
     <section class="hero">
 
@@ -62,12 +54,11 @@
 
         <p class="hero-text">
           ერთი სივრცე Arduino & Chemistry პროექტებისთვის —
-          დაათვალიერე საინტერესო ნამუშევრები,
-          გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
+          დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს
+          და აღმოაჩინე ახალი შესაძლებლობები.
         </p>
 
         <div class="hero-actions">
-
           <a class="button primary" href="projects.html">
             პროექტების ნახვა
             <i data-lucide="arrow-right"></i>
@@ -77,12 +68,9 @@
             ადმინისტრატორი
             <i data-lucide="lock-keyhole"></i>
           </a>
-
         </div>
 
-
         <div class="hero-stats">
-
           <div>
             <strong>∞</strong>
             <span>შესაძლებლობა</span>
@@ -97,27 +85,39 @@
             <strong>100%</strong>
             <span>რეალური პროექტები</span>
           </div>
-
         </div>
 
       </div>
 
 
       <!-- MODERN ARDUINO BOARD -->
-
       <div class="circuit-visual" aria-hidden="true">
 
         <div class="board">
 
-          <div class="board-usb"></div>
+          <!-- PCB decorative glow -->
+          <div class="board-glow"></div>
 
+          <!-- USB PORT -->
+          <div class="board-usb">
+            <div class="usb-inner"></div>
+          </div>
+
+          <!-- POWER CONNECTOR -->
           <div class="board-power">
             <span></span>
             <span></span>
             <span></span>
           </div>
 
-          <div class="board-header">
+          <!-- DIGITAL PIN HEADER -->
+          <div class="board-header board-header-top">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
             <span></span>
             <span></span>
             <span></span>
@@ -128,27 +128,85 @@
             <span></span>
           </div>
 
+          <!-- POWER PIN HEADER -->
+          <div class="board-header board-header-bottom">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <!-- MAIN MICROCONTROLLER -->
           <div class="board-chip">
             <small>ATMEL</small>
             <strong>MEGA328P</strong>
+            <span>U1</span>
           </div>
 
-          <div class="board-crystal"></div>
+          <!-- CRYSTAL -->
+          <div class="board-crystal">
+            <span>16.000</span>
+          </div>
 
+          <!-- CAPACITORS -->
           <div class="board-cap cap-1"></div>
           <div class="board-cap cap-2"></div>
           <div class="board-cap cap-3"></div>
+          <div class="board-cap cap-4"></div>
 
-          <div class="board-led led-green"></div>
-          <div class="board-led led-orange"></div>
+          <!-- RESISTORS -->
+          <div class="board-resistor resistor-1"></div>
+          <div class="board-resistor resistor-2"></div>
+          <div class="board-resistor resistor-3"></div>
 
-          <div class="board-button"></div>
+          <!-- LEDs -->
+          <div class="board-led led-green">
+            <span></span>
+          </div>
 
+          <div class="board-led led-orange">
+            <span></span>
+          </div>
+
+          <div class="board-led led-red">
+            <span></span>
+          </div>
+
+          <!-- RESET BUTTON -->
+          <div class="board-button">
+            <span></span>
+          </div>
+
+          <!-- SMALL COMPONENTS -->
+          <div class="board-component component-1"></div>
+          <div class="board-component component-2"></div>
+          <div class="board-component component-3"></div>
+          <div class="board-component component-4"></div>
+
+          <!-- PCB TRACES -->
           <div class="board-trace trace-1"></div>
           <div class="board-trace trace-2"></div>
           <div class="board-trace trace-3"></div>
           <div class="board-trace trace-4"></div>
+          <div class="board-trace trace-5"></div>
+          <div class="board-trace trace-6"></div>
+          <div class="board-trace trace-7"></div>
+          <div class="board-trace trace-8"></div>
 
+          <!-- GOLD CONTACT POINTS -->
+          <div class="contact contact-1"></div>
+          <div class="contact contact-2"></div>
+          <div class="contact contact-3"></div>
+          <div class="contact contact-4"></div>
+          <div class="contact contact-5"></div>
+          <div class="contact contact-6"></div>
+
+          <!-- BOARD TEXT -->
           <div class="board-label">
             ARDUINO
           </div>
@@ -157,14 +215,22 @@
             CHEMISTRY HUB
           </div>
 
+          <div class="board-model">
+            UNO • R3
+          </div>
+
+          <!-- SCREW / MOUNTING HOLES -->
+          <div class="mount-hole hole-1"></div>
+          <div class="mount-hole hole-2"></div>
+          <div class="mount-hole hole-3"></div>
+          <div class="mount-hole hole-4"></div>
+
         </div>
 
       </div>
 
     </section>
 
-
-    <!-- HOW IT WORKS -->
 
     <section id="how-it-works" class="section">
 
@@ -176,78 +242,43 @@
         როგორ მუშაობს Arduino & Chemistry Hub?
       </h2>
 
-
       <div class="steps">
 
         <article>
-
           <b>01</b>
-
           <i data-lucide="search"></i>
-
-          <h3>
-            დაათვალიერე პროექტები
-          </h3>
-
+          <h3>დაათვალიერე პროექტები</h3>
           <p>
-            აღმოაჩინე Arduino-ს საინტერესო
-            და პრაქტიკული პროექტები.
+            აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
           </p>
-
         </article>
 
-
         <article>
-
           <b>02</b>
-
           <i data-lucide="lightbulb"></i>
-
-          <h3>
-            იპოვე ახალი იდეები
-          </h3>
-
+          <h3>იპოვე ახალი იდეები</h3>
           <p>
-            გაეცანი სხვადასხვა პროექტს
-            და აღმოაჩინე ახალი შესაძლებლობები.
+            გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
           </p>
-
         </article>
 
-
         <article>
-
           <b>03</b>
-
           <i data-lucide="file-text"></i>
-
-          <h3>
-            გაეცანი დეტალებს
-          </h3>
-
+          <h3>გაეცანი დეტალებს</h3>
           <p>
-            იხილე პროექტის აღწერა, კოდი,
-            ინსტრუქცია და საჭირო მასალები.
+            იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
           </p>
-
         </article>
 
-
         <article>
-
           <b>04</b>
-
           <i data-lucide="graduation-cap"></i>
-
-          <h3>
-            ისწავლე პრაქტიკიდან
-          </h3>
-
+          <h3>ისწავლე პრაქტიკიდან</h3>
           <p>
-            გამოიყენე რეალური პროექტები
-            ცოდნის გასაღრმავებლად და გასავითარებლად.
+            გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად
+            და გასავითარებლად.
           </p>
-
         </article>
 
       </div>
@@ -255,35 +286,27 @@
     </section>
 
 
-    <!-- ABOUT -->
-
     <section id="about" class="about section">
 
       <div>
-
         <p class="eyebrow">
           ARDUINO•CHEMISTRY•HUB-ის შესახებ
         </p>
 
         <h2>
-          იდეები უკეთესია,
+          იდეები უკეთესია,<br>
           როცა გაზიარებულია.
         </h2>
-
       </div>
 
-
       <p>
-        ArduinoHub აერთიანებს Arduino-ს პროექტებს
-        ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო
-        საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს
-        და მიიღო ახალი იდეები.
+        ArduinoHub აერთიანებს Arduino-ს პროექტებს ერთ სივრცეში:
+        აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო
+        მათ დეტალებს და მიიღო ახალი იდეები.
       </p>
 
     </section>
 
-
-    <!-- CTA -->
 
     <section class="cta">
 
@@ -295,11 +318,8 @@
       </h2>
 
       <a class="button primary" href="projects.html">
-
         პროექტების ნახვა
-
         <i data-lucide="arrow-right"></i>
-
       </a>
 
     </section>
@@ -307,44 +327,30 @@
   </main>
 
 
-  <!-- FOOTER -->
-
   <footer>
 
     <a class="brand" href="index.html">
-      <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
+      <span class="brand-mark">∞</span>
+      ArduinoChemistry<span>Hub</span>
     </a>
 
     <p>
       Arduino & Chemistry პროექტები ერთიან სივრცეში.
     </p>
 
-
     <div class="footer-credit">
-
-      <span>
-        29-ე საჯარო სკოლის მიერ
-      </span>
-
-      <span>
-        მცირედ გამოყენებულია AI
-      </span>
-
+      <span>29-ე საჯარო სკოლის მიერ</span>
+      <span>მცირედ გამოყენებულია AI</span>
     </div>
 
-
     <small>
-
-      © <span data-year></span> ArduinoHub.
-      ყველა უფლება დაცულია.
-
+      © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
     </small>
 
   </footer>
 
 
   <script src="https://unpkg.com/lucide@latest"></script>
-
   <script type="module" src="script.js"></script>
 
 </body>
