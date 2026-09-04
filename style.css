@@ -1282,31 +1282,32 @@ select:focus{
 
 /* =========================================
    TEAM GRID
+   MAIA FIRST + 2 COLUMNS
 ========================================= */
 
 .team-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:18px;
+  gap:14px;
   width:100%;
 }
 
 
 /* =========================================
-   TEAM CARDS
+   TEAM CARDS — COMPACT
 ========================================= */
 
 .team-card{
   position:relative;
   overflow:hidden;
   display:flex;
-  gap:18px;
-  padding:22px;
-  min-height:230px;
+  gap:15px;
+  padding:18px;
+  min-height:185px;
   width:100%;
   background:var(--panel);
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:12px;
   transition:
     transform .25s,
     border-color .25s,
@@ -1316,10 +1317,10 @@ select:focus{
 .team-card::before{
   content:"";
   position:absolute;
-  width:150px;
-  height:150px;
-  right:-60px;
-  top:-60px;
+  width:130px;
+  height:130px;
+  right:-50px;
+  top:-50px;
   border-radius:50%;
   background:
     radial-gradient(
@@ -1331,66 +1332,9 @@ select:focus{
 }
 
 .team-card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-4px);
   border-color:#36c596;
   box-shadow:var(--shadow);
-}
-
-
-/* =========================================
-   MAIA — FIRST / CENTER
-========================================= */
-
-.team-card-teacher{
-  grid-column:1 / -1;
-  justify-self:center;
-  width:min(58%,700px);
-  min-height:230px;
-  margin:0;
-  border-color:#7d3038;
-}
-
-.team-card-teacher::before{
-  background:
-    radial-gradient(
-      circle,
-      #ff4f5f20,
-      transparent 70%
-    );
-}
-
-.team-card-teacher:hover{
-  border-color:#ff5967;
-  box-shadow:
-    0 18px 50px #0008,
-    0 0 30px #ff4f5f12;
-}
-
-.team-card-teacher .team-avatar{
-  border-color:#a83b47;
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      #64252d,
-      #170b0d 70%
-    );
-  box-shadow:
-    0 0 30px #ff4f5f18,
-    inset 0 0 25px #ff4f5f0d;
-}
-
-.team-card-teacher .team-avatar span{
-  color:#ff8c96;
-}
-
-.team-card-teacher .team-role{
-  color:#ff5967;
-}
-
-.team-card-teacher .team-tags span{
-  background:#421c21;
-  border-color:#713038;
-  color:#ff9aa2;
 }
 
 
@@ -1427,8 +1371,8 @@ select:focus{
       #130d08 70%
     );
   box-shadow:
-    0 0 30px #ff8a2a20,
-    inset 0 0 22px #ff8a2a10;
+    0 0 25px #ff8a2a20,
+    inset 0 0 20px #ff8a2a10;
 }
 
 .team-card-orange .team-tags span{
@@ -1442,9 +1386,9 @@ select:focus{
 ========================================= */
 
 .team-avatar{
-  flex:0 0 82px;
-  width:82px;
-  height:82px;
+  flex:0 0 70px;
+  width:70px;
+  height:70px;
   display:grid;
   place-items:center;
   border-radius:50%;
@@ -1456,15 +1400,15 @@ select:focus{
       #081612 70%
     );
   box-shadow:
-    0 0 30px #22d39515,
-    inset 0 0 22px #22d3950d;
+    0 0 25px #22d39515,
+    inset 0 0 20px #22d3950d;
 }
 
 .team-avatar span{
   color:var(--green2);
-  font:800 23px Inter;
-  letter-spacing:2px;
-  transform:translateX(2px);
+  font:800 20px Inter;
+  letter-spacing:1px;
+  transform:translateX(1px);
 }
 
 
@@ -1480,21 +1424,21 @@ select:focus{
 
 .team-role{
   color:var(--green);
-  font:700 9px Inter;
-  letter-spacing:1.5px;
-  margin:1px 0 7px;
+  font:700 10px Inter;
+  letter-spacing:1.3px;
+  margin:0 0 6px;
 }
 
 .team-info h2{
-  font:800 21px Inter;
-  letter-spacing:-.04em;
-  margin:0 0 9px;
+  font:800 20px Inter;
+  letter-spacing:-.035em;
+  margin:0 0 7px;
 }
 
 .team-description{
   color:var(--muted);
-  font-size:12px;
-  line-height:1.6;
+  font-size:13px;
+  line-height:1.55;
   margin:0;
 }
 
@@ -1507,16 +1451,74 @@ select:focus{
   display:flex;
   flex-wrap:wrap;
   gap:5px;
-  margin-top:14px;
+  margin-top:11px;
 }
 
 .team-tags span{
-  padding:5px 7px;
+  padding:4px 7px;
   border-radius:20px;
   background:#16392f;
   border:1px solid #245748;
   color:var(--green2);
-  font-size:8px;
+  font-size:9px;
+}
+
+
+/* =========================================
+   MAIA — FIRST + CENTERED
+========================================= */
+
+.team-card-teacher{
+  order:-1;
+  grid-column:1/-1;
+  justify-self:center;
+  width:min(46%,520px);
+  min-height:185px;
+  margin:0;
+  border-color:#7d3038;
+}
+
+.team-card-teacher::before{
+  background:
+    radial-gradient(
+      circle,
+      #ff4f5f20,
+      transparent 70%
+    );
+}
+
+.team-card-teacher:hover{
+  border-color:#ff5967;
+  box-shadow:
+    0 18px 50px #0008,
+    0 0 30px #ff4f5f12;
+}
+
+.team-card-teacher .team-avatar{
+  border-color:#a83b47;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #64252d,
+      #170b0d 70%
+    );
+  box-shadow:
+    0 0 25px #ff4f5f18,
+    inset 0 0 22px #ff4f5f0d;
+}
+
+.team-card-teacher .team-avatar span{
+  color:#ff8c96;
+}
+
+.team-card-teacher .team-role{
+  color:#ff5967;
+}
+
+.team-card-teacher .team-tags span{
+  background:#421c21;
+  border-color:#713038;
+  color:#ff9aa2;
 }
 
 
@@ -1825,7 +1827,7 @@ select:focus{
 
   .team-grid{
     grid-template-columns:1fr;
-    gap:18px;
+    gap:15px;
   }
 
   .team-card{
@@ -1834,8 +1836,8 @@ select:focus{
 
   .team-card-teacher{
     grid-column:auto;
-    width:100%;
     justify-self:stretch;
+    width:100%;
   }
 
 
@@ -2094,28 +2096,34 @@ select:focus{
 
   .team-grid{
     grid-template-columns:1fr;
-    gap:15px;
+    gap:14px;
   }
 
   .team-card{
     flex-direction:column;
-    gap:15px;
-    padding:20px;
+    gap:13px;
+    padding:18px;
     min-height:auto;
   }
 
+  .team-card-teacher{
+    grid-column:auto;
+    justify-self:stretch;
+    width:100%;
+  }
+
   .team-avatar{
-    width:80px;
-    height:80px;
-    flex-basis:80px;
+    width:72px;
+    height:72px;
+    flex-basis:72px;
   }
 
   .team-avatar span{
-    font-size:21px;
+    font-size:20px;
   }
 
   .team-info h2{
-    font-size:21px;
+    font-size:20px;
   }
 
   .team-description{
@@ -2123,17 +2131,11 @@ select:focus{
   }
 
   .team-tags{
-    margin-top:14px;
+    margin-top:12px;
   }
 
   .team-tags span{
     font-size:9px;
-  }
-
-  .team-card-teacher{
-    grid-column:auto;
-    width:100%;
-    justify-self:stretch;
   }
 
   .team-footer-message{
