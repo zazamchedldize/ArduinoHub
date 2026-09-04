@@ -1,4 +1,3 @@
-
 :root{
   --bg:#07110f;
   --panel:#0d1b18;
@@ -1282,7 +1281,7 @@ select:focus{
 
 
 /* =========================================
-   TEAM GRID — 2 x 2
+   TEAM GRID
 ========================================= */
 
 .team-grid{
@@ -1322,11 +1321,12 @@ select:focus{
   right:-60px;
   top:-60px;
   border-radius:50%;
-  background:radial-gradient(
-    circle,
-    #22d39518,
-    transparent 70%
-  );
+  background:
+    radial-gradient(
+      circle,
+      #22d39518,
+      transparent 70%
+    );
   pointer-events:none;
 }
 
@@ -1334,6 +1334,63 @@ select:focus{
   transform:translateY(-5px);
   border-color:#36c596;
   box-shadow:var(--shadow);
+}
+
+
+/* =========================================
+   MAIA — FIRST / CENTER
+========================================= */
+
+.team-card-teacher{
+  grid-column:1 / -1;
+  justify-self:center;
+  width:min(58%,700px);
+  min-height:230px;
+  margin:0;
+  border-color:#7d3038;
+}
+
+.team-card-teacher::before{
+  background:
+    radial-gradient(
+      circle,
+      #ff4f5f20,
+      transparent 70%
+    );
+}
+
+.team-card-teacher:hover{
+  border-color:#ff5967;
+  box-shadow:
+    0 18px 50px #0008,
+    0 0 30px #ff4f5f12;
+}
+
+.team-card-teacher .team-avatar{
+  border-color:#a83b47;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #64252d,
+      #170b0d 70%
+    );
+  box-shadow:
+    0 0 30px #ff4f5f18,
+    inset 0 0 25px #ff4f5f0d;
+}
+
+.team-card-teacher .team-avatar span{
+  color:#ff8c96;
+}
+
+.team-card-teacher .team-role{
+  color:#ff5967;
+}
+
+.team-card-teacher .team-tags span{
+  background:#421c21;
+  border-color:#713038;
+  color:#ff9aa2;
 }
 
 
@@ -1460,61 +1517,6 @@ select:focus{
   border:1px solid #245748;
   color:var(--green2);
   font-size:8px;
-}
-
-
-/* =========================================
-   MAIA — EXISTING RED STYLE
-========================================= */
-
-.team-card-teacher{
-  width:100%;
-  min-height:230px;
-  margin:0;
-  border-color:#7d3038;
-}
-
-.team-card-teacher::before{
-  background:
-    radial-gradient(
-      circle,
-      #ff4f5f20,
-      transparent 70%
-    );
-}
-
-.team-card-teacher:hover{
-  border-color:#ff5967;
-  box-shadow:
-    0 18px 50px #0008,
-    0 0 30px #ff4f5f12;
-}
-
-.team-card-teacher .team-avatar{
-  border-color:#a83b47;
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      #64252d,
-      #170b0d 70%
-    );
-  box-shadow:
-    0 0 30px #ff4f5f18,
-    inset 0 0 22px #ff4f5f0d;
-}
-
-.team-card-teacher .team-avatar span{
-  color:#ff8c96;
-}
-
-.team-card-teacher .team-role{
-  color:#ff5967;
-}
-
-.team-card-teacher .team-tags span{
-  background:#421c21;
-  border-color:#713038;
-  color:#ff9aa2;
 }
 
 
@@ -1830,6 +1832,12 @@ select:focus{
     min-height:auto;
   }
 
+  .team-card-teacher{
+    grid-column:auto;
+    width:100%;
+    justify-self:stretch;
+  }
+
 
   /* FOOTER */
 
@@ -2123,7 +2131,9 @@ select:focus{
   }
 
   .team-card-teacher{
+    grid-column:auto;
     width:100%;
+    justify-self:stretch;
   }
 
   .team-footer-message{
@@ -2331,4 +2341,3 @@ svg{
   }
 
 }
-
