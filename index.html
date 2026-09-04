@@ -1,213 +1,125 @@
-<!doctype html>
-<html lang="ka">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="ArduinoHub — Arduino პროექტების გაზიარების პლატფორმა">
-  <title>ArduinoHub — შექმენი, ააწყვე, შთააგონე.</title>
-  <link rel="icon" type="image/png" href="arduinuhub-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+```html
+<section class="hero">
+  <div class="hero-copy">
 
-  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <p class="eyebrow">ARDUINO PROJECT COMMUNITY</p>
 
-  <link rel="stylesheet" href="style.css">
-</head>
+    <h1>
+      აღმოაჩინე,<br>
+      <em>ისწავლე,</em> შექმენი.
+    </h1>
 
-<body data-page="home">
+    <p class="hero-text">
+      ერთი სივრცე Arduino პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები,
+      გაეცანი იდეებს და აღმოაჩინე ახალი შესაძლებლობები.
+    </p>
 
-  <header class="site-header">
-    <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
-      <span class="brand-mark">∞</span>Arduino<span>Hub</span>
-    </a>
-
-    <button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">
-      ☰
-    </button>
-
-    <nav>
-      <a class="active" href="index.html">მთავარი</a>
-      <a href="projects.html">პროექტები</a>
-      <a href="#how-it-works">როგორ მუშაობს</a>
-      <a href="team.html">ჩვენი გუნდი</a>
-      <a class="nav-admin" href="admin.html">
-        ადმინისტრატორი
-        <i data-lucide="shield"></i>
-      </a>
-    </nav>
-  </header>
-
-  <main>
-
-    <section class="hero">
-      <div class="hero-copy">
-
-        <p class="eyebrow">ARDUINO PROJECT COMMUNITY</p>
-
-        <h1>
-          შექმენი,<br>
-          <em>ააწყვე,</em> შთააგონე.
-        </h1>
-
-        <p class="hero-text">
-          ერთი სივრცე Arduino პროექტებისთვის — გააზიარე ცოდნა,
-          აღმოაჩინე იდეები და ააწყე მომავალი.
-        </p>
-
-        <div class="hero-actions">
-          <a class="button primary" href="projects.html">
-            დამთვალიერებელი
-            <i data-lucide="arrow-right"></i>
-          </a>
-
-          <a class="button secondary" href="admin.html">
-            ადმინისტრატორი
-            <i data-lucide="lock-keyhole"></i>
-          </a>
-        </div>
-
-        <div class="hero-stats">
-          <div>
-            <strong>∞</strong>
-            <span>შესაძლებლობა</span>
-          </div>
-
-          <div>
-            <strong>1</strong>
-            <span>საერთო სივრცე</span>
-          </div>
-
-          <div>
-            <strong>100%</strong>
-            <span>რეალური პროექტები</span>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="circuit-visual" aria-hidden="true">
-        <div class="board">
-          <span class="chip">
-            ARDUINO<br>
-            HUB
-          </span>
-
-          <span class="pin p1"></span>
-          <span class="pin p2"></span>
-          <span class="pin p3"></span>
-          <span class="pin p4"></span>
-
-          <span class="led"></span>
-
-          <span class="trace t1"></span>
-          <span class="trace t2"></span>
-        </div>
-      </div>
-    </section>
-
-
-    <section id="how-it-works" class="section">
-
-      <p class="eyebrow">მარტივი პროცესი</p>
-
-      <h2>როგორ მუშაობს ArduinoHub?</h2>
-
-      <div class="steps">
-
-        <article>
-          <b>01</b>
-          <i data-lucide="wrench"></i>
-          <h3>შექმენი პროექტი</h3>
-          <p>ააწყვე შენი იდეა Arduino-ით.</p>
-        </article>
-
-        <article>
-          <b>02</b>
-          <i data-lucide="upload-cloud"></i>
-          <h3>ატვირთე ინფორმაცია</h3>
-          <p>დაამატე კოდი, ინსტრუქცია და მედია.</p>
-        </article>
-
-        <article>
-          <b>03</b>
-          <i data-lucide="rocket"></i>
-          <h3>გამოაქვეყნე</h3>
-          <p>გაუზიარე ნამუშევარი საზოგადოებას.</p>
-        </article>
-
-        <article>
-          <b>04</b>
-          <i data-lucide="sparkles"></i>
-          <h3>შთააგონე სხვები</h3>
-          <p>შენი შემდეგი პროექტი სხვასაც დაეხმარება.</p>
-        </article>
-
-      </div>
-    </section>
-
-
-    <section id="about" class="about section">
-
-      <div>
-        <p class="eyebrow">ARDUINOHUB-ის შესახებ</p>
-
-        <h2>
-          იდეები უკეთესია,
-          როცა გაზიარებულია.
-        </h2>
-      </div>
-
-      <p>
-        ArduinoHub აერთიანებს შემქმნელებს ერთ სივრცეში:
-        აქ პროექტები, ცოდნა და პრაქტიკული გამოცდილება
-        ხელმისაწვდომია ყველასთვის.
-      </p>
-
-    </section>
-
-
-    <section class="cta">
-
-      <i data-lucide="cpu"></i>
-
-      <h2>
-        შენი შემდეგი პროექტი შეიძლება<br>
-        სხვასაც შთააგონოს.
-      </h2>
-
+    <div class="hero-actions">
       <a class="button primary" href="projects.html">
         პროექტების ნახვა
         <i data-lucide="arrow-right"></i>
       </a>
 
-    </section>
-
-  </main>
-
-
-  <footer>
-
-    <a class="brand" href="index.html">
-      <span class="brand-mark">∞</span>Arduino<span>Hub</span>
-    </a>
-
-    <p>Arduino პროექტები ერთიან სივრცეში.</p>
-
-    <div class="footer-credit">
-      <span>29-ე საჯარო სკოლის მიერ</span>
-      <span>დამზადებაში დაგვეხმარა AI Assistant</span>
+      <a class="button secondary" href="admin.html">
+        ადმინისტრატორი
+        <i data-lucide="lock-keyhole"></i>
+      </a>
     </div>
 
-    <small>
-      © <span data-year></span> ArduinoHub.
-      ყველა უფლება დაცულია.
-    </small>
+    <div class="hero-stats">
+      <div>
+        <strong>∞</strong>
+        <span>შესაძლებლობა</span>
+      </div>
 
-  </footer>
+      <div>
+        <strong>1</strong>
+        <span>საერთო სივრცე</span>
+      </div>
+
+      <div>
+        <strong>100%</strong>
+        <span>რეალური პროექტები</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script type="module" src="script.js"></script>
+<section id="how-it-works" class="section">
 
-</body>
-</html>
+  <p class="eyebrow">მარტივი პროცესი</p>
+
+  <h2>როგორ მუშაობს ArduinoHub?</h2>
+
+  <div class="steps">
+
+    <article>
+      <b>01</b>
+      <i data-lucide="search"></i>
+      <h3>დაათვალიერე პროექტები</h3>
+      <p>აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.</p>
+    </article>
+
+    <article>
+      <b>02</b>
+      <i data-lucide="lightbulb"></i>
+      <h3>იპოვე ახალი იდეები</h3>
+      <p>გაეცანი სხვადასხვა პროექტს და მიიღე ახალი შთაგონება.</p>
+    </article>
+
+    <article>
+      <b>03</b>
+      <i data-lucide="code-2"></i>
+      <h3>გაეცანი დეტალებს</h3>
+      <p>იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.</p>
+    </article>
+
+    <article>
+      <b>04</b>
+      <i data-lucide="sparkles"></i>
+      <h3>შეიძინე გამოცდილება</h3>
+      <p>ისწავლე პრაქტიკული მაგალითებიდან და განავითარე შენი ცოდნა.</p>
+    </article>
+
+  </div>
+</section>
+
+
+<section id="about" class="about section">
+
+  <div>
+    <p class="eyebrow">ARDUINOHUB-ის შესახებ</p>
+
+    <h2>
+      იდეები უკეთესია,
+      როცა გაზიარებულია.
+    </h2>
+  </div>
+
+  <p>
+    ArduinoHub აერთიანებს Arduino-ს პროექტებს ერთ სივრცეში:
+    აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები,
+    გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
+  </p>
+
+</section>
+
+
+<section class="cta">
+
+  <i data-lucide="cpu"></i>
+
+  <h2>
+    აღმოაჩინე ახალი იდეები<br>
+    და გაიცანი Arduino-ს შესაძლებლობები.
+  </h2>
+
+  <a class="button primary" href="projects.html">
+    პროექტების ნახვა
+    <i data-lucide="arrow-right"></i>
+  </a>
+
+</section>
+```
