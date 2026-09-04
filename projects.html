@@ -1,1 +1,325 @@
 <!doctype html><html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>პროექტები — ArduinoHub</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body data-page="projects"><header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">∞</span>Arduino<span>Hub</span></a><button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">☰</button><nav><a href="index.html">მთავარი</a><a class="active" href="projects.html">პროექტები</a><a href="index.html#how-it-works">როგორ მუშაობს</a><a href="index.html#about">ჩვენ შესახებ</a><a class="nav-admin" href="admin.html">ადმინისტრატორი <i data-lucide="shield"></i></a></nav></header><main class="page-shell"><div class="page-title"><p class="eyebrow">აღმოაჩინე იდეები</p><h1>Arduino პროექტები</h1><p>ნახე რეალური პროექტები ჩვენი შემქმნელებისგან.</p></div><div class="filters"><label class="search"><i data-lucide="search"></i><input id="project-search" type="search" placeholder="მოძებნე პროექტი..." autocomplete="off"></label><label class="select-label"><span class="sr-only">კატეგორია</span><select id="category-filter"><option value="">ყველა კატეგორია</option><option>Arduino</option><option>Robotics</option><option>Sensors</option><option>Automation</option><option>LED</option><option>LCD</option><option>IoT</option><option>Other</option></select></label></div><div id="projects-status" class="loading" role="status">პროექტები იტვირთება...</div><section id="projects-grid" class="project-grid" aria-live="polite"></section></main><footer><a class="brand" href="index.html"><span class="brand-mark">∞</span>Arduino<span>Hub</span></a><small>© <span data-year></span> ArduinoHub.</small></footer><div id="toast" class="toast" role="status"></div><script src="https://unpkg.com/lucide@latest"></script><script type="module" src="script.js"></script></body></html>
+<!doctype html>
+<html lang="ka">
+
+<head>
+  <link rel="icon" type="image/png" href="arduinuhub-icon.png">
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
+  <title>პროექტები — ArduinoHub</title>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+
+<body data-page="projects">
+
+
+  <!-- =========================================
+       HEADER
+  ========================================== -->
+
+  <header class="site-header">
+
+
+    <a
+      class="brand"
+      href="index.html"
+    >
+
+      <span class="brand-mark">
+        ∞
+      </span>
+
+      Arduino<span>Hub</span>
+
+    </a>
+
+
+
+    <button
+      class="menu-toggle"
+      aria-label="მენიუს გახსნა"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+
+
+
+    <nav>
+
+      <a href="index.html">
+        მთავარი
+      </a>
+
+
+      <a
+        class="active"
+        href="projects.html"
+      >
+        პროექტები
+      </a>
+
+
+      <a href="index.html#how-it-works">
+        როგორ მუშაობს
+      </a>
+
+
+      <a href="index.html#about">
+        ჩვენ შესახებ
+      </a>
+
+
+      <a
+        class="nav-admin"
+        href="admin.html"
+      >
+
+        ადმინისტრატორი
+
+        <i data-lucide="shield"></i>
+
+      </a>
+
+    </nav>
+
+  </header>
+
+
+
+  <!-- =========================================
+       PROJECTS PAGE
+  ========================================== -->
+
+  <main class="page-shell">
+
+
+    <!-- Page title -->
+
+    <div class="page-title">
+
+
+      <p class="eyebrow">
+        აღმოაჩინე იდეები
+      </p>
+
+
+      <h1>
+        Arduino პროექტები
+      </h1>
+
+
+      <p>
+        ნახე რეალური პროექტები ჩვენი
+        შემქმნელებისგან.
+      </p>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         FILTERS
+    ========================================== -->
+
+    <div class="filters">
+
+
+      <!-- Search -->
+
+      <label class="search">
+
+        <i data-lucide="search"></i>
+
+
+        <input
+          id="project-search"
+          type="search"
+          placeholder="მოძებნე პროექტი..."
+          autocomplete="off"
+        >
+
+      </label>
+
+
+
+      <!-- Category -->
+
+      <label class="select-label">
+
+        <span class="sr-only">
+          კატეგორია
+        </span>
+
+
+        <select id="category-filter">
+
+          <option value="">
+            ყველა კატეგორია
+          </option>
+
+          <option>
+            Arduino
+          </option>
+
+          <option>
+            Robotics
+          </option>
+
+          <option>
+            Sensors
+          </option>
+
+          <option>
+            Automation
+          </option>
+
+          <option>
+            LED
+          </option>
+
+          <option>
+            LCD
+          </option>
+
+          <option>
+            IoT
+          </option>
+
+          <option>
+            Other
+          </option>
+
+        </select>
+
+      </label>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         LOADING / STATUS
+    ========================================== -->
+
+    <div
+      id="projects-status"
+      class="loading"
+      role="status"
+    >
+
+      პროექტები იტვირთება...
+
+    </div>
+
+
+
+    <!-- =========================================
+         PROJECT GRID
+    ========================================== -->
+
+    <section
+      id="projects-grid"
+      class="project-grid"
+      aria-live="polite"
+    ></section>
+
+
+  </main>
+
+
+
+  <!-- =========================================
+       FOOTER
+  ========================================== -->
+
+  <footer>
+
+
+    <a
+      class="brand"
+      href="index.html"
+    >
+
+      <span class="brand-mark">
+        ∞
+      </span>
+
+      Arduino<span>Hub</span>
+
+    </a>
+
+
+    <small>
+
+      ©
+      <span data-year></span>
+      ArduinoHub.
+
+    </small>
+
+
+  </footer>
+
+
+
+  <!-- =========================================
+       TOAST
+  ========================================== -->
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+  ></div>
+
+
+
+  <!-- =========================================
+       LUCIDE ICONS
+  ========================================== -->
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
+
+  <!-- =========================================
+       MAIN JAVASCRIPT
+  ========================================== -->
+
+  <script
+    type="module"
+    src="script.js"
+  ></script>
+
+
+</body>
+
+</html>
