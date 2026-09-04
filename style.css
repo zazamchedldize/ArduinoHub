@@ -1340,45 +1340,54 @@ select:focus{
 
 
 /* =========================================
-   ZAZA + TEKLA — ORANGE
+   ZAZA + TEKLA — YELLOW / GOLD
 ========================================= */
 
 .team-card-orange{
-  border-color:#d86b1f;
+  border-color:#c9a227;
 }
 
 .team-card-orange::before{
   background:
     radial-gradient(
       circle,
-      #ff8a2a22,
+      #ffd84a22,
       transparent 70%
     );
 }
 
 .team-card-orange:hover{
-  border-color:#ff8a2a;
+  border-color:#f4d03f;
   box-shadow:
     0 18px 50px #0008,
-    0 0 30px #ff8a2a18;
+    0 0 30px #f4d03f20;
 }
 
 .team-card-orange .team-avatar{
-  border-color:#d86b1f;
+  border-color:#c9a227;
   background:
     radial-gradient(
       circle at 35% 30%,
-      #71340f,
-      #130d08 70%
+      #6b5812,
+      #161208 70%
     );
   box-shadow:
-    0 0 25px #ff8a2a20,
-    inset 0 0 20px #ff8a2a10;
+    0 0 25px #f4d03f20,
+    inset 0 0 20px #f4d03f10;
+}
+
+.team-card-orange .team-avatar span{
+  color:#ffe58a;
+}
+
+.team-card-orange .team-role{
+  color:#f4d03f;
 }
 
 .team-card-orange .team-tags span{
-  background:#4a2815;
-  border-color:#8a4922;
+  background:#493d16;
+  border-color:#806b20;
+  color:#ffe58a;
 }
 
 
