@@ -10,8 +10,7 @@
     content="width=device-width,initial-scale=1"
   >
 
-  <title>პროექტები — ArduinoHub</title>
-
+  <title>პროექტები — Arduino & Chemistry Hub</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -30,7 +29,6 @@
     rel="stylesheet"
     href="style.css"
   >
-
 </head>
 
 
@@ -42,7 +40,6 @@
   ========================================== -->
 
   <header class="site-header">
-
 
     <a
       class="brand"
@@ -58,9 +55,6 @@
     </a>
 
 
-
-
-
     <button
       class="menu-toggle"
       aria-label="მენიუს გახსნა"
@@ -70,13 +64,11 @@
     </button>
 
 
-
     <nav>
 
       <a href="index.html">
         მთავარი
       </a>
-
 
       <a
         class="active"
@@ -85,32 +77,25 @@
         პროექტები
       </a>
 
-
       <a href="index.html#how-it-works">
         როგორ მუშაობს
       </a>
-
 
       <a href="index.html#about">
         ჩვენ შესახებ
       </a>
 
-
       <a
         class="nav-admin"
         href="admin.html"
       >
-
         ადმინისტრატორი
-
         <i data-lucide="shield"></i>
-
       </a>
 
     </nav>
 
   </header>
-
 
 
   <!-- =========================================
@@ -124,25 +109,20 @@
 
     <div class="page-title">
 
-
       <p class="eyebrow">
         აღმოაჩინე იდეები
       </p>
 
-
       <h1>
         Arduino პროექტები
       </h1>
-
 
       <p>
         ნახე რეალური პროექტები ჩვენი
         შემქმნელებისგან.
       </p>
 
-
     </div>
-
 
 
     <!-- =========================================
@@ -158,7 +138,6 @@
 
         <i data-lucide="search"></i>
 
-
         <input
           id="project-search"
           type="search"
@@ -169,7 +148,6 @@
       </label>
 
 
-
       <!-- Category -->
 
       <label class="select-label">
@@ -178,42 +156,45 @@
           კატეგორია
         </span>
 
-
         <select id="category-filter">
 
           <option value="">
             ყველა კატეგორია
           </option>
 
-          <option>
+          <option value="Arduino">
             Arduino
           </option>
 
-          <option>
+          <option value="Robotics">
             Robotics
           </option>
 
-          <option>
+          <option value="Sensors">
             Sensors
           </option>
 
-          <option>
+          <option value="Automation">
             Automation
           </option>
 
-          <option>
+          <option value="LED">
             LED
           </option>
 
-          <option>
+          <option value="LCD">
             LCD
           </option>
 
-          <option>
+          <option value="IoT">
             IoT
           </option>
 
-          <option>
+          <option value="Chemistry">
+            Chemistry
+          </option>
+
+          <option value="Other">
             Other
           </option>
 
@@ -221,9 +202,7 @@
 
       </label>
 
-
     </div>
-
 
 
     <!-- =========================================
@@ -235,11 +214,8 @@
       class="loading"
       role="status"
     >
-
       პროექტები იტვირთება...
-
     </div>
-
 
 
     <!-- =========================================
@@ -256,15 +232,6 @@
   </main>
 
 
-
-  <!-- =========================================
-       FOOTER
-  ========================================== -->
-
-
-
-
-
   <!-- =========================================
        TOAST
   ========================================== -->
@@ -276,13 +243,11 @@
   ></div>
 
 
-
   <!-- =========================================
        LUCIDE ICONS
   ========================================== -->
 
   <script src="https://unpkg.com/lucide@latest"></script>
-
 
 
   <!-- =========================================
