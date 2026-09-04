@@ -1043,7 +1043,7 @@ select:focus{
   padding:18px 32px;
   border-bottom:1px solid var(--line);
   display:flex;
-  justify-content:space-between;
+  justify-content:end;
   align-items:center;
   gap:20px;
 }
