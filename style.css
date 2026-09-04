@@ -1295,20 +1295,20 @@ select:focus{
 
 
 /* =========================================
-   TEAM CARDS — COMPACT
+   TEAM CARDS — SMALLER
 ========================================= */
 
 .team-card{
   position:relative;
   overflow:hidden;
   display:flex;
-  gap:15px;
-  padding:18px;
-  min-height:185px;
+  gap:13px;
+  padding:15px;
+  min-height:170px;
   width:100%;
   background:var(--panel);
   border:1px solid var(--line);
-  border-radius:12px;
+  border-radius:11px;
   transition:
     transform .25s,
     border-color .25s,
@@ -1318,10 +1318,10 @@ select:focus{
 .team-card::before{
   content:"";
   position:absolute;
-  width:130px;
-  height:130px;
-  right:-50px;
-  top:-50px;
+  width:125px;
+  height:125px;
+  right:-48px;
+  top:-48px;
   border-radius:50%;
   background:
     radial-gradient(
@@ -1384,7 +1384,6 @@ select:focus{
 
 /* =========================================
    ANI DZAGNIDZE — BLUE
-   THIRD ROW
 ========================================= */
 
 .team-card-blue{
@@ -1440,8 +1439,17 @@ select:focus{
    OTHER TEAM CARDS
 ========================================= */
 
-.team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue){
+.team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
   order:2;
+}
+
+
+/* =========================================
+   ANASTASIA TEVDORADZE — LAST
+========================================= */
+
+.team-card-new{
+  order:3;
 }
 
 
@@ -1450,9 +1458,9 @@ select:focus{
 ========================================= */
 
 .team-avatar{
-  flex:0 0 70px;
-  width:70px;
-  height:70px;
+  flex:0 0 64px;
+  width:64px;
+  height:64px;
   display:grid;
   place-items:center;
   border-radius:50%;
@@ -1488,20 +1496,20 @@ select:focus{
 
 .team-role{
   color:var(--green);
-  font:700 10px Inter;
+  font:700 11px Inter;
   letter-spacing:1.3px;
   margin:0 0 6px;
 }
 
 .team-info h2{
-  font:800 20px Inter;
+  font:800 22px Inter;
   letter-spacing:-.035em;
   margin:0 0 7px;
 }
 
 .team-description{
   color:var(--muted);
-  font-size:13px;
+  font-size:14px;
   line-height:1.55;
   margin:0;
 }
@@ -1515,7 +1523,7 @@ select:focus{
   display:flex;
   flex-wrap:wrap;
   gap:5px;
-  margin-top:11px;
+  margin-top:10px;
 }
 
 .team-tags span{
@@ -1524,7 +1532,7 @@ select:focus{
   background:#16392f;
   border:1px solid #245748;
   color:var(--green2);
-  font-size:9px;
+  font-size:10px;
 }
 
 
@@ -1537,7 +1545,7 @@ select:focus{
   grid-column:1/-1;
   justify-self:center;
   width:min(46%,520px);
-  min-height:185px;
+  min-height:170px;
   margin:0;
   border-color:#7d3038;
 }
@@ -1908,8 +1916,12 @@ select:focus{
     order:1;
   }
 
-  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue){
+  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
     order:2;
+  }
+
+  .team-card-new{
+    order:3;
   }
 
 
@@ -2168,13 +2180,13 @@ select:focus{
 
   .team-grid{
     grid-template-columns:1fr;
-    gap:14px;
+    gap:13px;
   }
 
   .team-card{
     flex-direction:column;
-    gap:13px;
-    padding:18px;
+    gap:11px;
+    padding:15px;
     min-height:auto;
   }
 
@@ -2188,34 +2200,42 @@ select:focus{
     order:1;
   }
 
-  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue){
+  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
     order:2;
   }
 
+  .team-card-new{
+    order:3;
+  }
+
   .team-avatar{
-    width:72px;
-    height:72px;
-    flex-basis:72px;
+    width:66px;
+    height:66px;
+    flex-basis:66px;
   }
 
   .team-avatar span{
     font-size:20px;
   }
 
+  .team-role{
+    font-size:11px;
+  }
+
   .team-info h2{
-    font-size:20px;
+    font-size:21px;
   }
 
   .team-description{
-    font-size:13px;
+    font-size:14px;
   }
 
   .team-tags{
-    margin-top:12px;
+    margin-top:11px;
   }
 
   .team-tags span{
-    font-size:9px;
+    font-size:10px;
   }
 
   .team-footer-message{
@@ -2296,7 +2316,19 @@ select:focus{
   }
 
   .team-card{
-    padding:20px;
+    padding:17px;
+  }
+
+  .team-info h2{
+    font-size:20px;
+  }
+
+  .team-description{
+    font-size:13px;
+  }
+
+  .team-tags span{
+    font-size:9px;
   }
 
   .team-footer-message h2{
