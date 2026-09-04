@@ -1,408 +1,472 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ka">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arduino Uno R3 Hero Section</title>
-  <style>
-    /* =========================================
-       GLOBAL RESET & STYLES
-    ========================================= */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="ArduinoChemistryHub — Arduino & Chemistry პროექტების სივრცე">
+  <title>ArduinoChemistryHub</title>
 
-    body {
-      background-color: #0b1315;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  <link rel="icon" type="image/png" href="arduinuhub-icon.png">
 
-    /* =========================================
-       REALISTIC ARDUINO UNO R3 3D MODEL STYLES
-    ========================================= */
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    .circuit-visual {
-      height: 390px;
-      display: grid;
-      place-items: center;
-      perspective: 1000px;
-      overflow: visible;
-    }
-
-    .board-3d-wrap {
-      transform: rotateX(16deg) rotateY(-18deg) rotateZ(10deg);
-      transform-style: preserve-3d;
-      filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.6));
-      transition: transform 0.4s ease;
-    }
-
-    .board-3d-wrap:hover {
-      transform: rotateX(8deg) rotateY(-8deg) rotateZ(3deg) scale(1.02);
-    }
-
-    .arduino-uno-board {
-      width: 330px;
-      height: 230px;
-      background: #005662; /* Arduino Classic Teal/Blue PCB */
-      border-radius: 14px;
-      position: relative;
-      box-shadow: 
-        inset 0 0 20px rgba(0, 0, 0, 0.4),
-        inset 0 0 2px 2px rgba(255, 255, 255, 0.15),
-        0 10px 30px rgba(0, 40, 35, 0.5);
-      border: 2px solid #003a42;
-    }
-
-    /* PCB Silk Screen Graphics & Labels */
-    .arduino-pcb {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .arduino-logo-text {
-      position: absolute;
-      top: 18px;
-      right: 25px;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-
-    .arduino-model-text {
-      position: absolute;
-      top: 38px;
-      right: 48px;
-      color: #ffffff;
-      font-weight: 900;
-      font-size: 24px;
-      letter-spacing: 2px;
-    }
-
-    .arduino-rev-text {
-      position: absolute;
-      top: 45px;
-      right: 22px;
-      color: #22d395;
-      font-weight: 700;
-      font-size: 12px;
-    }
-
-    .arduino-ital-text {
-      position: absolute;
-      bottom: 15px;
-      right: 20px;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 8px;
-      letter-spacing: 1px;
-    }
-
-    /* USB Type-B Port */
-    .arduino-usb-port {
-      position: absolute;
-      left: 10px;
-      top: 75px;
-      width: 42px;
-      height: 52px;
-      background: linear-gradient(90deg, #b0b0b0, #e0e0e0, #959595);
-      border-radius: 3px;
-      border: 1px solid #666;
-      box-shadow: 2px 4px 8px rgba(0,0,0,0.4);
-    }
-    .usb-inner-socket {
-      position: absolute;
-      top: 12px;
-      left: 6px;
-      width: 30px;
-      height: 28px;
-      background: #222;
-      border-radius: 2px;
-      border: 1px solid #444;
-    }
-
-    /* DC Power Jack */
-    .arduino-power-jack {
-      position: absolute;
-      left: 10px;
-      bottom: 25px;
-      width: 48px;
-      height: 42px;
-      background: #1a1a1a;
-      border-radius: 4px;
-      border: 1px solid #333;
-      box-shadow: 2px 4px 8px rgba(0,0,0,0.4);
-    }
-    .jack-pin {
-      position: absolute;
-      top: 14px;
-      left: 16px;
-      width: 14px;
-      height: 14px;
-      background: #d4af37;
-      border-radius: 50%;
-    }
-
-    /* Reset Button */
-    .arduino-reset-btn {
-      position: absolute;
-      left: 70px;
-      top: 25px;
-      width: 16px;
-      height: 16px;
-      background: #e74c3c;
-      border-radius: 3px;
-      border: 1px solid #900;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-
-    /* Voltage Regulator */
-    .arduino-voltage-reg {
-      position: absolute;
-      left: 68px;
-      bottom: 22px;
-      width: 22px;
-      height: 14px;
-      background: #111;
-      border: 1px solid #444;
-      border-radius: 2px;
-    }
-
-    /* Crystal Oscillator */
-    .arduino-crystal {
-      position: absolute;
-      left: 110px;
-      top: 30px;
-      width: 18px;
-      height: 10px;
-      background: linear-gradient(135deg, #d1d1d1, #888);
-      border-radius: 5px;
-      border: 1px solid #555;
-    }
-
-    /* ATmega328P DIP Chip */
-    .arduino-mcu-socket {
-      position: absolute;
-      left: 115px;
-      top: 75px;
-      width: 110px;
-      height: 60px;
-      background: #0f1715;
-      border: 1px solid #222;
-      border-radius: 2px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
-    }
-
-    .arduino-mcu-chip {
-      position: absolute;
-      inset: 4px;
-      background: #1b2422;
-      border: 1px solid #334;
-      border-radius: 2px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #a3e4d7;
-    }
-
-    .mcu-brand {
-      font-size: 8px;
-      font-weight: 700;
-    }
-    .mcu-name {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-    .mcu-code {
-      font-size: 7px;
-      color: #76c7c0;
-    }
-
-    /* Secondary Chip (16U2) */
-    .arduino-small-mcu {
-      position: absolute;
-      left: 75px;
-      top: 65px;
-      width: 25px;
-      height: 25px;
-      background: #151515;
-      border: 1px solid #333;
-      border-radius: 2px;
-    }
-
-    /* Pin Headers */
-    .arduino-pin-header {
-      position: absolute;
-      background: #111;
-      border: 1px solid #333;
-      display: flex;
-      gap: 3px;
-      padding: 2px 4px;
-      border-radius: 2px;
-    }
-
-    .arduino-pin-header span {
-      width: 4px;
-      height: 8px;
-      background: #d4af37;
-      border-radius: 1px;
-    }
-
-    .header-digital {
-      top: 8px;
-      right: 15px;
-      height: 16px;
-    }
-
-    .header-analog {
-      bottom: 8px;
-      right: 15px;
-      height: 16px;
-    }
-
-    .header-power {
-      bottom: 8px;
-      right: 145px;
-      height: 16px;
-    }
-
-    /* LEDs */
-    .arduino-led {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      box-shadow: 0 0 8px currentColor;
-    }
-    .led-on { background: #22d395; color: #22d395; left: 98px; top: 32px; }
-    .led-tx { background: #ff7180; color: #ff7180; left: 88px; top: 48px; }
-    .led-rx { background: #ff7180; color: #ff7180; left: 98px; top: 48px; }
-    .led-l  { background: #ffbe0b; color: #ffbe0b; left: 108px; top: 48px; }
-
-    /* Capacitors & Resistors */
-    .arduino-cap {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: radial-gradient(circle, #e2e8f0 30%, #94a3b8 80%);
-      border-radius: 50%;
-      border: 1px solid #475569;
-    }
-    .cap-1 { top: 30px; left: 140px; }
-    .cap-2 { top: 30px; left: 160px; }
-
-    .arduino-resistor {
-      position: absolute;
-      width: 12px;
-      height: 6px;
-      background: #854d0e;
-      border-radius: 2px;
-      border: 1px solid #422006;
-    }
-    .res-1 { top: 32px; left: 190px; }
-
-    /* Mounting Holes */
-    .arduino-hole {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #07110f;
-      border: 2px solid #d4af37;
-    }
-    .hole-tl { top: 10px; left: 10px; }
-    .hole-tr { top: 10px; right: 10px; }
-    .hole-bl { bottom: 10px; left: 10px; }
-    .hole-br { bottom: 10px; right: 10px; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-  <!-- HERO SECTION VISUAL -->
-  <div class="circuit-visual" aria-hidden="true">
-    <div class="board-3d-wrap">
-      <div class="arduino-uno-board">
-        
-        <!-- PCB Base & Silkscreen Graphics -->
-        <div class="arduino-pcb">
-          <div class="arduino-logo-text">Arduino®</div>
-          <div class="arduino-model-text">UNO</div>
-          <div class="arduino-rev-text">R3</div>
-          <div class="arduino-ital-text">Made in Italy</div>
-        </div>
+<body data-page="home">
 
-        <!-- USB Type-B Port (Silver) -->
-        <div class="arduino-usb-port">
-          <div class="usb-inner-socket"></div>
-        </div>
+<header class="site-header">
 
-        <!-- DC Power Jack (Black) -->
-        <div class="arduino-power-jack">
-          <div class="jack-pin"></div>
-        </div>
+  <a class="brand" href="index.html" aria-label="ArduinoChemistryHub მთავარი">
+    <span class="brand-mark">∞</span>
+    ArduinoChemistry<span>Hub</span>
+  </a>
 
-        <!-- Reset Button -->
-        <div class="arduino-reset-btn"></div>
+  <button class="menu-toggle" type="button" aria-label="მენიუს გახსნა" aria-expanded="false">
+    ☰
+  </button>
 
-        <!-- Voltage Regulator (TO-220) -->
-        <div class="arduino-voltage-reg"></div>
+  <nav>
+    <a class="active" href="index.html">მთავარი</a>
+    <a href="projects.html">პროექტები</a>
+    <a href="#how-it-works">როგორ მუშაობს</a>
+    <a href="team.html">ჩვენი გუნდი</a>
 
-        <!-- 16MHz Crystal Oscillator -->
-        <div class="arduino-crystal"></div>
+    <a class="nav-admin" href="admin.html">
+      ადმინისტრატორი
+      <i data-lucide="shield"></i>
+    </a>
+  </nav>
 
-        <!-- ATmega328P Main Microcontroller Chip -->
-        <div class="arduino-mcu-socket">
-          <div class="arduino-mcu-chip">
-            <span class="mcu-brand">ATMEL®</span>
-            <span class="mcu-name">MEGA328P-PU</span>
-            <span class="mcu-code">2020 </span>
-          </div>
-        </div>
+</header>
 
-        <!-- ATmega16U2 (Secondary USB-Serial chip) -->
-        <div class="arduino-small-mcu"></div>
 
-        <!-- Digital Pin Headers -->
-        <div class="arduino-pin-header header-digital">
-          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+<main>
 
-        <!-- Analog & Power Pin Headers -->
-        <div class="arduino-pin-header header-analog">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="arduino-pin-header header-power">
-          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+  <!-- =========================================
+       HERO
+  ========================================== -->
 
-        <!-- LEDs (Power, TX, RX, L) -->
-        <div class="arduino-led led-on"></div>
-        <div class="arduino-led led-tx"></div>
-        <div class="arduino-led led-rx"></div>
-        <div class="arduino-led led-l"></div>
+  <section class="hero">
 
-        <!-- Capacitors & Resistors -->
-        <div class="arduino-cap cap-1"></div>
-        <div class="arduino-cap cap-2"></div>
-        <div class="arduino-resistor res-1"></div>
+    <div class="hero-copy">
 
-        <!-- Mounting Holes -->
-        <div class="arduino-hole hole-tl"></div>
-        <div class="arduino-hole hole-tr"></div>
-        <div class="arduino-hole hole-bl"></div>
-        <div class="arduino-hole hole-br"></div>
+      <p class="eyebrow">
+        ARDUINO & CHEMISTRY PROJECT COMMUNITY
+      </p>
+
+      <h1>
+        აღმოაჩინე,<br>
+        <em>ისწავლე,</em> განვითარდი
+      </h1>
+
+      <p class="hero-text">
+        ერთი სივრცე Arduino & Chemistry პროექტებისთვის —
+        დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს
+        და აღმოაჩინე ახალი შესაძლებლობები.
+      </p>
+
+      <div class="hero-actions">
+
+        <a class="button primary" href="projects.html">
+          პროექტების ნახვა
+          <i data-lucide="arrow-right"></i>
+        </a>
+
+        <a class="button secondary" href="admin.html">
+          ადმინისტრატორი
+          <i data-lucide="lock-keyhole"></i>
+        </a>
 
       </div>
+
+      <div class="hero-stats">
+
+        <div>
+          <strong>∞</strong>
+          <span>შესაძლებლობა</span>
+        </div>
+
+        <div>
+          <strong>1</strong>
+          <span>საერთო სივრცე</span>
+        </div>
+
+        <div>
+          <strong>100%</strong>
+          <span>რეალური პროექტები</span>
+        </div>
+
+      </div>
+
     </div>
+
+
+    <!-- =========================================
+         REALISTIC ARDUINO UNO R3
+    ========================================== -->
+
+    <div class="circuit-visual" aria-hidden="true">
+
+      <div class="board-3d-wrap">
+
+        <div class="arduino-uno-board">
+
+          <!-- PCB SILKSCREEN -->
+
+          <div class="arduino-pcb">
+
+            <div class="arduino-logo-text">
+              ARDUINO
+            </div>
+
+            <div class="arduino-model-text">
+              UNO
+            </div>
+
+            <div class="arduino-rev-text">
+              R3
+            </div>
+
+            <div class="arduino-ital-text">
+              MADE IN ITALY
+            </div>
+
+          </div>
+
+
+          <!-- USB TYPE-B -->
+
+          <div class="arduino-usb-port">
+            <div class="usb-inner-socket"></div>
+          </div>
+
+
+          <!-- DC POWER JACK -->
+
+          <div class="arduino-power-jack">
+            <div class="jack-pin"></div>
+          </div>
+
+
+          <!-- RESET BUTTON -->
+
+          <div class="arduino-reset-btn"></div>
+
+
+          <!-- VOLTAGE REGULATOR -->
+
+          <div class="arduino-voltage-reg"></div>
+
+
+          <!-- CRYSTAL -->
+
+          <div class="arduino-crystal"></div>
+
+
+          <!-- SECONDARY MCU -->
+
+          <div class="arduino-small-mcu"></div>
+
+
+          <!-- MAIN ATMEGA328P -->
+
+          <div class="arduino-mcu-socket">
+
+            <div class="arduino-mcu-chip">
+
+              <span class="mcu-brand">
+                ATMEL
+              </span>
+
+              <span class="mcu-name">
+                ATMEGA328P
+              </span>
+
+              <span class="mcu-code">
+                PU • U1
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- DIGITAL PIN HEADER -->
+
+          <div class="arduino-pin-header header-digital">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+
+          <!-- ANALOG PIN HEADER -->
+
+          <div class="arduino-pin-header header-analog">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+
+          <!-- POWER PIN HEADER -->
+
+          <div class="arduino-pin-header header-power">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+
+          <!-- LEDS -->
+
+          <div class="arduino-led led-on"></div>
+
+          <div class="arduino-led led-tx"></div>
+
+          <div class="arduino-led led-rx"></div>
+
+          <div class="arduino-led led-l"></div>
+
+
+          <!-- CAPACITORS -->
+
+          <div class="arduino-cap cap-1"></div>
+
+          <div class="arduino-cap cap-2"></div>
+
+
+          <!-- RESISTOR -->
+
+          <div class="arduino-resistor res-1"></div>
+
+
+          <!-- MOUNTING HOLES -->
+
+          <div class="arduino-hole hole-tl"></div>
+
+          <div class="arduino-hole hole-tr"></div>
+
+          <div class="arduino-hole hole-bl"></div>
+
+          <div class="arduino-hole hole-br"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================================
+       HOW IT WORKS
+  ========================================== -->
+
+  <section id="how-it-works" class="section">
+
+    <p class="eyebrow">
+      მარტივი პროცესი
+    </p>
+
+    <h2>
+      როგორ მუშაობს Arduino & Chemistry Hub?
+    </h2>
+
+    <div class="steps">
+
+      <article>
+
+        <b>01</b>
+
+        <i data-lucide="search"></i>
+
+        <h3>
+          დაათვალიერე პროექტები
+        </h3>
+
+        <p>
+          აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
+        </p>
+
+      </article>
+
+
+      <article>
+
+        <b>02</b>
+
+        <i data-lucide="lightbulb"></i>
+
+        <h3>
+          იპოვე ახალი იდეები
+        </h3>
+
+        <p>
+          გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
+        </p>
+
+      </article>
+
+
+      <article>
+
+        <b>03</b>
+
+        <i data-lucide="file-text"></i>
+
+        <h3>
+          გაეცანი დეტალებს
+        </h3>
+
+        <p>
+          იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
+        </p>
+
+      </article>
+
+
+      <article>
+
+        <b>04</b>
+
+        <i data-lucide="graduation-cap"></i>
+
+        <h3>
+          ისწავლე პრაქტიკიდან
+        </h3>
+
+        <p>
+          გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად
+          და გასავითარებლად.
+        </p>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================================
+       ABOUT
+  ========================================== -->
+
+  <section id="about" class="about section">
+
+    <div>
+
+      <p class="eyebrow">
+        ARDUINO • CHEMISTRY • HUB-ის შესახებ
+      </p>
+
+      <h2>
+        იდეები უკეთესია,<br>
+        როცა გაზიარებულია.
+      </h2>
+
+    </div>
+
+    <p>
+      ArduinoChemistryHub აერთიანებს Arduino-სა და Chemistry-ს
+      პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო
+      ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
+    </p>
+
+  </section>
+
+
+  <!-- =========================================
+       CTA
+  ========================================== -->
+
+  <section class="cta">
+
+    <i data-lucide="cpu"></i>
+
+    <h2>
+      აღმოაჩინე ახალი იდეები<br>
+      და გაიცანი Arduino-ს შესაძლებლობები.
+    </h2>
+
+    <a class="button primary" href="projects.html">
+
+      პროექტების ნახვა
+
+      <i data-lucide="arrow-right"></i>
+
+    </a>
+
+  </section>
+
+</main>
+
+
+<!-- =========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+  <a class="brand" href="index.html">
+
+    <span class="brand-mark">∞</span>
+
+    ArduinoChemistry<span>Hub</span>
+
+  </a>
+
+  <p>
+    Arduino & Chemistry პროექტები ერთიან სივრცეში.
+  </p>
+
+  <div class="footer-credit">
+
+    <span>
+      29-ე საჯარო სკოლის მიერ
+    </span>
+
+    <span>
+      მცირედ გამოყენებულია AI
+    </span>
+
   </div>
+
+  <small>
+    © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
+  </small>
+
+</footer>
+
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script type="module" src="script.js"></script>
 
 </body>
 </html>
