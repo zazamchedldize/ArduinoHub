@@ -1,6 +1,6 @@
 :root{
   --bg:#07110f;
-  --panel:#0d1sb18;
+  --panel:#0d1b18;
   --panel2:#10231e;
   --line:#234139;
   --text:#edf7f3;
@@ -1280,12 +1280,18 @@ select:focus{
 }
 
 
-/* TEAM CARDS */
+/* =========================================
+   TEAM CARDS — 2 x 2 LAYOUT
+========================================= */
+
+/*
+   HTML-ში ანი და მაია .team-grid-ის გარეთ არიან.
+   display:contents მათ საშუალებას აძლევს იგივე
+   grid-ში მოხვდნენ ზაზასა და თეკლასთან ერთად.
+*/
 
 .team-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:24px 18px;
+  display:contents;
 }
 
 .team-card{
@@ -1327,7 +1333,73 @@ select:focus{
 }
 
 
-/* AVATAR */
+/* =========================================
+   ZAZA + TEKLA — ORANGE CARDS
+========================================= */
+
+/*
+   პირველი ორი Card:
+   ზაზა მჭედლიძე
+   თეკლა შველიძე
+
+   ტექსტის ფერები უცვლელია.
+   მხოლოდ მწვანე დეკორატიული ელემენტები
+   იცვლება სტაფილოსფერზე.
+*/
+
+.team-grid .team-card:nth-child(1),
+.team-grid .team-card:nth-child(2){
+  border-color:#d86b1f;
+}
+
+.team-grid .team-card:nth-child(1)::before,
+.team-grid .team-card:nth-child(2)::before{
+  background:
+    radial-gradient(
+      circle,
+      #ff8a2a22,
+      transparent 70%
+    );
+}
+
+.team-grid .team-card:nth-child(1):hover,
+.team-grid .team-card:nth-child(2):hover{
+  border-color:#ff8a2a;
+  box-shadow:
+    0 18px 50px #0008,
+    0 0 30px #ff8a2a18;
+}
+
+
+/* ORANGE AVATARS */
+
+.team-grid .team-card:nth-child(1) .team-avatar,
+.team-grid .team-card:nth-child(2) .team-avatar{
+  border-color:#d86b1f;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #71340f,
+      #130d08 70%
+    );
+  box-shadow:
+    0 0 35px #ff8a2a20,
+    inset 0 0 25px #ff8a2a10;
+}
+
+
+/* ORANGE DECORATIVE TAG BACKGROUNDS */
+
+.team-grid .team-card:nth-child(1) .team-tags span,
+.team-grid .team-card:nth-child(2) .team-tags span{
+  background:#4a2815;
+  border-color:#8a4922;
+}
+
+
+/* =========================================
+   AVATAR
+========================================= */
 
 .team-avatar{
   flex:0 0 105px;
@@ -1356,7 +1428,9 @@ select:focus{
 }
 
 
-/* TEAM INFO */
+/* =========================================
+   TEAM INFO
+========================================= */
 
 .team-info{
   position:relative;
@@ -1385,7 +1459,9 @@ select:focus{
 }
 
 
-/* TAGS */
+/* =========================================
+   TAGS
+========================================= */
 
 .team-tags{
   display:flex;
@@ -1404,13 +1480,14 @@ select:focus{
 }
 
 
-/* TEACHER CARD */
+/* =========================================
+   TEACHER CARD
+========================================= */
 
 .team-card-teacher{
-  grid-column:1 / -1;
-  width:calc(50% - 9px);
-  justify-self:center;
-  margin-top:8px;
+  width:auto;
+  justify-self:auto;
+  margin-top:0;
   min-height:310px;
   border-color:#7d3038;
 }
@@ -1459,7 +1536,9 @@ select:focus{
 }
 
 
-/* BOTTOM MESSAGE */
+/* =========================================
+   BOTTOM MESSAGE
+========================================= */
 
 .team-footer-message{
   position:relative;
@@ -1548,10 +1627,6 @@ select:focus{
 
   .project-grid{
     grid-template-columns:repeat(2,1fr);
-  }
-
-  .team-card-teacher{
-    width:calc(50% - 9px);
   }
 }
 
@@ -1757,13 +1832,16 @@ select:focus{
   }
 
 
-  /* TEAM */
+  /* =========================================
+     TEAM — TABLET
+  ========================================= */
 
   .team-page{
     padding:60px 24px 75px;
   }
 
   .team-grid{
+    display:grid;
     grid-template-columns:1fr;
     gap:18px;
   }
@@ -1773,9 +1851,8 @@ select:focus{
   }
 
   .team-card-teacher{
-    grid-column:auto;
     width:100%;
-    margin-top:6px;
+    margin-top:0;
   }
 
 
@@ -2013,7 +2090,9 @@ select:focus{
   }
 
 
-  /* TEAM */
+  /* =========================================
+     TEAM — PHONE
+  ========================================= */
 
   .team-page{
     padding:45px 18px 60px;
@@ -2031,10 +2110,17 @@ select:focus{
     font-size:14px;
   }
 
+  .team-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
   .team-card{
     flex-direction:column;
     gap:18px;
     padding:23px;
+    min-height:auto;
   }
 
   .team-avatar{
