@@ -1,96 +1,167 @@
-import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import {
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    supabaseIsConfigured
+} from './supabase-config.js';
+
+import {
+    createClient
+} from 'https://esm.sh/@supabase/supabase-js@2';
+
 
 const db = supabaseIsConfigured
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: {
-            persistSession: true,
-            autoRefreshToken: true
+    ? createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true
+            }
         }
-    })
+    )
     : null;
+
 
 const page = document.body.dataset.page;
 
-const $ = (s, root = document) => root.querySelector(s);
+
+const $ = (s, root = document) =>
+    root.querySelector(s);
+
 
 const esc = (value = '') =>
-    String(value).replace(/[&<>'"]/g, c => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-    }[c]));
+    String(value).replace(
+        /[&<>'"]/g,
+        c => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[c])
+    );
 
-const icon = name => `<i data-lucide="${name}"></i>`;
+
+const icon = name =>
+    `<i data-lucide="${name}"></i>`;
+
 
 function refreshIcons() {
     window.lucide?.createIcons();
 }
 
+
 function toast(message, type = '') {
+
     const el = $('#toast');
 
     if (!el) return;
 
     el.textContent = message;
-    el.className = `toast show ${type}`;
+
+    el.className =
+        `toast show ${type}`;
 
     clearTimeout(toast.timer);
 
-    toast.timer = setTimeout(() => {
-        el.className = 'toast';
-    }, 3200);
+    toast.timer = setTimeout(
+        () => {
+            el.className = 'toast';
+        },
+        3200
+    );
 }
 
+
 function dateText(value) {
-    return new Intl.DateTimeFormat('ka-GE', {
-        dateStyle: 'medium'
-    }).format(new Date(value));
+
+    return new Intl.DateTimeFormat(
+        'ka-GE',
+        {
+            dateStyle: 'medium'
+        }
+    ).format(
+        new Date(value)
+    );
 }
+
 
 function neutralError(
     error,
     fallback = 'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
 ) {
+
     console.error(error);
+
     return fallback;
 }
 
+
 function configuredMessage(target) {
+
+    if (!target) return;
+
     target.innerHTML = `
         <div class="empty-state">
+
             ${icon('settings')}
-            <h2>Supabase ჯერ არ არის კონფიგურირებული</h2>
+
+            <h2>
+                Supabase ჯერ არ არის კონფიგურირებული
+            </h2>
+
             <p>
                 დაამატეთ პროექტის URL და anon key
                 <code>supabase-config.js</code>-ში,
                 შემდეგ გაუშვით schema SQL.
             </p>
+
         </div>
     `;
 
     refreshIcons();
 }
 
+
 function initChrome() {
+
     document
         .querySelectorAll('[data-year]')
-        .forEach(el => {
-            el.textContent = new Date().getFullYear();
-        });
+        .forEach(
+            el => {
+                el.textContent =
+                    new Date().getFullYear();
+            }
+        );
 
-    const button = $('.menu-toggle');
+
+    const button =
+        $('.menu-toggle');
+
 
     if (button) {
-        button.addEventListener('click', () => {
-            const nav = $('nav');
-            const open = nav.classList.toggle('open');
 
-            button.setAttribute('aria-expanded', open);
-        });
+        button.addEventListener(
+            'click',
+            () => {
+
+                const nav =
+                    $('nav');
+
+                if (!nav) return;
+
+                const open =
+                    nav.classList.toggle('open');
+
+                button.setAttribute(
+                    'aria-expanded',
+                    open
+                );
+            }
+        );
     }
+
 
     refreshIcons();
 }
@@ -101,19 +172,24 @@ function initChrome() {
 ========================================================= */
 
 function card(project) {
-    const image = project.image_url
-        ? `
-            <img
-                src="${esc(project.image_url)}"
-                alt="${esc(project.title)}"
-                loading="lazy"
-            >
-        `
-        : `
-            <div class="card-image fallback">
-                ${icon('circuit-board')}
-            </div>
-        `;
+
+    const image =
+        project.image_url
+
+            ? `
+                <img
+                    src="${esc(project.image_url)}"
+                    alt="${esc(project.title)}"
+                    loading="lazy"
+                >
+            `
+
+            : `
+                <div class="card-image fallback">
+                    ${icon('circuit-board')}
+                </div>
+            `;
+
 
     return `
         <article class="project-card">
@@ -125,11 +201,15 @@ function card(project) {
             <div class="card-body">
 
                 <div class="card-meta">
-                    <span>${esc(project.category)}</span>
+
+                    <span>
+                        ${esc(project.category)}
+                    </span>
 
                     <time datetime="${esc(project.created_at)}">
                         ${dateText(project.created_at)}
                     </time>
+
                 </div>
 
                 <h2>
@@ -169,12 +249,18 @@ function card(project) {
 ========================================================= */
 
 async function initProjects() {
-    const status = $('#projects-status');
-    const grid = $('#projects-grid');
+
+    const status =
+        $('#projects-status');
+
+    const grid =
+        $('#projects-grid');
+
 
     if (!db) {
         return configuredMessage(status);
     }
+
 
     const {
         data,
@@ -185,78 +271,108 @@ async function initProjects() {
             'id,title,description,category,author,image_url,created_at'
         )
         .eq('published', true)
-        .order('created_at', {
-            ascending: false
-        })
+        .order(
+            'created_at',
+            {
+                ascending: false
+            }
+        )
         .limit(60);
 
+
     if (error) {
-        status.textContent = neutralError(
-            error,
-            'პროექტების ჩატვირთვა ვერ მოხერხდა.'
-        );
+
+        status.textContent =
+            neutralError(
+                error,
+                'პროექტების ჩატვირთვა ვერ მოხერხდა.'
+            );
 
         return;
     }
 
+
     status.remove();
 
+
     const render = () => {
-        const q = $('#project-search')
-            .value
-            .trim()
-            .toLocaleLowerCase('ka');
 
-        const category = $('#category-filter').value;
+        const q =
+            $('#project-search')
+                .value
+                .trim()
+                .toLocaleLowerCase('ka');
 
-        const result = data.filter(p =>
-            (!category || p.category === category) &&
-            (
-                !q ||
-                `${p.title} ${p.description} ${p.author}`
-                    .toLocaleLowerCase('ka')
-                    .includes(q)
-            )
-        );
 
-        grid.innerHTML = result.length
-            ? result.map(card).join('')
-            : `
-                <div class="empty-state full">
+        const category =
+            $('#category-filter').value;
 
-                    ${icon('search-x')}
 
-                    <h2>
-                        ${
-                            data.length
-                                ? 'პროექტი ვერ მოიძებნა'
-                                : 'ჯერ პროექტები არ დამატებულა'
-                        }
-                    </h2>
+        const result =
+            data.filter(
+                p =>
+                    (!category ||
+                        p.category === category) &&
 
-                    <p>
-                        ${
-                            data.length
-                                ? 'შეცვალეთ ძიება ან ფილტრი.'
-                                : 'როგორც კი ადმინისტრატორი პირველ პროექტს გამოაქვეყნებს, ის აქ გამოჩნდება.'
-                        }
-                    </p>
+                    (
+                        !q ||
 
-                </div>
-            `;
+                        `${p.title} ${p.description} ${p.author}`
+                            .toLocaleLowerCase('ka')
+                            .includes(q)
+                    )
+            );
+
+
+        grid.innerHTML =
+            result.length
+
+                ? result
+                    .map(card)
+                    .join('')
+
+                : `
+                    <div class="empty-state full">
+
+                        ${icon('search-x')}
+
+                        <h2>
+                            ${
+                                data.length
+                                    ? 'პროექტი ვერ მოიძებნა'
+                                    : 'ჯერ პროექტები არ დამატებულა'
+                            }
+                        </h2>
+
+                        <p>
+                            ${
+                                data.length
+                                    ? 'შეცვალეთ ძიება ან ფილტრი.'
+                                    : 'როგორც კი ადმინისტრატორი პირველ პროექტს გამოაქვეყნებს, ის აქ გამოჩნდება.'
+                            }
+                        </p>
+
+                    </div>
+                `;
+
 
         refreshIcons();
     };
 
-    $('#project-search').addEventListener(
-        'input',
-        render
-    );
 
-    $('#category-filter').addEventListener(
-        'change',
-        render
-    );
+    $('#project-search')
+        .addEventListener(
+            'input',
+            render
+        );
+
+
+    $('#category-filter')
+        .addEventListener(
+            'change',
+            render
+        );
+
 
     render();
 }
@@ -267,17 +383,30 @@ async function initProjects() {
 ========================================================= */
 
 async function initDetail() {
-    const target = $('#project-detail');
+
+    const target =
+        $('#project-detail');
+
 
     if (!db) {
         return configuredMessage(target);
     }
 
-    const id = new URLSearchParams(location.search).get('id');
 
-    if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
+    const id =
+        new URLSearchParams(
+            location.search
+        ).get('id');
+
+
+    if (
+        !id ||
+        !/^[0-9a-f-]{36}$/i.test(id)
+    ) {
+
         return notFound(target);
     }
+
 
     const {
         data: p,
@@ -289,74 +418,91 @@ async function initDetail() {
         .eq('published', true)
         .maybeSingle();
 
+
     if (error || !p) {
         return notFound(target);
     }
 
-    const image = p.image_url
-        ? `
-            <img
-                class="detail-image"
-                src="${esc(p.image_url)}"
-                alt="${esc(p.title)}"
-            >
-        `
-        : '';
 
-    const video = p.video_url
-        ? `
-            <section class="detail-section media-section">
+    const image =
+        p.image_url
 
-                <h2>
-                    ${icon('video')}
-                    ვიდეო
-                </h2>
-
-                <video
-                    controls
-                    preload="metadata"
-                    src="${esc(p.video_url)}"
+            ? `
+                <img
+                    class="detail-image"
+                    src="${esc(p.image_url)}"
+                    alt="${esc(p.title)}"
                 >
-                    თქვენი ბრაუზერი ვიდეოს არ უჭერს მხარს.
-                </video>
+            `
 
-            </section>
-        `
-        : '';
+            : '';
 
-    const components = p.components
-        ? `
-            <section class="detail-section">
 
-                <h2>
-                    ${icon('package')}
-                    საჭირო კომპონენტები
-                </h2>
+    const video =
+        p.video_url
 
-                <div class="prose lines">
-                    ${esc(p.components)}
-                </div>
+            ? `
+                <section class="detail-section media-section">
 
-            </section>
-        `
-        : '';
+                    <h2>
+                        ${icon('video')}
+                        ვიდეო
+                    </h2>
 
-    const how = p.how_it_was_made
-        ? `
-            <section class="detail-section">
+                    <video
+                        controls
+                        preload="metadata"
+                        src="${esc(p.video_url)}"
+                    >
+                        თქვენი ბრაუზერი ვიდეოს არ უჭერს მხარს.
+                    </video>
 
-                <h2>
-                    ${icon('wrench')}
-                    როგორ გაკეთდა
-                </h2>
+                </section>
+            `
 
-                <div class="prose lines">
-                    ${esc(p.how_it_was_made)}
-                </div>
+            : '';
 
-            </section>
-        `
-        : '';
+
+    const components =
+        p.components
+
+            ? `
+                <section class="detail-section">
+
+                    <h2>
+                        ${icon('package')}
+                        საჭირო კომპონენტები
+                    </h2>
+
+                    <div class="prose lines">
+                        ${esc(p.components)}
+                    </div>
+
+                </section>
+            `
+
+            : '';
+
+
+    const how =
+        p.how_it_was_made
+
+            ? `
+                <section class="detail-section">
+
+                    <h2>
+                        ${icon('wrench')}
+                        როგორ გაკეთდა
+                    </h2>
+
+                    <div class="prose lines">
+                        ${esc(p.how_it_was_made)}
+                    </div>
+
+                </section>
+            `
+
+            : '';
 
 
     /* =====================================================
@@ -365,22 +511,34 @@ async function initDetail() {
 
     let code = '';
 
-    if (p.code && p.code.trim()) {
+
+    if (
+        p.code &&
+        p.code.trim()
+    ) {
 
         const isChemistry =
-            String(p.category).toLowerCase() === 'chemistry';
+            String(p.category)
+                .toLowerCase() === 'chemistry';
 
-        const sectionTitle = isChemistry
-            ? 'ქიმიური რეაქცია'
-            : 'Arduino Code';
 
-        const copyText = isChemistry
-            ? 'ტექსტის დაკოპირება'
-            : 'კოდის დაკოპირება';
+        const sectionTitle =
+            isChemistry
+                ? 'ქიმიური რეაქცია'
+                : 'Arduino Code';
 
-        const sectionIcon = isChemistry
-            ? 'flask-conical'
-            : 'braces';
+
+        const copyText =
+            isChemistry
+                ? 'ტექსტის დაკოპირება'
+                : 'კოდის დაკოპირება';
+
+
+        const sectionIcon =
+            isChemistry
+                ? 'flask-conical'
+                : 'braces';
+
 
         code = `
             <section class="detail-section">
@@ -413,6 +571,7 @@ async function initDetail() {
 
 
     target.className = '';
+
 
     target.innerHTML = `
         <article class="detail">
@@ -483,8 +642,11 @@ async function initDetail() {
                     p.code
                 );
 
+
                 const isChemistry =
-                    String(p.category).toLowerCase() === 'chemistry';
+                    String(p.category)
+                        .toLowerCase() === 'chemistry';
+
 
                 toast(
                     isChemistry
@@ -502,6 +664,7 @@ async function initDetail() {
         }
     );
 
+
     refreshIcons();
 }
 
@@ -511,7 +674,11 @@ async function initDetail() {
 ========================================================= */
 
 function notFound(target) {
+
+    if (!target) return;
+
     target.className = '';
+
 
     target.innerHTML = `
         <div class="empty-state">
@@ -536,6 +703,7 @@ function notFound(target) {
         </div>
     `;
 
+
     refreshIcons();
 }
 
@@ -551,11 +719,13 @@ const IMAGE_TYPES = [
     'image/gif'
 ];
 
+
 const VIDEO_TYPES = [
     'video/mp4',
     'video/webm',
     'video/ogg'
 ];
+
 
 function fileOkay(
     file,
@@ -563,9 +733,12 @@ function fileOkay(
     max,
     label
 ) {
+
     if (!file) return true;
 
+
     if (!types.includes(file.type)) {
+
         toast(
             `${label}: ფაილის ტიპი მიუღებელია.`
         );
@@ -573,13 +746,16 @@ function fileOkay(
         return false;
     }
 
+
     if (file.size > max) {
+
         toast(
             `${label}: ფაილი ზედმეტად დიდია.`
         );
 
         return false;
     }
+
 
     return true;
 }
@@ -590,7 +766,9 @@ function fileOkay(
 ========================================================= */
 
 async function isAdmin(user) {
+
     if (!user || !db) return null;
+
 
     const {
         data,
@@ -601,13 +779,19 @@ async function isAdmin(user) {
         .eq('user_id', user.id)
         .maybeSingle();
 
+
     if (error || !data) {
         return null;
     }
 
+
     return data;
 }
 
+
+/* =========================================================
+   ADMIN INITIALIZATION
+========================================================= */
 
 async function initAdmin() {
 
@@ -617,19 +801,27 @@ async function initAdmin() {
             .querySelector('form')
             .hidden = true;
 
+
         $('#login-error').textContent =
             'Supabase ჯერ არ არის კონფიგურირებული.';
 
+
         return;
     }
+
 
     const {
         data: { session }
     } = await db.auth.getSession();
 
+
     if (session) {
-        await showDashboard(session.user);
+
+        await showDashboard(
+            session.user
+        );
     }
+
 
     $('#login-form')
         .addEventListener(
@@ -637,11 +829,13 @@ async function initAdmin() {
             login
         );
 
+
     $('#logout-button')
         ?.addEventListener(
             'click',
             logout
         );
+
 
     $('#new-project-button')
         ?.addEventListener(
@@ -649,11 +843,13 @@ async function initAdmin() {
             () => openEditor()
         );
 
+
     $('#cancel-edit')
         ?.addEventListener(
             'click',
             closeEditor
         );
+
 
     $('#project-form')
         ?.addEventListener(
@@ -661,11 +857,13 @@ async function initAdmin() {
             saveProject
         );
 
+
     $('#image-file')
         ?.addEventListener(
             'change',
             imagePreview
         );
+
 
     $('#video-file')
         ?.addEventListener(
@@ -686,7 +884,9 @@ async function initAdmin() {
        CATEGORY LABEL UPDATE
     ===================================================== */
 
-    const categorySelect = $('#category');
+    const categorySelect =
+        $('#category');
+
 
     if (categorySelect) {
 
@@ -695,8 +895,16 @@ async function initAdmin() {
             updateCodeFieldLabel
         );
 
+
         updateCodeFieldLabel();
     }
+
+
+    /* =====================================================
+       CLUB MEETING
+    ===================================================== */
+
+    bindMeetingForm();
 
 
     db.auth.onAuthStateChange(
@@ -717,35 +925,51 @@ async function initAdmin() {
 
 function updateCodeFieldLabel() {
 
-    const category = $('#category');
+    const category =
+        $('#category');
 
-    const codeInput = $('#code');
 
-    if (!category || !codeInput) {
+    const codeInput =
+        $('#code');
+
+
+    if (
+        !category ||
+        !codeInput
+    ) {
         return;
     }
 
-    const label = codeInput.closest('label');
+
+    const label =
+        codeInput.closest('label');
+
 
     if (!label) {
         return;
     }
 
+
     const isChemistry =
-        String(category.value).toLowerCase() === 'chemistry';
+        String(category.value)
+            .toLowerCase() === 'chemistry';
 
 
-    /* label-ის პირველი ტექსტური ნაწილი */
+    const textNodes =
+        Array.from(
+            label.childNodes
+        ).filter(
+            node =>
+                node.nodeType === Node.TEXT_NODE
+        );
 
-    const textNodes = Array.from(
-        label.childNodes
-    ).filter(
-        node => node.nodeType === Node.TEXT_NODE
-    );
 
-    const titleNode = textNodes.find(
-        node => node.textContent.trim()
-    );
+    const titleNode =
+        textNodes.find(
+            node =>
+                node.textContent.trim()
+        );
+
 
     if (titleNode) {
 
@@ -755,8 +979,6 @@ function updateCodeFieldLabel() {
                 : '\n                            Arduino Code\n\n                            ';
     }
 
-
-    /* Placeholder-იც შეიცვალოს */
 
     if (isChemistry) {
 
@@ -779,11 +1001,18 @@ async function login(event) {
 
     event.preventDefault();
 
-    const form = event.currentTarget;
 
-    const button = form.querySelector('button');
+    const form =
+        event.currentTarget;
 
-    $('#login-error').textContent = '';
+
+    const button =
+        form.querySelector('button');
+
+
+    $('#login-error').textContent =
+        '';
+
 
     setBusy(
         button,
@@ -791,39 +1020,64 @@ async function login(event) {
         'იტვირთება...'
     );
 
+
     const {
         data,
         error
     } = await db.auth.signInWithPassword({
-        email: $('#login-email').value.trim(),
-        password: $('#login-password').value
+        email:
+            $('#login-email')
+                .value
+                .trim(),
+
+        password:
+            $('#login-password').value
     });
 
-    if (error || !data.user) {
+
+    if (
+        error ||
+        !data.user
+    ) {
 
         $('#login-error').textContent =
             'მონაცემები არასწორია';
 
-        setBusy(button, false);
+
+        setBusy(
+            button,
+            false
+        );
+
 
         return;
     }
 
-    const admin = await isAdmin(
-        data.user
-    );
+
+    const admin =
+        await isAdmin(
+            data.user
+        );
+
 
     if (!admin) {
 
         await db.auth.signOut();
 
+
         $('#login-error').textContent =
             'ამ ანგარიშს ადმინისტრატორის წვდომა არ აქვს.';
 
-        setBusy(button, false);
+
+        setBusy(
+            button,
+            false
+        );
+
 
         return;
     }
+
 
     await showDashboard(
         data.user,
@@ -845,41 +1099,66 @@ async function showDashboard(
         knownAdmin ||
         await isAdmin(user);
 
+
     if (!admin) {
 
         if (user) {
             await db.auth.signOut();
         }
 
+
         return showLogin();
     }
 
-    $('#auth-panel').hidden = true;
 
-    $('#dashboard').hidden = false;
+    $('#auth-panel').hidden =
+        true;
+
+
+    $('#dashboard').hidden =
+        false;
+
 
     $('#admin-name').textContent =
         admin.username;
 
+
     refreshIcons();
 
-    await loadAdminProjects();
+
+    await Promise.all([
+        loadAdminProjects(),
+        loadAdminMeeting()
+    ]);
 }
 
 
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
 function showLogin() {
 
-    $('#dashboard').hidden = true;
+    $('#dashboard').hidden =
+        true;
 
-    $('#auth-panel').hidden = false;
+
+    $('#auth-panel').hidden =
+        false;
+
 
     closeEditor();
 }
 
 
+/* =========================================================
+   LOGOUT
+========================================================= */
+
 async function logout() {
 
     await db.auth.signOut();
+
 
     toast(
         'თქვენ გამოხვედით ანგარიშიდან.'
@@ -887,26 +1166,40 @@ async function logout() {
 }
 
 
+/* =========================================================
+   BUSY BUTTON
+========================================================= */
+
 function setBusy(
     button,
     busy,
     text
 ) {
 
-    button.disabled = busy;
+    if (!button) return;
+
+
+    button.disabled =
+        busy;
+
 
     if (busy) {
 
         button.dataset.label =
             button.innerHTML;
 
-        button.textContent = text;
 
-    } else if (button.dataset.label) {
+        button.textContent =
+            text;
+
+    } else if (
+        button.dataset.label
+    ) {
 
         button.innerHTML =
             button.dataset.label;
     }
+
 
     refreshIcons();
 }
@@ -921,13 +1214,24 @@ let adminProjects = [];
 
 async function loadAdminProjects() {
 
-    const status = $('#admin-status');
+    const status =
+        $('#admin-status');
 
-    const list = $('#admin-project-list');
 
-    status.hidden = false;
+    const list =
+        $('#admin-project-list');
 
-    list.innerHTML = '';
+
+    if (!status || !list) return;
+
+
+    status.hidden =
+        false;
+
+
+    list.innerHTML =
+        '';
+
 
     const {
         data,
@@ -937,9 +1241,13 @@ async function loadAdminProjects() {
         .select(
             'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
         )
-        .order('created_at', {
-            ascending: false
-        });
+        .order(
+            'created_at',
+            {
+                ascending: false
+            }
+        );
+
 
     if (error) {
 
@@ -952,112 +1260,126 @@ async function loadAdminProjects() {
         return;
     }
 
-    adminProjects = data;
 
-    status.hidden = true;
+    adminProjects =
+        data || [];
+
+
+    status.hidden =
+        true;
+
 
     $('#admin-count').textContent =
-        `${data.length} პროექტი`;
+        `${adminProjects.length} პროექტი`;
 
-    list.innerHTML = data.length
-        ? data
-            .map(
-                p => `
-                    <article class="admin-row">
 
-                        <div>
+    list.innerHTML =
+        adminProjects.length
 
-                            <h3>
-                                ${esc(p.title)}
-                            </h3>
+            ? adminProjects
+                .map(
+                    p => `
+                        <article class="admin-row">
 
-                            <p>
-                                ${esc(p.category)}
-                                ·
-                                ${dateText(p.created_at)}
-                            </p>
+                            <div>
 
-                        </div>
+                                <h3>
+                                    ${esc(p.title)}
+                                </h3>
 
-                        <span
-                            class="status ${
-                                p.published
-                                    ? 'published'
-                                    : 'hidden-status'
-                            }"
-                        >
-                            ${
-                                p.published
-                                    ? 'გამოქვეყნებული'
-                                    : 'დამალული'
-                            }
-                        </span>
+                                <p>
+                                    ${esc(p.category)}
+                                    ·
+                                    ${dateText(p.created_at)}
+                                </p>
 
-                        <div class="row-actions">
+                            </div>
 
-                            <a
-                                class="icon-button"
-                                title="ნახვა"
-                                href="project.html?id=${p.id}"
-                            >
-                                ${icon('eye')}
-                            </a>
 
-                            <button
-                                class="icon-button edit"
-                                data-id="${p.id}"
-                                title="რედაქტირება"
-                            >
-                                ${icon('pencil')}
-                            </button>
-
-                            <button
-                                class="icon-button toggle"
-                                data-id="${p.id}"
-                                title="${
+                            <span
+                                class="status ${
                                     p.published
-                                        ? 'დამალვა'
-                                        : 'გამოქვეყნება'
+                                        ? 'published'
+                                        : 'hidden-status'
                                 }"
                             >
                                 ${
-                                    icon(
-                                        p.published
-                                            ? 'eye-off'
-                                            : 'send'
-                                    )
+                                    p.published
+                                        ? 'გამოქვეყნებული'
+                                        : 'დამალული'
                                 }
-                            </button>
+                            </span>
 
-                            <button
-                                class="icon-button danger delete"
-                                data-id="${p.id}"
-                                title="წაშლა"
-                            >
-                                ${icon('trash-2')}
-                            </button>
 
-                        </div>
+                            <div class="row-actions">
 
-                    </article>
-                `
-            )
-            .join('')
-        : `
-            <div class="empty-state compact-empty">
+                                <a
+                                    class="icon-button"
+                                    title="ნახვა"
+                                    href="project.html?id=${p.id}"
+                                >
+                                    ${icon('eye')}
+                                </a>
 
-                ${icon('folder-plus')}
 
-                <h2>
-                    ჯერ პროექტები არ დამატებულა
-                </h2>
+                                <button
+                                    class="icon-button edit"
+                                    data-id="${p.id}"
+                                    title="რედაქტირება"
+                                >
+                                    ${icon('pencil')}
+                                </button>
 
-                <p>
-                    დაიწყეთ პირველი რეალური პროექტის დამატებით.
-                </p>
 
-            </div>
-        `;
+                                <button
+                                    class="icon-button toggle"
+                                    data-id="${p.id}"
+                                    title="${
+                                        p.published
+                                            ? 'დამალვა'
+                                            : 'გამოქვეყნება'
+                                    }"
+                                >
+                                    ${
+                                        icon(
+                                            p.published
+                                                ? 'eye-off'
+                                                : 'send'
+                                        )
+                                    }
+                                </button>
+
+
+                                <button
+                                    class="icon-button danger delete"
+                                    data-id="${p.id}"
+                                    title="წაშლა"
+                                >
+                                    ${icon('trash-2')}
+                                </button>
+
+                            </div>
+
+                        </article>
+                    `
+                )
+                .join('')
+
+            : `
+                <div class="empty-state compact-empty">
+
+                    ${icon('folder-plus')}
+
+                    <h2>
+                        ჯერ პროექტები არ დამატებულა
+                    </h2>
+
+                    <p>
+                        დაიწყეთ პირველი რეალური პროექტის დამატებით.
+                    </p>
+
+                </div>
+            `;
 
 
     list
@@ -1105,6 +1427,7 @@ async function loadAdminProjects() {
                 )
         );
 
+
     refreshIcons();
 }
 
@@ -1115,54 +1438,76 @@ async function loadAdminProjects() {
 
 function openEditor(p) {
 
-    const form = $('#project-form');
+    const form =
+        $('#project-form');
+
 
     form.reset();
 
-    $('#image-preview').hidden = true;
+
+    $('#image-preview').hidden =
+        true;
+
 
     $('#image-name').textContent =
         'ფაილი არჩეული არ არის';
 
+
     $('#video-name').textContent =
         'ფაილი არჩეული არ არის';
 
-    $('#form-error').textContent = '';
+
+    $('#form-error').textContent =
+        '';
+
 
     $('#editor-title').textContent =
         p
             ? 'პროექტის რედაქტირება'
             : 'ახალი პროექტი';
 
+
     $('#save-project').innerHTML =
         p
+
             ? `ცვლილებების შენახვა ${icon('save')}`
+
             : `პროექტის დამატება ${icon('save')}`;
 
 
     if (p) {
 
-        $('#edit-id').value = p.id;
+        $('#edit-id').value =
+            p.id;
 
-        $('#title').value = p.title;
+
+        $('#title').value =
+            p.title;
+
 
         $('#category').value =
             p.category;
 
+
         $('#author').value =
             p.author;
+
 
         $('#published').checked =
             p.published;
 
+
         $('#description').value =
             p.description;
+
 
         $('#components').value =
             p.components || '';
 
+
         $('#how-made').value =
             p.how_it_was_made || '';
+
 
         $('#code').value =
             p.code || '';
@@ -1171,24 +1516,34 @@ function openEditor(p) {
 
     updateCodeFieldLabel();
 
-    $('#project-editor').hidden = false;
+
+    $('#project-editor').hidden =
+        false;
+
 
     $('#project-editor').scrollIntoView({
         behavior: 'smooth',
         block: 'start'
     });
 
+
     refreshIcons();
 }
 
+
+/* =========================================================
+   CLOSE EDITOR
+========================================================= */
 
 function closeEditor() {
 
     const editor =
         $('#project-editor');
 
+
     if (editor) {
-        editor.hidden = true;
+        editor.hidden =
+            true;
     }
 }
 
@@ -1202,9 +1557,11 @@ function imagePreview() {
     const file =
         $('#image-file').files[0];
 
+
     $('#image-name').textContent =
         file?.name ||
         'ფაილი არჩეული არ არის';
+
 
     if (
         file &&
@@ -1219,10 +1576,13 @@ function imagePreview() {
         const preview =
             $('#image-preview');
 
+
         preview.src =
             URL.createObjectURL(file);
 
-        preview.hidden = false;
+
+        preview.hidden =
+            false;
     }
 }
 
@@ -1242,6 +1602,7 @@ async function upload(
 
     if (!file) return null;
 
+
     if (
         !fileOkay(
             file,
@@ -1250,10 +1611,12 @@ async function upload(
             label
         )
     ) {
+
         throw new Error(
             'invalid-file'
         );
     }
+
 
     const clean =
         file.name.replace(
@@ -1261,8 +1624,10 @@ async function upload(
             '_'
         );
 
+
     const path =
         `${folder}/${crypto.randomUUID()}-${clean}`;
+
 
     const {
         error
@@ -1278,9 +1643,11 @@ async function upload(
             }
         );
 
+
     if (error) {
         throw error;
     }
+
 
     const {
         data
@@ -1288,12 +1655,17 @@ async function upload(
         .from(bucket)
         .getPublicUrl(path);
 
+
     return {
         url: data.publicUrl,
         path
     };
 }
 
+
+/* =========================================================
+   STORAGE PATH
+========================================================= */
 
 function storagePath(
     url,
@@ -1305,15 +1677,20 @@ function storagePath(
         const marker =
             `/storage/v1/object/public/${bucket}/`;
 
+
         const index =
             url?.indexOf(marker);
 
+
         return index >= 0
+
             ? decodeURIComponent(
                 url.slice(
-                    index + marker.length
+                    index +
+                    marker.length
                 )
             )
+
             : null;
 
     } catch {
@@ -1322,6 +1699,10 @@ function storagePath(
     }
 }
 
+
+/* =========================================================
+   REMOVE STORED FILE
+========================================================= */
 
 async function removeStored(
     url,
@@ -1334,6 +1715,7 @@ async function removeStored(
             bucket
         );
 
+
     if (path) {
 
         const {
@@ -1342,7 +1724,9 @@ async function removeStored(
             .from(bucket)
             .remove([path]);
 
+
         if (error) {
+
             console.warn(
                 'Storage cleanup failed',
                 error
@@ -1360,24 +1744,33 @@ async function saveProject(event) {
 
     event.preventDefault();
 
+
     const button =
         $('#save-project');
+
 
     const id =
         $('#edit-id').value;
 
+
     const old =
         adminProjects.find(
-            p => p.id === id
+            p =>
+                p.id === id
         );
+
 
     const image =
         $('#image-file').files[0];
 
+
     const video =
         $('#video-file').files[0];
 
-    $('#form-error').textContent = '';
+
+    $('#form-error').textContent =
+        '';
+
 
     if (
         !fileOkay(
@@ -1386,6 +1779,7 @@ async function saveProject(event) {
             5 * 1024 * 1024,
             'სურათი'
         ) ||
+
         !fileOkay(
             video,
             VIDEO_TYPES,
@@ -1396,13 +1790,16 @@ async function saveProject(event) {
         return;
     }
 
+
     setBusy(
         button,
         true,
         'ინახება...'
     );
 
+
     let uploads = [];
+
 
     try {
 
@@ -1415,6 +1812,7 @@ async function saveProject(event) {
 
             uploads.push([
                 'image',
+
                 await upload(
                     image,
                     'project-images',
@@ -1431,6 +1829,7 @@ async function saveProject(event) {
 
             uploads.push([
                 'video',
+
                 await upload(
                     video,
                     'project-videos',
@@ -1450,19 +1849,23 @@ async function saveProject(event) {
                     .value
                     .trim(),
 
+
             category:
                 $('#category')
                     .value,
+
 
             author:
                 $('#author')
                     .value
                     .trim(),
 
+
             description:
                 $('#description')
                     .value
                     .trim(),
+
 
             components:
                 $('#components')
@@ -1470,17 +1873,20 @@ async function saveProject(event) {
                     .trim() ||
                 null,
 
+
             how_it_was_made:
                 $('#how-made')
                     .value
                     .trim() ||
                 null,
 
+
             code:
                 $('#code')
                     .value
                     .trim() ||
                 null,
+
 
             published:
                 $('#published')
@@ -1490,21 +1896,27 @@ async function saveProject(event) {
 
         const img =
             uploads.find(
-                x => x[0] === 'image'
+                x =>
+                    x[0] === 'image'
             )?.[1];
+
 
         const vid =
             uploads.find(
-                x => x[0] === 'video'
+                x =>
+                    x[0] === 'video'
             )?.[1];
 
 
         if (img) {
+
             value.image_url =
                 img.url;
         }
 
+
         if (vid) {
+
             value.video_url =
                 vid.url;
         }
@@ -1568,7 +1980,9 @@ async function saveProject(event) {
             'success'
         );
 
+
         closeEditor();
+
 
         await loadAdminProjects();
 
@@ -1577,18 +1991,24 @@ async function saveProject(event) {
 
         console.error(error);
 
+
         for (
             const [kind, file]
             of uploads
         ) {
 
+            if (!file?.url) continue;
+
+
             await removeStored(
                 file.url,
+
                 kind === 'image'
                     ? 'project-images'
                     : 'project-videos'
             );
         }
+
 
         $('#form-error').textContent =
             neutralError(
@@ -1614,17 +2034,24 @@ async function togglePublished(id) {
 
     const p =
         adminProjects.find(
-            x => x.id === id
+            x =>
+                x.id === id
         );
+
+
+    if (!p) return;
+
 
     const {
         error
     } = await db
         .from('projects')
         .update({
-            published: !p.published
+            published:
+                !p.published
         })
         .eq('id', id);
+
 
     if (error) {
 
@@ -1633,12 +2060,14 @@ async function togglePublished(id) {
         );
     }
 
+
     toast(
         p.published
             ? 'პროექტი დამალულია.'
             : 'პროექტი გამოქვეყნდა.',
         'success'
     );
+
 
     loadAdminProjects();
 }
@@ -1652,8 +2081,10 @@ async function deleteProject(id) {
 
     const p =
         adminProjects.find(
-            x => x.id === id
+            x =>
+                x.id === id
         );
+
 
     if (
         !p ||
@@ -1664,12 +2095,14 @@ async function deleteProject(id) {
         return;
     }
 
+
     const {
         error
     } = await db
         .from('projects')
         .delete()
         .eq('id', id);
+
 
     if (error) {
 
@@ -1678,23 +2111,718 @@ async function deleteProject(id) {
         );
     }
 
+
     await Promise.all([
+
         removeStored(
             p.image_url,
             'project-images'
         ),
+
         removeStored(
             p.video_url,
             'project-videos'
         )
+
     ]);
+
 
     toast(
         'პროექტი წაიშალა.',
         'success'
     );
 
+
     loadAdminProjects();
+}
+
+
+/* =========================================================
+   CLUB MEETING
+   PUBLIC + ADMIN
+========================================================= */
+
+const GEORGIAN_WEEKDAYS = [
+    'კვირა',
+    'ორშაბათი',
+    'სამშაბათი',
+    'ოთხშაბათი',
+    'ხუთშაბათი',
+    'პარასკევი',
+    'შაბათი'
+];
+
+
+/* =========================================================
+   MEETING DAY
+========================================================= */
+
+function meetingDay(dateValue) {
+
+    if (!dateValue) {
+        return '—';
+    }
+
+
+    const d =
+        new Date(
+            `${dateValue}T12:00:00`
+        );
+
+
+    if (Number.isNaN(d.getTime())) {
+        return '—';
+    }
+
+
+    return GEORGIAN_WEEKDAYS[
+        d.getDay()
+    ];
+}
+
+
+/* =========================================================
+   MEETING DATE TEXT
+========================================================= */
+
+function meetingDateText(dateValue) {
+
+    if (!dateValue) {
+        return '—';
+    }
+
+
+    const d =
+        new Date(
+            `${dateValue}T12:00:00`
+        );
+
+
+    if (
+        Number.isNaN(
+            d.getTime()
+        )
+    ) {
+        return dateValue;
+    }
+
+
+    return new Intl.DateTimeFormat(
+        'ka-GE',
+        {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }
+    ).format(d);
+}
+
+
+/* =========================================================
+   MEETING TIME TEXT
+========================================================= */
+
+function meetingTimeText(timeValue) {
+
+    if (!timeValue) {
+        return '—';
+    }
+
+
+    const m =
+        String(timeValue).match(
+            /^(\d{2}):(\d{2})/
+        );
+
+
+    return m
+        ? `${m[1]}:${m[2]}`
+        : timeValue;
+}
+
+
+/* =========================================================
+   GET MEETING
+========================================================= */
+
+async function getMeeting() {
+
+    if (!db) {
+
+        return {
+            data: null,
+            error: new Error(
+                'Supabase not configured'
+            )
+        };
+    }
+
+
+    return await db
+        .from('club_meeting')
+        .select(
+            'id,meeting_date,meeting_time,updated_at'
+        )
+        .eq('id', 1)
+        .maybeSingle();
+}
+
+
+/* =========================================================
+   RENDER PUBLIC MEETING
+========================================================= */
+
+function renderMeetingContent(meeting) {
+
+    const target =
+        $('#meeting-content');
+
+
+    if (!target) return;
+
+
+    if (!meeting) {
+
+        target.innerHTML = `
+            <div class="meeting-empty">
+
+                ${icon('calendar-off')}
+
+                <h3>
+                    შეკრება ჯერ არ არის გამოქვეყნებული
+                </h3>
+
+                <p>
+                    როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს,
+                    ინფორმაცია აქ გამოჩნდება.
+                </p>
+
+            </div>
+        `;
+
+    } else {
+
+        target.innerHTML = `
+            <div class="meeting-date-main">
+                ${esc(
+                    meetingDateText(
+                        meeting.meeting_date
+                    )
+                )}
+            </div>
+
+
+            <div class="meeting-detail-row">
+
+                <div>
+
+                    <span>
+                        დღე
+                    </span>
+
+                    <strong>
+                        ${esc(
+                            meetingDay(
+                                meeting.meeting_date
+                            )
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        დრო
+                    </span>
+
+                    <strong>
+                        ${esc(
+                            meetingTimeText(
+                                meeting.meeting_time
+                            )
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+    refreshIcons();
+}
+
+
+/* =========================================================
+   LOAD PUBLIC MEETING
+========================================================= */
+
+async function loadPublicMeeting() {
+
+    const {
+        data,
+        error
+    } = await getMeeting();
+
+
+    if (error) {
+
+        console.error(error);
+
+
+        const target =
+            $('#meeting-content');
+
+
+        if (target) {
+
+            target.innerHTML = `
+                <div class="meeting-empty">
+
+                    ${icon('triangle-alert')}
+
+                    <h3>
+                        ინფორმაციის ჩატვირთვა ვერ მოხერხდა
+                    </h3>
+
+                    <p>
+                        სცადეთ რამდენიმე წამში ხელახლა.
+                    </p>
+
+                </div>
+            `;
+
+            refreshIcons();
+        }
+
+
+        return;
+    }
+
+
+    renderMeetingContent(
+        data
+    );
+}
+
+
+/* =========================================================
+   OPEN MEETING MODAL
+========================================================= */
+
+function openMeetingModal() {
+
+    const modal =
+        $('#meeting-modal');
+
+
+    if (!modal) return;
+
+
+    modal.hidden =
+        false;
+
+
+    modal.setAttribute(
+        'aria-hidden',
+        'false'
+    );
+
+
+    document.body.classList.add(
+        'modal-open'
+    );
+
+
+    loadPublicMeeting();
+
+
+    setTimeout(
+        () => {
+            $('#meeting-close')?.focus();
+        },
+        0
+    );
+}
+
+
+/* =========================================================
+   CLOSE MEETING MODAL
+========================================================= */
+
+function closeMeetingModal() {
+
+    const modal =
+        $('#meeting-modal');
+
+
+    if (!modal) return;
+
+
+    modal.hidden =
+        true;
+
+
+    modal.setAttribute(
+        'aria-hidden',
+        'true'
+    );
+
+
+    document.body.classList.remove(
+        'modal-open'
+    );
+}
+
+
+/* =========================================================
+   PUBLIC MEETING INIT
+========================================================= */
+
+function initMeetingPublic() {
+
+    const button =
+        $('#meeting-button');
+
+
+    if (!button) return;
+
+
+    button.addEventListener(
+        'click',
+        openMeetingModal
+    );
+
+
+    $('#meeting-close')
+        ?.addEventListener(
+            'click',
+            closeMeetingModal
+        );
+
+
+    document
+        .querySelectorAll(
+            '[data-meeting-close]'
+        )
+        .forEach(
+            el =>
+                el.addEventListener(
+                    'click',
+                    closeMeetingModal
+                )
+        );
+
+
+    document.addEventListener(
+        'keydown',
+        e => {
+
+            if (
+                e.key === 'Escape' &&
+                $('#meeting-modal') &&
+                !$('#meeting-modal').hidden
+            ) {
+
+                closeMeetingModal();
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   LOAD ADMIN MEETING
+========================================================= */
+
+async function loadAdminMeeting() {
+
+    const status =
+        $('#meeting-admin-status');
+
+
+    if (!status) return;
+
+
+    const {
+        data,
+        error
+    } = await getMeeting();
+
+
+    if (error) {
+
+        status.textContent =
+            'ჩატვირთვა ვერ მოხერხდა';
+
+
+        console.error(error);
+
+
+        return;
+    }
+
+
+    if (data) {
+
+        $('#meeting-date').value =
+            data.meeting_date || '';
+
+
+        $('#meeting-time').value =
+            String(
+                data.meeting_time || ''
+            ).slice(0, 5);
+
+
+        $('#meeting-day-preview').textContent =
+            meetingDay(
+                data.meeting_date
+            );
+
+
+        status.textContent =
+            'გამოქვეყნებულია';
+
+
+        status.className =
+            'meeting-admin-status published';
+
+    } else {
+
+        status.textContent =
+            'არ არის გამოქვეყნებული';
+
+
+        status.className =
+            'meeting-admin-status';
+
+
+        $('#meeting-day-preview').textContent =
+            '—';
+    }
+}
+
+
+/* =========================================================
+   BIND MEETING FORM
+========================================================= */
+
+function bindMeetingForm() {
+
+    const form =
+        $('#meeting-form');
+
+
+    if (!form) return;
+
+
+    $('#meeting-date')
+        ?.addEventListener(
+            'input',
+            e => {
+
+                $('#meeting-day-preview').textContent =
+                    meetingDay(
+                        e.target.value
+                    );
+            }
+        );
+
+
+    form.addEventListener(
+        'submit',
+        saveMeeting
+    );
+
+
+    $('#clear-meeting')
+        ?.addEventListener(
+            'click',
+            clearMeeting
+        );
+}
+
+
+/* =========================================================
+   SAVE / PUBLISH MEETING
+========================================================= */
+
+async function saveMeeting(event) {
+
+    event.preventDefault();
+
+
+    if (!db) return;
+
+
+    const button =
+        $('#save-meeting');
+
+
+    const errorTarget =
+        $('#meeting-form-error');
+
+
+    const date =
+        $('#meeting-date').value;
+
+
+    const time =
+        $('#meeting-time').value;
+
+
+    errorTarget.textContent =
+        '';
+
+
+    if (
+        !date ||
+        !time
+    ) {
+
+        errorTarget.textContent =
+            'აირჩიეთ თარიღი და დრო.';
+
+
+        return;
+    }
+
+
+    setBusy(
+        button,
+        true,
+        'ქვეყნდება...'
+    );
+
+
+    try {
+
+        const {
+            data: {
+                user
+            }
+        } = await db.auth.getUser();
+
+
+        if (!user) {
+
+            throw new Error(
+                'not-authenticated'
+            );
+        }
+
+
+        const {
+            error
+        } = await db
+            .from('club_meeting')
+            .upsert(
+                {
+                    id: 1,
+                    meeting_date: date,
+                    meeting_time: time,
+                    updated_by: user.id
+                },
+                {
+                    onConflict: 'id'
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        toast(
+            'კლუბის შეკრება გამოქვეყნდა.',
+            'success'
+        );
+
+
+        await loadAdminMeeting();
+
+    } catch (error) {
+
+        errorTarget.textContent =
+            neutralError(
+                error,
+                'შეკრების გამოქვეყნება ვერ მოხერხდა.'
+            );
+
+    } finally {
+
+        setBusy(
+            button,
+            false
+        );
+    }
+}
+
+
+/* =========================================================
+   DELETE / CANCEL MEETING
+========================================================= */
+
+async function clearMeeting() {
+
+    if (!db) return;
+
+
+    if (
+        !confirm(
+            'ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?'
+        )
+    ) {
+        return;
+    }
+
+
+    const {
+        error
+    } = await db
+        .from('club_meeting')
+        .delete()
+        .eq('id', 1);
+
+
+    if (error) {
+
+        return toast(
+            'შეკრების წაშლა ვერ მოხერხდა.'
+        );
+    }
+
+
+    $('#meeting-date').value =
+        '';
+
+
+    $('#meeting-time').value =
+        '';
+
+
+    $('#meeting-day-preview').textContent =
+        '—';
+
+
+    $('#meeting-admin-status').textContent =
+        'არ არის გამოქვეყნებული';
+
+
+    $('#meeting-admin-status').className =
+        'meeting-admin-status';
+
+
+    toast(
+        'შეკრება გაუქმდა.',
+        'success'
+    );
 }
 
 
@@ -1707,14 +2835,20 @@ async function initPasswordReset() {
     const form =
         $('#reset-password-form');
 
+
+    if (!form) return;
+
+
     if (!db) {
 
         $('#reset-error').textContent =
             'Supabase ჯერ არ არის კონფიგურირებული.';
 
+
         form.querySelector(
             'button'
         ).disabled = true;
+
 
         return;
     }
@@ -1726,21 +2860,27 @@ async function initPasswordReset() {
 
             event.preventDefault();
 
+
             const error =
                 $('#reset-error');
+
 
             const password =
                 $('#new-password').value;
 
+
             const confirmPassword =
                 $('#confirm-password').value;
+
 
             const button =
                 form.querySelector(
                     'button'
                 );
 
-            error.textContent = '';
+
+            error.textContent =
+                '';
 
 
             if (
@@ -1751,21 +2891,27 @@ async function initPasswordReset() {
                 error.textContent =
                     'პაროლები ერთმანეთს არ ემთხვევა.';
 
+
                 return;
             }
 
 
-            if (password.length < 10) {
+            if (
+                password.length < 10
+            ) {
 
                 error.textContent =
                     'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.';
+
 
                 return;
             }
 
 
             const {
-                data: { session }
+                data: {
+                    session
+                }
             } = await db.auth.getSession();
 
 
@@ -1773,6 +2919,7 @@ async function initPasswordReset() {
 
                 error.textContent =
                     'აღდგენის ბმული არასწორია ან ვადა გაუვიდა. მოითხოვეთ ახალი ბმული.';
+
 
                 return;
             }
@@ -1804,10 +2951,13 @@ async function initPasswordReset() {
                     'success'
                 );
 
+
                 setTimeout(
                     () => {
+
                         location.href =
                             'admin.html';
+
                     },
                     900
                 );
@@ -1829,17 +2979,26 @@ async function initPasswordReset() {
 
 initChrome();
 
+
+if (page === 'home') {
+    initMeetingPublic();
+}
+
+
 if (page === 'projects') {
     initProjects();
 }
+
 
 if (page === 'detail') {
     initDetail();
 }
 
+
 if (page === 'admin') {
     initAdmin();
 }
+
 
 if (page === 'reset') {
     initPasswordReset();
