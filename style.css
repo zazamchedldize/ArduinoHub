@@ -1344,7 +1344,9 @@ select:focus{
 ========================================= */
 
 .team-card-orange{
-  border-color:#c9a227;
+  background:#000;
+  border-color:#222;
+  box-shadow:0 18px 50px #0008;
 }
 
 .team-card-orange::before{
@@ -1357,10 +1359,9 @@ select:focus{
 }
 
 .team-card-orange:hover{
-  border-color:#f4d03f;
-  box-shadow:
-    0 18px 50px #0008,
-    0 0 30px #f4d03f20;
+  background:#000;
+  border-color:#333;
+  box-shadow:0 20px 55px #0009;
 }
 
 .team-card-orange .team-avatar{
