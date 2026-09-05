@@ -168,6 +168,446 @@ function initChrome() {
 
 
 /* =========================================================
+   ARDUINOHUB PREDEFINED CHAT
+   NO AI / NO API / NO BACKEND
+========================================================= */
+
+const AI_PRESET_ANSWERS = {
+
+    'როდის შეიქმნა ArduinoHub?': `
+        <p>
+            ArduinoHub შეიქმნა როგორც Arduino-სა და ქიმიის
+            პროექტების ერთ სივრცეში თავმოყრისა და გაზიარების პლატფორმა.
+        </p>
+
+        <p>
+            ზუსტი შექმნის თარიღი შეგიძლიათ მიუთითოთ ArduinoHub-ის
+            ოფიციალურ ინფორმაციაში.
+        </p>
+    `,
+
+
+    'რა არის ArduinoHub-ის მიზანი?': `
+        <p>
+            <strong>ArduinoHub-ის მიზანია</strong> Arduino-ს,
+            ელექტრონიკისა და ქიმიის შესახებ ცოდნის მარტივად,
+            გასაგებად და საინტერესო ფორმით გაზიარება.
+        </p>
+
+        <p>
+            საიტი მომხმარებლებს საშუალებას აძლევს გაეცნონ
+            სხვადასხვა პროექტს, ექსპერიმენტს და პრაქტიკულ იდეას.
+        </p>
+    `,
+
+
+    'რა პროექტებია საიტზე?': `
+        <p>
+            ArduinoHub-ზე განთავსებულია სხვადასხვა პრაქტიკული
+            პროექტი, რომლებიც დაკავშირებულია Arduino-სთან,
+            ელექტრონიკასთან, სენსორებთან, ავტომატიზაციასთან
+            და ქიმიის ექსპერიმენტებთან.
+        </p>
+
+        <p>
+            პროექტების სრული სიის სანახავად გადადით
+            <strong>პროექტების</strong> გვერდზე.
+        </p>
+    `,
+
+
+    'ვინ შექმნა ArduinoHub?': `
+        <p>
+            ArduinoHub-ის შემქმნელის ზუსტი სახელი უნდა იყოს
+            მითითებული საიტის ოფიციალურ ინფორმაციაში.
+        </p>
+
+        <p>
+            ამ პასუხში სახელს შეგნებულად არ ვიგონებ, რათა
+            საიტზე არ გამოჩნდეს არასწორი ინფორმაცია.
+        </p>
+    `
+
+};
+
+
+function addAIMessage(
+    type,
+    content
+) {
+
+    const messages =
+        $('#ai-chat-messages');
+
+
+    if (!messages) return null;
+
+
+    const message =
+        document.createElement('div');
+
+
+    message.className =
+        `ai-message ${type}`;
+
+
+    if (type === 'assistant') {
+
+        message.innerHTML = `
+            <div class="ai-message-avatar">
+                ${icon('bot')}
+            </div>
+
+            <div class="ai-message-bubble">
+                ${content}
+            </div>
+        `;
+
+    } else {
+
+        message.innerHTML = `
+            <div class="ai-message-bubble">
+                ${esc(content)}
+            </div>
+        `;
+    }
+
+
+    messages.appendChild(
+        message
+    );
+
+
+    refreshIcons();
+
+
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: 'smooth'
+    });
+
+
+    return message;
+}
+
+
+function answerAIPresetQuestion(
+    question
+) {
+
+    const answer =
+        AI_PRESET_ANSWERS[question];
+
+
+    if (!answer) {
+
+        addAIMessage(
+            'assistant',
+            `
+                <p>
+                    ამ კითხვაზე პასუხი ჯერ არ არის დამატებული.
+                </p>
+            `
+        );
+
+        return;
+    }
+
+
+    setTimeout(
+        () => {
+
+            addAIMessage(
+                'assistant',
+                answer
+            );
+
+        },
+        180
+    );
+}
+
+
+function openAIChat() {
+
+    const chat =
+        $('#ai-chat');
+
+
+    const toggle =
+        $('#ai-chat-toggle');
+
+
+    const windowEl =
+        $('#ai-chat-window');
+
+
+    if (
+        !chat ||
+        !toggle
+    ) {
+        return;
+    }
+
+
+    chat.classList.add(
+        'open'
+    );
+
+
+    toggle.setAttribute(
+        'aria-expanded',
+        'true'
+    );
+
+
+    windowEl?.setAttribute(
+        'aria-hidden',
+        'false'
+    );
+
+
+    setTimeout(
+        () => {
+            $('#ai-chat-input')?.focus();
+        },
+        220
+    );
+}
+
+
+function closeAIChat() {
+
+    const chat =
+        $('#ai-chat');
+
+
+    const toggle =
+        $('#ai-chat-toggle');
+
+
+    const windowEl =
+        $('#ai-chat-window');
+
+
+    if (
+        !chat ||
+        !toggle
+    ) {
+        return;
+    }
+
+
+    chat.classList.remove(
+        'open'
+    );
+
+
+    toggle.setAttribute(
+        'aria-expanded',
+        'false'
+    );
+
+
+    windowEl?.setAttribute(
+        'aria-hidden',
+        'true'
+    );
+}
+
+
+function initAIChat() {
+
+    const chat =
+        $('#ai-chat');
+
+
+    if (!chat) return;
+
+
+    const toggle =
+        $('#ai-chat-toggle');
+
+
+    const close =
+        $('#ai-chat-close');
+
+
+    const form =
+        $('#ai-chat-form');
+
+
+    const input =
+        $('#ai-chat-input');
+
+
+    if (toggle) {
+
+        toggle.addEventListener(
+            'click',
+            () => {
+
+                if (
+                    chat.classList.contains(
+                        'open'
+                    )
+                ) {
+
+                    closeAIChat();
+
+                } else {
+
+                    openAIChat();
+                }
+            }
+        );
+    }
+
+
+    close?.addEventListener(
+        'click',
+        closeAIChat
+    );
+
+
+    chat
+        .querySelectorAll(
+            '.ai-suggestion'
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    'click',
+                    () => {
+
+                        const question =
+                            button.dataset.aiQuestion;
+
+
+                        if (!question) {
+                            return;
+                        }
+
+
+                        addAIMessage(
+                            'user',
+                            question
+                        );
+
+
+                        if (input) {
+                            input.value =
+                                '';
+                        }
+
+
+                        answerAIPresetQuestion(
+                            question
+                        );
+                    }
+                );
+            }
+        );
+
+
+    form?.addEventListener(
+        'submit',
+        event => {
+
+            event.preventDefault();
+
+
+            const question =
+                input?.value
+                    ?.trim();
+
+
+            if (!question) {
+                return;
+            }
+
+
+            const preset =
+                AI_PRESET_ANSWERS[
+                    question
+                ];
+
+
+            if (!preset) {
+
+                addAIMessage(
+                    'user',
+                    question
+                );
+
+
+                input.value =
+                    '';
+
+
+                setTimeout(
+                    () => {
+
+                        addAIMessage(
+                            'assistant',
+                            `
+                                <p>
+                                    ამ ეტაპზე ArduinoHub AI-ში
+                                    მხოლოდ წინასწარ მომზადებული კითხვებია
+                                    ხელმისაწვდომი.
+                                </p>
+
+                                <p>
+                                    აირჩიეთ ერთ-ერთი შემოთავაზებული
+                                    კითხვა ზემოთ.
+                                </p>
+                            `
+                        );
+
+                    },
+                    180
+                );
+
+
+                return;
+            }
+
+
+            addAIMessage(
+                'user',
+                question
+            );
+
+
+            input.value =
+                '';
+
+
+            answerAIPresetQuestion(
+                question
+            );
+        }
+    );
+
+
+    document.addEventListener(
+        'keydown',
+        event => {
+
+            if (
+                event.key === 'Escape' &&
+                chat.classList.contains('open')
+            ) {
+
+                closeAIChat();
+            }
+        }
+    );
+}
+
+
+/* =========================================================
    PROJECT CARD
 ========================================================= */
 
@@ -2981,7 +3421,10 @@ initChrome();
 
 
 if (page === 'home') {
+
     initMeetingPublic();
+
+    initAIChat();
 }
 
 
