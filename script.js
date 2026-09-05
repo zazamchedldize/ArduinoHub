@@ -220,7 +220,7 @@ const AI_PRESET_ANSWERS = {
     'ვინ შექმნა ArduinoHub?': `
         <p>
             ArduinoHub-ი შექმნა
-            <strong>ზაზა მჭედლიძემ</strong>
+            <strong>მოაზროვნე ქიმიკოსთა კლუბმა</strong>
         </p>
     `,
 
@@ -239,7 +239,7 @@ const AI_PRESET_ANSWERS = {
         </p>
 
         <p>
-           <strong> • ზაზა მჭედლიძე<br>
+           • ზაზა მჭედლიძე<br>
             • თეკლა შველიძე<br>
             • ანასტასია ხონელიძე<br>
             • ანასტასია თევდორაძე <br>
@@ -247,7 +247,7 @@ const AI_PRESET_ANSWERS = {
                                     • გიორგი ბაღდავაძე <br>
                                            • მარიამ მიშვიძე <br>     
                                                        • ანი ძაგნიძე <br>
-                                                                   • ანასტასია თოდუა <br> </strong>
+                                                                   • ანასტასია თოდუა <br> 
         </p>
     `
 
