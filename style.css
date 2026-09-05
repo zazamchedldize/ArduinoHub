@@ -1635,12 +1635,39 @@ select:focus{
   position:relative;
 }
 
-.team-footer-message svg{
+
+/* =========================================
+   ARDUINO + CHEMISTRY ICONS
+========================================= */
+
+.team-footer-icons{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin-bottom:13px;
+}
+
+.team-footer-icons svg{
   width:34px;
   height:34px;
   color:var(--green);
-  margin-bottom:13px;
+  stroke-width:1.8;
 }
+
+.team-footer-icons svg:first-child{
+  filter:drop-shadow(0 0 8px #22d39525);
+}
+
+.team-footer-icons svg:last-child{
+  color:#89f4c9;
+  filter:drop-shadow(0 0 8px #89f4c925);
+}
+
+
+/* =========================================
+   FOOTER MESSAGE TEXT
+========================================= */
 
 .team-footer-message h2{
   font:800 30px Inter;
@@ -2252,6 +2279,16 @@ select:focus{
     padding:38px 18px;
   }
 
+  .team-footer-icons{
+    gap:11px;
+    margin-bottom:13px;
+  }
+
+  .team-footer-icons svg{
+    width:32px;
+    height:32px;
+  }
+
   .team-footer-message h2{
     font-size:24px;
   }
@@ -2338,6 +2375,15 @@ select:focus{
 
   .team-tags span{
     font-size:9px;
+  }
+
+  .team-footer-icons{
+    gap:10px;
+  }
+
+  .team-footer-icons svg{
+    width:30px;
+    height:30px;
   }
 
   .team-footer-message h2{
