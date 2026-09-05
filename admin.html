@@ -18,6 +18,25 @@
 
     <title>ადმინისტრატორი — ArduinoHub</title>
 
+    <meta
+        name="description"
+        content="ArduinoHub-ის ადმინისტრატორის მართვის პანელი."
+    >
+
+    <meta
+        name="robots"
+        content="noindex, nofollow, noarchive, nosnippet"
+    >
+
+    <meta
+        name="googlebot"
+        content="noindex, nofollow, noarchive, nosnippet"
+    >
+
+
+    <!-- =========================================
+         GOOGLE FONTS
+    ========================================== -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -31,6 +50,11 @@
         href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap"
         rel="stylesheet"
     >
+
+
+    <!-- =========================================
+         MAIN CSS
+    ========================================== -->
 
     <link
         rel="stylesheet"
@@ -46,11 +70,14 @@
 <main class="admin-page">
 
 
-    <!-- BRAND -->
+    <!-- =========================================
+         BRAND
+    ========================================== -->
 
     <a
         class="brand admin-brand"
         href="index.html"
+        aria-label="ArduinoHub — მთავარი გვერდი"
     >
 
         <span class="brand-mark">∞</span>
@@ -61,7 +88,9 @@
 
 
 
-    <!-- LOGIN -->
+    <!-- =========================================
+         LOGIN
+    ========================================== -->
 
     <section
         id="auth-panel"
@@ -122,6 +151,7 @@
                 id="login-error"
                 class="form-message"
                 role="alert"
+                aria-live="polite"
             ></p>
 
 
@@ -159,7 +189,9 @@
 
 
 
-    <!-- DASHBOARD -->
+    <!-- =========================================
+         DASHBOARD
+    ========================================== -->
 
     <section
         id="dashboard"
@@ -167,7 +199,9 @@
     >
 
 
-        <!-- DASHBOARD HEADER -->
+        <!-- =========================================
+             DASHBOARD HEADER
+        ========================================== -->
 
         <header class="dashboard-header">
 
@@ -208,7 +242,9 @@
         <main class="dashboard-shell">
 
 
-            <!-- DASHBOARD INTRO -->
+            <!-- =========================================
+                 DASHBOARD INTRO
+            ========================================== -->
 
             <div class="dashboard-intro">
 
@@ -383,6 +419,7 @@
                         id="meeting-form-error"
                         class="form-message"
                         role="alert"
+                        aria-live="polite"
                     ></p>
 
 
@@ -438,7 +475,9 @@
 
 
 
-                    <!-- BASIC INFO -->
+                    <!-- =========================================
+                         BASIC INFO
+                    ========================================== -->
 
                     <div class="form-grid">
 
@@ -555,7 +594,9 @@
 
 
 
-                    <!-- DESCRIPTION -->
+                    <!-- =========================================
+                         DESCRIPTION
+                    ========================================== -->
 
                     <label>
 
@@ -573,7 +614,9 @@
 
 
 
-                    <!-- COMPONENTS / HOW MADE -->
+                    <!-- =========================================
+                         COMPONENTS / HOW MADE
+                    ========================================== -->
 
                     <div class="form-grid">
 
@@ -609,7 +652,9 @@
 
 
 
-                    <!-- CODE -->
+                    <!-- =========================================
+                         CODE
+                    ========================================== -->
 
                     <label>
 
@@ -627,7 +672,9 @@
 
 
 
-                    <!-- FILE UPLOADS -->
+                    <!-- =========================================
+                         FILE UPLOADS
+                    ========================================== -->
 
                     <div class="upload-grid">
 
@@ -696,18 +743,23 @@
 
 
 
-                    <!-- FORM ERROR -->
+                    <!-- =========================================
+                         FORM ERROR
+                    ========================================== -->
 
                     <p
                         id="form-error"
                         class="form-message"
                         role="alert"
+                        aria-live="polite"
                     ></p>
 
 
 
 
-                    <!-- SAVE -->
+                    <!-- =========================================
+                         SAVE
+                    ========================================== -->
 
                     <button
                         id="save-project"
@@ -753,6 +805,8 @@
                 <div
                     id="admin-status"
                     class="loading"
+                    role="status"
+                    aria-live="polite"
                 >
 
                     პროექტები იტვირთება...
@@ -781,20 +835,32 @@
 
 
 
-<!-- TOAST -->
+<!-- =========================================
+     TOAST
+========================================== -->
 
 <div
     id="toast"
     class="toast"
     role="status"
+    aria-live="polite"
 ></div>
 
 
 
 
-<!-- SCRIPTS -->
+<!-- =========================================
+     LUCIDE ICONS
+========================================== -->
 
 <script src="https://unpkg.com/lucide@latest"></script>
+
+
+
+
+<!-- =========================================
+     MAIN JAVASCRIPT
+========================================== -->
 
 <script
     type="module"
@@ -803,4 +869,5 @@
 
 
 </body>
+
 </html>
