@@ -2289,7 +2289,7 @@ function renderMeetingContent(meeting) {
                 ${icon('calendar-off')}
 
                 <h3>
-                    შეკრება ჯერ არ არის გამოქვეყნებული
+                    თარიღი ჯერ არ არის გამოქვეყნებული
                 </h3>
 
                 <p>
