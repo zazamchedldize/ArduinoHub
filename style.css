@@ -10,14 +10,19 @@
   --danger:#ff7180;
   --shadow:0 18px 50px #0006;
 }
-/* Scrollbar-ის დამალვა, scroll ფუნქციის შენარჩუნებით */
-html {
-  scrollbar-width: none; /* Firefox */
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+html{
+  scrollbar-width:none;
 }
 
-html::-webkit-scrollbar {
-  display: none; /* Chrome, Edge, Safari */
+html::-webkit-scrollbar{
+  display:none;
 }
+
 *{
   box-sizing:border-box;
 }
@@ -33,19 +38,168 @@ body{
   font-family:FiraGO,Inter,sans-serif;
   line-height:1.55;
   overflow-x:hidden;
+  position:relative;
 }
+
+/* =========================================
+   MODERN SCIENCE BACKGROUND
+========================================= */
 
 body:before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:-1;
+  z-index:-2;
+
   background:
-    radial-gradient(circle at 74% 7%,#11614630,transparent 30%),
-    linear-gradient(90deg,#ffffff02 1px,transparent 1px),
-    linear-gradient(#ffffff02 1px,transparent 1px);
-  background-size:auto,44px 44px,44px 44px;
+    radial-gradient(
+      circle at 74% 7%,
+      #11614630,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 18% 48%,
+      #0e6b4b12,
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 84% 82%,
+      #22d3950d,
+      transparent 25%
+    ),
+    linear-gradient(
+      90deg,
+      #ffffff02 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      #ffffff02 1px,
+      transparent 1px
+    );
+
+  background-size:
+    auto,
+    auto,
+    auto,
+    44px 44px,
+    44px 44px;
+
+  background-position:
+    center,
+    center,
+    center,
+    0 0,
+    0 0;
+
+  animation:scienceGridMove 28s linear infinite;
+}
+
+/* მეორე ფენა — პატარა ნაწილაკები / circuit dots */
+
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+
+  background-image:
+    radial-gradient(circle at 10% 20%,#22d39518 0 1px,transparent 2px),
+    radial-gradient(circle at 26% 76%,#89f4c916 0 1px,transparent 2px),
+    radial-gradient(circle at 48% 18%,#22d39514 0 1px,transparent 2px),
+    radial-gradient(circle at 67% 63%,#89f4c910 0 1px,transparent 2px),
+    radial-gradient(circle at 88% 31%,#22d39516 0 1px,transparent 2px),
+    radial-gradient(circle at 92% 88%,#89f4c912 0 1px,transparent 2px),
+    linear-gradient(
+      90deg,
+      transparent 0 48%,
+      #22d39507 48.1%,
+      transparent 48.3% 100%
+    ),
+    linear-gradient(
+      0deg,
+      transparent 0 64%,
+      #22d39506 64.1%,
+      transparent 64.3% 100%
+    );
+
+  background-size:
+    280px 280px,
+    340px 340px,
+    420px 420px,
+    310px 310px,
+    390px 390px,
+    460px 460px,
+    100% 100%,
+    100% 100%;
+
+  animation:
+    particlesFloat 24s ease-in-out infinite alternate,
+    circuitPulse 7s ease-in-out infinite;
+}
+
+/* Grid-ის ძალიან ნელი მოძრაობა */
+
+@keyframes scienceGridMove{
+  0%{
+    background-position:
+      center,
+      center,
+      center,
+      0 0,
+      0 0;
+  }
+
+  50%{
+    background-position:
+      center,
+      center,
+      center,
+      22px 22px,
+      -22px 22px;
+  }
+
+  100%{
+    background-position:
+      center,
+      center,
+      center,
+      44px 44px,
+      -44px 44px;
+  }
+}
+
+/* ნაწილაკების ნელი მოძრაობა */
+
+@keyframes particlesFloat{
+  0%{
+    transform:translate3d(0,0,0);
+    opacity:.7;
+  }
+
+  50%{
+    transform:translate3d(0,-8px,0);
+    opacity:1;
+  }
+
+  100%{
+    transform:translate3d(5px,5px,0);
+    opacity:.75;
+  }
+}
+
+/* Circuit ხაზების მსუბუქი პულსაცია */
+
+@keyframes circuitPulse{
+  0%,
+  100%{
+    opacity:.65;
+  }
+
+  50%{
+    opacity:1;
+  }
 }
 
 a{
@@ -85,6 +239,9 @@ button:disabled{
   border-bottom:1px solid #ffffff0d;
   position:relative;
   z-index:30;
+  background:#07110f20;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
 }
 
 .brand{
@@ -113,6 +270,9 @@ button:disabled{
   color:var(--green);
   font-size:27px;
   line-height:1;
+  box-shadow:
+    0 0 14px #22d39518,
+    inset 0 0 10px #22d39508;
 }
 
 nav{
@@ -176,7 +336,8 @@ nav>a.active{
     transform .2s,
     background .2s,
     border-color .2s,
-    color .2s;
+    color .2s,
+    box-shadow .2s;
 }
 
 .nav-meeting svg{
@@ -189,6 +350,7 @@ nav>a.active{
   border-color:#d4af37;
   background:#d4af3712;
   transform:translateY(-1px);
+  box-shadow:0 0 18px #d4af3710;
 }
 
 
@@ -283,7 +445,9 @@ body.modal-open{
   place-items:center;
   color:#ffe58a;
   background:#d4af3708;
-  box-shadow:0 0 28px #d4af3712;
+  box-shadow:
+    0 0 28px #d4af3712,
+    inset 0 0 15px #d4af3708;
 }
 
 .meeting-icon svg{
@@ -406,6 +570,7 @@ body.modal-open{
   grid-template-columns:1.1fr .9fr;
   align-items:center;
   gap:55px;
+  position:relative;
 }
 
 .hero-copy{
@@ -440,6 +605,7 @@ body.modal-open{
 .hero h1 em{
   font-style:normal;
   color:var(--green);
+  text-shadow:0 0 30px #22d39518;
 }
 
 .hero-text{
@@ -470,7 +636,8 @@ body.modal-open{
     transform .2s,
     background .2s,
     border-color .2s,
-    color .2s;
+    color .2s,
+    box-shadow .2s;
 }
 
 .button:hover{
@@ -489,6 +656,7 @@ body.modal-open{
 
 .primary:hover{
   background:var(--green2);
+  box-shadow:0 9px 28px #21d39530;
 }
 
 .secondary{
@@ -499,6 +667,7 @@ body.modal-open{
 
 .secondary:hover{
   border-color:#36c596;
+  box-shadow:0 0 20px #22d3950b;
 }
 
 .ghost{
@@ -549,6 +718,34 @@ body.modal-open{
   display:grid;
   place-items:center;
   min-width:0;
+  position:relative;
+}
+
+.circuit-visual:before{
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    #22d3950d,
+    transparent 65%
+  );
+  filter:blur(2px);
+  animation:boardGlow 5s ease-in-out infinite alternate;
+}
+
+@keyframes boardGlow{
+  from{
+    transform:scale(.94);
+    opacity:.6;
+  }
+
+  to{
+    transform:scale(1.06);
+    opacity:1;
+  }
 }
 
 .board{
@@ -562,6 +759,7 @@ body.modal-open{
     inset 0 0 50px #2effb012,
     0 0 70px #19cf8c17;
   transform:rotate(-6deg);
+  z-index:1;
 }
 
 .chip{
@@ -618,6 +816,22 @@ body.modal-open{
   top:39px;
   background:var(--green);
   box-shadow:0 0 18px var(--green);
+  animation:ledPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ledPulse{
+  0%,
+  100%{
+    opacity:.7;
+    box-shadow:0 0 12px var(--green);
+  }
+
+  50%{
+    opacity:1;
+    box-shadow:
+      0 0 25px var(--green),
+      0 0 45px #22d39535;
+  }
 }
 
 .trace{
@@ -653,6 +867,7 @@ body.modal-open{
   max-width:1216px;
   margin:0 auto;
   padding:105px 32px;
+  position:relative;
 }
 
 .section h2,
@@ -671,19 +886,27 @@ body.modal-open{
 
 .steps article{
   position:relative;
-  background:var(--panel);
+  background:linear-gradient(
+    145deg,
+    var(--panel),
+    #0a1714
+  );
   border:1px solid var(--line);
   padding:25px;
   border-radius:11px;
   min-height:205px;
   transition:
     transform .2s,
-    border-color .2s;
+    border-color .2s,
+    box-shadow .2s;
 }
 
 .steps article:hover{
   transform:translateY(-5px);
   border-color:#36c596;
+  box-shadow:
+    0 14px 35px #0005,
+    0 0 25px #22d39509;
 }
 
 .steps b{
@@ -751,7 +974,24 @@ body.modal-open{
   content:"";
   position:absolute;
   inset:-100px;
-  background:radial-gradient(circle,#40e9aa20,transparent 45%);
+  background:radial-gradient(
+    circle,
+    #40e9aa20,
+    transparent 45%
+  );
+  animation:ctaGlow 7s ease-in-out infinite alternate;
+}
+
+@keyframes ctaGlow{
+  from{
+    transform:scale(.9);
+    opacity:.6;
+  }
+
+  to{
+    transform:scale(1.1);
+    opacity:1;
+  }
 }
 
 .cta>*{
@@ -849,6 +1089,14 @@ footer small{
   border:1px solid var(--line);
   border-radius:7px;
   padding:0 14px;
+  transition:
+    border-color .2s,
+    box-shadow .2s;
+}
+
+.search:focus-within{
+  border-color:#36c596;
+  box-shadow:0 0 0 3px #22d39509;
 }
 
 .search svg{
@@ -897,12 +1145,14 @@ footer small{
   overflow:hidden;
   transition:
     transform .2s,
-    box-shadow .2s;
+    box-shadow .2s,
+    border-color .2s;
 }
 
 .project-card:hover{
   transform:translateY(-5px);
   box-shadow:var(--shadow);
+  border-color:#2c6653;
 }
 
 .card-image{
@@ -1093,6 +1343,7 @@ footer small{
   object-fit:cover;
   border-radius:10px;
   border:1px solid var(--line);
+  box-shadow:0 18px 50px #0005;
 }
 
 .detail-content{
@@ -1193,7 +1444,12 @@ footer small{
 .admin-page{
   min-height:100vh;
   padding:26px;
-  background:radial-gradient(circle at 50% 0,#123a2d,transparent 43%);
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      #123a2d,
+      transparent 43%
+    );
 }
 
 .admin-brand{
@@ -1985,6 +2241,7 @@ select:focus{
       transparent 45%
     );
   pointer-events:none;
+  animation:ctaGlow 7s ease-in-out infinite alternate;
 }
 
 .team-footer-message>*{
@@ -2470,6 +2727,11 @@ select:focus{
     height:205px;
   }
 
+  .circuit-visual:before{
+    width:260px;
+    height:260px;
+  }
+
   .board{
     transform:scale(.58) rotate(-6deg);
   }
@@ -2929,4 +3191,24 @@ svg{
     max-width:100%;
   }
 
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  html{
+    scroll-behavior:auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
 }
