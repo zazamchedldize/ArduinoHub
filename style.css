@@ -33,7 +33,18 @@ html{
 
 body{
   margin:0;
-  background:var(--bg);
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      #22d3950d,
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      #00c98a08,
+      transparent 30%
+    ),
+    var(--bg);
   color:var(--text);
   font-family:FiraGO,Inter,sans-serif;
   line-height:1.55;
@@ -44,247 +55,87 @@ body{
 
 
 /* =========================================
-   FLOATING ENERGY BACKGROUND
-   NO GRID / NO WHITE LINES
+   LIGHTWEIGHT AURORA BACKGROUND
+   Modern / Smooth / Performance Friendly
 ========================================= */
 
 body:before{
   content:"";
   position:fixed;
-  inset:-30%;
+  width:520px;
+  height:520px;
+  left:-180px;
+  top:100px;
+  border-radius:50%;
   pointer-events:none;
-  z-index:-2;
+  z-index:-1;
 
-  background:
-    radial-gradient(
-      circle at 12% 18%,
-      #22d3952b 0,
-      #22d39518 7%,
-      #22d39508 17%,
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 84% 12%,
-      #00e6a52a 0,
-      #22d39512 9%,
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 72% 68%,
-      #22d39524 0,
-      #22d3950d 12%,
-      transparent 31%
-    ),
-    radial-gradient(
-      circle at 18% 82%,
-      #00a87822 0,
-      #22d39509 13%,
-      transparent 29%
-    ),
-    radial-gradient(
-      circle at 48% 42%,
-      #0b5d4620 0,
-      transparent 28%
-    );
+  background:#22d3950b;
 
-  background-size:
-    720px 720px,
-    820px 820px,
-    760px 760px,
-    690px 690px,
-    900px 900px;
-
-  filter:blur(24px);
-  opacity:.8;
-  will-change:transform,background-position;
-
-  animation:
-    energyFloat 26s ease-in-out infinite alternate,
-    energyShift 38s ease-in-out infinite alternate;
+  animation:auroraMove 18s ease-in-out infinite alternate;
 }
-
-
-/* პატარა მოძრავი ნაწილაკები */
 
 body:after{
   content:"";
   position:fixed;
-  inset:-5%;
+  width:460px;
+  height:460px;
+  right:-160px;
+  bottom:60px;
+  border-radius:50%;
   pointer-events:none;
   z-index:-1;
 
-  background-image:
-    radial-gradient(circle at 7% 17%,#89f4c965 0 1.5px,transparent 3px),
-    radial-gradient(circle at 14% 71%,#22d39570 0 2px,transparent 4px),
-    radial-gradient(circle at 23% 43%,#5fffc560 0 1px,transparent 3px),
-    radial-gradient(circle at 31% 12%,#89f4c950 0 1.5px,transparent 4px),
-    radial-gradient(circle at 38% 77%,#22d39565 0 2px,transparent 4px),
-    radial-gradient(circle at 47% 28%,#5fffc55a 0 1px,transparent 3px),
-    radial-gradient(circle at 55% 88%,#89f4c950 0 1.5px,transparent 4px),
-    radial-gradient(circle at 63% 53%,#22d39570 0 2px,transparent 4px),
-    radial-gradient(circle at 71% 19%,#89f4c95c 0 1px,transparent 3px),
-    radial-gradient(circle at 79% 79%,#22d39565 0 1.5px,transparent 4px),
-    radial-gradient(circle at 87% 39%,#5fffc560 0 2px,transparent 4px),
-    radial-gradient(circle at 94% 68%,#89f4c950 0 1px,transparent 3px),
-    radial-gradient(circle at 4% 91%,#22d39555 0 1.5px,transparent 4px),
-    radial-gradient(circle at 18% 28%,#89f4c950 0 1px,transparent 3px),
-    radial-gradient(circle at 28% 92%,#22d39560 0 2px,transparent 4px),
-    radial-gradient(circle at 44% 61%,#5fffc555 0 1px,transparent 3px),
-    radial-gradient(circle at 68% 87%,#22d39560 0 1.5px,transparent 4px),
-    radial-gradient(circle at 82% 9%,#89f4c955 0 2px,transparent 4px),
-    radial-gradient(circle at 91% 52%,#22d39560 0 1px,transparent 3px);
+  background:#00c98a08;
 
-  background-size:
-    290px 330px,
-    370px 410px,
-    430px 470px,
-    520px 540px,
-    340px 390px,
-    470px 430px,
-    610px 570px,
-    390px 450px,
-    560px 510px,
-    430px 480px,
-    650px 610px,
-    500px 550px,
-    380px 420px,
-    590px 530px,
-    450px 500px,
-    620px 580px,
-    410px 460px,
-    700px 640px,
-    540px 600px;
-
-  filter:blur(.3px);
-  opacity:.55;
-  will-change:transform,opacity;
-
-  animation:
-    particlesFloat 24s ease-in-out infinite alternate,
-    particlesPulse 7s ease-in-out infinite alternate;
+  animation:auroraMove2 22s ease-in-out infinite alternate;
 }
 
 
 /* =========================================
-   ENERGY ANIMATIONS
+   AURORA ANIMATIONS
 ========================================= */
 
-@keyframes energyFloat{
+@keyframes auroraMove{
 
   0%{
-    transform:
-      translate3d(-3%,-2%,0)
-      scale(1);
-  }
-
-  20%{
-    transform:
-      translate3d(2%,3%,0)
-      scale(1.04);
-  }
-
-  40%{
-    transform:
-      translate3d(5%,-1%,0)
-      scale(1.08);
-  }
-
-  60%{
-    transform:
-      translate3d(-1%,5%,0)
-      scale(1.03);
-  }
-
-  80%{
-    transform:
-      translate3d(-4%,1%,0)
-      scale(1.07);
-  }
-
-  100%{
-    transform:
-      translate3d(3%,4%,0)
-      scale(1.02);
-  }
-}
-
-@keyframes energyShift{
-
-  0%{
-    background-position:
-      0% 0%,
-      100% 0%,
-      100% 100%,
-      0% 100%,
-      50% 50%;
+    transform:translate3d(0,0,0);
+    opacity:.45;
   }
 
   50%{
-    background-position:
-      20% 25%,
-      80% 20%,
-      75% 75%,
-      20% 80%,
-      45% 55%;
+    transform:translate3d(180px,80px,0);
+    opacity:.75;
   }
 
   100%{
-    background-position:
-      35% 10%,
-      65% 35%,
-      60% 90%,
-      35% 65%,
-      55% 40%;
+    transform:translate3d(80px,220px,0);
+    opacity:.5;
   }
 }
 
-
-/* =========================================
-   PARTICLE ANIMATIONS
-========================================= */
-
-@keyframes particlesFloat{
+@keyframes auroraMove2{
 
   0%{
-    transform:translate3d(0,15px,0) scale(1);
-  }
-
-  25%{
-    transform:translate3d(18px,-20px,0) scale(1.02);
-  }
-
-  50%{
-    transform:translate3d(-12px,-38px,0) scale(.98);
-  }
-
-  75%{
-    transform:translate3d(24px,-15px,0) scale(1.03);
-  }
-
-  100%{
-    transform:translate3d(-8px,20px,0) scale(1);
-  }
-}
-
-@keyframes particlesPulse{
-
-  0%{
+    transform:translate3d(0,0,0);
     opacity:.35;
   }
 
-  30%{
-    opacity:.62;
-  }
-
-  60%{
-    opacity:.42;
+  50%{
+    transform:translate3d(-140px,-90px,0);
+    opacity:.65;
   }
 
   100%{
-    opacity:.72;
+    transform:translate3d(-60px,-180px,0);
+    opacity:.4;
   }
 }
 
+
+/* =========================================
+   BASIC ELEMENTS
+========================================= */
 
 a{
   color:inherit;
@@ -2434,6 +2285,20 @@ select:focus{
 
 @media (max-width:820px){
 
+  body:before{
+    width:360px;
+    height:360px;
+    left:-170px;
+    top:160px;
+  }
+
+  body:after{
+    width:320px;
+    height:320px;
+    right:-170px;
+    bottom:100px;
+  }
+
   .site-header{
     height:70px;
     padding:0 20px;
@@ -3286,6 +3151,11 @@ svg{
 
   html{
     scroll-behavior:auto;
+  }
+
+  body:before,
+  body:after{
+    animation:none;
   }
 
   * ,
