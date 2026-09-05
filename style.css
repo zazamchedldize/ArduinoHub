@@ -10,7 +10,14 @@
   --danger:#ff7180;
   --shadow:0 18px 50px #0006;
 }
+/* Scrollbar-ის დამალვა, scroll ფუნქციის შენარჩუნებით */
+html {
+  scrollbar-width: none; /* Firefox */
+}
 
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Edge, Safari */
+}
 *{
   box-sizing:border-box;
 }
