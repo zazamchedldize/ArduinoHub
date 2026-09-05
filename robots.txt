@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin.html
+
+Sitemap: https://arduinohub.onrender.com/sitemap.xml
