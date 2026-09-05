@@ -39,168 +39,185 @@ body{
   line-height:1.55;
   overflow-x:hidden;
   position:relative;
+  isolation:isolate;
 }
 
+
 /* =========================================
-   MODERN SCIENCE BACKGROUND
+   ANIMATED GLOWING BACKGROUND
 ========================================= */
+
+/*
+   არანაირი grid / თეთრი ხაზი.
+   ფონზე მოძრაობს რბილი მწვანე ნათებები.
+*/
 
 body:before{
   content:"";
   position:fixed;
-  inset:0;
+  inset:-25%;
   pointer-events:none;
   z-index:-2;
 
   background:
     radial-gradient(
-      circle at 74% 7%,
-      #11614630,
+      circle at 15% 20%,
+      #22d39520 0,
+      #22d3950d 12%,
       transparent 30%
     ),
     radial-gradient(
-      circle at 18% 48%,
-      #0e6b4b12,
-      transparent 27%
+      circle at 80% 15%,
+      #00ffd51a 0,
+      #22d3950b 15%,
+      transparent 32%
     ),
     radial-gradient(
-      circle at 84% 82%,
-      #22d3950d,
-      transparent 25%
+      circle at 75% 75%,
+      #22d3951b 0,
+      #22d39508 16%,
+      transparent 33%
     ),
-    linear-gradient(
-      90deg,
-      #ffffff02 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      #ffffff02 1px,
-      transparent 1px
+    radial-gradient(
+      circle at 20% 85%,
+      #00a87814 0,
+      transparent 28%
     );
 
-  background-size:
-    auto,
-    auto,
-    auto,
-    44px 44px,
-    44px 44px;
-
-  background-position:
-    center,
-    center,
-    center,
-    0 0,
-    0 0;
-
-  animation:scienceGridMove 28s linear infinite;
+  filter:blur(12px);
+  animation:
+    ambientGlow 22s ease-in-out infinite alternate;
 }
 
-/* მეორე ფენა — პატარა ნაწილაკები / circuit dots */
+
+/*
+   პატარა მოძრავი glowing ნაწილაკები.
+   სხვადასხვა ზომა და სხვადასხვა მოძრაობა.
+*/
 
 body:after{
   content:"";
   position:fixed;
-  inset:0;
+  inset:-10%;
   pointer-events:none;
   z-index:-1;
 
   background-image:
-    radial-gradient(circle at 10% 20%,#22d39518 0 1px,transparent 2px),
-    radial-gradient(circle at 26% 76%,#89f4c916 0 1px,transparent 2px),
-    radial-gradient(circle at 48% 18%,#22d39514 0 1px,transparent 2px),
-    radial-gradient(circle at 67% 63%,#89f4c910 0 1px,transparent 2px),
-    radial-gradient(circle at 88% 31%,#22d39516 0 1px,transparent 2px),
-    radial-gradient(circle at 92% 88%,#89f4c912 0 1px,transparent 2px),
-    linear-gradient(
-      90deg,
-      transparent 0 48%,
-      #22d39507 48.1%,
-      transparent 48.3% 100%
-    ),
-    linear-gradient(
-      0deg,
-      transparent 0 64%,
-      #22d39506 64.1%,
-      transparent 64.3% 100%
-    );
+    radial-gradient(circle at 8% 18%,#5fffc526 0 2px,transparent 4px),
+    radial-gradient(circle at 17% 68%,#22d39524 0 1.5px,transparent 4px),
+    radial-gradient(circle at 29% 36%,#89f4c91d 0 2px,transparent 5px),
+    radial-gradient(circle at 42% 82%,#22d39522 0 1.5px,transparent 4px),
+    radial-gradient(circle at 54% 20%,#5fffc51d 0 2px,transparent 5px),
+    radial-gradient(circle at 66% 58%,#22d39526 0 1.5px,transparent 4px),
+    radial-gradient(circle at 78% 30%,#89f4c920 0 2px,transparent 5px),
+    radial-gradient(circle at 91% 76%,#22d39522 0 2px,transparent 5px),
+    radial-gradient(circle at 94% 12%,#5fffc51b 0 1.5px,transparent 4px),
+    radial-gradient(circle at 5% 92%,#89f4c918 0 2px,transparent 5px);
 
   background-size:
-    280px 280px,
-    340px 340px,
-    420px 420px,
+    260px 260px,
     310px 310px,
+    370px 370px,
+    290px 290px,
+    430px 430px,
+    330px 330px,
     390px 390px,
-    460px 460px,
-    100% 100%,
-    100% 100%;
+    470px 470px,
+    340px 340px,
+    410px 410px;
+
+  filter:blur(.2px);
 
   animation:
-    particlesFloat 24s ease-in-out infinite alternate,
-    circuitPulse 7s ease-in-out infinite;
+    particlesDrift 30s linear infinite,
+    particlesPulse 8s ease-in-out infinite alternate;
 }
 
-/* Grid-ის ძალიან ნელი მოძრაობა */
 
-@keyframes scienceGridMove{
+/* დიდი ნათებების მოძრაობა */
+
+@keyframes ambientGlow{
+
   0%{
-    background-position:
-      center,
-      center,
-      center,
-      0 0,
-      0 0;
-  }
-
-  50%{
-    background-position:
-      center,
-      center,
-      center,
-      22px 22px,
-      -22px 22px;
-  }
-
-  100%{
-    background-position:
-      center,
-      center,
-      center,
-      44px 44px,
-      -44px 44px;
-  }
-}
-
-/* ნაწილაკების ნელი მოძრაობა */
-
-@keyframes particlesFloat{
-  0%{
-    transform:translate3d(0,0,0);
-    opacity:.7;
-  }
-
-  50%{
-    transform:translate3d(0,-8px,0);
-    opacity:1;
-  }
-
-  100%{
-    transform:translate3d(5px,5px,0);
-    opacity:.75;
-  }
-}
-
-/* Circuit ხაზების მსუბუქი პულსაცია */
-
-@keyframes circuitPulse{
-  0%,
-  100%{
+    transform:
+      translate3d(-3%, -2%, 0)
+      scale(1);
     opacity:.65;
   }
 
+  25%{
+    transform:
+      translate3d(2%, 3%, 0)
+      scale(1.04);
+    opacity:.82;
+  }
+
   50%{
-    opacity:1;
+    transform:
+      translate3d(4%, -1%, 0)
+      scale(1.08);
+    opacity:.7;
+  }
+
+  75%{
+    transform:
+      translate3d(-2%, 4%, 0)
+      scale(1.03);
+    opacity:.9;
+  }
+
+  100%{
+    transform:
+      translate3d(3%, 1%, 0)
+      scale(1.07);
+    opacity:.72;
   }
 }
+
+
+/* ნაწილაკების ნელი გადაადგილება */
+
+@keyframes particlesDrift{
+
+  0%{
+    transform:translate3d(0,0,0);
+  }
+
+  25%{
+    transform:translate3d(18px,-14px,0);
+  }
+
+  50%{
+    transform:translate3d(-12px,20px,0);
+  }
+
+  75%{
+    transform:translate3d(22px,9px,0);
+  }
+
+  100%{
+    transform:translate3d(0,0,0);
+  }
+}
+
+
+/* ნაწილაკების ძალიან მსუბუქი ციმციმი */
+
+@keyframes particlesPulse{
+
+  0%{
+    opacity:.45;
+  }
+
+  50%{
+    opacity:.8;
+  }
+
+  100%{
+    opacity:.55;
+  }
+}
+
 
 a{
   color:inherit;
