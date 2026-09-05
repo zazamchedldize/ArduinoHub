@@ -47,11 +47,6 @@ body{
    ANIMATED GLOWING BACKGROUND
 ========================================= */
 
-/*
-   არანაირი grid / თეთრი ხაზი.
-   ფონზე მოძრაობს რბილი მწვანე ნათებები.
-*/
-
 body:before{
   content:"";
   position:fixed;
@@ -90,10 +85,9 @@ body:before{
 }
 
 
-/*
-   პატარა მოძრავი glowing ნაწილაკები.
-   სხვადასხვა ზომა და სხვადასხვა მოძრაობა.
-*/
+/* =========================================
+   SMALL MOVING PARTICLES
+========================================= */
 
 body:after{
   content:"";
@@ -103,16 +97,16 @@ body:after{
   z-index:-1;
 
   background-image:
-    radial-gradient(circle at 8% 18%,#5fffc526 0 2px,transparent 4px),
-    radial-gradient(circle at 17% 68%,#22d39524 0 1.5px,transparent 4px),
-    radial-gradient(circle at 29% 36%,#89f4c91d 0 2px,transparent 5px),
-    radial-gradient(circle at 42% 82%,#22d39522 0 1.5px,transparent 4px),
-    radial-gradient(circle at 54% 20%,#5fffc51d 0 2px,transparent 5px),
-    radial-gradient(circle at 66% 58%,#22d39526 0 1.5px,transparent 4px),
-    radial-gradient(circle at 78% 30%,#89f4c920 0 2px,transparent 5px),
-    radial-gradient(circle at 91% 76%,#22d39522 0 2px,transparent 5px),
-    radial-gradient(circle at 94% 12%,#5fffc51b 0 1.5px,transparent 4px),
-    radial-gradient(circle at 5% 92%,#89f4c918 0 2px,transparent 5px);
+    radial-gradient(circle at 8% 18%,#8ffff052 0 2.5px,transparent 4.5px),
+    radial-gradient(circle at 17% 68%,#22d39545 0 2px,transparent 4.5px),
+    radial-gradient(circle at 29% 36%,#b8ffe052 0 2.5px,transparent 5px),
+    radial-gradient(circle at 42% 82%,#22d39542 0 2px,transparent 4.5px),
+    radial-gradient(circle at 54% 20%,#8ffff04a 0 2.5px,transparent 5px),
+    radial-gradient(circle at 66% 58%,#22d39548 0 2px,transparent 4.5px),
+    radial-gradient(circle at 78% 30%,#b8ffe04a 0 2.5px,transparent 5px),
+    radial-gradient(circle at 91% 76%,#22d39542 0 2.5px,transparent 5px),
+    radial-gradient(circle at 94% 12%,#8ffff046 0 2px,transparent 4.5px),
+    radial-gradient(circle at 5% 92%,#b8ffe03f 0 2.5px,transparent 5px);
 
   background-size:
     260px 260px,
@@ -129,12 +123,14 @@ body:after{
   filter:blur(.2px);
 
   animation:
-    particlesDrift 30s linear infinite,
-    particlesPulse 8s ease-in-out infinite alternate;
+    particlesDrift 14s linear infinite,
+    particlesPulse 5s ease-in-out infinite alternate;
 }
 
 
-/* დიდი ნათებების მოძრაობა */
+/* =========================================
+   LARGE GLOW MOVEMENT
+========================================= */
 
 @keyframes ambientGlow{
 
@@ -175,7 +171,9 @@ body:after{
 }
 
 
-/* ნაწილაკების ნელი გადაადგილება */
+/* =========================================
+   FASTER PARTICLE MOVEMENT
+========================================= */
 
 @keyframes particlesDrift{
 
@@ -184,15 +182,15 @@ body:after{
   }
 
   25%{
-    transform:translate3d(18px,-14px,0);
+    transform:translate3d(32px,-25px,0);
   }
 
   50%{
-    transform:translate3d(-12px,20px,0);
+    transform:translate3d(-25px,35px,0);
   }
 
   75%{
-    transform:translate3d(22px,9px,0);
+    transform:translate3d(38px,18px,0);
   }
 
   100%{
@@ -201,20 +199,22 @@ body:after{
 }
 
 
-/* ნაწილაკების ძალიან მსუბუქი ციმციმი */
+/* =========================================
+   PARTICLE BRIGHTNESS
+========================================= */
 
 @keyframes particlesPulse{
 
   0%{
-    opacity:.45;
+    opacity:.65;
   }
 
   50%{
-    opacity:.8;
+    opacity:1;
   }
 
   100%{
-    opacity:.55;
+    opacity:.72;
   }
 }
 
@@ -1905,7 +1905,6 @@ select:focus{
 
 /* =========================================
    TEAM GRID
-   MAIA FIRST + 2 COLUMNS
 ========================================= */
 
 .team-grid{
@@ -1917,7 +1916,7 @@ select:focus{
 
 
 /* =========================================
-   TEAM CARDS — SMALLER
+   TEAM CARDS
 ========================================= */
 
 .team-card{
@@ -1934,7 +1933,9 @@ select:focus{
   transition:
     transform .25s,
     border-color .25s,
-    box-shadow .25s;
+    box-shadow .25s,
+    opacity .45s ease,
+    filter .45s ease;
 }
 
 .team-card::before{
@@ -1958,6 +1959,23 @@ select:focus{
   transform:translateY(-4px);
   border-color:#36c596;
   box-shadow:var(--shadow);
+}
+
+
+/* =========================================
+   TEAM CARD FADE EFFECT
+========================================= */
+
+.team-grid:has(.team-card:hover) .team-card{
+  opacity:.42;
+  filter:saturate(.7);
+}
+
+.team-grid:has(.team-card:hover) .team-card:hover{
+  opacity:1;
+  filter:saturate(1);
+  transform:translateY(-7px) scale(1.015);
+  z-index:3;
 }
 
 
@@ -3134,6 +3152,15 @@ select:focus{
   .team-card:hover,
   .steps article:hover,
   .nav-meeting:hover{
+    transform:none;
+  }
+
+  .team-grid:has(.team-card:hover) .team-card{
+    opacity:1;
+    filter:none;
+  }
+
+  .team-grid:has(.team-card:hover) .team-card:hover{
     transform:none;
   }
 
