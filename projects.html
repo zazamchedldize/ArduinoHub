@@ -2,17 +2,135 @@
 <html lang="ka">
 
 <head>
-  <link rel="icon" type="image/png" href="arduinuhub-icon.png">
+
   <meta charset="utf-8">
 
   <meta
     name="viewport"
-    content="width=device-width,initial-scale=1"
+    content="width=device-width, initial-scale=1"
   >
 
-  <title>პროექტები — Arduino & Chemistry Hub</title>
+  <!-- =====================================================
+       SEO
+       ===================================================== -->
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>პროექტები — ArduinoHub | Arduino & Chemistry</title>
+
+  <meta
+    name="description"
+    content="ArduinoHub-ის Arduino, Chemistry, Robotics, Sensors, Automation, LED, LCD და IoT პროექტები. აღმოაჩინე რეალური პროექტები, მათი კოდი, მასალები და შექმნის პროცესი."
+  >
+
+  <meta
+    name="keywords"
+    content="Arduino პროექტები, ArduinoHub პროექტები, Arduino საქართველო, Chemistry პროექტები, Arduino კოდი, Robotics, Sensors, IoT, Arduino პროექტები ქართულად"
+  >
+
+  <meta
+    name="author"
+    content="ArduinoHub — 29-ე საჯარო სკოლა"
+  >
+
+  <meta
+    name="robots"
+    content="index, follow"
+  >
+
+  <meta
+    name="googlebot"
+    content="index, follow"
+  >
+
+  <link
+    rel="canonical"
+    href="https://arduinohub.onrender.com/projects.html"
+  >
+
+
+  <!-- =====================================================
+       OPEN GRAPH
+       ===================================================== -->
+
+  <meta
+    property="og:type"
+    content="website"
+  >
+
+  <meta
+    property="og:url"
+    content="https://arduinohub.onrender.com/projects.html"
+  >
+
+  <meta
+    property="og:title"
+    content="პროექტები — ArduinoHub"
+  >
+
+  <meta
+    property="og:description"
+    content="აღმოაჩინე Arduino & Chemistry პროექტები ArduinoHub-ზე და გაეცანი მათ კოდს, მასალებსა და შექმნის პროცესს."
+  >
+
+  <meta
+    property="og:site_name"
+    content="ArduinoHub"
+  >
+
+  <meta
+    property="og:locale"
+    content="ka_GE"
+  >
+
+  <meta
+    property="og:image"
+    content="https://arduinohub.onrender.com/arduinuhub-icon.png"
+  >
+
+
+  <!-- =====================================================
+       TWITTER / X
+       ===================================================== -->
+
+  <meta
+    name="twitter:card"
+    content="summary"
+  >
+
+  <meta
+    name="twitter:title"
+    content="პროექტები — ArduinoHub"
+  >
+
+  <meta
+    name="twitter:description"
+    content="ArduinoHub-ის რეალური Arduino & Chemistry პროექტები."
+  >
+
+  <meta
+    name="twitter:image"
+    content="https://arduinohub.onrender.com/arduinuhub-icon.png"
+  >
+
+
+  <!-- =====================================================
+       FAVICON
+       ===================================================== -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="arduinuhub-icon.png"
+  >
+
+
+  <!-- =====================================================
+       FONTS
+       ===================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
   <link
     rel="preconnect"
@@ -25,10 +143,41 @@
     rel="stylesheet"
   >
 
+
+  <!-- =====================================================
+       CSS
+       ===================================================== -->
+
   <link
     rel="stylesheet"
     href="style.css"
   >
+
+
+  <!-- =====================================================
+       STRUCTURED DATA
+       ===================================================== -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "ArduinoHub — პროექტები",
+    "url": "https://arduinohub.onrender.com/projects.html",
+    "description": "ArduinoHub-ის Arduino & Chemistry პროექტების კოლექცია.",
+    "inLanguage": "ka",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "ArduinoHub",
+      "url": "https://arduinohub.onrender.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+    }
+  }
+  </script>
+
 </head>
 
 
@@ -44,6 +193,7 @@
     <a
       class="brand"
       href="index.html"
+      aria-label="ArduinoHub მთავარი"
     >
 
       <span class="brand-mark">
@@ -70,6 +220,7 @@
         მთავარი
       </a>
 
+
       <a
         class="active"
         href="projects.html"
@@ -77,13 +228,16 @@
         პროექტები
       </a>
 
+
       <a href="index.html#how-it-works">
         როგორ მუშაობს
       </a>
 
+
       <a href="index.html#about">
         ჩვენ შესახებ
       </a>
+
 
       <a
         class="nav-admin"
@@ -113,9 +267,11 @@
         აღმოაჩინე იდეები
       </p>
 
+
       <h1>
         Arduino პროექტები
       </h1>
+
 
       <p>
         ნახე რეალური პროექტები ჩვენი
@@ -138,11 +294,13 @@
 
         <i data-lucide="search"></i>
 
+
         <input
           id="project-search"
           type="search"
           placeholder="მოძებნე პროექტი..."
           autocomplete="off"
+          aria-label="პროექტის ძებნა"
         >
 
       </label>
@@ -156,43 +314,56 @@
           კატეგორია
         </span>
 
-        <select id="category-filter">
+
+        <select
+          id="category-filter"
+          aria-label="პროექტის კატეგორიის არჩევა"
+        >
 
           <option value="">
             ყველა კატეგორია
           </option>
 
+
           <option value="Arduino">
             Arduino
           </option>
+
 
           <option value="Robotics">
             Robotics
           </option>
 
+
           <option value="Sensors">
             Sensors
           </option>
+
 
           <option value="Automation">
             Automation
           </option>
 
+
           <option value="LED">
             LED
           </option>
+
 
           <option value="LCD">
             LCD
           </option>
 
+
           <option value="IoT">
             IoT
           </option>
 
+
           <option value="Chemistry">
             Chemistry
           </option>
+
 
           <option value="Other">
             Other
@@ -213,6 +384,7 @@
       id="projects-status"
       class="loading"
       role="status"
+      aria-live="polite"
     >
       პროექტები იტვირთება...
     </div>
@@ -226,6 +398,7 @@
       id="projects-grid"
       class="project-grid"
       aria-live="polite"
+      aria-label="ArduinoHub პროექტები"
     ></section>
 
 
@@ -240,6 +413,7 @@
     id="toast"
     class="toast"
     role="status"
+    aria-live="polite"
   ></div>
 
 
