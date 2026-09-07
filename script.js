@@ -804,13 +804,6 @@ function getAIErrorStatus(error) {
 /*
     ამოწმებს არის თუ არა შეცდომა
     Gemini-ის quota / rate limit პრობლემა.
-
-    მნიშვნელოვანია:
-    Gemini ზოგჯერ quota-ს შეცდომას
-    Edge Function-ის გავლით 500-ადაც აბრუნებს.
-
-    ამიტომ მარტო HTTP 429-ზე
-    დაყრდნობა საკმარისი არ არის.
 */
 
 function isAIQuotaError(error) {
@@ -881,9 +874,6 @@ function getAIUserErrorMessage(error) {
 
     /*
         პირველ რიგში quota-ს ვამოწმებთ.
-
-        ეს აუცილებელია, რადგან quota-ს
-        შეცდომა შეიძლება 500-ადაც მოვიდეს.
     */
 
     if (
@@ -1151,6 +1141,54 @@ async function askAI(question) {
                 })
             );
 
+
+    /*
+        =====================================================
+        მნიშვნელოვანი:
+        თუ მომხმარებელი შესულია Supabase Auth-ში,
+        Edge Function-ს უნდა გავუგზავნოთ მისი რეალური
+        access token.
+
+        anon key Authorization-ში აღარ იგზავნება.
+
+        ჩვეულებრივი, არაავტორიზებული მომხმარებლისთვის
+        Authorization-ში გამოიყენება anon key მხოლოდ იმიტომ,
+        რომ ამ ფუნქციის საჯარო AI ჩატი ამჟამად anonymous-ადაც
+        მუშაობს.
+
+        ადმინისტრატორის შემთხვევაში კი იგზავნება:
+            session.access_token
+
+        ეს საჭიროა იმისთვის, რომ ai-chat.ts-მ რეალურად
+        შეძლოს ადმინისტრატორის ამოცნობა და კლუბის შეკრების
+        ბრძანების შესრულება.
+        =====================================================
+    */
+
+    let authorizationToken =
+        SUPABASE_ANON_KEY;
+
+    if (db) {
+        try {
+            const {
+                data: {
+                    session
+                }
+            } = await db.auth.getSession();
+
+            if (session?.access_token) {
+                authorizationToken =
+                    session.access_token;
+            }
+        } catch (sessionError) {
+            console.warn(
+                'Could not read Supabase session:',
+                sessionError
+            );
+        }
+    }
+
+
     let response;
 
     try {
@@ -1164,8 +1202,17 @@ async function askAI(question) {
                         'Content-Type':
                             'application/json',
 
+                        /*
+                            აქ უკვე რეალური user JWT
+                            მიდის, თუ მომხმარებელი შესულია.
+                        */
+
                         'Authorization':
-                            `Bearer ${SUPABASE_ANON_KEY}`,
+                            `Bearer ${authorizationToken}`,
+
+                        /*
+                            API key ცალკე header-ში.
+                        */
 
                         'apikey':
                             SUPABASE_ANON_KEY
@@ -1180,6 +1227,13 @@ async function askAI(question) {
 
                             context:
                                 AI_SYSTEM_CONTEXT,
+
+                            /*
+                                ეს მხოლოდ UI-სთვის გამოიყენება
+                                ჩვეულებრივი AI greeting-ისთვის.
+
+                                ავტორიზაცია ამას არ ეყრდნობა.
+                            */
 
                             adminGreeting:
                                 aiAdminGreeting
@@ -1216,7 +1270,6 @@ async function askAI(question) {
 
     if (!response.ok) {
         /*
-            ძალიან მნიშვნელოვანია:
             backend-ის რეალური error ტექსტი
             ვინახავთ Error ობიექტში.
         */
@@ -1518,9 +1571,6 @@ async function handleAIQuestion(question) {
 
         /*
             DEBUG ინფორმაცია.
-
-            ეს გვეხმარება იმის გაგებაში,
-            backend რეალურად რას აბრუნებს.
         */
 
         console.error(
@@ -1536,23 +1586,6 @@ async function handleAIQuestion(question) {
 
         typing?.remove();
 
-
-        /*
-            აქ აღარ ვაჩვენებთ ავტომატურად
-            ერთსა და იმავე generic შეცდომას.
-
-            თუ Gemini quota არის:
-            → quota შეტყობინება
-
-            თუ model პრობლემაა:
-            → model შეტყობინება
-
-            თუ 500 არის:
-            → server შეტყობინება
-
-            თუ network არის:
-            → connection შეტყობინება
-        */
 
         addAIMessage(
             'error',
@@ -2272,6 +2305,7 @@ async function initDetail() {
                     </div>
 
                 </div>
+
 
                 ${image}
 
