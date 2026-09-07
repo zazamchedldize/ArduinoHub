@@ -14,7 +14,14 @@
     --ai-pink:#ff72d2;
     --ai-blue:#5c8dff;
 }
+.ai-chat-messages{
+  padding-bottom:12px
+}
 
+.ai-chat-window{
+  height:auto;
+  max-height:700px
+}
 html{
     scrollbar-width:none;
 }
