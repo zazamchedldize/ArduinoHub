@@ -287,6 +287,18 @@ function addAIMessage(
             </div>
         `;
 
+    } else if (type === 'error') {
+
+        message.innerHTML = `
+            <div class="ai-message-avatar">
+                ${icon('triangle-alert')}
+            </div>
+
+            <div class="ai-message-bubble">
+                ${content}
+            </div>
+        `;
+
     } else {
 
         message.innerHTML = `
@@ -504,8 +516,22 @@ async function askAI(question) {
 
 
     /*
-        ვინახავთ მხოლოდ ბოლო 10 შეტყობინებას,
-        რათა მოთხოვნები ზედმეტად დიდი არ გახდეს.
+        Edge Function ელოდება history-ს
+        role + text ფორმატში.
+
+        მაგალითად:
+
+        {
+            role: 'user',
+            text: 'რა არის Arduino?'
+        }
+
+        ან:
+
+        {
+            role: 'assistant',
+            text: 'Arduino არის...'
+        }
     */
 
     const history =
@@ -513,13 +539,27 @@ async function askAI(question) {
             .slice(-10)
             .map(
                 message => ({
-                    role: message.role,
-                    content: String(
-                        message.content || ''
-                    ).slice(0, 2000)
+                    role:
+                        message.role === 'assistant'
+                            ? 'assistant'
+                            : 'user',
+
+                    text:
+                        String(
+                            message.content || ''
+                        ).slice(0, 2000)
                 })
             );
 
+
+    /*
+        Supabase Edge Function-ის გამოძახება.
+
+        Authorization + apikey საჭიროა Supabase-ის
+        Edge Function-ის დაცული endpoint-ისთვის.
+
+        Gemini API Key აქ არ იგზავნება.
+    */
 
     const response =
         await fetch(
@@ -528,7 +568,13 @@ async function askAI(question) {
                 method: 'POST',
 
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+
+                    'Authorization':
+                        `Bearer ${SUPABASE_ANON_KEY}`,
+
+                    'apikey':
+                        SUPABASE_ANON_KEY
                 },
 
                 body: JSON.stringify({
@@ -563,7 +609,7 @@ async function askAI(question) {
         const errorMessage =
             data?.error ||
             data?.message ||
-            'AI-სთან დაკავშირება ვერ მოხერხდა.';
+            `AI-სთან დაკავშირება ვერ მოხერხდა. (${response.status})`;
 
 
         throw new Error(
@@ -723,19 +769,13 @@ async function handleAIQuestion(question) {
         addAIMessage(
             'error',
             `
-                <div class="ai-message-avatar">
-                    ${icon('triangle-alert')}
-                </div>
+                <p>
+                    AI-სთან დაკავშირება ვერ მოხერხდა.
+                </p>
 
-                <div class="ai-message-bubble">
-                    <p>
-                        AI-სთან დაკავშირება ვერ მოხერხდა.
-                    </p>
-
-                    <p>
-                        გთხოვ, ცოტა ხანში სცადე ხელახლა.
-                    </p>
-                </div>
+                <p>
+                    გთხოვ, ცოტა ხანში სცადე ხელახლა.
+                </p>
             `
         );
 
