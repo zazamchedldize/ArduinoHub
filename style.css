@@ -8,19 +8,8 @@
   --green:#22d395;
   --green2:#89f4c9;
   --danger:#ff7180;
+  --gold:#d4af37;
   --shadow:0 18px 50px #0006;
-}
-
-/* =========================================
-   SCROLLBAR
-========================================= */
-
-html{
-  scrollbar-width:none;
-}
-
-html::-webkit-scrollbar{
-  display:none;
 }
 
 *{
@@ -28,7 +17,12 @@ html::-webkit-scrollbar{
 }
 
 html{
+  scrollbar-width:none;
   scroll-behavior:smooth;
+}
+
+html::-webkit-scrollbar{
+  display:none;
 }
 
 body{
@@ -42,11 +36,6 @@ body{
   isolation:isolate;
 }
 
-
-/* =========================================
-   ANIMATED GLOWING BACKGROUND
-========================================= */
-
 body:before{
   content:"";
   position:fixed;
@@ -55,39 +44,14 @@ body:before{
   z-index:-2;
 
   background:
-    radial-gradient(
-      circle at 15% 20%,
-      #22d39520 0,
-      #22d3950d 12%,
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 80% 15%,
-      #00ffd51a 0,
-      #22d3950b 15%,
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 75% 75%,
-      #22d3951b 0,
-      #22d39508 16%,
-      transparent 33%
-    ),
-    radial-gradient(
-      circle at 20% 85%,
-      #00a87814 0,
-      transparent 28%
-    );
+    radial-gradient(circle at 15% 20%,#22d39520 0,#22d3950d 12%,transparent 30%),
+    radial-gradient(circle at 80% 15%,#00ffd51a 0,#22d3950b 15%,transparent 32%),
+    radial-gradient(circle at 75% 75%,#22d3951b 0,#22d39508 16%,transparent 33%),
+    radial-gradient(circle at 20% 85%,#00a87814 0,transparent 28%);
 
   filter:blur(12px);
-  animation:
-    ambientGlow 22s ease-in-out infinite alternate;
+  animation:ambientGlow 22s ease-in-out infinite alternate;
 }
-
-
-/* =========================================
-   SMALL MOVING PARTICLES
-========================================= */
 
 body:after{
   content:"";
@@ -127,97 +91,42 @@ body:after{
     particlesPulse 5s ease-in-out infinite alternate;
 }
 
-
-/* =========================================
-   LARGE GLOW MOVEMENT
-========================================= */
-
 @keyframes ambientGlow{
-
   0%{
-    transform:
-      translate3d(-3%, -2%, 0)
-      scale(1);
+    transform:translate3d(-3%,-2%,0) scale(1);
     opacity:.65;
   }
-
   25%{
-    transform:
-      translate3d(2%, 3%, 0)
-      scale(1.04);
+    transform:translate3d(2%,3%,0) scale(1.04);
     opacity:.82;
   }
-
   50%{
-    transform:
-      translate3d(4%, -1%, 0)
-      scale(1.08);
+    transform:translate3d(4%,-1%,0) scale(1.08);
     opacity:.7;
   }
-
   75%{
-    transform:
-      translate3d(-2%, 4%, 0)
-      scale(1.03);
+    transform:translate3d(-2%,4%,0) scale(1.03);
     opacity:.9;
   }
-
   100%{
-    transform:
-      translate3d(3%, 1%, 0)
-      scale(1.07);
+    transform:translate3d(3%,1%,0) scale(1.07);
     opacity:.72;
   }
 }
-
-
-/* =========================================
-   FASTER PARTICLE MOVEMENT
-========================================= */
 
 @keyframes particlesDrift{
-
-  0%{
-    transform:translate3d(0,0,0);
-  }
-
-  25%{
-    transform:translate3d(32px,-25px,0);
-  }
-
-  50%{
-    transform:translate3d(-25px,35px,0);
-  }
-
-  75%{
-    transform:translate3d(38px,18px,0);
-  }
-
-  100%{
-    transform:translate3d(0,0,0);
-  }
+  0%{transform:translate3d(0,0,0);}
+  25%{transform:translate3d(32px,-25px,0);}
+  50%{transform:translate3d(-25px,35px,0);}
+  75%{transform:translate3d(38px,18px,0);}
+  100%{transform:translate3d(0,0,0);}
 }
-
-
-/* =========================================
-   PARTICLE BRIGHTNESS
-========================================= */
 
 @keyframes particlesPulse{
-
-  0%{
-    opacity:.65;
-  }
-
-  50%{
-    opacity:1;
-  }
-
-  100%{
-    opacity:.72;
-  }
+  0%{opacity:.65;}
+  50%{opacity:1;}
+  100%{opacity:.72;}
 }
-
 
 a{
   color:inherit;
@@ -240,23 +149,27 @@ button:disabled{
   opacity:.6;
 }
 
-
-/* =========================================
+/* =========================================================
    HEADER
-========================================= */
+   ========================================================= */
 
 .site-header{
   height:78px;
   max-width:1280px;
   margin:auto;
   padding:0 32px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   border-bottom:1px solid #ffffff0d;
+
   position:relative;
   z-index:30;
+
   background:#07110f20;
+
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
 }
@@ -265,6 +178,7 @@ button:disabled{
   display:inline-flex;
   align-items:center;
   gap:2px;
+
   font-family:Inter,sans-serif;
   font-size:20px;
   font-weight:800;
@@ -279,14 +193,20 @@ button:disabled{
 .brand-mark{
   display:grid;
   place-items:center;
+
   width:29px;
   height:29px;
+
   margin-right:7px;
+
   border:1px solid var(--green);
   border-radius:50%;
+
   color:var(--green);
+
   font-size:27px;
   line-height:1;
+
   box-shadow:
     0 0 14px #22d39518,
     inset 0 0 10px #22d39508;
@@ -296,6 +216,7 @@ nav{
   display:flex;
   gap:26px;
   align-items:center;
+
   font-size:14px;
   color:var(--muted);
 }
@@ -311,9 +232,13 @@ nav>a.active{
 
 .nav-admin{
   color:var(--green);
+
   border:1px solid #28dc9b55;
+
   padding:8px 13px;
+
   border-radius:7px;
+
   display:flex;
   gap:6px;
   align-items:center;
@@ -325,30 +250,39 @@ nav>a.active{
 
 .menu-toggle{
   display:none;
+
   color:var(--text);
   border:0;
   background:transparent;
+
   font-size:25px;
+
   width:42px;
   height:42px;
 }
 
-
-/* =========================================
-   CLUB MEETING BUTTON
-========================================= */
+/* =========================================================
+   CLUB MEETING
+   ========================================================= */
 
 .nav-meeting{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:6px;
+
   border:1px solid #d4af3755;
+
   background:#d4af3708;
+
   color:#ffe58a;
+
   border-radius:7px;
+
   padding:8px 12px;
+
   font:600 13px FiraGO,Inter,sans-serif;
+
   transition:
     transform .2s,
     background .2s,
@@ -366,14 +300,11 @@ nav>a.active{
   color:#fff0b0;
   border-color:#d4af37;
   background:#d4af3712;
+
   transform:translateY(-1px);
+
   box-shadow:0 0 18px #d4af3710;
 }
-
-
-/* =========================================
-   CLUB MEETING MODAL
-========================================= */
 
 body.modal-open{
   overflow:hidden;
@@ -382,9 +313,12 @@ body.modal-open{
 .meeting-modal{
   position:fixed;
   inset:0;
+
   z-index:200;
+
   display:grid;
   place-items:center;
+
   padding:22px;
 }
 
@@ -395,22 +329,37 @@ body.modal-open{
 .meeting-backdrop{
   position:absolute;
   inset:0;
+
   background:#000b;
+
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
 }
 
 .meeting-dialog{
   position:relative;
+
   width:min(520px,100%);
+
   padding:38px 34px 34px;
-  background:linear-gradient(145deg,#0e211b,#07120f);
+
+  background:
+    linear-gradient(
+      145deg,
+      #0e211b,
+      #07120f
+    );
+
   border:1px solid #d4af3760;
+
   border-radius:16px;
+
   box-shadow:
     0 30px 90px #000c,
     0 0 45px #d4af3710;
+
   text-align:center;
+
   animation:meetingIn .2s ease-out;
 }
 
@@ -428,16 +377,24 @@ body.modal-open{
 
 .meeting-close{
   position:absolute;
+
   right:14px;
   top:14px;
+
   width:36px;
   height:36px;
+
   border:1px solid var(--line);
+
   border-radius:8px;
+
   background:#ffffff06;
+
   color:var(--muted);
+
   display:grid;
   place-items:center;
+
   transition:.2s;
 }
 
@@ -455,13 +412,20 @@ body.modal-open{
 .meeting-icon{
   width:58px;
   height:58px;
+
   margin:0 auto 18px;
+
   border:1px solid #d4af3766;
+
   border-radius:50%;
+
   display:grid;
   place-items:center;
+
   color:#ffe58a;
+
   background:#d4af3708;
+
   box-shadow:
     0 0 28px #d4af3712,
     inset 0 0 15px #d4af3708;
@@ -472,20 +436,39 @@ body.modal-open{
   height:27px;
 }
 
+.eyebrow{
+  font-family:Inter,sans-serif;
+
+  font-size:11px;
+  letter-spacing:2px;
+
+  color:var(--green);
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  margin:0 0 14px;
+}
+
 .meeting-dialog .eyebrow{
   margin-bottom:9px;
 }
 
 .meeting-dialog h2{
   font:800 30px/1.1 Inter,sans-serif;
+
   margin:0 0 22px;
+
   letter-spacing:-.04em;
 }
 
 .meeting-content{
   min-height:150px;
+
   display:flex;
   flex-direction:column;
+
   justify-content:center;
 }
 
@@ -504,6 +487,7 @@ body.modal-open{
 .meeting-loading svg{
   width:18px;
   height:18px;
+
   animation:spin 1s linear infinite;
 }
 
@@ -520,40 +504,52 @@ body.modal-open{
 .meeting-empty svg{
   width:34px;
   height:34px;
+
   color:var(--green);
+
   margin-bottom:10px;
 }
 
 .meeting-empty h3{
   margin:0 0 7px;
+
   color:var(--text);
+
   font-size:18px;
 }
 
 .meeting-empty p{
   margin:0;
+
   font-size:13px;
+
   line-height:1.7;
 }
 
 .meeting-date-main{
   font:800 clamp(24px,5vw,34px)/1.2 Inter,sans-serif;
+
   color:#ffe58a;
+
   letter-spacing:-.04em;
+
   margin-bottom:22px;
 }
 
 .meeting-detail-row{
   display:grid;
   grid-template-columns:1fr 1fr;
+
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
 
 .meeting-detail-row>div{
   padding:16px 12px;
+
   display:flex;
   flex-direction:column;
+
   gap:4px;
 }
 
@@ -564,29 +560,39 @@ body.modal-open{
 .meeting-detail-row span{
   font-size:11px;
   color:var(--muted);
+
   text-transform:uppercase;
+
   letter-spacing:1.3px;
 }
 
 .meeting-detail-row strong{
   font:700 19px Inter,sans-serif;
+
   color:var(--text);
 }
 
-
-/* =========================================
+/* =========================================================
    HERO
-========================================= */
+   ========================================================= */
 
 .hero{
   min-height:600px;
+
   max-width:1216px;
+
   margin:auto;
+
   padding:100px 32px 80px;
+
   display:grid;
+
   grid-template-columns:1.1fr .9fr;
+
   align-items:center;
+
   gap:55px;
+
   position:relative;
 }
 
@@ -594,24 +600,18 @@ body.modal-open{
   min-width:0;
 }
 
-.eyebrow{
-  font-family:Inter,sans-serif;
-  font-size:11px;
-  letter-spacing:2px;
-  color:var(--green);
-  font-weight:700;
-  text-transform:uppercase;
-  margin:0 0 14px;
-}
-
 .hero h1,
 .page-title h1,
 .detail h1,
 .dashboard-intro h1{
   font-family:Inter,sans-serif;
+
   font-weight:800;
+
   letter-spacing:-.065em;
+
   line-height:1.04;
+
   margin:0;
 }
 
@@ -621,34 +621,51 @@ body.modal-open{
 
 .hero h1 em{
   font-style:normal;
+
   color:var(--green);
+
   text-shadow:0 0 30px #22d39518;
 }
 
 .hero-text{
   color:var(--muted);
+
   font-size:17px;
+
   max-width:540px;
+
   margin:28px 0;
 }
 
 .hero-actions{
   display:flex;
+
   gap:12px;
+
   flex-wrap:wrap;
 }
 
 .button{
   border:1px solid transparent;
+
   border-radius:7px;
+
   padding:12px 17px;
+
   min-height:44px;
+
   display:inline-flex;
+
   justify-content:center;
+
   gap:8px;
+
   align-items:center;
+
   font-weight:600;
+
   font-size:14px;
+
   transition:
     transform .2s,
     background .2s,
@@ -667,35 +684,45 @@ body.modal-open{
 
 .primary{
   background:var(--green);
+
   color:#062018;
+
   box-shadow:0 7px 22px #21d39522;
 }
 
 .primary:hover{
   background:var(--green2);
+
   box-shadow:0 9px 28px #21d39530;
 }
 
 .secondary{
   background:#ffffff08;
+
   color:var(--text);
+
   border-color:var(--line);
 }
 
 .secondary:hover{
   border-color:#36c596;
+
   box-shadow:0 0 20px #22d3950b;
 }
 
 .ghost{
   background:transparent;
+
   color:var(--muted);
+
   border-color:var(--line);
 }
 
 .compact{
   padding:8px 11px;
+
   min-height:37px;
+
   font-size:12px;
 }
 
@@ -705,62 +732,80 @@ body.modal-open{
 
 .hero-stats{
   display:flex;
+
   gap:30px;
+
   margin-top:65px;
 }
 
 .hero-stats div{
   display:flex;
+
   flex-direction:column;
+
   gap:2px;
 }
 
 .hero-stats strong{
   color:var(--green2);
+
   font:700 25px Inter,sans-serif;
 }
 
 .hero-stats span{
   font-size:12px;
+
   color:var(--muted);
 }
 
-
-/* =========================================
-   ARDUINO BOARD
-========================================= */
+/* =========================================================
+   BOARD
+   ========================================================= */
 
 .circuit-visual{
   height:370px;
+
   display:grid;
+
   place-items:center;
+
   min-width:0;
+
   position:relative;
 }
 
 .circuit-visual:before{
   content:"";
+
   position:absolute;
+
   width:330px;
   height:330px;
+
   border-radius:50%;
-  background:radial-gradient(
-    circle,
-    #22d3950d,
-    transparent 65%
-  );
+
+  background:
+    radial-gradient(
+      circle,
+      #22d3950d,
+      transparent 65%
+    );
+
   filter:blur(2px);
+
   animation:boardGlow 5s ease-in-out infinite alternate;
 }
 
 @keyframes boardGlow{
   from{
     transform:scale(.94);
+
     opacity:.6;
   }
 
   to{
     transform:scale(1.06);
+
     opacity:1;
   }
 }
@@ -768,83 +813,113 @@ body.modal-open{
 .board{
   width:min(350px,90%);
   height:260px;
+
   border:1px solid #35e4a766;
-  background:linear-gradient(135deg,#14372d,#0b201b);
+
+  background:
+    linear-gradient(
+      135deg,
+      #14372d,
+      #0b201b
+    );
+
   border-radius:20px;
+
   position:relative;
+
   box-shadow:
     inset 0 0 50px #2effb012,
     0 0 70px #19cf8c17;
+
   transform:rotate(-6deg);
+
   z-index:1;
 }
 
 .chip{
   position:absolute;
+
   left:50%;
   top:50%;
+
   transform:translate(-50%,-50%);
+
   width:145px;
+
   padding:35px 0;
+
   border-radius:5px;
+
   background:#06100e;
+
   border:1px solid #315c4e;
+
   text-align:center;
+
   color:var(--green2);
+
   font:700 19px/1.2 Inter,sans-serif;
+
   letter-spacing:2px;
+
   box-shadow:0 0 22px #000;
 }
 
 .pin{
   position:absolute;
+
   width:9px;
   height:36px;
+
   background:#c5a85c;
+
   border-radius:2px;
 }
 
-.p1,
-.p2{
+.p1,.p2{
   top:95px;
 }
 
-.p3,
-.p4{
+.p3,.p4{
   bottom:95px;
 }
 
-.p1,
-.p3{
+.p1,.p3{
   left:75px;
 }
 
-.p2,
-.p4{
+.p2,.p4{
   right:75px;
 }
 
 .led{
   position:absolute;
+
   width:17px;
   height:17px;
+
   border-radius:50%;
+
   right:38px;
   top:39px;
+
   background:var(--green);
+
   box-shadow:0 0 18px var(--green);
+
   animation:ledPulse 2.5s ease-in-out infinite;
 }
 
 @keyframes ledPulse{
-  0%,
-  100%{
+  0%,100%{
     opacity:.7;
+
     box-shadow:0 0 12px var(--green);
   }
 
   50%{
     opacity:1;
+
     box-shadow:
       0 0 25px var(--green),
       0 0 45px #22d39535;
@@ -853,15 +928,19 @@ body.modal-open{
 
 .trace{
   position:absolute;
+
   border:2px solid #23b77c;
+
   border-radius:12px;
 }
 
 .t1{
   width:85px;
   height:60px;
+
   left:21px;
   top:37px;
+
   border-left:0;
   border-bottom:0;
 }
@@ -869,49 +948,65 @@ body.modal-open{
 .t2{
   width:85px;
   height:60px;
+
   right:21px;
   bottom:37px;
+
   border-right:0;
   border-top:0;
 }
 
-
-/* =========================================
+/* =========================================================
    SECTIONS
-========================================= */
+   ========================================================= */
 
 .section{
   max-width:1216px;
+
   margin:0 auto;
+
   padding:105px 32px;
+
   position:relative;
 }
 
 .section h2,
 .cta h2{
   font:800 clamp(29px,4vw,47px)/1.1 Inter,sans-serif;
+
   letter-spacing:-.05em;
+
   margin:0;
 }
 
 .steps{
   display:grid;
+
   grid-template-columns:repeat(4,1fr);
+
   gap:14px;
+
   margin-top:48px;
 }
 
 .steps article{
   position:relative;
-  background:linear-gradient(
-    145deg,
-    var(--panel),
-    #0a1714
-  );
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--panel),
+      #0a1714
+    );
+
   border:1px solid var(--line);
+
   padding:25px;
+
   border-radius:11px;
+
   min-height:205px;
+
   transition:
     transform .2s,
     border-color .2s,
@@ -920,7 +1015,9 @@ body.modal-open{
 
 .steps article:hover{
   transform:translateY(-5px);
+
   border-color:#36c596;
+
   box-shadow:
     0 14px 35px #0005,
     0 0 25px #22d39509;
@@ -928,85 +1025,116 @@ body.modal-open{
 
 .steps b{
   position:absolute;
+
   right:20px;
   top:17px;
+
   color:#ffffff13;
+
   font:800 44px Inter,sans-serif;
 }
 
 .steps svg{
   width:26px;
+
   color:var(--green);
+
   margin-bottom:30px;
 }
 
 .steps h3{
   font-size:17px;
+
   margin:0 0 7px;
 }
 
 .steps p,
 .about p{
   color:var(--muted);
+
   font-size:14px;
+
   margin:0;
 }
 
-
-/* =========================================
+/* =========================================================
    ABOUT
-========================================= */
+   ========================================================= */
 
 .about{
   border-top:1px solid #ffffff0d;
+
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:110px;
+
   align-items:center;
 }
 
 .about>p{
   font-size:17px;
+
   line-height:1.8;
 }
 
-
-/* =========================================
+/* =========================================================
    CTA
-========================================= */
+   ========================================================= */
 
 .cta{
   max-width:1152px;
+
   margin:30px auto 100px;
+
   padding:70px 40px;
-  background:linear-gradient(105deg,#123a2f,#0b201b);
+
+  background:
+    linear-gradient(
+      105deg,
+      #123a2f,
+      #0b201b
+    );
+
   border:1px solid #29664f;
+
   border-radius:14px;
+
   text-align:center;
+
   position:relative;
+
   overflow:hidden;
 }
 
 .cta:before{
   content:"";
+
   position:absolute;
+
   inset:-100px;
-  background:radial-gradient(
-    circle,
-    #40e9aa20,
-    transparent 45%
-  );
+
+  background:
+    radial-gradient(
+      circle,
+      #40e9aa20,
+      transparent 45%
+    );
+
   animation:ctaGlow 7s ease-in-out infinite alternate;
 }
 
 @keyframes ctaGlow{
   from{
     transform:scale(.9);
+
     opacity:.6;
   }
 
   to{
     transform:scale(1.1);
+
     opacity:1;
   }
 }
@@ -1017,8 +1145,10 @@ body.modal-open{
 
 .cta>svg{
   color:var(--green);
+
   width:35px;
   height:35px;
+
   margin-bottom:16px;
 }
 
@@ -1026,21 +1156,29 @@ body.modal-open{
   margin-bottom:27px;
 }
 
-
-/* =========================================
+/* =========================================================
    FOOTER
-========================================= */
+   ========================================================= */
 
 footer{
   max-width:1216px;
+
   border-top:1px solid #ffffff10;
+
   margin:auto;
+
   padding:28px 32px;
+
   display:flex;
+
   justify-content:space-between;
+
   gap:25px;
+
   align-items:center;
+
   color:var(--muted);
+
   font-size:13px;
 }
 
@@ -1050,7 +1188,9 @@ footer p{
 
 footer div{
   margin-left:auto;
+
   display:flex;
+
   gap:18px;
 }
 
@@ -1060,7 +1200,9 @@ footer small{
 
 .footer-credit{
   display:flex;
+
   gap:18px;
+
   align-items:center;
 }
 
@@ -1068,44 +1210,59 @@ footer small{
   color:var(--green2);
 }
 
-
-/* =========================================
-   PROJECTS PAGE
-========================================= */
+/* =========================================================
+   PROJECTS
+   ========================================================= */
 
 .page-shell{
   max-width:1216px;
+
   margin:auto;
+
   padding:70px 32px 100px;
+
   min-height:calc(100vh - 160px);
 }
 
 .page-title h1{
   font-size:clamp(38px,5vw,58px);
+
   margin-bottom:12px;
 }
 
 .page-title>p:last-child{
   color:var(--muted);
+
   margin:0;
 }
 
 .filters{
   display:flex;
+
   gap:12px;
+
   margin:42px 0 30px;
 }
 
 .search{
   flex:1;
+
   max-width:520px;
+
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
   background:var(--panel);
+
   border:1px solid var(--line);
+
   border-radius:7px;
+
   padding:0 14px;
+
   transition:
     border-color .2s,
     box-shadow .2s;
@@ -1113,29 +1270,39 @@ footer small{
 
 .search:focus-within{
   border-color:#36c596;
+
   box-shadow:0 0 0 3px #22d39509;
 }
 
 .search svg{
   color:var(--muted);
+
   width:18px;
+
   flex-shrink:0;
 }
 
 .search input,
 .select-label select{
   color:var(--text);
+
   background:transparent;
+
   border:0;
   outline:0;
+
   padding:13px 0;
+
   width:100%;
 }
 
 .select-label{
   background:var(--panel);
+
   border:1px solid var(--line);
+
   border-radius:7px;
+
   padding:0 11px;
 }
 
@@ -1145,21 +1312,29 @@ footer small{
 
 .loading{
   color:var(--muted);
+
   padding:42px 0;
+
   text-align:center;
 }
 
 .project-grid{
   display:grid;
+
   grid-template-columns:repeat(3,1fr);
+
   gap:17px;
 }
 
 .project-card{
   background:var(--panel);
+
   border:1px solid var(--line);
+
   border-radius:11px;
+
   overflow:hidden;
+
   transition:
     transform .2s,
     box-shadow .2s,
@@ -1168,20 +1343,26 @@ footer small{
 
 .project-card:hover{
   transform:translateY(-5px);
+
   box-shadow:var(--shadow);
+
   border-color:#2c6653;
 }
 
 .card-image{
   height:194px;
+
   background:#10251f;
+
   overflow:hidden;
 }
 
 .card-image img{
   width:100%;
   height:100%;
+
   object-fit:cover;
+
   transition:transform .4s;
 }
 
@@ -1191,7 +1372,9 @@ footer small{
 
 .card-image.fallback{
   display:grid;
+
   place-items:center;
+
   color:#5de6b3;
 }
 
@@ -1206,48 +1389,71 @@ footer small{
 
 .card-meta{
   display:flex;
+
   justify-content:space-between;
+
   gap:8px;
+
   align-items:center;
+
   color:var(--muted);
+
   font-size:11px;
 }
 
 .card-meta span{
   background:#1d4a3c;
+
   color:var(--green2);
+
   border-radius:20px;
+
   padding:4px 8px;
 }
 
 .card-body h2{
   font:700 19px Inter,sans-serif;
+
   margin:14px 0 9px;
 }
 
 .card-body>p{
   color:var(--muted);
+
   font-size:13px;
+
   margin:0;
+
   display:-webkit-box;
+
   -webkit-line-clamp:2;
+
   -webkit-box-orient:vertical;
+
   overflow:hidden;
 }
 
 .card-footer{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   gap:10px;
+
   margin-top:21px;
+
   color:var(--muted);
+
   font-size:12px;
 }
 
 .card-footer span{
   display:flex;
+
   align-items:center;
+
   gap:5px;
 }
 
@@ -1257,25 +1463,35 @@ footer small{
 
 .text-link{
   color:var(--green);
+
   font-weight:600;
+
   display:flex;
+
   align-items:center;
+
   gap:4px;
 }
 
-
-/* =========================================
+/* =========================================================
    EMPTY STATE
-========================================= */
+   ========================================================= */
 
 .empty-state{
   background:var(--panel);
+
   border:1px dashed #315549;
+
   border-radius:11px;
+
   padding:60px 25px;
+
   text-align:center;
+
   color:var(--muted);
+
   max-width:650px;
+
   margin:42px auto;
 }
 
@@ -1285,32 +1501,40 @@ footer small{
 
 .empty-state svg{
   color:var(--green);
+
   width:42px;
   height:42px;
 }
 
 .empty-state h2{
   font:700 21px Inter,sans-serif;
+
   color:var(--text);
+
   margin:13px 0 7px;
 }
 
 .empty-state p{
   margin:0 0 20px;
+
   font-size:14px;
 }
 
-
-/* =========================================
-   DETAIL PAGE
-========================================= */
+/* =========================================================
+   DETAIL
+   ========================================================= */
 
 .back-link{
   display:inline-flex;
+
   align-items:center;
+
   gap:7px;
+
   color:var(--muted);
+
   font-size:14px;
+
   margin-bottom:32px;
 }
 
@@ -1324,29 +1548,41 @@ footer small{
 
 .detail-hero{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:45px;
+
   align-items:center;
+
   border-bottom:1px solid var(--line);
+
   padding-bottom:48px;
 }
 
 .detail h1{
   font-size:clamp(36px,5vw,62px);
+
   margin:16px 0;
 }
 
 .detail-hero p{
   color:var(--muted);
+
   font-size:17px;
+
   margin-bottom:22px;
 }
 
 .author-line{
   display:flex;
+
   align-items:center;
+
   gap:7px;
+
   color:var(--green2);
+
   font-size:14px;
 }
 
@@ -1356,15 +1592,21 @@ footer small{
 
 .detail-image{
   width:100%;
+
   max-height:410px;
+
   object-fit:cover;
+
   border-radius:10px;
+
   border:1px solid var(--line);
+
   box-shadow:0 18px 50px #0005;
 }
 
 .detail-content{
   max-width:860px;
+
   margin:48px auto;
 }
 
@@ -1374,19 +1616,25 @@ footer small{
 
 .detail-section h2{
   display:flex;
+
   gap:10px;
+
   align-items:center;
+
   font:700 22px Inter,sans-serif;
+
   margin:0 0 15px;
 }
 
 .detail-section h2 svg{
   color:var(--green);
+
   width:22px;
 }
 
 .prose{
   color:var(--muted);
+
   line-height:1.9;
 }
 
@@ -1396,71 +1644,100 @@ footer small{
 
 .media-section video{
   max-width:100%;
+
   width:100%;
+
   border:1px solid var(--line);
+
   border-radius:9px;
+
   background:#000;
 }
 
 .code-heading{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   gap:15px;
 }
 
 .detail pre{
   background:#06110e;
+
   border:1px solid #25483d;
+
   padding:20px;
+
   border-radius:9px;
+
   overflow:auto;
+
   color:#b7f5dc;
+
   font:13px/1.65 "SFMono-Regular",Consolas,monospace;
 }
 
-
-/* =========================================
+/* =========================================================
    TOAST
-========================================= */
+   ========================================================= */
 
 .toast{
   position:fixed;
+
   z-index:100;
+
   right:22px;
   bottom:22px;
+
   opacity:0;
+
   transform:translateY(10px);
+
   pointer-events:none;
+
   background:#243f36;
+
   color:var(--text);
+
   border:1px solid #3a6857;
+
   border-radius:8px;
+
   padding:12px 16px;
+
   transition:.2s;
+
   box-shadow:var(--shadow);
+
   font-size:14px;
+
   max-width:calc(100vw - 44px);
 }
 
 .toast.show{
   opacity:1;
+
   transform:none;
 }
 
 .toast.success{
   border-color:var(--green);
+
   color:var(--green2);
 }
 
-
-/* =========================================
+/* =========================================================
    ADMIN LOGIN
-========================================= */
+   ========================================================= */
 
 .admin-page{
   min-height:100vh;
+
   padding:26px;
+
   background:
     radial-gradient(
       circle at 50% 0,
@@ -1471,42 +1748,57 @@ footer small{
 
 .admin-brand{
   position:absolute;
+
   left:35px;
   top:26px;
 }
 
 .auth-card{
   width:min(460px,100%);
+
   margin:90px auto;
+
   padding:36px;
+
   background:var(--panel);
+
   border:1px solid var(--line);
+
   border-radius:13px;
+
   box-shadow:var(--shadow);
 }
 
 .auth-card h1{
   font:700 27px/1.2 Inter,sans-serif;
+
   margin:0 0 9px;
+
   letter-spacing:-.04em;
 }
 
 .auth-card>p:not(.eyebrow){
   color:var(--muted);
+
   font-size:14px;
+
   margin:0 0 28px;
 }
 
 .auth-card form{
   display:grid;
+
   gap:18px;
 }
 
 .auth-card label,
 #project-form label{
   display:grid;
+
   gap:7px;
+
   font-size:13px;
+
   color:var(--muted);
 }
 
@@ -1514,12 +1806,19 @@ input,
 textarea,
 select{
   width:100%;
+
   color:var(--text);
+
   background:#071310;
+
   border:1px solid #2c4a40;
+
   border-radius:6px;
+
   padding:11px;
+
   outline:none;
+
   transition:
     border-color .2s,
     box-shadow .2s;
@@ -1533,60 +1832,81 @@ input:focus,
 textarea:focus,
 select:focus{
   border-color:var(--green);
+
   box-shadow:0 0 0 3px #21d39512;
 }
 
 .form-message{
   color:#ff9da7;
+
   font-size:13px;
+
   min-height:18px;
+
   margin:0;
 }
 
 .centered{
   display:flex;
+
   justify-content:center;
+
   margin:24px 0 0;
 }
 
-
-/* =========================================
+/* =========================================================
    ADMIN DASHBOARD
-========================================= */
+   ========================================================= */
 
 .dashboard-header{
   max-width:1280px;
+
   margin:auto;
+
   padding:18px 32px;
+
   border-bottom:1px solid var(--line);
+
   display:flex;
+
   justify-content:end;
+
   align-items:center;
+
   gap:20px;
 }
 
 .dashboard-header>div{
   display:flex;
+
   align-items:center;
+
   gap:10px;
 }
 
 .dashboard-header span{
   font-size:13px;
+
   color:var(--green2);
 }
 
 .dashboard-shell{
   max-width:1216px;
+
   margin:auto;
+
   padding:44px 32px 90px;
 }
 
 .dashboard-intro{
   display:flex;
+
   justify-content:space-between;
+
   align-items:end;
+
   gap:20px;
+
   margin-bottom:35px;
 }
 
@@ -1597,22 +1917,29 @@ select:focus{
 .editor-card,
 .management{
   background:var(--panel);
+
   border:1px solid var(--line);
+
   border-radius:11px;
+
   padding:27px;
 }
 
-
-/* =========================================
-   ADMIN CLUB MEETING
-========================================= */
+/* =========================================================
+   ADMIN MEETING
+   ========================================================= */
 
 .meeting-admin-card{
   background:var(--panel);
+
   border:1px solid #d4af3730;
+
   border-radius:11px;
+
   padding:27px;
+
   margin-bottom:22px;
+
   box-shadow:0 15px 45px #0004;
 }
 
@@ -1622,85 +1949,121 @@ select:focus{
 
 .meeting-admin-card .section-heading h2{
   margin:0;
+
   font:700 22px Inter,sans-serif;
 }
 
 .meeting-admin-help{
   margin:0 0 22px;
+
   color:var(--muted);
+
   font-size:13px;
 }
 
 .meeting-admin-status{
   font-size:12px;
+
   color:var(--muted);
+
   border:1px solid var(--line);
+
   border-radius:20px;
+
   padding:6px 10px;
 }
 
 .meeting-admin-status.published{
   color:#ffe58a;
+
   border-color:#d4af3760;
+
   background:#d4af3708;
 }
 
 .meeting-form{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:17px;
+
   align-items:end;
 }
 
 .meeting-form label{
   display:flex;
+
   flex-direction:column;
+
   gap:8px;
+
   color:var(--muted);
+
   font-size:13px;
 }
 
 .meeting-form input{
   width:100%;
+
   background:#071310;
+
   color:var(--text);
+
   border:1px solid #2c4a40;
+
   border-radius:8px;
+
   padding:12px 13px;
+
   outline:0;
 }
 
 .meeting-form input:focus{
   border-color:#d4af37;
+
   box-shadow:0 0 0 3px #d4af3712;
 }
 
 .meeting-day-preview{
   min-height:48px;
+
   background:#071310;
+
   border:1px solid #2c4a40;
+
   border-radius:8px;
+
   padding:7px 13px;
+
   display:flex;
+
   flex-direction:column;
+
   justify-content:center;
 }
 
 .meeting-day-preview span{
   font-size:11px;
+
   color:var(--muted);
 }
 
 .meeting-day-preview strong{
   color:#ffe58a;
+
   font:700 14px Inter,sans-serif;
 }
 
 .meeting-form-actions{
   grid-column:1/-1;
+
   display:flex;
+
   gap:10px;
+
   flex-wrap:wrap;
+
   margin-top:2px;
 }
 
@@ -1711,32 +2074,45 @@ select:focus{
 .editor-heading,
 .section-heading{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   gap:15px;
+
   margin-bottom:22px;
 }
 
 .editor-heading h2,
 .section-heading h2{
   margin:0;
+
   font:700 22px Inter,sans-serif;
 }
 
 .icon-button{
   border:1px solid var(--line);
+
   color:var(--muted);
+
   background:#ffffff05;
+
   width:35px;
   height:35px;
+
   border-radius:6px;
+
   display:inline-grid;
+
   place-items:center;
+
   transition:.2s;
 }
 
 .icon-button:hover{
   color:var(--green);
+
   border-color:var(--green);
 }
 
@@ -1746,21 +2122,28 @@ select:focus{
 
 .icon-button.danger:hover{
   color:var(--danger);
+
   border-color:var(--danger);
 }
 
 .form-grid,
 .upload-grid{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:17px;
+
   margin-bottom:17px;
 }
 
 .checkbox-label{
   display:flex!important;
+
   align-items:center;
+
   gap:8px!important;
+
   color:var(--text)!important;
 }
 
@@ -1774,8 +2157,11 @@ select:focus{
 
 .upload-field{
   border:1px dashed #41675a;
+
   border-radius:7px;
+
   padding:15px;
+
   gap:10px!important;
 }
 
@@ -1785,22 +2171,31 @@ select:focus{
 
 .upload-field input{
   padding:7px;
+
   background:transparent;
+
   border:0;
 }
 
 .upload-field span{
   font-size:12px;
+
   color:var(--green2);
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
 .upload-field img{
   max-height:160px;
+
   max-width:100%;
+
   border-radius:5px;
+
   object-fit:cover;
 }
 
@@ -1810,126 +2205,156 @@ select:focus{
 
 .section-heading span{
   font-size:13px;
+
   color:var(--muted);
 }
 
 .admin-row{
   display:grid;
+
   grid-template-columns:1fr auto auto;
+
   align-items:center;
+
   gap:20px;
+
   border-top:1px solid #ffffff0c;
+
   padding:17px 0;
 }
 
 .admin-row h3{
   font:600 15px Inter,sans-serif;
+
   margin:0 0 4px;
 }
 
 .admin-row p{
   font-size:12px;
+
   color:var(--muted);
+
   margin:0;
 }
 
 .status{
   font-size:11px;
+
   border-radius:20px;
+
   padding:5px 8px;
 }
 
 .published{
   background:#154635;
+
   color:var(--green2);
 }
 
 .hidden-status{
   background:#3a3432;
+
   color:#d8c1a6;
 }
 
 .row-actions{
   display:flex;
+
   gap:6px;
 }
 
 .compact-empty{
   margin:15px auto;
+
   padding:30px;
 }
 
 .sr-only{
   position:absolute;
+
   clip:rect(0,0,0,0);
+
   width:1px;
   height:1px;
+
   overflow:hidden;
 }
 
-
-/* =========================================
-   TEAM PAGE
-========================================= */
+/* =========================================================
+   TEAM
+   ========================================================= */
 
 .team-page{
   max-width:1216px;
+
   margin:0 auto;
+
   padding:80px 32px 100px;
 }
 
 .team-intro{
   max-width:760px;
+
   margin-bottom:45px;
 }
 
 .team-intro h1{
   font:800 clamp(42px,6vw,68px)/1.05 Inter,sans-serif;
+
   letter-spacing:-.065em;
+
   margin:0 0 22px;
 }
 
 .team-intro h1 em{
   color:var(--green);
+
   font-style:normal;
 }
 
 .team-intro>p:last-child{
   color:var(--muted);
+
   font-size:17px;
+
   max-width:650px;
+
   line-height:1.8;
+
   margin:0;
 }
 
-
-/* =========================================
-   TEAM GRID
-========================================= */
-
 .team-grid{
   display:grid;
+
   grid-template-columns:repeat(2,minmax(0,1fr));
+
   gap:14px;
+
   width:100%;
 }
 
-
-/* =========================================
-   TEAM CARDS
-========================================= */
-
 .team-card{
   position:relative;
+
   overflow:hidden;
+
   display:flex;
+
   gap:13px;
+
   padding:15px;
+
   min-height:170px;
+
   width:100%;
+
   background:var(--panel);
+
   border:1px solid var(--line);
+
   border-radius:11px;
+
   transition:
     transform .25s,
     border-color .25s,
@@ -1940,52 +2365,60 @@ select:focus{
 
 .team-card::before{
   content:"";
+
   position:absolute;
+
   width:125px;
   height:125px;
+
   right:-48px;
   top:-48px;
+
   border-radius:50%;
+
   background:
     radial-gradient(
       circle,
       #22d39518,
       transparent 70%
     );
+
   pointer-events:none;
 }
 
 .team-card:hover{
   transform:translateY(-4px);
+
   border-color:#36c596;
+
   box-shadow:var(--shadow);
 }
 
-
-/* =========================================
-   TEAM CARD FADE EFFECT
-========================================= */
-
 .team-grid:has(.team-card:hover) .team-card{
   opacity:.42;
+
   filter:saturate(.7);
 }
 
 .team-grid:has(.team-card:hover) .team-card:hover{
   opacity:1;
+
   filter:saturate(1);
-  transform:translateY(-7px) scale(1.015);
+
+  transform:
+    translateY(-7px)
+    scale(1.015);
+
   z-index:3;
 }
 
-
-/* =========================================
-   ZAZA + TEKLA — TOP TIER BLACK
-========================================= */
+/* TOP TIER */
 
 .team-card-orange{
   background:#000;
+
   border:1px solid #d4af37;
+
   box-shadow:
     0 0 0 1px #d4af3718,
     0 18px 50px #000b,
@@ -2003,7 +2436,9 @@ select:focus{
 
 .team-card-orange:hover{
   background:#000;
+
   border-color:#f0d36a;
+
   box-shadow:
     0 0 0 1px #d4af3730,
     0 20px 55px #000c,
@@ -2012,12 +2447,14 @@ select:focus{
 
 .team-card-orange .team-avatar{
   border-color:#d4af37;
+
   background:
     radial-gradient(
       circle at 35% 30%,
       #30260b,
       #050505 70%
     );
+
   box-shadow:
     0 0 25px #d4af3718,
     inset 0 0 20px #d4af370d;
@@ -2033,17 +2470,17 @@ select:focus{
 
 .team-card-orange .team-tags span{
   background:#050505;
+
   border-color:#6f5a1b;
+
   color:#ffe58a;
 }
 
-
-/* =========================================
-   ANI DZAGNIDZE — BLUE
-========================================= */
+/* BLUE */
 
 .team-card-blue{
   order:1;
+
   border-color:#2874c7;
 }
 
@@ -2058,6 +2495,7 @@ select:focus{
 
 .team-card-blue:hover{
   border-color:#42a5ff;
+
   box-shadow:
     0 18px 50px #0008,
     0 0 30px #3195ff20;
@@ -2065,12 +2503,14 @@ select:focus{
 
 .team-card-blue .team-avatar{
   border-color:#2874c7;
+
   background:
     radial-gradient(
       circle at 35% 30%,
       #174b7d,
       #07121f 70%
     );
+
   box-shadow:
     0 0 25px #3195ff20,
     inset 0 0 20px #3195ff10;
@@ -2086,2169 +2526,35 @@ select:focus{
 
 .team-card-blue .team-tags span{
   background:#122f4e;
+
   border-color:#245b8d;
+
   color:#8bc9ff;
 }
-
-
-/* =========================================
-   OTHER TEAM CARDS
-========================================= */
 
 .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
   order:2;
 }
 
-
-/* =========================================
-   ANASTASIA TEVDORADZE — LAST
-========================================= */
-
 .team-card-new{
   order:3;
 }
 
-
-/* =========================================
-   TEAM AVATAR
-========================================= */
-
 .team-avatar{
   flex:0 0 64px;
+
   width:64px;
   height:64px;
+
   display:grid;
+
   place-items:center;
+
   border-radius:50%;
+
   border:1px solid #2c8c6b;
+
   background:
     radial-gradient(
       circle at 35% 30%,
-      #1b5946,
-      #081612 70%
-    );
-  box-shadow:
-    0 0 25px #22d39515,
-    inset 0 0 20px #22d3950d;
-}
-
-.team-avatar span{
-  color:var(--green2);
-  font:800 20px Inter,sans-serif;
-  letter-spacing:1px;
-  transform:translateX(1px);
-}
-
-
-/* =========================================
-   TEAM INFO
-========================================= */
-
-.team-info{
-  position:relative;
-  z-index:1;
-  min-width:0;
-}
-
-.team-role{
-  color:var(--green);
-  font:700 11px Inter,sans-serif;
-  letter-spacing:1.3px;
-  margin:0 0 6px;
-}
-
-.team-info h2{
-  font:800 22px Inter,sans-serif;
-  letter-spacing:-.035em;
-  margin:0 0 7px;
-}
-
-.team-description{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.55;
-  margin:0;
-}
-
-
-/* =========================================
-   TEAM TAGS
-========================================= */
-
-.team-tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-  margin-top:10px;
-}
-
-.team-tags span{
-  padding:4px 7px;
-  border-radius:20px;
-  background:#16392f;
-  border:1px solid #245748;
-  color:var(--green2);
-  font-size:10px;
-}
-
-
-/* =========================================
-   MAIA — FIRST + CENTERED
-========================================= */
-
-.team-card-teacher{
-  order:-1;
-  grid-column:1/-1;
-  justify-self:center;
-  width:min(46%,520px);
-  min-height:170px;
-  margin:0;
-  border-color:#7d3038;
-}
-
-.team-card-teacher::before{
-  background:
-    radial-gradient(
-      circle,
-      #ff4f5f20,
-      transparent 70%
-    );
-}
-
-.team-card-teacher:hover{
-  border-color:#ff5967;
-  box-shadow:
-    0 18px 50px #0008,
-    0 0 30px #ff4f5f12;
-}
-
-.team-card-teacher .team-avatar{
-  border-color:#a83b47;
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      #64252d,
-      #170b0d 70%
-    );
-  box-shadow:
-    0 0 25px #ff4f5f18,
-    inset 0 0 22px #ff4f5f0d;
-}
-
-.team-card-teacher .team-avatar span{
-  color:#ff8c96;
-}
-
-.team-card-teacher .team-role{
-  color:#ff5967;
-}
-
-.team-card-teacher .team-tags span{
-  background:#421c21;
-  border-color:#713038;
-  color:#ff9aa2;
-}
-
-
-/* =========================================
-   BOTTOM MESSAGE
-========================================= */
-
-.team-footer-message{
-  position:relative;
-  overflow:hidden;
-  margin-top:22px;
-  padding:45px 25px;
-  text-align:center;
-  background:linear-gradient(105deg,#123a2f,#0b201b);
-  border:1px solid #29664f;
-  border-radius:14px;
-}
-
-.team-footer-message::before{
-  content:"";
-  position:absolute;
-  inset:-100px;
-  background:
-    radial-gradient(
-      circle,
-      #40e9aa20,
-      transparent 45%
-    );
-  pointer-events:none;
-  animation:ctaGlow 7s ease-in-out infinite alternate;
-}
-
-.team-footer-message>*{
-  position:relative;
-}
-
-
-/* =========================================
-   ARDUINO + CHEMISTRY ICONS
-========================================= */
-
-.team-footer-icons{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-  margin-bottom:13px;
-}
-
-.team-footer-icons svg{
-  width:34px;
-  height:34px;
-  color:var(--green);
-  stroke-width:1.8;
-}
-
-.team-footer-icons svg:first-child{
-  filter:drop-shadow(0 0 8px #22d39525);
-}
-
-.team-footer-icons svg:last-child{
-  color:#89f4c9;
-  filter:drop-shadow(0 0 8px #89f4c925);
-}
-
-
-/* =========================================
-   FOOTER MESSAGE TEXT
-========================================= */
-
-.team-footer-message h2{
-  font:800 30px Inter,sans-serif;
-  letter-spacing:-.05em;
-  margin:0 0 9px;
-}
-
-.team-footer-message p{
-  color:var(--muted);
-  margin:0;
-  font-size:14px;
-}
-
-
-/* =========================================
-   LARGE TABLETS / SMALL LAPTOPS
-========================================= */
-
-@media (max-width:1100px){
-
-  .site-header{
-    padding-left:25px;
-    padding-right:25px;
-  }
-
-  nav{
-    gap:18px;
-  }
-
-  .nav-meeting{
-    padding:7px 9px;
-    font-size:12px;
-  }
-
-  .hero{
-    grid-template-columns:1fr;
-    padding-top:75px;
-    gap:40px;
-  }
-
-  .hero-copy{
-    max-width:760px;
-  }
-
-  .circuit-visual{
-    height:300px;
-  }
-
-  .steps{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .about{
-    gap:50px;
-  }
-
-  .project-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-
-/* =========================================
-   TABLETS
-========================================= */
-
-@media (max-width:820px){
-
-  .site-header{
-    height:70px;
-    padding:0 20px;
-  }
-
-  .menu-toggle{
-    display:block;
-  }
-
-  nav{
-    display:none;
-    position:absolute;
-    top:70px;
-    left:14px;
-    right:14px;
-    background:#10221d;
-    border:1px solid var(--line);
-    border-radius:9px;
-    padding:13px;
-    box-shadow:var(--shadow);
-    flex-direction:column;
-    align-items:stretch;
-    gap:4px;
-    z-index:50;
-  }
-
-  nav.open{
-    display:flex;
-  }
-
-  nav>a,
-  nav>button{
-    width:100%;
-    padding:10px;
-    border-radius:6px;
-  }
-
-  nav>a:hover,
-  nav>a.active{
-    background:#ffffff08;
-  }
-
-  .nav-admin,
-  .nav-meeting{
-    justify-content:center;
-  }
-
-
-  /* HERO */
-
-  .hero{
-    grid-template-columns:1fr;
-    min-height:auto;
-    padding:70px 24px 50px;
-    gap:30px;
-  }
-
-  .hero h1{
-    font-size:clamp(45px,10vw,65px);
-  }
-
-  .hero-text{
-    font-size:15px;
-    line-height:1.7;
-  }
-
-  .hero-actions{
-    width:100%;
-  }
-
-  .hero-stats{
-    margin-top:45px;
-  }
-
-  .circuit-visual{
-    height:270px;
-  }
-
-
-  /* SECTIONS */
-
-  .section{
-    padding:70px 24px;
-  }
-
-  .steps{
-    grid-template-columns:1fr 1fr;
-    gap:13px;
-    margin-top:35px;
-  }
-
-  .about{
-    grid-template-columns:1fr;
-    gap:28px;
-  }
-
-  .about>p{
-    font-size:15px;
-  }
-
-
-  /* CTA */
-
-  .cta{
-    margin:15px 24px 60px;
-    padding:50px 25px;
-  }
-
-
-  /* PROJECTS */
-
-  .page-shell{
-    padding:55px 20px 70px;
-  }
-
-  .filters{
-    flex-direction:column;
-    margin:32px 0 28px;
-  }
-
-  .search{
-    max-width:none;
-  }
-
-  .select-label{
-    width:100%;
-  }
-
-  .project-grid{
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-  }
-
-  .card-image{
-    height:180px;
-  }
-
-
-  /* DETAIL */
-
-  .detail-hero{
-    grid-template-columns:1fr;
-    gap:30px;
-  }
-
-  .detail-image{
-    max-height:450px;
-  }
-
-  .detail-content{
-    margin:40px auto;
-  }
-
-
-  /* ADMIN */
-
-  .admin-page{
-    padding:20px;
-  }
-
-  .admin-brand{
-    position:static;
-    margin-bottom:25px;
-  }
-
-  .auth-card{
-    margin:40px auto 60px;
-  }
-
-  .dashboard-header{
-    padding:17px 20px;
-  }
-
-  .dashboard-shell{
-    padding:40px 20px 70px;
-  }
-
-  .dashboard-intro{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .form-grid,
-  .upload-grid{
-    grid-template-columns:1fr;
-  }
-
-  .meeting-form{
-    grid-template-columns:1fr;
-  }
-
-  .meeting-form-actions{
-    grid-column:auto;
-  }
-
-  .meeting-admin-card{
-    padding:20px;
-  }
-
-  .meeting-admin-card .section-heading{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .admin-row{
-    grid-template-columns:1fr auto;
-    gap:12px;
-  }
-
-  .row-actions{
-    grid-column:1/-1;
-  }
-
-
-  /* TEAM */
-
-  .team-page{
-    padding:60px 24px 75px;
-  }
-
-  .team-grid{
-    grid-template-columns:1fr;
-    gap:15px;
-  }
-
-  .team-card{
-    min-height:auto;
-  }
-
-  .team-card-teacher{
-    grid-column:auto;
-    justify-self:stretch;
-    width:100%;
-  }
-
-  .team-card-blue{
-    order:1;
-  }
-
-  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
-    order:2;
-  }
-
-  .team-card-new{
-    order:3;
-  }
-
-
-  /* FOOTER */
-
-  footer{
-    padding:25px 20px;
-    flex-wrap:wrap;
-    gap:15px 20px;
-  }
-
-  footer .brand{
-    width:100%;
-  }
-
-  footer p{
-    width:100%;
-  }
-
-  footer div{
-    margin-left:0;
-  }
-
-  .footer-credit{
-    width:100%;
-    flex-wrap:wrap;
-    gap:7px 18px;
-  }
-
-  footer small{
-    width:100%;
-    white-space:normal;
-  }
-
-}
-
-
-/* =========================================
-   PHONES
-========================================= */
-
-@media (max-width:600px){
-
-  .site-header{
-    padding:0 16px;
-  }
-
-  .brand{
-    font-size:18px;
-  }
-
-  .brand-mark{
-    width:27px;
-    height:27px;
-    font-size:24px;
-  }
-
-
-  /* MEETING */
-
-  .meeting-modal{
-    padding:14px;
-  }
-
-  .meeting-dialog{
-    padding:34px 20px 24px;
-    border-radius:14px;
-  }
-
-  .meeting-dialog h2{
-    font-size:27px;
-  }
-
-  .meeting-date-main{
-    font-size:25px;
-  }
-
-  .meeting-detail-row strong{
-    font-size:17px;
-  }
-
-  .meeting-detail-row>div{
-    padding:14px 8px;
-  }
-
-
-  /* HERO */
-
-  .hero{
-    padding:55px 18px 40px;
-    gap:20px;
-  }
-
-  .hero h1{
-    font-size:45px;
-  }
-
-  .hero-text{
-    font-size:14px;
-    margin:20px 0;
-  }
-
-  .hero-actions{
-    flex-direction:column;
-  }
-
-  .hero-actions .button{
-    width:100%;
-  }
-
-  .hero-stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:40px;
-  }
-
-  .hero-stats strong{
-    font-size:19px;
-  }
-
-  .hero-stats span{
-    font-size:9px;
-  }
-
-
-  /* BOARD */
-
-  .circuit-visual{
-    height:205px;
-  }
-
-  .circuit-visual:before{
-    width:260px;
-    height:260px;
-  }
-
-  .board{
-    transform:scale(.58) rotate(-6deg);
-  }
-
-
-  /* SECTIONS */
-
-  .section{
-    padding:55px 18px;
-  }
-
-  .section h2,
-  .cta h2{
-    font-size:30px;
-  }
-
-  .steps{
-    grid-template-columns:1fr;
-  }
-
-  .steps article{
-    min-height:165px;
-    padding:21px;
-  }
-
-
-  /* CTA */
-
-  .cta{
-    margin:5px 14px 45px;
-    padding:42px 18px;
-  }
-
-
-  /* PROJECTS */
-
-  .page-shell{
-    padding:45px 16px 60px;
-  }
-
-  .page-title h1{
-    font-size:38px;
-  }
-
-  .project-grid{
-    grid-template-columns:1fr;
-  }
-
-  .card-image{
-    height:200px;
-  }
-
-  .card-body{
-    padding:18px;
-  }
-
-
-  /* DETAIL */
-
-  .detail h1{
-    font-size:37px;
-  }
-
-  .detail-hero{
-    gap:25px;
-    padding-bottom:30px;
-  }
-
-  .detail-hero p{
-    font-size:14px;
-  }
-
-  .detail-content{
-    margin-top:30px;
-  }
-
-  .detail-section{
-    margin-bottom:32px;
-  }
-
-  .detail-section h2{
-    font-size:19px;
-  }
-
-  .detail pre{
-    font-size:11px;
-    padding:15px;
-  }
-
-  .code-heading{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-
-  /* ADMIN */
-
-  .auth-card{
-    padding:24px 18px;
-    margin-top:25px;
-  }
-
-  .dashboard-shell{
-    padding-left:16px;
-    padding-right:16px;
-  }
-
-  .editor-card,
-  .management{
-    padding:17px;
-  }
-
-  .editor-heading h2,
-  .section-heading h2{
-    font-size:19px;
-  }
-
-  .dashboard-intro h1{
-    font-size:32px;
-  }
-
-  .admin-row{
-    grid-template-columns:1fr;
-  }
-
-  .row-actions{
-    grid-column:auto;
-  }
-
-  .status{
-    justify-self:start;
-  }
-
-
-  /* TEAM */
-
-  .team-page{
-    padding:45px 18px 60px;
-  }
-
-  .team-intro{
-    margin-bottom:35px;
-  }
-
-  .team-intro h1{
-    font-size:42px;
-  }
-
-  .team-intro>p:last-child{
-    font-size:14px;
-  }
-
-  .team-grid{
-    grid-template-columns:1fr;
-    gap:13px;
-  }
-
-  .team-card{
-    flex-direction:column;
-    gap:11px;
-    padding:15px;
-    min-height:auto;
-  }
-
-  .team-card-teacher{
-    grid-column:auto;
-    justify-self:stretch;
-    width:100%;
-  }
-
-  .team-card-blue{
-    order:1;
-  }
-
-  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
-    order:2;
-  }
-
-  .team-card-new{
-    order:3;
-  }
-
-  .team-avatar{
-    width:66px;
-    height:66px;
-    flex-basis:66px;
-  }
-
-  .team-avatar span{
-    font-size:20px;
-  }
-
-  .team-role{
-    font-size:11px;
-  }
-
-  .team-info h2{
-    font-size:21px;
-  }
-
-  .team-description{
-    font-size:14px;
-  }
-
-  .team-tags{
-    margin-top:11px;
-  }
-
-  .team-tags span{
-    font-size:10px;
-  }
-
-  .team-footer-message{
-    margin-top:18px;
-    padding:38px 18px;
-  }
-
-  .team-footer-icons{
-    gap:11px;
-    margin-bottom:13px;
-  }
-
-  .team-footer-icons svg{
-    width:32px;
-    height:32px;
-  }
-
-  .team-footer-message h2{
-    font-size:24px;
-  }
-
-
-  /* FOOTER */
-
-  footer{
-    padding:24px 18px;
-    font-size:12px;
-  }
-
-  .footer-credit{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:5px;
-  }
-
-}
-
-
-/* =========================================
-   VERY SMALL PHONES
-========================================= */
-
-@media (max-width:380px){
-
-  .site-header{
-    padding:0 13px;
-  }
-
-  .hero{
-    padding-left:15px;
-    padding-right:15px;
-  }
-
-  .hero h1{
-    font-size:39px;
-  }
-
-  .hero-stats{
-    grid-template-columns:1fr;
-    gap:13px;
-  }
-
-  .hero-stats div{
-    flex-direction:row;
-    align-items:center;
-    gap:8px;
-  }
-
-  .steps article{
-    padding:19px;
-  }
-
-  .card-image{
-    height:180px;
-  }
-
-  .detail h1{
-    font-size:33px;
-  }
-
-  .team-page{
-    padding-left:15px;
-    padding-right:15px;
-  }
-
-  .team-intro h1{
-    font-size:37px;
-  }
-
-  .team-card{
-    padding:17px;
-  }
-
-  .team-info h2{
-    font-size:20px;
-  }
-
-  .team-description{
-    font-size:13px;
-  }
-
-  .team-tags span{
-    font-size:9px;
-  }
-
-  .team-footer-icons{
-    gap:10px;
-  }
-
-  .team-footer-icons svg{
-    width:30px;
-    height:30px;
-  }
-
-  .team-footer-message h2{
-    font-size:21px;
-  }
-
-  .auth-card{
-    padding:21px 15px;
-  }
-
-  .meeting-dialog{
-    padding-left:16px;
-    padding-right:16px;
-  }
-
-  .meeting-date-main{
-    font-size:22px;
-  }
-
-}
-
-
-/* =========================================
-   LANDSCAPE PHONES
-========================================= */
-
-@media (max-height:500px) and (orientation:landscape){
-
-  .site-header{
-    height:62px;
-  }
-
-  nav{
-    top:62px;
-  }
-
-  .hero{
-    padding-top:30px;
-    padding-bottom:30px;
-  }
-
-  .circuit-visual{
-    height:220px;
-  }
-
-  .board{
-    transform:scale(.6) rotate(-6deg);
-  }
-
-}
-
-
-/* =========================================
-   TOUCH DEVICES
-========================================= */
-
-@media (hover:none) and (pointer:coarse){
-
-  .button:hover,
-  .project-card:hover,
-  .team-card:hover,
-  .steps article:hover,
-  .nav-meeting:hover{
-    transform:none;
-  }
-
-  .team-grid:has(.team-card:hover) .team-card{
-    opacity:1;
-    filter:none;
-  }
-
-  .team-grid:has(.team-card:hover) .team-card:hover{
-    transform:none;
-  }
-
-  nav a,
-  nav button{
-    min-height:42px;
-  }
-
-  button,
-  .button,
-  nav a,
-  nav button{
-    -webkit-tap-highlight-color:transparent;
-  }
-
-}
-
-
-/* =========================================
-   ACCESSIBILITY / TEXT SAFETY
-========================================= */
-
-img,
-video{
-  max-width:100%;
-}
-
-iframe{
-  max-width:100%;
-}
-
-pre,
-code{
-  max-width:100%;
-}
-
-table{
-  max-width:100%;
-  overflow-x:auto;
-}
-
-svg{
-  flex-shrink:0;
-}
-
-
-/* =========================================
-   PREVENT MOBILE OVERFLOW
-========================================= */
-
-@media (max-width:820px){
-
-  h1,
-  h2,
-  h3,
-  p{
-    overflow-wrap:anywhere;
-  }
-
-  .detail,
-  .team-info,
-  .card-body,
-  .dashboard-intro{
-    min-width:0;
-  }
-
-  .button{
-    max-width:100%;
-  }
-
-  .upload-field span{
-    max-width:100%;
-  }
-
-}
-
-
-/* =========================================
-   REDUCED MOTION
-========================================= */
-
-@media (prefers-reduced-motion:reduce){
-
-  html{
-    scroll-behavior:auto;
-  }
-
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    transition-duration:.01ms!important;
-  }
-}
-
-/* =========================================
-   ARDUINOHUB AI CHAT
-========================================= */
-
-/* =========================================================
-   ARDUINOHUB AI CHAT
-   PREMIUM FUTURISTIC / JARVIS VFX EDITION
-   ========================================================= */
-
-.ai-chat{
-  position:fixed;
-  right:24px;
-  bottom:24px;
-  z-index:180;
-  font-family:FiraGO,Inter,sans-serif;
-  isolation:isolate;
-}
-
-/* =========================================================
-   FLOATING AI BUTTON
-   ========================================================= */
-
-.ai-chat-toggle{
-  position:relative;
-  width:62px;
-  height:62px;
-
-  display:grid;
-  place-items:center;
-
-  border:1px solid #58f5bd88;
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle at 32% 22%,
-      #3b9c78 0,
-      #164534 32%,
-      #0b2019 68%,
-      #06100d 100%
-    );
-
-  color:#a4ffdc;
-
-  box-shadow:
-    0 15px 45px #000b,
-    0 0 25px #22d39535,
-    0 0 80px #22d39512,
-    inset 0 0 22px #89f4c918;
-
-  transition:
-    transform .35s cubic-bezier(.16,1,.3,1),
-    border-color .35s,
-    box-shadow .35s,
-    background .35s;
-
-  overflow:visible;
-}
-
-/* rotating energy ring */
-.ai-chat-toggle::before{
-  content:"";
-  position:absolute;
-  inset:-6px;
-
-  border-radius:50%;
-
-  background:
-    conic-gradient(
-      from 0deg,
-      transparent 0deg,
-      #22d395 45deg,
-      transparent 90deg,
-      transparent 175deg,
-      #89f4c9 225deg,
-      transparent 275deg,
-      transparent 360deg
-    );
-
-  -webkit-mask:
-    radial-gradient(
-      farthest-side,
-      transparent calc(100% - 2px),
-      #000 calc(100% - 1px)
-    );
-
-  mask:
-    radial-gradient(
-      farthest-side,
-      transparent calc(100% - 2px),
-      #000 calc(100% - 1px)
-    );
-
-  animation:aiEnergySpin 5s linear infinite;
-
-  opacity:.8;
-  pointer-events:none;
-}
-
-/* outer aura */
-.ai-chat-toggle::after{
-  content:"";
-  position:absolute;
-  inset:-16px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      #22d39520 0%,
-      #22d3950b 38%,
-      transparent 72%
-    );
-
-  filter:blur(8px);
-
-  animation:aiAura 3.5s ease-in-out infinite;
-
-  pointer-events:none;
-  z-index:-1;
-}
-
-@keyframes aiEnergySpin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-@keyframes aiAura{
-  0%,100%{
-    transform:scale(.85);
-    opacity:.4;
-  }
-
-  50%{
-    transform:scale(1.18);
-    opacity:1;
-  }
-}
-
-.ai-chat-toggle:hover{
-  transform:
-    translateY(-5px)
-    scale(1.07);
-
-  border-color:#89f4c9;
-
-  background:
-    radial-gradient(
-      circle at 32% 22%,
-      #48b88e 0,
-      #1b5b45 34%,
-      #092017 72%
-    );
-
-  box-shadow:
-    0 20px 55px #000d,
-    0 0 35px #22d39550,
-    0 0 100px #22d39518,
-    inset 0 0 25px #89f4c920;
-}
-
-.ai-chat-toggle:active{
-  transform:scale(.94);
-}
-
-/* =========================================================
-   AI ICON
-   ========================================================= */
-
-.ai-chat-icon{
-  width:27px;
-  height:27px;
-
-  position:relative;
-  z-index:3;
-
-  filter:
-    drop-shadow(0 0 7px #89f4c9)
-    drop-shadow(0 0 17px #22d39555);
-
-  transition:
-    opacity .3s,
-    transform .35s cubic-bezier(.16,1,.3,1);
-}
-
-.ai-chat-toggle .close-icon{
-  position:absolute;
-
-  opacity:0;
-
-  transform:
-    rotate(-120deg)
-    scale(.5);
-}
-
-.ai-chat.open .chat-icon{
-  opacity:0;
-
-  transform:
-    rotate(120deg)
-    scale(.5);
-}
-
-.ai-chat.open .close-icon{
-  opacity:1;
-
-  transform:
-    rotate(0)
-    scale(1);
-}
-
-/* =========================================================
-   BADGE
-   ========================================================= */
-
-.ai-chat-badge{
-  position:absolute;
-
-  right:-2px;
-  top:-3px;
-
-  min-width:24px;
-  height:24px;
-
-  padding:0 6px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #a3ffdc,
-      #22d395
-    );
-
-  color:#03150f;
-
-  border:2px solid var(--bg);
-
-  font:
-    900 9px/1 Inter,sans-serif;
-
-  letter-spacing:.5px;
-
-  z-index:6;
-
-  box-shadow:
-    0 0 12px #22d39580,
-    0 0 25px #22d39535;
-
-  animation:badgeFloat 2.4s ease-in-out infinite;
-}
-
-@keyframes badgeFloat{
-  0%,100%{
-    transform:translateY(0) scale(1);
-  }
-
-  50%{
-    transform:translateY(-3px) scale(1.06);
-  }
-}
-
-.ai-chat.open .ai-chat-badge{
-  opacity:0;
-  transform:scale(.4);
-}
-
-/* =========================================================
-   PULSE RINGS
-   ========================================================= */
-
-.ai-chat-pulse{
-  position:absolute;
-  inset:-7px;
-
-  border:1px solid #22d39545;
-  border-radius:50%;
-
-  pointer-events:none;
-
-  animation:aiPulse 3.2s ease-out infinite
-
-@keyframes aiChatPulse{
-
-  0%{
-    transform:scale(.9);
-    opacity:0;
-  }
-
-  25%{
-    opacity:.8;
-  }
-
-  70%{
-    transform:scale(1.22);
-    opacity:0;
-  }
-
-  100%{
-    transform:scale(1.22);
-    opacity:0;
-  }
-}
-
-
-/* =========================================
-   CHAT WINDOW
-========================================= */
-
-.ai-chat-window{
-  position:absolute;
-  right:0;
-  bottom:73px;
-
-  width:min(390px,calc(100vw - 32px));
-  height:min(590px,calc(100vh - 115px));
-
-  display:flex;
-  flex-direction:column;
-
-  overflow:hidden;
-
-  background:
-    linear-gradient(
-      145deg,
-      #10251f,
-      #071410 75%
-    );
-
-  border:1px solid #31594c;
-  border-radius:17px;
-
-  box-shadow:
-    0 30px 90px #000c,
-    0 0 50px #22d39512,
-    inset 0 1px 0 #ffffff08;
-
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-
-  transform:
-    translateY(14px)
-    scale(.96);
-
-  transform-origin:
-    bottom right;
-
-  transition:
-    opacity .22s ease,
-    transform .22s ease,
-    visibility .22s;
-}
-
-.ai-chat.open .ai-chat-window{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-
-  transform:
-    translateY(0)
-    scale(1);
-}
-
-
-/* =========================================
-   CHAT HEADER
-========================================= */
-
-.ai-chat-header{
-  flex-shrink:0;
-
-  min-height:76px;
-  padding:14px 15px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-
-  border-bottom:1px solid #ffffff0d;
-
-  background:
-    linear-gradient(
-      135deg,
-      #12372c,
-      #0c1e18
-    );
-}
-
-.ai-chat-title{
-  min-width:0;
-
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-
-.ai-chat-title>div:last-child{
-  min-width:0;
-
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.ai-chat-title strong{
-  color:var(--text);
-  font:700 15px Inter,sans-serif;
-  letter-spacing:-.02em;
-}
-
-.ai-chat-title span{
-  color:var(--green2);
-  font-size:10px;
-}
-
-.ai-avatar{
-  width:42px;
-  height:42px;
-  flex:0 0 42px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:50%;
-  border:1px solid #35e4a766;
-
-  color:var(--green2);
-
-  background:
-    radial-gradient(
-      circle at 35% 25%,
-      #1d5a45,
-      #071612 72%
-    );
-
-  box-shadow:
-    0 0 20px #22d39518,
-    inset 0 0 14px #22d3950c;
-}
-
-.ai-avatar svg{
-  width:20px;
-  height:20px;
-}
-
-
-/* =========================================
-   CLOSE BUTTON
-========================================= */
-
-.ai-chat-close{
-  width:34px;
-  height:34px;
-  flex:0 0 34px;
-
-  display:grid;
-  place-items:center;
-
-  border:1px solid var(--line);
-  border-radius:8px;
-
-  background:#ffffff05;
-  color:var(--muted);
-
-  transition:
-    color .2s,
-    border-color .2s,
-    background .2s,
-    transform .2s;
-}
-
-.ai-chat-close:hover{
-  color:var(--text);
-  border-color:#3d7964;
-  background:#ffffff0a;
-  transform:rotate(4deg);
-}
-
-.ai-chat-close svg{
-  width:17px;
-  height:17px;
-}
-
-
-/* =========================================
-   CHAT MESSAGES
-========================================= */
-
-.ai-chat-messages{
-  flex:1;
-  min-height:0;
-
-  overflow-y:auto;
-  overflow-x:hidden;
-
-  padding:18px 15px 15px;
-
-  scrollbar-width:thin;
-  scrollbar-color:#31594c transparent;
-}
-
-.ai-chat-messages::-webkit-scrollbar{
-  width:5px;
-}
-
-.ai-chat-messages::-webkit-scrollbar-track{
-  background:transparent;
-}
-
-.ai-chat-messages::-webkit-scrollbar-thumb{
-  background:#31594c;
-  border-radius:20px;
-}
-
-.ai-message{
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
-
-  margin-bottom:14px;
-
-  animation:aiMessageIn .22s ease-out;
-}
-
-@keyframes aiMessageIn{
-
-  from{
-    opacity:0;
-    transform:translateY(6px);
-  }
-
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.ai-message.assistant{
-  justify-content:flex-start;
-}
-
-.ai-message.user{
-  justify-content:flex-end;
-}
-
-.ai-message-avatar{
-  width:29px;
-  height:29px;
-  flex:0 0 29px;
-
-  display:grid;
-  place-items:center;
-
-  margin-top:2px;
-
-  border:1px solid #2c745b;
-  border-radius:50%;
-
-  background:#0d2920;
-  color:var(--green2);
-}
-
-.ai-message-avatar svg{
-  width:15px;
-  height:15px;
-}
-
-.ai-message.user .ai-message-avatar{
-  display:none;
-}
-
-
-/* =========================================
-   MESSAGE BUBBLES
-========================================= */
-
-.ai-message-bubble{
-  max-width:82%;
-
-  padding:11px 13px;
-
-  border-radius:12px;
-
-  font-size:13px;
-  line-height:1.65;
-}
-
-.ai-message-bubble p{
-  margin:0;
-}
-
-.ai-message-bubble p+p{
-  margin-top:8px;
-}
-
-.ai-message.assistant .ai-message-bubble{
-  color:#dcebe5;
-  background:#10241e;
-  border:1px solid #294b40;
-  border-top-left-radius:4px;
-}
-
-.ai-message.user .ai-message-bubble{
-  color:#06140f;
-  background:var(--green);
-  border:1px solid var(--green);
-  border-top-right-radius:4px;
-}
-
-.ai-message-bubble strong{
-  color:var(--green2);
-}
-
-.ai-message.user .ai-message-bubble strong{
-  color:#06140f;
-}
-
-
-/* =========================================
-   SUGGESTIONS
-========================================= */
-
-.ai-suggestions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-
-  padding-left:37px;
-  margin:4px 0 15px;
-}
-
-.ai-suggestion{
-  border:1px solid #31594c;
-  border-radius:20px;
-
-  padding:7px 10px;
-
-  background:#ffffff04;
-  color:#b9d3c9;
-
-  font-size:11px;
-
-  transition:
-    border-color .2s,
-    color .2s,
-    background .2s,
-    transform .2s;
-}
-
-.ai-suggestion:hover{
-  border-color:#35b989;
-  color:var(--green2);
-  background:#22d3950b;
-  transform:translateY(-1px);
-}
-
-
-/* =========================================
-   CHAT INPUT
-========================================= */
-
-.ai-chat-form{
-  flex-shrink:0;
-
-  padding:12px 13px 13px;
-
-  border-top:1px solid #ffffff0d;
-
-  background:#081612;
-}
-
-.ai-chat-input-wrap{
-  display:flex;
-  align-items:center;
-  gap:7px;
-
-  padding:5px;
-
-  background:#0d211b;
-  border:1px solid #2c4a40;
-  border-radius:10px;
-
-  transition:
-    border-color .2s,
-    box-shadow .2s;
-}
-
-.ai-chat-input-wrap:focus-within{
-  border-color:#35c995;
-  box-shadow:
-    0 0 0 3px #22d3950b,
-    0 0 20px #22d39508;
-}
-
-.ai-chat-input{
-  flex:1;
-}
-
-.ai-chat-form input{
-  min-width:0;
-
-  width:100%;
-
-  padding:8px 9px;
-
-  border:0;
-  outline:0;
-
-  background:transparent;
-  color:var(--text);
-
-  font-size:13px;
-}
-
-.ai-chat-form input::placeholder{
-  color:#668078;
-}
-
-.ai-chat-form input:focus{
-  border:0;
-  box-shadow:none;
-}
-
-.ai-chat-form button[type="submit"]{
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-
-  display:grid;
-  place-items:center;
-
-  border:0;
-  border-radius:8px;
-
-  background:var(--green);
-  color:#06140f;
-
-  transition:
-    background .2s,
-    transform .2s,
-    box-shadow .2s;
-}
-
-.ai-chat-form button[type="submit"]:hover{
-  background:var(--green2);
-  transform:translateY(-1px);
-  box-shadow:0 5px 16px #22d39525;
-}
-
-.ai-chat-form button[type="submit"]:active{
-  transform:scale(.94);
-}
-
-.ai-chat-form button[type="submit"] svg{
-  width:17px;
-  height:17px;
-}
-
-.ai-chat-form small{
-  display:block;
-
-  margin-top:7px;
-  padding:0 3px;
-
-  color:#5e766e;
-
-  font-size:9px;
-  line-height:1.4;
-}
-
-
-/* =========================================
-   TYPING INDICATOR
-========================================= */
-
-.ai-typing{
-  display:flex;
-  align-items:center;
-  gap:4px;
-
-  min-height:22px;
-}
-
-.ai-typing span{
-  width:5px;
-  height:5px;
-
-  border-radius:50%;
-
-  background:var(--green2);
-
-  animation:
-    aiTyping 1.2s ease-in-out infinite;
-}
-
-.ai-typing span:nth-child(2){
-  animation-delay:.15s;
-}
-
-.ai-typing span:nth-child(3){
-  animation-delay:.3s;
-}
-
-@keyframes aiTyping{
-
-  0%,
-  60%,
-  100%{
-    opacity:.3;
-    transform:translateY(0);
-  }
-
-  30%{
-    opacity:1;
-    transform:translateY(-3px);
-  }
-}
-
-
-/* =========================================
-   AI CHAT ERROR
-========================================= */
-
-.ai-message.error .ai-message-bubble{
-  border-color:#743943;
-  color:#ffb0b7;
-  background:#2a1519;
-}
-
-
-/* =========================================
-   DISABLED SEND
-========================================= */
-
-.ai-chat-form button[type="submit"]:disabled{
-  opacity:.45;
-  cursor:wait;
-  transform:none;
-  box-shadow:none;
-}
-
-
-/* =========================================
-   CHAT MOBILE
-========================================= */
-
-@media (max-width:600px){
-
-  .ai-chat{
-    right:15px;
-    bottom:15px;
-  }
-
-  .ai-chat-toggle{
-    width:55px;
-    height:55px;
-  }
-
-  .ai-chat-window{
-    right:0;
-    bottom:68px;
-
-    width:calc(100vw - 30px);
-    max-width:none;
-
-    height:min(570px,calc(100vh - 100px));
-
-    border-radius:15px;
-  }
-
-  .ai-chat-header{
-    min-height:70px;
-    padding:12px;
-  }
-
-  .ai-avatar{
-    width:39px;
-    height:39px;
-    flex-basis:39px;
-  }
-
-  .ai-chat-messages{
-    padding:15px 12px;
-  }
-
-  .ai-message-bubble{
-    max-width:88%;
-    font-size:12.5px;
-  }
-
-  .ai-suggestions{
-    padding-left:37px;
-  }
-
-  .ai-chat-form{
-    padding:10px;
-  }
-
-}
-
-
-/* =========================================
-   VERY SMALL PHONES
-========================================= */
-
-@media (max-width:380px){
-
-  .ai-chat{
-    right:12px;
-    bottom:12px;
-  }
-
-  .ai-chat-toggle{
-    width:52px;
-    height:52px;
-  }
-
-  .ai-chat-window{
-    width:calc(100vw - 24px);
-    bottom:64px;
-    height:calc(100vh - 88px);
-  }
-
-  .ai-chat-title strong{
-    font-size:14px;
-  }
-
-  .ai-chat-title span{
-    font-size:9px;
-  }
-
-}
-
-
-/* =========================================
-   LANDSCAPE PHONES
-========================================= */
-
-@media (max-height:500px) and (orientation:landscape){
-
-  .ai-chat-window{
-    height:calc(100vh - 85px);
-    width:min(390px,calc(100vw - 30px));
-  }
-
-}
-
-
-/* =========================================
-   TOUCH DEVICES
-========================================= */
-
-@media (hover:none) and (pointer:coarse){
-
-  .ai-chat-toggle:hover{
-    transform:none;
-  }
-
-  .ai-suggestion:hover{
-    transform:none;
-  }
-
-  .ai-chat-form button[type="submit"]:hover{
-    transform:none;
-  }
-
-}
-
-
-/* =========================================
-   REDUCED MOTION — AI CHAT
-========================================= */
-
-@media (prefers-reduced-motion:reduce){
-
-  .ai-chat-pulse,
-  .ai-typing span{
-    animation:none;
-  }
-
-  .ai-chat-window,
-  .ai-message{
-    transition:none;
-    animation:none;
-  }
-
-}
+      #1
