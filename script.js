@@ -53,7 +53,6 @@ function toast(message, type = '') {
     }
 
     el.textContent = message;
-
     el.className = `toast show ${type}`;
 
     clearTimeout(toast.timer);
@@ -119,13 +118,15 @@ function initChrome() {
             }
         );
 
-    const button = $('.menu-toggle');
+    const button =
+        $('.menu-toggle');
 
     if (button) {
         button.addEventListener(
             'click',
             () => {
-                const nav = $('nav');
+                const nav =
+                    $('nav');
 
                 if (!nav) {
                     return;
@@ -149,7 +150,7 @@ function initChrome() {
 /* =========================================================
    ARDUINOHUB AI CHAT
    REAL AI — SUPABASE EDGE FUNCTION + GEMINI
-   ========================================================= */
+========================================================= */
 
 const AI_FUNCTION_URL =
     supabaseIsConfigured && SUPABASE_URL
@@ -158,22 +159,19 @@ const AI_FUNCTION_URL =
 
 
 /* AI conversation history. */
-
 let aiHistory = [];
 
 
 /*
-   აქტიური ადმინისტრატორის AI მიმართვა.
+    აქტიური ადმინისტრატორის AI მიმართვა.
 
-   Zaza  -> ბატონო ზაზა
-   Tekla -> ქალბატონო თეკლა
+    Zaza  -> ბატონო ზაზა
+    Tekla -> ქალბატონო თეკლა
 */
-
 let aiAdminGreeting = '';
 
 
 /* ArduinoHub AI-ის მუდმივი კონტექსტი. */
-
 const AI_SYSTEM_CONTEXT = `
 შენ ხარ ArduinoHub AI — ArduinoHub-ის ოფიციალური AI ასისტენტი.
 
@@ -231,15 +229,14 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 
 
 /*
-   ამოიცნობს რომელი ადმინისტრატორი არის შესული.
+    ამოიცნობს რომელი ადმინისტრატორი არის შესული.
 
-   Zaza:
-   ბატონო ზაზა
+    Zaza:
+    ბატონო ზაზა
 
-   Tekla:
-   ქალბატონო თეკლა
+    Tekla:
+    ქალბატონო თეკლა
 */
-
 async function detectAIAdmin() {
     if (!db) {
         aiAdminGreeting = '';
@@ -292,7 +289,6 @@ async function detectAIAdmin() {
         } else {
             aiAdminGreeting = '';
         }
-
     } catch (error) {
         console.warn(
             'AI admin detection failed:',
@@ -305,13 +301,12 @@ async function detectAIAdmin() {
 
 
 /*
-   ამატებს ადმინისტრატორის მიმართვას AI პასუხს.
+    ამატებს ადმინისტრატორის მიმართვას AI პასუხს.
 
-   თუ Gemini-მ უკვე დაწერა:
-   "ბატონო ზაზა, ..."
-   მეორედ აღარ დაამატებს.
+    თუ Gemini-მ უკვე დაწერა:
+    "ბატონო ზაზა, ..."
+    მეორედ აღარ დაამატებს.
 */
-
 function applyAIGreeting(reply) {
     const clean =
         String(reply || '').trim();
@@ -336,8 +331,9 @@ function applyAIGreeting(reply) {
 }
 
 
-/* ამატებს შეტყობინებას ჩატში. */
-
+/*
+    ამატებს შეტყობინებას ჩატში.
+*/
 function addAIMessage(
     type,
     content
@@ -356,7 +352,6 @@ function addAIMessage(
         `ai-message ${type}`;
 
     if (type === 'assistant') {
-
         message.innerHTML = `
             <div class="ai-message-avatar">
                 ${icon('bot')}
@@ -366,9 +361,7 @@ function addAIMessage(
                 ${content}
             </div>
         `;
-
     } else if (type === 'error') {
-
         message.innerHTML = `
             <div class="ai-message-avatar">
                 ${icon('triangle-alert')}
@@ -378,9 +371,7 @@ function addAIMessage(
                 ${content}
             </div>
         `;
-
     } else {
-
         message.innerHTML = `
             <div class="ai-message-bubble">
                 ${esc(content)}
@@ -404,24 +395,8 @@ function addAIMessage(
 
 
 /*
-   AI პასუხის ლამაზი Markdown -> HTML გარდაქმნა.
-
-   მხარდაჭერა:
-   **bold**
-   *italic*
-   `inline code`
-   # სათაური
-   ## ქვესათაური
-   ### პატარა სათაური
-   - სია
-   * სია
-   • სია
-   1. სია
-   2. სია
-   > ციტატა
-   ```code```
+    AI პასუხის ლამაზი Markdown -> HTML გარდაქმნა.
 */
-
 function formatAIResponse(text) {
     if (!text) {
         return '<p>პასუხი ვერ მივიღე.</p>';
@@ -434,12 +409,6 @@ function formatAIResponse(text) {
                 ''
             )
             .trim();
-
-
-    /*
-       ჯერ code block-ებს ვინახავთ,
-       რათა მათში Markdown არ გაფუჭდეს.
-    */
 
     const codeBlocks = [];
 
@@ -457,55 +426,37 @@ function formatAIResponse(text) {
         }
     );
 
-
     let safe =
         esc(source);
-
-
-    /* Bold + italic */
 
     safe = safe.replace(
         /\*\*\*(.+?)\*\*\*/g,
         '<strong><em>$1</em></strong>'
     );
 
-
-    /* Bold */
-
     safe = safe.replace(
         /\*\*(.+?)\*\*/g,
         '<strong>$1</strong>'
     );
-
-
-    /* Italic */
 
     safe = safe.replace(
         /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
         '<em>$1</em>'
     );
 
-
-    /* Inline code */
-
     safe = safe.replace(
         /`([^`\n]+)`/g,
         '<code class="ai-inline-code">$1</code>'
     );
 
-
     const lines =
         safe.split(/\r?\n/);
 
     let html = '';
-
     let paragraph = [];
-
     let listType = null;
 
-
     const closeList = () => {
-
         if (listType === 'ul') {
             html += '</ul>';
         }
@@ -517,9 +468,7 @@ function formatAIResponse(text) {
         listType = null;
     };
 
-
     const flushParagraph = () => {
-
         if (!paragraph.length) {
             return;
         }
@@ -540,12 +489,9 @@ function formatAIResponse(text) {
         paragraph = [];
     };
 
-
     for (const rawLine of lines) {
-
         const line =
             rawLine.trim();
-
 
         if (!line) {
             flushParagraph();
@@ -553,16 +499,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* Code block */
-
         const codeMatch =
             line.match(
                 /^@@CODEBLOCK_(\d+)@@$/
             );
 
         if (codeMatch) {
-
             flushParagraph();
             closeList();
 
@@ -580,16 +522,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* ### heading */
-
         const heading3 =
             line.match(
                 /^###\s+(.+)$/
             );
 
         if (heading3) {
-
             flushParagraph();
             closeList();
 
@@ -602,16 +540,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* ## heading */
-
         const heading2 =
             line.match(
                 /^##\s+(.+)$/
             );
 
         if (heading2) {
-
             flushParagraph();
             closeList();
 
@@ -624,16 +558,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* # heading */
-
         const heading1 =
             line.match(
                 /^#\s+(.+)$/
             );
 
         if (heading1) {
-
             flushParagraph();
             closeList();
 
@@ -646,16 +576,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* Blockquote */
-
         const quote =
             line.match(
                 /^>\s*(.+)$/
             );
 
         if (quote) {
-
             flushParagraph();
             closeList();
 
@@ -668,16 +594,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* Unordered list */
-
         const unordered =
             line.match(
                 /^(?:[-*•])\s+(.+)$/
             );
 
         if (unordered) {
-
             flushParagraph();
 
             if (listType !== 'ul') {
@@ -698,16 +620,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
-        /* Ordered list */
-
         const ordered =
             line.match(
                 /^\d+[.)]\s+(.+)$/
             );
 
         if (ordered) {
-
             flushParagraph();
 
             if (listType !== 'ol') {
@@ -728,17 +646,12 @@ function formatAIResponse(text) {
             continue;
         }
 
-
         closeList();
-
         paragraph.push(line);
     }
 
-
     flushParagraph();
-
     closeList();
-
 
     return (
         html ||
@@ -747,10 +660,10 @@ function formatAIResponse(text) {
 }
 
 
-/* Typing indicator. */
-
+/*
+    Typing indicator.
+*/
 function addAITyping() {
-
     const messages =
         $('#ai-chat-messages');
 
@@ -793,14 +706,27 @@ function addAITyping() {
 
 /* =========================================================
    AI ERROR HANDLING
-   ========================================================= */
+========================================================= */
 
 
 /*
-   Backend-ის შეცდომიდან HTTP status-ის ამოღება.
-*/
+    HTTP status-ის ამოღება.
 
+    ადრე მხოლოდ error.message-ს ამოწმებდა.
+    ახლა ჯერ პირდაპირ error.status-ს ამოწმებს.
+*/
 function getAIErrorStatus(error) {
+    if (
+        error &&
+        Number.isFinite(
+            Number(error.status)
+        )
+    ) {
+        return Number(
+            error.status
+        );
+    }
+
     const message =
         String(
             error?.message || ''
@@ -818,22 +744,73 @@ function getAIErrorStatus(error) {
 
 
 /*
-   ლამაზი ქართული შეტყობინებები
-   სხვადასხვა შეცდომისთვის.
+    Backend error-ის ტექსტის უსაფრთხოდ ამოღება.
 */
+function getAIErrorText(error) {
+    if (!error) {
+        return '';
+    }
 
+    if (
+        typeof error === 'string'
+    ) {
+        return error.trim();
+    }
+
+    if (
+        typeof error.message === 'string' &&
+        error.message.trim()
+    ) {
+        return error.message.trim();
+    }
+
+    if (
+        typeof error.error === 'string' &&
+        error.error.trim()
+    ) {
+        return error.error.trim();
+    }
+
+    if (
+        error.error &&
+        typeof error.error.message === 'string'
+    ) {
+        return error.error.message.trim();
+    }
+
+    if (
+        error.data &&
+        typeof error.data.error === 'string'
+    ) {
+        return error.data.error.trim();
+    }
+
+    if (
+        error.data?.error &&
+        typeof error.data.error.message === 'string'
+    ) {
+        return error.data.error.message.trim();
+    }
+
+    return '';
+}
+
+
+/*
+    ლამაზი ქართული შეტყობინებები
+    სხვადასხვა შეცდომისთვის.
+*/
 function getAIUserErrorMessage(error) {
-
     const status =
         getAIErrorStatus(error);
 
+    const rawMessage =
+        getAIErrorText(error);
 
     /*
-       429 — Gemini quota.
+        429 — Gemini quota.
     */
-
     if (status === 429) {
-
         return `
             <div class="ai-error-content">
                 <strong>
@@ -857,11 +834,9 @@ function getAIUserErrorMessage(error) {
 
 
     /*
-       401 — Authorization.
+        401 — Authorization.
     */
-
     if (status === 401) {
-
         return `
             <div class="ai-error-content">
                 <strong>
@@ -874,7 +849,8 @@ function getAIUserErrorMessage(error) {
                 </p>
 
                 <small>
-                    გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
+                    გთხოვთ, შეამოწმოთ Supabase-ის
+                    Edge Function და API key.
                 </small>
             </div>
         `;
@@ -882,11 +858,9 @@ function getAIUserErrorMessage(error) {
 
 
     /*
-       403 — Access denied.
+        403 — Access denied.
     */
-
     if (status === 403) {
-
         return `
             <div class="ai-error-content">
                 <strong>
@@ -895,12 +869,12 @@ function getAIUserErrorMessage(error) {
                 </strong>
 
                 <p>
-                    AI სერვერმა მოთხოვნა ვერ მიიღო.
+                    AI სერვერმა მოთხოვნაზე წვდომა უარყო.
                 </p>
 
                 <small>
-                    თუ პრობლემა გაგრძელდა, საჭიროა
-                    ადმინისტრატორის მიერ AI სერვერის შემოწმება.
+                    საჭიროა Gemini API key-ის,
+                    Supabase Secret-ის ან API წვდომის შემოწმება.
                 </small>
             </div>
         `;
@@ -908,11 +882,9 @@ function getAIUserErrorMessage(error) {
 
 
     /*
-       404 — Function/model not found.
+        404 — Function/model not found.
     */
-
     if (status === 404) {
-
         return `
             <div class="ai-error-content">
                 <strong>
@@ -921,12 +893,13 @@ function getAIUserErrorMessage(error) {
                 </strong>
 
                 <p>
-                    AI ფუნქცია ან მოთხოვნილი რესურსი
-                    ამჟამად ვერ მოიძებნა.
+                    AI ფუნქცია ან მოთხოვნილი Gemini რესურსი
+                    ვერ მოიძებნა.
                 </p>
 
                 <small>
-                    გთხოვთ, მოგვიანებით სცადოთ ხელახლა.
+                    შეამოწმეთ Edge Function-ის სახელი
+                    და Gemini model-ის სახელი.
                 </small>
             </div>
         `;
@@ -934,11 +907,9 @@ function getAIUserErrorMessage(error) {
 
 
     /*
-       400 — Bad request.
+        400 — Bad request.
     */
-
     if (status === 400) {
-
         return `
             <div class="ai-error-content">
                 <strong>
@@ -951,7 +922,8 @@ function getAIUserErrorMessage(error) {
                 </p>
 
                 <small>
-                    სცადეთ კითხვის ოდნავ სხვანაირად დაწერა.
+                    თუ პრობლემა ყველა კითხვაზე მეორდება,
+                    საჭიროა Edge Function-ის შემოწმება.
                 </small>
             </div>
         `;
@@ -959,16 +931,37 @@ function getAIUserErrorMessage(error) {
 
 
     /*
-       500/502/503/504 — Server error.
+        408 — timeout.
     */
+    if (status === 408) {
+        return `
+            <div class="ai-error-content">
+                <strong>
+                    ${icon('clock-3')}
+                    AI-მ პასუხის დაბრუნება ვერ მოასწრო
+                </strong>
 
+                <p>
+                    მოთხოვნას ძალიან დიდი დრო დასჭირდა.
+                </p>
+
+                <small>
+                    სცადეთ ხელახლა.
+                </small>
+            </div>
+        `;
+    }
+
+
+    /*
+        500/502/503/504 — Server error.
+    */
     if (
         status === 500 ||
         status === 502 ||
         status === 503 ||
         status === 504
     ) {
-
         return `
             <div class="ai-error-content">
                 <strong>
@@ -990,9 +983,33 @@ function getAIUserErrorMessage(error) {
 
 
     /*
-       Network / unknown error.
+        თუ backend-მა კონკრეტული ტექსტი მოგვცა,
+        generic შეტყობინების ნაცვლად ვაჩვენებთ
+        უსაფრთხოდ escaped ტექსტს.
     */
+    if (rawMessage) {
+        return `
+            <div class="ai-error-content">
+                <strong>
+                    ${icon('triangle-alert')}
+                    AI მოთხოვნის შეცდომა
+                </strong>
 
+                <p>
+                    ${esc(rawMessage)}
+                </p>
+
+                <small>
+                    გთხოვთ, რამდენიმე წამში სცადოთ ხელახლა.
+                </small>
+            </div>
+        `;
+    }
+
+
+    /*
+        Network / CORS / connection error.
+    */
     return `
         <div class="ai-error-content">
             <strong>
@@ -1001,36 +1018,67 @@ function getAIUserErrorMessage(error) {
             </strong>
 
             <p>
-                ამ მომენტში AI სერვისთან დაკავშირება
-                ვერ მოხერხდა.
+                ამ მომენტში AI სერვისთან დაკავშირება ვერ მოხერხდა.
             </p>
 
             <small>
-                გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
+                თუ ეს შეტყობინება ყველა კითხვაზე ჩნდება,
+                შეამოწმეთ Supabase Edge Function-ის Logs.
             </small>
         </div>
     `;
 }
 
 
-/* =========================================================
-   აგზავნის კითხვას Supabase Edge Function-ში.
-   ========================================================= */
+/*
+    Backend-ის response body-დან ტექსტის ამოღება.
+*/
+async function readAIResponseBody(response) {
+    const raw =
+        await response.text();
 
-async function askAI(question) {
-
-    if (!AI_FUNCTION_URL) {
-        throw new Error(
-            'AI ფუნქციის მისამართი ვერ მოიძებნა.'
-        );
+    if (!raw) {
+        return {
+            json: null,
+            text: ''
+        };
     }
 
+    try {
+        return {
+            json: JSON.parse(raw),
+            text: raw
+        };
+    } catch {
+        return {
+            json: null,
+            text: raw
+        };
+    }
+}
+
+
+/* =========================================================
+   აგზავნის კითხვას Supabase Edge Function-ში.
+========================================================= */
+
+async function askAI(question) {
+    if (!AI_FUNCTION_URL) {
+        const error =
+            new Error(
+                'AI ფუნქციის მისამართი ვერ მოიძებნა.'
+            );
+
+        error.code =
+            'AI_FUNCTION_URL_MISSING';
+
+        throw error;
+    }
 
     const cleanQuestion =
         String(question)
             .trim()
             .slice(0, 1000);
-
 
     if (!cleanQuestion) {
         return null;
@@ -1055,78 +1103,126 @@ async function askAI(question) {
             );
 
 
-    const response =
-        await fetch(
-            AI_FUNCTION_URL,
-            {
-                method: 'POST',
-
-                headers: {
-                    'Content-Type':
-                        'application/json',
-
-                    'Authorization':
-                        `Bearer ${SUPABASE_ANON_KEY}`,
-
-                    'apikey':
-                        SUPABASE_ANON_KEY
-                },
-
-                body: JSON.stringify({
-                    message:
-                        cleanQuestion,
-
-                    history,
-
-                    context:
-                        AI_SYSTEM_CONTEXT,
-
-                    adminGreeting:
-                        aiAdminGreeting
-                })
-            }
-        );
-
-
-    let data = null;
-
+    let response;
 
     try {
-        data =
-            await response.json();
-    } catch {
-        data = null;
-    }
+        response =
+            await fetch(
+                AI_FUNCTION_URL,
+                {
+                    method: 'POST',
 
+                    headers: {
+                        'Content-Type':
+                            'application/json',
 
-    if (!response.ok) {
+                        'Authorization':
+                            `Bearer ${SUPABASE_ANON_KEY}`,
 
-        /*
-           Error object-ში ვინახავთ
-           HTTP status-საც, რათა ქვემოთ
-           ზუსტად გავიგოთ 429/500 და ა.შ.
-        */
+                        'apikey':
+                            SUPABASE_ANON_KEY
+                    },
 
-        const backendMessage =
-            data?.error ||
-            data?.message ||
-            `AI request failed with status ${response.status}`;
+                    body:
+                        JSON.stringify({
+                            message:
+                                cleanQuestion,
 
+                            history,
 
+                            context:
+                                AI_SYSTEM_CONTEXT,
+
+                            adminGreeting:
+                                aiAdminGreeting
+                        })
+                }
+            );
+    } catch (networkError) {
         const error =
             new Error(
-                String(backendMessage)
+                networkError?.message ||
+                'AI სერვერთან ქსელური კავშირი ვერ დამყარდა.'
             );
 
+        error.code =
+            'AI_NETWORK_ERROR';
 
-        error.status =
-            response.status;
-
+        error.original =
+            networkError;
 
         throw error;
     }
 
 
+    const body =
+        await readAIResponseBody(
+            response
+        );
+
+    const data =
+        body.json;
+
+
+    /*
+        HTTP error.
+    */
+    if (!response.ok) {
+        let backendMessage = '';
+
+        if (
+            typeof data?.error === 'string'
+        ) {
+            backendMessage =
+                data.error;
+        } else if (
+            data?.error &&
+            typeof data.error.message === 'string'
+        ) {
+            backendMessage =
+                data.error.message;
+        } else if (
+            typeof data?.message === 'string'
+        ) {
+            backendMessage =
+                data.message;
+        } else if (
+            body.text
+        ) {
+            backendMessage =
+                body.text;
+        }
+
+
+        const error =
+            new Error(
+                backendMessage ||
+                `AI request failed with status ${response.status}`
+            );
+
+        /*
+            ყველაზე მნიშვნელოვანი ცვლილება:
+            status პირდაპირ ვინახავთ error-ში.
+        */
+        error.status =
+            response.status;
+
+        error.code =
+            'AI_HTTP_ERROR';
+
+        error.responseText =
+            body.text;
+
+        error.responseData =
+            data;
+
+        throw error;
+    }
+
+
+    /*
+        წარმატებული response.
+    */
     const reply =
         String(
             data?.reply ||
@@ -1136,9 +1232,24 @@ async function askAI(question) {
 
 
     if (!reply) {
-        throw new Error(
-            'AI-მ ცარიელი პასუხი დააბრუნა.'
-        );
+        const error =
+            new Error(
+                'AI-მ ცარიელი პასუხი დააბრუნა.'
+            );
+
+        error.status =
+            response.status;
+
+        error.code =
+            'AI_EMPTY_RESPONSE';
+
+        error.responseText =
+            body.text;
+
+        error.responseData =
+            data;
+
+        throw error;
     }
 
 
@@ -1148,29 +1259,19 @@ async function askAI(question) {
 
 /* =========================================================
    FRONTEND SAFETY
-   ========================================================= */
+========================================================= */
 
 function containsUnsafeContent(text) {
-
     const value =
         String(text || '')
             .toLowerCase()
             .trim();
 
-
     if (!value) {
         return false;
     }
 
-
     const unsafePatterns = [
-
-        /*
-           აშკარა 18+ მიმართულების სიტყვები.
-           აქ intentionally არ არის გრძელი სია,
-           რათა ნორმალური სასწავლო სიტყვები
-           შემთხვევით არ დაიბლოკოს.
-        */
 
         /\b(porn|porno|pornography)\b/i,
 
@@ -1180,16 +1281,12 @@ function containsUnsafeContent(text) {
 
         /\b(hentai)\b/i,
 
-
-        /* ქართული გავრცელებული შეუფერებელი ფორმები. */
-
         /სექსუალური\s+შინაარსი/i,
 
         /პორნო/i,
 
         /პორნოგრაფ/i
     ];
-
 
     return unsafePatterns.some(
         pattern =>
@@ -1198,13 +1295,12 @@ function containsUnsafeContent(text) {
 }
 
 
-/* უსაფრთხოების გაფრთხილება. */
-
+/*
+    უსაფრთხოების გაფრთხილება.
+*/
 function addAISafetyWarning() {
-
     const message = `
         <div class="ai-safety-warning">
-
             <strong>
                 ${icon('shield-alert')}
                 უსაფრთხოების გაფრთხილება
@@ -1216,7 +1312,6 @@ function addAISafetyWarning() {
                 პლატფორმა განკუთვნილია სასწავლო,
                 Arduino-სა და ქიმიის საკითხებისთვის.
             </p>
-
         </div>
     `;
 
@@ -1227,21 +1322,19 @@ function addAISafetyWarning() {
 }
 
 
-/* მომხმარებლის კითხვის დამუშავება. */
-
+/*
+    მომხმარებლის კითხვის დამუშავება.
+*/
 async function handleAIQuestion(question) {
-
     const input =
         $('#ai-chat-input');
 
     const send =
         $('#ai-send-btn');
 
-
     const cleanQuestion =
         String(question || '')
             .trim();
-
 
     if (!cleanQuestion) {
         return;
@@ -1249,31 +1342,28 @@ async function handleAIQuestion(question) {
 
 
     /*
-       ყოველი ახალი კითხვა ამოწმებს
-       მიმდინარე ადმინისტრატორის ანგარიშს.
+        ყოველი ახალი კითხვა ამოწმებს
+        მიმდინარე ადმინისტრატორის ანგარიშს.
     */
-
     await detectAIAdmin();
 
 
-    /* Unsafe content. */
-
+    /*
+        Unsafe content.
+    */
     if (
         containsUnsafeContent(
             cleanQuestion
         )
     ) {
-
         addAIMessage(
             'user',
             cleanQuestion
         );
 
-
         if (input) {
             input.value = '';
         }
-
 
         addAISafetyWarning();
 
@@ -1285,7 +1375,6 @@ async function handleAIQuestion(question) {
         'user',
         cleanQuestion
     );
-
 
     aiHistory.push({
         role: 'user',
@@ -1308,20 +1397,17 @@ async function handleAIQuestion(question) {
 
 
     try {
-
         const reply =
             await askAI(
                 cleanQuestion
             );
 
-
         typing?.remove();
 
 
         /*
-           Admin greeting frontend-ში გარანტირებულად ემატება.
+            Admin greeting frontend-ში გარანტირებულად ემატება.
         */
-
         const finalReply =
             applyAIGreeting(
                 reply
@@ -1343,10 +1429,9 @@ async function handleAIQuestion(question) {
 
 
         /*
-           ისტორიის ზომა მცირეა,
-           რათა AI უფრო სწრაფი დარჩეს.
+            ისტორიის ზომა მცირეა,
+            რათა AI უფრო სწრაფი დარჩეს.
         */
-
         if (
             aiHistory.length > 10
         ) {
@@ -1355,10 +1440,26 @@ async function handleAIQuestion(question) {
         }
 
     } catch (error) {
-
         console.error(
             'ArduinoHub AI error:',
             error
+        );
+
+        console.error(
+            'AI error status:',
+            error?.status
+        );
+
+        console.error(
+            'AI error message:',
+            error?.message
+        );
+
+        console.error(
+            'AI error response:',
+            error?.responseData ||
+            error?.responseText ||
+            null
         );
 
 
@@ -1366,15 +1467,9 @@ async function handleAIQuestion(question) {
 
 
         /*
-           აქ უკვე აღარ ვაჩვენებთ
-           ყოველთვის ერთსა და იმავე
-           generic შეცდომას.
-
-           თუ 429 არის → quota შეტყობინება.
-           თუ 500 არის → server შეტყობინება.
-           და ა.შ.
+            აქ უკვე კონკრეტულად ვაჩვენებთ
+            შეცდომის ტიპს.
         */
-
         addAIMessage(
             'error',
             getAIUserErrorMessage(
@@ -1383,7 +1478,6 @@ async function handleAIQuestion(question) {
         );
 
     } finally {
-
         if (send) {
             send.disabled = false;
         }
@@ -1395,10 +1489,9 @@ async function handleAIQuestion(question) {
 
 /* =========================================================
    AI CHAT OPEN / CLOSE
-   ========================================================= */
+========================================================= */
 
 function openAIChat() {
-
     const chat =
         $('#ai-chat');
 
@@ -1408,7 +1501,6 @@ function openAIChat() {
     const windowEl =
         $('#ai-chat-window');
 
-
     if (
         !chat ||
         !toggle
@@ -1416,23 +1508,19 @@ function openAIChat() {
         return;
     }
 
-
     chat.classList.add(
         'open'
     );
-
 
     toggle.setAttribute(
         'aria-expanded',
         'true'
     );
 
-
     windowEl?.setAttribute(
         'aria-hidden',
         'false'
     );
-
 
     setTimeout(
         () => {
@@ -1443,9 +1531,7 @@ function openAIChat() {
     );
 }
 
-
 function closeAIChat() {
-
     const chat =
         $('#ai-chat');
 
@@ -1455,7 +1541,6 @@ function closeAIChat() {
     const windowEl =
         $('#ai-chat-window');
 
-
     if (
         !chat ||
         !toggle
@@ -1463,17 +1548,14 @@ function closeAIChat() {
         return;
     }
 
-
     chat.classList.remove(
         'open'
     );
-
 
     toggle.setAttribute(
         'aria-expanded',
         'false'
     );
-
 
     windowEl?.setAttribute(
         'aria-hidden',
@@ -1484,13 +1566,11 @@ function closeAIChat() {
 
 /* =========================================================
    AI Chat initialization
-   ========================================================= */
+========================================================= */
 
 async function initAIChat() {
-
     const chat =
         $('#ai-chat');
-
 
     if (!chat) {
         return;
@@ -1498,10 +1578,9 @@ async function initAIChat() {
 
 
     /*
-       ჯერ განვსაზღვროთ admin,
-       შემდეგ გავუშვათ ჩატი.
+        ჯერ განვსაზღვროთ admin,
+        შემდეგ გავუშვათ ჩატი.
     */
-
     await detectAIAdmin();
 
 
@@ -1519,11 +1598,9 @@ async function initAIChat() {
 
 
     if (toggle) {
-
         toggle.addEventListener(
             'click',
             () => {
-
                 if (
                     chat.classList.contains(
                         'open'
@@ -1545,55 +1622,49 @@ async function initAIChat() {
 
 
     /*
-       ძველი suggestion ღილაკები
-       თუ HTML-ში აღარ არსებობს,
-       ეს უბრალოდ ცარიელ შედეგს დააბრუნებს
-       და არაფერს გააფუჭებს.
+        ძველი suggestion ღილაკები
+        თუ HTML-ში აღარ არსებობს,
+        არაფერი მოხდება.
     */
-
     chat
         .querySelectorAll(
             '.ai-suggestion'
         )
         .forEach(
             button => {
-
                 button.addEventListener(
                     'click',
                     async () => {
-
                         const question =
                             button.dataset.aiQuestion;
-
 
                         if (!question) {
                             return;
                         }
 
-
                         chat
                             .querySelectorAll(
                                 '.ai-suggestion'
                             )
                             .forEach(
                                 b => {
-                                    b.disabled = true;
+                                    b.disabled =
+                                        true;
                                 }
                             );
-
 
                         await handleAIQuestion(
                             question
                         );
 
-
                         chat
                             .querySelectorAll(
                                 '.ai-suggestion'
                             )
                             .forEach(
                                 b => {
-                                    b.disabled = false;
+                                    b.disabled =
+                                        false;
                                 }
                             );
                     }
@@ -1605,19 +1676,15 @@ async function initAIChat() {
     form?.addEventListener(
         'submit',
         async event => {
-
             event.preventDefault();
-
 
             const question =
                 input?.value
                     ?.trim();
 
-
             if (!question) {
                 return;
             }
-
 
             await handleAIQuestion(
                 question
@@ -1629,12 +1696,10 @@ async function initAIChat() {
     input?.addEventListener(
         'keydown',
         event => {
-
             if (
                 event.key === 'Enter' &&
                 !event.shiftKey
             ) {
-
                 event.preventDefault();
 
                 form?.requestSubmit();
@@ -1646,7 +1711,6 @@ async function initAIChat() {
     document.addEventListener(
         'keydown',
         event => {
-
             if (
                 event.key === 'Escape' &&
                 chat.classList.contains(
@@ -1660,15 +1724,12 @@ async function initAIChat() {
 
 
     /*
-       თუ admin login/logout მოხდა,
-       greeting განახლდეს.
+        თუ admin login/logout მოხდა,
+        greeting განახლდეს.
     */
-
     if (db) {
-
         db.auth.onAuthStateChange(
             () => {
-
                 setTimeout(
                     () => {
                         detectAIAdmin();
@@ -1686,10 +1747,9 @@ async function initAIChat() {
 
 /* =========================================================
    PROJECT CARD
-   ========================================================= */
+========================================================= */
 
 function card(project) {
-
     const image =
         project.image_url
             ? `
@@ -1705,7 +1765,6 @@ function card(project) {
                 </div>
             `;
 
-
     return `
         <article class="project-card">
 
@@ -1716,15 +1775,15 @@ function card(project) {
             <div class="card-body">
 
                 <div class="card-meta">
-
                     <span>
                         ${esc(project.category)}
                     </span>
 
-                    <time datetime="${esc(project.created_at)}">
+                    <time
+                        datetime="${esc(project.created_at)}"
+                    >
                         ${dateText(project.created_at)}
                     </time>
-
                 </div>
 
                 <h2>
@@ -1760,20 +1819,17 @@ function card(project) {
 
 
 async function initProjects() {
-
     const status =
         $('#projects-status');
 
     const grid =
         $('#projects-grid');
 
-
     if (!db) {
         return configuredMessage(
             status
         );
     }
-
 
     const {
         data,
@@ -1795,9 +1851,7 @@ async function initProjects() {
         )
         .limit(60);
 
-
     if (error) {
-
         status.textContent =
             neutralError(
                 error,
@@ -1807,30 +1861,24 @@ async function initProjects() {
         return;
     }
 
-
     status.remove();
 
-
     const render = () => {
-
         const q =
             $('#project-search')
                 .value
                 .trim()
                 .toLocaleLowerCase('ka');
 
-
         const category =
             $('#category-filter')
                 .value;
-
 
         const result =
             data.filter(
                 p =>
                     (!category ||
                         p.category === category) &&
-
                     (
                         !q ||
                         `${p.title} ${p.description} ${p.author}`
@@ -1839,7 +1887,6 @@ async function initProjects() {
                     )
             );
 
-
         grid.innerHTML =
             result.length
                 ? result
@@ -1847,7 +1894,6 @@ async function initProjects() {
                     .join('')
                 : `
                     <div class="empty-state full">
-
                         ${icon('search-x')}
 
                         <h2>
@@ -1865,10 +1911,8 @@ async function initProjects() {
                                     : 'როგორც კი ადმინისტრატორი პირველ პროექტს გამოაქვეყნებს, ის აქ გამოჩნდება.'
                             }
                         </p>
-
                     </div>
                 `;
-
 
         refreshIcons();
     };
@@ -1880,13 +1924,11 @@ async function initProjects() {
             render
         );
 
-
     $('#category-filter')
         .addEventListener(
             'change',
             render
         );
-
 
     render();
 }
@@ -1894,13 +1936,11 @@ async function initProjects() {
 
 /* =========================================================
    PROJECT DETAIL
-   ========================================================= */
+========================================================= */
 
 async function initDetail() {
-
     const target =
         $('#project-detail');
-
 
     if (!db) {
         return configuredMessage(
@@ -1908,12 +1948,10 @@ async function initDetail() {
         );
     }
 
-
     const id =
         new URLSearchParams(
             location.search
         ).get('id');
-
 
     if (
         !id ||
@@ -1923,7 +1961,6 @@ async function initDetail() {
             target
         );
     }
-
 
     const {
         data: p,
@@ -1935,7 +1972,6 @@ async function initDetail() {
         .eq('published', true)
         .maybeSingle();
 
-
     if (
         error ||
         !p
@@ -1944,7 +1980,6 @@ async function initDetail() {
             target
         );
     }
-
 
     const image =
         p.image_url
@@ -1956,7 +1991,6 @@ async function initDetail() {
                 >
             `
             : '';
-
 
     const video =
         p.video_url
@@ -1980,7 +2014,6 @@ async function initDetail() {
             `
             : '';
 
-
     const components =
         p.components
             ? `
@@ -1998,7 +2031,6 @@ async function initDetail() {
                 </section>
             `
             : '';
-
 
     const how =
         p.how_it_was_made
@@ -2018,38 +2050,31 @@ async function initDetail() {
             `
             : '';
 
-
     let code = '';
-
 
     if (
         p.code &&
         p.code.trim()
     ) {
-
         const isChemistry =
             String(p.category)
                 .toLowerCase() ===
             'chemistry';
-
 
         const sectionTitle =
             isChemistry
                 ? 'ქიმიური რეაქცია'
                 : 'Arduino Code';
 
-
         const copyText =
             isChemistry
                 ? 'ტექსტის დაკოპირება'
                 : 'კოდის დაკოპირება';
 
-
         const sectionIcon =
             isChemistry
                 ? 'flask-conical'
                 : 'braces';
-
 
         code = `
             <section class="detail-section">
@@ -2080,9 +2105,7 @@ async function initDetail() {
         `;
     }
 
-
     target.className = '';
-
 
     target.innerHTML = `
         <article class="detail">
@@ -2122,7 +2145,6 @@ async function initDetail() {
 
             </div>
 
-
             <div class="detail-content">
 
                 ${components}
@@ -2143,20 +2165,16 @@ async function initDetail() {
         ?.addEventListener(
             'click',
             async () => {
-
                 try {
-
                     await navigator.clipboard
                         .writeText(
                             p.code
                         );
 
-
                     const isChemistry =
                         String(p.category)
                             .toLowerCase() ===
                         'chemistry';
-
 
                     toast(
                         isChemistry
@@ -2164,9 +2182,7 @@ async function initDetail() {
                             : 'კოდი დაკოპირდა',
                         'success'
                     );
-
                 } catch {
-
                     toast(
                         'დაკოპირება ვერ მოხერხდა.'
                     );
@@ -2174,20 +2190,16 @@ async function initDetail() {
             }
         );
 
-
     refreshIcons();
 }
 
 
 function notFound(target) {
-
     if (!target) {
         return;
     }
 
-
     target.className = '';
-
 
     target.innerHTML = `
         <div class="empty-state">
@@ -2212,14 +2224,13 @@ function notFound(target) {
         </div>
     `;
 
-
     refreshIcons();
 }
 
 
 /* =========================================================
    FILE UPLOADS
-   ========================================================= */
+========================================================= */
 
 const IMAGE_TYPES = [
     'image/jpeg',
@@ -2227,7 +2238,6 @@ const IMAGE_TYPES = [
     'image/webp',
     'image/gif'
 ];
-
 
 const VIDEO_TYPES = [
     'video/mp4',
@@ -2242,14 +2252,13 @@ function fileOkay(
     max,
     label
 ) {
-
     if (!file) {
         return true;
     }
 
-
-    if (!types.includes(file.type)) {
-
+    if (
+        !types.includes(file.type)
+    ) {
         toast(
             `${label}: ფაილის ტიპი მიუღებელია.`
         );
@@ -2257,16 +2266,15 @@ function fileOkay(
         return false;
     }
 
-
-    if (file.size > max) {
-
+    if (
+        file.size > max
+    ) {
         toast(
             `${label}: ფაილი ზედმეტად დიდია.`
         );
 
         return false;
     }
-
 
     return true;
 }
@@ -2280,11 +2288,9 @@ async function upload(
     max,
     label
 ) {
-
     if (!file) {
         return null;
     }
-
 
     if (
         !fileOkay(
@@ -2299,17 +2305,14 @@ async function upload(
         );
     }
 
-
     const clean =
         file.name.replace(
             /[^a-zA-Z0-9._-]/g,
             '_'
         );
 
-
     const path =
         `${folder}/${crypto.randomUUID()}-${clean}`;
-
 
     const {
         error
@@ -2325,20 +2328,15 @@ async function upload(
             }
         );
 
-
     if (error) {
         throw error;
     }
-
 
     const {
         data
     } = db.storage
         .from(bucket)
-        .getPublicUrl(
-            path
-        );
-
+        .getPublicUrl(path);
 
     return {
         url: data.publicUrl,
@@ -2351,28 +2349,22 @@ function storagePath(
     url,
     bucket
 ) {
-
     try {
-
         const marker =
             `/storage/v1/object/public/${bucket}/`;
-
 
         const index =
             url?.indexOf(marker);
 
-
         return index >= 0
             ? decodeURIComponent(
                 url.slice(
-                    index +
-                    marker.length
+                    index + marker.length
                 )
             )
             : null;
 
     } catch {
-
         return null;
     }
 }
@@ -2382,27 +2374,20 @@ async function removeStored(
     url,
     bucket
 ) {
-
     const path =
         storagePath(
             url,
             bucket
         );
 
-
     if (path) {
-
         const {
             error
         } = await db.storage
             .from(bucket)
-            .remove([
-                path
-            ]);
-
+            .remove([path]);
 
         if (error) {
-
             console.warn(
                 'Storage cleanup failed',
                 error
@@ -2414,17 +2399,15 @@ async function removeStored(
 
 /* =========================================================
    ADMIN
-   ========================================================= */
+========================================================= */
 
 async function isAdmin(user) {
-
     if (
         !user ||
         !db
     ) {
         return null;
     }
-
 
     const {
         data,
@@ -2438,7 +2421,6 @@ async function isAdmin(user) {
         )
         .maybeSingle();
 
-
     if (
         error ||
         !data
@@ -2446,28 +2428,22 @@ async function isAdmin(user) {
         return null;
     }
 
-
     return data;
 }
 
 
 async function initAdmin() {
-
     if (!db) {
-
         $('#auth-panel')
             .querySelector('form')
             .hidden = true;
-
 
         $('#login-error')
             .textContent =
             'Supabase ჯერ არ არის კონფიგურირებული.';
 
-
         return;
     }
-
 
     const {
         data: {
@@ -2476,14 +2452,11 @@ async function initAdmin() {
     } = await db.auth
         .getSession();
 
-
     if (session) {
-
         await showDashboard(
             session.user
         );
     }
-
 
     $('#login-form')
         .addEventListener(
@@ -2491,21 +2464,17 @@ async function initAdmin() {
             login
         );
 
-
     $('#logout-button')
         ?.addEventListener(
             'click',
             logout
         );
 
-
     $('#new-project-button')
         ?.addEventListener(
             'click',
-            () =>
-                openEditor()
+            () => openEditor()
         );
-
 
     $('#cancel-edit')
         ?.addEventListener(
@@ -2513,13 +2482,11 @@ async function initAdmin() {
             closeEditor
         );
 
-
     $('#project-form')
         ?.addEventListener(
             'submit',
             saveProject
         );
-
 
     $('#image-file')
         ?.addEventListener(
@@ -2527,12 +2494,10 @@ async function initAdmin() {
             imagePreview
         );
 
-
     $('#video-file')
         ?.addEventListener(
             'change',
             () => {
-
                 $('#video-name')
                     .textContent =
                     $('#video-file')
@@ -2542,29 +2507,22 @@ async function initAdmin() {
             }
         );
 
-
     const categorySelect =
         $('#category');
 
-
     if (categorySelect) {
-
         categorySelect.addEventListener(
             'change',
             updateCodeFieldLabel
         );
 
-
         updateCodeFieldLabel();
     }
 
-
     bindMeetingForm();
-
 
     db.auth.onAuthStateChange(
         (_event, session) => {
-
             if (!session) {
                 showLogin();
             }
@@ -2574,13 +2532,11 @@ async function initAdmin() {
 
 
 function updateCodeFieldLabel() {
-
     const category =
         $('#category');
 
     const codeInput =
         $('#code');
-
 
     if (
         !category ||
@@ -2589,32 +2545,27 @@ function updateCodeFieldLabel() {
         return;
     }
 
-
     const label =
         codeInput.closest('label');
-
 
     if (!label) {
         return;
     }
-
 
     const isChemistry =
         String(category.value)
             .toLowerCase() ===
         'chemistry';
 
-
     const textNodes =
         Array.from(
             label.childNodes
         )
-        .filter(
-            node =>
-                node.nodeType ===
-                Node.TEXT_NODE
-        );
-
+            .filter(
+                node =>
+                    node.nodeType ===
+                    Node.TEXT_NODE
+            );
 
     const titleNode =
         textNodes.find(
@@ -2622,29 +2573,17 @@ function updateCodeFieldLabel() {
                 node.textContent.trim()
         );
 
-
     if (titleNode) {
-
         titleNode.textContent =
             isChemistry
-                ? `
-                            ქიმიური რეაქცია
-
-                            `
-                : `
-                            Arduino Code
-
-                            `;
+                ? ` ქიმიური რეაქცია `
+                : ` Arduino Code `;
     }
 
-
     if (isChemistry) {
-
         codeInput.placeholder =
             'მაგ.: რეაქციის ფორმულა, ქიმიური განტოლება ან რეაქციის აღწერა...';
-
     } else {
-
         codeInput.placeholder =
             'ჩასვით Arduino კოდი აქ...';
     }
@@ -2652,30 +2591,24 @@ function updateCodeFieldLabel() {
 
 
 async function login(event) {
-
     event.preventDefault();
-
 
     const form =
         event.currentTarget;
-
 
     const button =
         form.querySelector(
             'button'
         );
 
-
     $('#login-error')
         .textContent = '';
-
 
     setBusy(
         button,
         true,
         'იტვირთება...'
     );
-
 
     const {
         data,
@@ -2692,53 +2625,41 @@ async function login(event) {
                     .value
         });
 
-
     if (
         error ||
         !data.user
     ) {
-
         $('#login-error')
             .textContent =
             'მონაცემები არასწორია';
-
 
         setBusy(
             button,
             false
         );
 
-
         return;
     }
-
 
     const admin =
         await isAdmin(
             data.user
         );
 
-
     if (!admin) {
-
-        await db.auth
-            .signOut();
-
+        await db.auth.signOut();
 
         $('#login-error')
             .textContent =
             'ამ ანგარიშს ადმინისტრატორის წვდომა არ აქვს.';
-
 
         setBusy(
             button,
             false
         );
 
-
         return;
     }
-
 
     await showDashboard(
         data.user,
@@ -2751,38 +2672,29 @@ async function showDashboard(
     user,
     knownAdmin
 ) {
-
     const admin =
         knownAdmin ||
         await isAdmin(user);
 
-
     if (!admin) {
-
         if (user) {
             await db.auth.signOut();
         }
 
-
         return showLogin();
     }
-
 
     $('#auth-panel')
         .hidden = true;
 
-
     $('#dashboard')
         .hidden = false;
-
 
     $('#admin-name')
         .textContent =
         admin.username;
 
-
     refreshIcons();
-
 
     await Promise.all([
         loadAdminProjects(),
@@ -2792,26 +2704,20 @@ async function showDashboard(
 
 
 function showLogin() {
-
     $('#dashboard')
         .hidden = true;
 
-
     $('#auth-panel')
         .hidden = false;
-
 
     closeEditor();
 }
 
 
 async function logout() {
-
     await db.auth.signOut();
 
-
     aiAdminGreeting = '';
-
 
     toast(
         'თქვენ გამოხვედით ანგარიშიდან.'
@@ -2824,33 +2730,25 @@ function setBusy(
     busy,
     text
 ) {
-
     if (!button) {
         return;
     }
 
-
     button.disabled =
         busy;
 
-
     if (busy) {
-
         button.dataset.label =
             button.innerHTML;
 
-
         button.textContent =
             text;
-
     } else if (
         button.dataset.label
     ) {
-
         button.innerHTML =
             button.dataset.label;
     }
-
 
     refreshIcons();
 }
@@ -2858,20 +2756,17 @@ function setBusy(
 
 /* =========================================================
    ADMIN PROJECTS
-   ========================================================= */
+========================================================= */
 
 let adminProjects = [];
 
 
 async function loadAdminProjects() {
-
     const status =
         $('#admin-status');
 
-
     const list =
         $('#admin-project-list');
-
 
     if (
         !status ||
@@ -2880,12 +2775,9 @@ async function loadAdminProjects() {
         return;
     }
 
-
     status.hidden = false;
 
-
     list.innerHTML = '';
-
 
     const {
         data,
@@ -2902,31 +2794,25 @@ async function loadAdminProjects() {
             }
         );
 
-
     if (error) {
-
         status.textContent =
             neutralError(
                 error,
                 'პროექტების ჩატვირთვა ვერ მოხერხდა.'
             );
 
-
         return;
     }
-
 
     adminProjects =
         data || [];
 
-
-    status.hidden = true;
-
+    status.hidden =
+        true;
 
     $('#admin-count')
         .textContent =
         `${adminProjects.length} პროექტი`;
-
 
     list.innerHTML =
         adminProjects.length
@@ -2949,7 +2835,6 @@ async function loadAdminProjects() {
 
                             </div>
 
-
                             <span
                                 class="status ${
                                     p.published
@@ -2964,7 +2849,6 @@ async function loadAdminProjects() {
                                 }
                             </span>
 
-
                             <div class="row-actions">
 
                                 <a
@@ -2975,7 +2859,6 @@ async function loadAdminProjects() {
                                     ${icon('eye')}
                                 </a>
 
-
                                 <button
                                     class="icon-button edit"
                                     data-id="${p.id}"
@@ -2983,7 +2866,6 @@ async function loadAdminProjects() {
                                 >
                                     ${icon('pencil')}
                                 </button>
-
 
                                 <button
                                     class="icon-button toggle"
@@ -3003,7 +2885,6 @@ async function loadAdminProjects() {
                                     }
                                 </button>
 
-
                                 <button
                                     class="icon-button danger delete"
                                     data-id="${p.id}"
@@ -3018,7 +2899,6 @@ async function loadAdminProjects() {
                     `
                 )
                 .join('')
-
             : `
                 <div class="empty-state compact-empty">
 
@@ -3081,41 +2961,33 @@ async function loadAdminProjects() {
                 )
         );
 
-
     refreshIcons();
 }
 
 
 /* =========================================================
    PROJECT EDITOR
-   ========================================================= */
+========================================================= */
 
 function openEditor(p) {
-
     const form =
         $('#project-form');
 
-
     form.reset();
-
 
     $('#image-preview')
         .hidden = true;
-
 
     $('#image-name')
         .textContent =
         'ფაილი არჩეული არ არის';
 
-
     $('#video-name')
         .textContent =
         'ფაილი არჩეული არ არის';
 
-
     $('#form-error')
         .textContent = '';
-
 
     $('#editor-title')
         .textContent =
@@ -3123,71 +2995,48 @@ function openEditor(p) {
             ? 'პროექტის რედაქტირება'
             : 'ახალი პროექტი';
 
-
     $('#save-project')
         .innerHTML =
         p
             ? `ცვლილებების შენახვა ${icon('save')}`
             : `პროექტის დამატება ${icon('save')}`;
 
-
     if (p) {
-
         $('#edit-id')
-            .value =
-            p.id;
-
+            .value = p.id;
 
         $('#title')
-            .value =
-            p.title;
-
+            .value = p.title;
 
         $('#category')
-            .value =
-            p.category;
-
+            .value = p.category;
 
         $('#author')
-            .value =
-            p.author;
-
+            .value = p.author;
 
         $('#published')
-            .checked =
-            p.published;
-
+            .checked = p.published;
 
         $('#description')
-            .value =
-            p.description;
-
+            .value = p.description;
 
         $('#components')
             .value =
-            p.components ||
-            '';
-
+            p.components || '';
 
         $('#how-made')
             .value =
-            p.how_it_was_made ||
-            '';
-
+            p.how_it_was_made || '';
 
         $('#code')
             .value =
-            p.code ||
-            '';
+            p.code || '';
     }
-
 
     updateCodeFieldLabel();
 
-
     $('#project-editor')
         .hidden = false;
-
 
     $('#project-editor')
         .scrollIntoView({
@@ -3195,16 +3044,13 @@ function openEditor(p) {
             block: 'start'
         });
 
-
     refreshIcons();
 }
 
 
 function closeEditor() {
-
     const editor =
         $('#project-editor');
-
 
     if (editor) {
         editor.hidden = true;
@@ -3213,17 +3059,14 @@ function closeEditor() {
 
 
 function imagePreview() {
-
     const file =
         $('#image-file')
             .files[0];
-
 
     $('#image-name')
         .textContent =
         file?.name ||
         'ფაილი არჩეული არ არის';
-
 
     if (
         file &&
@@ -3234,16 +3077,13 @@ function imagePreview() {
             'სურათი'
         )
     ) {
-
         const preview =
             $('#image-preview');
-
 
         preview.src =
             URL.createObjectURL(
                 file
             );
-
 
         preview.hidden = false;
     }
@@ -3252,42 +3092,33 @@ function imagePreview() {
 
 /* =========================================================
    SAVE PROJECT
-   ========================================================= */
+========================================================= */
 
 async function saveProject(event) {
-
     event.preventDefault();
-
 
     const button =
         $('#save-project');
-
 
     const id =
         $('#edit-id')
             .value;
 
-
     const old =
         adminProjects.find(
-            p =>
-                p.id === id
+            p => p.id === id
         );
-
 
     const image =
         $('#image-file')
             .files[0];
 
-
     const video =
         $('#video-file')
             .files[0];
 
-
     $('#form-error')
         .textContent = '';
-
 
     if (
         !fileOkay(
@@ -3296,7 +3127,6 @@ async function saveProject(event) {
             5 * 1024 * 1024,
             'სურათი'
         ) ||
-
         !fileOkay(
             video,
             VIDEO_TYPES,
@@ -3307,26 +3137,20 @@ async function saveProject(event) {
         return;
     }
 
-
     setBusy(
         button,
         true,
         'ინახება...'
     );
 
-
     let uploads = [];
 
-
     try {
-
         const folder =
             id ||
             crypto.randomUUID();
 
-
         if (image) {
-
             uploads.push([
                 'image',
                 await upload(
@@ -3340,9 +3164,7 @@ async function saveProject(event) {
             ]);
         }
 
-
         if (video) {
-
             uploads.push([
                 'video',
                 await upload(
@@ -3356,9 +3178,7 @@ async function saveProject(event) {
             ]);
         }
 
-
         const value = {
-
             title:
                 $('#title')
                     .value
@@ -3401,40 +3221,29 @@ async function saveProject(event) {
                     .checked
         };
 
-
         const img =
             uploads.find(
-                x =>
-                    x[0] ===
-                    'image'
+                x => x[0] === 'image'
             )?.[1];
-
 
         const vid =
             uploads.find(
-                x =>
-                    x[0] ===
-                    'video'
+                x => x[0] === 'video'
             )?.[1];
-
 
         if (img) {
             value.image_url =
                 img.url;
         }
 
-
         if (vid) {
             value.video_url =
                 vid.url;
         }
 
-
         let error;
 
-
         if (id) {
-
             ({
                 error
             } = await db
@@ -3444,9 +3253,7 @@ async function saveProject(event) {
                     'id',
                     id
                 ));
-
         } else {
-
             ({
                 error
             } = await db
@@ -3454,35 +3261,29 @@ async function saveProject(event) {
                 .insert(value));
         }
 
-
         if (error) {
             throw error;
         }
-
 
         if (
             img &&
             old?.image_url
         ) {
-
             await removeStored(
                 old.image_url,
                 'project-images'
             );
         }
 
-
         if (
             vid &&
             old?.video_url
         ) {
-
             await removeStored(
                 old.video_url,
                 'project-videos'
             );
         }
-
 
         toast(
             id
@@ -3491,30 +3292,20 @@ async function saveProject(event) {
             'success'
         );
 
-
         closeEditor();
-
 
         await loadAdminProjects();
 
     } catch (error) {
-
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         for (
-            const [
-                kind,
-                file
-            ] of uploads
+            const [kind, file]
+            of uploads
         ) {
-
             if (!file?.url) {
                 continue;
             }
-
 
             await removeStored(
                 file.url,
@@ -3524,7 +3315,6 @@ async function saveProject(event) {
             );
         }
 
-
         $('#form-error')
             .textContent =
             neutralError(
@@ -3533,7 +3323,6 @@ async function saveProject(event) {
             );
 
     } finally {
-
         setBusy(
             button,
             false
@@ -3543,18 +3332,14 @@ async function saveProject(event) {
 
 
 async function togglePublished(id) {
-
     const p =
         adminProjects.find(
-            x =>
-                x.id === id
+            x => x.id === id
         );
-
 
     if (!p) {
         return;
     }
-
 
     const {
         error
@@ -3569,14 +3354,11 @@ async function togglePublished(id) {
             id
         );
 
-
     if (error) {
-
         return toast(
             'სტატუსის შეცვლა ვერ მოხერხდა.'
         );
     }
-
 
     toast(
         p.published
@@ -3585,19 +3367,15 @@ async function togglePublished(id) {
         'success'
     );
 
-
     loadAdminProjects();
 }
 
 
 async function deleteProject(id) {
-
     const p =
         adminProjects.find(
-            x =>
-                x.id === id
+            x => x.id === id
         );
-
 
     if (
         !p ||
@@ -3607,7 +3385,6 @@ async function deleteProject(id) {
     ) {
         return;
     }
-
 
     const {
         error
@@ -3619,14 +3396,11 @@ async function deleteProject(id) {
             id
         );
 
-
     if (error) {
-
         return toast(
             'პროექტის წაშლა ვერ მოხერხდა.'
         );
     }
-
 
     await Promise.all([
         removeStored(
@@ -3640,12 +3414,10 @@ async function deleteProject(id) {
         )
     ]);
 
-
     toast(
         'პროექტი წაიშალა.',
         'success'
     );
-
 
     loadAdminProjects();
 }
@@ -3653,7 +3425,7 @@ async function deleteProject(id) {
 
 /* =========================================================
    CLUB MEETING
-   ========================================================= */
+========================================================= */
 
 const GEORGIAN_WEEKDAYS = [
     'კვირა',
@@ -3667,17 +3439,14 @@ const GEORGIAN_WEEKDAYS = [
 
 
 function meetingDay(dateValue) {
-
     if (!dateValue) {
         return '—';
     }
-
 
     const d =
         new Date(
             `${dateValue}T12:00:00`
         );
-
 
     if (
         Number.isNaN(
@@ -3687,25 +3456,23 @@ function meetingDay(dateValue) {
         return '—';
     }
 
-
     return GEORGIAN_WEEKDAYS[
         d.getDay()
     ];
 }
 
 
-function meetingDateText(dateValue) {
-
+function meetingDateText(
+    dateValue
+) {
     if (!dateValue) {
         return '—';
     }
-
 
     const d =
         new Date(
             `${dateValue}T12:00:00`
         );
-
 
     if (
         Number.isNaN(
@@ -3714,7 +3481,6 @@ function meetingDateText(dateValue) {
     ) {
         return dateValue;
     }
-
 
     return new Intl.DateTimeFormat(
         'ka-GE',
@@ -3727,19 +3493,18 @@ function meetingDateText(dateValue) {
 }
 
 
-function meetingTimeText(timeValue) {
-
+function meetingTimeText(
+    timeValue
+) {
     if (!timeValue) {
         return '—';
     }
-
 
     const m =
         String(timeValue)
             .match(
                 /^(\d{2}):(\d{2})/
             );
-
 
     return m
         ? `${m[1]}:${m[2]}`
@@ -3748,9 +3513,7 @@ function meetingTimeText(timeValue) {
 
 
 async function getMeeting() {
-
     if (!db) {
-
         return {
             data: null,
             error:
@@ -3759,7 +3522,6 @@ async function getMeeting() {
                 )
         };
     }
-
 
     return await db
         .from('club_meeting')
@@ -3774,19 +3536,17 @@ async function getMeeting() {
 }
 
 
-function renderMeetingContent(meeting) {
-
+function renderMeetingContent(
+    meeting
+) {
     const target =
         $('#meeting-content');
-
 
     if (!target) {
         return;
     }
 
-
     if (!meeting) {
-
         target.innerHTML = `
             <div class="meeting-empty">
 
@@ -3804,11 +3564,8 @@ function renderMeetingContent(meeting) {
 
             </div>
         `;
-
     } else {
-
         target.innerHTML = `
-
             <div class="meeting-date-main">
                 ${esc(
                     meetingDateText(
@@ -3820,7 +3577,6 @@ function renderMeetingContent(meeting) {
             <div class="meeting-detail-row">
 
                 <div>
-
                     <span>
                         დღე
                     </span>
@@ -3832,12 +3588,9 @@ function renderMeetingContent(meeting) {
                             )
                         )}
                     </strong>
-
                 </div>
 
-
                 <div>
-
                     <span>
                         დრო
                     </span>
@@ -3849,39 +3602,30 @@ function renderMeetingContent(meeting) {
                             )
                         )}
                     </strong>
-
                 </div>
 
             </div>
         `;
     }
 
-
     refreshIcons();
 }
 
 
 async function loadPublicMeeting() {
-
     const {
         data,
         error
     } = await getMeeting();
 
-
     if (error) {
-
         console.error(error);
-
 
         const target =
             $('#meeting-content');
 
-
         if (target) {
-
             target.innerHTML = `
-
                 <div class="meeting-empty">
 
                     ${icon('triangle-alert')}
@@ -3897,14 +3641,11 @@ async function loadPublicMeeting() {
                 </div>
             `;
 
-
             refreshIcons();
         }
 
-
         return;
     }
-
 
     renderMeetingContent(
         data
@@ -3913,32 +3654,25 @@ async function loadPublicMeeting() {
 
 
 function openMeetingModal() {
-
     const modal =
         $('#meeting-modal');
-
 
     if (!modal) {
         return;
     }
 
-
     modal.hidden = false;
-
 
     modal.setAttribute(
         'aria-hidden',
         'false'
     );
 
-
     document.body.classList.add(
         'modal-open'
     );
 
-
     loadPublicMeeting();
-
 
     setTimeout(
         () => {
@@ -3951,24 +3685,19 @@ function openMeetingModal() {
 
 
 function closeMeetingModal() {
-
     const modal =
         $('#meeting-modal');
-
 
     if (!modal) {
         return;
     }
 
-
     modal.hidden = true;
-
 
     modal.setAttribute(
         'aria-hidden',
         'true'
     );
-
 
     document.body.classList.remove(
         'modal-open'
@@ -3977,28 +3706,23 @@ function closeMeetingModal() {
 
 
 function initMeetingPublic() {
-
     const button =
         $('#meeting-button');
-
 
     if (!button) {
         return;
     }
-
 
     button.addEventListener(
         'click',
         openMeetingModal
     );
 
-
     $('#meeting-close')
         ?.addEventListener(
             'click',
             closeMeetingModal
         );
-
 
     document
         .querySelectorAll(
@@ -4012,11 +3736,9 @@ function initMeetingPublic() {
                 )
         );
 
-
     document.addEventListener(
         'keydown',
         e => {
-
             if (
                 e.key === 'Escape' &&
                 $('#meeting-modal') &&
@@ -4030,41 +3752,32 @@ function initMeetingPublic() {
 
 
 async function loadAdminMeeting() {
-
     const status =
         $('#meeting-admin-status');
-
 
     if (!status) {
         return;
     }
-
 
     const {
         data,
         error
     } = await getMeeting();
 
-
     if (error) {
-
         status.textContent =
             'ჩატვირთვა ვერ მოხერხდა';
-
 
         console.error(error);
 
         return;
     }
 
-
     if (data) {
-
         $('#meeting-date')
             .value =
             data.meeting_date ||
             '';
-
 
         $('#meeting-time')
             .value =
@@ -4076,30 +3789,24 @@ async function loadAdminMeeting() {
                 5
             );
 
-
         $('#meeting-day-preview')
             .textContent =
             meetingDay(
                 data.meeting_date
             );
 
-
         status.textContent =
             'გამოქვეყნებულია';
-
 
         status.className =
             'meeting-admin-status published';
 
     } else {
-
         status.textContent =
             'არ არის გამოქვეყნებული';
 
-
         status.className =
             'meeting-admin-status';
-
 
         $('#meeting-day-preview')
             .textContent =
@@ -4109,21 +3816,17 @@ async function loadAdminMeeting() {
 
 
 function bindMeetingForm() {
-
     const form =
         $('#meeting-form');
-
 
     if (!form) {
         return;
     }
 
-
     $('#meeting-date')
         ?.addEventListener(
             'input',
             e => {
-
                 $('#meeting-day-preview')
                     .textContent =
                     meetingDay(
@@ -4132,12 +3835,10 @@ function bindMeetingForm() {
             }
         );
 
-
     form.addEventListener(
         'submit',
         saveMeeting
     );
-
 
     $('#clear-meeting')
         ?.addEventListener(
@@ -4148,48 +3849,38 @@ function bindMeetingForm() {
 
 
 async function saveMeeting(event) {
-
     event.preventDefault();
-
 
     if (!db) {
         return;
     }
 
-
     const button =
         $('#save-meeting');
 
-
     const errorTarget =
         $('#meeting-form-error');
-
 
     const date =
         $('#meeting-date')
             .value;
 
-
     const time =
         $('#meeting-time')
             .value;
 
-
     errorTarget.textContent =
         '';
-
 
     if (
         !date ||
         !time
     ) {
-
         errorTarget.textContent =
             'აირჩიეთ თარიღი და დრო.';
 
         return;
     }
-
 
     setBusy(
         button,
@@ -4197,9 +3888,7 @@ async function saveMeeting(event) {
         'ქვეყნდება...'
     );
 
-
     try {
-
         const {
             data: {
                 user
@@ -4207,13 +3896,11 @@ async function saveMeeting(event) {
         } = await db.auth
             .getUser();
 
-
         if (!user) {
             throw new Error(
                 'not-authenticated'
             );
         }
-
 
         const {
             error
@@ -4222,31 +3909,31 @@ async function saveMeeting(event) {
             .upsert(
                 {
                     id: 1,
-                    meeting_date: date,
-                    meeting_time: time,
-                    updated_by: user.id
+                    meeting_date:
+                        date,
+                    meeting_time:
+                        time,
+                    updated_by:
+                        user.id
                 },
                 {
-                    onConflict: 'id'
+                    onConflict:
+                        'id'
                 }
             );
-
 
         if (error) {
             throw error;
         }
-
 
         toast(
             'კლუბის შეკრება გამოქვეყნდა.',
             'success'
         );
 
-
         await loadAdminMeeting();
 
     } catch (error) {
-
         errorTarget.textContent =
             neutralError(
                 error,
@@ -4254,7 +3941,6 @@ async function saveMeeting(event) {
             );
 
     } finally {
-
         setBusy(
             button,
             false
@@ -4264,11 +3950,9 @@ async function saveMeeting(event) {
 
 
 async function clearMeeting() {
-
     if (!db) {
         return;
     }
-
 
     if (
         !confirm(
@@ -4277,7 +3961,6 @@ async function clearMeeting() {
     ) {
         return;
     }
-
 
     const {
         error
@@ -4289,36 +3972,29 @@ async function clearMeeting() {
             1
         );
 
-
     if (error) {
-
         return toast(
             'შეკრების წაშლა ვერ მოხერხდა.'
         );
     }
 
-
     $('#meeting-date')
         .value = '';
-
 
     $('#meeting-time')
         .value = '';
 
-
     $('#meeting-day-preview')
-        .textContent = '—';
-
+        .textContent =
+        '—';
 
     $('#meeting-admin-status')
         .textContent =
         'არ არის გამოქვეყნებული';
 
-
     $('#meeting-admin-status')
         .className =
         'meeting-admin-status';
-
 
     toast(
         'შეკრება გაუქმდა.',
@@ -4329,89 +4005,70 @@ async function clearMeeting() {
 
 /* =========================================================
    PASSWORD RESET
-   ========================================================= */
+========================================================= */
 
 async function initPasswordReset() {
-
     const form =
         $('#reset-password-form');
-
 
     if (!form) {
         return;
     }
 
-
     if (!db) {
-
         $('#reset-error')
             .textContent =
             'Supabase ჯერ არ არის კონფიგურირებული.';
-
 
         form.querySelector(
             'button'
         ).disabled = true;
 
-
         return;
     }
-
 
     form.addEventListener(
         'submit',
         async event => {
-
             event.preventDefault();
-
 
             const error =
                 $('#reset-error');
-
 
             const password =
                 $('#new-password')
                     .value;
 
-
             const confirmPassword =
                 $('#confirm-password')
                     .value;
-
 
             const button =
                 form.querySelector(
                     'button'
                 );
 
-
             error.textContent =
                 '';
-
 
             if (
                 password !==
                 confirmPassword
             ) {
-
                 error.textContent =
                     'პაროლები ერთმანეთს არ ემთხვევა.';
 
                 return;
             }
 
-
             if (
-                password.length <
-                10
+                password.length < 10
             ) {
-
                 error.textContent =
                     'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.';
 
                 return;
             }
-
 
             const {
                 data: {
@@ -4420,22 +4077,18 @@ async function initPasswordReset() {
             } = await db.auth
                 .getSession();
 
-
             if (!session) {
-
                 error.textContent =
                     'აღდგენის ბმული არასწორია ან ვადა გაუვიდა. მოითხოვეთ ახალი ბმული.';
 
                 return;
             }
 
-
             setBusy(
                 button,
                 true,
                 'ინახება...'
             );
-
 
             const {
                 error: updateError
@@ -4444,19 +4097,14 @@ async function initPasswordReset() {
                     password
                 });
 
-
             if (updateError) {
-
                 error.textContent =
                     'პაროლის შეცვლა ვერ მოხერხდა. მოითხოვეთ ახალი ბმული.';
-
             } else {
-
                 toast(
                     'პაროლი წარმატებით შეიცვალა.',
                     'success'
                 );
-
 
                 setTimeout(
                     () => {
@@ -4466,7 +4114,6 @@ async function initPasswordReset() {
                     900
                 );
             }
-
 
             setBusy(
                 button,
@@ -4479,15 +4126,13 @@ async function initPasswordReset() {
 
 /* =========================================================
    INITIALIZATION
-   ========================================================= */
+========================================================= */
 
 initChrome();
 
 
 if (page === 'home') {
-
     initMeetingPublic();
-
     initAIChat();
 }
 
