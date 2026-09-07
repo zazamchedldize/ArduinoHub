@@ -172,20 +172,6 @@ function initChrome() {
    REAL AI — SUPABASE EDGE FUNCTION + GEMINI
 ========================================================= */
 
-/*
-    IMPORTANT:
-
-    Gemini API Key აქ არ არის.
-
-    API Key ინახება მხოლოდ Supabase Edge Function-ის
-    Secret-ში:
-
-        GEMINI_API_KEY
-
-    Frontend უკავშირდება მხოლოდ ჩვენს Supabase ფუნქციას.
-*/
-
-
 const AI_FUNCTION_URL =
     supabaseIsConfigured && SUPABASE_URL
         ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
@@ -195,31 +181,21 @@ const AI_FUNCTION_URL =
 /*
     AI conversation history.
 */
-
 let aiHistory = [];
 
 
 /*
-    ამ ცვლადში ვინახავთ მიმდინარე AI მომხმარებლის
-    ადმინისტრატორის მიმართვას.
+    აქტიური ადმინისტრატორის AI მიმართვა.
 
-    null
-        = ჩვეულებრივი მომხმარებელი
-
-    "ბატონო ზაზა,"
-        = Zaza
-
-    "ქალბატონო თეკლა,"
-        = თეკლა
+    Zaza  -> ბატონო ზაზა
+    Tekla -> ქალბატონო თეკლა
 */
-
-let aiAdminGreeting = null;
+let aiAdminGreeting = '';
 
 
 /*
-    ArduinoHub-ის მუდმივი ინფორმაცია.
+    ArduinoHub AI-ის მუდმივი კონტექსტი.
 */
-
 const AI_SYSTEM_CONTEXT = `
 შენ ხარ ArduinoHub AI — ArduinoHub-ის ოფიციალური AI ასისტენტი.
 
@@ -250,7 +226,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 პასუხის წესები:
 
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
-2. იყავი მეგობრული, ბუნებრივი და გასაგები.
+2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
 4. თუ მომხმარებელი დამწყებია, ახსენი მარტივად.
 5. თუ კითხვა ArduinoHub-ის შესახებ არის და ზუსტი ინფორმაცია არ გაქვს,
@@ -261,72 +237,45 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
    მოცემულ ინფორმაციაში არ არის.
 9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
 10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
-
-11. პასუხები ყოველთვის დააფორმატე მკაფიოდ და ლამაზად.
-12. საჭიროების შემთხვევაში გამოიყენე Markdown:
-    **მნიშვნელოვანი ტექსტი**
-    *დახრილი ტექსტი*
-    - პუნქტები
-    1. დანომრილი პუნქტები
-    ## სათაურები
-    > ციტატები
-    \`inline code\`
-    და fenced code blocks.
-
-13. ქიმიური ფორმულები დაწერე ჩვეულებრივ ტექსტად:
-    H2O, CO2, NaCl, KMnO4, Mn2O7 და ა.შ.
-
-14. არასოდეს დაწერო უბრალოდ "svg" ან სხვა ტექნიკური სიტყვა,
-    თუ მას რეალური მნიშვნელობა არ აქვს პასუხისთვის.
-
-15. პასუხი არ გაწყვიტო შუა წინადადებაში.
-    ყოველთვის დაასრულე აზრი სრულად.
-
-16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე typo,
-    ერთი ან რამდენიმე არასწორად დაწერილი ასო, გამოტოვებული ასო,
-    ზედმეტი ასო ან მცირე ორთოგრაფიული შეცდომა.
-    ასეთ შეცდომებზე არ გაჩერდე და მომხმარებელს არ მოსთხოვო
-    კითხვის თავიდან დაწერა.
-    კონტექსტიდან თავად განსაზღვრე, რას გულისხმობს მომხმარებელი,
-    და ისე უპასუხე.
-
-17. თუ მომხმარებელმა დაწერა სიტყვა ოდნავ შეცდომით,
-    არ გაუსვა ყურადღება შეცდომას და არ უთხრა:
-    "თქვენ ალბათ ეს იგულისხმეთ?"
-    თუ მნიშვნელობა საკმარისად გასაგებია.
-
-18. თუ შეცდომა იმდენად დიდია, რომ კითხვა რეალურად გაუგებარია,
-    მხოლოდ მაშინ სთხოვე მომხმარებელს დაზუსტება.
-
-19. პასუხი იყოს ბუნებრივი და ადამიანური და არა ზედმეტად რობოტული.
-
-20. გამოიყენე მოკლე აბზაცები და საჭიროების შემთხვევაში
-    გამოყავი მთავარი ინფორმაცია ცალკე პუნქტებად.
+11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის:
+    **მნიშვნელოვანი ტექსტი**, *აქცენტი*, სათაურები, bullet list-ები,
+    numbered list-ები და code blocks.
+12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად:
+    H2O, CO2, NaCl, KMnO4, Mn2O7.
+13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
+14. პასუხი არ შეწყვიტო შუა წინადადებაში. ყოველთვის დაასრულე აზრი.
+15. თუ პასუხს რამდენიმე ნაწილი აქვს, დაალაგე ლოგიკურად.
+16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული
+    შეცდომა — მაგალითად ერთი ასოს გამოტოვება, ზედმეტი ასო ან არასწორი ასო.
+    თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე
+    და ჩვეულებრივ უპასუხე.
+17. თუ კითხვა გასაგებია მიუხედავად მცირე typo-სა, მომხმარებელს ნუ სთხოვ
+    თავიდან დაწერას.
+18. თუ მომხმარებელი წერს უხეშ, შეურაცხმყოფელ, სექსუალურ, 18+ ან აშკარად
+    შეუსაბამო შინაარსს, არ გააგრძელო ასეთი საუბარი. უპასუხე მოკლე,
+    მშვიდი გაფრთხილებით და გადაიყვანე საუბარი სასწავლო თემაზე.
+19. ArduinoHub AI განკუთვნილია სასწავლო, ტექნიკური და უსაფრთხო
+    კომუნიკაციისთვის.
+20. არასდროს შეურაცხყო მომხმარებელი, მაშინაც კი, თუ მომხმარებელი
+    შეურაცხმყოფელ ენას იყენებს.
 `;
 
 
-/* =========================================================
-   AI ADMIN GREETING
-========================================================= */
-
 /*
-    ამოწმებს, არის თუ არა ამჟამად შესული ადმინისტრატორი.
+    ამოიცნობს რომელი ადმინისტრატორი არის შესული.
 
     Zaza:
-        ბატონო ზაზა,
+        ბატონო ზაზა
 
-    თეკლა:
-        ქალბატონო თეკლა,
-
-    სხვა მომხმარებელი:
-        null
+    Tekla:
+        ქალბატონო თეკლა
 */
-
-async function detectAIAdminGreeting() {
-
-    aiAdminGreeting = null;
+async function detectAIAdmin() {
 
     if (!db) {
+
+        aiAdminGreeting = '';
+
         return;
     }
 
@@ -341,6 +290,9 @@ async function detectAIAdminGreeting() {
 
 
         if (!session?.user) {
+
+            aiAdminGreeting = '';
+
             return;
         }
 
@@ -352,126 +304,101 @@ async function detectAIAdminGreeting() {
 
 
         if (!admin?.username) {
+
+            aiAdminGreeting = '';
+
             return;
         }
 
 
         const username =
-            String(admin.username)
+            String(
+                admin.username
+            )
                 .trim()
-                .toLocaleLowerCase('ka-GE');
+                .toLowerCase();
 
-
-        /*
-            Zaza-ს სხვადასხვა შესაძლო ფორმა.
-        */
 
         if (
             username === 'zaza' ||
             username === 'ზაზა' ||
-            username.includes('zaza') ||
-            username.includes('ზაზა')
+            username.includes('ზაზა') ||
+            username.includes('zaza')
         ) {
 
             aiAdminGreeting =
-                'ბატონო ზაზა,';
+                'ბატონო ზაზა';
 
-            return;
-        }
-
-
-        /*
-            თეკლას სხვადასხვა შესაძლო ფორმა.
-        */
-
-        if (
+        } else if (
             username === 'tekla' ||
             username === 'თეკლა' ||
-            username.includes('tekla') ||
-            username.includes('თეკლა')
+            username.includes('თეკლა') ||
+            username.includes('tekla')
         ) {
 
             aiAdminGreeting =
-                'ქალბატონო თეკლა,';
+                'ქალბატონო თეკლა';
 
-            return;
+        } else {
+
+            aiAdminGreeting = '';
         }
-
-
-        /*
-            თუ მომავალში სხვა ადმინისტრატორიც დაემატება,
-            აქ შეგვიძლია სხვა მიმართვებიც დავამატოთ.
-        */
 
     } catch (error) {
 
         console.warn(
-            'AI admin greeting detection failed:',
+            'AI admin detection failed:',
             error
         );
 
-        aiAdminGreeting = null;
+        aiAdminGreeting = '';
     }
 }
 
 
 /*
-    AI პასუხს ამატებს შესაბამის ადმინისტრატორის მიმართვას.
+    ამატებს ადმინისტრატორის მიმართვას AI პასუხს.
 
-    მნიშვნელოვანია:
-    მიმართვა frontend-ზე ემატება, ამიტომ Edge Function-ში
-    დამატებითი ცვლილების გარეშეც გარანტირებულად გამოჩნდება.
+    თუ Gemini-მ უკვე თვითონ დაწერა:
+    "ბატონო ზაზა, ..."
+    მეორედ აღარ დაამატებს.
 */
+function applyAIGreeting(reply) {
 
-function applyAIAdminGreeting(reply) {
-
-    const text =
-        String(reply || '').trim();
-
-
-    if (!text) {
-        return text;
-    }
-
-
-    if (!aiAdminGreeting) {
-        return text;
-    }
-
-
-    /*
-        თუ AI-მ შემთხვევით უკვე დაამატა იგივე მიმართვა,
-        ორჯერ აღარ დავამატებთ.
-    */
-
-    const firstPart =
-        text
-            .slice(0, 100)
-            .toLocaleLowerCase('ka-GE');
-
-
-    const greetingLower =
-        aiAdminGreeting
-            .toLocaleLowerCase('ka-GE');
+    const clean =
+        String(
+            reply || ''
+        ).trim();
 
 
     if (
-        firstPart.startsWith(
-            greetingLower
-        )
+        !aiAdminGreeting ||
+        !clean
     ) {
-        return text;
+
+        return clean;
     }
 
 
-    return `${aiAdminGreeting} ${text}`;
+    const greetingPattern =
+        /^(ბატონო\s+ზაზა|ქალბატონო\s+თეკლა)\s*[,!:—-]?\s*/i;
+
+
+    if (
+        greetingPattern.test(clean)
+    ) {
+
+        return clean;
+    }
+
+
+    return `${aiAdminGreeting}, ${clean}`;
 }
 
 
-/* =========================================================
-   AI MESSAGE
-========================================================= */
-
+/*
+    ამატებს შეტყობინებას ჩატში.
+*/
 function addAIMessage(
     type,
     content
@@ -544,134 +471,82 @@ function addAIMessage(
 }
 
 
-/* =========================================================
-   BEAUTIFUL AI RESPONSE FORMATTER
-========================================================= */
-
 /*
-    AI პასუხის Markdown → HTML გარდაქმნა.
+    AI პასუხის ლამაზი Markdown -> HTML გარდაქმნა.
 
     მხარდაჭერა:
 
     **bold**
     *italic*
-    ***bold italic***
     `inline code`
 
     # სათაური
-    ## სათაური
-    ### სათაური
+    ## ქვესათაური
+    ### პატარა სათაური
 
     - სია
     * სია
     • სია
 
-    1. დანომრილი სია
+    1. სია
+    2. სია
 
     > ციტატა
 
-    ```code
-    კოდი
-    ```
+    ```code```
 */
-
-
 function formatAIResponse(text) {
 
     if (!text) {
+
         return '<p>პასუხი ვერ მივიღე.</p>';
     }
 
 
     let source =
         String(text)
-            .replace(/\r\n/g, '\n')
-            .replace(/\r/g, '\n')
+            .replace(
+                /^\s*svg\s*$/gim,
+                ''
+            )
             .trim();
 
 
     /*
-        ზედმეტი standalone "svg" ტექსტის მოცილება.
+        ჯერ code block-ებს ვინახავთ,
+        რათა მათში Markdown არ გაფუჭდეს.
     */
+    const codeBlocks = [];
+
 
     source =
         source.replace(
-            /^\s*svg\s*$/gim,
-            ''
+            /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+            (_, code) => {
+
+                const index =
+                    codeBlocks.length;
+
+
+                codeBlocks.push(
+                    esc(
+                        code.trim()
+                    )
+                );
+
+
+                return `@@CODEBLOCK_${index}@@`;
+            }
         );
 
-
-    /*
-        HTML-ის უსაფრთხოდ escape.
-    */
 
     let safe =
         esc(source);
 
 
     /*
-        fenced code blocks-ის დროებითი შენახვა.
+        Bold + italic
     */
-
-    const codeBlocks = [];
-
-
-    safe =
-        safe.replace(
-            /```(?:([a-zA-Z0-9_-]+)\n)?([\s\S]*?)```/g,
-            (_match, language, code) => {
-
-                const id =
-                    `@@AICODEBLOCK${codeBlocks.length}@@`;
-
-
-                codeBlocks.push({
-                    id,
-                    language:
-                        language || '',
-                    code:
-                        code
-                            .replace(/^\n/, '')
-                            .replace(/\n$/, '')
-                });
-
-
-                return id;
-            }
-        );
-
-
-    /*
-        Inline code-ის დროებითი შენახვა.
-    */
-
-    const inlineCodes = [];
-
-
-    safe =
-        safe.replace(
-            /`([^`\n]+)`/g,
-            (_match, code) => {
-
-                const id =
-                    `@@AIINLINECODE${inlineCodes.length}@@`;
-
-
-                inlineCodes.push({
-                    id,
-                    code
-                });
-
-
-                return id;
-            }
-        );
-
-
-    /*
-        Bold + italic.
-    */
-
     safe =
         safe.replace(
             /\*\*\*(.+?)\*\*\*/g,
@@ -680,9 +555,8 @@ function formatAIResponse(text) {
 
 
     /*
-        Bold.
+        Bold
     */
-
     safe =
         safe.replace(
             /\*\*(.+?)\*\*/g,
@@ -691,102 +565,90 @@ function formatAIResponse(text) {
 
 
     /*
-        Italic.
+        Italic
     */
-
     safe =
         safe.replace(
-            /(^|[^\*])\*([^*\n]+)\*(?!\*)/g,
-            '$1<em>$2</em>'
+            /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+            '<em>$1</em>'
         );
 
 
     /*
-        ხაზების დაყოფა.
+        Inline code
     */
+    safe =
+        safe.replace(
+            /`([^`\n]+)`/g,
+            '<code class="ai-inline-code">$1</code>'
+        );
+
 
     const lines =
-        safe.split('\n');
+        safe.split(/\r?\n/);
 
 
     let html = '';
 
+    let paragraph = [];
+
     let listType = null;
 
-    let listItems = [];
 
-
-    function closeList() {
-
-        if (!listType) {
-            return;
-        }
-
+    const closeList = () => {
 
         if (listType === 'ul') {
 
-            html += `
-                <ul class="ai-list">
-                    ${listItems.join('')}
-                </ul>
-            `;
+            html += '</ul>';
+        }
 
-        } else {
 
-            html += `
-                <ol class="ai-ordered-list">
-                    ${listItems.join('')}
-                </ol>
-            `;
+        if (listType === 'ol') {
+
+            html += '</ol>';
         }
 
 
         listType = null;
-
-        listItems = [];
-    }
+    };
 
 
-    function addListItem(
-        type,
-        content
-    ) {
+    const flushParagraph = () => {
 
-        if (listType !== type) {
-
-            closeList();
-
-            listType = type;
+        if (!paragraph.length) {
+            return;
         }
 
 
-        listItems.push(`
-            <li>
-                ${content}
-            </li>
-        `);
-    }
+        const content =
+            paragraph
+                .join(' ')
+                .trim();
 
 
-    for (
-        let index = 0;
-        index < lines.length;
-        index++
-    ) {
+        if (content) {
 
-        const rawLine =
-            lines[index];
+            html += `
+                <p>
+                    ${content}
+                </p>
+            `;
+        }
 
 
-        const trimmed =
+        paragraph = [];
+    };
+
+
+    for (const rawLine of lines) {
+
+        const line =
             rawLine.trim();
 
 
-        /*
-            ცარიელი ხაზი.
-        */
+        if (!line) {
 
-        if (!trimmed) {
+            flushParagraph();
 
             closeList();
 
@@ -795,26 +657,33 @@ function formatAIResponse(text) {
 
 
         /*
-            Heading H1.
+            Code block
         */
+        const codeMatch =
+            line.match(
+                /^@@CODEBLOCK_(\d+)@@$/
+            );
 
-        if (
-            /^#\s+/.test(trimmed)
-        ) {
+
+        if (codeMatch) {
+
+            flushParagraph();
 
             closeList();
 
 
-            const title =
-                trimmed
-                    .replace(/^#\s+/, '')
-                    .trim();
+            const code =
+                codeBlocks[
+                    Number(
+                        codeMatch[1]
+                    )
+                ] || '';
 
 
             html += `
-                <h3 class="ai-response-title">
-                    ${title}
-                </h3>
+                <pre class="ai-code-block">
+                    <code>${code}</code>
+                </pre>
             `;
 
 
@@ -823,25 +692,24 @@ function formatAIResponse(text) {
 
 
         /*
-            Heading H2.
+            ### heading
         */
+        const heading3 =
+            line.match(
+                /^###\s+(.+)$/
+            );
 
-        if (
-            /^##\s+/.test(trimmed)
-        ) {
+
+        if (heading3) {
+
+            flushParagraph();
 
             closeList();
 
 
-            const title =
-                trimmed
-                    .replace(/^##\s+/, '')
-                    .trim();
-
-
             html += `
-                <h4 class="ai-response-subtitle">
-                    ${title}
+                <h4 class="ai-response-small-title">
+                    ${heading3[1]}
                 </h4>
             `;
 
@@ -851,26 +719,25 @@ function formatAIResponse(text) {
 
 
         /*
-            Heading H3.
+            ## heading
         */
+        const heading2 =
+            line.match(
+                /^##\s+(.+)$/
+            );
 
-        if (
-            /^###\s+/.test(trimmed)
-        ) {
+
+        if (heading2) {
+
+            flushParagraph();
 
             closeList();
 
 
-            const title =
-                trimmed
-                    .replace(/^###\s+/, '')
-                    .trim();
-
-
             html += `
-                <h5 class="ai-response-small-title">
-                    ${title}
-                </h5>
+                <h3 class="ai-response-subtitle">
+                    ${heading2[1]}
+                </h3>
             `;
 
 
@@ -879,67 +746,51 @@ function formatAIResponse(text) {
 
 
         /*
-            Unordered list.
+            # heading
         */
-
-        const unordered =
-            trimmed.match(
-                /^[-•*]\s+(.+)$/
+        const heading1 =
+            line.match(
+                /^#\s+(.+)$/
             );
 
 
-        if (unordered) {
+        if (heading1) {
 
-            addListItem(
-                'ul',
-                unordered[1]
-            );
-
-            continue;
-        }
-
-
-        /*
-            Ordered list.
-        */
-
-        const ordered =
-            trimmed.match(
-                /^\d+[.)]\s+(.+)$/
-            );
-
-
-        if (ordered) {
-
-            addListItem(
-                'ol',
-                ordered[1]
-            );
-
-            continue;
-        }
-
-
-        /*
-            Blockquote.
-        */
-
-        if (
-            trimmed.startsWith('>')
-        ) {
+            flushParagraph();
 
             closeList();
 
 
-            const quote =
-                trimmed
-                    .replace(/^>\s?/, '')
-                    .trim();
+            html += `
+                <h2 class="ai-response-title">
+                    ${heading1[1]}
+                </h2>
+            `;
+
+
+            continue;
+        }
+
+
+        /*
+            Blockquote
+        */
+        const quote =
+            line.match(
+                /^>\s*(.+)$/
+            );
+
+
+        if (quote) {
+
+            flushParagraph();
+
+            closeList();
 
 
             html += `
                 <blockquote class="ai-blockquote">
-                    ${quote}
+                    ${quote[1]}
                 </blockquote>
             `;
 
@@ -949,95 +800,102 @@ function formatAIResponse(text) {
 
 
         /*
-            ჩვეულებრივი აბზაცი.
+            Unordered list
         */
+        const unordered =
+            line.match(
+                /^(?:[-*•])\s+(.+)$/
+            );
+
+
+        if (unordered) {
+
+            flushParagraph();
+
+
+            if (
+                listType !== 'ul'
+            ) {
+
+                closeList();
+
+                html +=
+                    '<ul class="ai-list">';
+
+                listType = 'ul';
+            }
+
+
+            html += `
+                <li>
+                    ${unordered[1]}
+                </li>
+            `;
+
+
+            continue;
+        }
+
+
+        /*
+            Ordered list
+        */
+        const ordered =
+            line.match(
+                /^\d+[.)]\s+(.+)$/
+            );
+
+
+        if (ordered) {
+
+            flushParagraph();
+
+
+            if (
+                listType !== 'ol'
+            ) {
+
+                closeList();
+
+                html +=
+                    '<ol class="ai-ordered-list">';
+
+                listType = 'ol';
+            }
+
+
+            html += `
+                <li>
+                    ${ordered[1]}
+                </li>
+            `;
+
+
+            continue;
+        }
+
 
         closeList();
 
-
-        html += `
-            <p>
-                ${trimmed}
-            </p>
-        `;
+        paragraph.push(line);
     }
 
+
+    flushParagraph();
 
     closeList();
 
 
-    /*
-        Inline code-ის დაბრუნება.
-    */
-
-    for (const item of inlineCodes) {
-
-        html =
-            html.replace(
-                item.id,
-                `<code class="ai-inline-code">${item.code}</code>`
-            );
-    }
-
-
-    /*
-        Code block-ის დაბრუნება.
-    */
-
-    for (const block of codeBlocks) {
-
-        const languageLabel =
-            block.language
-                ? `
-                    <span class="ai-code-language">
-                        ${esc(block.language)}
-                    </span>
-                `
-                : '';
-
-
-        const codeHTML = `
-            <div class="ai-code-wrapper">
-
-                ${languageLabel}
-
-                <pre class="ai-code-block"><code>${block.code}</code></pre>
-
-            </div>
-        `;
-
-
-        html =
-            html.replace(
-                block.id,
-                codeHTML
-            );
-    }
-
-
-    /*
-        უსაფრთხოების მიზნით, თუ formatter-მა
-        საბოლოოდ ვერ შექმნა HTML.
-    */
-
-    if (!html.trim()) {
-
-        return `
-            <p>
-                ${esc(source)}
-            </p>
-        `;
-    }
-
-
-    return html;
+    return (
+        html ||
+        '<p>პასუხი ვერ მივიღე.</p>'
+    );
 }
 
 
-/* =========================================================
-   AI TYPING INDICATOR
-========================================================= */
-
+/*
+    Typing indicator.
+*/
 function addAITyping() {
 
     const messages =
@@ -1086,10 +944,9 @@ function addAITyping() {
 }
 
 
-/* =========================================================
-   ASK AI
-========================================================= */
-
+/*
+    აგზავნის კითხვას Supabase Edge Function-ში.
+*/
 async function askAI(question) {
 
     if (!AI_FUNCTION_URL) {
@@ -1107,18 +964,14 @@ async function askAI(question) {
 
 
     if (!cleanQuestion) {
+
         return null;
     }
 
 
-    /*
-        Edge Function ელოდება history-ს
-        role + text ფორმატში.
-    */
-
     const history =
         aiHistory
-            .slice(-10)
+            .slice(-8)
             .map(
                 message => ({
                     role:
@@ -1129,30 +982,10 @@ async function askAI(question) {
                     text:
                         String(
                             message.content || ''
-                        ).slice(0, 2000)
+                        ).slice(0, 1800)
                 })
             );
 
-
-    /*
-        დამატებითი მინიშნება AI-სთვის.
-
-        ეს განსაკუთრებით ეხმარება მცირე typo-ების
-        შემთხვევაში.
-    */
-
-    const typoInstruction = `
-მომხმარებლის ამ შეტყობინებაში შეიძლება იყოს მცირე
-ტექსტური შეცდომები, მაგალითად ერთი არასწორი ან
-გამოტოვებული ასო. თუ მნიშვნელობა კონტექსტიდან
-გასაგებია, შეცდომა უბრალოდ იგნორირე და პირდაპირ
-უპასუხე სწორად გაგებულ კითხვას.
-`;
-
-
-    /*
-        Supabase Edge Function.
-    */
 
     const response =
         await fetch(
@@ -1172,12 +1005,15 @@ async function askAI(question) {
 
                 body: JSON.stringify({
                     message:
-                        `${typoInstruction}\n\nმომხმარებლის კითხვა:\n${cleanQuestion}`,
+                        cleanQuestion,
 
                     history,
 
                     context:
-                        AI_SYSTEM_CONTEXT
+                        AI_SYSTEM_CONTEXT,
+
+                    adminGreeting:
+                        aiAdminGreeting
                 })
             }
         );
@@ -1231,10 +1067,93 @@ async function askAI(question) {
 }
 
 
-/* =========================================================
-   HANDLE AI QUESTION
-========================================================= */
+/*
+    მარტივი frontend safety check.
 
+    მთავარი უსაფრთხოების ფილტრი აუცილებლად უნდა იყოს
+    Edge Function-შიც.
+*/
+function containsUnsafeContent(text) {
+
+    const value =
+        String(text || '')
+            .toLowerCase()
+            .trim();
+
+
+    if (!value) {
+        return false;
+    }
+
+
+    const unsafePatterns = [
+
+        /*
+            აშკარა 18+ მიმართულების სიტყვები.
+            აქ intentionally არ არის გრძელი სია,
+            რათა ნორმალური სასწავლო სიტყვები შემთხვევით
+            არ დაიბლოკოს.
+        */
+        /\b(porn|porno|pornography)\b/i,
+
+        /\b(sexcam|onlyfans)\b/i,
+
+        /\b(nude|nudes)\b/i,
+
+        /\b(hentai)\b/i,
+
+        /*
+            ქართული გავრცელებული შეუფერებელი ფორმები.
+        */
+        /სექსუალური\s+შინაარსი/i,
+
+        /პორნო/i,
+
+        /პორნოგრაფ/i
+    ];
+
+
+    return unsafePatterns.some(
+        pattern =>
+            pattern.test(value)
+    );
+}
+
+
+/*
+    უსაფრთხოების გაფრთხილება.
+*/
+function addAISafetyWarning() {
+
+    const message = `
+        <div class="ai-safety-warning">
+
+            <strong>
+                ${icon('shield-alert')}
+                უსაფრთხოების გაფრთხილება
+            </strong>
+
+            <p>
+                გთხოვთ, არ გამოიყენოთ ArduinoHub AI
+                18+ ან შეუფერებელი შინაარსისთვის.
+                პლატფორმა განკუთვნილია სასწავლო,
+                Arduino-სა და ქიმიის საკითხებისთვის.
+            </p>
+
+        </div>
+    `;
+
+
+    addAIMessage(
+        'error',
+        message
+    );
+}
+
+
+/*
+    მომხმარებლის კითხვის დამუშავება.
+*/
 async function handleAIQuestion(question) {
 
     const input =
@@ -1256,8 +1175,38 @@ async function handleAIQuestion(question) {
 
 
     /*
-        მომხმარებლის შეტყობინება.
+        ყოველი ახალი კითხვა ამოწმებს მიმდინარე
+        ადმინისტრატორის ანგარიშს.
     */
+    await detectAIAdmin();
+
+
+    /*
+        Unsafe content.
+    */
+    if (
+        containsUnsafeContent(
+            cleanQuestion
+        )
+    ) {
+
+        addAIMessage(
+            'user',
+            cleanQuestion
+        );
+
+
+        if (input) {
+            input.value = '';
+        }
+
+
+        addAISafetyWarning();
+
+
+        return;
+    }
+
 
     addAIMessage(
         'user',
@@ -1265,37 +1214,21 @@ async function handleAIQuestion(question) {
     );
 
 
-    /*
-        ჩატის ისტორიაში ვინახავთ.
-    */
-
     aiHistory.push({
         role: 'user',
         content: cleanQuestion
     });
 
 
-    /*
-        input-ის გასუფთავება.
-    */
-
     if (input) {
         input.value = '';
     }
 
 
-    /*
-        გაგზავნის ღილაკის გათიშვა.
-    */
-
     if (send) {
         send.disabled = true;
     }
 
-
-    /*
-        Typing indicator.
-    */
 
     const typing =
         addAITyping();
@@ -1309,32 +1242,17 @@ async function handleAIQuestion(question) {
             );
 
 
-        /*
-            Typing indicator-ის წაშლა.
-        */
-
         typing?.remove();
 
 
         /*
-            ადმინისტრატორის მიმართვის დამატება.
-
-            Zaza:
-                ბატონო ზაზა,
-
-            თეკლა:
-                ქალბატონო თეკლა,
+            Admin greeting frontend-ში გარანტირებულად ემატება.
         */
-
         const finalReply =
-            applyAIAdminGreeting(
+            applyAIGreeting(
                 reply
             );
 
-
-        /*
-            AI პასუხის ლამაზად ჩვენება.
-        */
 
         addAIMessage(
             'assistant',
@@ -1344,10 +1262,6 @@ async function handleAIQuestion(question) {
         );
 
 
-        /*
-            ისტორიაში ვინახავთ საბოლოო პასუხს.
-        */
-
         aiHistory.push({
             role: 'assistant',
             content: finalReply
@@ -1355,15 +1269,15 @@ async function handleAIQuestion(question) {
 
 
         /*
-            ისტორიას ზედმეტად არ გავზრდით.
+            ისტორიის ზომა მცირეა,
+            რათა AI უფრო სწრაფი დარჩეს.
         */
-
         if (
-            aiHistory.length > 12
+            aiHistory.length > 10
         ) {
 
             aiHistory =
-                aiHistory.slice(-12);
+                aiHistory.slice(-10);
         }
 
     } catch (error) {
@@ -1377,16 +1291,6 @@ async function handleAIQuestion(question) {
         typing?.remove();
 
 
-        /*
-            შეცდომის ტექსტიც უფრო სასარგებლო გახდა.
-        */
-
-        const errorText =
-            error?.message
-                ? esc(error.message)
-                : 'უცნობი შეცდომა';
-
-
         addAIMessage(
             'error',
             `
@@ -1397,13 +1301,6 @@ async function handleAIQuestion(question) {
                 <p>
                     გთხოვ, ცოტა ხანში სცადე ხელახლა.
                 </p>
-
-                <details class="ai-error-details">
-                    <summary>ტექნიკური ინფორმაცია</summary>
-                    <div>
-                        ${errorText}
-                    </div>
-                </details>
             `
         );
 
@@ -1418,10 +1315,6 @@ async function handleAIQuestion(question) {
     }
 }
 
-
-/* =========================================================
-   OPEN AI CHAT
-========================================================= */
 
 function openAIChat() {
 
@@ -1471,10 +1364,6 @@ function openAIChat() {
 }
 
 
-/* =========================================================
-   CLOSE AI CHAT
-========================================================= */
-
 function closeAIChat() {
 
     const chat =
@@ -1515,10 +1404,9 @@ function closeAIChat() {
 }
 
 
-/* =========================================================
-   INIT AI CHAT
-========================================================= */
-
+/*
+    AI Chat initialization.
+*/
 async function initAIChat() {
 
     const chat =
@@ -1529,11 +1417,10 @@ async function initAIChat() {
 
 
     /*
-        პირველივე ეტაპზე ვადგენთ,
-        ვინ არის შესული.
+        ჯერ განვსაზღვროთ admin,
+        შემდეგ გავუშვათ ჩატი.
     */
-
-    await detectAIAdminGreeting();
+    await detectAIAdmin();
 
 
     const toggle =
@@ -1551,10 +1438,6 @@ async function initAIChat() {
     const input =
         $('#ai-chat-input');
 
-
-    /*
-        ჩატის გახსნა / დახურვა.
-    */
 
     if (toggle) {
 
@@ -1579,19 +1462,11 @@ async function initAIChat() {
     }
 
 
-    /*
-        Close button.
-    */
-
     close?.addEventListener(
         'click',
         closeAIChat
     );
 
-
-    /*
-        Suggested questions.
-    */
 
     chat
         .querySelectorAll(
@@ -1612,11 +1487,6 @@ async function initAIChat() {
                             return;
                         }
 
-
-                        /*
-                            სანამ AI პასუხობს,
-                            სხვა suggestion-ებს ვთიშავთ.
-                        */
 
                         chat
                             .querySelectorAll(
@@ -1649,10 +1519,6 @@ async function initAIChat() {
         );
 
 
-    /*
-        ჩვეულებრივი ტექსტური კითხვა.
-    */
-
     form?.addEventListener(
         'submit',
         async event => {
@@ -1677,10 +1543,6 @@ async function initAIChat() {
     );
 
 
-    /*
-        Enter-ით გაგზავნა.
-    */
-
     input?.addEventListener(
         'keydown',
         event => {
@@ -1699,10 +1561,6 @@ async function initAIChat() {
     );
 
 
-    /*
-        Escape — ჩატის დახურვა.
-    */
-
     document.addEventListener(
         'keydown',
         event => {
@@ -1719,23 +1577,21 @@ async function initAIChat() {
 
 
     /*
-        თუ ადმინისტრატორი login/logout-ს აკეთებს
-        ჩატის გახსნის შემდეგ, მიმართვაც განახლდება.
+        თუ admin login/logout მოხდა,
+        greeting განახლდეს.
     */
-
     if (db) {
 
         db.auth.onAuthStateChange(
-            async (_event, session) => {
+            () => {
 
-                if (!session) {
+                setTimeout(
+                    () => {
+                        detectAIAdmin();
+                    },
+                    0
+                );
 
-                    aiAdminGreeting = null;
-
-                } else {
-
-                    await detectAIAdminGreeting();
-                }
             }
         );
     }
@@ -1821,10 +1677,6 @@ function card(project) {
     `;
 }
 
-
-/* =========================================================
-   PROJECTS PAGE
-========================================================= */
 
 async function initProjects() {
 
@@ -1956,10 +1808,6 @@ async function initProjects() {
 }
 
 
-/* =========================================================
-   DETAIL PAGE
-========================================================= */
-
 async function initDetail() {
 
     const target =
@@ -2083,10 +1931,6 @@ async function initDetail() {
             : '';
 
 
-    /* =====================================================
-       CATEGORY-BASED CODE / CHEMISTRY SECTION
-    ===================================================== */
-
     let code = '';
 
 
@@ -2206,10 +2050,6 @@ async function initDetail() {
     `;
 
 
-    /* =====================================================
-       COPY BUTTON
-    ===================================================== */
-
     $('#copy-code')?.addEventListener(
         'click',
         async () => {
@@ -2247,10 +2087,6 @@ async function initDetail() {
 }
 
 
-/* =========================================================
-   NOT FOUND
-========================================================= */
-
 function notFound(target) {
 
     if (!target) return;
@@ -2285,10 +2121,6 @@ function notFound(target) {
     refreshIcons();
 }
 
-
-/* =========================================================
-   FILE TYPES
-========================================================= */
 
 const IMAGE_TYPES = [
     'image/jpeg',
@@ -2339,10 +2171,6 @@ function fileOkay(
 }
 
 
-/* =========================================================
-   ADMIN
-========================================================= */
-
 async function isAdmin(user) {
 
     if (!user || !db) return null;
@@ -2366,10 +2194,6 @@ async function isAdmin(user) {
     return data;
 }
 
-
-/* =========================================================
-   ADMIN INITIALIZATION
-========================================================= */
 
 async function initAdmin() {
 
@@ -2458,10 +2282,6 @@ async function initAdmin() {
         );
 
 
-    /* =====================================================
-       CATEGORY LABEL UPDATE
-    ===================================================== */
-
     const categorySelect =
         $('#category');
 
@@ -2478,10 +2298,6 @@ async function initAdmin() {
     }
 
 
-    /* =====================================================
-       CLUB MEETING
-    ===================================================== */
-
     bindMeetingForm();
 
 
@@ -2496,10 +2312,6 @@ async function initAdmin() {
     );
 }
 
-
-/* =========================================================
-   UPDATE CODE FIELD LABEL
-========================================================= */
 
 function updateCodeFieldLabel() {
 
@@ -2570,10 +2382,6 @@ function updateCodeFieldLabel() {
     }
 }
 
-
-/* =========================================================
-   LOGIN
-========================================================= */
 
 async function login(event) {
 
@@ -2664,10 +2472,6 @@ async function login(event) {
 }
 
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
 async function showDashboard(
     user,
     knownAdmin
@@ -2711,10 +2515,6 @@ async function showDashboard(
 }
 
 
-/* =========================================================
-   SHOW LOGIN
-========================================================= */
-
 function showLogin() {
 
     $('#dashboard').hidden =
@@ -2729,20 +2529,12 @@ function showLogin() {
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
-
 async function logout() {
 
     await db.auth.signOut();
 
 
-    /*
-        AI-სთვის ადმინისტრატორის მიმართვის მოცილება.
-    */
-
-    aiAdminGreeting = null;
+    aiAdminGreeting = '';
 
 
     toast(
@@ -2750,10 +2542,6 @@ async function logout() {
     );
 }
 
-
-/* =========================================================
-   BUSY BUTTON
-========================================================= */
 
 function setBusy(
     button,
@@ -2789,10 +2577,6 @@ function setBusy(
     refreshIcons();
 }
 
-
-/* =========================================================
-   ADMIN PROJECTS
-========================================================= */
 
 let adminProjects = [];
 
@@ -3017,10 +2801,6 @@ async function loadAdminProjects() {
 }
 
 
-/* =========================================================
-   OPEN EDITOR
-========================================================= */
-
 function openEditor(p) {
 
     const form =
@@ -3116,10 +2896,6 @@ function openEditor(p) {
 }
 
 
-/* =========================================================
-   CLOSE EDITOR
-========================================================= */
-
 function closeEditor() {
 
     const editor =
@@ -3132,10 +2908,6 @@ function closeEditor() {
     }
 }
 
-
-/* =========================================================
-   IMAGE PREVIEW
-========================================================= */
 
 function imagePreview() {
 
@@ -3171,10 +2943,6 @@ function imagePreview() {
     }
 }
 
-
-/* =========================================================
-   UPLOAD
-========================================================= */
 
 async function upload(
     file,
@@ -3248,10 +3016,6 @@ async function upload(
 }
 
 
-/* =========================================================
-   STORAGE PATH
-========================================================= */
-
 function storagePath(
     url,
     bucket
@@ -3285,10 +3049,6 @@ function storagePath(
 }
 
 
-/* =========================================================
-   REMOVE STORED FILE
-========================================================= */
-
 async function removeStored(
     url,
     bucket
@@ -3320,10 +3080,6 @@ async function removeStored(
     }
 }
 
-
-/* =========================================================
-   SAVE PROJECT
-========================================================= */
 
 async function saveProject(event) {
 
@@ -3611,10 +3367,6 @@ async function saveProject(event) {
 }
 
 
-/* =========================================================
-   PUBLISH / HIDE
-========================================================= */
-
 async function togglePublished(id) {
 
     const p =
@@ -3657,10 +3409,6 @@ async function togglePublished(id) {
     loadAdminProjects();
 }
 
-
-/* =========================================================
-   DELETE PROJECT
-========================================================= */
 
 async function deleteProject(id) {
 
@@ -3722,11 +3470,6 @@ async function deleteProject(id) {
 }
 
 
-/* =========================================================
-   CLUB MEETING
-   PUBLIC + ADMIN
-========================================================= */
-
 const GEORGIAN_WEEKDAYS = [
     'კვირა',
     'ორშაბათი',
@@ -3737,10 +3480,6 @@ const GEORGIAN_WEEKDAYS = [
     'შაბათი'
 ];
 
-
-/* =========================================================
-   MEETING DAY
-========================================================= */
 
 function meetingDay(dateValue) {
 
@@ -3765,10 +3504,6 @@ function meetingDay(dateValue) {
     ];
 }
 
-
-/* =========================================================
-   MEETING DATE TEXT
-========================================================= */
 
 function meetingDateText(dateValue) {
 
@@ -3803,10 +3538,6 @@ function meetingDateText(dateValue) {
 }
 
 
-/* =========================================================
-   MEETING TIME TEXT
-========================================================= */
-
 function meetingTimeText(timeValue) {
 
     if (!timeValue) {
@@ -3825,10 +3556,6 @@ function meetingTimeText(timeValue) {
         : timeValue;
 }
 
-
-/* =========================================================
-   GET MEETING
-========================================================= */
 
 async function getMeeting() {
 
@@ -3852,10 +3579,6 @@ async function getMeeting() {
         .maybeSingle();
 }
 
-
-/* =========================================================
-   RENDER PUBLIC MEETING
-========================================================= */
 
 function renderMeetingContent(meeting) {
 
@@ -3941,10 +3664,6 @@ function renderMeetingContent(meeting) {
 }
 
 
-/* =========================================================
-   LOAD PUBLIC MEETING
-========================================================= */
-
 async function loadPublicMeeting() {
 
     const {
@@ -3994,10 +3713,6 @@ async function loadPublicMeeting() {
 }
 
 
-/* =========================================================
-   OPEN MEETING MODAL
-========================================================= */
-
 function openMeetingModal() {
 
     const modal =
@@ -4034,10 +3749,6 @@ function openMeetingModal() {
 }
 
 
-/* =========================================================
-   CLOSE MEETING MODAL
-========================================================= */
-
 function closeMeetingModal() {
 
     const modal =
@@ -4062,10 +3773,6 @@ function closeMeetingModal() {
     );
 }
 
-
-/* =========================================================
-   PUBLIC MEETING INIT
-========================================================= */
 
 function initMeetingPublic() {
 
@@ -4119,10 +3826,6 @@ function initMeetingPublic() {
     );
 }
 
-
-/* =========================================================
-   LOAD ADMIN MEETING
-========================================================= */
 
 async function loadAdminMeeting() {
 
@@ -4193,10 +3896,6 @@ async function loadAdminMeeting() {
 }
 
 
-/* =========================================================
-   BIND MEETING FORM
-========================================================= */
-
 function bindMeetingForm() {
 
     const form =
@@ -4232,10 +3931,6 @@ function bindMeetingForm() {
         );
 }
 
-
-/* =========================================================
-   SAVE / PUBLISH MEETING
-========================================================= */
 
 async function saveMeeting(event) {
 
@@ -4350,10 +4045,6 @@ async function saveMeeting(event) {
 }
 
 
-/* =========================================================
-   DELETE / CANCEL MEETING
-========================================================= */
-
 async function clearMeeting() {
 
     if (!db) return;
@@ -4410,10 +4101,6 @@ async function clearMeeting() {
     );
 }
 
-
-/* =========================================================
-   PASSWORD RESET
-========================================================= */
 
 async function initPasswordReset() {
 
@@ -4559,7 +4246,7 @@ async function initPasswordReset() {
 
 
 /* =========================================================
-   INITIALIZE
+   INITIALIZATION
 ========================================================= */
 
 initChrome();
