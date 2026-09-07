@@ -1,4 +1,3 @@
-
 import {
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
@@ -169,90 +168,92 @@ function initChrome() {
 
 
 /* =========================================================
-   ARDUINOHUB PREDEFINED CHAT
-   NO AI / NO API / NO BACKEND
+   ARDUINOHUB AI CHAT
+   REAL AI — SUPABASE EDGE FUNCTION + GEMINI
 ========================================================= */
 
-const AI_PRESET_ANSWERS = {
+/*
+    IMPORTANT:
 
-    'როდის შეიქმნა ArduinoHub?': `
-            <p>
-            <strong>2026 წლის 3 სექტემბერს.</strong>
-        </p>
-        <p>
-            ArduinoHub შეიქმნა როგორც Arduino-სა და ქიმიის
-            პროექტების ერთ სივრცეში თავმოყრისა და გაზიარებისათვის.
-        </p>
+    Gemini API Key აქ არ არის.
 
+    API Key ინახება მხოლოდ Supabase Edge Function-ის
+    Secret-ში:
 
-    `,
+        GEMINI_API_KEY
 
+    Frontend უკავშირდება მხოლოდ ჩვენს Supabase ფუნქციას:
+*/
 
-    'რა არის ArduinoHub-ის მიზანი?': `
-        <p>
-            <strong>ArduinoHub-ის მიზანია</strong> Arduino-ს,
-            ელექტრონიკისა და ქიმიის შესახებ ცოდნის მარტივად,
-            გასაგებად და საინტერესო ფორმით გაზიარება.
-        </p>
-
-        <p>
-            საიტი მომხმარებლებს საშუალებას აძლევს გაეცნონ
-            სხვადასხვა პროექტს, ექსპერიმენტს და პრაქტიკულ იდეას.
-        </p>
-    `,
+const AI_FUNCTION_URL =
+    supabaseIsConfigured && SUPABASE_URL
+        ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
+        : null;
 
 
-    'რა პროექტებია საიტზე?': `
-        <p>
-            ArduinoHub-ზე განთავსებულია სხვადასხვა პრაქტიკული
-            პროექტი, რომლებიც დაკავშირებულია Arduino-სთან,
-            ელექტრონიკასთან, სენსორებთან, ავტომატიზაციასთან
-            და ქიმიის ექსპერიმენტებთან.
-        </p>
+/*
+    AI conversation history.
 
-        <p>
-            პროექტების სრული სიის სანახავად გადადით
-            <strong>პროექტების</strong> გვერდზე.
-        </p>
-    `,
+    ვინაიდან ბრაუზერში მხოლოდ ბოლო რამდენიმე შეტყობინებას
+    ვინახავთ, მოთხოვნები ზედმეტად დიდი არ გახდება.
+*/
+
+let aiHistory = [];
 
 
-    'ვინ შექმნა ArduinoHub?': `
-        <p>
-            ArduinoHub-ი შექმნა
-            <strong>მოაზროვნე ქიმიკოსთა კლუბმა</strong>
-        </p>
-    `,
+/*
+    ArduinoHub-ის მუდმივი ინფორმაცია.
+
+    ეს ეხმარება AI-ს საიტის შესახებ სწორად პასუხის გაცემაში.
+*/
+
+const AI_SYSTEM_CONTEXT = `
+შენ ხარ ArduinoHub AI — ArduinoHub-ის ოფიციალური AI ასისტენტი.
+
+ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
+
+საიტის ძირითადი ინფორმაცია:
+
+- ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
+- პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების
+  ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
+- ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
+- პროექტების მიმართულებები მოიცავს Arduino-ს, ელექტრონიკას,
+  სენსორებს, ავტომატიზაციას, LED-ს, LCD-ს, IoT-ს და ქიმიის
+  ექსპერიმენტებს.
+- ArduinoHub შექმნილია „მოაზროვნე ქიმიკოსთა კლუბის“ მიერ.
+- კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
+- კლუბის წევრები არიან:
+  ზაზა მჭედლიძე,
+  თეკლა შველიძე,
+  ანასტასია ხონელიძე,
+  ანასტასია თევდორაძე,
+  ანი მუმლაძე,
+  გიორგი ბაღდავაძე,
+  მარიამ მიშვიძე,
+  ანი ძაგნიძე,
+  ანასტასია თოდუა.
+
+პასუხის წესები:
+
+1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
+2. იყავი მეგობრული, ბუნებრივი და გასაგები.
+3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
+4. თუ მომხმარებელი დამწყებია, ახსენი მარტივად.
+5. თუ კითხვა ArduinoHub-ის შესახებ არის და ზუსტი ინფორმაცია არ გაქვს,
+   არ მოიგონო ინფორმაცია.
+6. თუ რაიმე ინფორმაცია არ იცი, პირდაპირ თქვი, რომ ზუსტი ინფორმაცია არ გაქვს.
+7. არ თქვა, რომ შენ ხარ Google Gemini. მომხმარებლისთვის შენ ხარ ArduinoHub AI.
+8. არ მოიგონო ისეთი პროექტები, ადამიანები ან ფუნქციები, რომლებიც
+   მოცემულ ინფორმაციაში არ არის.
+9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
+10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
+`;
 
 
-    'ვინ არის კლუბის ხელმძღვანელი?': `
-        <p>
-            კლუბის ხელმძღვანელია:
-            <strong>ქალბატონი მაია მელაძე</strong>
-        </p>
-    `,
-
-
-    'კლუბის წევრები.': `
-        <p>
-            <strong>კლუბის წევრები არიან:</strong>
-        </p>
-
-        <p>
-           • ზაზა მჭედლიძე<br>
-            • თეკლა შველიძე<br>
-            • ანასტასია ხონელიძე<br>
-            • ანასტასია თევდორაძე <br>
-                        • ანი მუმლაძე <br>
-                                    • გიორგი ბაღდავაძე <br>
-                                           • მარიამ მიშვიძე <br>     
-                                                       • ანი ძაგნიძე <br>
-                                                                   • ანასტასია თოდუა <br> 
-        </p>
-    `
-
-};
-
+/*
+    ამატებს შეტყობინებას ჩატში.
+*/
 
 function addAIMessage(
     type,
@@ -314,42 +315,445 @@ function addAIMessage(
 }
 
 
-function answerAIPresetQuestion(
-    question
-) {
+/*
+    AI პასუხიდან Markdown-ის ძალიან მარტივი
+    HTML ფორმატირება.
 
-    const answer =
-        AI_PRESET_ANSWERS[question];
+    ეს საშუალებას აძლევს AI-ს გამოიყენოს:
+
+    **მნიშვნელოვანი ტექსტი**
+    `კოდი`
+    • სია
+*/
+
+function formatAIResponse(text) {
+
+    if (!text) {
+        return '<p>პასუხი ვერ მივიღე.</p>';
+    }
 
 
-    if (!answer) {
+    let safe =
+        esc(text);
 
-        addAIMessage(
-            'assistant',
-            `
-                <p>
-                    ამ კითხვაზე პასუხი ჯერ არ არის დამატებული.
-                </p>
-            `
+
+    safe =
+        safe.replace(
+            /\*\*(.+?)\*\*/g,
+            '<strong>$1</strong>'
         );
 
+
+    safe =
+        safe.replace(
+            /`([^`]+)`/g,
+            '<code>$1</code>'
+        );
+
+
+    const lines =
+        safe.split(/\r?\n/);
+
+
+    let html = '';
+    let listOpen = false;
+
+
+    for (const line of lines) {
+
+        const trimmed =
+            line.trim();
+
+
+        if (!trimmed) {
+
+            if (listOpen) {
+
+                html += '</ul>';
+                listOpen = false;
+            }
+
+            continue;
+        }
+
+
+        if (
+            trimmed.startsWith('• ') ||
+            trimmed.startsWith('- ')
+        ) {
+
+            if (!listOpen) {
+
+                html += '<ul>';
+                listOpen = true;
+            }
+
+
+            html += `
+                <li>
+                    ${
+                        trimmed
+                            .replace(/^([•-])\s*/, '')
+                    }
+                </li>
+            `;
+
+            continue;
+        }
+
+
+        if (listOpen) {
+
+            html += '</ul>';
+            listOpen = false;
+        }
+
+
+        html += `
+            <p>
+                ${trimmed}
+            </p>
+        `;
+    }
+
+
+    if (listOpen) {
+        html += '</ul>';
+    }
+
+
+    return html;
+}
+
+
+/*
+    Typing indicator.
+*/
+
+function addAITyping() {
+
+    const messages =
+        $('#ai-chat-messages');
+
+
+    if (!messages) return null;
+
+
+    const typing =
+        document.createElement('div');
+
+
+    typing.className =
+        'ai-message assistant ai-typing-message';
+
+
+    typing.innerHTML = `
+        <div class="ai-message-avatar">
+            ${icon('bot')}
+        </div>
+
+        <div class="ai-message-bubble ai-typing">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    `;
+
+
+    messages.appendChild(
+        typing
+    );
+
+
+    refreshIcons();
+
+
+    messages.scrollTo({
+        top: messages.scrollHeight,
+        behavior: 'smooth'
+    });
+
+
+    return typing;
+}
+
+
+/*
+    აგზავნის კითხვას Supabase Edge Function-ში.
+*/
+
+async function askAI(question) {
+
+    if (!AI_FUNCTION_URL) {
+
+        throw new Error(
+            'AI ფუნქციის მისამართი ვერ მოიძებნა.'
+        );
+    }
+
+
+    const cleanQuestion =
+        String(question)
+            .trim()
+            .slice(0, 1000);
+
+
+    if (!cleanQuestion) {
+        return null;
+    }
+
+
+    /*
+        ვინახავთ მხოლოდ ბოლო 10 შეტყობინებას,
+        რათა მოთხოვნები ზედმეტად დიდი არ გახდეს.
+    */
+
+    const history =
+        aiHistory
+            .slice(-10)
+            .map(
+                message => ({
+                    role: message.role,
+                    content: String(
+                        message.content || ''
+                    ).slice(0, 2000)
+                })
+            );
+
+
+    const response =
+        await fetch(
+            AI_FUNCTION_URL,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+                    message:
+                        cleanQuestion,
+
+                    history,
+
+                    context:
+                        AI_SYSTEM_CONTEXT
+                })
+            }
+        );
+
+
+    let data = null;
+
+
+    try {
+
+        data =
+            await response.json();
+
+    } catch {
+
+        data = null;
+    }
+
+
+    if (!response.ok) {
+
+        const errorMessage =
+            data?.error ||
+            data?.message ||
+            'AI-სთან დაკავშირება ვერ მოხერხდა.';
+
+
+        throw new Error(
+            errorMessage
+        );
+    }
+
+
+    const reply =
+        String(
+            data?.reply ||
+            data?.text ||
+            ''
+        ).trim();
+
+
+    if (!reply) {
+
+        throw new Error(
+            'AI-მ ცარიელი პასუხი დააბრუნა.'
+        );
+    }
+
+
+    return reply;
+}
+
+
+/*
+    რეალური AI კითხვის დამუშავება.
+*/
+
+async function handleAIQuestion(question) {
+
+    const input =
+        $('#ai-chat-input');
+
+
+    const send =
+        $('#ai-chat-send');
+
+
+    const cleanQuestion =
+        String(question || '')
+            .trim();
+
+
+    if (!cleanQuestion) {
         return;
     }
 
 
-    setTimeout(
-        () => {
+    /*
+        მომხმარებლის შეტყობინება.
+    */
 
-            addAIMessage(
-                'assistant',
-                answer
+    addAIMessage(
+        'user',
+        cleanQuestion
+    );
+
+
+    /*
+        ჩატის ისტორიაში ვინახავთ.
+    */
+
+    aiHistory.push({
+        role: 'user',
+        content: cleanQuestion
+    });
+
+
+    /*
+        input-ის გასუფთავება.
+    */
+
+    if (input) {
+        input.value = '';
+    }
+
+
+    /*
+        გაგზავნის ღილაკის გათიშვა.
+    */
+
+    if (send) {
+        send.disabled = true;
+    }
+
+
+    /*
+        Typing indicator.
+    */
+
+    const typing =
+        addAITyping();
+
+
+    try {
+
+        const reply =
+            await askAI(
+                cleanQuestion
             );
 
-        },
-        180
-    );
+
+        /*
+            Typing indicator-ის წაშლა.
+        */
+
+        typing?.remove();
+
+
+        /*
+            AI პასუხის ჩვენება.
+        */
+
+        addAIMessage(
+            'assistant',
+            formatAIResponse(reply)
+        );
+
+
+        /*
+            ისტორიაში ვინახავთ AI პასუხსაც.
+        */
+
+        aiHistory.push({
+            role: 'assistant',
+            content: reply
+        });
+
+
+        /*
+            ისტორიას ზედმეტად არ გავზრდით.
+        */
+
+        if (
+            aiHistory.length > 12
+        ) {
+
+            aiHistory =
+                aiHistory.slice(-12);
+        }
+
+    } catch (error) {
+
+        console.error(
+            'ArduinoHub AI error:',
+            error
+        );
+
+
+        typing?.remove();
+
+
+        addAIMessage(
+            'error',
+            `
+                <div class="ai-message-avatar">
+                    ${icon('triangle-alert')}
+                </div>
+
+                <div class="ai-message-bubble">
+                    <p>
+                        AI-სთან დაკავშირება ვერ მოხერხდა.
+                    </p>
+
+                    <p>
+                        გთხოვ, ცოტა ხანში სცადე ხელახლა.
+                    </p>
+                </div>
+            `
+        );
+
+    } finally {
+
+        if (send) {
+            send.disabled = false;
+        }
+
+
+        input?.focus();
+    }
 }
 
+
+/*
+    AI ჩატის გახსნა.
+*/
 
 function openAIChat() {
 
@@ -399,6 +803,10 @@ function openAIChat() {
 }
 
 
+/*
+    AI ჩატის დახურვა.
+*/
+
 function closeAIChat() {
 
     const chat =
@@ -439,6 +847,10 @@ function closeAIChat() {
 }
 
 
+/*
+    AI ჩატის ინიციალიზაცია.
+*/
+
 function initAIChat() {
 
     const chat =
@@ -464,6 +876,10 @@ function initAIChat() {
         $('#ai-chat-input');
 
 
+    /*
+        ჩატის გახსნა / დახურვა.
+    */
+
     if (toggle) {
 
         toggle.addEventListener(
@@ -487,11 +903,19 @@ function initAIChat() {
     }
 
 
+    /*
+        Close button.
+    */
+
     close?.addEventListener(
         'click',
         closeAIChat
     );
 
+
+    /*
+        Suggested questions.
+    */
 
     chat
         .querySelectorAll(
@@ -502,7 +926,7 @@ function initAIChat() {
 
                 button.addEventListener(
                     'click',
-                    () => {
+                    async () => {
 
                         const question =
                             button.dataset.aiQuestion;
@@ -513,30 +937,49 @@ function initAIChat() {
                         }
 
 
-                        addAIMessage(
-                            'user',
+                        /*
+                            სანამ AI პასუხობს,
+                            სხვა suggestion-ებს ვთიშავთ.
+                        */
+
+                        chat
+                            .querySelectorAll(
+                                '.ai-suggestion'
+                            )
+                            .forEach(
+                                b => {
+                                    b.disabled = true;
+                                }
+                            );
+
+
+                        await handleAIQuestion(
                             question
                         );
 
 
-                        if (input) {
-                            input.value =
-                                '';
-                        }
-
-
-                        answerAIPresetQuestion(
-                            question
-                        );
+                        chat
+                            .querySelectorAll(
+                                '.ai-suggestion'
+                            )
+                            .forEach(
+                                b => {
+                                    b.disabled = false;
+                                }
+                            );
                     }
                 );
             }
         );
 
 
+    /*
+        ჩვეულებრივი ტექსტური კითხვა.
+    */
+
     form?.addEventListener(
         'submit',
-        event => {
+        async event => {
 
             event.preventDefault();
 
@@ -551,68 +994,38 @@ function initAIChat() {
             }
 
 
-            const preset =
-                AI_PRESET_ANSWERS[
-                    question
-                ];
-
-
-            if (!preset) {
-
-                addAIMessage(
-                    'user',
-                    question
-                );
-
-
-                input.value =
-                    '';
-
-
-                setTimeout(
-                    () => {
-
-                        addAIMessage(
-                            'assistant',
-                            `
-                                <p>
-                                    ამ ეტაპზე ArduinoHub AI-ში
-                                    მხოლოდ წინასწარ მომზადებული კითხვებია
-                                    ხელმისაწვდომი.
-                                </p>
-
-                                <p>
-                                    აირჩიეთ ერთ-ერთი შემოთავაზებული
-                                    კითხვა ზემოთ.
-                                </p>
-                            `
-                        );
-
-                    },
-                    180
-                );
-
-
-                return;
-            }
-
-
-            addAIMessage(
-                'user',
-                question
-            );
-
-
-            input.value =
-                '';
-
-
-            answerAIPresetQuestion(
+            await handleAIQuestion(
                 question
             );
         }
     );
 
+
+    /*
+        Enter-ით გაგზავნა.
+    */
+
+    input?.addEventListener(
+        'keydown',
+        event => {
+
+            if (
+                event.key === 'Enter' &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+
+                form?.requestSubmit();
+            }
+        }
+    );
+
+
+    /*
+        Escape — ჩატის დახურვა.
+    */
 
     document.addEventListener(
         'keydown',
@@ -627,6 +1040,9 @@ function initAIChat() {
             }
         }
     );
+
+
+    refreshIcons();
 }
 
 
@@ -3469,4 +3885,3 @@ if (page === 'admin') {
 if (page === 'reset') {
     initPasswordReset();
 }
-
