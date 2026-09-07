@@ -182,8 +182,9 @@ function initChrome() {
 
         GEMINI_API_KEY
 
-    Frontend უკავშირდება მხოლოდ ჩვენს Supabase ფუნქციას:
+    Frontend უკავშირდება მხოლოდ ჩვენს Supabase ფუნქციას.
 */
+
 
 const AI_FUNCTION_URL =
     supabaseIsConfigured && SUPABASE_URL
@@ -193,18 +194,30 @@ const AI_FUNCTION_URL =
 
 /*
     AI conversation history.
-
-    ვინაიდან ბრაუზერში მხოლოდ ბოლო რამდენიმე შეტყობინებას
-    ვინახავთ, მოთხოვნები ზედმეტად დიდი არ გახდება.
 */
 
 let aiHistory = [];
 
 
 /*
-    ArduinoHub-ის მუდმივი ინფორმაცია.
+    ამ ცვლადში ვინახავთ მიმდინარე AI მომხმარებლის
+    ადმინისტრატორის მიმართვას.
 
-    ეს ეხმარება AI-ს საიტის შესახებ სწორად პასუხის გაცემაში.
+    null
+        = ჩვეულებრივი მომხმარებელი
+
+    "ბატონო ზაზა,"
+        = Zaza
+
+    "ქალბატონო თეკლა,"
+        = თეკლა
+*/
+
+let aiAdminGreeting = null;
+
+
+/*
+    ArduinoHub-ის მუდმივი ინფორმაცია.
 */
 
 const AI_SYSTEM_CONTEXT = `
@@ -248,12 +261,216 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
    მოცემულ ინფორმაციაში არ არის.
 9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
 10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
+
+11. პასუხები ყოველთვის დააფორმატე მკაფიოდ და ლამაზად.
+12. საჭიროების შემთხვევაში გამოიყენე Markdown:
+    **მნიშვნელოვანი ტექსტი**
+    *დახრილი ტექსტი*
+    - პუნქტები
+    1. დანომრილი პუნქტები
+    ## სათაურები
+    > ციტატები
+    \`inline code\`
+    და fenced code blocks.
+
+13. ქიმიური ფორმულები დაწერე ჩვეულებრივ ტექსტად:
+    H2O, CO2, NaCl, KMnO4, Mn2O7 და ა.შ.
+
+14. არასოდეს დაწერო უბრალოდ "svg" ან სხვა ტექნიკური სიტყვა,
+    თუ მას რეალური მნიშვნელობა არ აქვს პასუხისთვის.
+
+15. პასუხი არ გაწყვიტო შუა წინადადებაში.
+    ყოველთვის დაასრულე აზრი სრულად.
+
+16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე typo,
+    ერთი ან რამდენიმე არასწორად დაწერილი ასო, გამოტოვებული ასო,
+    ზედმეტი ასო ან მცირე ორთოგრაფიული შეცდომა.
+    ასეთ შეცდომებზე არ გაჩერდე და მომხმარებელს არ მოსთხოვო
+    კითხვის თავიდან დაწერა.
+    კონტექსტიდან თავად განსაზღვრე, რას გულისხმობს მომხმარებელი,
+    და ისე უპასუხე.
+
+17. თუ მომხმარებელმა დაწერა სიტყვა ოდნავ შეცდომით,
+    არ გაუსვა ყურადღება შეცდომას და არ უთხრა:
+    "თქვენ ალბათ ეს იგულისხმეთ?"
+    თუ მნიშვნელობა საკმარისად გასაგებია.
+
+18. თუ შეცდომა იმდენად დიდია, რომ კითხვა რეალურად გაუგებარია,
+    მხოლოდ მაშინ სთხოვე მომხმარებელს დაზუსტება.
+
+19. პასუხი იყოს ბუნებრივი და ადამიანური და არა ზედმეტად რობოტული.
+
+20. გამოიყენე მოკლე აბზაცები და საჭიროების შემთხვევაში
+    გამოყავი მთავარი ინფორმაცია ცალკე პუნქტებად.
 `;
 
 
+/* =========================================================
+   AI ADMIN GREETING
+========================================================= */
+
 /*
-    ამატებს შეტყობინებას ჩატში.
+    ამოწმებს, არის თუ არა ამჟამად შესული ადმინისტრატორი.
+
+    Zaza:
+        ბატონო ზაზა,
+
+    თეკლა:
+        ქალბატონო თეკლა,
+
+    სხვა მომხმარებელი:
+        null
 */
+
+async function detectAIAdminGreeting() {
+
+    aiAdminGreeting = null;
+
+    if (!db) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: {
+                session
+            }
+        } = await db.auth.getSession();
+
+
+        if (!session?.user) {
+            return;
+        }
+
+
+        const admin =
+            await isAdmin(
+                session.user
+            );
+
+
+        if (!admin?.username) {
+            return;
+        }
+
+
+        const username =
+            String(admin.username)
+                .trim()
+                .toLocaleLowerCase('ka-GE');
+
+
+        /*
+            Zaza-ს სხვადასხვა შესაძლო ფორმა.
+        */
+
+        if (
+            username === 'zaza' ||
+            username === 'ზაზა' ||
+            username.includes('zaza') ||
+            username.includes('ზაზა')
+        ) {
+
+            aiAdminGreeting =
+                'ბატონო ზაზა,';
+
+            return;
+        }
+
+
+        /*
+            თეკლას სხვადასხვა შესაძლო ფორმა.
+        */
+
+        if (
+            username === 'tekla' ||
+            username === 'თეკლა' ||
+            username.includes('tekla') ||
+            username.includes('თეკლა')
+        ) {
+
+            aiAdminGreeting =
+                'ქალბატონო თეკლა,';
+
+            return;
+        }
+
+
+        /*
+            თუ მომავალში სხვა ადმინისტრატორიც დაემატება,
+            აქ შეგვიძლია სხვა მიმართვებიც დავამატოთ.
+        */
+
+    } catch (error) {
+
+        console.warn(
+            'AI admin greeting detection failed:',
+            error
+        );
+
+        aiAdminGreeting = null;
+    }
+}
+
+
+/*
+    AI პასუხს ამატებს შესაბამის ადმინისტრატორის მიმართვას.
+
+    მნიშვნელოვანია:
+    მიმართვა frontend-ზე ემატება, ამიტომ Edge Function-ში
+    დამატებითი ცვლილების გარეშეც გარანტირებულად გამოჩნდება.
+*/
+
+function applyAIAdminGreeting(reply) {
+
+    const text =
+        String(reply || '').trim();
+
+
+    if (!text) {
+        return text;
+    }
+
+
+    if (!aiAdminGreeting) {
+        return text;
+    }
+
+
+    /*
+        თუ AI-მ შემთხვევით უკვე დაამატა იგივე მიმართვა,
+        ორჯერ აღარ დავამატებთ.
+    */
+
+    const firstPart =
+        text
+            .slice(0, 100)
+            .toLocaleLowerCase('ka-GE');
+
+
+    const greetingLower =
+        aiAdminGreeting
+            .toLocaleLowerCase('ka-GE');
+
+
+    if (
+        firstPart.startsWith(
+            greetingLower
+        )
+    ) {
+        return text;
+    }
+
+
+    return `${aiAdminGreeting} ${text}`;
+}
+
+
+/* =========================================================
+   AI MESSAGE
+========================================================= */
 
 function addAIMessage(
     type,
@@ -327,16 +544,37 @@ function addAIMessage(
 }
 
 
+/* =========================================================
+   BEAUTIFUL AI RESPONSE FORMATTER
+========================================================= */
+
 /*
-    AI პასუხიდან Markdown-ის ძალიან მარტივი
-    HTML ფორმატირება.
+    AI პასუხის Markdown → HTML გარდაქმნა.
 
-    ეს საშუალებას აძლევს AI-ს გამოიყენოს:
+    მხარდაჭერა:
 
-    **მნიშვნელოვანი ტექსტი**
-    `კოდი`
+    **bold**
+    *italic*
+    ***bold italic***
+    `inline code`
+
+    # სათაური
+    ## სათაური
+    ### სათაური
+
+    - სია
+    * სია
     • სია
+
+    1. დანომრილი სია
+
+    > ციტატა
+
+    ```code
+    კოდი
+    ```
 */
+
 
 function formatAIResponse(text) {
 
@@ -345,9 +583,105 @@ function formatAIResponse(text) {
     }
 
 
-    let safe =
-        esc(text);
+    let source =
+        String(text)
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .trim();
 
+
+    /*
+        ზედმეტი standalone "svg" ტექსტის მოცილება.
+    */
+
+    source =
+        source.replace(
+            /^\s*svg\s*$/gim,
+            ''
+        );
+
+
+    /*
+        HTML-ის უსაფრთხოდ escape.
+    */
+
+    let safe =
+        esc(source);
+
+
+    /*
+        fenced code blocks-ის დროებითი შენახვა.
+    */
+
+    const codeBlocks = [];
+
+
+    safe =
+        safe.replace(
+            /```(?:([a-zA-Z0-9_-]+)\n)?([\s\S]*?)```/g,
+            (_match, language, code) => {
+
+                const id =
+                    `@@AICODEBLOCK${codeBlocks.length}@@`;
+
+
+                codeBlocks.push({
+                    id,
+                    language:
+                        language || '',
+                    code:
+                        code
+                            .replace(/^\n/, '')
+                            .replace(/\n$/, '')
+                });
+
+
+                return id;
+            }
+        );
+
+
+    /*
+        Inline code-ის დროებითი შენახვა.
+    */
+
+    const inlineCodes = [];
+
+
+    safe =
+        safe.replace(
+            /`([^`\n]+)`/g,
+            (_match, code) => {
+
+                const id =
+                    `@@AIINLINECODE${inlineCodes.length}@@`;
+
+
+                inlineCodes.push({
+                    id,
+                    code
+                });
+
+
+                return id;
+            }
+        );
+
+
+    /*
+        Bold + italic.
+    */
+
+    safe =
+        safe.replace(
+            /\*\*\*(.+?)\*\*\*/g,
+            '<strong><em>$1</em></strong>'
+        );
+
+
+    /*
+        Bold.
+    */
 
     safe =
         safe.replace(
@@ -356,69 +690,269 @@ function formatAIResponse(text) {
         );
 
 
+    /*
+        Italic.
+    */
+
     safe =
         safe.replace(
-            /`([^`]+)`/g,
-            '<code>$1</code>'
+            /(^|[^\*])\*([^*\n]+)\*(?!\*)/g,
+            '$1<em>$2</em>'
         );
 
 
+    /*
+        ხაზების დაყოფა.
+    */
+
     const lines =
-        safe.split(/\r?\n/);
+        safe.split('\n');
 
 
     let html = '';
-    let listOpen = false;
+
+    let listType = null;
+
+    let listItems = [];
 
 
-    for (const line of lines) {
+    function closeList() {
+
+        if (!listType) {
+            return;
+        }
+
+
+        if (listType === 'ul') {
+
+            html += `
+                <ul class="ai-list">
+                    ${listItems.join('')}
+                </ul>
+            `;
+
+        } else {
+
+            html += `
+                <ol class="ai-ordered-list">
+                    ${listItems.join('')}
+                </ol>
+            `;
+        }
+
+
+        listType = null;
+
+        listItems = [];
+    }
+
+
+    function addListItem(
+        type,
+        content
+    ) {
+
+        if (listType !== type) {
+
+            closeList();
+
+            listType = type;
+        }
+
+
+        listItems.push(`
+            <li>
+                ${content}
+            </li>
+        `);
+    }
+
+
+    for (
+        let index = 0;
+        index < lines.length;
+        index++
+    ) {
+
+        const rawLine =
+            lines[index];
+
 
         const trimmed =
-            line.trim();
+            rawLine.trim();
 
+
+        /*
+            ცარიელი ხაზი.
+        */
 
         if (!trimmed) {
 
-            if (listOpen) {
-
-                html += '</ul>';
-                listOpen = false;
-            }
+            closeList();
 
             continue;
         }
 
 
+        /*
+            Heading H1.
+        */
+
         if (
-            trimmed.startsWith('• ') ||
-            trimmed.startsWith('- ')
+            /^#\s+/.test(trimmed)
         ) {
 
-            if (!listOpen) {
+            closeList();
 
-                html += '<ul>';
-                listOpen = true;
-            }
+
+            const title =
+                trimmed
+                    .replace(/^#\s+/, '')
+                    .trim();
 
 
             html += `
-                <li>
-                    ${
-                        trimmed
-                            .replace(/^([•-])\s*/, '')
-                    }
-                </li>
+                <h3 class="ai-response-title">
+                    ${title}
+                </h3>
             `;
+
 
             continue;
         }
 
 
-        if (listOpen) {
+        /*
+            Heading H2.
+        */
 
-            html += '</ul>';
-            listOpen = false;
+        if (
+            /^##\s+/.test(trimmed)
+        ) {
+
+            closeList();
+
+
+            const title =
+                trimmed
+                    .replace(/^##\s+/, '')
+                    .trim();
+
+
+            html += `
+                <h4 class="ai-response-subtitle">
+                    ${title}
+                </h4>
+            `;
+
+
+            continue;
         }
+
+
+        /*
+            Heading H3.
+        */
+
+        if (
+            /^###\s+/.test(trimmed)
+        ) {
+
+            closeList();
+
+
+            const title =
+                trimmed
+                    .replace(/^###\s+/, '')
+                    .trim();
+
+
+            html += `
+                <h5 class="ai-response-small-title">
+                    ${title}
+                </h5>
+            `;
+
+
+            continue;
+        }
+
+
+        /*
+            Unordered list.
+        */
+
+        const unordered =
+            trimmed.match(
+                /^[-•*]\s+(.+)$/
+            );
+
+
+        if (unordered) {
+
+            addListItem(
+                'ul',
+                unordered[1]
+            );
+
+            continue;
+        }
+
+
+        /*
+            Ordered list.
+        */
+
+        const ordered =
+            trimmed.match(
+                /^\d+[.)]\s+(.+)$/
+            );
+
+
+        if (ordered) {
+
+            addListItem(
+                'ol',
+                ordered[1]
+            );
+
+            continue;
+        }
+
+
+        /*
+            Blockquote.
+        */
+
+        if (
+            trimmed.startsWith('>')
+        ) {
+
+            closeList();
+
+
+            const quote =
+                trimmed
+                    .replace(/^>\s?/, '')
+                    .trim();
+
+
+            html += `
+                <blockquote class="ai-blockquote">
+                    ${quote}
+                </blockquote>
+            `;
+
+
+            continue;
+        }
+
+
+        /*
+            ჩვეულებრივი აბზაცი.
+        */
+
+        closeList();
 
 
         html += `
@@ -429,8 +963,70 @@ function formatAIResponse(text) {
     }
 
 
-    if (listOpen) {
-        html += '</ul>';
+    closeList();
+
+
+    /*
+        Inline code-ის დაბრუნება.
+    */
+
+    for (const item of inlineCodes) {
+
+        html =
+            html.replace(
+                item.id,
+                `<code class="ai-inline-code">${item.code}</code>`
+            );
+    }
+
+
+    /*
+        Code block-ის დაბრუნება.
+    */
+
+    for (const block of codeBlocks) {
+
+        const languageLabel =
+            block.language
+                ? `
+                    <span class="ai-code-language">
+                        ${esc(block.language)}
+                    </span>
+                `
+                : '';
+
+
+        const codeHTML = `
+            <div class="ai-code-wrapper">
+
+                ${languageLabel}
+
+                <pre class="ai-code-block"><code>${block.code}</code></pre>
+
+            </div>
+        `;
+
+
+        html =
+            html.replace(
+                block.id,
+                codeHTML
+            );
+    }
+
+
+    /*
+        უსაფრთხოების მიზნით, თუ formatter-მა
+        საბოლოოდ ვერ შექმნა HTML.
+    */
+
+    if (!html.trim()) {
+
+        return `
+            <p>
+                ${esc(source)}
+            </p>
+        `;
     }
 
 
@@ -438,9 +1034,9 @@ function formatAIResponse(text) {
 }
 
 
-/*
-    Typing indicator.
-*/
+/* =========================================================
+   AI TYPING INDICATOR
+========================================================= */
 
 function addAITyping() {
 
@@ -490,9 +1086,9 @@ function addAITyping() {
 }
 
 
-/*
-    აგზავნის კითხვას Supabase Edge Function-ში.
-*/
+/* =========================================================
+   ASK AI
+========================================================= */
 
 async function askAI(question) {
 
@@ -518,20 +1114,6 @@ async function askAI(question) {
     /*
         Edge Function ელოდება history-ს
         role + text ფორმატში.
-
-        მაგალითად:
-
-        {
-            role: 'user',
-            text: 'რა არის Arduino?'
-        }
-
-        ან:
-
-        {
-            role: 'assistant',
-            text: 'Arduino არის...'
-        }
     */
 
     const history =
@@ -553,12 +1135,23 @@ async function askAI(question) {
 
 
     /*
-        Supabase Edge Function-ის გამოძახება.
+        დამატებითი მინიშნება AI-სთვის.
 
-        Authorization + apikey საჭიროა Supabase-ის
-        Edge Function-ის დაცული endpoint-ისთვის.
+        ეს განსაკუთრებით ეხმარება მცირე typo-ების
+        შემთხვევაში.
+    */
 
-        Gemini API Key აქ არ იგზავნება.
+    const typoInstruction = `
+მომხმარებლის ამ შეტყობინებაში შეიძლება იყოს მცირე
+ტექსტური შეცდომები, მაგალითად ერთი არასწორი ან
+გამოტოვებული ასო. თუ მნიშვნელობა კონტექსტიდან
+გასაგებია, შეცდომა უბრალოდ იგნორირე და პირდაპირ
+უპასუხე სწორად გაგებულ კითხვას.
+`;
+
+
+    /*
+        Supabase Edge Function.
     */
 
     const response =
@@ -579,7 +1172,7 @@ async function askAI(question) {
 
                 body: JSON.stringify({
                     message:
-                        cleanQuestion,
+                        `${typoInstruction}\n\nმომხმარებლის კითხვა:\n${cleanQuestion}`,
 
                     history,
 
@@ -638,9 +1231,9 @@ async function askAI(question) {
 }
 
 
-/*
-    რეალური AI კითხვის დამუშავება.
-*/
+/* =========================================================
+   HANDLE AI QUESTION
+========================================================= */
 
 async function handleAIQuestion(question) {
 
@@ -724,22 +1317,40 @@ async function handleAIQuestion(question) {
 
 
         /*
-            AI პასუხის ჩვენება.
+            ადმინისტრატორის მიმართვის დამატება.
+
+            Zaza:
+                ბატონო ზაზა,
+
+            თეკლა:
+                ქალბატონო თეკლა,
+        */
+
+        const finalReply =
+            applyAIAdminGreeting(
+                reply
+            );
+
+
+        /*
+            AI პასუხის ლამაზად ჩვენება.
         */
 
         addAIMessage(
             'assistant',
-            formatAIResponse(reply)
+            formatAIResponse(
+                finalReply
+            )
         );
 
 
         /*
-            ისტორიაში ვინახავთ AI პასუხსაც.
+            ისტორიაში ვინახავთ საბოლოო პასუხს.
         */
 
         aiHistory.push({
             role: 'assistant',
-            content: reply
+            content: finalReply
         });
 
 
@@ -766,6 +1377,16 @@ async function handleAIQuestion(question) {
         typing?.remove();
 
 
+        /*
+            შეცდომის ტექსტიც უფრო სასარგებლო გახდა.
+        */
+
+        const errorText =
+            error?.message
+                ? esc(error.message)
+                : 'უცნობი შეცდომა';
+
+
         addAIMessage(
             'error',
             `
@@ -776,6 +1397,13 @@ async function handleAIQuestion(question) {
                 <p>
                     გთხოვ, ცოტა ხანში სცადე ხელახლა.
                 </p>
+
+                <details class="ai-error-details">
+                    <summary>ტექნიკური ინფორმაცია</summary>
+                    <div>
+                        ${errorText}
+                    </div>
+                </details>
             `
         );
 
@@ -791,9 +1419,9 @@ async function handleAIQuestion(question) {
 }
 
 
-/*
-    AI ჩატის გახსნა.
-*/
+/* =========================================================
+   OPEN AI CHAT
+========================================================= */
 
 function openAIChat() {
 
@@ -843,9 +1471,9 @@ function openAIChat() {
 }
 
 
-/*
-    AI ჩატის დახურვა.
-*/
+/* =========================================================
+   CLOSE AI CHAT
+========================================================= */
 
 function closeAIChat() {
 
@@ -887,17 +1515,25 @@ function closeAIChat() {
 }
 
 
-/*
-    AI ჩატის ინიციალიზაცია.
-*/
+/* =========================================================
+   INIT AI CHAT
+========================================================= */
 
-function initAIChat() {
+async function initAIChat() {
 
     const chat =
         $('#ai-chat');
 
 
     if (!chat) return;
+
+
+    /*
+        პირველივე ეტაპზე ვადგენთ,
+        ვინ არის შესული.
+    */
+
+    await detectAIAdminGreeting();
 
 
     const toggle =
@@ -1080,6 +1716,29 @@ function initAIChat() {
             }
         }
     );
+
+
+    /*
+        თუ ადმინისტრატორი login/logout-ს აკეთებს
+        ჩატის გახსნის შემდეგ, მიმართვაც განახლდება.
+    */
+
+    if (db) {
+
+        db.auth.onAuthStateChange(
+            async (_event, session) => {
+
+                if (!session) {
+
+                    aiAdminGreeting = null;
+
+                } else {
+
+                    await detectAIAdminGreeting();
+                }
+            }
+        );
+    }
 
 
     refreshIcons();
@@ -2077,6 +2736,13 @@ function showLogin() {
 async function logout() {
 
     await db.auth.signOut();
+
+
+    /*
+        AI-სთვის ადმინისტრატორის მიმართვის მოცილება.
+    */
+
+    aiAdminGreeting = null;
 
 
     toast(
