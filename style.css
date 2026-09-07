@@ -14,13 +14,7 @@
     --ai-pink:#ff72d2;
     --ai-blue:#5c8dff;
 }
-.ai-chat-messages{
-  padding-bottom:12px
-}
 
-.ai-chat-window{
-  height:auto;
-  max-height:700px
 }
 html{
     scrollbar-width:none;
@@ -4056,4 +4050,23 @@ svg{
     .ai-chat-header::after{
         animation:none;
     }
+}
+
+.ai-chat-window{
+  height:auto;
+  max-height:min(640px,calc(100vh - 120px));
+}
+
+@media (max-width:600px){
+  .ai-chat-window{
+    height:auto;
+    max-height:calc(100vh - 100px);
+  }
+}
+
+@media (max-width:380px){
+  .ai-chat-window{
+    height:auto;
+    max-height:calc(100vh - 88px);
+  }
 }
