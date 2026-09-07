@@ -53,7 +53,9 @@ function toast(message, type = '') {
     }
 
     el.textContent = message;
-    el.className = `toast show ${type}`;
+
+    el.className =
+        `toast show ${type}`;
 
     clearTimeout(toast.timer);
 
@@ -125,8 +127,7 @@ function initChrome() {
         button.addEventListener(
             'click',
             () => {
-                const nav =
-                    $('nav');
+                const nav = $('nav');
 
                 if (!nav) {
                     return;
@@ -150,15 +151,17 @@ function initChrome() {
 /* =========================================================
    ARDUINOHUB AI CHAT
    REAL AI — SUPABASE EDGE FUNCTION + GEMINI
-========================================================= */
+   ========================================================= */
 
 const AI_FUNCTION_URL =
-    supabaseIsConfigured && SUPABASE_URL
+    supabaseIsConfigured &&
+    SUPABASE_URL
         ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
         : null;
 
 
 /* AI conversation history. */
+
 let aiHistory = [];
 
 
@@ -168,10 +171,12 @@ let aiHistory = [];
     Zaza  -> ბატონო ზაზა
     Tekla -> ქალბატონო თეკლა
 */
+
 let aiAdminGreeting = '';
 
 
 /* ArduinoHub AI-ის მუდმივი კონტექსტი. */
+
 const AI_SYSTEM_CONTEXT = `
 შენ ხარ ArduinoHub AI — ArduinoHub-ის ოფიციალური AI ასისტენტი.
 
@@ -208,15 +213,8 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 8. არ მოიგონო ისეთი პროექტები, ადამიანები ან ფუნქციები, რომლებიც მოცემულ ინფორმაციაში არ არის.
 9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
 10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
-11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის:
-    **მნიშვნელოვანი ტექსტი**,
-    *აქცენტი*,
-    სათაურები,
-    bullet list-ები,
-    numbered list-ები
-    და code blocks.
-12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად:
-    H2O, CO2, NaCl, KMnO4, Mn2O7.
+11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის: **მნიშვნელოვანი ტექსტი**, *აქცენტი*, სათაურები, bullet list-ები, numbered list-ები და code blocks.
+12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად: H2O, CO2, NaCl, KMnO4, Mn2O7.
 13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
 14. პასუხი არ შეწყვიტო შუა წინადადებაში. ყოველთვის დაასრულე აზრი.
 15. თუ პასუხს რამდენიმე ნაწილი აქვს, დაალაგე ლოგიკურად.
@@ -237,6 +235,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
     Tekla:
     ქალბატონო თეკლა
 */
+
 async function detectAIAdmin() {
     if (!db) {
         aiAdminGreeting = '';
@@ -307,6 +306,7 @@ async function detectAIAdmin() {
     "ბატონო ზაზა, ..."
     მეორედ აღარ დაამატებს.
 */
+
 function applyAIGreeting(reply) {
     const clean =
         String(reply || '').trim();
@@ -334,6 +334,7 @@ function applyAIGreeting(reply) {
 /*
     ამატებს შეტყობინებას ჩატში.
 */
+
 function addAIMessage(
     type,
     content
@@ -396,7 +397,23 @@ function addAIMessage(
 
 /*
     AI პასუხის ლამაზი Markdown -> HTML გარდაქმნა.
+
+    მხარდაჭერა:
+    **bold**
+    *italic*
+    `inline code`
+    # სათაური
+    ## ქვესათაური
+    ### პატარა სათაური
+    - სია
+    * სია
+    • სია
+    1. სია
+    2. სია
+    > ციტატა
+    ```code```
 */
+
 function formatAIResponse(text) {
     if (!text) {
         return '<p>პასუხი ვერ მივიღე.</p>';
@@ -410,50 +427,69 @@ function formatAIResponse(text) {
             )
             .trim();
 
+    /*
+        ჯერ code block-ებს ვინახავთ,
+        რათა მათში Markdown არ გაფუჭდეს.
+    */
+
     const codeBlocks = [];
 
-    source = source.replace(
-        /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
-        (_, code) => {
-            const index =
-                codeBlocks.length;
+    source =
+        source.replace(
+            /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+            (_, code) => {
+                const index =
+                    codeBlocks.length;
 
-            codeBlocks.push(
-                esc(code.trim())
-            );
+                codeBlocks.push(
+                    esc(code.trim())
+                );
 
-            return `@@CODEBLOCK_${index}@@`;
-        }
-    );
+                return `@@CODEBLOCK_${index}@@`;
+            }
+        );
 
-    let safe =
-        esc(source);
+    let safe = esc(source);
 
-    safe = safe.replace(
-        /\*\*\*(.+?)\*\*\*/g,
-        '<strong><em>$1</em></strong>'
-    );
+    /* Bold + italic */
 
-    safe = safe.replace(
-        /\*\*(.+?)\*\*/g,
-        '<strong>$1</strong>'
-    );
+    safe =
+        safe.replace(
+            /\*\*\*(.+?)\*\*\*/g,
+            '<strong><em>$1</em></strong>'
+        );
 
-    safe = safe.replace(
-        /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
-        '<em>$1</em>'
-    );
+    /* Bold */
 
-    safe = safe.replace(
-        /`([^`\n]+)`/g,
-        '<code class="ai-inline-code">$1</code>'
-    );
+    safe =
+        safe.replace(
+            /\*\*(.+?)\*\*/g,
+            '<strong>$1</strong>'
+        );
+
+    /* Italic */
+
+    safe =
+        safe.replace(
+            /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+            '<em>$1</em>'
+        );
+
+    /* Inline code */
+
+    safe =
+        safe.replace(
+            /`([^`\n]+)`/g,
+            '<code class="ai-inline-code">$1</code>'
+        );
 
     const lines =
         safe.split(/\r?\n/);
 
     let html = '';
+
     let paragraph = [];
+
     let listType = null;
 
     const closeList = () => {
@@ -489,7 +525,10 @@ function formatAIResponse(text) {
         paragraph = [];
     };
 
-    for (const rawLine of lines) {
+    for (
+        const rawLine
+        of lines
+    ) {
         const line =
             rawLine.trim();
 
@@ -498,6 +537,8 @@ function formatAIResponse(text) {
             closeList();
             continue;
         }
+
+        /* Code block */
 
         const codeMatch =
             line.match(
@@ -510,7 +551,9 @@ function formatAIResponse(text) {
 
             const code =
                 codeBlocks[
-                    Number(codeMatch[1])
+                    Number(
+                        codeMatch[1]
+                    )
                 ] || '';
 
             html += `
@@ -521,6 +564,8 @@ function formatAIResponse(text) {
 
             continue;
         }
+
+        /* ### heading */
 
         const heading3 =
             line.match(
@@ -540,6 +585,8 @@ function formatAIResponse(text) {
             continue;
         }
 
+        /* ## heading */
+
         const heading2 =
             line.match(
                 /^##\s+(.+)$/
@@ -557,6 +604,8 @@ function formatAIResponse(text) {
 
             continue;
         }
+
+        /* # heading */
 
         const heading1 =
             line.match(
@@ -576,6 +625,8 @@ function formatAIResponse(text) {
             continue;
         }
 
+        /* Blockquote */
+
         const quote =
             line.match(
                 /^>\s*(.+)$/
@@ -593,6 +644,8 @@ function formatAIResponse(text) {
 
             continue;
         }
+
+        /* Unordered list */
 
         const unordered =
             line.match(
@@ -619,6 +672,8 @@ function formatAIResponse(text) {
 
             continue;
         }
+
+        /* Ordered list */
 
         const ordered =
             line.match(
@@ -647,10 +702,12 @@ function formatAIResponse(text) {
         }
 
         closeList();
+
         paragraph.push(line);
     }
 
     flushParagraph();
+
     closeList();
 
     return (
@@ -663,6 +720,7 @@ function formatAIResponse(text) {
 /*
     Typing indicator.
 */
+
 function addAITyping() {
     const messages =
         $('#ai-chat-messages');
@@ -706,20 +764,20 @@ function addAITyping() {
 
 /* =========================================================
    AI ERROR HANDLING
-========================================================= */
+   ========================================================= */
 
 
 /*
-    HTTP status-ის ამოღება.
+    Backend-ის შეცდომიდან HTTP status-ის ამოღება.
 
-    ადრე მხოლოდ error.message-ს ამოწმებდა.
-    ახლა ჯერ პირდაპირ error.status-ს ამოწმებს.
+    პირველ რიგში ვიყენებთ error.status-ს,
+    რადგან askAI() მას პირდაპირ ინახავს.
 */
+
 function getAIErrorStatus(error) {
     if (
-        error &&
         Number.isFinite(
-            Number(error.status)
+            Number(error?.status)
         )
     ) {
         return Number(
@@ -744,55 +802,71 @@ function getAIErrorStatus(error) {
 
 
 /*
-    Backend error-ის ტექსტის უსაფრთხოდ ამოღება.
+    ამოწმებს არის თუ არა შეცდომა
+    Gemini-ის quota / rate limit პრობლემა.
+
+    მნიშვნელოვანია:
+    Gemini ზოგჯერ quota-ს შეცდომას
+    Edge Function-ის გავლით 500-ადაც აბრუნებს.
+
+    ამიტომ მარტო HTTP 429-ზე
+    დაყრდნობა საკმარისი არ არის.
 */
-function getAIErrorText(error) {
-    if (!error) {
-        return '';
-    }
 
-    if (
-        typeof error === 'string'
-    ) {
-        return error.trim();
-    }
+function isAIQuotaError(error) {
+    const message =
+        String(
+            error?.message || ''
+        ).toLowerCase();
 
-    if (
-        typeof error.message === 'string' &&
-        error.message.trim()
-    ) {
-        return error.message.trim();
-    }
+    const quotaPatterns = [
+        'quota exceeded',
+        'quotaexceeded',
+        'quota',
+        'resource_exhausted',
+        'resource exhausted',
+        'free_tier',
+        'free tier',
+        'generate_content_free_tier_requests',
+        'rate limit',
+        'ratelimit',
+        'too many requests',
+        'requests per day',
+        'requests per minute'
+    ];
 
-    if (
-        typeof error.error === 'string' &&
-        error.error.trim()
-    ) {
-        return error.error.trim();
-    }
+    return quotaPatterns.some(
+        pattern =>
+            message.includes(pattern)
+    );
+}
 
-    if (
-        error.error &&
-        typeof error.error.message === 'string'
-    ) {
-        return error.error.message.trim();
-    }
 
-    if (
-        error.data &&
-        typeof error.data.error === 'string'
-    ) {
-        return error.data.error.trim();
-    }
+/*
+    Gemini model-ის პრობლემის ამოცნობა.
+*/
 
-    if (
-        error.data?.error &&
-        typeof error.data.error.message === 'string'
-    ) {
-        return error.data.error.message.trim();
-    }
+function isAIModelError(error) {
+    const message =
+        String(
+            error?.message || ''
+        ).toLowerCase();
 
-    return '';
+    const modelPatterns = [
+        'model not found',
+        'model is not found',
+        'not available',
+        'is no longer available',
+        'unsupported model',
+        'unknown model',
+        'models/',
+        'gemini model'
+    ];
+
+    return modelPatterns.some(
+        pattern =>
+            message.includes(pattern)
+    );
 }
 
 
@@ -800,19 +874,25 @@ function getAIErrorText(error) {
     ლამაზი ქართული შეტყობინებები
     სხვადასხვა შეცდომისთვის.
 */
+
 function getAIUserErrorMessage(error) {
     const status =
         getAIErrorStatus(error);
 
-    const rawMessage =
-        getAIErrorText(error);
-
     /*
-        429 — Gemini quota.
+        პირველ რიგში quota-ს ვამოწმებთ.
+
+        ეს აუცილებელია, რადგან quota-ს
+        შეცდომა შეიძლება 500-ადაც მოვიდეს.
     */
-    if (status === 429) {
+
+    if (
+        status === 429 ||
+        isAIQuotaError(error)
+    ) {
         return `
             <div class="ai-error-content">
+
                 <strong>
                     ${icon('zap')}
                     AI დროებით მიუწვდომელია
@@ -820,14 +900,47 @@ function getAIUserErrorMessage(error) {
 
                 <p>
                     ArduinoHub AI-ის უფასო გამოყენების
-                    დღიური ლიმიტი ამ დროისთვის ამოიწურა.
+                    ლიმიტი ამ დროისთვის ამოიწურა.
                 </p>
 
                 <small>
-                    გთხოვთ, მოგვიანებით სცადოთ ხელახლა.
-                    როგორც კი Gemini-ის ლიმიტი განახლდება,
+                    პრობლემა Gemini-ის გამოყენების
+                    ლიმიტს უკავშირდება და არა შენს
+                    კითხვას. ლიმიტის განახლების შემდეგ
                     ჩატი კვლავ ავტომატურად იმუშავებს.
                 </small>
+
+            </div>
+        `;
+    }
+
+
+    /*
+        Model-ის პრობლემა.
+    */
+
+    if (
+        isAIModelError(error)
+    ) {
+        return `
+            <div class="ai-error-content">
+
+                <strong>
+                    ${icon('cpu')}
+                    AI მოდელის პრობლემა
+                </strong>
+
+                <p>
+                    ArduinoHub AI-ის გამოყენებული
+                    Gemini მოდელი ამჟამად ვერ მუშაობს
+                    ან მიუწვდომელია.
+                </p>
+
+                <small>
+                    საჭიროა Supabase Edge Function-ში
+                    გამოყენებული მოდელის შემოწმება.
+                </small>
+
             </div>
         `;
     }
@@ -836,22 +949,25 @@ function getAIUserErrorMessage(error) {
     /*
         401 — Authorization.
     */
+
     if (status === 401) {
         return `
             <div class="ai-error-content">
+
                 <strong>
                     ${icon('lock-keyhole')}
                     AI ავტორიზაციის პრობლემა
                 </strong>
 
                 <p>
-                    AI სერვერთან ავტორიზაცია ვერ მოხერხდა.
+                    AI სერვერთან ავტორიზაცია
+                    ვერ მოხერხდა.
                 </p>
 
                 <small>
-                    გთხოვთ, შეამოწმოთ Supabase-ის
-                    Edge Function და API key.
+                    გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
                 </small>
+
             </div>
         `;
     }
@@ -860,22 +976,25 @@ function getAIUserErrorMessage(error) {
     /*
         403 — Access denied.
     */
+
     if (status === 403) {
         return `
             <div class="ai-error-content">
+
                 <strong>
                     ${icon('shield-alert')}
                     AI სერვერთან წვდომა შეზღუდულია
                 </strong>
 
                 <p>
-                    AI სერვერმა მოთხოვნაზე წვდომა უარყო.
+                    AI სერვერმა მოთხოვნა ვერ მიიღო.
                 </p>
 
                 <small>
-                    საჭიროა Gemini API key-ის,
-                    Supabase Secret-ის ან API წვდომის შემოწმება.
+                    საჭიროა AI სერვერის კონფიგურაციის
+                    შემოწმება.
                 </small>
+
             </div>
         `;
     }
@@ -884,23 +1003,25 @@ function getAIUserErrorMessage(error) {
     /*
         404 — Function/model not found.
     */
+
     if (status === 404) {
         return `
             <div class="ai-error-content">
+
                 <strong>
                     ${icon('search-x')}
                     AI სერვისი ვერ მოიძებნა
                 </strong>
 
                 <p>
-                    AI ფუნქცია ან მოთხოვნილი Gemini რესურსი
-                    ვერ მოიძებნა.
+                    AI ფუნქცია ან მოთხოვნილი რესურსი
+                    ამჟამად ვერ მოიძებნა.
                 </p>
 
                 <small>
-                    შეამოწმეთ Edge Function-ის სახელი
-                    და Gemini model-ის სახელი.
+                    გთხოვთ, მოგვიანებით სცადოთ ხელახლა.
                 </small>
+
             </div>
         `;
     }
@@ -909,45 +1030,26 @@ function getAIUserErrorMessage(error) {
     /*
         400 — Bad request.
     */
+
     if (status === 400) {
         return `
             <div class="ai-error-content">
+
                 <strong>
                     ${icon('triangle-alert')}
                     მოთხოვნის დამუშავება ვერ მოხერხდა
                 </strong>
 
                 <p>
-                    AI-მ მიღებული მოთხოვნა ვერ დაამუშავა.
+                    AI-მ მიღებული მოთხოვნა
+                    ვერ დაამუშავა.
                 </p>
 
                 <small>
-                    თუ პრობლემა ყველა კითხვაზე მეორდება,
-                    საჭიროა Edge Function-ის შემოწმება.
+                    სცადეთ კითხვის ოდნავ
+                    სხვანაირად დაწერა.
                 </small>
-            </div>
-        `;
-    }
 
-
-    /*
-        408 — timeout.
-    */
-    if (status === 408) {
-        return `
-            <div class="ai-error-content">
-                <strong>
-                    ${icon('clock-3')}
-                    AI-მ პასუხის დაბრუნება ვერ მოასწრო
-                </strong>
-
-                <p>
-                    მოთხოვნას ძალიან დიდი დრო დასჭირდა.
-                </p>
-
-                <small>
-                    სცადეთ ხელახლა.
-                </small>
             </div>
         `;
     }
@@ -956,6 +1058,7 @@ function getAIUserErrorMessage(error) {
     /*
         500/502/503/504 — Server error.
     */
+
     if (
         status === 500 ||
         status === 502 ||
@@ -964,6 +1067,7 @@ function getAIUserErrorMessage(error) {
     ) {
         return `
             <div class="ai-error-content">
+
                 <strong>
                     ${icon('server-crash')}
                     AI სერვერის დროებითი პრობლემა
@@ -975,104 +1079,50 @@ function getAIUserErrorMessage(error) {
                 </p>
 
                 <small>
-                    გთხოვთ, რამდენიმე წამში სცადოთ ხელახლა.
+                    გთხოვთ, რამდენიმე წამში
+                    სცადოთ ხელახლა.
                 </small>
+
             </div>
         `;
     }
 
 
     /*
-        თუ backend-მა კონკრეტული ტექსტი მოგვცა,
-        generic შეტყობინების ნაცვლად ვაჩვენებთ
-        უსაფრთხოდ escaped ტექსტს.
+        Network / unknown error.
     */
-    if (rawMessage) {
-        return `
-            <div class="ai-error-content">
-                <strong>
-                    ${icon('triangle-alert')}
-                    AI მოთხოვნის შეცდომა
-                </strong>
 
-                <p>
-                    ${esc(rawMessage)}
-                </p>
-
-                <small>
-                    გთხოვთ, რამდენიმე წამში სცადოთ ხელახლა.
-                </small>
-            </div>
-        `;
-    }
-
-
-    /*
-        Network / CORS / connection error.
-    */
     return `
         <div class="ai-error-content">
+
             <strong>
                 ${icon('wifi-off')}
                 AI-სთან დაკავშირება ვერ მოხერხდა
             </strong>
 
             <p>
-                ამ მომენტში AI სერვისთან დაკავშირება ვერ მოხერხდა.
+                ამ მომენტში AI სერვისთან
+                დაკავშირება ვერ მოხერხდა.
             </p>
 
             <small>
-                თუ ეს შეტყობინება ყველა კითხვაზე ჩნდება,
-                შეამოწმეთ Supabase Edge Function-ის Logs.
+                გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
             </small>
+
         </div>
     `;
 }
 
 
-/*
-    Backend-ის response body-დან ტექსტის ამოღება.
-*/
-async function readAIResponseBody(response) {
-    const raw =
-        await response.text();
-
-    if (!raw) {
-        return {
-            json: null,
-            text: ''
-        };
-    }
-
-    try {
-        return {
-            json: JSON.parse(raw),
-            text: raw
-        };
-    } catch {
-        return {
-            json: null,
-            text: raw
-        };
-    }
-}
-
-
 /* =========================================================
    აგზავნის კითხვას Supabase Edge Function-ში.
-========================================================= */
+   ========================================================= */
 
 async function askAI(question) {
     if (!AI_FUNCTION_URL) {
-        const error =
-            new Error(
-                'AI ფუნქციის მისამართი ვერ მოიძებნა.'
-            );
-
-        error.code =
-            'AI_FUNCTION_URL_MISSING';
-
-        throw error;
+        throw new Error(
+            'AI ფუნქციის მისამართი ვერ მოიძებნა.'
+        );
     }
 
     const cleanQuestion =
@@ -1083,7 +1133,6 @@ async function askAI(question) {
     if (!cleanQuestion) {
         return null;
     }
-
 
     const history =
         aiHistory
@@ -1101,7 +1150,6 @@ async function askAI(question) {
                         ).slice(0, 1800)
                 })
             );
-
 
     let response;
 
@@ -1142,94 +1190,104 @@ async function askAI(question) {
         const error =
             new Error(
                 networkError?.message ||
-                'AI სერვერთან ქსელური კავშირი ვერ დამყარდა.'
+                'Network error'
             );
 
-        error.code =
-            'AI_NETWORK_ERROR';
-
-        error.original =
-            networkError;
+        error.status = 0;
 
         throw error;
     }
 
 
-    const body =
-        await readAIResponseBody(
-            response
-        );
-
-    const data =
-        body.json;
-
-
     /*
-        HTTP error.
+        ყოველთვის ვკითხულობთ response body-ს,
+        მათ შორის error შემთხვევაშიც.
     */
+
+    let data = null;
+
+    try {
+        data =
+            await response.json();
+    } catch {
+        data = null;
+    }
+
+
     if (!response.ok) {
-        let backendMessage = '';
+        /*
+            ძალიან მნიშვნელოვანია:
+            backend-ის რეალური error ტექსტი
+            ვინახავთ Error ობიექტში.
+        */
 
-        if (
-            typeof data?.error === 'string'
-        ) {
-            backendMessage =
-                data.error;
-        } else if (
-            data?.error &&
-            typeof data.error.message === 'string'
-        ) {
-            backendMessage =
-                data.error.message;
-        } else if (
-            typeof data?.message === 'string'
-        ) {
-            backendMessage =
-                data.message;
-        } else if (
-            body.text
-        ) {
-            backendMessage =
-                body.text;
-        }
-
+        const backendMessage =
+            data?.error ||
+            data?.message ||
+            data?.details ||
+            `AI request failed with status ${response.status}`;
 
         const error =
             new Error(
-                backendMessage ||
-                `AI request failed with status ${response.status}`
+                String(
+                    backendMessage
+                )
             );
 
         /*
-            ყველაზე მნიშვნელოვანი ცვლილება:
-            status პირდაპირ ვინახავთ error-ში.
+            HTTP status პირდაპირ ვინახავთ.
         */
+
         error.status =
             response.status;
 
-        error.code =
-            'AI_HTTP_ERROR';
+        /*
+            დამატებითი ინფორმაცია,
+            თუ backend-მა რამე დააბრუნა.
+        */
 
-        error.responseText =
-            body.text;
+        error.backendData =
+            data;
 
-        error.responseData =
+        error.backendStatus =
+            response.status;
+
+        throw error;
+    }
+
+
+    /*
+        ზოგიერთ backend ვერსიაში შეიძლება
+        error:true + reply დაბრუნდეს.
+        ასეთ შემთხვევაშიც ვამოწმებთ.
+    */
+
+    if (
+        data?.error &&
+        !data?.reply &&
+        !data?.text
+    ) {
+        const error =
+            new Error(
+                String(data.error)
+            );
+
+        error.status =
+            response.status;
+
+        error.backendData =
             data;
 
         throw error;
     }
 
 
-    /*
-        წარმატებული response.
-    */
     const reply =
         String(
             data?.reply ||
             data?.text ||
             ''
         ).trim();
-
 
     if (!reply) {
         const error =
@@ -1240,18 +1298,11 @@ async function askAI(question) {
         error.status =
             response.status;
 
-        error.code =
-            'AI_EMPTY_RESPONSE';
-
-        error.responseText =
-            body.text;
-
-        error.responseData =
+        error.backendData =
             data;
 
         throw error;
     }
-
 
     return reply;
 }
@@ -1259,7 +1310,7 @@ async function askAI(question) {
 
 /* =========================================================
    FRONTEND SAFETY
-========================================================= */
+   ========================================================= */
 
 function containsUnsafeContent(text) {
     const value =
@@ -1273,6 +1324,10 @@ function containsUnsafeContent(text) {
 
     const unsafePatterns = [
 
+        /*
+            აშკარა 18+ მიმართულების სიტყვები.
+        */
+
         /\b(porn|porno|pornography)\b/i,
 
         /\b(sexcam|onlyfans)\b/i,
@@ -1280,6 +1335,11 @@ function containsUnsafeContent(text) {
         /\b(nude|nudes)\b/i,
 
         /\b(hentai)\b/i,
+
+        /*
+            ქართული გავრცელებული
+            შეუფერებელი ფორმები.
+        */
 
         /სექსუალური\s+შინაარსი/i,
 
@@ -1298,9 +1358,11 @@ function containsUnsafeContent(text) {
 /*
     უსაფრთხოების გაფრთხილება.
 */
+
 function addAISafetyWarning() {
     const message = `
         <div class="ai-safety-warning">
+
             <strong>
                 ${icon('shield-alert')}
                 უსაფრთხოების გაფრთხილება
@@ -1312,6 +1374,7 @@ function addAISafetyWarning() {
                 პლატფორმა განკუთვნილია სასწავლო,
                 Arduino-სა და ქიმიის საკითხებისთვის.
             </p>
+
         </div>
     `;
 
@@ -1325,6 +1388,7 @@ function addAISafetyWarning() {
 /*
     მომხმარებლის კითხვის დამუშავება.
 */
+
 async function handleAIQuestion(question) {
     const input =
         $('#ai-chat-input');
@@ -1345,12 +1409,14 @@ async function handleAIQuestion(question) {
         ყოველი ახალი კითხვა ამოწმებს
         მიმდინარე ადმინისტრატორის ანგარიშს.
     */
+
     await detectAIAdmin();
 
 
     /*
         Unsafe content.
     */
+
     if (
         containsUnsafeContent(
             cleanQuestion
@@ -1406,8 +1472,10 @@ async function handleAIQuestion(question) {
 
 
         /*
-            Admin greeting frontend-ში გარანტირებულად ემატება.
+            Admin greeting frontend-ში
+            გარანტირებულად ემატება.
         */
+
         const finalReply =
             applyAIGreeting(
                 reply
@@ -1432,6 +1500,7 @@ async function handleAIQuestion(question) {
             ისტორიის ზომა მცირეა,
             რათა AI უფრო სწრაფი დარჩეს.
         */
+
         if (
             aiHistory.length > 10
         ) {
@@ -1440,10 +1509,19 @@ async function handleAIQuestion(question) {
         }
 
     } catch (error) {
+
         console.error(
             'ArduinoHub AI error:',
             error
         );
+
+
+        /*
+            DEBUG ინფორმაცია.
+
+            ეს გვეხმარება იმის გაგებაში,
+            backend რეალურად რას აბრუნებს.
+        */
 
         console.error(
             'AI error status:',
@@ -1451,15 +1529,8 @@ async function handleAIQuestion(question) {
         );
 
         console.error(
-            'AI error message:',
-            error?.message
-        );
-
-        console.error(
-            'AI error response:',
-            error?.responseData ||
-            error?.responseText ||
-            null
+            'AI backend data:',
+            error?.backendData
         );
 
 
@@ -1467,9 +1538,22 @@ async function handleAIQuestion(question) {
 
 
         /*
-            აქ უკვე კონკრეტულად ვაჩვენებთ
-            შეცდომის ტიპს.
+            აქ აღარ ვაჩვენებთ ავტომატურად
+            ერთსა და იმავე generic შეცდომას.
+
+            თუ Gemini quota არის:
+            → quota შეტყობინება
+
+            თუ model პრობლემაა:
+            → model შეტყობინება
+
+            თუ 500 არის:
+            → server შეტყობინება
+
+            თუ network არის:
+            → connection შეტყობინება
         */
+
         addAIMessage(
             'error',
             getAIUserErrorMessage(
@@ -1478,6 +1562,7 @@ async function handleAIQuestion(question) {
         );
 
     } finally {
+
         if (send) {
             send.disabled = false;
         }
@@ -1489,7 +1574,7 @@ async function handleAIQuestion(question) {
 
 /* =========================================================
    AI CHAT OPEN / CLOSE
-========================================================= */
+   ========================================================= */
 
 function openAIChat() {
     const chat =
@@ -1531,6 +1616,7 @@ function openAIChat() {
     );
 }
 
+
 function closeAIChat() {
     const chat =
         $('#ai-chat');
@@ -1566,7 +1652,7 @@ function closeAIChat() {
 
 /* =========================================================
    AI Chat initialization
-========================================================= */
+   ========================================================= */
 
 async function initAIChat() {
     const chat =
@@ -1581,6 +1667,7 @@ async function initAIChat() {
         ჯერ განვსაზღვროთ admin,
         შემდეგ გავუშვათ ჩატი.
     */
+
     await detectAIAdmin();
 
 
@@ -1624,19 +1711,24 @@ async function initAIChat() {
     /*
         ძველი suggestion ღილაკები
         თუ HTML-ში აღარ არსებობს,
-        არაფერი მოხდება.
+        ეს უბრალოდ ცარიელ შედეგს
+        დააბრუნებს.
     */
+
     chat
         .querySelectorAll(
             '.ai-suggestion'
         )
         .forEach(
             button => {
+
                 button.addEventListener(
                     'click',
                     async () => {
+
                         const question =
-                            button.dataset.aiQuestion;
+                            button.dataset
+                                .aiQuestion;
 
                         if (!question) {
                             return;
@@ -1676,6 +1768,7 @@ async function initAIChat() {
     form?.addEventListener(
         'submit',
         async event => {
+
             event.preventDefault();
 
             const question =
@@ -1696,6 +1789,7 @@ async function initAIChat() {
     input?.addEventListener(
         'keydown',
         event => {
+
             if (
                 event.key === 'Enter' &&
                 !event.shiftKey
@@ -1711,6 +1805,7 @@ async function initAIChat() {
     document.addEventListener(
         'keydown',
         event => {
+
             if (
                 event.key === 'Escape' &&
                 chat.classList.contains(
@@ -1727,9 +1822,11 @@ async function initAIChat() {
         თუ admin login/logout მოხდა,
         greeting განახლდეს.
     */
+
     if (db) {
         db.auth.onAuthStateChange(
             () => {
+
                 setTimeout(
                     () => {
                         detectAIAdmin();
@@ -1747,7 +1844,7 @@ async function initAIChat() {
 
 /* =========================================================
    PROJECT CARD
-========================================================= */
+   ========================================================= */
 
 function card(project) {
     const image =
@@ -1775,15 +1872,15 @@ function card(project) {
             <div class="card-body">
 
                 <div class="card-meta">
+
                     <span>
                         ${esc(project.category)}
                     </span>
 
-                    <time
-                        datetime="${esc(project.created_at)}"
-                    >
+                    <time datetime="${esc(project.created_at)}">
                         ${dateText(project.created_at)}
                     </time>
+
                 </div>
 
                 <h2>
@@ -1831,6 +1928,7 @@ async function initProjects() {
         );
     }
 
+
     const {
         data,
         error
@@ -1851,6 +1949,7 @@ async function initProjects() {
         )
         .limit(60);
 
+
     if (error) {
         status.textContent =
             neutralError(
@@ -1861,9 +1960,12 @@ async function initProjects() {
         return;
     }
 
+
     status.remove();
 
+
     const render = () => {
+
         const q =
             $('#project-search')
                 .value
@@ -1873,6 +1975,7 @@ async function initProjects() {
         const category =
             $('#category-filter')
                 .value;
+
 
         const result =
             data.filter(
@@ -1887,6 +1990,7 @@ async function initProjects() {
                     )
             );
 
+
         grid.innerHTML =
             result.length
                 ? result
@@ -1894,6 +1998,7 @@ async function initProjects() {
                     .join('')
                 : `
                     <div class="empty-state full">
+
                         ${icon('search-x')}
 
                         <h2>
@@ -1911,6 +2016,7 @@ async function initProjects() {
                                     : 'როგორც კი ადმინისტრატორი პირველ პროექტს გამოაქვეყნებს, ის აქ გამოჩნდება.'
                             }
                         </p>
+
                     </div>
                 `;
 
@@ -1936,7 +2042,7 @@ async function initProjects() {
 
 /* =========================================================
    PROJECT DETAIL
-========================================================= */
+   ========================================================= */
 
 async function initDetail() {
     const target =
@@ -1948,10 +2054,12 @@ async function initDetail() {
         );
     }
 
+
     const id =
         new URLSearchParams(
             location.search
         ).get('id');
+
 
     if (
         !id ||
@@ -1962,15 +2070,23 @@ async function initDetail() {
         );
     }
 
+
     const {
         data: p,
         error
     } = await db
         .from('projects')
         .select('*')
-        .eq('id', id)
-        .eq('published', true)
+        .eq(
+            'id',
+            id
+        )
+        .eq(
+            'published',
+            true
+        )
         .maybeSingle();
+
 
     if (
         error ||
@@ -1980,6 +2096,7 @@ async function initDetail() {
             target
         );
     }
+
 
     const image =
         p.image_url
@@ -1991,6 +2108,7 @@ async function initDetail() {
                 >
             `
             : '';
+
 
     const video =
         p.video_url
@@ -2007,12 +2125,14 @@ async function initDetail() {
                         preload="metadata"
                         src="${esc(p.video_url)}"
                     >
-                        თქვენი ბრაუზერი ვიდეოს არ უჭერს მხარს.
+                        თქვენი ბრაუზერი ვიდეოს
+                        არ უჭერს მხარს.
                     </video>
 
                 </section>
             `
             : '';
+
 
     const components =
         p.components
@@ -2032,6 +2152,7 @@ async function initDetail() {
             `
             : '';
 
+
     const how =
         p.how_it_was_made
             ? `
@@ -2050,31 +2171,38 @@ async function initDetail() {
             `
             : '';
 
+
     let code = '';
+
 
     if (
         p.code &&
         p.code.trim()
     ) {
+
         const isChemistry =
             String(p.category)
                 .toLowerCase() ===
             'chemistry';
+
 
         const sectionTitle =
             isChemistry
                 ? 'ქიმიური რეაქცია'
                 : 'Arduino Code';
 
+
         const copyText =
             isChemistry
                 ? 'ტექსტის დაკოპირება'
                 : 'კოდის დაკოპირება';
 
+
         const sectionIcon =
             isChemistry
                 ? 'flask-conical'
                 : 'braces';
+
 
         code = `
             <section class="detail-section">
@@ -2098,14 +2226,18 @@ async function initDetail() {
                 </div>
 
                 <pre>
-                    <code id="arduino-code">${esc(p.code)}</code>
+                    <code id="arduino-code">
+                        ${esc(p.code)}
+                    </code>
                 </pre>
 
             </section>
         `;
     }
 
+
     target.className = '';
+
 
     target.innerHTML = `
         <article class="detail">
@@ -2145,6 +2277,7 @@ async function initDetail() {
 
             </div>
 
+
             <div class="detail-content">
 
                 ${components}
@@ -2165,16 +2298,20 @@ async function initDetail() {
         ?.addEventListener(
             'click',
             async () => {
+
                 try {
+
                     await navigator.clipboard
                         .writeText(
                             p.code
                         );
 
+
                     const isChemistry =
                         String(p.category)
                             .toLowerCase() ===
                         'chemistry';
+
 
                     toast(
                         isChemistry
@@ -2182,13 +2319,16 @@ async function initDetail() {
                             : 'კოდი დაკოპირდა',
                         'success'
                     );
+
                 } catch {
+
                     toast(
                         'დაკოპირება ვერ მოხერხდა.'
                     );
                 }
             }
         );
+
 
     refreshIcons();
 }
@@ -2211,7 +2351,8 @@ function notFound(target) {
             </h2>
 
             <p>
-                ბმული არასწორია ან პროექტი აღარ არის გამოქვეყნებული.
+                ბმული არასწორია ან პროექტი
+                აღარ არის გამოქვეყნებული.
             </p>
 
             <a
@@ -2230,7 +2371,7 @@ function notFound(target) {
 
 /* =========================================================
    FILE UPLOADS
-========================================================= */
+   ========================================================= */
 
 const IMAGE_TYPES = [
     'image/jpeg',
@@ -2256,9 +2397,7 @@ function fileOkay(
         return true;
     }
 
-    if (
-        !types.includes(file.type)
-    ) {
+    if (!types.includes(file.type)) {
         toast(
             `${label}: ფაილის ტიპი მიუღებელია.`
         );
@@ -2266,9 +2405,7 @@ function fileOkay(
         return false;
     }
 
-    if (
-        file.size > max
-    ) {
+    if (file.size > max) {
         toast(
             `${label}: ფაილი ზედმეტად დიდია.`
         );
@@ -2292,6 +2429,7 @@ async function upload(
         return null;
     }
 
+
     if (
         !fileOkay(
             file,
@@ -2305,14 +2443,17 @@ async function upload(
         );
     }
 
+
     const clean =
         file.name.replace(
             /[^a-zA-Z0-9._-]/g,
             '_'
         );
 
+
     const path =
         `${folder}/${crypto.randomUUID()}-${clean}`;
+
 
     const {
         error
@@ -2328,15 +2469,20 @@ async function upload(
             }
         );
 
+
     if (error) {
         throw error;
     }
+
 
     const {
         data
     } = db.storage
         .from(bucket)
-        .getPublicUrl(path);
+        .getPublicUrl(
+            path
+        );
+
 
     return {
         url: data.publicUrl,
@@ -2350,6 +2496,7 @@ function storagePath(
     bucket
 ) {
     try {
+
         const marker =
             `/storage/v1/object/public/${bucket}/`;
 
@@ -2359,7 +2506,8 @@ function storagePath(
         return index >= 0
             ? decodeURIComponent(
                 url.slice(
-                    index + marker.length
+                    index +
+                    marker.length
                 )
             )
             : null;
@@ -2381,11 +2529,14 @@ async function removeStored(
         );
 
     if (path) {
+
         const {
             error
         } = await db.storage
             .from(bucket)
-            .remove([path]);
+            .remove([
+                path
+            ]);
 
         if (error) {
             console.warn(
@@ -2399,7 +2550,7 @@ async function removeStored(
 
 /* =========================================================
    ADMIN
-========================================================= */
+   ========================================================= */
 
 async function isAdmin(user) {
     if (
@@ -2408,6 +2559,7 @@ async function isAdmin(user) {
     ) {
         return null;
     }
+
 
     const {
         data,
@@ -2421,6 +2573,7 @@ async function isAdmin(user) {
         )
         .maybeSingle();
 
+
     if (
         error ||
         !data
@@ -2428,12 +2581,14 @@ async function isAdmin(user) {
         return null;
     }
 
+
     return data;
 }
 
 
 async function initAdmin() {
     if (!db) {
+
         $('#auth-panel')
             .querySelector('form')
             .hidden = true;
@@ -2445,6 +2600,7 @@ async function initAdmin() {
         return;
     }
 
+
     const {
         data: {
             session
@@ -2452,11 +2608,13 @@ async function initAdmin() {
     } = await db.auth
         .getSession();
 
+
     if (session) {
         await showDashboard(
             session.user
         );
     }
+
 
     $('#login-form')
         .addEventListener(
@@ -2464,11 +2622,13 @@ async function initAdmin() {
             login
         );
 
+
     $('#logout-button')
         ?.addEventListener(
             'click',
             logout
         );
+
 
     $('#new-project-button')
         ?.addEventListener(
@@ -2476,11 +2636,13 @@ async function initAdmin() {
             () => openEditor()
         );
 
+
     $('#cancel-edit')
         ?.addEventListener(
             'click',
             closeEditor
         );
+
 
     $('#project-form')
         ?.addEventListener(
@@ -2488,16 +2650,19 @@ async function initAdmin() {
             saveProject
         );
 
+
     $('#image-file')
         ?.addEventListener(
             'change',
             imagePreview
         );
 
+
     $('#video-file')
         ?.addEventListener(
             'change',
             () => {
+
                 $('#video-name')
                     .textContent =
                     $('#video-file')
@@ -2507,10 +2672,13 @@ async function initAdmin() {
             }
         );
 
+
     const categorySelect =
         $('#category');
 
+
     if (categorySelect) {
+
         categorySelect.addEventListener(
             'change',
             updateCodeFieldLabel
@@ -2519,10 +2687,13 @@ async function initAdmin() {
         updateCodeFieldLabel();
     }
 
+
     bindMeetingForm();
+
 
     db.auth.onAuthStateChange(
         (_event, session) => {
+
             if (!session) {
                 showLogin();
             }
@@ -2538,6 +2709,7 @@ function updateCodeFieldLabel() {
     const codeInput =
         $('#code');
 
+
     if (
         !category ||
         !codeInput
@@ -2545,17 +2717,21 @@ function updateCodeFieldLabel() {
         return;
     }
 
+
     const label =
         codeInput.closest('label');
+
 
     if (!label) {
         return;
     }
 
+
     const isChemistry =
         String(category.value)
             .toLowerCase() ===
         'chemistry';
+
 
     const textNodes =
         Array.from(
@@ -2567,23 +2743,30 @@ function updateCodeFieldLabel() {
                     Node.TEXT_NODE
             );
 
+
     const titleNode =
         textNodes.find(
             node =>
                 node.textContent.trim()
         );
 
+
     if (titleNode) {
+
         titleNode.textContent =
             isChemistry
                 ? ` ქიმიური რეაქცია `
                 : ` Arduino Code `;
     }
 
+
     if (isChemistry) {
+
         codeInput.placeholder =
             'მაგ.: რეაქციის ფორმულა, ქიმიური განტოლება ან რეაქციის აღწერა...';
+
     } else {
+
         codeInput.placeholder =
             'ჩასვით Arduino კოდი აქ...';
     }
@@ -2601,14 +2784,17 @@ async function login(event) {
             'button'
         );
 
+
     $('#login-error')
         .textContent = '';
+
 
     setBusy(
         button,
         true,
         'იტვირთება...'
     );
+
 
     const {
         data,
@@ -2625,10 +2811,12 @@ async function login(event) {
                     .value
         });
 
+
     if (
         error ||
         !data.user
     ) {
+
         $('#login-error')
             .textContent =
             'მონაცემები არასწორია';
@@ -2641,13 +2829,17 @@ async function login(event) {
         return;
     }
 
+
     const admin =
         await isAdmin(
             data.user
         );
 
+
     if (!admin) {
-        await db.auth.signOut();
+
+        await db.auth
+            .signOut();
 
         $('#login-error')
             .textContent =
@@ -2660,6 +2852,7 @@ async function login(event) {
 
         return;
     }
+
 
     await showDashboard(
         data.user,
@@ -2674,27 +2867,37 @@ async function showDashboard(
 ) {
     const admin =
         knownAdmin ||
-        await isAdmin(user);
+        await isAdmin(
+            user
+        );
+
 
     if (!admin) {
+
         if (user) {
-            await db.auth.signOut();
+            await db.auth
+                .signOut();
         }
 
         return showLogin();
     }
 
+
     $('#auth-panel')
         .hidden = true;
 
+
     $('#dashboard')
         .hidden = false;
+
 
     $('#admin-name')
         .textContent =
         admin.username;
 
+
     refreshIcons();
+
 
     await Promise.all([
         loadAdminProjects(),
@@ -2715,7 +2918,8 @@ function showLogin() {
 
 
 async function logout() {
-    await db.auth.signOut();
+    await db.auth
+        .signOut();
 
     aiAdminGreeting = '';
 
@@ -2734,21 +2938,27 @@ function setBusy(
         return;
     }
 
+
     button.disabled =
         busy;
 
+
     if (busy) {
+
         button.dataset.label =
             button.innerHTML;
 
         button.textContent =
             text;
+
     } else if (
         button.dataset.label
     ) {
+
         button.innerHTML =
             button.dataset.label;
     }
+
 
     refreshIcons();
 }
@@ -2756,7 +2966,7 @@ function setBusy(
 
 /* =========================================================
    ADMIN PROJECTS
-========================================================= */
+   ========================================================= */
 
 let adminProjects = [];
 
@@ -2768,6 +2978,7 @@ async function loadAdminProjects() {
     const list =
         $('#admin-project-list');
 
+
     if (
         !status ||
         !list
@@ -2775,9 +2986,11 @@ async function loadAdminProjects() {
         return;
     }
 
+
     status.hidden = false;
 
     list.innerHTML = '';
+
 
     const {
         data,
@@ -2794,7 +3007,9 @@ async function loadAdminProjects() {
             }
         );
 
+
     if (error) {
+
         status.textContent =
             neutralError(
                 error,
@@ -2804,15 +3019,18 @@ async function loadAdminProjects() {
         return;
     }
 
+
     adminProjects =
         data || [];
 
-    status.hidden =
-        true;
+
+    status.hidden = true;
+
 
     $('#admin-count')
         .textContent =
         `${adminProjects.length} პროექტი`;
+
 
     list.innerHTML =
         adminProjects.length
@@ -2909,7 +3127,8 @@ async function loadAdminProjects() {
                     </h2>
 
                     <p>
-                        დაიწყეთ პირველი რეალური პროექტის დამატებით.
+                        დაიწყეთ პირველი რეალური
+                        პროექტის დამატებით.
                     </p>
 
                 </div>
@@ -2961,33 +3180,40 @@ async function loadAdminProjects() {
                 )
         );
 
+
     refreshIcons();
 }
 
 
 /* =========================================================
    PROJECT EDITOR
-========================================================= */
+   ========================================================= */
 
 function openEditor(p) {
     const form =
         $('#project-form');
 
+
     form.reset();
+
 
     $('#image-preview')
         .hidden = true;
+
 
     $('#image-name')
         .textContent =
         'ფაილი არჩეული არ არის';
 
+
     $('#video-name')
         .textContent =
         'ფაილი არჩეული არ არის';
 
+
     $('#form-error')
         .textContent = '';
+
 
     $('#editor-title')
         .textContent =
@@ -2995,54 +3221,70 @@ function openEditor(p) {
             ? 'პროექტის რედაქტირება'
             : 'ახალი პროექტი';
 
+
     $('#save-project')
         .innerHTML =
         p
             ? `ცვლილებების შენახვა ${icon('save')}`
             : `პროექტის დამატება ${icon('save')}`;
 
+
     if (p) {
+
         $('#edit-id')
-            .value = p.id;
+            .value =
+            p.id;
 
         $('#title')
-            .value = p.title;
+            .value =
+            p.title;
 
         $('#category')
-            .value = p.category;
+            .value =
+            p.category;
 
         $('#author')
-            .value = p.author;
+            .value =
+            p.author;
 
         $('#published')
-            .checked = p.published;
+            .checked =
+            p.published;
 
         $('#description')
-            .value = p.description;
+            .value =
+            p.description;
 
         $('#components')
             .value =
-            p.components || '';
+            p.components ||
+            '';
 
         $('#how-made')
             .value =
-            p.how_it_was_made || '';
+            p.how_it_was_made ||
+            '';
 
         $('#code')
             .value =
-            p.code || '';
+            p.code ||
+            '';
     }
+
 
     updateCodeFieldLabel();
 
+
     $('#project-editor')
         .hidden = false;
+
 
     $('#project-editor')
         .scrollIntoView({
             behavior: 'smooth',
             block: 'start'
         });
+
 
     refreshIcons();
 }
@@ -3063,10 +3305,12 @@ function imagePreview() {
         $('#image-file')
             .files[0];
 
+
     $('#image-name')
         .textContent =
         file?.name ||
         'ფაილი არჩეული არ არის';
+
 
     if (
         file &&
@@ -3077,6 +3321,7 @@ function imagePreview() {
             'სურათი'
         )
     ) {
+
         const preview =
             $('#image-preview');
 
@@ -3092,33 +3337,41 @@ function imagePreview() {
 
 /* =========================================================
    SAVE PROJECT
-========================================================= */
+   ========================================================= */
 
 async function saveProject(event) {
     event.preventDefault();
 
+
     const button =
         $('#save-project');
+
 
     const id =
         $('#edit-id')
             .value;
 
+
     const old =
         adminProjects.find(
-            p => p.id === id
+            p =>
+                p.id === id
         );
+
 
     const image =
         $('#image-file')
             .files[0];
 
+
     const video =
         $('#video-file')
             .files[0];
 
+
     $('#form-error')
         .textContent = '';
+
 
     if (
         !fileOkay(
@@ -3137,22 +3390,29 @@ async function saveProject(event) {
         return;
     }
 
+
     setBusy(
         button,
         true,
         'ინახება...'
     );
 
+
     let uploads = [];
 
+
     try {
+
         const folder =
             id ||
             crypto.randomUUID();
 
+
         if (image) {
+
             uploads.push([
                 'image',
+
                 await upload(
                     image,
                     'project-images',
@@ -3164,9 +3424,12 @@ async function saveProject(event) {
             ]);
         }
 
+
         if (video) {
+
             uploads.push([
                 'video',
+
                 await upload(
                     video,
                     'project-videos',
@@ -3178,7 +3441,9 @@ async function saveProject(event) {
             ]);
         }
 
+
         const value = {
+
             title:
                 $('#title')
                     .value
@@ -3221,69 +3486,92 @@ async function saveProject(event) {
                     .checked
         };
 
+
         const img =
             uploads.find(
-                x => x[0] === 'image'
+                x =>
+                    x[0] ===
+                    'image'
             )?.[1];
+
 
         const vid =
             uploads.find(
-                x => x[0] === 'video'
+                x =>
+                    x[0] ===
+                    'video'
             )?.[1];
+
 
         if (img) {
             value.image_url =
                 img.url;
         }
 
+
         if (vid) {
             value.video_url =
                 vid.url;
         }
 
+
         let error;
 
+
         if (id) {
+
             ({
                 error
-            } = await db
-                .from('projects')
-                .update(value)
-                .eq(
-                    'id',
-                    id
-                ));
+            } =
+                await db
+                    .from('projects')
+                    .update(value)
+                    .eq(
+                        'id',
+                        id
+                    ));
+
         } else {
+
             ({
                 error
-            } = await db
-                .from('projects')
-                .insert(value));
+            } =
+                await db
+                    .from('projects')
+                    .insert(
+                        value
+                    ));
         }
+
 
         if (error) {
             throw error;
         }
 
+
         if (
             img &&
             old?.image_url
         ) {
+
             await removeStored(
                 old.image_url,
                 'project-images'
             );
         }
 
+
         if (
             vid &&
             old?.video_url
         ) {
+
             await removeStored(
                 old.video_url,
                 'project-videos'
             );
         }
+
 
         toast(
             id
@@ -3292,20 +3580,30 @@ async function saveProject(event) {
             'success'
         );
 
+
         closeEditor();
 
         await loadAdminProjects();
 
     } catch (error) {
-        console.error(error);
+
+        console.error(
+            error
+        );
+
 
         for (
-            const [kind, file]
+            const [
+                kind,
+                file
+            ]
             of uploads
         ) {
+
             if (!file?.url) {
                 continue;
             }
+
 
             await removeStored(
                 file.url,
@@ -3315,6 +3613,7 @@ async function saveProject(event) {
             );
         }
 
+
         $('#form-error')
             .textContent =
             neutralError(
@@ -3323,6 +3622,7 @@ async function saveProject(event) {
             );
 
     } finally {
+
         setBusy(
             button,
             false
@@ -3334,12 +3634,15 @@ async function saveProject(event) {
 async function togglePublished(id) {
     const p =
         adminProjects.find(
-            x => x.id === id
+            x =>
+                x.id === id
         );
+
 
     if (!p) {
         return;
     }
+
 
     const {
         error
@@ -3354,11 +3657,14 @@ async function togglePublished(id) {
             id
         );
 
+
     if (error) {
+
         return toast(
             'სტატუსის შეცვლა ვერ მოხერხდა.'
         );
     }
+
 
     toast(
         p.published
@@ -3367,6 +3673,7 @@ async function togglePublished(id) {
         'success'
     );
 
+
     loadAdminProjects();
 }
 
@@ -3374,8 +3681,10 @@ async function togglePublished(id) {
 async function deleteProject(id) {
     const p =
         adminProjects.find(
-            x => x.id === id
+            x =>
+                x.id === id
         );
+
 
     if (
         !p ||
@@ -3385,6 +3694,7 @@ async function deleteProject(id) {
     ) {
         return;
     }
+
 
     const {
         error
@@ -3396,11 +3706,14 @@ async function deleteProject(id) {
             id
         );
 
+
     if (error) {
+
         return toast(
             'პროექტის წაშლა ვერ მოხერხდა.'
         );
     }
+
 
     await Promise.all([
         removeStored(
@@ -3414,10 +3727,12 @@ async function deleteProject(id) {
         )
     ]);
 
+
     toast(
         'პროექტი წაიშალა.',
         'success'
     );
+
 
     loadAdminProjects();
 }
@@ -3425,7 +3740,7 @@ async function deleteProject(id) {
 
 /* =========================================================
    CLUB MEETING
-========================================================= */
+   ========================================================= */
 
 const GEORGIAN_WEEKDAYS = [
     'კვირა',
@@ -3443,10 +3758,12 @@ function meetingDay(dateValue) {
         return '—';
     }
 
+
     const d =
         new Date(
             `${dateValue}T12:00:00`
         );
+
 
     if (
         Number.isNaN(
@@ -3455,6 +3772,7 @@ function meetingDay(dateValue) {
     ) {
         return '—';
     }
+
 
     return GEORGIAN_WEEKDAYS[
         d.getDay()
@@ -3469,10 +3787,12 @@ function meetingDateText(
         return '—';
     }
 
+
     const d =
         new Date(
             `${dateValue}T12:00:00`
         );
+
 
     if (
         Number.isNaN(
@@ -3481,6 +3801,7 @@ function meetingDateText(
     ) {
         return dateValue;
     }
+
 
     return new Intl.DateTimeFormat(
         'ka-GE',
@@ -3500,11 +3821,13 @@ function meetingTimeText(
         return '—';
     }
 
+
     const m =
         String(timeValue)
             .match(
                 /^(\d{2}):(\d{2})/
             );
+
 
     return m
         ? `${m[1]}:${m[2]}`
@@ -3522,6 +3845,7 @@ async function getMeeting() {
                 )
         };
     }
+
 
     return await db
         .from('club_meeting')
@@ -3542,11 +3866,14 @@ function renderMeetingContent(
     const target =
         $('#meeting-content');
 
+
     if (!target) {
         return;
     }
 
+
     if (!meeting) {
+
         target.innerHTML = `
             <div class="meeting-empty">
 
@@ -3564,7 +3891,9 @@ function renderMeetingContent(
 
             </div>
         `;
+
     } else {
+
         target.innerHTML = `
             <div class="meeting-date-main">
                 ${esc(
@@ -3577,6 +3906,7 @@ function renderMeetingContent(
             <div class="meeting-detail-row">
 
                 <div>
+
                     <span>
                         დღე
                     </span>
@@ -3588,9 +3918,11 @@ function renderMeetingContent(
                             )
                         )}
                     </strong>
+
                 </div>
 
                 <div>
+
                     <span>
                         დრო
                     </span>
@@ -3602,11 +3934,13 @@ function renderMeetingContent(
                             )
                         )}
                     </strong>
+
                 </div>
 
             </div>
         `;
     }
+
 
     refreshIcons();
 }
@@ -3618,13 +3952,20 @@ async function loadPublicMeeting() {
         error
     } = await getMeeting();
 
+
     if (error) {
-        console.error(error);
+
+        console.error(
+            error
+        );
+
 
         const target =
             $('#meeting-content');
 
+
         if (target) {
+
             target.innerHTML = `
                 <div class="meeting-empty">
 
@@ -3647,6 +3988,7 @@ async function loadPublicMeeting() {
         return;
     }
 
+
     renderMeetingContent(
         data
     );
@@ -3657,9 +3999,11 @@ function openMeetingModal() {
     const modal =
         $('#meeting-modal');
 
+
     if (!modal) {
         return;
     }
+
 
     modal.hidden = false;
 
@@ -3668,11 +4012,14 @@ function openMeetingModal() {
         'false'
     );
 
+
     document.body.classList.add(
         'modal-open'
     );
 
+
     loadPublicMeeting();
+
 
     setTimeout(
         () => {
@@ -3688,9 +4035,11 @@ function closeMeetingModal() {
     const modal =
         $('#meeting-modal');
 
+
     if (!modal) {
         return;
     }
+
 
     modal.hidden = true;
 
@@ -3698,6 +4047,7 @@ function closeMeetingModal() {
         'aria-hidden',
         'true'
     );
+
 
     document.body.classList.remove(
         'modal-open'
@@ -3709,20 +4059,24 @@ function initMeetingPublic() {
     const button =
         $('#meeting-button');
 
+
     if (!button) {
         return;
     }
+
 
     button.addEventListener(
         'click',
         openMeetingModal
     );
 
+
     $('#meeting-close')
         ?.addEventListener(
             'click',
             closeMeetingModal
         );
+
 
     document
         .querySelectorAll(
@@ -3736,9 +4090,11 @@ function initMeetingPublic() {
                 )
         );
 
+
     document.addEventListener(
         'keydown',
         e => {
+
             if (
                 e.key === 'Escape' &&
                 $('#meeting-modal') &&
@@ -3755,25 +4111,33 @@ async function loadAdminMeeting() {
     const status =
         $('#meeting-admin-status');
 
+
     if (!status) {
         return;
     }
+
 
     const {
         data,
         error
     } = await getMeeting();
 
+
     if (error) {
+
         status.textContent =
             'ჩატვირთვა ვერ მოხერხდა';
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         return;
     }
 
+
     if (data) {
+
         $('#meeting-date')
             .value =
             data.meeting_date ||
@@ -3802,6 +4166,7 @@ async function loadAdminMeeting() {
             'meeting-admin-status published';
 
     } else {
+
         status.textContent =
             'არ არის გამოქვეყნებული';
 
@@ -3819,14 +4184,17 @@ function bindMeetingForm() {
     const form =
         $('#meeting-form');
 
+
     if (!form) {
         return;
     }
+
 
     $('#meeting-date')
         ?.addEventListener(
             'input',
             e => {
+
                 $('#meeting-day-preview')
                     .textContent =
                     meetingDay(
@@ -3835,10 +4203,12 @@ function bindMeetingForm() {
             }
         );
 
+
     form.addEventListener(
         'submit',
         saveMeeting
     );
+
 
     $('#clear-meeting')
         ?.addEventListener(
@@ -3851,36 +4221,45 @@ function bindMeetingForm() {
 async function saveMeeting(event) {
     event.preventDefault();
 
+
     if (!db) {
         return;
     }
 
+
     const button =
         $('#save-meeting');
 
+
     const errorTarget =
         $('#meeting-form-error');
+
 
     const date =
         $('#meeting-date')
             .value;
 
+
     const time =
         $('#meeting-time')
             .value;
 
+
     errorTarget.textContent =
         '';
+
 
     if (
         !date ||
         !time
     ) {
+
         errorTarget.textContent =
             'აირჩიეთ თარიღი და დრო.';
 
         return;
     }
+
 
     setBusy(
         button,
@@ -3888,13 +4267,17 @@ async function saveMeeting(event) {
         'ქვეყნდება...'
     );
 
+
     try {
+
         const {
             data: {
                 user
             }
-        } = await db.auth
-            .getUser();
+        } =
+            await db.auth
+                .getUser();
+
 
         if (!user) {
             throw new Error(
@@ -3902,38 +4285,40 @@ async function saveMeeting(event) {
             );
         }
 
+
         const {
             error
-        } = await db
-            .from('club_meeting')
-            .upsert(
-                {
-                    id: 1,
-                    meeting_date:
-                        date,
-                    meeting_time:
-                        time,
-                    updated_by:
-                        user.id
-                },
-                {
-                    onConflict:
-                        'id'
-                }
-            );
+        } =
+            await db
+                .from('club_meeting')
+                .upsert(
+                    {
+                        id: 1,
+                        meeting_date: date,
+                        meeting_time: time,
+                        updated_by: user.id
+                    },
+                    {
+                        onConflict: 'id'
+                    }
+                );
+
 
         if (error) {
             throw error;
         }
+
 
         toast(
             'კლუბის შეკრება გამოქვეყნდა.',
             'success'
         );
 
+
         await loadAdminMeeting();
 
     } catch (error) {
+
         errorTarget.textContent =
             neutralError(
                 error,
@@ -3941,6 +4326,7 @@ async function saveMeeting(event) {
             );
 
     } finally {
+
         setBusy(
             button,
             false
@@ -3954,6 +4340,7 @@ async function clearMeeting() {
         return;
     }
 
+
     if (
         !confirm(
             'ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?'
@@ -3961,6 +4348,7 @@ async function clearMeeting() {
     ) {
         return;
     }
+
 
     const {
         error
@@ -3972,11 +4360,14 @@ async function clearMeeting() {
             1
         );
 
+
     if (error) {
+
         return toast(
             'შეკრების წაშლა ვერ მოხერხდა.'
         );
     }
+
 
     $('#meeting-date')
         .value = '';
@@ -3985,8 +4376,7 @@ async function clearMeeting() {
         .value = '';
 
     $('#meeting-day-preview')
-        .textContent =
-        '—';
+        .textContent = '—';
 
     $('#meeting-admin-status')
         .textContent =
@@ -3995,6 +4385,7 @@ async function clearMeeting() {
     $('#meeting-admin-status')
         .className =
         'meeting-admin-status';
+
 
     toast(
         'შეკრება გაუქმდა.',
@@ -4005,17 +4396,20 @@ async function clearMeeting() {
 
 /* =========================================================
    PASSWORD RESET
-========================================================= */
+   ========================================================= */
 
 async function initPasswordReset() {
     const form =
         $('#reset-password-form');
 
+
     if (!form) {
         return;
     }
 
+
     if (!db) {
+
         $('#reset-error')
             .textContent =
             'Supabase ჯერ არ არის კონფიგურირებული.';
@@ -4027,62 +4421,78 @@ async function initPasswordReset() {
         return;
     }
 
+
     form.addEventListener(
         'submit',
         async event => {
+
             event.preventDefault();
+
 
             const error =
                 $('#reset-error');
+
 
             const password =
                 $('#new-password')
                     .value;
 
+
             const confirmPassword =
                 $('#confirm-password')
                     .value;
+
 
             const button =
                 form.querySelector(
                     'button'
                 );
 
+
             error.textContent =
                 '';
+
 
             if (
                 password !==
                 confirmPassword
             ) {
+
                 error.textContent =
                     'პაროლები ერთმანეთს არ ემთხვევა.';
 
                 return;
             }
 
+
             if (
                 password.length < 10
             ) {
+
                 error.textContent =
                     'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.';
 
                 return;
             }
 
+
             const {
                 data: {
                     session
                 }
-            } = await db.auth
-                .getSession();
+            } =
+                await db.auth
+                    .getSession();
+
 
             if (!session) {
+
                 error.textContent =
                     'აღდგენის ბმული არასწორია ან ვადა გაუვიდა. მოითხოვეთ ახალი ბმული.';
 
                 return;
             }
+
 
             setBusy(
                 button,
@@ -4090,21 +4500,28 @@ async function initPasswordReset() {
                 'ინახება...'
             );
 
+
             const {
                 error: updateError
-            } = await db.auth
-                .updateUser({
-                    password
-                });
+            } =
+                await db.auth
+                    .updateUser({
+                        password
+                    });
+
 
             if (updateError) {
+
                 error.textContent =
                     'პაროლის შეცვლა ვერ მოხერხდა. მოითხოვეთ ახალი ბმული.';
+
             } else {
+
                 toast(
                     'პაროლი წარმატებით შეიცვალა.',
                     'success'
                 );
+
 
                 setTimeout(
                     () => {
@@ -4114,6 +4531,7 @@ async function initPasswordReset() {
                     900
                 );
             }
+
 
             setBusy(
                 button,
@@ -4126,32 +4544,42 @@ async function initPasswordReset() {
 
 /* =========================================================
    INITIALIZATION
-========================================================= */
+   ========================================================= */
 
 initChrome();
 
 
-if (page === 'home') {
+if (
+    page === 'home'
+) {
     initMeetingPublic();
     initAIChat();
 }
 
 
-if (page === 'projects') {
+if (
+    page === 'projects'
+) {
     initProjects();
 }
 
 
-if (page === 'detail') {
+if (
+    page === 'detail'
+) {
     initDetail();
 }
 
 
-if (page === 'admin') {
+if (
+    page === 'admin'
+) {
     initAdmin();
 }
 
 
-if (page === 'reset') {
+if (
+    page === 'reset'
+) {
     initPasswordReset();
 }
