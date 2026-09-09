@@ -16,7 +16,8 @@ const db = supabaseIsConfigured
 
 const page = document.body.dataset.page
 
-const $ = (s, root = document) => root.querySelector(s)
+const $ = (s, root = document) =>
+  root.querySelector(s)
 
 const esc = (value = '') =>
   String(value).replace(
@@ -30,7 +31,8 @@ const esc = (value = '') =>
     }[c])
   )
 
-const icon = name => `<i data-lucide="${name}"></i>`
+const icon = name =>
+  `<i data-lucide="${name}"></i>`
 
 function refreshIcons() {
   window.lucide?.createIcons()
@@ -62,7 +64,9 @@ function dateText(value) {
     {
       dateStyle: 'medium'
     }
-  ).format(new Date(value))
+  ).format(
+    new Date(value)
+  )
 }
 
 function neutralError(
@@ -99,7 +103,8 @@ function initChrome() {
     .querySelectorAll('[data-year]')
     .forEach(
       el => {
-        el.textContent = new Date().getFullYear()
+        el.textContent =
+          new Date().getFullYear()
       }
     )
 
@@ -115,7 +120,8 @@ function initChrome() {
           return
         }
 
-        const open = nav.classList.toggle('open')
+        const open =
+          nav.classList.toggle('open')
 
         button.setAttribute(
           'aria-expanded',
@@ -142,7 +148,6 @@ const AI_SYSTEM_CONTEXT = `
 ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
 
 საიტის ძირითადი ინფორმაცია:
-
 - ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
 - პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
 - ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
@@ -151,7 +156,6 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
 
 კლუბის წევრები არიან:
-
 - ზაზა მჭედლიძე — აქტიური წევრია.
 - თეკლა შველიძე — აქტიური წევრია.
 - ანასტასია ხონელიძე — აქტიური წევრია.
@@ -163,7 +167,6 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
 
 პასუხის წესები:
-
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
 2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
@@ -195,7 +198,9 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: { session }
+      data: {
+        session
+      }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -203,16 +208,18 @@ async function detectAIAdmin() {
       return
     }
 
-    const admin = await isAdmin(session.user)
+    const admin =
+      await isAdmin(session.user)
 
     if (!admin?.username) {
       aiAdminGreeting = ''
       return
     }
 
-    const username = String(admin.username)
-      .trim()
-      .toLowerCase()
+    const username =
+      String(admin.username)
+        .trim()
+        .toLowerCase()
 
     if (
       username === 'zaza' ||
@@ -242,7 +249,8 @@ async function detectAIAdmin() {
 }
 
 function applyAIGreeting(reply) {
-  const clean = String(reply || '').trim()
+  const clean =
+    String(reply || '').trim()
 
   if (
     !aiAdminGreeting ||
@@ -254,7 +262,9 @@ function applyAIGreeting(reply) {
   const greetingPattern =
     /^(ბატონო\s+ზაზა|ქალბატონო\s+თეკლა)\s*[,!:—-]?\s*/i
 
-  if (greetingPattern.test(clean)) {
+  if (
+    greetingPattern.test(clean)
+  ) {
     return clean
   }
 
@@ -265,15 +275,18 @@ function addAIMessage(
   type,
   content
 ) {
-  const messages = $('#ai-chat-messages')
+  const messages =
+    $('#ai-chat-messages')
 
   if (!messages) {
     return null
   }
 
-  const message = document.createElement('div')
+  const message =
+    document.createElement('div')
 
-  message.className = `ai-message ${type}`
+  message.className =
+    `ai-message ${type}`
 
   if (type === 'assistant') {
     message.innerHTML = `
@@ -320,51 +333,59 @@ function formatAIResponse(text) {
     return '<p>პასუხი ვერ მივიღე.</p>'
   }
 
-  let source = String(text)
-    .replace(
-      /^\s*svg\s*$/gim,
-      ''
-    )
-    .trim()
+  let source =
+    String(text)
+      .replace(
+        /^\s*svg\s*$/gim,
+        ''
+      )
+      .trim()
 
   const codeBlocks = []
 
-  source = source.replace(
-    /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
-    (_, code) => {
-      const index = codeBlocks.length
+  source =
+    source.replace(
+      /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+      (_, code) => {
+        const index =
+          codeBlocks.length
 
-      codeBlocks.push(
-        esc(code.trim())
-      )
+        codeBlocks.push(
+          esc(code.trim())
+        )
 
-      return `@@CODEBLOCK_${index}@@`
-    }
-  )
+        return `@@CODEBLOCK_${index}@@`
+      }
+    )
 
   let safe = esc(source)
 
-  safe = safe.replace(
-    /\*\*\*(.+?)\*\*\*/g,
-    '<strong><em>$1</em></strong>'
-  )
+  safe =
+    safe.replace(
+      /\*\*\*(.+?)\*\*\*/g,
+      '<strong><em>$1</em></strong>'
+    )
 
-  safe = safe.replace(
-    /\*\*(.+?)\*\*/g,
-    '<strong>$1</strong>'
-  )
+  safe =
+    safe.replace(
+      /\*\*(.+?)\*\*/g,
+      '<strong>$1</strong>'
+    )
 
-  safe = safe.replace(
-    /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
-    '<em>$1</em>'
-  )
+  safe =
+    safe.replace(
+      /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+      '<em>$1</em>'
+    )
 
-  safe = safe.replace(
-    /`([^`\n]+)`/g,
-    '<code class="ai-inline-code">$1</code>'
-  )
+  safe =
+    safe.replace(
+      /`([^`\n]+)`/g,
+      '<code class="ai-inline-code">$1</code>'
+    )
 
-  const lines = safe.split(/\r?\n/)
+  const lines =
+    safe.split(/\r?\n/)
 
   let html = ''
   let paragraph = []
@@ -387,9 +408,10 @@ function formatAIResponse(text) {
       return
     }
 
-    const content = paragraph
-      .join(' ')
-      .trim()
+    const content =
+      paragraph
+        .join(' ')
+        .trim()
 
     if (content) {
       html += `
@@ -403,7 +425,8 @@ function formatAIResponse(text) {
   }
 
   for (const rawLine of lines) {
-    const line = rawLine.trim()
+    const line =
+      rawLine.trim()
 
     if (!line) {
       flushParagraph()
@@ -516,9 +539,7 @@ function formatAIResponse(text) {
 
       if (listType !== 'ul') {
         closeList()
-
-        html += '<ul class="ai-list>'
-
+        html += '<ul class="ai-list">'
         listType = 'ul'
       }
 
@@ -541,9 +562,7 @@ function formatAIResponse(text) {
 
       if (listType !== 'ol') {
         closeList()
-
         html += '<ol class="ai-ordered-list">'
-
         listType = 'ol'
       }
 
@@ -557,7 +576,6 @@ function formatAIResponse(text) {
     }
 
     closeList()
-
     paragraph.push(line)
   }
 
@@ -571,7 +589,8 @@ function formatAIResponse(text) {
 }
 
 function addAITyping() {
-  const messages = $('#ai-chat-messages')
+  const messages =
+    $('#ai-chat-messages')
 
   if (!messages) {
     return null
@@ -616,13 +635,15 @@ function getAIErrorStatus(error) {
     return Number(error.status)
   }
 
-  const message = String(
-    error?.message || ''
-  )
+  const message =
+    String(
+      error?.message || ''
+    )
 
-  const match = message.match(
-    /\b(400|401|403|404|408|409|429|500|502|503|504)\b/
-  )
+  const match =
+    message.match(
+      /\b(400|401|403|404|408|409|429|500|502|503|504)\b/
+    )
 
   return match
     ? Number(match[1])
@@ -630,9 +651,10 @@ function getAIErrorStatus(error) {
 }
 
 function isAIQuotaError(error) {
-  const message = String(
-    error?.message || ''
-  ).toLowerCase()
+  const message =
+    String(
+      error?.message || ''
+    ).toLowerCase()
 
   const quotaPatterns = [
     'quota exceeded',
@@ -657,9 +679,10 @@ function isAIQuotaError(error) {
 }
 
 function isAIModelError(error) {
-  const message = String(
-    error?.message || ''
-  ).toLowerCase()
+  const message =
+    String(
+      error?.message || ''
+    ).toLowerCase()
 
   const modelPatterns = [
     'model not found',
@@ -848,27 +871,30 @@ async function askAI(question) {
     )
   }
 
-  const cleanQuestion = String(question)
-    .trim()
-    .slice(0, 1000)
+  const cleanQuestion =
+    String(question)
+      .trim()
+      .slice(0, 1000)
 
   if (!cleanQuestion) {
     return null
   }
 
-  const history = aiHistory
-    .slice(-8)
-    .map(
-      message => ({
-        role:
-          message.role === 'assistant'
-            ? 'assistant'
-            : 'user',
-        text: String(
-          message.content || ''
-        ).slice(0, 1800)
-      })
-    )
+  const history =
+    aiHistory
+      .slice(-8)
+      .map(
+        message => ({
+          role:
+            message.role === 'assistant'
+              ? 'assistant'
+              : 'user',
+          text:
+            String(
+              message.content || ''
+            ).slice(0, 1800)
+        })
+      )
 
   let authorizationToken =
     SUPABASE_ANON_KEY
@@ -876,7 +902,9 @@ async function askAI(question) {
   if (db) {
     try {
       const {
-        data: { session }
+        data: {
+          session
+        }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -894,37 +922,30 @@ async function askAI(question) {
   let response
 
   try {
-    response = await fetch(
-      AI_FUNCTION_URL,
-      {
-        method: 'POST',
-
-        headers: {
-          'Content-Type':
-            'application/json',
-
-          'Authorization':
-            `Bearer ${authorizationToken}`,
-
-          'apikey':
-            SUPABASE_ANON_KEY
-        },
-
-        body: JSON.stringify({
-          message: cleanQuestion,
-          history,
-          context:
-            AI_SYSTEM_CONTEXT,
-          adminGreeting:
-            aiAdminGreeting
-        })
-      }
-    )
+    response =
+      await fetch(
+        AI_FUNCTION_URL,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authorizationToken}`,
+            'apikey': SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({
+            message: cleanQuestion,
+            history,
+            context: AI_SYSTEM_CONTEXT,
+            adminGreeting: aiAdminGreeting
+          })
+        }
+      )
   } catch (networkError) {
-    const error = new Error(
-      networkError?.message ||
-      'Network error'
-    )
+    const error =
+      new Error(
+        networkError?.message ||
+        'Network error'
+      )
 
     error.status = 0
 
@@ -934,7 +955,8 @@ async function askAI(question) {
   let data = null
 
   try {
-    data = await response.json()
+    data =
+      await response.json()
   } catch {
     data = null
   }
@@ -946,14 +968,17 @@ async function askAI(question) {
       data?.details ||
       `AI request failed with status ${response.status}`
 
-    const error = new Error(
-      String(backendMessage)
-    )
+    const error =
+      new Error(
+        String(backendMessage)
+      )
 
     error.status =
       response.status
 
-    error.backendData = data
+    error.backendData =
+      data
+
     error.backendStatus =
       response.status
 
@@ -965,33 +990,38 @@ async function askAI(question) {
     !data?.reply &&
     !data?.text
   ) {
-    const error = new Error(
-      String(data.error)
-    )
+    const error =
+      new Error(
+        String(data.error)
+      )
 
     error.status =
       response.status
 
-    error.backendData = data
+    error.backendData =
+      data
 
     throw error
   }
 
-  const reply = String(
-    data?.reply ||
-    data?.text ||
-    ''
-  ).trim()
+  const reply =
+    String(
+      data?.reply ||
+      data?.text ||
+      ''
+    ).trim()
 
   if (!reply) {
-    const error = new Error(
-      'AI-მ ცარიელი პასუხი დააბრუნა.'
-    )
+    const error =
+      new Error(
+        'AI-მ ცარიელი პასუხი დააბრუნა.'
+      )
 
     error.status =
       response.status
 
-    error.backendData = data
+    error.backendData =
+      data
 
     throw error
   }
@@ -1000,9 +1030,10 @@ async function askAI(question) {
 }
 
 function containsUnsafeContent(text) {
-  const value = String(text || '')
-    .toLowerCase()
-    .trim()
+  const value =
+    String(text || '')
+      .toLowerCase()
+      .trim()
 
   if (!value) {
     return false
@@ -1044,9 +1075,6 @@ function addAISafetyWarning() {
   )
 }
 
-/*
- * AI ჩატის შეტყობინების შენახვა Supabase-ში
- */
 async function saveAIChatMessage(message) {
   if (!db) {
     return
@@ -1054,7 +1082,9 @@ async function saveAIChatMessage(message) {
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -1068,17 +1098,16 @@ async function saveAIChatMessage(message) {
       user.email ||
       'მომხმარებელი'
 
-    const {
-      error
-    } = await db
-      .from('ai_chat_history')
-      .insert({
-        user_id: user.id,
-        username:
-          String(username).trim(),
-        message:
-          String(message).trim()
-      })
+    const { error } =
+      await db
+        .from('ai_chat_history')
+        .insert({
+          user_id: user.id,
+          username:
+            String(username).trim(),
+          message:
+            String(message).trim()
+        })
 
     if (error) {
       console.warn(
@@ -1094,9 +1123,6 @@ async function saveAIChatMessage(message) {
   }
 }
 
-/*
- * /history ბრძანებისთვის Supabase RPC
- */
 async function getZazaHistory() {
   if (!db) {
     throw new Error(
@@ -1118,9 +1144,27 @@ async function getZazaHistory() {
   return data || []
 }
 
-/*
- * /history შედეგების ფორმატირება
- */
+async function deleteZazaHistoryItem(id) {
+  if (!db) {
+    throw new Error(
+      'Supabase არ არის კონფიგურირებული.'
+    )
+  }
+
+  const {
+    error
+  } = await db.rpc(
+    'delete_zaza_history_item',
+    {
+      p_id: id
+    }
+  )
+
+  if (error) {
+    throw error
+  }
+}
+
 function formatZazaHistory(items) {
   if (!items.length) {
     return `
@@ -1135,7 +1179,7 @@ function formatZazaHistory(items) {
       „ზაზა“-ს შესახებ ნაპოვნი შეტყობინებები
     </h3>
 
-    <p>
+    <p class="ai-history-count">
       ნაპოვნია <strong>${items.length}</strong> შეტყობინება:
     </p>
 
@@ -1160,10 +1204,8 @@ function formatZazaHistory(items) {
           ? new Intl.DateTimeFormat(
               'ka-GE',
               {
-                dateStyle:
-                  'medium',
-                timeStyle:
-                  'short'
+                dateStyle: 'medium',
+                timeStyle: 'short'
               }
             ).format(
               new Date(
@@ -1173,7 +1215,10 @@ function formatZazaHistory(items) {
           : ''
 
       html += `
-        <div class="ai-history-item">
+        <div
+          class="ai-history-item"
+          data-history-id="${Number(item.id)}"
+        >
           <strong>
             ${index + 1}. ${username}
           </strong>
@@ -1187,6 +1232,15 @@ function formatZazaHistory(items) {
               ? `<small>${esc(date)}</small>`
               : ''
           }
+
+          <button
+            type="button"
+            class="ai-history-delete"
+            data-history-id="${Number(item.id)}"
+          >
+            ${icon('trash-2')}
+            სამუდამოდ წაშლა
+          </button>
         </div>
       `
     }
@@ -1197,6 +1251,132 @@ function formatZazaHistory(items) {
   `
 
   return html
+}
+
+function setupZazaHistoryDelete() {
+  const buttons =
+    document.querySelectorAll(
+      '.ai-history-delete'
+    )
+
+  buttons.forEach(
+    button => {
+      button.addEventListener(
+        'click',
+        async () => {
+          const id =
+            Number(
+              button.dataset.historyId
+            )
+
+          if (
+            !Number.isSafeInteger(id)
+          ) {
+            return
+          }
+
+          const confirmed =
+            confirm(
+              'ნამდვილად გინდა ამ შეტყობინების სამუდამოდ წაშლა?'
+            )
+
+          if (!confirmed) {
+            return
+          }
+
+          button.disabled = true
+
+          button.innerHTML = `
+            ${icon('loader-circle')}
+            იშლება...
+          `
+
+          refreshIcons()
+
+          try {
+            await deleteZazaHistoryItem(
+              id
+            )
+
+            const item =
+              button.closest(
+                '.ai-history-item'
+              )
+
+            item?.remove()
+
+            const list =
+              document.querySelector(
+                '.ai-history-list'
+              )
+
+            const remaining =
+              list
+                ? list.querySelectorAll(
+                    '.ai-history-item'
+                  ).length
+                : 0
+
+            const count =
+              document.querySelector(
+                '.ai-history-count'
+              )
+
+            if (count) {
+              count.innerHTML =
+                remaining
+                  ? `დარჩენილია <strong>${remaining}</strong> შეტყობინება:`
+                  : 'ყველა შეტყობინება წაშლილია.'
+            }
+
+            if (
+              list &&
+              remaining === 0
+            ) {
+              list.innerHTML = `
+                <div class="empty-state compact-empty">
+                  ${icon('trash-2')}
+                  <h3>
+                    ისტორია ცარიელია
+                  </h3>
+                  <p>
+                    ყველა ნაპოვნი შეტყობინება სამუდამოდ წაიშალა.
+                  </p>
+                </div>
+              `
+
+              refreshIcons()
+            }
+
+            toast(
+              'შეტყობინება სამუდამოდ წაიშალა.',
+              'success'
+            )
+          } catch (error) {
+            console.error(
+              'History delete error:',
+              error
+            )
+
+            button.disabled = false
+
+            button.innerHTML = `
+              ${icon('trash-2')}
+              სამუდამოდ წაშლა
+            `
+
+            refreshIcons()
+
+            alert(
+              'შეტყობინების წაშლა ვერ მოხერხდა.'
+            )
+          }
+        }
+      )
+    }
+  )
+
+  refreshIcons()
 }
 
 async function handleAIQuestion(question) {
@@ -1230,7 +1410,6 @@ async function handleAIQuestion(question) {
     }
 
     addAISafetyWarning()
-
     return
   }
 
@@ -1243,17 +1422,10 @@ async function handleAIQuestion(question) {
     input.value = ''
   }
 
-  /*
-   * /history სპეციალური ბრძანება
-   */
   if (
     cleanQuestion.toLowerCase() ===
     '/history'
   ) {
-    /*
-     * ეს მხოლოდ დამატებითი frontend შემოწმებაა.
-     * რეალური უსაფრთხოება Supabase RPC-შიც არის.
-     */
     const isZaza =
       aiAdminGreeting ===
       'ბატონო ზაზა'
@@ -1296,6 +1468,8 @@ async function handleAIQuestion(question) {
           history
         )
       )
+
+      setupZazaHistoryDelete()
     } catch (error) {
       console.error(
         'History error:',
@@ -1329,9 +1503,6 @@ async function handleAIQuestion(question) {
     return
   }
 
-  /*
-   * ჩვეულებრივი მომხმარებლის შეტყობინება ინახება Supabase-ში
-   */
   await saveAIChatMessage(
     cleanQuestion
   )
@@ -1357,7 +1528,9 @@ async function handleAIQuestion(question) {
     typing?.remove()
 
     const finalReply =
-      applyAIGreeting(reply)
+      applyAIGreeting(
+        reply
+      )
 
     addAIMessage(
       'assistant',
@@ -1549,8 +1722,7 @@ async function initAIChat() {
               )
               .forEach(
                 b => {
-                  b.disabled =
-                    true
+                  b.disabled = true
                 }
               )
 
@@ -1564,8 +1736,7 @@ async function initAIChat() {
               )
               .forEach(
                 b => {
-                  b.disabled =
-                    false
+                  b.disabled = false
                 }
               )
           }
@@ -1599,7 +1770,6 @@ async function initAIChat() {
         !event.shiftKey
       ) {
         event.preventDefault()
-
         form?.requestSubmit()
       }
     }
@@ -1831,9 +2001,7 @@ async function initDetail() {
 
   if (
     !id ||
-    !/^[0-9a-f-]{36}$/i.test(
-      id
-    )
+    !/^[0-9a-f-]{36}$/i.test(id)
   ) {
     return notFound(
       target
@@ -2031,7 +2199,9 @@ async function initDetail() {
       async () => {
         try {
           await navigator.clipboard
-            .writeText(p.code)
+            .writeText(
+              p.code
+            )
 
           const isChemistry =
             String(
@@ -2181,10 +2351,13 @@ async function upload(
     throw error
   }
 
-  const { data } =
-    db.storage
-      .from(bucket)
-      .getPublicUrl(path)
+  const {
+    data
+  } = db.storage
+    .from(bucket)
+    .getPublicUrl(
+      path
+    )
 
   return {
     url: data.publicUrl,
@@ -2286,7 +2459,9 @@ async function initAdmin() {
   }
 
   const {
-    data: { session }
+    data: {
+      session
+    }
   } = await db.auth
     .getSession()
 
@@ -2455,7 +2630,6 @@ async function login(event) {
         $('#login-email')
           .value
           .trim(),
-
       password:
         $('#login-password')
           .value
@@ -2605,7 +2779,6 @@ async function loadAdminProjects() {
   }
 
   status.hidden = false
-
   list.innerHTML = ''
 
   const {
@@ -2724,18 +2897,18 @@ async function loadAdminProjects() {
           )
           .join('')
       : `
-          <div class="empty-state compact-empty">
-            ${icon('folder-plus')}
+        <div class="empty-state compact-empty">
+          ${icon('folder-plus')}
 
-            <h2>
-              ჯერ პროექტები არ დამატებულა
-            </h2>
+          <h2>
+            ჯერ პროექტები არ დამატებულა
+          </h2>
 
-            <p>
-              დაიწყეთ პირველი რეალური პროექტის დამატებით.
-            </p>
-          </div>
-        `
+          <p>
+            დაიწყეთ პირველი რეალური პროექტის დამატებით.
+          </p>
+        </div>
+      `
 
   list
     .querySelectorAll(
@@ -2846,8 +3019,7 @@ function openEditor(p) {
 
     $('#how-made')
       .value =
-      p.how_it_was_made ||
-      ''
+      p.how_it_was_made || ''
 
     $('#code')
       .value =
@@ -3037,16 +3209,12 @@ async function saveProject(event) {
 
     const img =
       uploads.find(
-        x =>
-          x[0] ===
-          'image'
+        x => x[0] === 'image'
       )?.[1]
 
     const vid =
       uploads.find(
-        x =>
-          x[0] ===
-          'video'
+        x => x[0] === 'video'
       )?.[1]
 
     if (img) {
@@ -3247,9 +3415,7 @@ const GEORGIAN_WEEKDAYS = [
   'შაბათი'
 ]
 
-function meetingDay(
-  dateValue
-) {
+function meetingDay(dateValue) {
   if (!dateValue) {
     return '—'
   }
@@ -3323,9 +3489,10 @@ async function getMeeting() {
   if (!db) {
     return {
       data: null,
-      error: new Error(
-        'Supabase not configured'
-      )
+      error:
+        new Error(
+          'Supabase not configured'
+        )
     }
   }
 
@@ -3568,15 +3735,16 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-      data.meeting_date ||
-      ''
+      data.meeting_date || ''
 
     $('#meeting-time')
       .value =
       String(
-        data.meeting_time ||
-        ''
-      ).slice(0, 5)
+        data.meeting_time || ''
+      ).slice(
+        0,
+        5
+      )
 
     $('#meeting-day-preview')
       .textContent =
@@ -3597,8 +3765,7 @@ async function loadAdminMeeting() {
       'meeting-admin-status'
 
     $('#meeting-day-preview')
-      .textContent =
-      '—'
+      .textContent = '—'
   }
 }
 
@@ -3678,7 +3845,9 @@ async function saveMeeting(
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth
       .getUser()
 
@@ -3703,8 +3872,7 @@ async function saveMeeting(
             user.id
         },
         {
-          onConflict:
-            'id'
+          onConflict: 'id'
         }
       )
 
@@ -3798,9 +3966,7 @@ async function initPasswordReset() {
       'Supabase ჯერ არ არის კონფიგურირებული.'
 
     form
-      .querySelector(
-        'button'
-      )
+      .querySelector('button')
       .disabled = true
 
     return
@@ -3841,8 +4007,7 @@ async function initPasswordReset() {
       }
 
       if (
-        password.length <
-        10
+        password.length < 10
       ) {
         error.textContent =
           'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.'
@@ -3851,7 +4016,9 @@ async function initPasswordReset() {
       }
 
       const {
-        data: { session }
+        data: {
+          session
+        }
       } = await db.auth
         .getSession()
 
