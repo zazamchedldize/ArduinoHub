@@ -16,23 +16,20 @@ const db = supabaseIsConfigured
 
 const page = document.body.dataset.page
 
-const $ = (s, root = document) =>
-  root.querySelector(s)
+const $ = (s, root = document) => root.querySelector(s)
 
-const esc = (value = '') =>
-  String(value).replace(
-    /[&<>'"]/g,
-    c => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[c])
-  )
+const esc = (value = '') => String(value).replace(
+  /[&<>'"]/g,
+  c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[c])
+)
 
-const icon = name =>
-  `<i data-lucide="${name}"></i>`
+const icon = name => `<i data-lucide="${name}"></i>`
 
 function refreshIcons() {
   window.lucide?.createIcons()
@@ -103,8 +100,7 @@ function initChrome() {
     .querySelectorAll('[data-year]')
     .forEach(
       el => {
-        el.textContent =
-          new Date().getFullYear()
+        el.textContent = new Date().getFullYear()
       }
     )
 
@@ -182,7 +178,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
 14. პასუხი არ შეწყვიტო შუა წინადადებაში. ყოველთვის დაასრულე აზრი.
 15. თუ პასუხს რამდენიმე ნაწილი აქვს, დაალაგე ლოგიკურად.
-16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული შეცდომა — მაგალითად ერთი ასოს გამოტოვება, ზედმეტი ასო ან არასწორი ასო. თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე და ჩვეულებრივ უპასუხე.
+16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული შეცდომა. თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე და ჩვეულებრივ უპასუხე.
 17. თუ კითხვა გასაგებია მიუხედავად მცირე typo-სა, მომხმარებელს ნუ სთხოვ თავიდან დაწერას.
 18. თუ მომხმარებელი წერს უხეშ, შეურაცხმყოფელ, სექსუალურ, 18+ ან აშკარად შეუსაბამო შინაარსს, არ გააგრძელო ასეთი საუბარი. უპასუხე მოკლე, მშვიდი გაფრთხილებით და გადაიყვანე სასწავლო თემაზე.
 19. ArduinoHub AI განკუთვნილია სასწავლო, ტექნიკური და უსაფრთხო კომუნიკაციისთვის.
@@ -198,9 +194,7 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: {
-        session
-      }
+      data: { session }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -208,18 +202,16 @@ async function detectAIAdmin() {
       return
     }
 
-    const admin =
-      await isAdmin(session.user)
+    const admin = await isAdmin(session.user)
 
     if (!admin?.username) {
       aiAdminGreeting = ''
       return
     }
 
-    const username =
-      String(admin.username)
-        .trim()
-        .toLowerCase()
+    const username = String(admin.username)
+      .trim()
+      .toLowerCase()
 
     if (
       username === 'zaza' ||
@@ -249,8 +241,7 @@ async function detectAIAdmin() {
 }
 
 function applyAIGreeting(reply) {
-  const clean =
-    String(reply || '').trim()
+  const clean = String(reply || '').trim()
 
   if (
     !aiAdminGreeting ||
@@ -275,8 +266,7 @@ function addAIMessage(
   type,
   content
 ) {
-  const messages =
-    $('#ai-chat-messages')
+  const messages = $('#ai-chat-messages')
 
   if (!messages) {
     return null
@@ -333,56 +323,50 @@ function formatAIResponse(text) {
     return '<p>პასუხი ვერ მივიღე.</p>'
   }
 
-  let source =
-    String(text)
-      .replace(
-        /^\s*svg\s*$/gim,
-        ''
-      )
-      .trim()
+  let source = String(text)
+    .replace(
+      /^\s*svg\s*$/gim,
+      ''
+    )
+    .trim()
 
   const codeBlocks = []
 
-  source =
-    source.replace(
-      /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
-      (_, code) => {
-        const index =
-          codeBlocks.length
+  source = source.replace(
+    /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+    (_, code) => {
+      const index =
+        codeBlocks.length
 
-        codeBlocks.push(
-          esc(code.trim())
-        )
+      codeBlocks.push(
+        esc(code.trim())
+      )
 
-        return `@@CODEBLOCK_${index}@@`
-      }
-    )
+      return `@@CODEBLOCK_${index}@@`
+    }
+  )
 
   let safe = esc(source)
 
-  safe =
-    safe.replace(
-      /\*\*\*(.+?)\*\*\*/g,
-      '<strong><em>$1</em></strong>'
-    )
+  safe = safe.replace(
+    /\*\*\*(.+?)\*\*\*/g,
+    '<strong><em>$1</em></strong>'
+  )
 
-  safe =
-    safe.replace(
-      /\*\*(.+?)\*\*/g,
-      '<strong>$1</strong>'
-    )
+  safe = safe.replace(
+    /\*\*(.+?)\*\*/g,
+    '<strong>$1</strong>'
+  )
 
-  safe =
-    safe.replace(
-      /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
-      '<em>$1</em>'
-    )
+  safe = safe.replace(
+    /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+    '<em>$1</em>'
+  )
 
-  safe =
-    safe.replace(
-      /`([^`\n]+)`/g,
-      '<code class="ai-inline-code">$1</code>'
-    )
+  safe = safe.replace(
+    /`([^`\n]+)`/g,
+    '<code class="ai-inline-code">$1</code>'
+  )
 
   const lines =
     safe.split(/\r?\n/)
@@ -425,8 +409,7 @@ function formatAIResponse(text) {
   }
 
   for (const rawLine of lines) {
-    const line =
-      rawLine.trim()
+    const line = rawLine.trim()
 
     if (!line) {
       flushParagraph()
@@ -458,9 +441,7 @@ function formatAIResponse(text) {
     }
 
     const heading3 =
-      line.match(
-        /^###\s+(.+)$/
-      )
+      line.match(/^###\s+(.+)$/)
 
     if (heading3) {
       flushParagraph()
@@ -476,9 +457,7 @@ function formatAIResponse(text) {
     }
 
     const heading2 =
-      line.match(
-        /^##\s+(.+)$/
-      )
+      line.match(/^##\s+(.+)$/)
 
     if (heading2) {
       flushParagraph()
@@ -494,9 +473,7 @@ function formatAIResponse(text) {
     }
 
     const heading1 =
-      line.match(
-        /^#\s+(.+)$/
-      )
+      line.match(/^#\s+(.+)$/)
 
     if (heading1) {
       flushParagraph()
@@ -512,9 +489,7 @@ function formatAIResponse(text) {
     }
 
     const quote =
-      line.match(
-        /^>\s*(.+)$/
-      )
+      line.match(/^>\s*(.+)$/)
 
     if (quote) {
       flushParagraph()
@@ -539,7 +514,10 @@ function formatAIResponse(text) {
 
       if (listType !== 'ul') {
         closeList()
-        html += '<ul class="ai-list">'
+
+        html +=
+          '<ul class="ai-list">'
+
         listType = 'ul'
       }
 
@@ -562,7 +540,10 @@ function formatAIResponse(text) {
 
       if (listType !== 'ol') {
         closeList()
-        html += '<ol class="ai-ordered-list">'
+
+        html +=
+          '<ol class="ai-ordered-list">'
+
         listType = 'ol'
       }
 
@@ -576,6 +557,7 @@ function formatAIResponse(text) {
     }
 
     closeList()
+
     paragraph.push(line)
   }
 
@@ -721,7 +703,8 @@ function getAIUserErrorMessage(error) {
         </p>
 
         <small>
-          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას. ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
+          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას.
+          ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
         </small>
       </div>
     `
@@ -902,9 +885,7 @@ async function askAI(question) {
   if (db) {
     try {
       const {
-        data: {
-          session
-        }
+        data: { session }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -922,24 +903,26 @@ async function askAI(question) {
   let response
 
   try {
-    response =
-      await fetch(
-        AI_FUNCTION_URL,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authorizationToken}`,
-            'apikey': SUPABASE_ANON_KEY
-          },
-          body: JSON.stringify({
-            message: cleanQuestion,
-            history,
-            context: AI_SYSTEM_CONTEXT,
-            adminGreeting: aiAdminGreeting
-          })
-        }
-      )
+    response = await fetch(
+      AI_FUNCTION_URL,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+            `Bearer ${authorizationToken}`,
+          'apikey':
+            SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          message: cleanQuestion,
+          history,
+          context: AI_SYSTEM_CONTEXT,
+          adminGreeting:
+            aiAdminGreeting
+        })
+      }
+    )
   } catch (networkError) {
     const error =
       new Error(
@@ -955,8 +938,7 @@ async function askAI(question) {
   let data = null
 
   try {
-    data =
-      await response.json()
+    data = await response.json()
   } catch {
     data = null
   }
@@ -1064,7 +1046,8 @@ function addAISafetyWarning() {
       </strong>
 
       <p>
-        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის. პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
+        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის.
+        პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
       </p>
     </div>
   `
@@ -1082,9 +1065,7 @@ async function saveAIChatMessage(message) {
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -1151,14 +1132,13 @@ async function deleteZazaHistoryItem(id) {
     )
   }
 
-  const {
-    error
-  } = await db.rpc(
-    'delete_zaza_history_item',
-    {
-      p_id: id
-    }
-  )
+  const { error } =
+    await db.rpc(
+      'delete_zaza_history_item',
+      {
+        history_id: id
+      }
+    )
 
   if (error) {
     throw error
@@ -1310,12 +1290,39 @@ function setupZazaHistoryDelete() {
                 '.ai-history-list'
               )
 
-            const remaining =
+            const historyItems =
               list
                 ? list.querySelectorAll(
                     '.ai-history-item'
-                  ).length
-                : 0
+                  )
+                : []
+
+            const remaining =
+              historyItems.length
+
+            historyItems.forEach(
+              (historyItem, index) => {
+                const strong =
+                  historyItem.querySelector(
+                    'strong'
+                  )
+
+                if (!strong) {
+                  return
+                }
+
+                const currentText =
+                  strong.textContent
+                    .replace(
+                      /^\s*\d+\.\s*/,
+                      ''
+                    )
+                    .trim()
+
+                strong.textContent =
+                  `${index + 1}. ${currentText}`
+              }
+            )
 
             const count =
               document.querySelector(
@@ -1336,9 +1343,11 @@ function setupZazaHistoryDelete() {
               list.innerHTML = `
                 <div class="empty-state compact-empty">
                   ${icon('trash-2')}
+
                   <h3>
                     ისტორია ცარიელია
                   </h3>
+
                   <p>
                     ყველა ნაპოვნი შეტყობინება სამუდამოდ წაიშალა.
                   </p>
@@ -1410,6 +1419,7 @@ async function handleAIQuestion(question) {
     }
 
     addAISafetyWarning()
+
     return
   }
 
@@ -1770,6 +1780,7 @@ async function initAIChat() {
         !event.shiftKey
       ) {
         event.preventDefault()
+
         form?.requestSubmit()
       }
     }
@@ -2343,7 +2354,8 @@ async function upload(
       {
         cacheControl: '3600',
         upsert: false,
-        contentType: file.type
+        contentType:
+          file.type
       }
     )
 
@@ -2351,13 +2363,10 @@ async function upload(
     throw error
   }
 
-  const {
-    data
-  } = db.storage
-    .from(bucket)
-    .getPublicUrl(
-      path
-    )
+  const { data } =
+    db.storage
+      .from(bucket)
+      .getPublicUrl(path)
 
   return {
     url: data.publicUrl,
@@ -2453,22 +2462,33 @@ async function initAdmin() {
 
     $('#login-error')
       .textContent =
-      'Supabase ჯერ არ არის კონფიგურირებული.'
+        'Supabase ჯერ არ არის კონფიგურირებული.'
 
     return
   }
 
   const {
-    data: {
-      session
-    }
+    data: { session }
   } = await db.auth
     .getSession()
 
   if (session) {
-    await showDashboard(
-      session.user
-    )
+    const admin =
+      await isAdmin(
+        session.user
+      )
+
+    if (admin) {
+      await showDashboard(
+        session.user,
+        admin
+      )
+    } else {
+      location.href =
+        'index.html'
+
+      return
+    }
   }
 
   $('#login-form')
@@ -2513,10 +2533,10 @@ async function initAdmin() {
       () => {
         $('#video-name')
           .textContent =
-          $('#video-file')
-            .files[0]
-            ?.name ||
-          'ფაილი არჩეული არ არის'
+            $('#video-file')
+              .files[0]
+              ?.name ||
+            'ფაილი არჩეული არ არის'
       }
     )
 
@@ -2641,7 +2661,7 @@ async function login(event) {
   ) {
     $('#login-error')
       .textContent =
-      'მონაცემები არასწორია'
+        'მონაცემები არასწორია'
 
     setBusy(
       button,
@@ -2656,25 +2676,31 @@ async function login(event) {
       data.user
     )
 
-  if (!admin) {
-    await db.auth
-      .signOut()
-
-    $('#login-error')
-      .textContent =
-      'ამ ანგარიშს ადმინისტრატორის წვდომა არ აქვს.'
-
-    setBusy(
-      button,
-      false
+  if (admin) {
+    await showDashboard(
+      data.user,
+      admin
     )
 
     return
   }
 
-  await showDashboard(
-    data.user,
-    admin
+  toast(
+    'წარმატებით შეხვედით ანგარიშში.',
+    'success'
+  )
+
+  setTimeout(
+    () => {
+      location.href =
+        'index.html'
+    },
+    500
+  )
+
+  setBusy(
+    button,
+    false
   )
 }
 
@@ -2687,11 +2713,6 @@ async function showDashboard(
     await isAdmin(user)
 
   if (!admin) {
-    if (user) {
-      await db.auth
-        .signOut()
-    }
-
     return showLogin()
   }
 
@@ -2703,7 +2724,7 @@ async function showDashboard(
 
   $('#admin-name')
     .textContent =
-    admin.username
+      admin.username
 
   refreshIcons()
 
@@ -2724,8 +2745,7 @@ function showLogin() {
 }
 
 async function logout() {
-  await db.auth
-    .signOut()
+  await db.auth.signOut()
 
   aiAdminGreeting = ''
 
@@ -2743,8 +2763,7 @@ function setBusy(
     return
   }
 
-  button.disabled =
-    busy
+  button.disabled = busy
 
   if (busy) {
     button.dataset.label =
@@ -2779,6 +2798,7 @@ async function loadAdminProjects() {
   }
 
   status.hidden = false
+
   list.innerHTML = ''
 
   const {
@@ -2813,7 +2833,7 @@ async function loadAdminProjects() {
 
   $('#admin-count')
     .textContent =
-    `${adminProjects.length} პროექტი`
+      `${adminProjects.length} პროექტი`
 
   list.innerHTML =
     adminProjects.length
@@ -2973,57 +2993,63 @@ function openEditor(p) {
 
   $('#image-name')
     .textContent =
-    'ფაილი არჩეული არ არის'
+      'ფაილი არჩეული არ არის'
 
   $('#video-name')
     .textContent =
-    'ფაილი არჩეული არ არის'
+      'ფაილი არჩეული არ არის'
 
   $('#form-error')
     .textContent = ''
 
   $('#editor-title')
     .textContent =
-    p
-      ? 'პროექტის რედაქტირება'
-      : 'ახალი პროექტი'
+      p
+        ? 'პროექტის რედაქტირება'
+        : 'ახალი პროექტი'
 
   $('#save-project')
     .innerHTML =
-    p
-      ? `ცვლილებების შენახვა ${icon('save')}`
-      : `პროექტის დამატება ${icon('save')}`
+      p
+        ? `ცვლილებების შენახვა ${icon('save')}`
+        : `პროექტის დამატება ${icon('save')}`
 
   if (p) {
     $('#edit-id')
-      .value = p.id
+      .value =
+        p.id
 
     $('#title')
-      .value = p.title
+      .value =
+        p.title
 
     $('#category')
-      .value = p.category
+      .value =
+        p.category
 
     $('#author')
-      .value = p.author
+      .value =
+        p.author
 
     $('#published')
-      .checked = p.published
+      .checked =
+        p.published
 
     $('#description')
-      .value = p.description
+      .value =
+        p.description
 
     $('#components')
       .value =
-      p.components || ''
+        p.components || ''
 
     $('#how-made')
       .value =
-      p.how_it_was_made || ''
+        p.how_it_was_made || ''
 
     $('#code')
       .value =
-      p.code || ''
+        p.code || ''
   }
 
   updateCodeFieldLabel()
@@ -3056,8 +3082,8 @@ function imagePreview() {
 
   $('#image-name')
     .textContent =
-    file?.name ||
-    'ფაილი არჩეული არ არის'
+      file?.name ||
+      'ფაილი არჩეული არ არის'
 
   if (
     file &&
@@ -3092,7 +3118,8 @@ async function saveProject(event) {
 
   const old =
     adminProjects.find(
-      p => p.id === id
+      p =>
+        p.id === id
     )
 
   const image =
@@ -3209,12 +3236,16 @@ async function saveProject(event) {
 
     const img =
       uploads.find(
-        x => x[0] === 'image'
+        x =>
+          x[0] ===
+          'image'
       )?.[1]
 
     const vid =
       uploads.find(
-        x => x[0] === 'video'
+        x =>
+          x[0] ===
+          'video'
       )?.[1]
 
     if (img) {
@@ -3285,10 +3316,8 @@ async function saveProject(event) {
     console.error(error)
 
     for (
-      const [
-        kind,
-        file
-      ] of uploads
+      const [kind, file]
+      of uploads
     ) {
       if (!file?.url) {
         continue
@@ -3304,10 +3333,10 @@ async function saveProject(event) {
 
     $('#form-error')
       .textContent =
-      neutralError(
-        error,
-        'პროექტის შენახვა ვერ მოხერხდა.'
-      )
+        neutralError(
+          error,
+          'პროექტის შენახვა ვერ მოხერხდა.'
+        )
   } finally {
     setBusy(
       button,
@@ -3319,7 +3348,8 @@ async function saveProject(event) {
 async function togglePublished(id) {
   const p =
     adminProjects.find(
-      x => x.id === id
+      x =>
+        x.id === id
     )
 
   if (!p) {
@@ -3358,7 +3388,8 @@ async function togglePublished(id) {
 async function deleteProject(id) {
   const p =
     adminProjects.find(
-      x => x.id === id
+      x =>
+        x.id === id
     )
 
   if (
@@ -3415,7 +3446,9 @@ const GEORGIAN_WEEKDAYS = [
   'შაბათი'
 ]
 
-function meetingDay(dateValue) {
+function meetingDay(
+  dateValue
+) {
   if (!dateValue) {
     return '—'
   }
@@ -3528,7 +3561,8 @@ function renderMeetingContent(
         </h3>
 
         <p>
-          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
+          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს,
+          ინფორმაცია აქ გამოჩნდება.
         </p>
       </div>
     `
@@ -3735,22 +3769,24 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-      data.meeting_date || ''
+        data.meeting_date ||
+        ''
 
     $('#meeting-time')
       .value =
-      String(
-        data.meeting_time || ''
-      ).slice(
-        0,
-        5
-      )
+        String(
+          data.meeting_time ||
+          ''
+        ).slice(
+          0,
+          5
+        )
 
     $('#meeting-day-preview')
       .textContent =
-      meetingDay(
-        data.meeting_date
-      )
+        meetingDay(
+          data.meeting_date
+        )
 
     status.textContent =
       'გამოქვეყნებულია'
@@ -3765,7 +3801,8 @@ async function loadAdminMeeting() {
       'meeting-admin-status'
 
     $('#meeting-day-preview')
-      .textContent = '—'
+      .textContent =
+        '—'
   }
 }
 
@@ -3783,9 +3820,9 @@ function bindMeetingForm() {
       e => {
         $('#meeting-day-preview')
           .textContent =
-          meetingDay(
-            e.target.value
-          )
+            meetingDay(
+              e.target.value
+            )
       }
     )
 
@@ -3845,9 +3882,7 @@ async function saveMeeting(
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth
       .getUser()
 
@@ -3872,7 +3907,8 @@ async function saveMeeting(
             user.id
         },
         {
-          onConflict: 'id'
+          onConflict:
+            'id'
         }
       )
 
@@ -3940,11 +3976,11 @@ async function clearMeeting() {
 
   $('#meeting-admin-status')
     .textContent =
-    'არ არის გამოქვეყნებული'
+      'არ არის გამოქვეყნებული'
 
   $('#meeting-admin-status')
     .className =
-    'meeting-admin-status'
+      'meeting-admin-status'
 
   toast(
     'შეკრება გაუქმდა.',
@@ -3963,7 +3999,7 @@ async function initPasswordReset() {
   if (!db) {
     $('#reset-error')
       .textContent =
-      'Supabase ჯერ არ არის კონფიგურირებული.'
+        'Supabase ჯერ არ არის კონფიგურირებული.'
 
     form
       .querySelector('button')
@@ -4016,9 +4052,7 @@ async function initPasswordReset() {
       }
 
       const {
-        data: {
-          session
-        }
+        data: { session }
       } = await db.auth
         .getSession()
 
