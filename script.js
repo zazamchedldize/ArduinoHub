@@ -8,36 +8,38 @@ import {
   createClient
 } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const db =
-  supabaseIsConfigured
-    ? createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-          auth: {
-            persistSession: true,
-            autoRefreshToken: true
-          }
+const db = supabaseIsConfigured
+  ? createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true
         }
-      )
-    : null
+      }
+    )
+  : null
 
 const page = document.body.dataset.page
 
-const $ = (s, root = document) =>
-  root.querySelector(s)
+const $ = (
+  s,
+  root = document
+) => root.querySelector(s)
 
-const esc = (value = '') =>
+const esc = (
+  value = ''
+) =>
   String(value).replace(
     /[&<>'"]/g,
-    c =>
-      ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-      }[c])
+    c => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[c])
   )
 
 const icon = name =>
@@ -47,7 +49,10 @@ function refreshIcons() {
   window.lucide?.createIcons()
 }
 
-function toast(message, type = '') {
+function toast(
+  message,
+  type = ''
+) {
   const el = $('#toast')
 
   if (!el) {
@@ -73,7 +78,9 @@ function dateText(value) {
     {
       dateStyle: 'medium'
     }
-  ).format(new Date(value))
+  ).format(
+    new Date(value)
+  )
 }
 
 function neutralError(
@@ -116,7 +123,8 @@ function initChrome() {
         new Date().getFullYear()
     })
 
-  const button = $('.menu-toggle')
+  const button =
+    $('.menu-toggle')
 
   if (button) {
     button.addEventListener(
@@ -160,6 +168,7 @@ const AI_SYSTEM_CONTEXT = `
 ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
 
 საიტის ძირითადი ინფორმაცია:
+
 - ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
 - პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
 - ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
@@ -168,6 +177,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
 
 კლუბის წევრები არიან:
+
 - ზაზა მჭედლიძე — აქტიური წევრია.
 - თეკლა შველიძე — აქტიური წევრია.
 - ანასტასია ხონელიძე — აქტიური წევრია.
@@ -179,6 +189,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
 
 პასუხის წესები:
+
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
 2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
@@ -209,7 +220,9 @@ async function getCurrentUser() {
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth.getUser()
 
     return user || null
@@ -269,7 +282,9 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: { session }
+      data: {
+        session
+      }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -296,14 +311,16 @@ async function detectAIAdmin() {
       username.includes('ზაზა') ||
       username.includes('zaza')
     ) {
-      aiAdminGreeting = 'ბატონო ზაზა'
+      aiAdminGreeting =
+        'ბატონო ზაზა'
     } else if (
       username === 'tekla' ||
       username === 'თეკლა' ||
       username.includes('თეკლა') ||
       username.includes('tekla')
     ) {
-      aiAdminGreeting = 'ქალბატონო თეკლა'
+      aiAdminGreeting =
+        'ქალბატონო თეკლა'
     } else {
       aiAdminGreeting = ''
     }
@@ -331,14 +348,19 @@ function applyAIGreeting(reply) {
   const greetingPattern =
     /^(ბატონო\s+ზაზა|ქალბატონო\s+თეკლა)\s*[,!:—-]?\s*/i
 
-  if (greetingPattern.test(clean)) {
+  if (
+    greetingPattern.test(clean)
+  ) {
     return clean
   }
 
   return `${aiAdminGreeting}, ${clean}`
 }
 
-function addAIMessage(type, content) {
+function addAIMessage(
+  type,
+  content
+) {
   const messages =
     $('#ai-chat-messages')
 
@@ -598,8 +620,10 @@ function formatAIResponse(text) {
 
       if (listType !== 'ul') {
         closeList()
+
         html +=
           '<ul class="ai-list">'
+
         listType = 'ul'
       }
 
@@ -622,8 +646,10 @@ function formatAIResponse(text) {
 
       if (listType !== 'ol') {
         closeList()
+
         html +=
           '<ol class="ai-ordered-list">'
+
         listType = 'ol'
       }
 
@@ -637,6 +663,7 @@ function formatAIResponse(text) {
     }
 
     closeList()
+
     paragraph.push(line)
   }
 
@@ -711,9 +738,8 @@ function getAIErrorStatus(error) {
 
 function isAIQuotaError(error) {
   const message =
-    String(
-      error?.message || ''
-    ).toLowerCase()
+    String(error?.message || '')
+      .toLowerCase()
 
   const quotaPatterns = [
     'quota exceeded',
@@ -739,9 +765,8 @@ function isAIQuotaError(error) {
 
 function isAIModelError(error) {
   const message =
-    String(
-      error?.message || ''
-    ).toLowerCase()
+    String(error?.message || '')
+      .toLowerCase()
 
   const modelPatterns = [
     'model not found',
@@ -800,7 +825,8 @@ function getAIUserErrorMessage(error) {
 
         <p>
           ArduinoHub AI-ის გამოყენებული Gemini
-          მოდელი ამჟამად ვერ მუშაობს ან მიუწვდომელია.
+          მოდელი ამჟამად ვერ მუშაობს ან
+          მიუწვდომელია.
         </p>
 
         <small>
@@ -902,8 +928,8 @@ function getAIUserErrorMessage(error) {
         </strong>
 
         <p>
-          AI სერვერმა პასუხის დაბრუნება
-          ამჯერად ვერ შეძლო.
+          AI სერვერმა პასუხის დაბრუნება ამჯერად
+          ვერ შეძლო.
         </p>
 
         <small>
@@ -956,9 +982,10 @@ async function askAI(question) {
           message.role === 'assistant'
             ? 'assistant'
             : 'user',
-        text: String(
-          message.content || ''
-        ).slice(0, 1800)
+        text:
+          String(
+            message.content || ''
+          ).slice(0, 1800)
       }))
 
   const currentUser =
@@ -970,7 +997,9 @@ async function askAI(question) {
   if (db) {
     try {
       const {
-        data: { session }
+        data: {
+          session
+        }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -1001,6 +1030,7 @@ async function askAI(question) {
         ${currentUser.id}
 
         მნიშვნელოვანი წესები:
+
         - ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
         - თუ მომხმარებელი გეკითხება „ვინ ვარ?“,
           „რა მქვია?“ ან მსგავს რამეს,
@@ -1027,32 +1057,33 @@ async function askAI(question) {
   let response
 
   try {
-    response = await fetch(
-      AI_FUNCTION_URL,
-      {
-        method: 'POST',
+    response =
+      await fetch(
+        AI_FUNCTION_URL,
+        {
+          method: 'POST',
 
-        headers: {
-          'Content-Type':
-            'application/json',
+          headers: {
+            'Content-Type':
+              'application/json',
 
-          'Authorization':
-            `Bearer ${authorizationToken}`,
+            'Authorization':
+              `Bearer ${authorizationToken}`,
 
-          'apikey':
-            SUPABASE_ANON_KEY
-        },
+            'apikey':
+              SUPABASE_ANON_KEY
+          },
 
-        body: JSON.stringify({
-          message: cleanQuestion,
-          history,
-          context: finalContext,
-          adminGreeting:
-            aiAdminGreeting,
-          currentUser
-        })
-      }
-    )
+          body: JSON.stringify({
+            message: cleanQuestion,
+            history,
+            context: finalContext,
+            adminGreeting:
+              aiAdminGreeting,
+            currentUser
+          })
+        }
+      )
   } catch (networkError) {
     const error =
       new Error(
@@ -1068,7 +1099,8 @@ async function askAI(question) {
   let data = null
 
   try {
-    data = await response.json()
+    data =
+      await response.json()
   } catch {
     data = null
   }
@@ -1088,9 +1120,7 @@ async function askAI(question) {
     error.status =
       response.status
 
-    error.backendData =
-      data
-
+    error.backendData = data
     error.backendStatus =
       response.status
 
@@ -1110,8 +1140,7 @@ async function askAI(question) {
     error.status =
       response.status
 
-    error.backendData =
-      data
+    error.backendData = data
 
     throw error
   }
@@ -1132,8 +1161,7 @@ async function askAI(question) {
     error.status =
       response.status
 
-    error.backendData =
-      data
+    error.backendData = data
 
     throw error
   }
@@ -1197,7 +1225,9 @@ async function saveAIChatMessage(message) {
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -1207,16 +1237,17 @@ async function saveAIChatMessage(message) {
     const username =
       getUserDisplayName(user)
 
-    const { error } =
-      await db
-        .from('ai_chat_history')
-        .insert({
-          user_id: user.id,
-          username:
-            String(username).trim(),
-          message:
-            String(message).trim()
-        })
+    const {
+      error
+    } = await db
+      .from('ai_chat_history')
+      .insert({
+        user_id: user.id,
+        username:
+          String(username).trim(),
+        message:
+          String(message).trim()
+      })
 
     if (error) {
       console.warn(
@@ -1274,7 +1305,6 @@ async function deleteZazaHistoryItem(id) {
   }
 
   const {
-    data,
     error
   } = await db.rpc(
     'delete_zaza_history_item',
@@ -1284,381 +1314,34 @@ async function deleteZazaHistoryItem(id) {
   )
 
   if (error) {
-    console.error(
-      'Supabase delete RPC error:',
-      error
-    )
-
     throw error
   }
 
-  return data
-}
+  const {
+    data: remainingData,
+    error: verifyError
+  } = await db.rpc(
+    'get_zaza_history'
+  )
 
-function ensureHistoryConfirmStyles() {
-  if (
-    document.getElementById(
-      'ai-history-confirm-styles'
-    )
-  ) {
-    return
+  if (verifyError) {
+    throw verifyError
   }
 
-  const style =
-    document.createElement('style')
-
-  style.id =
-    'ai-history-confirm-styles'
-
-  style.textContent = `
-    .ai-history-confirm {
-      position: fixed !important;
-      inset: 0 !important;
-      z-index: 999999 !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 100vw !important;
-      height: 100dvh !important;
-      padding: 18px !important;
-      box-sizing: border-box !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      transition:
-        opacity .18s ease,
-        visibility .18s ease !important;
-      isolation: isolate !important;
-    }
-
-    .ai-history-confirm.visible {
-      opacity: 1 !important;
-      visibility: visible !important;
-      pointer-events: auto !important;
-    }
-
-    .ai-history-confirm-backdrop {
-      position: absolute !important;
-      inset: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      background: rgba(0, 0, 0, .78) !important;
-      -webkit-backdrop-filter: blur(8px) !important;
-      backdrop-filter: blur(8px) !important;
-      pointer-events: auto !important;
-      touch-action: none !important;
-    }
-
-    .ai-history-confirm-box {
-      position: relative !important;
-      z-index: 2 !important;
-      width: min(380px, calc(100vw - 32px)) !important;
-      max-width: 380px !important;
-      box-sizing: border-box !important;
-      padding: 24px !important;
-      border: 1px solid rgba(34, 211, 149, .28) !important;
-      border-radius: 22px !important;
-      background:
-        linear-gradient(
-          145deg,
-          rgba(13, 27, 24, .98),
-          rgba(7, 17, 15, .99)
-        ) !important;
-      box-shadow:
-        0 24px 80px rgba(0, 0, 0, .65),
-        0 0 0 1px rgba(255, 255, 255, .03) inset !important;
-      color: #edf7f3 !important;
-      text-align: center !important;
-      transform: translateY(12px) scale(.96) !important;
-      transition: transform .18s ease !important;
-      pointer-events: auto !important;
-    }
-
-    .ai-history-confirm.visible
-    .ai-history-confirm-box {
-      transform:
-        translateY(0)
-        scale(1) !important;
-    }
-
-    .ai-history-confirm-icon {
-      width: 54px !important;
-      height: 54px !important;
-      margin: 0 auto 14px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      border-radius: 50% !important;
-      background: rgba(255, 113, 128, .12) !important;
-      color: #ff7180 !important;
-    }
-
-    .ai-history-confirm-icon svg {
-      width: 25px !important;
-      height: 25px !important;
-    }
-
-    .ai-history-confirm-box h3 {
-      margin: 0 0 10px !important;
-      font-size: 20px !important;
-      line-height: 1.25 !important;
-    }
-
-    .ai-history-confirm-box p {
-      margin: 0 !important;
-      color: #91aaa2 !important;
-      font-size: 14px !important;
-      line-height: 1.6 !important;
-    }
-
-    .ai-history-confirm-actions {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 10px !important;
-      margin-top: 22px !important;
-    }
-
-    .ai-history-confirm-actions button {
-      min-height: 48px !important;
-      width: 100% !important;
-      border-radius: 13px !important;
-      border: 1px solid rgba(255,255,255,.1) !important;
-      padding: 11px 14px !important;
-      font: inherit !important;
-      font-weight: 700 !important;
-      cursor: pointer !important;
-      -webkit-tap-highlight-color: transparent !important;
-      touch-action: manipulation !important;
-    }
-
-    .ai-history-confirm-cancel {
-      background: rgba(255,255,255,.06) !important;
-      color: #edf7f3 !important;
-    }
-
-    .ai-history-confirm-delete {
-      background: #ff7180 !important;
-      border-color: #ff7180 !important;
-      color: #fff !important;
-    }
-
-    .ai-history-confirm-actions button:disabled {
-      opacity: .55 !important;
-      cursor: not-allowed !important;
-    }
-
-    @media (max-width: 520px) {
-      .ai-history-confirm {
-        padding: 14px !important;
-      }
-
-      .ai-history-confirm-box {
-        width: calc(100vw - 28px) !important;
-        padding: 21px 17px !important;
-        border-radius: 19px !important;
-      }
-
-      .ai-history-confirm-actions {
-        gap: 8px !important;
-      }
-
-      .ai-history-confirm-actions button {
-        min-height: 50px !important;
-        font-size: 14px !important;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ai-history-confirm,
-      .ai-history-confirm-box {
-        transition: none !important;
-      }
-    }
-  `
-
-  document.head.appendChild(style)
-}
-
-function showHistoryDeleteConfirm() {
-  ensureHistoryConfirmStyles()
-
-  return new Promise(resolve => {
-    const existing =
-      document.querySelector(
-        '.ai-history-confirm'
-      )
-
-    if (existing) {
-      existing.remove()
-    }
-
-    const overlay =
-      document.createElement('div')
-
-    overlay.className =
-      'ai-history-confirm'
-
-    overlay.setAttribute(
-      'role',
-      'presentation'
+  const stillExists =
+    (remainingData || []).some(
+      item =>
+        Number(item.id) ===
+        numericId
     )
 
-    overlay.innerHTML = `
-      <div
-        class="ai-history-confirm-backdrop"
-        data-history-cancel
-      ></div>
-
-      <div
-        class="ai-history-confirm-box"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="history-confirm-title"
-      >
-        <div class="ai-history-confirm-icon">
-          ${icon('trash-2')}
-        </div>
-
-        <h3 id="history-confirm-title">
-          შეტყობინების წაშლა
-        </h3>
-
-        <p>
-          ნამდვილად გინდა ამ შეტყობინების
-          სამუდამოდ წაშლა?
-        </p>
-
-        <div class="ai-history-confirm-actions">
-          <button
-            type="button"
-            class="ai-history-confirm-cancel"
-            data-history-cancel
-          >
-            გაუქმება
-          </button>
-
-          <button
-            type="button"
-            class="ai-history-confirm-delete"
-            data-history-confirm
-          >
-            OK, წაშლა
-          </button>
-        </div>
-      </div>
-    `
-
-    document.body.appendChild(
-      overlay
+  if (stillExists) {
+    throw new Error(
+      'Supabase-მ შეტყობინება ვერ წაშალა. შეამოწმეთ delete_zaza_history_item ფუნქცია.'
     )
+  }
 
-    refreshIcons()
-
-    let finished = false
-
-    const finish = result => {
-      if (finished) {
-        return
-      }
-
-      finished = true
-
-      overlay.classList.remove(
-        'visible'
-      )
-
-      setTimeout(
-        () => {
-          overlay.remove()
-        },
-        180
-      )
-
-      document.removeEventListener(
-        'keydown',
-        handleKeydown
-      )
-
-      resolve(result)
-    }
-
-    const handleKeydown =
-      event => {
-        if (
-          event.key === 'Escape'
-        ) {
-          event.preventDefault()
-          finish(false)
-        }
-
-        if (
-          event.key === 'Enter' &&
-          document.activeElement ===
-            confirmButton
-        ) {
-          event.preventDefault()
-          finish(true)
-        }
-      }
-
-    const cancelButtons =
-      overlay.querySelectorAll(
-        '[data-history-cancel]'
-      )
-
-    cancelButtons.forEach(
-      button => {
-        button.addEventListener(
-          'click',
-          event => {
-            event.preventDefault()
-            event.stopPropagation()
-            finish(false)
-          },
-          {
-            passive: false
-          }
-        )
-      }
-    )
-
-    const confirmButton =
-      overlay.querySelector(
-        '[data-history-confirm]'
-      )
-
-    confirmButton?.addEventListener(
-      'click',
-      event => {
-        event.preventDefault()
-        event.stopPropagation()
-        finish(true)
-      },
-      {
-        passive: false
-      }
-    )
-
-    document.addEventListener(
-      'keydown',
-      handleKeydown
-    )
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        overlay.classList.add(
-          'visible'
-        )
-
-        setTimeout(
-          () => {
-            confirmButton?.focus()
-          },
-          30
-        )
-      })
-    })
-  })
+  return true
 }
 
 function formatZazaHistory(items) {
@@ -1713,13 +1396,10 @@ function formatZazaHistory(items) {
             )
           : ''
 
-      const id =
-        Number(item.id)
-
       html += `
         <div
           class="ai-history-item"
-          data-history-id="${id}"
+          data-history-id="${Number(item.id)}"
         >
           <strong>
             ${index + 1}. ${username}
@@ -1742,7 +1422,7 @@ function formatZazaHistory(items) {
           <button
             type="button"
             class="ai-history-delete"
-            data-history-id="${id}"
+            data-history-id="${Number(item.id)}"
           >
             ${icon('trash-2')}
             სამუდამოდ წაშლა
@@ -1765,229 +1445,265 @@ function setupZazaHistoryDelete() {
       '.ai-history-delete'
     )
 
-  buttons.forEach(
-    button => {
-      if (
-        button.dataset.deleteBound ===
-        'true'
-      ) {
-        return
-      }
+  buttons.forEach(button => {
+    if (
+      button.dataset.deleteBound ===
+      'true'
+    ) {
+      return
+    }
 
-      button.dataset.deleteBound =
-        'true'
+    button.dataset.deleteBound =
+      'true'
 
-      button.style.pointerEvents =
-        'auto'
+    button.addEventListener(
+      'click',
+      async event => {
+        event.preventDefault()
+        event.stopPropagation()
 
-      button.style.touchAction =
-        'manipulation'
+        if (button.disabled) {
+          return
+        }
 
-      button.addEventListener(
-        'click',
-        async event => {
-          event.preventDefault()
-          event.stopPropagation()
+        const id =
+          Number(
+            button.dataset.historyId
+          )
 
-          if (
-            button.disabled
-          ) {
-            return
-          }
+        if (
+          !Number.isSafeInteger(id)
+        ) {
+          toast(
+            'შეტყობინების ID არასწორია.'
+          )
 
-          const id =
-            Number(
-              button.dataset.historyId
-            )
+          return
+        }
 
-          if (
-            !Number.isSafeInteger(
-              id
-            )
-          ) {
-            toast(
-              'შეტყობინების ID არასწორია.'
-            )
+        const confirmed =
+          button.dataset.deleteConfirm ===
+          'true'
 
-            return
-          }
+        if (!confirmed) {
+          button.dataset.deleteConfirm =
+            'true'
 
-          const confirmed =
-            await showHistoryDeleteConfirm()
-
-          if (!confirmed) {
-            return
-          }
-
-          if (
-            button.disabled
-          ) {
-            return
-          }
-
-          button.disabled = true
+          button.classList.add(
+            'delete-confirm-ready'
+          )
 
           button.innerHTML = `
-            ${icon('loader-circle')}
-            იშლება...
+            ${icon('triangle-alert')}
+            ნამდვილად წაშლა?
           `
 
           refreshIcons()
 
-          try {
-            await deleteZazaHistoryItem(
-              id
-            )
+          clearTimeout(
+            button.deleteConfirmTimer
+          )
 
-            const item =
-              button.closest(
-                '.ai-history-item'
-              )
+          button.deleteConfirmTimer =
+            setTimeout(
+              () => {
+                if (
+                  document.body.contains(
+                    button
+                  ) &&
+                  button.dataset.deleteConfirm ===
+                    'true' &&
+                  !button.disabled
+                ) {
+                  button.dataset.deleteConfirm =
+                    'false'
 
-            if (item) {
-              item.remove()
-            }
-
-            const list =
-              document.querySelector(
-                '.ai-history-list'
-              )
-
-            const historyItems =
-              list
-                ? list.querySelectorAll(
-                    '.ai-history-item'
-                  )
-                : []
-
-            const remaining =
-              historyItems.length
-
-            historyItems.forEach(
-              (
-                historyItem,
-                index
-              ) => {
-                const strong =
-                  historyItem.querySelector(
-                    'strong'
+                  button.classList.remove(
+                    'delete-confirm-ready'
                   )
 
-                if (!strong) {
-                  return
+                  button.innerHTML = `
+                    ${icon('trash-2')}
+                    სამუდამოდ წაშლა
+                  `
+
+                  refreshIcons()
                 }
+              },
+              5000
+            )
 
-                const currentText =
-                  strong.textContent
-                    .replace(
-                      /^\s*\d+\.\s*/,
-                      ''
-                    )
-                    .trim()
+          return
+        }
 
-                strong.textContent =
-                  `${index + 1}. ${currentText}`
+        clearTimeout(
+          button.deleteConfirmTimer
+        )
+
+        button.disabled = true
+
+        button.dataset.deleteConfirm =
+          'false'
+
+        button.classList.remove(
+          'delete-confirm-ready'
+        )
+
+        button.innerHTML = `
+          ${icon('loader-circle')}
+          იშლება...
+        `
+
+        refreshIcons()
+
+        try {
+          await deleteZazaHistoryItem(
+            id
+          )
+
+          const item =
+            button.closest(
+              '.ai-history-item'
+            )
+
+          if (item) {
+            item.remove()
+          }
+
+          const list =
+            document.querySelector(
+              '.ai-history-list'
+            )
+
+          const historyItems =
+            list
+              ? list.querySelectorAll(
+                  '.ai-history-item'
+                )
+              : []
+
+          const remaining =
+            historyItems.length
+
+          historyItems.forEach(
+            (
+              historyItem,
+              index
+            ) => {
+              const strong =
+                historyItem.querySelector(
+                  'strong'
+                )
+
+              if (!strong) {
+                return
               }
-            )
 
-            const count =
-              document.querySelector(
-                '.ai-history-count'
-              )
+              const currentText =
+                strong.textContent
+                  .replace(
+                    /^\s*\d+\.\s*/,
+                    ''
+                  )
+                  .trim()
 
-            if (count) {
-              count.innerHTML =
-                remaining
-                  ? `
-                    დარჩენილია
-                    <strong>
-                      ${remaining}
-                    </strong>
-                    შეტყობინება:
-                  `
-                  : `
-                    ყველა შეტყობინება
-                    წაშლილია.
-                  `
+              strong.textContent =
+                `${index + 1}. ${currentText}`
             }
+          )
 
-            if (
-              list &&
-              remaining === 0
-            ) {
-              list.innerHTML = `
-                <div class="empty-state compact-empty">
-                  ${icon('trash-2')}
-
-                  <h3>
-                    ისტორია ცარიელია
-                  </h3>
-
-                  <p>
-                    ყველა ნაპოვნი შეტყობინება
-                    სამუდამოდ წაიშალა.
-                  </p>
-                </div>
-              `
-
-              refreshIcons()
-            }
-
-            toast(
-              'შეტყობინება სამუდამოდ წაიშალა.',
-              'success'
-            )
-          } catch (error) {
-            console.error(
-              'History delete error:',
-              error
+          const count =
+            document.querySelector(
+              '.ai-history-count'
             )
 
-            console.error(
-              'History delete message:',
-              error?.message
-            )
+          if (count) {
+            count.innerHTML =
+              remaining
+                ? `
+                  დარჩენილია
+                  <strong>
+                    ${remaining}
+                  </strong>
+                  შეტყობინება:
+                `
+                : `
+                  ყველა შეტყობინება წაშლილია.
+                `
+          }
 
-            console.error(
-              'History delete details:',
-              error?.details
-            )
+          if (
+            list &&
+            remaining === 0
+          ) {
+            list.innerHTML = `
+              <div class="empty-state compact-empty">
+                ${icon('trash-2')}
 
-            console.error(
-              'History delete hint:',
-              error?.hint
-            )
+                <h3>
+                  ისტორია ცარიელია
+                </h3>
 
-            button.disabled =
-              false
-
-            button.innerHTML = `
-              ${icon('trash-2')}
-              სამუდამოდ წაშლა
+                <p>
+                  ყველა ნაპოვნი შეტყობინება
+                  სამუდამოდ წაიშალა.
+                </p>
+              </div>
             `
 
             refreshIcons()
-
-            const actualError =
-              String(
-                error?.message ||
-                error?.details ||
-                ''
-              ).trim()
-
-            toast(
-              actualError
-                ? `წაშლა ვერ მოხერხდა: ${actualError}`
-                : 'შეტყობინების წაშლა ვერ მოხერხდა.'
-            )
           }
-        },
-        {
-          passive: false
+
+          toast(
+            'შეტყობინება სამუდამოდ წაიშალა.',
+            'success'
+          )
+        } catch (error) {
+          console.error(
+            'History delete error:',
+            error
+          )
+
+          console.error(
+            'History delete message:',
+            error?.message
+          )
+
+          console.error(
+            'History delete details:',
+            error?.details
+          )
+
+          console.error(
+            'History delete hint:',
+            error?.hint
+          )
+
+          button.disabled = false
+
+          button.dataset.deleteConfirm =
+            'false'
+
+          button.innerHTML = `
+            ${icon('trash-2')}
+            სამუდამოდ წაშლა
+          `
+
+          refreshIcons()
+
+          const errorMessage =
+            error?.message ||
+            error?.details ||
+            error?.hint ||
+            'შეტყობინების წაშლა ვერ მოხერხდა.'
+
+          toast(
+            errorMessage
+          )
         }
-      )
-    }
-  )
+      }
+    )
+  })
 
   refreshIcons()
 }
@@ -2102,8 +1818,7 @@ async function handleAIQuestion(question) {
             </strong>
 
             <p>
-              მონაცემების მიღებისას
-              შეცდომა მოხდა.
+              მონაცემების მიღებისას შეცდომა მოხდა.
             </p>
           </div>
         `
@@ -2144,7 +1859,9 @@ async function handleAIQuestion(question) {
     typing?.remove()
 
     const finalReply =
-      applyAIGreeting(reply)
+      applyAIGreeting(
+        reply
+      )
 
     addAIMessage(
       'assistant',
@@ -2317,46 +2034,40 @@ async function initAIChat() {
     .querySelectorAll(
       '.ai-suggestion'
     )
-    .forEach(
-      button => {
-        button.addEventListener(
-          'click',
-          async () => {
-            const question =
-              button.dataset
-                .aiQuestion
+    .forEach(button => {
+      button.addEventListener(
+        'click',
+        async () => {
+          const question =
+            button.dataset
+              .aiQuestion
 
-            if (!question) {
-              return
-            }
-
-            chat
-              .querySelectorAll(
-                '.ai-suggestion'
-              )
-              .forEach(
-                b => {
-                  b.disabled = true
-                }
-              )
-
-            await handleAIQuestion(
-              question
-            )
-
-            chat
-              .querySelectorAll(
-                '.ai-suggestion'
-              )
-              .forEach(
-                b => {
-                  b.disabled = false
-                }
-              )
+          if (!question) {
+            return
           }
-        )
-      }
-    )
+
+          chat
+            .querySelectorAll(
+              '.ai-suggestion'
+            )
+            .forEach(b => {
+              b.disabled = true
+            })
+
+          await handleAIQuestion(
+            question
+          )
+
+          chat
+            .querySelectorAll(
+              '.ai-suggestion'
+            )
+            .forEach(b => {
+              b.disabled = false
+            })
+        }
+      )
+    })
 
   form?.addEventListener(
     'submit',
@@ -2435,9 +2146,11 @@ function card(project) {
             ${esc(project.category)}
           </span>
 
-          <time datetime="${esc(
-            project.created_at
-          )}">
+          <time
+            datetime="${esc(
+              project.created_at
+            )}"
+          >
             ${dateText(
               project.created_at
             )}
@@ -2449,7 +2162,9 @@ function card(project) {
         </h2>
 
         <p>
-          ${esc(project.description)}
+          ${esc(
+            project.description
+          )}
         </p>
 
         <div class="card-footer">
@@ -2536,7 +2251,8 @@ async function initProjects() {
         p =>
           (
             !category ||
-            p.category === category
+            p.category ===
+              category
           ) &&
           (
             !q ||
@@ -2610,11 +2326,11 @@ async function initDetail() {
 
   if (
     !id ||
-    !/^[0-9a-f-]{36}$/i.test(
-      id
-    )
+    !/^[0-9a-f-]{36}$/i.test(id)
   ) {
-    return notFound(target)
+    return notFound(
+      target
+    )
   }
 
   const {
@@ -2634,7 +2350,9 @@ async function initDetail() {
     error ||
     !p
   ) {
-    return notFound(target)
+    return notFound(
+      target
+    )
   }
 
   const image =
@@ -2806,7 +2524,9 @@ async function initDetail() {
       async () => {
         try {
           await navigator.clipboard
-            .writeText(p.code)
+            .writeText(
+              p.code
+            )
 
           const isChemistry =
             String(
@@ -2939,24 +2659,28 @@ async function upload(
   const path =
     `${folder}/${crypto.randomUUID()}-${clean}`
 
-  const { error } =
-    await db.storage
-      .from(bucket)
-      .upload(
-        path,
-        file,
-        {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: file.type
-        }
-      )
+  const {
+    error
+  } = await db.storage
+    .from(bucket)
+    .upload(
+      path,
+      file,
+      {
+        cacheControl: '3600',
+        upsert: false,
+        contentType:
+          file.type
+      }
+    )
 
   if (error) {
     throw error
   }
 
-  const { data } =
+  const {
+    data
+  } =
     db.storage
       .from(bucket)
       .getPublicUrl(path)
@@ -3002,7 +2726,9 @@ async function removeStored(
     )
 
   if (path) {
-    const { error } =
+    const {
+      error
+    } =
       await db.storage
         .from(bucket)
         .remove([path])
@@ -3060,7 +2786,9 @@ async function initAdmin() {
   }
 
   const {
-    data: { session }
+    data: {
+      session
+    }
   } = await db.auth.getSession()
 
   if (session) {
@@ -3170,7 +2898,9 @@ function updateCodeFieldLabel() {
   }
 
   const label =
-    codeInput.closest('label')
+    codeInput.closest(
+      'label'
+    )
 
   if (!label) {
     return
@@ -3237,8 +2967,7 @@ async function login(event) {
     $('#login-error')
 
   if (errorElement) {
-    errorElement.textContent =
-      ''
+    errorElement.textContent = ''
   }
 
   if (
@@ -3385,7 +3114,9 @@ async function logout() {
   }
 
   try {
-    const { error } =
+    const {
+      error
+    } =
       await db.auth.signOut()
 
     if (error) {
@@ -3416,9 +3147,7 @@ async function logout() {
       'success'
     )
 
-    if (
-      page === 'admin'
-    ) {
+    if (page === 'admin') {
       setTimeout(
         () => {
           location.href =
@@ -3484,7 +3213,6 @@ async function loadAdminProjects() {
   }
 
   status.hidden = false
-
   list.innerHTML = ''
 
   const {
@@ -3525,81 +3253,82 @@ async function loadAdminProjects() {
     adminProjects.length
       ? adminProjects
           .map(
-            p => `
-              <article class="admin-row">
-                <div>
-                  <h3>
-                    ${esc(p.title)}
-                  </h3>
+            p =>
+              `
+                <article class="admin-row">
+                  <div>
+                    <h3>
+                      ${esc(p.title)}
+                    </h3>
 
-                  <p>
-                    ${esc(p.category)}
-                    ·
-                    ${dateText(
-                      p.created_at
-                    )}
-                  </p>
-                </div>
+                    <p>
+                      ${esc(p.category)}
+                      ·
+                      ${dateText(
+                        p.created_at
+                      )}
+                    </p>
+                  </div>
 
-                <span
-                  class="status ${
-                    p.published
-                      ? 'published'
-                      : 'hidden-status'
-                  }"
-                >
-                  ${
-                    p.published
-                      ? 'გამოქვეყნებული'
-                      : 'დამალული'
-                  }
-                </span>
-
-                <div class="row-actions">
-                  <a
-                    class="icon-button"
-                    title="ნახვა"
-                    href="project.html?id=${p.id}"
-                  >
-                    ${icon('eye')}
-                  </a>
-
-                  <button
-                    class="icon-button edit"
-                    data-id="${p.id}"
-                    title="რედაქტირება"
-                  >
-                    ${icon('pencil')}
-                  </button>
-
-                  <button
-                    class="icon-button toggle"
-                    data-id="${p.id}"
-                    title="${
+                  <span
+                    class="status ${
                       p.published
-                        ? 'დამალვა'
-                        : 'გამოქვეყნება'
+                        ? 'published'
+                        : 'hidden-status'
                     }"
                   >
                     ${
-                      icon(
-                        p.published
-                          ? 'eye-off'
-                          : 'send'
-                      )
+                      p.published
+                        ? 'გამოქვეყნებული'
+                        : 'დამალული'
                     }
-                  </button>
+                  </span>
 
-                  <button
-                    class="icon-button danger delete"
-                    data-id="${p.id}"
-                    title="წაშლა"
-                  >
-                    ${icon('trash-2')}
-                  </button>
-                </div>
-              </article>
-            `
+                  <div class="row-actions">
+                    <a
+                      class="icon-button"
+                      title="ნახვა"
+                      href="project.html?id=${p.id}"
+                    >
+                      ${icon('eye')}
+                    </a>
+
+                    <button
+                      class="icon-button edit"
+                      data-id="${p.id}"
+                      title="რედაქტირება"
+                    >
+                      ${icon('pencil')}
+                    </button>
+
+                    <button
+                      class="icon-button toggle"
+                      data-id="${p.id}"
+                      title="${
+                        p.published
+                          ? 'დამალვა'
+                          : 'გამოქვეყნება'
+                      }"
+                    >
+                      ${
+                        icon(
+                          p.published
+                            ? 'eye-off'
+                            : 'send'
+                        )
+                      }
+                    </button>
+
+                    <button
+                      class="icon-button danger delete"
+                      data-id="${p.id}"
+                      title="წაშლა"
+                    >
+                      ${icon('trash-2')}
+                    </button>
+                  </div>
+                </article>
+              `
           )
           .join('')
       : `
@@ -3611,8 +3340,7 @@ async function loadAdminProjects() {
           </h2>
 
           <p>
-            დაიწყეთ პირველი რეალური
-            პროექტის დამატებით.
+            დაიწყეთ პირველი რეალური პროექტის დამატებით.
           </p>
         </div>
       `
@@ -3709,10 +3437,12 @@ function openEditor(p) {
       .value = p.author
 
     $('#published')
-      .checked = p.published
+      .checked =
+      p.published
 
     $('#description')
-      .value = p.description
+      .value =
+      p.description
 
     $('#components')
       .value =
@@ -3788,13 +3518,11 @@ async function saveProject(event) {
     $('#save-project')
 
   const id =
-    $('#edit-id')
-      .value
+    $('#edit-id').value
 
   const old =
     adminProjects.find(
-      p =>
-        p.id === id
+      p => p.id === id
     )
 
   const image =
@@ -3934,7 +3662,9 @@ async function saveProject(event) {
     let error
 
     if (id) {
-      ;({ error } =
+      ({
+        error
+      } =
         await db
           .from('projects')
           .update(value)
@@ -3943,7 +3673,9 @@ async function saveProject(event) {
             id
           ))
     } else {
-      ;({ error } =
+      ({
+        error
+      } =
         await db
           .from('projects')
           .insert(value))
@@ -4029,17 +3761,18 @@ async function togglePublished(id) {
     return
   }
 
-  const { error } =
-    await db
-      .from('projects')
-      .update({
-        published:
-          !p.published
-      })
-      .eq(
-        'id',
-        id
-      )
+  const {
+    error
+  } = await db
+    .from('projects')
+    .update({
+      published:
+        !p.published
+    })
+    .eq(
+      'id',
+      id
+    )
 
   if (error) {
     return toast(
@@ -4073,14 +3806,15 @@ async function deleteProject(id) {
     return
   }
 
-  const { error } =
-    await db
-      .from('projects')
-      .delete()
-      .eq(
-        'id',
-        id
-      )
+  const {
+    error
+  } = await db
+    .from('projects')
+    .delete()
+    .eq(
+      'id',
+      id
+    )
 
   if (error) {
     return toast(
@@ -4231,9 +3965,8 @@ function renderMeetingContent(
         </h3>
 
         <p>
-          როგორც კი ადმინისტრატორი
-          თარიღსა და დროს გამოაქვეყნებს,
-          ინფორმაცია აქ გამოჩნდება.
+          როგორც კი ადმინისტრატორი თარიღსა და
+          დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
         </p>
       </div>
     `
@@ -4441,12 +4174,14 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-      data.meeting_date || ''
+      data.meeting_date ||
+      ''
 
     $('#meeting-time')
       .value =
       String(
-        data.meeting_time || ''
+        data.meeting_time ||
+        ''
       ).slice(
         0,
         5
@@ -4471,7 +4206,8 @@ async function loadAdminMeeting() {
       'meeting-admin-status'
 
     $('#meeting-day-preview')
-      .textContent = '—'
+      .textContent =
+      '—'
   }
 }
 
@@ -4528,8 +4264,7 @@ async function saveMeeting(event) {
     $('#meeting-time')
       .value
 
-  errorTarget.textContent =
-    ''
+  errorTarget.textContent = ''
 
   if (
     !date ||
@@ -4549,7 +4284,9 @@ async function saveMeeting(event) {
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -4558,21 +4295,23 @@ async function saveMeeting(event) {
       )
     }
 
-    const { error } =
-      await db
-        .from('club_meeting')
-        .upsert(
-          {
-            id: 1,
-            meeting_date: date,
-            meeting_time: time,
-            updated_by:
-              user.id
-          },
-          {
-            onConflict: 'id'
-          }
-        )
+    const {
+      error
+    } = await db
+      .from('club_meeting')
+      .upsert(
+        {
+          id: 1,
+          meeting_date: date,
+          meeting_time: time,
+          updated_by:
+            user.id
+        },
+        {
+          onConflict:
+            'id'
+        }
+      )
 
     if (error) {
       throw error
@@ -4611,14 +4350,15 @@ async function clearMeeting() {
     return
   }
 
-  const { error } =
-    await db
-      .from('club_meeting')
-      .delete()
-      .eq(
-        'id',
-        1
-      )
+  const {
+    error
+  } = await db
+    .from('club_meeting')
+    .delete()
+    .eq(
+      'id',
+      1
+    )
 
   if (error) {
     return toast(
@@ -4690,8 +4430,7 @@ async function initPasswordReset() {
           'button'
         )
 
-      error.textContent =
-        ''
+      error.textContent = ''
 
       if (
         password !==
@@ -4704,8 +4443,7 @@ async function initPasswordReset() {
       }
 
       if (
-        password.length <
-        10
+        password.length < 10
       ) {
         error.textContent =
           'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.'
@@ -4714,7 +4452,9 @@ async function initPasswordReset() {
       }
 
       const {
-        data: { session }
+        data: {
+          session
+        }
       } =
         await db.auth.getSession()
 
@@ -4765,14 +4505,9 @@ async function initPasswordReset() {
   )
 }
 
-let authUIUpdating =
-  false
-
-let authUIQueued =
-  false
-
-let authUIListenerStarted =
-  false
+let authUIUpdating = false
+let authUIQueued = false
+let authUIListenerStarted = false
 
 function findLoginElement() {
   const elements =
@@ -4809,8 +4544,10 @@ function findLoginElement() {
           href.endsWith(
             '/admin.html'
           ) ||
-          text === 'log in' ||
-          text === 'login' ||
+          text ===
+            'log in' ||
+          text ===
+            'login' ||
           text ===
             'ადმინისტრატორი'
         )
@@ -4837,7 +4574,9 @@ function closeAllAccountMenus(
     )
 }
 
-function createAccountMenu(user) {
+function createAccountMenu(
+  user
+) {
   const name =
     getUserDisplayName(
       user
