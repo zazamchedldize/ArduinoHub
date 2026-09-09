@@ -8,38 +8,37 @@ import {
   createClient
 } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const db = supabaseIsConfigured
-  ? createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true
+const db =
+  supabaseIsConfigured
+    ? createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true
+          }
         }
-      }
-    )
-  : null
+      )
+    : null
 
 const page = document.body.dataset.page
 
-const $ = (
-  s,
-  root = document
-) => root.querySelector(s)
+const $ = (s, root = document) =>
+  root.querySelector(s)
 
-const esc = (
-  value = ''
-) => String(value).replace(
-  /[&<>'"]/g,
-  c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;'
-  }[c])
-)
+const esc = (value = '') =>
+  String(value).replace(
+    /[&<>'"]/g,
+    c =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[c])
+  )
 
 const icon = name =>
   `<i data-lucide="${name}"></i>`
@@ -48,10 +47,7 @@ function refreshIcons() {
   window.lucide?.createIcons()
 }
 
-function toast(
-  message,
-  type = ''
-) {
+function toast(message, type = '') {
   const el = $('#toast')
 
   if (!el) {
@@ -59,9 +55,7 @@ function toast(
   }
 
   el.textContent = message
-
-  el.className =
-    `toast show ${type}`
+  el.className = `toast show ${type}`
 
   clearTimeout(toast.timer)
 
@@ -79,23 +73,18 @@ function dateText(value) {
     {
       dateStyle: 'medium'
     }
-  ).format(
-    new Date(value)
-  )
+  ).format(new Date(value))
 }
 
 function neutralError(
   error,
-  fallback =
-    'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
+  fallback = 'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
 ) {
   console.error(error)
   return fallback
 }
 
-function configuredMessage(
-  target
-) {
+function configuredMessage(target) {
   if (!target) {
     return
   }
@@ -127,8 +116,7 @@ function initChrome() {
         new Date().getFullYear()
     })
 
-  const button =
-    $('.menu-toggle')
+  const button = $('.menu-toggle')
 
   if (button) {
     button.addEventListener(
@@ -172,7 +160,6 @@ const AI_SYSTEM_CONTEXT = `
 ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
 
 საიტის ძირითადი ინფორმაცია:
-
 - ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
 - პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
 - ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
@@ -181,7 +168,6 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
 
 კლუბის წევრები არიან:
-
 - ზაზა მჭედლიძე — აქტიური წევრია.
 - თეკლა შველიძე — აქტიური წევრია.
 - ანასტასია ხონელიძე — აქტიური წევრია.
@@ -193,7 +179,6 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
 
 პასუხის წესები:
-
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
 2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
@@ -224,9 +209,7 @@ async function getCurrentUser() {
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth.getUser()
 
     return user || null
@@ -240,9 +223,7 @@ async function getCurrentUser() {
   }
 }
 
-function getUserDisplayName(
-  user
-) {
+function getUserDisplayName(user) {
   if (!user) {
     return 'მომხმარებელი'
   }
@@ -288,9 +269,7 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: {
-        session
-      }
+      data: { session }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -299,9 +278,7 @@ async function detectAIAdmin() {
     }
 
     const admin =
-      await isAdmin(
-        session.user
-      )
+      await isAdmin(session.user)
 
     if (!admin?.username) {
       aiAdminGreeting = ''
@@ -319,16 +296,14 @@ async function detectAIAdmin() {
       username.includes('ზაზა') ||
       username.includes('zaza')
     ) {
-      aiAdminGreeting =
-        'ბატონო ზაზა'
+      aiAdminGreeting = 'ბატონო ზაზა'
     } else if (
       username === 'tekla' ||
       username === 'თეკლა' ||
       username.includes('თეკლა') ||
       username.includes('tekla')
     ) {
-      aiAdminGreeting =
-        'ქალბატონო თეკლა'
+      aiAdminGreeting = 'ქალბატონო თეკლა'
     } else {
       aiAdminGreeting = ''
     }
@@ -342,9 +317,7 @@ async function detectAIAdmin() {
   }
 }
 
-function applyAIGreeting(
-  reply
-) {
+function applyAIGreeting(reply) {
   const clean =
     String(reply || '').trim()
 
@@ -358,19 +331,14 @@ function applyAIGreeting(
   const greetingPattern =
     /^(ბატონო\s+ზაზა|ქალბატონო\s+თეკლა)\s*[,!:—-]?\s*/i
 
-  if (
-    greetingPattern.test(clean)
-  ) {
+  if (greetingPattern.test(clean)) {
     return clean
   }
 
   return `${aiAdminGreeting}, ${clean}`
 }
 
-function addAIMessage(
-  type,
-  content
-) {
+function addAIMessage(type, content) {
   const messages =
     $('#ai-chat-messages')
 
@@ -424,9 +392,7 @@ function addAIMessage(
   return message
 }
 
-function formatAIResponse(
-  text
-) {
+function formatAIResponse(text) {
   if (!text) {
     return '<p>პასუხი ვერ მივიღე.</p>'
   }
@@ -441,46 +407,41 @@ function formatAIResponse(
 
   const codeBlocks = []
 
-  source =
-    source.replace(
-      /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
-      (_, code) => {
-        const index =
-          codeBlocks.length
+  source = source.replace(
+    /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+    (_, code) => {
+      const index =
+        codeBlocks.length
 
-        codeBlocks.push(
-          esc(code.trim())
-        )
+      codeBlocks.push(
+        esc(code.trim())
+      )
 
-        return `@@CODEBLOCK_${index}@@`
-      }
-    )
+      return `@@CODEBLOCK_${index}@@`
+    }
+  )
 
   let safe = esc(source)
 
-  safe =
-    safe.replace(
-      /\*\*\*(.+?)\*\*\*/g,
-      '<strong><em>$1</em></strong>'
-    )
+  safe = safe.replace(
+    /\*\*\*(.+?)\*\*\*/g,
+    '<strong><em>$1</em></strong>'
+  )
 
-  safe =
-    safe.replace(
-      /\*\*(.+?)\*\*/g,
-      '<strong>$1</strong>'
-    )
+  safe = safe.replace(
+    /\*\*(.+?)\*\*/g,
+    '<strong>$1</strong>'
+  )
 
-  safe =
-    safe.replace(
-      /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
-      '<em>$1</em>'
-    )
+  safe = safe.replace(
+    /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+    '<em>$1</em>'
+  )
 
-  safe =
-    safe.replace(
-      /`([^`\n]+)`/g,
-      '<code class="ai-inline-code">$1</code>'
-    )
+  safe = safe.replace(
+    /`([^`\n]+)`/g,
+    '<code class="ai-inline-code">$1</code>'
+  )
 
   const lines =
     safe.split(/\r?\n/)
@@ -726,9 +687,7 @@ function addAITyping() {
   return typing
 }
 
-function getAIErrorStatus(
-  error
-) {
+function getAIErrorStatus(error) {
   if (
     Number.isFinite(
       Number(error?.status)
@@ -738,9 +697,7 @@ function getAIErrorStatus(
   }
 
   const message =
-    String(
-      error?.message || ''
-    )
+    String(error?.message || '')
 
   const match =
     message.match(
@@ -752,9 +709,7 @@ function getAIErrorStatus(
     : null
 }
 
-function isAIQuotaError(
-  error
-) {
+function isAIQuotaError(error) {
   const message =
     String(
       error?.message || ''
@@ -782,9 +737,7 @@ function isAIQuotaError(
   )
 }
 
-function isAIModelError(
-  error
-) {
+function isAIModelError(error) {
   const message =
     String(
       error?.message || ''
@@ -807,9 +760,7 @@ function isAIModelError(
   )
 }
 
-function getAIUserErrorMessage(
-  error
-) {
+function getAIUserErrorMessage(error) {
   const status =
     getAIErrorStatus(error)
 
@@ -825,12 +776,15 @@ function getAIUserErrorMessage(
         </strong>
 
         <p>
-          ArduinoHub AI-ის უფასო გამოყენების ლიმიტი ამ დროისთვის ამოიწურა.
+          ArduinoHub AI-ის უფასო გამოყენების
+          ლიმიტი ამ დროისთვის ამოიწურა.
         </p>
 
         <small>
-          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას.
-          ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
+          პრობლემა Gemini-ის გამოყენების ლიმიტს
+          უკავშირდება და არა შენს კითხვას.
+          ლიმიტის განახლების შემდეგ ჩატი კვლავ
+          ავტომატურად იმუშავებს.
         </small>
       </div>
     `
@@ -845,11 +799,13 @@ function getAIUserErrorMessage(
         </strong>
 
         <p>
-          ArduinoHub AI-ის გამოყენებული Gemini მოდელი ამჟამად ვერ მუშაობს ან მიუწვდომელია.
+          ArduinoHub AI-ის გამოყენებული Gemini
+          მოდელი ამჟამად ვერ მუშაობს ან მიუწვდომელია.
         </p>
 
         <small>
-          საჭიროა Supabase Edge Function-ში გამოყენებული მოდელის შემოწმება.
+          საჭიროა Supabase Edge Function-ში
+          გამოყენებული მოდელის შემოწმება.
         </small>
       </div>
     `
@@ -902,7 +858,8 @@ function getAIUserErrorMessage(
         </strong>
 
         <p>
-          AI ფუნქცია ან მოთხოვნილი რესურსი ამჟამად ვერ მოიძებნა.
+          AI ფუნქცია ან მოთხოვნილი რესურსი
+          ამჟამად ვერ მოიძებნა.
         </p>
 
         <small>
@@ -945,7 +902,8 @@ function getAIUserErrorMessage(
         </strong>
 
         <p>
-          AI სერვერმა პასუხის დაბრუნება ამჯერად ვერ შეძლო.
+          AI სერვერმა პასუხის დაბრუნება
+          ამჯერად ვერ შეძლო.
         </p>
 
         <small>
@@ -963,7 +921,8 @@ function getAIUserErrorMessage(
       </strong>
 
       <p>
-        ამ მომენტში AI სერვისთან დაკავშირება ვერ მოხერხდა.
+        ამ მომენტში AI სერვისთან დაკავშირება
+        ვერ მოხერხდა.
       </p>
 
       <small>
@@ -973,9 +932,7 @@ function getAIUserErrorMessage(
   `
 }
 
-async function askAI(
-  question
-) {
+async function askAI(question) {
   if (!AI_FUNCTION_URL) {
     throw new Error(
       'AI ფუნქციის მისამართი ვერ მოიძებნა.'
@@ -999,10 +956,9 @@ async function askAI(
           message.role === 'assistant'
             ? 'assistant'
             : 'user',
-        text:
-          String(
-            message.content || ''
-          ).slice(0, 1800)
+        text: String(
+          message.content || ''
+        ).slice(0, 1800)
       }))
 
   const currentUser =
@@ -1014,9 +970,7 @@ async function askAI(
   if (db) {
     try {
       const {
-        data: {
-          session
-        }
+        data: { session }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -1034,36 +988,41 @@ async function askAI(
   const userIdentityContext =
     currentUser.isAuthenticated
       ? `
-ამჟამად ArduinoHub AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
+        ამჟამად ArduinoHub AI-ს ესაუბრება
+        სისტემაში შესული მომხმარებელი.
 
-მომხმარებლის სახელი და გვარი:
-${currentUser.name}
+        მომხმარებლის სახელი და გვარი:
+        ${currentUser.name}
 
-მომხმარებლის email:
-${currentUser.email || 'უცნობია'}
+        მომხმარებლის email:
+        ${currentUser.email || 'უცნობია'}
 
-მომხმარებლის Supabase ID:
-${currentUser.id}
+        მომხმარებლის Supabase ID:
+        ${currentUser.id}
 
-მნიშვნელოვანი წესები:
-
-- ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
-- თუ მომხმარებელი გეკითხება „ვინ ვარ?“, „რა მქვია?“ ან მსგავს რამეს, გამოიყენე ზემოთ მოცემული სახელი.
-- არ აურიო ეს მომხმარებელი ArduinoHub-ის კლუბის სხვა წევრებში.
-- მომხმარებლის სახელი არ მოიგონო.
-- მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო, თუ ამის შესახებ პირდაპირ არ გკითხავს.
-`
+        მნიშვნელოვანი წესები:
+        - ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
+        - თუ მომხმარებელი გეკითხება „ვინ ვარ?“,
+          „რა მქვია?“ ან მსგავს რამეს,
+          გამოიყენე ზემოთ მოცემული სახელი.
+        - არ აურიო ეს მომხმარებელი ArduinoHub-ის
+          კლუბის სხვა წევრებში.
+        - მომხმარებლის სახელი არ მოიგონო.
+        - მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო,
+          თუ ამის შესახებ პირდაპირ არ გკითხავს.
+      `
       : `
-ამჟამად ArduinoHub AI-ს ესაუბრება არაავტორიზებული მომხმარებელი.
+        ამჟამად ArduinoHub AI-ს ესაუბრება
+        არაავტორიზებული მომხმარებელი.
 
-მომხმარებლის სახელი უცნობია.
-`
+        მომხმარებლის სახელი უცნობია.
+      `
 
   const finalContext = `
-${AI_SYSTEM_CONTEXT}
+    ${AI_SYSTEM_CONTEXT}
 
-${userIdentityContext}
-`
+    ${userIdentityContext}
+  `
 
   let response
 
@@ -1086,16 +1045,11 @@ ${userIdentityContext}
 
         body: JSON.stringify({
           message: cleanQuestion,
-
           history,
-
           context: finalContext,
-
           adminGreeting:
             aiAdminGreeting,
-
-          currentUser:
-            currentUser
+          currentUser
         })
       }
     )
@@ -1114,8 +1068,7 @@ ${userIdentityContext}
   let data = null
 
   try {
-    data =
-      await response.json()
+    data = await response.json()
   } catch {
     data = null
   }
@@ -1188,9 +1141,7 @@ ${userIdentityContext}
   return reply
 }
 
-function containsUnsafeContent(
-  text
-) {
+function containsUnsafeContent(text) {
   const value =
     String(text || '')
       .toLowerCase()
@@ -1225,8 +1176,10 @@ function addAISafetyWarning() {
       </strong>
 
       <p>
-        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის.
-        პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
+        გთხოვთ, არ გამოიყენოთ ArduinoHub AI
+        18+ ან შეუფერებელი შინაარსისთვის.
+        პლატფორმა განკუთვნილია სასწავლო,
+        Arduino-სა და ქიმიის საკითხებისთვის.
       </p>
     </div>
   `
@@ -1237,18 +1190,14 @@ function addAISafetyWarning() {
   )
 }
 
-async function saveAIChatMessage(
-  message
-) {
+async function saveAIChatMessage(message) {
   if (!db) {
     return
   }
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -1258,17 +1207,16 @@ async function saveAIChatMessage(
     const username =
       getUserDisplayName(user)
 
-    const {
-      error
-    } = await db
-      .from('ai_chat_history')
-      .insert({
-        user_id: user.id,
-        username:
-          String(username).trim(),
-        message:
-          String(message).trim()
-      })
+    const { error } =
+      await db
+        .from('ai_chat_history')
+        .insert({
+          user_id: user.id,
+          username:
+            String(username).trim(),
+          message:
+            String(message).trim()
+        })
 
     if (error) {
       console.warn(
@@ -1305,36 +1253,420 @@ async function getZazaHistory() {
   return data || []
 }
 
-async function deleteZazaHistoryItem(
-  id
-) {
+async function deleteZazaHistoryItem(id) {
   if (!db) {
     throw new Error(
       'Supabase არ არის კონფიგურირებული.'
     )
   }
 
+  const numericId =
+    Number(id)
+
+  if (
+    !Number.isSafeInteger(
+      numericId
+    )
+  ) {
+    throw new Error(
+      'შეტყობინების ID არასწორია.'
+    )
+  }
+
   const {
+    data,
     error
   } = await db.rpc(
     'delete_zaza_history_item',
     {
-      history_id: id
+      history_id: numericId
     }
   )
 
   if (error) {
+    console.error(
+      'Supabase delete RPC error:',
+      error
+    )
+
     throw error
   }
+
+  return data
 }
 
-function formatZazaHistory(
-  items
-) {
+function ensureHistoryConfirmStyles() {
+  if (
+    document.getElementById(
+      'ai-history-confirm-styles'
+    )
+  ) {
+    return
+  }
+
+  const style =
+    document.createElement('style')
+
+  style.id =
+    'ai-history-confirm-styles'
+
+  style.textContent = `
+    .ai-history-confirm {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 999999 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100vw !important;
+      height: 100dvh !important;
+      padding: 18px !important;
+      box-sizing: border-box !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      transition:
+        opacity .18s ease,
+        visibility .18s ease !important;
+      isolation: isolate !important;
+    }
+
+    .ai-history-confirm.visible {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+
+    .ai-history-confirm-backdrop {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background: rgba(0, 0, 0, .78) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      backdrop-filter: blur(8px) !important;
+      pointer-events: auto !important;
+      touch-action: none !important;
+    }
+
+    .ai-history-confirm-box {
+      position: relative !important;
+      z-index: 2 !important;
+      width: min(380px, calc(100vw - 32px)) !important;
+      max-width: 380px !important;
+      box-sizing: border-box !important;
+      padding: 24px !important;
+      border: 1px solid rgba(34, 211, 149, .28) !important;
+      border-radius: 22px !important;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(13, 27, 24, .98),
+          rgba(7, 17, 15, .99)
+        ) !important;
+      box-shadow:
+        0 24px 80px rgba(0, 0, 0, .65),
+        0 0 0 1px rgba(255, 255, 255, .03) inset !important;
+      color: #edf7f3 !important;
+      text-align: center !important;
+      transform: translateY(12px) scale(.96) !important;
+      transition: transform .18s ease !important;
+      pointer-events: auto !important;
+    }
+
+    .ai-history-confirm.visible
+    .ai-history-confirm-box {
+      transform:
+        translateY(0)
+        scale(1) !important;
+    }
+
+    .ai-history-confirm-icon {
+      width: 54px !important;
+      height: 54px !important;
+      margin: 0 auto 14px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 50% !important;
+      background: rgba(255, 113, 128, .12) !important;
+      color: #ff7180 !important;
+    }
+
+    .ai-history-confirm-icon svg {
+      width: 25px !important;
+      height: 25px !important;
+    }
+
+    .ai-history-confirm-box h3 {
+      margin: 0 0 10px !important;
+      font-size: 20px !important;
+      line-height: 1.25 !important;
+    }
+
+    .ai-history-confirm-box p {
+      margin: 0 !important;
+      color: #91aaa2 !important;
+      font-size: 14px !important;
+      line-height: 1.6 !important;
+    }
+
+    .ai-history-confirm-actions {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 10px !important;
+      margin-top: 22px !important;
+    }
+
+    .ai-history-confirm-actions button {
+      min-height: 48px !important;
+      width: 100% !important;
+      border-radius: 13px !important;
+      border: 1px solid rgba(255,255,255,.1) !important;
+      padding: 11px 14px !important;
+      font: inherit !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      -webkit-tap-highlight-color: transparent !important;
+      touch-action: manipulation !important;
+    }
+
+    .ai-history-confirm-cancel {
+      background: rgba(255,255,255,.06) !important;
+      color: #edf7f3 !important;
+    }
+
+    .ai-history-confirm-delete {
+      background: #ff7180 !important;
+      border-color: #ff7180 !important;
+      color: #fff !important;
+    }
+
+    .ai-history-confirm-actions button:disabled {
+      opacity: .55 !important;
+      cursor: not-allowed !important;
+    }
+
+    @media (max-width: 520px) {
+      .ai-history-confirm {
+        padding: 14px !important;
+      }
+
+      .ai-history-confirm-box {
+        width: calc(100vw - 28px) !important;
+        padding: 21px 17px !important;
+        border-radius: 19px !important;
+      }
+
+      .ai-history-confirm-actions {
+        gap: 8px !important;
+      }
+
+      .ai-history-confirm-actions button {
+        min-height: 50px !important;
+        font-size: 14px !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ai-history-confirm,
+      .ai-history-confirm-box {
+        transition: none !important;
+      }
+    }
+  `
+
+  document.head.appendChild(style)
+}
+
+function showHistoryDeleteConfirm() {
+  ensureHistoryConfirmStyles()
+
+  return new Promise(resolve => {
+    const existing =
+      document.querySelector(
+        '.ai-history-confirm'
+      )
+
+    if (existing) {
+      existing.remove()
+    }
+
+    const overlay =
+      document.createElement('div')
+
+    overlay.className =
+      'ai-history-confirm'
+
+    overlay.setAttribute(
+      'role',
+      'presentation'
+    )
+
+    overlay.innerHTML = `
+      <div
+        class="ai-history-confirm-backdrop"
+        data-history-cancel
+      ></div>
+
+      <div
+        class="ai-history-confirm-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="history-confirm-title"
+      >
+        <div class="ai-history-confirm-icon">
+          ${icon('trash-2')}
+        </div>
+
+        <h3 id="history-confirm-title">
+          შეტყობინების წაშლა
+        </h3>
+
+        <p>
+          ნამდვილად გინდა ამ შეტყობინების
+          სამუდამოდ წაშლა?
+        </p>
+
+        <div class="ai-history-confirm-actions">
+          <button
+            type="button"
+            class="ai-history-confirm-cancel"
+            data-history-cancel
+          >
+            გაუქმება
+          </button>
+
+          <button
+            type="button"
+            class="ai-history-confirm-delete"
+            data-history-confirm
+          >
+            OK, წაშლა
+          </button>
+        </div>
+      </div>
+    `
+
+    document.body.appendChild(
+      overlay
+    )
+
+    refreshIcons()
+
+    let finished = false
+
+    const finish = result => {
+      if (finished) {
+        return
+      }
+
+      finished = true
+
+      overlay.classList.remove(
+        'visible'
+      )
+
+      setTimeout(
+        () => {
+          overlay.remove()
+        },
+        180
+      )
+
+      document.removeEventListener(
+        'keydown',
+        handleKeydown
+      )
+
+      resolve(result)
+    }
+
+    const handleKeydown =
+      event => {
+        if (
+          event.key === 'Escape'
+        ) {
+          event.preventDefault()
+          finish(false)
+        }
+
+        if (
+          event.key === 'Enter' &&
+          document.activeElement ===
+            confirmButton
+        ) {
+          event.preventDefault()
+          finish(true)
+        }
+      }
+
+    const cancelButtons =
+      overlay.querySelectorAll(
+        '[data-history-cancel]'
+      )
+
+    cancelButtons.forEach(
+      button => {
+        button.addEventListener(
+          'click',
+          event => {
+            event.preventDefault()
+            event.stopPropagation()
+            finish(false)
+          },
+          {
+            passive: false
+          }
+        )
+      }
+    )
+
+    const confirmButton =
+      overlay.querySelector(
+        '[data-history-confirm]'
+      )
+
+    confirmButton?.addEventListener(
+      'click',
+      event => {
+        event.preventDefault()
+        event.stopPropagation()
+        finish(true)
+      },
+      {
+        passive: false
+      }
+    )
+
+    document.addEventListener(
+      'keydown',
+      handleKeydown
+    )
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        overlay.classList.add(
+          'visible'
+        )
+
+        setTimeout(
+          () => {
+            confirmButton?.focus()
+          },
+          30
+        )
+      })
+    })
+  })
+}
+
+function formatZazaHistory(items) {
   if (!items.length) {
     return `
       <p>
-        „ზაზა“-ს შესახებ სხვა მომხმარებლების შეტყობინებები ვერ მოიძებნა.
+        „ზაზა“-ს შესახებ სხვა მომხმარებლების
+        შეტყობინებები ვერ მოიძებნა.
       </p>
     `
   }
@@ -1381,10 +1713,13 @@ function formatZazaHistory(
             )
           : ''
 
+      const id =
+        Number(item.id)
+
       html += `
         <div
           class="ai-history-item"
-          data-history-id="${Number(item.id)}"
+          data-history-id="${id}"
         >
           <strong>
             ${index + 1}. ${username}
@@ -1396,14 +1731,18 @@ function formatZazaHistory(
 
           ${
             date
-              ? `<small>${esc(date)}</small>`
+              ? `
+                <small>
+                  ${esc(date)}
+                </small>
+              `
               : ''
           }
 
           <button
             type="button"
             class="ai-history-delete"
-            data-history-id="${Number(item.id)}"
+            data-history-id="${id}"
           >
             ${icon('trash-2')}
             სამუდამოდ წაშლა
@@ -1428,26 +1767,61 @@ function setupZazaHistoryDelete() {
 
   buttons.forEach(
     button => {
+      if (
+        button.dataset.deleteBound ===
+        'true'
+      ) {
+        return
+      }
+
+      button.dataset.deleteBound =
+        'true'
+
+      button.style.pointerEvents =
+        'auto'
+
+      button.style.touchAction =
+        'manipulation'
+
       button.addEventListener(
         'click',
-        async () => {
+        async event => {
+          event.preventDefault()
+          event.stopPropagation()
+
+          if (
+            button.disabled
+          ) {
+            return
+          }
+
           const id =
             Number(
               button.dataset.historyId
             )
 
           if (
-            !Number.isSafeInteger(id)
+            !Number.isSafeInteger(
+              id
+            )
           ) {
+            toast(
+              'შეტყობინების ID არასწორია.'
+            )
+
             return
           }
 
           const confirmed =
-            confirm(
-              'ნამდვილად გინდა ამ შეტყობინების სამუდამოდ წაშლა?'
-            )
+            await showHistoryDeleteConfirm()
 
           if (!confirmed) {
+            return
+          }
+
+          if (
+            button.disabled
+          ) {
             return
           }
 
@@ -1470,7 +1844,9 @@ function setupZazaHistoryDelete() {
                 '.ai-history-item'
               )
 
-            item?.remove()
+            if (item) {
+              item.remove()
+            }
 
             const list =
               document.querySelector(
@@ -1524,10 +1900,15 @@ function setupZazaHistoryDelete() {
                 remaining
                   ? `
                     დარჩენილია
-                    <strong>${remaining}</strong>
+                    <strong>
+                      ${remaining}
+                    </strong>
                     შეტყობინება:
                   `
-                  : 'ყველა შეტყობინება წაშლილია.'
+                  : `
+                    ყველა შეტყობინება
+                    წაშლილია.
+                  `
             }
 
             if (
@@ -1543,7 +1924,8 @@ function setupZazaHistoryDelete() {
                   </h3>
 
                   <p>
-                    ყველა ნაპოვნი შეტყობინება სამუდამოდ წაიშალა.
+                    ყველა ნაპოვნი შეტყობინება
+                    სამუდამოდ წაიშალა.
                   </p>
                 </div>
               `
@@ -1561,7 +1943,23 @@ function setupZazaHistoryDelete() {
               error
             )
 
-            button.disabled = false
+            console.error(
+              'History delete message:',
+              error?.message
+            )
+
+            console.error(
+              'History delete details:',
+              error?.details
+            )
+
+            console.error(
+              'History delete hint:',
+              error?.hint
+            )
+
+            button.disabled =
+              false
 
             button.innerHTML = `
               ${icon('trash-2')}
@@ -1570,10 +1968,22 @@ function setupZazaHistoryDelete() {
 
             refreshIcons()
 
-            alert(
-              'შეტყობინების წაშლა ვერ მოხერხდა.'
+            const actualError =
+              String(
+                error?.message ||
+                error?.details ||
+                ''
+              ).trim()
+
+            toast(
+              actualError
+                ? `წაშლა ვერ მოხერხდა: ${actualError}`
+                : 'შეტყობინების წაშლა ვერ მოხერხდა.'
             )
           }
+        },
+        {
+          passive: false
         }
       )
     }
@@ -1582,9 +1992,7 @@ function setupZazaHistoryDelete() {
   refreshIcons()
 }
 
-async function handleAIQuestion(
-  question
-) {
+async function handleAIQuestion(question) {
   const input =
     $('#ai-chat-input')
 
@@ -1646,7 +2054,8 @@ async function handleAIQuestion(
             </strong>
 
             <p>
-              /history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.
+              /history ბრძანების გამოყენება
+              მხოლოდ ბატონ ზაზას შეუძლია.
             </p>
           </div>
         `
@@ -1693,7 +2102,8 @@ async function handleAIQuestion(
             </strong>
 
             <p>
-              მონაცემების მიღებისას შეცდომა მოხდა.
+              მონაცემების მიღებისას
+              შეცდომა მოხდა.
             </p>
           </div>
         `
@@ -1734,9 +2144,7 @@ async function handleAIQuestion(
     typing?.remove()
 
     const finalReply =
-      applyAIGreeting(
-        reply
-      )
+      applyAIGreeting(reply)
 
     addAIMessage(
       'assistant',
@@ -1976,6 +2384,7 @@ async function initAIChat() {
         !event.shiftKey
       ) {
         event.preventDefault()
+
         form?.requestSubmit()
       }
     }
@@ -2201,7 +2610,9 @@ async function initDetail() {
 
   if (
     !id ||
-    !/^[0-9a-f-]{36}$/i.test(id)
+    !/^[0-9a-f-]{36}$/i.test(
+      id
+    )
   ) {
     return notFound(target)
   }
@@ -2212,10 +2623,7 @@ async function initDetail() {
   } = await db
     .from('projects')
     .select('*')
-    .eq(
-      'id',
-      id
-    )
+    .eq('id', id)
     .eq(
       'published',
       true
@@ -2398,9 +2806,7 @@ async function initDetail() {
       async () => {
         try {
           await navigator.clipboard
-            .writeText(
-              p.code
-            )
+            .writeText(p.code)
 
           const isChemistry =
             String(
@@ -2425,9 +2831,7 @@ async function initDetail() {
   refreshIcons()
 }
 
-function notFound(
-  target
-) {
+function notFound(target) {
   if (!target) {
     return
   }
@@ -2443,7 +2847,8 @@ function notFound(
       </h2>
 
       <p>
-        ბმული არასწორია ან პროექტი აღარ არის გამოქვეყნებული.
+        ბმული არასწორია ან პროექტი
+        აღარ არის გამოქვეყნებული.
       </p>
 
       <a
@@ -2534,29 +2939,27 @@ async function upload(
   const path =
     `${folder}/${crypto.randomUUID()}-${clean}`
 
-  const {
-    error
-  } = await db.storage
-    .from(bucket)
-    .upload(
-      path,
-      file,
-      {
-        cacheControl: '3600',
-        upsert: false,
-        contentType: file.type
-      }
-    )
+  const { error } =
+    await db.storage
+      .from(bucket)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: file.type
+        }
+      )
 
   if (error) {
     throw error
   }
 
-  const {
-    data
-  } = db.storage
-    .from(bucket)
-    .getPublicUrl(path)
+  const { data } =
+    db.storage
+      .from(bucket)
+      .getPublicUrl(path)
 
   return {
     url: data.publicUrl,
@@ -2579,7 +2982,7 @@ function storagePath(
       ? decodeURIComponent(
           url.slice(
             index +
-            marker.length
+              marker.length
           )
         )
       : null
@@ -2599,11 +3002,10 @@ async function removeStored(
     )
 
   if (path) {
-    const {
-      error
-    } = await db.storage
-      .from(bucket)
-      .remove([path])
+    const { error } =
+      await db.storage
+        .from(bucket)
+        .remove([path])
 
     if (error) {
       console.warn(
@@ -2614,9 +3016,7 @@ async function removeStored(
   }
 }
 
-async function isAdmin(
-  user
-) {
+async function isAdmin(user) {
   if (
     !user ||
     !db
@@ -2660,9 +3060,7 @@ async function initAdmin() {
   }
 
   const {
-    data: {
-      session
-    }
+    data: { session }
   } = await db.auth.getSession()
 
   if (session) {
@@ -2699,7 +3097,8 @@ async function initAdmin() {
   $('#new-project-button')
     ?.addEventListener(
       'click',
-      () => openEditor()
+      () =>
+        openEditor()
     )
 
   $('#cancel-edit')
@@ -2748,10 +3147,7 @@ async function initAdmin() {
   bindMeetingForm()
 
   db.auth.onAuthStateChange(
-    (
-      _event,
-      session
-    ) => {
+    (_event, session) => {
       if (!session) {
         showLogin()
       }
@@ -2817,9 +3213,7 @@ function updateCodeFieldLabel() {
   }
 }
 
-async function login(
-  event
-) {
+async function login(event) {
   event.preventDefault()
 
   const form =
@@ -2843,7 +3237,8 @@ async function login(
     $('#login-error')
 
   if (errorElement) {
-    errorElement.textContent = ''
+    errorElement.textContent =
+      ''
   }
 
   if (
@@ -2990,9 +3385,8 @@ async function logout() {
   }
 
   try {
-    const {
-      error
-    } = await db.auth.signOut()
+    const { error } =
+      await db.auth.signOut()
 
     if (error) {
       throw error
@@ -3005,7 +3399,8 @@ async function logout() {
         '.account-menu'
       )
       .forEach(
-        menu => menu.remove()
+        menu =>
+          menu.remove()
       )
 
     const loginElement =
@@ -3089,6 +3484,7 @@ async function loadAdminProjects() {
   }
 
   status.hidden = false
+
   list.innerHTML = ''
 
   const {
@@ -3215,15 +3611,14 @@ async function loadAdminProjects() {
           </h2>
 
           <p>
-            დაიწყეთ პირველი რეალური პროექტის დამატებით.
+            დაიწყეთ პირველი რეალური
+            პროექტის დამატებით.
           </p>
         </div>
       `
 
   list
-    .querySelectorAll(
-      '.edit'
-    )
+    .querySelectorAll('.edit')
     .forEach(
       b =>
         b.addEventListener(
@@ -3240,9 +3635,7 @@ async function loadAdminProjects() {
     )
 
   list
-    .querySelectorAll(
-      '.toggle'
-    )
+    .querySelectorAll('.toggle')
     .forEach(
       b =>
         b.addEventListener(
@@ -3255,9 +3648,7 @@ async function loadAdminProjects() {
     )
 
   list
-    .querySelectorAll(
-      '.delete'
-    )
+    .querySelectorAll('.delete')
     .forEach(
       b =>
         b.addEventListener(
@@ -3390,9 +3781,7 @@ function imagePreview() {
   }
 }
 
-async function saveProject(
-  event
-) {
+async function saveProject(event) {
   event.preventDefault()
 
   const button =
@@ -3523,15 +3912,13 @@ async function saveProject(
     const img =
       uploads.find(
         x =>
-          x[0] ===
-          'image'
+          x[0] === 'image'
       )?.[1]
 
     const vid =
       uploads.find(
         x =>
-          x[0] ===
-          'video'
+          x[0] === 'video'
       )?.[1]
 
     if (img) {
@@ -3547,21 +3934,19 @@ async function saveProject(
     let error
 
     if (id) {
-      ({
-        error
-      } = await db
-        .from('projects')
-        .update(value)
-        .eq(
-          'id',
-          id
-        ))
+      ;({ error } =
+        await db
+          .from('projects')
+          .update(value)
+          .eq(
+            'id',
+            id
+          ))
     } else {
-      ({
-        error
-      } = await db
-        .from('projects')
-        .insert(value))
+      ;({ error } =
+        await db
+          .from('projects')
+          .insert(value))
     }
 
     if (error) {
@@ -3633,9 +4018,7 @@ async function saveProject(
   }
 }
 
-async function togglePublished(
-  id
-) {
+async function togglePublished(id) {
   const p =
     adminProjects.find(
       x =>
@@ -3646,18 +4029,17 @@ async function togglePublished(
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('projects')
-    .update({
-      published:
-        !p.published
-    })
-    .eq(
-      'id',
-      id
-    )
+  const { error } =
+    await db
+      .from('projects')
+      .update({
+        published:
+          !p.published
+      })
+      .eq(
+        'id',
+        id
+      )
 
   if (error) {
     return toast(
@@ -3675,9 +4057,7 @@ async function togglePublished(
   loadAdminProjects()
 }
 
-async function deleteProject(
-  id
-) {
+async function deleteProject(id) {
   const p =
     adminProjects.find(
       x =>
@@ -3693,15 +4073,14 @@ async function deleteProject(
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('projects')
-    .delete()
-    .eq(
-      'id',
-      id
-    )
+  const { error } =
+    await db
+      .from('projects')
+      .delete()
+      .eq(
+        'id',
+        id
+      )
 
   if (error) {
     return toast(
@@ -3738,9 +4117,7 @@ const GEORGIAN_WEEKDAYS = [
   'შაბათი'
 ]
 
-function meetingDay(
-  dateValue
-) {
+function meetingDay(dateValue) {
   if (!dateValue) {
     return '—'
   }
@@ -3854,7 +4231,8 @@ function renderMeetingContent(
         </h3>
 
         <p>
-          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს,
+          როგორც კი ადმინისტრატორი
+          თარიღსა და დროს გამოაქვეყნებს,
           ინფორმაცია აქ გამოჩნდება.
         </p>
       </div>
@@ -4129,9 +4507,7 @@ function bindMeetingForm() {
     )
 }
 
-async function saveMeeting(
-  event
-) {
+async function saveMeeting(event) {
   event.preventDefault()
 
   if (!db) {
@@ -4173,9 +4549,7 @@ async function saveMeeting(
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -4184,21 +4558,21 @@ async function saveMeeting(
       )
     }
 
-    const {
-      error
-    } = await db
-      .from('club_meeting')
-      .upsert(
-        {
-          id: 1,
-          meeting_date: date,
-          meeting_time: time,
-          updated_by: user.id
-        },
-        {
-          onConflict: 'id'
-        }
-      )
+    const { error } =
+      await db
+        .from('club_meeting')
+        .upsert(
+          {
+            id: 1,
+            meeting_date: date,
+            meeting_time: time,
+            updated_by:
+              user.id
+          },
+          {
+            onConflict: 'id'
+          }
+        )
 
     if (error) {
       throw error
@@ -4237,15 +4611,14 @@ async function clearMeeting() {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('club_meeting')
-    .delete()
-    .eq(
-      'id',
-      1
-    )
+  const { error } =
+    await db
+      .from('club_meeting')
+      .delete()
+      .eq(
+        'id',
+        1
+      )
 
   if (error) {
     return toast(
@@ -4331,7 +4704,8 @@ async function initPasswordReset() {
       }
 
       if (
-        password.length < 10
+        password.length <
+        10
       ) {
         error.textContent =
           'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.'
@@ -4340,10 +4714,9 @@ async function initPasswordReset() {
       }
 
       const {
-        data: {
-          session
-        }
-      } = await db.auth.getSession()
+        data: { session }
+      } =
+        await db.auth.getSession()
 
       if (!session) {
         error.textContent =
@@ -4360,10 +4733,11 @@ async function initPasswordReset() {
 
       const {
         error: updateError
-      } = await db.auth
-        .updateUser({
-          password
-        })
+      } =
+        await db.auth
+          .updateUser({
+            password
+          })
 
       if (updateError) {
         error.textContent =
@@ -4391,9 +4765,14 @@ async function initPasswordReset() {
   )
 }
 
-let authUIUpdating = false
-let authUIQueued = false
-let authUIListenerStarted = false
+let authUIUpdating =
+  false
+
+let authUIQueued =
+  false
+
+let authUIListenerStarted =
+  false
 
 function findLoginElement() {
   const elements =
@@ -4425,13 +4804,15 @@ function findLoginElement() {
             .toLowerCase()
 
         return (
-          href === 'admin.html' ||
+          href ===
+            'admin.html' ||
           href.endsWith(
             '/admin.html'
           ) ||
           text === 'log in' ||
           text === 'login' ||
-          text === 'ადმინისტრატორი'
+          text ===
+            'ადმინისტრატორი'
         )
       }
     ) || null
@@ -4456,9 +4837,7 @@ function closeAllAccountMenus(
     )
 }
 
-function createAccountMenu(
-  user
-) {
+function createAccountMenu(user) {
   const name =
     getUserDisplayName(
       user
@@ -4538,7 +4917,8 @@ function createAccountMenu(
         )
         .forEach(
           item => {
-            item.hidden = true
+            item.hidden =
+              true
           }
         )
 
@@ -4560,7 +4940,9 @@ function createAccountMenu(
 
       button.setAttribute(
         'aria-expanded',
-        String(shouldOpen)
+        String(
+          shouldOpen
+        )
       )
     }
   )
@@ -4646,7 +5028,8 @@ async function updateAuthUI() {
 
     if (!loginElement) {
       if (
-        existingMenus.length > 1
+        existingMenus.length >
+        1
       ) {
         existingMenus
           .slice(1)
@@ -4739,10 +5122,7 @@ async function initAuthUI() {
     true
 
   db.auth.onAuthStateChange(
-    (
-      _event,
-      session
-    ) => {
+    (_event, session) => {
       if (session?.user) {
         detectAIAdmin()
       } else {
