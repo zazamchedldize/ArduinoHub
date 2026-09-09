@@ -18,16 +18,17 @@ const page = document.body.dataset.page
 
 const $ = (s, root = document) => root.querySelector(s)
 
-const esc = (value = '') => String(value).replace(
-  /[&<>'"]/g,
-  c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;'
-  }[c])
-)
+const esc = (value = '') =>
+  String(value).replace(
+    /[&<>'"]/g,
+    c => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[c])
+  )
 
 const icon = name => `<i data-lucide="${name}"></i>`
 
@@ -82,12 +83,15 @@ function configuredMessage(target) {
   target.innerHTML = `
     <div class="empty-state">
       ${icon('settings')}
+
       <h2>
         Supabase ჯერ არ არის კონფიგურირებული
       </h2>
+
       <p>
         დაამატეთ პროექტის URL და anon key
-        <code>supabase-config.js</code>-ში, შემდეგ გაუშვით schema SQL.
+        <code>supabase-config.js</code>-ში,
+        შემდეგ გაუშვით schema SQL.
       </p>
     </div>
   `
@@ -100,7 +104,8 @@ function initChrome() {
     .querySelectorAll('[data-year]')
     .forEach(
       el => {
-        el.textContent = new Date().getFullYear()
+        el.textContent =
+          new Date().getFullYear()
       }
     )
 
@@ -173,7 +178,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 8. არ მოიგონო ისეთი პროექტები, ადამიანები ან ფუნქციები, რომლებიც მოცემულ ინფორმაციაში არ არის.
 9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
 10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
-11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის: **მნიშვნელოვანი ტექსტი**, *აქცენტი*, სათაურები, bullet list-ები, numbered list-ები და code blocks.
+11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის.
 12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად: H2O, CO2, NaCl, KMnO4, Mn2O7.
 13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
 14. პასუხი არ შეწყვიტო შუა წინადადებაში. ყოველთვის დაასრულე აზრი.
@@ -182,9 +187,70 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 17. თუ კითხვა გასაგებია მიუხედავად მცირე typo-სა, მომხმარებელს ნუ სთხოვ თავიდან დაწერას.
 18. თუ მომხმარებელი წერს უხეშ, შეურაცხმყოფელ, სექსუალურ, 18+ ან აშკარად შეუსაბამო შინაარსს, არ გააგრძელო ასეთი საუბარი. უპასუხე მოკლე, მშვიდი გაფრთხილებით და გადაიყვანე სასწავლო თემაზე.
 19. ArduinoHub AI განკუთვნილია სასწავლო, ტექნიკური და უსაფრთხო კომუნიკაციისთვის.
-20. არასდროს შეურაცხყო მომხმარებელი, მაშინაც კი, თუ მომხმარებელი შეურაცხმყოფელ ენას იყენებს.
-21. კლუბის წევრების აქტიურობაზე პასუხისას გამოიყენე ზემოთ მოცემული ინფორმაცია. არ უწოდო აქტიური წევრი ადამიანს, რომელიც მოცემულ კონტექსტში პასიურ ან იშვიათად დამსწრე წევრად არის აღწერილი. არ გააზვიადო ან დაამატო ისეთი ინფორმაცია წევრის საქმიანობაზე, რომელიც კონტექსტში არ არის მოცემული.
+20. არასდროს შეურაცხყო მომხმარებელი.
+21. კლუბის წევრების აქტიურობაზე პასუხისას გამოიყენე მხოლოდ ზემოთ მოცემული ინფორმაცია.
 `
+
+async function getCurrentUser() {
+  if (!db) {
+    return null
+  }
+
+  try {
+    const {
+      data: { user }
+    } = await db.auth.getUser()
+
+    return user || null
+  } catch (error) {
+    console.warn(
+      'Could not get current user:',
+      error
+    )
+
+    return null
+  }
+}
+
+function getUserDisplayName(user) {
+  if (!user) {
+    return 'მომხმარებელი'
+  }
+
+  const metadata =
+    user.user_metadata || {}
+
+  return String(
+    metadata.username ||
+    metadata.name ||
+    metadata.full_name ||
+    user.email ||
+    'მომხმარებელი'
+  ).trim()
+}
+
+async function getCurrentUserContext() {
+  const user = await getCurrentUser()
+
+  if (!user) {
+    return {
+      id: null,
+      email: null,
+      name: null,
+      isAuthenticated: false
+    }
+  }
+
+  const name =
+    getUserDisplayName(user)
+
+  return {
+    id: user.id,
+    email: user.email || null,
+    name,
+    isAuthenticated: true
+  }
+}
 
 async function detectAIAdmin() {
   if (!db) {
@@ -202,16 +268,18 @@ async function detectAIAdmin() {
       return
     }
 
-    const admin = await isAdmin(session.user)
+    const admin =
+      await isAdmin(session.user)
 
     if (!admin?.username) {
       aiAdminGreeting = ''
       return
     }
 
-    const username = String(admin.username)
-      .trim()
-      .toLowerCase()
+    const username =
+      String(admin.username)
+        .trim()
+        .toLowerCase()
 
     if (
       username === 'zaza' ||
@@ -219,14 +287,16 @@ async function detectAIAdmin() {
       username.includes('ზაზა') ||
       username.includes('zaza')
     ) {
-      aiAdminGreeting = 'ბატონო ზაზა'
+      aiAdminGreeting =
+        'ბატონო ზაზა'
     } else if (
       username === 'tekla' ||
       username === 'თეკლა' ||
       username.includes('თეკლა') ||
       username.includes('tekla')
     ) {
-      aiAdminGreeting = 'ქალბატონო თეკლა'
+      aiAdminGreeting =
+        'ქალბატონო თეკლა'
     } else {
       aiAdminGreeting = ''
     }
@@ -241,7 +311,8 @@ async function detectAIAdmin() {
 }
 
 function applyAIGreeting(reply) {
-  const clean = String(reply || '').trim()
+  const clean =
+    String(reply || '').trim()
 
   if (
     !aiAdminGreeting ||
@@ -266,7 +337,8 @@ function addAIMessage(
   type,
   content
 ) {
-  const messages = $('#ai-chat-messages')
+  const messages =
+    $('#ai-chat-messages')
 
   if (!messages) {
     return null
@@ -323,12 +395,13 @@ function formatAIResponse(text) {
     return '<p>პასუხი ვერ მივიღე.</p>'
   }
 
-  let source = String(text)
-    .replace(
-      /^\s*svg\s*$/gim,
-      ''
-    )
-    .trim()
+  let source =
+    String(text)
+      .replace(
+        /^\s*svg\s*$/gim,
+        ''
+      )
+      .trim()
 
   const codeBlocks = []
 
@@ -409,7 +482,8 @@ function formatAIResponse(text) {
   }
 
   for (const rawLine of lines) {
-    const line = rawLine.trim()
+    const line =
+      rawLine.trim()
 
     if (!line) {
       flushParagraph()
@@ -441,7 +515,9 @@ function formatAIResponse(text) {
     }
 
     const heading3 =
-      line.match(/^###\s+(.+)$/)
+      line.match(
+        /^###\s+(.+)$/
+      )
 
     if (heading3) {
       flushParagraph()
@@ -457,7 +533,9 @@ function formatAIResponse(text) {
     }
 
     const heading2 =
-      line.match(/^##\s+(.+)$/)
+      line.match(
+        /^##\s+(.+)$/
+      )
 
     if (heading2) {
       flushParagraph()
@@ -473,7 +551,9 @@ function formatAIResponse(text) {
     }
 
     const heading1 =
-      line.match(/^#\s+(.+)$/)
+      line.match(
+        /^#\s+(.+)$/
+      )
 
     if (heading1) {
       flushParagraph()
@@ -489,7 +569,9 @@ function formatAIResponse(text) {
     }
 
     const quote =
-      line.match(/^>\s*(.+)$/)
+      line.match(
+        /^>\s*(.+)$/
+      )
 
     if (quote) {
       flushParagraph()
@@ -879,6 +961,9 @@ async function askAI(question) {
         })
       )
 
+  const currentUser =
+    await getCurrentUserContext()
+
   let authorizationToken =
     SUPABASE_ANON_KEY
 
@@ -900,29 +985,67 @@ async function askAI(question) {
     }
   }
 
+  const userIdentityContext =
+    currentUser.isAuthenticated
+      ? `
+ამჟამად AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
+
+მომხმარებლის სახელი და გვარი:
+${currentUser.name}
+
+მომხმარებლის email:
+${currentUser.email || 'უცნობია'}
+
+მომხმარებლის Supabase ID:
+${currentUser.id}
+
+ეს ინფორმაცია გამოიყენე მხოლოდ მაშინ, როცა მომხმარებელი საკუთარ ვინაობას, სახელს ან ანგარიშს გეკითხება.
+
+მომხმარებელს მიმართე მისი სახელით მხოლოდ მაშინ, როცა ეს ბუნებრივად და სასარგებლოდ ჟღერს.
+`
+      : `
+ამჟამად მომხმარებელი სისტემაში შესული არ არის.
+`
+
+  const finalContext =
+    `${AI_SYSTEM_CONTEXT}\n\n${userIdentityContext}`
+
   let response
 
   try {
-    response = await fetch(
-      AI_FUNCTION_URL,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-            `Bearer ${authorizationToken}`,
-          'apikey':
-            SUPABASE_ANON_KEY
-        },
-        body: JSON.stringify({
-          message: cleanQuestion,
-          history,
-          context: AI_SYSTEM_CONTEXT,
-          adminGreeting:
-            aiAdminGreeting
-        })
-      }
-    )
+    response =
+      await fetch(
+        AI_FUNCTION_URL,
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type':
+              'application/json',
+
+            'Authorization':
+              `Bearer ${authorizationToken}`,
+
+            'apikey':
+              SUPABASE_ANON_KEY
+          },
+
+          body: JSON.stringify({
+            message:
+              cleanQuestion,
+
+            history,
+
+            context:
+              finalContext,
+
+            adminGreeting:
+              aiAdminGreeting,
+
+            currentUser
+          })
+        }
+      )
   } catch (networkError) {
     const error =
       new Error(
@@ -938,7 +1061,8 @@ async function askAI(question) {
   let data = null
 
   try {
-    data = await response.json()
+    data =
+      await response.json()
   } catch {
     data = null
   }
@@ -1073,11 +1197,7 @@ async function saveAIChatMessage(message) {
     }
 
     const username =
-      user.user_metadata?.username ||
-      user.user_metadata?.name ||
-      user.user_metadata?.full_name ||
-      user.email ||
-      'მომხმარებელი'
+      getUserDisplayName(user)
 
     const { error } =
       await db
@@ -1301,7 +1421,10 @@ function setupZazaHistoryDelete() {
               historyItems.length
 
             historyItems.forEach(
-              (historyItem, index) => {
+              (
+                historyItem,
+                index
+              ) => {
                 const strong =
                   historyItem.querySelector(
                     'strong'
@@ -1367,7 +1490,8 @@ function setupZazaHistoryDelete() {
               error
             )
 
-            button.disabled = false
+            button.disabled =
+              false
 
             button.innerHTML = `
               ${icon('trash-2')}
@@ -1396,7 +1520,9 @@ async function handleAIQuestion(question) {
     $('#ai-send-btn')
 
   const cleanQuestion =
-    String(question || '').trim()
+    String(
+      question || ''
+    ).trim()
 
   if (!cleanQuestion) {
     return
@@ -1538,9 +1664,7 @@ async function handleAIQuestion(question) {
     typing?.remove()
 
     const finalReply =
-      applyAIGreeting(
-        reply
-      )
+      applyAIGreeting(reply)
 
     addAIMessage(
       'assistant',
@@ -1780,7 +1904,6 @@ async function initAIChat() {
         !event.shiftKey
       ) {
         event.preventDefault()
-
         form?.requestSubmit()
       }
     }
@@ -1804,8 +1927,9 @@ async function initAIChat() {
     db.auth.onAuthStateChange(
       () => {
         setTimeout(
-          () => {
-            detectAIAdmin()
+          async () => {
+            await detectAIAdmin()
+            await updateAuthUI()
           },
           0
         )
@@ -1937,9 +2061,10 @@ async function initProjects() {
     const result =
       data.filter(
         p =>
-          (!category ||
-            p.category ===
-              category) &&
+          (
+            !category ||
+            p.category === category
+          ) &&
           (
             !q ||
             `${p.title} ${p.description} ${p.author}`
@@ -2014,9 +2139,7 @@ async function initDetail() {
     !id ||
     !/^[0-9a-f-]{36}$/i.test(id)
   ) {
-    return notFound(
-      target
-    )
+    return notFound(target)
   }
 
   const {
@@ -2036,9 +2159,7 @@ async function initDetail() {
     error ||
     !p
   ) {
-    return notFound(
-      target
-    )
+    return notFound(target)
   }
 
   const image =
@@ -2210,9 +2331,7 @@ async function initDetail() {
       async () => {
         try {
           await navigator.clipboard
-            .writeText(
-              p.code
-            )
+            .writeText(p.code)
 
           const isChemistry =
             String(
@@ -2344,20 +2463,18 @@ async function upload(
   const path =
     `${folder}/${crypto.randomUUID()}-${clean}`
 
-  const {
-    error
-  } = await db.storage
-    .from(bucket)
-    .upload(
-      path,
-      file,
-      {
-        cacheControl: '3600',
-        upsert: false,
-        contentType:
-          file.type
-      }
-    )
+  const { error } =
+    await db.storage
+      .from(bucket)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: file.type
+        }
+      )
 
   if (error) {
     throw error
@@ -2389,7 +2506,7 @@ function storagePath(
       ? decodeURIComponent(
           url.slice(
             index +
-              marker.length
+            marker.length
           )
         )
       : null
@@ -2409,11 +2526,10 @@ async function removeStored(
     )
 
   if (path) {
-    const {
-      error
-    } = await db.storage
-      .from(bucket)
-      .remove([path])
+    const { error } =
+      await db.storage
+        .from(bucket)
+        .remove([path])
 
     if (error) {
       console.warn(
@@ -2469,8 +2585,8 @@ async function initAdmin() {
 
   const {
     data: { session }
-  } = await db.auth
-    .getSession()
+  } =
+    await db.auth.getSession()
 
   if (session) {
     const admin =
@@ -2492,7 +2608,7 @@ async function initAdmin() {
   }
 
   $('#login-form')
-    .addEventListener(
+    ?.addEventListener(
       'submit',
       login
     )
@@ -2555,7 +2671,10 @@ async function initAdmin() {
   bindMeetingForm()
 
   db.auth.onAuthStateChange(
-    (_event, session) => {
+    (
+      _event,
+      session
+    ) => {
       if (!session) {
         showLogin()
       }
@@ -2608,8 +2727,8 @@ function updateCodeFieldLabel() {
   if (titleNode) {
     titleNode.textContent =
       isChemistry
-        ? ` ქიმიური რეაქცია `
-        : ` Arduino Code `
+        ? ' ქიმიური რეაქცია '
+        : ' Arduino Code '
   }
 
   if (isChemistry) {
@@ -2644,16 +2763,18 @@ async function login(event) {
   const {
     data,
     error
-  } = await db.auth
-    .signInWithPassword({
-      email:
-        $('#login-email')
-          .value
-          .trim(),
-      password:
-        $('#login-password')
-          .value
-    })
+  } =
+    await db.auth
+      .signInWithPassword({
+        email:
+          $('#login-email')
+            .value
+            .trim(),
+
+        password:
+          $('#login-password')
+            .value
+      })
 
   if (
     error ||
@@ -2685,9 +2806,16 @@ async function login(event) {
     return
   }
 
+  await updateAuthUI()
+
   toast(
     'წარმატებით შეხვედით ანგარიშში.',
     'success'
+  )
+
+  setBusy(
+    button,
+    false
   )
 
   setTimeout(
@@ -2696,11 +2824,6 @@ async function login(event) {
         'index.html'
     },
     500
-  )
-
-  setBusy(
-    button,
-    false
   )
 }
 
@@ -2713,7 +2836,10 @@ async function showDashboard(
     await isAdmin(user)
 
   if (!admin) {
-    return showLogin()
+    location.href =
+      'index.html'
+
+    return
   }
 
   $('#auth-panel')
@@ -2735,23 +2861,64 @@ async function showDashboard(
 }
 
 function showLogin() {
-  $('#dashboard')
-    .hidden = true
+  const dashboard =
+    $('#dashboard')
 
-  $('#auth-panel')
-    .hidden = false
+  const authPanel =
+    $('#auth-panel')
+
+  if (dashboard) {
+    dashboard.hidden = true
+  }
+
+  if (authPanel) {
+    authPanel.hidden = false
+  }
 
   closeEditor()
 }
 
 async function logout() {
-  await db.auth.signOut()
+  if (!db) {
+    return
+  }
+
+  const {
+    error
+  } =
+    await db.auth.signOut()
+
+  if (error) {
+    console.error(
+      'Logout error:',
+      error
+    )
+
+    toast(
+      'ანგარიშიდან გამოსვლა ვერ მოხერხდა.'
+    )
+
+    return
+  }
 
   aiAdminGreeting = ''
 
+  await updateAuthUI()
+
   toast(
-    'თქვენ გამოხვედით ანგარიშიდან.'
+    'თქვენ გამოხვედით ანგარიშიდან.',
+    'success'
   )
+
+  if (page === 'admin') {
+    setTimeout(
+      () => {
+        location.href =
+          'index.html'
+      },
+      500
+    )
+  }
 }
 
 function setBusy(
@@ -2763,7 +2930,8 @@ function setBusy(
     return
   }
 
-  button.disabled = busy
+  button.disabled =
+    busy
 
   if (busy) {
     button.dataset.label =
@@ -2798,23 +2966,23 @@ async function loadAdminProjects() {
   }
 
   status.hidden = false
-
   list.innerHTML = ''
 
   const {
     data,
     error
-  } = await db
-    .from('projects')
-    .select(
-      'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
-    )
-    .order(
-      'created_at',
-      {
-        ascending: false
-      }
-    )
+  } =
+    await db
+      .from('projects')
+      .select(
+        'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
+      )
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
 
   if (error) {
     status.textContent =
@@ -3016,20 +3184,16 @@ function openEditor(p) {
 
   if (p) {
     $('#edit-id')
-      .value =
-        p.id
+      .value = p.id
 
     $('#title')
-      .value =
-        p.title
+      .value = p.title
 
     $('#category')
-      .value =
-        p.category
+      .value = p.category
 
     $('#author')
-      .value =
-        p.author
+      .value = p.author
 
     $('#published')
       .checked =
@@ -3098,9 +3262,7 @@ function imagePreview() {
       $('#image-preview')
 
     preview.src =
-      URL.createObjectURL(
-        file
-      )
+      URL.createObjectURL(file)
 
     preview.hidden = false
   }
@@ -3263,19 +3425,21 @@ async function saveProject(event) {
     if (id) {
       ({
         error
-      } = await db
-        .from('projects')
-        .update(value)
-        .eq(
-          'id',
-          id
-        ))
+      } =
+        await db
+          .from('projects')
+          .update(value)
+          .eq(
+            'id',
+            id
+          ))
     } else {
       ({
         error
-      } = await db
-        .from('projects')
-        .insert(value))
+      } =
+        await db
+          .from('projects')
+          .insert(value))
     }
 
     if (error) {
@@ -3356,18 +3520,17 @@ async function togglePublished(id) {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('projects')
-    .update({
-      published:
-        !p.published
-    })
-    .eq(
-      'id',
-      id
-    )
+  const { error } =
+    await db
+      .from('projects')
+      .update({
+        published:
+          !p.published
+      })
+      .eq(
+        'id',
+        id
+      )
 
   if (error) {
     return toast(
@@ -3401,15 +3564,14 @@ async function deleteProject(id) {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('projects')
-    .delete()
-    .eq(
-      'id',
-      id
-    )
+  const { error } =
+    await db
+      .from('projects')
+      .delete()
+      .eq(
+        'id',
+        id
+      )
 
   if (error) {
     return toast(
@@ -3446,9 +3608,7 @@ const GEORGIAN_WEEKDAYS = [
   'შაბათი'
 ]
 
-function meetingDay(
-  dateValue
-) {
+function meetingDay(dateValue) {
   if (!dateValue) {
     return '—'
   }
@@ -3509,9 +3669,10 @@ function meetingTimeText(
   }
 
   const m =
-    String(timeValue).match(
-      /^(\d{2}):(\d{2})/
-    )
+    String(timeValue)
+      .match(
+        /^(\d{2}):(\d{2})/
+      )
 
   return m
     ? `${m[1]}:${m[2]}`
@@ -3615,7 +3776,8 @@ async function loadPublicMeeting() {
   const {
     data,
     error
-  } = await getMeeting()
+  } =
+    await getMeeting()
 
   if (error) {
     console.error(error)
@@ -3736,7 +3898,8 @@ function initMeetingPublic() {
       if (
         e.key === 'Escape' &&
         $('#meeting-modal') &&
-        !$('#meeting-modal').hidden
+        !$('#meeting-modal')
+          .hidden
       ) {
         closeMeetingModal()
       }
@@ -3755,7 +3918,8 @@ async function loadAdminMeeting() {
   const {
     data,
     error
-  } = await getMeeting()
+  } =
+    await getMeeting()
 
   if (error) {
     status.textContent =
@@ -3769,14 +3933,12 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-        data.meeting_date ||
-        ''
+        data.meeting_date || ''
 
     $('#meeting-time')
       .value =
         String(
-          data.meeting_time ||
-          ''
+          data.meeting_time || ''
         ).slice(
           0,
           5
@@ -3883,8 +4045,8 @@ async function saveMeeting(
   try {
     const {
       data: { user }
-    } = await db.auth
-      .getUser()
+    } =
+      await db.auth.getUser()
 
     if (!user) {
       throw new Error(
@@ -3892,25 +4054,21 @@ async function saveMeeting(
       )
     }
 
-    const {
-      error
-    } = await db
-      .from('club_meeting')
-      .upsert(
-        {
-          id: 1,
-          meeting_date:
-            date,
-          meeting_time:
-            time,
-          updated_by:
-            user.id
-        },
-        {
-          onConflict:
-            'id'
-        }
-      )
+    const { error } =
+      await db
+        .from('club_meeting')
+        .upsert(
+          {
+            id: 1,
+            meeting_date: date,
+            meeting_time: time,
+            updated_by:
+              user.id
+          },
+          {
+            onConflict: 'id'
+          }
+        )
 
     if (error) {
       throw error
@@ -3949,15 +4107,14 @@ async function clearMeeting() {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('club_meeting')
-    .delete()
-    .eq(
-      'id',
-      1
-    )
+  const { error } =
+    await db
+      .from('club_meeting')
+      .delete()
+      .eq(
+        'id',
+        1
+      )
 
   if (error) {
     return toast(
@@ -4053,8 +4210,8 @@ async function initPasswordReset() {
 
       const {
         data: { session }
-      } = await db.auth
-        .getSession()
+      } =
+        await db.auth.getSession()
 
       if (!session) {
         error.textContent =
@@ -4071,8 +4228,8 @@ async function initPasswordReset() {
 
       const {
         error: updateError
-      } = await db.auth
-        .updateUser({
+      } =
+        await db.auth.updateUser({
           password
         })
 
@@ -4102,6 +4259,254 @@ async function initPasswordReset() {
   )
 }
 
+function findLoginElement() {
+  const candidates =
+    document.querySelectorAll(
+      'a, button'
+    )
+
+  for (
+    const element
+    of candidates
+  ) {
+    const text =
+      element.textContent
+        .trim()
+        .toLowerCase()
+
+    const href =
+      element.getAttribute(
+        'href'
+      )
+
+    if (
+      text === 'log in' ||
+      text === 'login' ||
+      text === 'ადმინისტრატორი' ||
+      (
+        href &&
+        href.includes(
+          'admin.html'
+        ) &&
+        text.length < 40
+      )
+    ) {
+      return element
+    }
+  }
+
+  return null
+}
+
+function createAccountMenu(
+  user
+) {
+  const name =
+    getUserDisplayName(user)
+
+  const wrapper =
+    document.createElement(
+      'div'
+    )
+
+  wrapper.className =
+    'account-menu'
+
+  wrapper.innerHTML = `
+    <button
+      type="button"
+      class="account-button"
+      aria-expanded="false"
+    >
+      ${icon('user-round')}
+      <span class="account-name">
+        ${esc(name)}
+      </span>
+      ${icon('chevron-down')}
+    </button>
+
+    <div
+      class="account-dropdown"
+      hidden
+    >
+      <div class="account-dropdown-name">
+        ${icon('user-round')}
+        <span>
+          ${esc(name)}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="account-logout"
+      >
+        ${icon('log-out')}
+        გამოსვლა
+      </button>
+    </div>
+  `
+
+  const button =
+    wrapper.querySelector(
+      '.account-button'
+    )
+
+  const dropdown =
+    wrapper.querySelector(
+      '.account-dropdown'
+    )
+
+  const logoutButton =
+    wrapper.querySelector(
+      '.account-logout'
+    )
+
+  button?.addEventListener(
+    'click',
+    event => {
+      event.stopPropagation()
+
+      const open =
+        !dropdown.hidden
+
+      dropdown.hidden =
+        open
+
+      button.setAttribute(
+        'aria-expanded',
+        String(!open)
+      )
+    }
+  )
+
+  logoutButton?.addEventListener(
+    'click',
+    async event => {
+      event.stopPropagation()
+
+      logoutButton.disabled =
+        true
+
+      logoutButton.innerHTML = `
+        ${icon('loader-circle')}
+        გამოდის...
+      `
+
+      refreshIcons()
+
+      await logout()
+    }
+  )
+
+  document.addEventListener(
+    'click',
+    event => {
+      if (
+        !wrapper.contains(
+          event.target
+        )
+      ) {
+        dropdown.hidden =
+          true
+
+        button?.setAttribute(
+          'aria-expanded',
+          'false'
+        )
+      }
+    }
+  )
+
+  return wrapper
+}
+
+async function updateAuthUI() {
+  if (!db) {
+    return
+  }
+
+  const loginElement =
+    findLoginElement()
+
+  if (!loginElement) {
+    return
+  }
+
+  const user =
+    await getCurrentUser()
+
+  const oldMenu =
+    document.querySelector(
+      '.account-menu'
+    )
+
+  if (oldMenu) {
+    oldMenu.remove()
+  }
+
+  if (!user) {
+    loginElement.hidden =
+      false
+
+    return
+  }
+
+  const admin =
+    await isAdmin(user)
+
+  if (admin) {
+    loginElement.hidden =
+      false
+
+    return
+  }
+
+  const menu =
+    createAccountMenu(
+      user
+    )
+
+  loginElement.hidden =
+    true
+
+  loginElement.parentElement?.appendChild(
+    menu
+  )
+
+  refreshIcons()
+}
+
+async function initAuthUI() {
+  if (!db) {
+    return
+  }
+
+  await updateAuthUI()
+
+  db.auth.onAuthStateChange(
+    (
+      _event,
+      session
+    ) => {
+      setTimeout(
+        async () => {
+          await updateAuthUI()
+
+          if (
+            session?.user
+          ) {
+            await detectAIAdmin()
+          } else {
+            aiAdminGreeting =
+              ''
+          }
+        },
+        0
+      )
+    }
+  )
+}
+
 initChrome()
 
 if (page === 'home') {
@@ -4124,3 +4529,5 @@ if (page === 'admin') {
 if (page === 'reset') {
   initPasswordReset()
 }
+
+initAuthUI()
