@@ -1,31 +1,34 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const db = supabaseIsConfigured ? createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
-) : null
+const db = supabaseIsConfigured
+  ? createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true
+        }
+      }
+    )
+  : null
 
 const page = document.body.dataset.page
 
 const $ = (s, root = document) => root.querySelector(s)
 
-const esc = (value = '') => String(value).replace(
-  /[&<>'"]/g,
-  c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;'
-  }[c])
-)
+const esc = (value = '') =>
+  String(value).replace(
+    /[&<>'"]/g,
+    c => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[c])
+  )
 
 const icon = name => `<i data-lucide="${name}"></i>`
 
@@ -131,7 +134,6 @@ const AI_FUNCTION_URL =
     : null
 
 let aiHistory = []
-
 let aiAdminGreeting = ''
 
 const AI_SYSTEM_CONTEXT = `
@@ -140,6 +142,7 @@ const AI_SYSTEM_CONTEXT = `
 ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
 
 საიტის ძირითადი ინფორმაცია:
+
 - ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
 - პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
 - ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
@@ -148,6 +151,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
 
 კლუბის წევრები არიან:
+
 - ზაზა მჭედლიძე — აქტიური წევრია.
 - თეკლა შველიძე — აქტიური წევრია.
 - ანასტასია ხონელიძე — აქტიური წევრია.
@@ -159,6 +163,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
 
 პასუხის წესები:
+
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
 2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
@@ -190,9 +195,7 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: {
-        session
-      }
+      data: { session }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -200,9 +203,7 @@ async function detectAIAdmin() {
       return
     }
 
-    const admin = await isAdmin(
-      session.user
-    )
+    const admin = await isAdmin(session.user)
 
     if (!admin?.username) {
       aiAdminGreeting = ''
@@ -279,6 +280,7 @@ function addAIMessage(
       <div class="ai-message-avatar">
         ${icon('bot')}
       </div>
+
       <div class="ai-message-bubble">
         ${content}
       </div>
@@ -288,6 +290,7 @@ function addAIMessage(
       <div class="ai-message-avatar">
         ${icon('triangle-alert')}
       </div>
+
       <div class="ai-message-bubble">
         ${content}
       </div>
@@ -408,9 +411,10 @@ function formatAIResponse(text) {
       continue
     }
 
-    const codeMatch = line.match(
-      /^@@CODEBLOCK_(\d+)@@$/
-    )
+    const codeMatch =
+      line.match(
+        /^@@CODEBLOCK_(\d+)@@$/
+      )
 
     if (codeMatch) {
       flushParagraph()
@@ -430,9 +434,10 @@ function formatAIResponse(text) {
       continue
     }
 
-    const heading3 = line.match(
-      /^###\s+(.+)$/
-    )
+    const heading3 =
+      line.match(
+        /^###\s+(.+)$/
+      )
 
     if (heading3) {
       flushParagraph()
@@ -447,9 +452,10 @@ function formatAIResponse(text) {
       continue
     }
 
-    const heading2 = line.match(
-      /^##\s+(.+)$/
-    )
+    const heading2 =
+      line.match(
+        /^##\s+(.+)$/
+      )
 
     if (heading2) {
       flushParagraph()
@@ -464,9 +470,10 @@ function formatAIResponse(text) {
       continue
     }
 
-    const heading1 = line.match(
-      /^#\s+(.+)$/
-    )
+    const heading1 =
+      line.match(
+        /^#\s+(.+)$/
+      )
 
     if (heading1) {
       flushParagraph()
@@ -481,9 +488,10 @@ function formatAIResponse(text) {
       continue
     }
 
-    const quote = line.match(
-      /^>\s*(.+)$/
-    )
+    const quote =
+      line.match(
+        /^>\s*(.+)$/
+      )
 
     if (quote) {
       flushParagraph()
@@ -498,16 +506,19 @@ function formatAIResponse(text) {
       continue
     }
 
-    const unordered = line.match(
-      /^(?:[-*•])\s+(.+)$/
-    )
+    const unordered =
+      line.match(
+        /^(?:[-*•])\s+(.+)$/
+      )
 
     if (unordered) {
       flushParagraph()
 
       if (listType !== 'ul') {
         closeList()
-        html += '<ul class="ai-list">'
+
+        html += '<ul class="ai-list>'
+
         listType = 'ul'
       }
 
@@ -520,16 +531,19 @@ function formatAIResponse(text) {
       continue
     }
 
-    const ordered = line.match(
-      /^\d+[.)]\s+(.+)$/
-    )
+    const ordered =
+      line.match(
+        /^\d+[.)]\s+(.+)$/
+      )
 
     if (ordered) {
       flushParagraph()
 
       if (listType !== 'ol') {
         closeList()
+
         html += '<ol class="ai-ordered-list">'
+
         listType = 'ol'
       }
 
@@ -563,7 +577,8 @@ function addAITyping() {
     return null
   }
 
-  const typing = document.createElement('div')
+  const typing =
+    document.createElement('div')
 
   typing.className =
     'ai-message assistant ai-typing-message'
@@ -572,6 +587,7 @@ function addAITyping() {
     <div class="ai-message-avatar">
       ${icon('bot')}
     </div>
+
     <div class="ai-message-bubble ai-typing">
       <span></span>
       <span></span>
@@ -676,9 +692,11 @@ function getAIUserErrorMessage(error) {
           ${icon('zap')}
           AI დროებით მიუწვდომელია
         </strong>
+
         <p>
           ArduinoHub AI-ის უფასო გამოყენების ლიმიტი ამ დროისთვის ამოიწურა.
         </p>
+
         <small>
           პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას. ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
         </small>
@@ -693,9 +711,11 @@ function getAIUserErrorMessage(error) {
           ${icon('cpu')}
           AI მოდელის პრობლემა
         </strong>
+
         <p>
           ArduinoHub AI-ის გამოყენებული Gemini მოდელი ამჟამად ვერ მუშაობს ან მიუწვდომელია.
         </p>
+
         <small>
           საჭიროა Supabase Edge Function-ში გამოყენებული მოდელის შემოწმება.
         </small>
@@ -710,9 +730,11 @@ function getAIUserErrorMessage(error) {
           ${icon('lock-keyhole')}
           AI ავტორიზაციის პრობლემა
         </strong>
+
         <p>
           AI სერვერთან ავტორიზაცია ვერ მოხერხდა.
         </p>
+
         <small>
           გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
         </small>
@@ -727,9 +749,11 @@ function getAIUserErrorMessage(error) {
           ${icon('shield-alert')}
           AI სერვერთან წვდომა შეზღუდულია
         </strong>
+
         <p>
           AI სერვერმა მოთხოვნა ვერ მიიღო.
         </p>
+
         <small>
           საჭიროა AI სერვერის კონფიგურაციის შემოწმება.
         </small>
@@ -744,9 +768,11 @@ function getAIUserErrorMessage(error) {
           ${icon('search-x')}
           AI სერვისი ვერ მოიძებნა
         </strong>
+
         <p>
           AI ფუნქცია ან მოთხოვნილი რესურსი ამჟამად ვერ მოიძებნა.
         </p>
+
         <small>
           გთხოვთ, მოგვიანებით სცადოთ ხელახლა.
         </small>
@@ -761,9 +787,11 @@ function getAIUserErrorMessage(error) {
           ${icon('triangle-alert')}
           მოთხოვნის დამუშავება ვერ მოხერხდა
         </strong>
+
         <p>
           AI-მ მიღებული მოთხოვნა ვერ დაამუშავა.
         </p>
+
         <small>
           სცადეთ კითხვის ოდნავ სხვანაირად დაწერა.
         </small>
@@ -783,9 +811,11 @@ function getAIUserErrorMessage(error) {
           ${icon('server-crash')}
           AI სერვერის დროებითი პრობლემა
         </strong>
+
         <p>
           AI სერვერმა პასუხის დაბრუნება ამჯერად ვერ შეძლო.
         </p>
+
         <small>
           გთხოვთ, რამდენიმე წამში სცადოთ ხელახლა.
         </small>
@@ -799,9 +829,11 @@ function getAIUserErrorMessage(error) {
         ${icon('wifi-off')}
         AI-სთან დაკავშირება ვერ მოხერხდა
       </strong>
+
       <p>
         ამ მომენტში AI სერვისთან დაკავშირება ვერ მოხერხდა.
       </p>
+
       <small>
         გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
       </small>
@@ -844,9 +876,7 @@ async function askAI(question) {
   if (db) {
     try {
       const {
-        data: {
-          session
-        }
+        data: { session }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -868,18 +898,25 @@ async function askAI(question) {
       AI_FUNCTION_URL,
       {
         method: 'POST',
+
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type':
+            'application/json',
+
           'Authorization':
             `Bearer ${authorizationToken}`,
+
           'apikey':
             SUPABASE_ANON_KEY
         },
+
         body: JSON.stringify({
           message: cleanQuestion,
           history,
-          context: AI_SYSTEM_CONTEXT,
-          adminGreeting: aiAdminGreeting
+          context:
+            AI_SYSTEM_CONTEXT,
+          adminGreeting:
+            aiAdminGreeting
         })
       }
     )
@@ -913,9 +950,12 @@ async function askAI(question) {
       String(backendMessage)
     )
 
-    error.status = response.status
+    error.status =
+      response.status
+
     error.backendData = data
-    error.backendStatus = response.status
+    error.backendStatus =
+      response.status
 
     throw error
   }
@@ -929,7 +969,9 @@ async function askAI(question) {
       String(data.error)
     )
 
-    error.status = response.status
+    error.status =
+      response.status
+
     error.backendData = data
 
     throw error
@@ -946,7 +988,9 @@ async function askAI(question) {
       'AI-მ ცარიელი პასუხი დააბრუნა.'
     )
 
-    error.status = response.status
+    error.status =
+      response.status
+
     error.backendData = data
 
     throw error
@@ -987,6 +1031,7 @@ function addAISafetyWarning() {
         ${icon('shield-alert')}
         უსაფრთხოების გაფრთხილება
       </strong>
+
       <p>
         გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის. პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
       </p>
@@ -997,6 +1042,161 @@ function addAISafetyWarning() {
     'error',
     message
   )
+}
+
+/*
+ * AI ჩატის შეტყობინების შენახვა Supabase-ში
+ */
+async function saveAIChatMessage(message) {
+  if (!db) {
+    return
+  }
+
+  try {
+    const {
+      data: { user }
+    } = await db.auth.getUser()
+
+    if (!user) {
+      return
+    }
+
+    const username =
+      user.user_metadata?.username ||
+      user.user_metadata?.name ||
+      user.user_metadata?.full_name ||
+      user.email ||
+      'მომხმარებელი'
+
+    const {
+      error
+    } = await db
+      .from('ai_chat_history')
+      .insert({
+        user_id: user.id,
+        username:
+          String(username).trim(),
+        message:
+          String(message).trim()
+      })
+
+    if (error) {
+      console.warn(
+        'AI chat history save failed:',
+        error
+      )
+    }
+  } catch (error) {
+    console.warn(
+      'AI chat history error:',
+      error
+    )
+  }
+}
+
+/*
+ * /history ბრძანებისთვის Supabase RPC
+ */
+async function getZazaHistory() {
+  if (!db) {
+    throw new Error(
+      'Supabase არ არის კონფიგურირებული.'
+    )
+  }
+
+  const {
+    data,
+    error
+  } = await db.rpc(
+    'get_zaza_history'
+  )
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+/*
+ * /history შედეგების ფორმატირება
+ */
+function formatZazaHistory(items) {
+  if (!items.length) {
+    return `
+      <p>
+        „ზაზა“-ს შესახებ სხვა მომხმარებლების შეტყობინებები ვერ მოიძებნა.
+      </p>
+    `
+  }
+
+  let html = `
+    <h3 class="ai-response-subtitle">
+      „ზაზა“-ს შესახებ ნაპოვნი შეტყობინებები
+    </h3>
+
+    <p>
+      ნაპოვნია <strong>${items.length}</strong> შეტყობინება:
+    </p>
+
+    <div class="ai-history-list">
+  `
+
+  items.forEach(
+    (item, index) => {
+      const username =
+        esc(
+          item.username ||
+          'უცნობი მომხმარებელი'
+        )
+
+      const message =
+        esc(
+          item.message || ''
+        )
+
+      const date =
+        item.created_at
+          ? new Intl.DateTimeFormat(
+              'ka-GE',
+              {
+                dateStyle:
+                  'medium',
+                timeStyle:
+                  'short'
+              }
+            ).format(
+              new Date(
+                item.created_at
+              )
+            )
+          : ''
+
+      html += `
+        <div class="ai-history-item">
+          <strong>
+            ${index + 1}. ${username}
+          </strong>
+
+          <p>
+            ${message}
+          </p>
+
+          ${
+            date
+              ? `<small>${esc(date)}</small>`
+              : ''
+          }
+        </div>
+      `
+    }
+  )
+
+  html += `
+    </div>
+  `
+
+  return html
 }
 
 async function handleAIQuestion(question) {
@@ -1039,14 +1239,107 @@ async function handleAIQuestion(question) {
     cleanQuestion
   )
 
+  if (input) {
+    input.value = ''
+  }
+
+  /*
+   * /history სპეციალური ბრძანება
+   */
+  if (
+    cleanQuestion.toLowerCase() ===
+    '/history'
+  ) {
+    /*
+     * ეს მხოლოდ დამატებითი frontend შემოწმებაა.
+     * რეალური უსაფრთხოება Supabase RPC-შიც არის.
+     */
+    const isZaza =
+      aiAdminGreeting ===
+      'ბატონო ზაზა'
+
+    if (!isZaza) {
+      addAIMessage(
+        'error',
+        `
+          <div class="ai-error-content">
+            <strong>
+              წვდომა უარყოფილია
+            </strong>
+
+            <p>
+              /history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.
+            </p>
+          </div>
+        `
+      )
+
+      return
+    }
+
+    if (send) {
+      send.disabled = true
+    }
+
+    const typing =
+      addAITyping()
+
+    try {
+      const history =
+        await getZazaHistory()
+
+      typing?.remove()
+
+      addAIMessage(
+        'assistant',
+        formatZazaHistory(
+          history
+        )
+      )
+    } catch (error) {
+      console.error(
+        'History error:',
+        error
+      )
+
+      typing?.remove()
+
+      addAIMessage(
+        'error',
+        `
+          <div class="ai-error-content">
+            <strong>
+              ისტორიის ჩატვირთვა ვერ მოხერხდა
+            </strong>
+
+            <p>
+              მონაცემების მიღებისას შეცდომა მოხდა.
+            </p>
+          </div>
+        `
+      )
+    } finally {
+      if (send) {
+        send.disabled = false
+      }
+
+      input?.focus()
+    }
+
+    return
+  }
+
+  /*
+   * ჩვეულებრივი მომხმარებლის შეტყობინება ინახება Supabase-ში
+   */
+  await saveAIChatMessage(
+    cleanQuestion
+  )
+
   aiHistory.push({
     role: 'user',
     content: cleanQuestion
   })
-
-  if (input) {
-    input.value = ''
-  }
 
   if (send) {
     send.disabled = true
@@ -1057,7 +1350,9 @@ async function handleAIQuestion(question) {
 
   try {
     const reply =
-      await askAI(cleanQuestion)
+      await askAI(
+        cleanQuestion
+      )
 
     typing?.remove()
 
@@ -1102,7 +1397,9 @@ async function handleAIQuestion(question) {
 
     addAIMessage(
       'error',
-      getAIUserErrorMessage(error)
+      getAIUserErrorMessage(
+        error
+      )
     )
   } finally {
     if (send) {
@@ -1130,7 +1427,9 @@ function openAIChat() {
     return
   }
 
-  chat.classList.add('open')
+  chat.classList.add(
+    'open'
+  )
 
   toggle.setAttribute(
     'aria-expanded',
@@ -1168,7 +1467,9 @@ function closeAIChat() {
     return
   }
 
-  chat.classList.remove('open')
+  chat.classList.remove(
+    'open'
+  )
 
   toggle.setAttribute(
     'aria-expanded',
@@ -1444,7 +1745,9 @@ async function initProjects() {
       $('#project-search')
         .value
         .trim()
-        .toLocaleLowerCase('ka')
+        .toLocaleLowerCase(
+          'ka'
+        )
 
     const category =
       $('#category-filter')
@@ -1454,11 +1757,14 @@ async function initProjects() {
       data.filter(
         p =>
           (!category ||
-            p.category === category) &&
+            p.category ===
+              category) &&
           (
             !q ||
             `${p.title} ${p.description} ${p.author}`
-              .toLocaleLowerCase('ka')
+              .toLocaleLowerCase(
+                'ka'
+              )
               .includes(q)
           )
       )
@@ -1525,9 +1831,13 @@ async function initDetail() {
 
   if (
     !id ||
-    !/^[0-9a-f-]{36}$/i.test(id)
+    !/^[0-9a-f-]{36}$/i.test(
+      id
+    )
   ) {
-    return notFound(target)
+    return notFound(
+      target
+    )
   }
 
   const {
@@ -1547,7 +1857,9 @@ async function initDetail() {
     error ||
     !p
   ) {
-    return notFound(target)
+    return notFound(
+      target
+    )
   }
 
   const image =
@@ -1607,7 +1919,9 @@ async function initDetail() {
           </h2>
 
           <div class="prose lines">
-            ${esc(p.how_it_was_made)}
+            ${esc(
+              p.how_it_was_made
+            )}
           </div>
         </section>
       `
@@ -1620,8 +1934,9 @@ async function initDetail() {
     p.code.trim()
   ) {
     const isChemistry =
-      String(p.category)
-        .toLowerCase() ===
+      String(
+        p.category
+      ).toLowerCase() ===
       'chemistry'
 
     const sectionTitle =
@@ -1678,7 +1993,9 @@ async function initDetail() {
             </span>
 
             <time>
-              ${dateText(p.created_at)}
+              ${dateText(
+                p.created_at
+              )}
             </time>
           </div>
 
@@ -1717,8 +2034,9 @@ async function initDetail() {
             .writeText(p.code)
 
           const isChemistry =
-            String(p.category)
-              .toLowerCase() ===
+            String(
+              p.category
+            ).toLowerCase() ===
             'chemistry'
 
           toast(
@@ -1863,9 +2181,7 @@ async function upload(
     throw error
   }
 
-  const {
-    data
-  } =
+  const { data } =
     db.storage
       .from(bucket)
       .getPublicUrl(path)
@@ -1891,7 +2207,7 @@ function storagePath(
       ? decodeURIComponent(
           url.slice(
             index +
-            marker.length
+              marker.length
           )
         )
       : null
@@ -1970,9 +2286,7 @@ async function initAdmin() {
   }
 
   const {
-    data: {
-      session
-    }
+    data: { session }
   } = await db.auth
     .getSession()
 
@@ -2076,19 +2390,19 @@ function updateCodeFieldLabel() {
   }
 
   const isChemistry =
-    String(category.value)
-      .toLowerCase() ===
+    String(
+      category.value
+    ).toLowerCase() ===
     'chemistry'
 
   const textNodes =
     Array.from(
       label.childNodes
+    ).filter(
+      node =>
+        node.nodeType ===
+        Node.TEXT_NODE
     )
-      .filter(
-        node =>
-          node.nodeType ===
-          Node.TEXT_NODE
-      )
 
   const titleNode =
     textNodes.find(
@@ -2141,6 +2455,7 @@ async function login(event) {
         $('#login-email')
           .value
           .trim(),
+
       password:
         $('#login-password')
           .value
@@ -2254,7 +2569,8 @@ function setBusy(
     return
   }
 
-  button.disabled = busy
+  button.disabled =
+    busy
 
   if (busy) {
     button.dataset.label =
@@ -2338,7 +2654,11 @@ async function loadAdminProjects() {
                   </h3>
 
                   <p>
-                    ${esc(p.category)} · ${dateText(p.created_at)}
+                    ${esc(p.category)}
+                    ·
+                    ${dateText(
+                      p.created_at
+                    )}
                   </p>
                 </div>
 
@@ -2418,7 +2738,9 @@ async function loadAdminProjects() {
         `
 
   list
-    .querySelectorAll('.edit')
+    .querySelectorAll(
+      '.edit'
+    )
     .forEach(
       b =>
         b.addEventListener(
@@ -2435,7 +2757,9 @@ async function loadAdminProjects() {
     )
 
   list
-    .querySelectorAll('.toggle')
+    .querySelectorAll(
+      '.toggle'
+    )
     .forEach(
       b =>
         b.addEventListener(
@@ -2448,7 +2772,9 @@ async function loadAdminProjects() {
     )
 
   list
-    .querySelectorAll('.delete')
+    .querySelectorAll(
+      '.delete'
+    )
     .forEach(
       b =>
         b.addEventListener(
@@ -2520,7 +2846,8 @@ function openEditor(p) {
 
     $('#how-made')
       .value =
-      p.how_it_was_made || ''
+      p.how_it_was_made ||
+      ''
 
     $('#code')
       .value =
@@ -2593,8 +2920,7 @@ async function saveProject(event) {
 
   const old =
     adminProjects.find(
-      p =>
-        p.id === id
+      p => p.id === id
     )
 
   const image =
@@ -2825,8 +3151,7 @@ async function saveProject(event) {
 async function togglePublished(id) {
   const p =
     adminProjects.find(
-      x =>
-        x.id === id
+      x => x.id === id
     )
 
   if (!p) {
@@ -2865,8 +3190,7 @@ async function togglePublished(id) {
 async function deleteProject(id) {
   const p =
     adminProjects.find(
-      x =>
-        x.id === id
+      x => x.id === id
     )
 
   if (
@@ -2923,7 +3247,9 @@ const GEORGIAN_WEEKDAYS = [
   'შაბათი'
 ]
 
-function meetingDay(dateValue) {
+function meetingDay(
+  dateValue
+) {
   if (!dateValue) {
     return '—'
   }
@@ -2984,10 +3310,9 @@ function meetingTimeText(
   }
 
   const m =
-    String(timeValue)
-      .match(
-        /^(\d{2}):(\d{2})/
-      )
+    String(timeValue).match(
+      /^(\d{2}):(\d{2})/
+    )
 
   return m
     ? `${m[1]}:${m[2]}`
@@ -2998,10 +3323,9 @@ async function getMeeting() {
   if (!db) {
     return {
       data: null,
-      error:
-        new Error(
-          'Supabase not configured'
-        )
+      error: new Error(
+        'Supabase not configured'
+      )
     }
   }
 
@@ -3252,10 +3576,7 @@ async function loadAdminMeeting() {
       String(
         data.meeting_time ||
         ''
-      ).slice(
-        0,
-        5
-      )
+      ).slice(0, 5)
 
     $('#meeting-day-preview')
       .textContent =
@@ -3276,7 +3597,8 @@ async function loadAdminMeeting() {
       'meeting-admin-status'
 
     $('#meeting-day-preview')
-      .textContent = '—'
+      .textContent =
+      '—'
   }
 }
 
@@ -3312,7 +3634,9 @@ function bindMeetingForm() {
     )
 }
 
-async function saveMeeting(event) {
+async function saveMeeting(
+  event
+) {
   event.preventDefault()
 
   if (!db) {
@@ -3354,9 +3678,7 @@ async function saveMeeting(event) {
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth
       .getUser()
 
@@ -3373,12 +3695,16 @@ async function saveMeeting(event) {
       .upsert(
         {
           id: 1,
-          meeting_date: date,
-          meeting_time: time,
-          updated_by: user.id
+          meeting_date:
+            date,
+          meeting_time:
+            time,
+          updated_by:
+            user.id
         },
         {
-          onConflict: 'id'
+          onConflict:
+            'id'
         }
       )
 
@@ -3471,9 +3797,11 @@ async function initPasswordReset() {
       .textContent =
       'Supabase ჯერ არ არის კონფიგურირებული.'
 
-    form.querySelector(
-      'button'
-    ).disabled = true
+    form
+      .querySelector(
+        'button'
+      )
+      .disabled = true
 
     return
   }
@@ -3523,9 +3851,7 @@ async function initPasswordReset() {
       }
 
       const {
-        data: {
-          session
-        }
+        data: { session }
       } = await db.auth
         .getSession()
 
