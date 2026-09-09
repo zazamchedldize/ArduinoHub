@@ -245,7 +245,165 @@ nav>a{
 nav>a:hover,nav>a.active{
   color:var(--text);
 }
+.ai-history-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.16s ease,
+    visibility 0.16s ease;
+}
 
+.ai-history-confirm.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.ai-history-confirm.closing {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ai-history-confirm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  pointer-events: auto;
+}
+
+.ai-history-confirm-box {
+  position: relative;
+  z-index: 2;
+  width: min(360px, calc(100vw - 36px));
+  padding: 24px 20px 20px;
+  border: 1px solid rgba(166, 108, 255, 0.35);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20, 17, 32, 0.99),
+      rgba(9, 12, 20, 0.99)
+    );
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(166, 108, 255, 0.14);
+  text-align: center;
+  transform: translateY(10px) scale(0.96);
+  transition: transform 0.16s ease;
+}
+
+.ai-history-confirm.visible
+.ai-history-confirm-box {
+  transform: translateY(0) scale(1);
+}
+
+.ai-history-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 13px;
+  border: 1px solid rgba(180, 110, 255, 0.4);
+  border-radius: 14px;
+  background: rgba(105, 45, 180, 0.16);
+  color: #d2b6ff;
+}
+
+.ai-history-confirm-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.ai-history-confirm-box h3 {
+  margin: 0 0 8px;
+  color: #f2eaff;
+  font-size: 17px;
+}
+
+.ai-history-confirm-box p {
+  margin: 0;
+  color: #aebcb7;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.ai-history-confirm-actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 19px;
+}
+
+.ai-history-confirm-actions button {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  min-height: 43px;
+  border-radius: 11px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ai-history-confirm-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.045);
+  color: #dce6e2;
+}
+
+.ai-history-confirm-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgba(180, 110, 255, 0.5);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(105, 45, 180, 0.7),
+      rgba(45, 20, 90, 0.9)
+    );
+  color: #f0e5ff;
+  font-weight: 600;
+}
+
+.ai-history-confirm-delete svg {
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .ai-history-confirm {
+    padding: 16px;
+  }
+
+  .ai-history-confirm-box {
+    width: calc(100vw - 32px);
+    max-width: 360px;
+    padding: 22px 17px 17px;
+    border-radius: 18px;
+  }
+
+  .ai-history-confirm-actions {
+    gap: 8px;
+  }
+
+  .ai-history-confirm-actions button {
+    min-height: 46px;
+  }
+}
 .nav-admin{
   color:var(--green);
   border:1px solid #28dc9b55;
