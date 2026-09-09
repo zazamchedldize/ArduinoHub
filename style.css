@@ -297,6 +297,161 @@ nav>a:hover,nav>a.active{
   box-shadow:0 0 18px #d4af3710;
 }
 
+.account-menu{
+  position:relative;
+  display:flex;
+  align-items:center;
+  margin-left:8px;
+}
+
+.account-button{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:36px;
+  padding:7px 10px;
+  border:1px solid #28dc9b55;
+  border-radius:7px;
+  background:#22d39508;
+  color:var(--text);
+  font:600 13px FiraGO,Inter,sans-serif;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.account-button:hover{
+  border-color:#22d395;
+  background:#22d39512;
+}
+
+.account-button svg{
+  width:16px;
+  height:16px;
+}
+
+.account-name{
+  max-width:150px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.account-dropdown{
+  position:absolute;
+  top:calc(100% + 9px);
+  right:0;
+  width:210px;
+  padding:7px;
+  border:1px solid #234139;
+  border-radius:10px;
+  background:#0d1b18;
+  box-shadow:0 18px 50px #0008;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  z-index:100;
+}
+
+.account-dropdown[hidden]{
+  display:none;
+}
+
+.account-dropdown-name{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px;
+  margin-bottom:4px;
+  color:var(--text);
+  font:600 13px FiraGO,Inter,sans-serif;
+  border-bottom:1px solid #ffffff0d;
+}
+
+.account-dropdown-name svg{
+  width:16px;
+  height:16px;
+  color:var(--green);
+  flex:none;
+}
+
+.account-logout{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:#ff7180;
+  font:600 13px FiraGO,Inter,sans-serif;
+  text-align:left;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.account-logout:hover{
+  background:#ff71800d;
+}
+
+.account-logout svg{
+  width:16px;
+  height:16px;
+}
+
+@media(max-width:800px){
+  .site-header{
+    padding:0 18px;
+  }
+
+  nav{
+    gap:12px;
+  }
+
+  .account-name{
+    max-width:100px;
+  }
+
+  .account-button{
+    padding:7px 8px;
+  }
+}
+
+@media(max-width:600px){
+  .site-header{
+    height:70px;
+    padding:0 14px;
+  }
+
+  .brand{
+    font-size:18px;
+  }
+
+  .brand-mark{
+    width:27px;
+    height:27px;
+    font-size:24px;
+  }
+
+  .account-name{
+    display:none;
+  }
+
+  .account-button{
+    width:36px;
+    height:36px;
+    justify-content:center;
+    padding:0;
+  }
+
+  .account-button svg:last-child{
+    display:none;
+  }
+
+  .account-dropdown{
+    right:-4px;
+    width:200px;
+  }
+}
 body.modal-open{
   overflow:hidden;
 }
