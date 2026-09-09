@@ -1,5 +1,12 @@
-import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  supabaseIsConfigured
+} from './supabase-config.js'
+
+import {
+  createClient
+} from 'https://esm.sh/@supabase/supabase-js@2'
 
 const db = supabaseIsConfigured
   ? createClient(
@@ -16,27 +23,35 @@ const db = supabaseIsConfigured
 
 const page = document.body.dataset.page
 
-const $ = (s, root = document) => root.querySelector(s)
+const $ = (
+  s,
+  root = document
+) => root.querySelector(s)
 
-const esc = (value = '') =>
-  String(value).replace(
-    /[&<>'"]/g,
-    c => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[c])
-  )
+const esc = (
+  value = ''
+) => String(value).replace(
+  /[&<>'"]/g,
+  c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[c])
+)
 
-const icon = name => `<i data-lucide="${name}"></i>`
+const icon = name =>
+  `<i data-lucide="${name}"></i>`
 
 function refreshIcons() {
   window.lucide?.createIcons()
 }
 
-function toast(message, type = '') {
+function toast(
+  message,
+  type = ''
+) {
   const el = $('#toast')
 
   if (!el) {
@@ -44,7 +59,9 @@ function toast(message, type = '') {
   }
 
   el.textContent = message
-  el.className = `toast show ${type}`
+
+  el.className =
+    `toast show ${type}`
 
   clearTimeout(toast.timer)
 
@@ -69,13 +86,16 @@ function dateText(value) {
 
 function neutralError(
   error,
-  fallback = 'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
+  fallback =
+    'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
 ) {
   console.error(error)
   return fallback
 }
 
-function configuredMessage(target) {
+function configuredMessage(
+  target
+) {
   if (!target) {
     return
   }
@@ -102,14 +122,13 @@ function configuredMessage(target) {
 function initChrome() {
   document
     .querySelectorAll('[data-year]')
-    .forEach(
-      el => {
-        el.textContent =
-          new Date().getFullYear()
-      }
-    )
+    .forEach(el => {
+      el.textContent =
+        new Date().getFullYear()
+    })
 
-  const button = $('.menu-toggle')
+  const button =
+    $('.menu-toggle')
 
   if (button) {
     button.addEventListener(
@@ -126,7 +145,7 @@ function initChrome() {
 
         button.setAttribute(
           'aria-expanded',
-          open
+          String(open)
         )
       }
     )
@@ -136,8 +155,12 @@ function initChrome() {
 }
 
 const AI_FUNCTION_URL =
-  supabaseIsConfigured && SUPABASE_URL
-    ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
+  supabaseIsConfigured &&
+  SUPABASE_URL
+    ? `${SUPABASE_URL.replace(
+        /\/+$/,
+        ''
+      )}/functions/v1/ai-chat`
     : null
 
 let aiHistory = []
@@ -149,6 +172,7 @@ const AI_SYSTEM_CONTEXT = `
 ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
 
 საიტის ძირითადი ინფორმაცია:
+
 - ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
 - პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
 - ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
@@ -157,6 +181,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
 
 კლუბის წევრები არიან:
+
 - ზაზა მჭედლიძე — აქტიური წევრია.
 - თეკლა შველიძე — აქტიური წევრია.
 - ანასტასია ხონელიძე — აქტიური წევრია.
@@ -168,6 +193,7 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
 
 პასუხის წესები:
+
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
 2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
@@ -181,9 +207,9 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის.
 12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად: H2O, CO2, NaCl, KMnO4, Mn2O7.
 13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
-14. პასუხი არ შეწყვიტო შუა წინადადებაში. ყოველთვის დაასრულე აზრი.
+14. პასუხი არ შეწყვიტო შუა წინადადებაში.
 15. თუ პასუხს რამდენიმე ნაწილი აქვს, დაალაგე ლოგიკურად.
-16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული შეცდომა. თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე და ჩვეულებრივ უპასუხე.
+16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული შეცდომა. თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე.
 17. თუ კითხვა გასაგებია მიუხედავად მცირე typo-სა, მომხმარებელს ნუ სთხოვ თავიდან დაწერას.
 18. თუ მომხმარებელი წერს უხეშ, შეურაცხმყოფელ, სექსუალურ, 18+ ან აშკარად შეუსაბამო შინაარსს, არ გააგრძელო ასეთი საუბარი. უპასუხე მოკლე, მშვიდი გაფრთხილებით და გადაიყვანე სასწავლო თემაზე.
 19. ArduinoHub AI განკუთვნილია სასწავლო, ტექნიკური და უსაფრთხო კომუნიკაციისთვის.
@@ -198,7 +224,9 @@ async function getCurrentUser() {
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth.getUser()
 
     return user || null
@@ -212,7 +240,9 @@ async function getCurrentUser() {
   }
 }
 
-function getUserDisplayName(user) {
+function getUserDisplayName(
+  user
+) {
   if (!user) {
     return 'მომხმარებელი'
   }
@@ -230,7 +260,8 @@ function getUserDisplayName(user) {
 }
 
 async function getCurrentUserContext() {
-  const user = await getCurrentUser()
+  const user =
+    await getCurrentUser()
 
   if (!user) {
     return {
@@ -241,13 +272,10 @@ async function getCurrentUserContext() {
     }
   }
 
-  const name =
-    getUserDisplayName(user)
-
   return {
     id: user.id,
     email: user.email || null,
-    name,
+    name: getUserDisplayName(user),
     isAuthenticated: true
   }
 }
@@ -260,7 +288,9 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: { session }
+      data: {
+        session
+      }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -269,7 +299,9 @@ async function detectAIAdmin() {
     }
 
     const admin =
-      await isAdmin(session.user)
+      await isAdmin(
+        session.user
+      )
 
     if (!admin?.username) {
       aiAdminGreeting = ''
@@ -310,7 +342,9 @@ async function detectAIAdmin() {
   }
 }
 
-function applyAIGreeting(reply) {
+function applyAIGreeting(
+  reply
+) {
   const clean =
     String(reply || '').trim()
 
@@ -390,7 +424,9 @@ function addAIMessage(
   return message
 }
 
-function formatAIResponse(text) {
+function formatAIResponse(
+  text
+) {
   if (!text) {
     return '<p>პასუხი ვერ მივიღე.</p>'
   }
@@ -405,41 +441,46 @@ function formatAIResponse(text) {
 
   const codeBlocks = []
 
-  source = source.replace(
-    /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
-    (_, code) => {
-      const index =
-        codeBlocks.length
+  source =
+    source.replace(
+      /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+      (_, code) => {
+        const index =
+          codeBlocks.length
 
-      codeBlocks.push(
-        esc(code.trim())
-      )
+        codeBlocks.push(
+          esc(code.trim())
+        )
 
-      return `@@CODEBLOCK_${index}@@`
-    }
-  )
+        return `@@CODEBLOCK_${index}@@`
+      }
+    )
 
   let safe = esc(source)
 
-  safe = safe.replace(
-    /\*\*\*(.+?)\*\*\*/g,
-    '<strong><em>$1</em></strong>'
-  )
+  safe =
+    safe.replace(
+      /\*\*\*(.+?)\*\*\*/g,
+      '<strong><em>$1</em></strong>'
+    )
 
-  safe = safe.replace(
-    /\*\*(.+?)\*\*/g,
-    '<strong>$1</strong>'
-  )
+  safe =
+    safe.replace(
+      /\*\*(.+?)\*\*/g,
+      '<strong>$1</strong>'
+    )
 
-  safe = safe.replace(
-    /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
-    '<em>$1</em>'
-  )
+  safe =
+    safe.replace(
+      /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+      '<em>$1</em>'
+    )
 
-  safe = safe.replace(
-    /`([^`\n]+)`/g,
-    '<code class="ai-inline-code">$1</code>'
-  )
+  safe =
+    safe.replace(
+      /`([^`\n]+)`/g,
+      '<code class="ai-inline-code">$1</code>'
+    )
 
   const lines =
     safe.split(/\r?\n/)
@@ -596,10 +637,8 @@ function formatAIResponse(text) {
 
       if (listType !== 'ul') {
         closeList()
-
         html +=
           '<ul class="ai-list">'
-
         listType = 'ul'
       }
 
@@ -622,10 +661,8 @@ function formatAIResponse(text) {
 
       if (listType !== 'ol') {
         closeList()
-
         html +=
           '<ol class="ai-ordered-list">'
-
         listType = 'ol'
       }
 
@@ -639,7 +676,6 @@ function formatAIResponse(text) {
     }
 
     closeList()
-
     paragraph.push(line)
   }
 
@@ -690,7 +726,9 @@ function addAITyping() {
   return typing
 }
 
-function getAIErrorStatus(error) {
+function getAIErrorStatus(
+  error
+) {
   if (
     Number.isFinite(
       Number(error?.status)
@@ -714,7 +752,9 @@ function getAIErrorStatus(error) {
     : null
 }
 
-function isAIQuotaError(error) {
+function isAIQuotaError(
+  error
+) {
   const message =
     String(
       error?.message || ''
@@ -742,7 +782,9 @@ function isAIQuotaError(error) {
   )
 }
 
-function isAIModelError(error) {
+function isAIModelError(
+  error
+) {
   const message =
     String(
       error?.message || ''
@@ -765,7 +807,9 @@ function isAIModelError(error) {
   )
 }
 
-function getAIUserErrorMessage(error) {
+function getAIUserErrorMessage(
+  error
+) {
   const status =
     getAIErrorStatus(error)
 
@@ -929,7 +973,9 @@ function getAIUserErrorMessage(error) {
   `
 }
 
-async function askAI(question) {
+async function askAI(
+  question
+) {
   if (!AI_FUNCTION_URL) {
     throw new Error(
       'AI ფუნქციის მისამართი ვერ მოიძებნა.'
@@ -948,18 +994,16 @@ async function askAI(question) {
   const history =
     aiHistory
       .slice(-8)
-      .map(
-        message => ({
-          role:
-            message.role === 'assistant'
-              ? 'assistant'
-              : 'user',
-          text:
-            String(
-              message.content || ''
-            ).slice(0, 1800)
-        })
-      )
+      .map(message => ({
+        role:
+          message.role === 'assistant'
+            ? 'assistant'
+            : 'user',
+        text:
+          String(
+            message.content || ''
+          ).slice(0, 1800)
+      }))
 
   const currentUser =
     await getCurrentUserContext()
@@ -970,7 +1014,9 @@ async function askAI(question) {
   if (db) {
     try {
       const {
-        data: { session }
+        data: {
+          session
+        }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -988,7 +1034,7 @@ async function askAI(question) {
   const userIdentityContext =
     currentUser.isAuthenticated
       ? `
-ამჟამად AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
+ამჟამად ArduinoHub AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
 
 მომხმარებლის სახელი და გვარი:
 ${currentUser.name}
@@ -999,53 +1045,60 @@ ${currentUser.email || 'უცნობია'}
 მომხმარებლის Supabase ID:
 ${currentUser.id}
 
-ეს ინფორმაცია გამოიყენე მხოლოდ მაშინ, როცა მომხმარებელი საკუთარ ვინაობას, სახელს ან ანგარიშს გეკითხება.
+მნიშვნელოვანი წესები:
 
-მომხმარებელს მიმართე მისი სახელით მხოლოდ მაშინ, როცა ეს ბუნებრივად და სასარგებლოდ ჟღერს.
+- ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
+- თუ მომხმარებელი გეკითხება „ვინ ვარ?“, „რა მქვია?“ ან მსგავს რამეს, გამოიყენე ზემოთ მოცემული სახელი.
+- არ აურიო ეს მომხმარებელი ArduinoHub-ის კლუბის სხვა წევრებში.
+- მომხმარებლის სახელი არ მოიგონო.
+- მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო, თუ ამის შესახებ პირდაპირ არ გკითხავს.
 `
       : `
-ამჟამად მომხმარებელი სისტემაში შესული არ არის.
+ამჟამად ArduinoHub AI-ს ესაუბრება არაავტორიზებული მომხმარებელი.
+
+მომხმარებლის სახელი უცნობია.
 `
 
-  const finalContext =
-    `${AI_SYSTEM_CONTEXT}\n\n${userIdentityContext}`
+  const finalContext = `
+${AI_SYSTEM_CONTEXT}
+
+${userIdentityContext}
+`
 
   let response
 
   try {
-    response =
-      await fetch(
-        AI_FUNCTION_URL,
-        {
-          method: 'POST',
+    response = await fetch(
+      AI_FUNCTION_URL,
+      {
+        method: 'POST',
 
-          headers: {
-            'Content-Type':
-              'application/json',
+        headers: {
+          'Content-Type':
+            'application/json',
 
-            'Authorization':
-              `Bearer ${authorizationToken}`,
+          'Authorization':
+            `Bearer ${authorizationToken}`,
 
-            'apikey':
-              SUPABASE_ANON_KEY
-          },
+          'apikey':
+            SUPABASE_ANON_KEY
+        },
 
-          body: JSON.stringify({
-            message:
-              cleanQuestion,
+        body: JSON.stringify({
+          message: cleanQuestion,
 
-            history,
+          history,
 
-            context:
-              finalContext,
+          context: finalContext,
 
-            adminGreeting:
-              aiAdminGreeting,
+          adminGreeting:
+            aiAdminGreeting,
 
+          currentUser:
             currentUser
-          })
-        }
-      )
+        })
+      }
+    )
   } catch (networkError) {
     const error =
       new Error(
@@ -1135,7 +1188,9 @@ ${currentUser.id}
   return reply
 }
 
-function containsUnsafeContent(text) {
+function containsUnsafeContent(
+  text
+) {
   const value =
     String(text || '')
       .toLowerCase()
@@ -1182,14 +1237,18 @@ function addAISafetyWarning() {
   )
 }
 
-async function saveAIChatMessage(message) {
+async function saveAIChatMessage(
+  message
+) {
   if (!db) {
     return
   }
 
   try {
     const {
-      data: { user }
+      data: {
+        user
+      }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -1199,16 +1258,17 @@ async function saveAIChatMessage(message) {
     const username =
       getUserDisplayName(user)
 
-    const { error } =
-      await db
-        .from('ai_chat_history')
-        .insert({
-          user_id: user.id,
-          username:
-            String(username).trim(),
-          message:
-            String(message).trim()
-        })
+    const {
+      error
+    } = await db
+      .from('ai_chat_history')
+      .insert({
+        user_id: user.id,
+        username:
+          String(username).trim(),
+        message:
+          String(message).trim()
+      })
 
     if (error) {
       console.warn(
@@ -1245,27 +1305,32 @@ async function getZazaHistory() {
   return data || []
 }
 
-async function deleteZazaHistoryItem(id) {
+async function deleteZazaHistoryItem(
+  id
+) {
   if (!db) {
     throw new Error(
       'Supabase არ არის კონფიგურირებული.'
     )
   }
 
-  const { error } =
-    await db.rpc(
-      'delete_zaza_history_item',
-      {
-        history_id: id
-      }
-    )
+  const {
+    error
+  } = await db.rpc(
+    'delete_zaza_history_item',
+    {
+      history_id: id
+    }
+  )
 
   if (error) {
     throw error
   }
 }
 
-function formatZazaHistory(items) {
+function formatZazaHistory(
+  items
+) {
   if (!items.length) {
     return `
       <p>
@@ -1280,7 +1345,9 @@ function formatZazaHistory(items) {
     </h3>
 
     <p class="ai-history-count">
-      ნაპოვნია <strong>${items.length}</strong> შეტყობინება:
+      ნაპოვნია
+      <strong>${items.length}</strong>
+      შეტყობინება:
     </p>
 
     <div class="ai-history-list">
@@ -1455,7 +1522,11 @@ function setupZazaHistoryDelete() {
             if (count) {
               count.innerHTML =
                 remaining
-                  ? `დარჩენილია <strong>${remaining}</strong> შეტყობინება:`
+                  ? `
+                    დარჩენილია
+                    <strong>${remaining}</strong>
+                    შეტყობინება:
+                  `
                   : 'ყველა შეტყობინება წაშლილია.'
             }
 
@@ -1490,8 +1561,7 @@ function setupZazaHistoryDelete() {
               error
             )
 
-            button.disabled =
-              false
+            button.disabled = false
 
             button.innerHTML = `
               ${icon('trash-2')}
@@ -1512,7 +1582,9 @@ function setupZazaHistoryDelete() {
   refreshIcons()
 }
 
-async function handleAIQuestion(question) {
+async function handleAIQuestion(
+  question
+) {
   const input =
     $('#ai-chat-input')
 
@@ -1520,9 +1592,7 @@ async function handleAIQuestion(question) {
     $('#ai-send-btn')
 
   const cleanQuestion =
-    String(
-      question || ''
-    ).trim()
+    String(question || '').trim()
 
   if (!cleanQuestion) {
     return
@@ -1664,7 +1734,9 @@ async function handleAIQuestion(question) {
     typing?.remove()
 
     const finalReply =
-      applyAIGreeting(reply)
+      applyAIGreeting(
+        reply
+      )
 
     addAIMessage(
       'assistant',
@@ -1923,20 +1995,6 @@ async function initAIChat() {
     }
   )
 
-  if (db) {
-    db.auth.onAuthStateChange(
-      () => {
-        setTimeout(
-          async () => {
-            await detectAIAdmin()
-            await updateAuthUI()
-          },
-          0
-        )
-      }
-    )
-  }
-
   refreshIcons()
 }
 
@@ -1968,8 +2026,12 @@ function card(project) {
             ${esc(project.category)}
           </span>
 
-          <time datetime="${esc(project.created_at)}">
-            ${dateText(project.created_at)}
+          <time datetime="${esc(
+            project.created_at
+          )}">
+            ${dateText(
+              project.created_at
+            )}
           </time>
         </div>
 
@@ -1989,7 +2051,9 @@ function card(project) {
 
           <a
             class="text-link"
-            href="project.html?id=${encodeURIComponent(project.id)}"
+            href="project.html?id=${encodeURIComponent(
+              project.id
+            )}"
           >
             ნახვა
             ${icon('arrow-up-right')}
@@ -2148,7 +2212,10 @@ async function initDetail() {
   } = await db
     .from('projects')
     .select('*')
-    .eq('id', id)
+    .eq(
+      'id',
+      id
+    )
     .eq(
       'published',
       true
@@ -2331,7 +2398,9 @@ async function initDetail() {
       async () => {
         try {
           await navigator.clipboard
-            .writeText(p.code)
+            .writeText(
+              p.code
+            )
 
           const isChemistry =
             String(
@@ -2356,7 +2425,9 @@ async function initDetail() {
   refreshIcons()
 }
 
-function notFound(target) {
+function notFound(
+  target
+) {
   if (!target) {
     return
   }
@@ -2463,27 +2534,29 @@ async function upload(
   const path =
     `${folder}/${crypto.randomUUID()}-${clean}`
 
-  const { error } =
-    await db.storage
-      .from(bucket)
-      .upload(
-        path,
-        file,
-        {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: file.type
-        }
-      )
+  const {
+    error
+  } = await db.storage
+    .from(bucket)
+    .upload(
+      path,
+      file,
+      {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type
+      }
+    )
 
   if (error) {
     throw error
   }
 
-  const { data } =
-    db.storage
-      .from(bucket)
-      .getPublicUrl(path)
+  const {
+    data
+  } = db.storage
+    .from(bucket)
+    .getPublicUrl(path)
 
   return {
     url: data.publicUrl,
@@ -2526,10 +2599,11 @@ async function removeStored(
     )
 
   if (path) {
-    const { error } =
-      await db.storage
-        .from(bucket)
-        .remove([path])
+    const {
+      error
+    } = await db.storage
+      .from(bucket)
+      .remove([path])
 
     if (error) {
       console.warn(
@@ -2540,7 +2614,9 @@ async function removeStored(
   }
 }
 
-async function isAdmin(user) {
+async function isAdmin(
+  user
+) {
   if (
     !user ||
     !db
@@ -2578,15 +2654,16 @@ async function initAdmin() {
 
     $('#login-error')
       .textContent =
-        'Supabase ჯერ არ არის კონფიგურირებული.'
+      'Supabase ჯერ არ არის კონფიგურირებული.'
 
     return
   }
 
   const {
-    data: { session }
-  } =
-    await db.auth.getSession()
+    data: {
+      session
+    }
+  } = await db.auth.getSession()
 
   if (session) {
     const admin =
@@ -2649,10 +2726,10 @@ async function initAdmin() {
       () => {
         $('#video-name')
           .textContent =
-            $('#video-file')
-              .files[0]
-              ?.name ||
-            'ფაილი არჩეული არ არის'
+          $('#video-file')
+            .files[0]
+            ?.name ||
+          'ფაილი არჩეული არ არის'
       }
     )
 
@@ -2740,7 +2817,9 @@ function updateCodeFieldLabel() {
   }
 }
 
-async function login(event) {
+async function login(
+  event
+) {
   event.preventDefault()
 
   const form =
@@ -2751,8 +2830,33 @@ async function login(event) {
       'button'
     )
 
-  $('#login-error')
-    .textContent = ''
+  const email =
+    $('#login-email')
+      ?.value
+      .trim()
+
+  const password =
+    $('#login-password')
+      ?.value || ''
+
+  const errorElement =
+    $('#login-error')
+
+  if (errorElement) {
+    errorElement.textContent = ''
+  }
+
+  if (
+    !email ||
+    !password
+  ) {
+    if (errorElement) {
+      errorElement.textContent =
+        'შეავსეთ ორივე ველი.'
+    }
+
+    return
+  }
 
   setBusy(
     button,
@@ -2760,71 +2864,73 @@ async function login(event) {
     'იტვირთება...'
   )
 
-  const {
-    data,
-    error
-  } =
-    await db.auth
+  try {
+    const {
+      data,
+      error
+    } = await db.auth
       .signInWithPassword({
-        email:
-          $('#login-email')
-            .value
-            .trim(),
-
-        password:
-          $('#login-password')
-            .value
+        email,
+        password
       })
 
-  if (
-    error ||
-    !data.user
-  ) {
-    $('#login-error')
-      .textContent =
-        'მონაცემები არასწორია'
+    if (
+      error ||
+      !data?.user
+    ) {
+      if (errorElement) {
+        errorElement.textContent =
+          'მონაცემები არასწორია'
+      }
 
+      return
+    }
+
+    const user =
+      data.user
+
+    const admin =
+      await isAdmin(user)
+
+    if (admin) {
+      await showDashboard(
+        user,
+        admin
+      )
+
+      return
+    }
+
+    await updateAuthUI()
+
+    toast(
+      `კეთილი იყოს შენი დაბრუნება, ${getUserDisplayName(user)}!`,
+      'success'
+    )
+
+    setTimeout(
+      () => {
+        location.href =
+          'index.html'
+      },
+      500
+    )
+  } catch (error) {
+    console.error(
+      'Login error:',
+      error
+    )
+
+    if (errorElement) {
+      errorElement.textContent =
+        'შესვლა ვერ მოხერხდა. სცადეთ ხელახლა.'
+    }
+  } finally {
     setBusy(
       button,
       false
     )
-
-    return
   }
-
-  const admin =
-    await isAdmin(
-      data.user
-    )
-
-  if (admin) {
-    await showDashboard(
-      data.user,
-      admin
-    )
-
-    return
-  }
-
-  await updateAuthUI()
-
-  toast(
-    'წარმატებით შეხვედით ანგარიშში.',
-    'success'
-  )
-
-  setBusy(
-    button,
-    false
-  )
-
-  setTimeout(
-    () => {
-      location.href =
-        'index.html'
-    },
-    500
-  )
 }
 
 async function showDashboard(
@@ -2850,7 +2956,7 @@ async function showDashboard(
 
   $('#admin-name')
     .textContent =
-      admin.username
+    admin.username
 
   refreshIcons()
 
@@ -2883,12 +2989,50 @@ async function logout() {
     return
   }
 
-  const {
-    error
-  } =
-    await db.auth.signOut()
+  try {
+    const {
+      error
+    } = await db.auth.signOut()
 
-  if (error) {
+    if (error) {
+      throw error
+    }
+
+    aiAdminGreeting = ''
+
+    document
+      .querySelectorAll(
+        '.account-menu'
+      )
+      .forEach(
+        menu => menu.remove()
+      )
+
+    const loginElement =
+      findLoginElement()
+
+    if (loginElement) {
+      loginElement.hidden =
+        false
+    }
+
+    toast(
+      'თქვენ გამოხვედით ანგარიშიდან.',
+      'success'
+    )
+
+    if (
+      page === 'admin'
+    ) {
+      setTimeout(
+        () => {
+          location.href =
+            'index.html'
+        },
+        500
+      )
+    }
+  } catch (error) {
     console.error(
       'Logout error:',
       error
@@ -2896,27 +3040,6 @@ async function logout() {
 
     toast(
       'ანგარიშიდან გამოსვლა ვერ მოხერხდა.'
-    )
-
-    return
-  }
-
-  aiAdminGreeting = ''
-
-  await updateAuthUI()
-
-  toast(
-    'თქვენ გამოხვედით ანგარიშიდან.',
-    'success'
-  )
-
-  if (page === 'admin') {
-    setTimeout(
-      () => {
-        location.href =
-          'index.html'
-      },
-      500
     )
   }
 }
@@ -2971,18 +3094,17 @@ async function loadAdminProjects() {
   const {
     data,
     error
-  } =
-    await db
-      .from('projects')
-      .select(
-        'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
-      )
-      .order(
-        'created_at',
-        {
-          ascending: false
-        }
-      )
+  } = await db
+    .from('projects')
+    .select(
+      'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
+    )
+    .order(
+      'created_at',
+      {
+        ascending: false
+      }
+    )
 
   if (error) {
     status.textContent =
@@ -3001,7 +3123,7 @@ async function loadAdminProjects() {
 
   $('#admin-count')
     .textContent =
-      `${adminProjects.length} პროექტი`
+    `${adminProjects.length} პროექტი`
 
   list.innerHTML =
     adminProjects.length
@@ -3161,26 +3283,26 @@ function openEditor(p) {
 
   $('#image-name')
     .textContent =
-      'ფაილი არჩეული არ არის'
+    'ფაილი არჩეული არ არის'
 
   $('#video-name')
     .textContent =
-      'ფაილი არჩეული არ არის'
+    'ფაილი არჩეული არ არის'
 
   $('#form-error')
     .textContent = ''
 
   $('#editor-title')
     .textContent =
-      p
-        ? 'პროექტის რედაქტირება'
-        : 'ახალი პროექტი'
+    p
+      ? 'პროექტის რედაქტირება'
+      : 'ახალი პროექტი'
 
   $('#save-project')
     .innerHTML =
-      p
-        ? `ცვლილებების შენახვა ${icon('save')}`
-        : `პროექტის დამატება ${icon('save')}`
+    p
+      ? `ცვლილებების შენახვა ${icon('save')}`
+      : `პროექტის დამატება ${icon('save')}`
 
   if (p) {
     $('#edit-id')
@@ -3196,24 +3318,22 @@ function openEditor(p) {
       .value = p.author
 
     $('#published')
-      .checked =
-        p.published
+      .checked = p.published
 
     $('#description')
-      .value =
-        p.description
+      .value = p.description
 
     $('#components')
       .value =
-        p.components || ''
+      p.components || ''
 
     $('#how-made')
       .value =
-        p.how_it_was_made || ''
+      p.how_it_was_made || ''
 
     $('#code')
       .value =
-        p.code || ''
+      p.code || ''
   }
 
   updateCodeFieldLabel()
@@ -3246,8 +3366,8 @@ function imagePreview() {
 
   $('#image-name')
     .textContent =
-      file?.name ||
-      'ფაილი არჩეული არ არის'
+    file?.name ||
+    'ფაილი არჩეული არ არის'
 
   if (
     file &&
@@ -3262,13 +3382,17 @@ function imagePreview() {
       $('#image-preview')
 
     preview.src =
-      URL.createObjectURL(file)
+      URL.createObjectURL(
+        file
+      )
 
     preview.hidden = false
   }
 }
 
-async function saveProject(event) {
+async function saveProject(
+  event
+) {
   event.preventDefault()
 
   const button =
@@ -3425,21 +3549,19 @@ async function saveProject(event) {
     if (id) {
       ({
         error
-      } =
-        await db
-          .from('projects')
-          .update(value)
-          .eq(
-            'id',
-            id
-          ))
+      } = await db
+        .from('projects')
+        .update(value)
+        .eq(
+          'id',
+          id
+        ))
     } else {
       ({
         error
-      } =
-        await db
-          .from('projects')
-          .insert(value))
+      } = await db
+        .from('projects')
+        .insert(value))
     }
 
     if (error) {
@@ -3480,8 +3602,10 @@ async function saveProject(event) {
     console.error(error)
 
     for (
-      const [kind, file]
-      of uploads
+      const [
+        kind,
+        file
+      ] of uploads
     ) {
       if (!file?.url) {
         continue
@@ -3497,10 +3621,10 @@ async function saveProject(event) {
 
     $('#form-error')
       .textContent =
-        neutralError(
-          error,
-          'პროექტის შენახვა ვერ მოხერხდა.'
-        )
+      neutralError(
+        error,
+        'პროექტის შენახვა ვერ მოხერხდა.'
+      )
   } finally {
     setBusy(
       button,
@@ -3509,7 +3633,9 @@ async function saveProject(event) {
   }
 }
 
-async function togglePublished(id) {
+async function togglePublished(
+  id
+) {
   const p =
     adminProjects.find(
       x =>
@@ -3520,17 +3646,18 @@ async function togglePublished(id) {
     return
   }
 
-  const { error } =
-    await db
-      .from('projects')
-      .update({
-        published:
-          !p.published
-      })
-      .eq(
-        'id',
-        id
-      )
+  const {
+    error
+  } = await db
+    .from('projects')
+    .update({
+      published:
+        !p.published
+    })
+    .eq(
+      'id',
+      id
+    )
 
   if (error) {
     return toast(
@@ -3548,7 +3675,9 @@ async function togglePublished(id) {
   loadAdminProjects()
 }
 
-async function deleteProject(id) {
+async function deleteProject(
+  id
+) {
   const p =
     adminProjects.find(
       x =>
@@ -3564,14 +3693,15 @@ async function deleteProject(id) {
     return
   }
 
-  const { error } =
-    await db
-      .from('projects')
-      .delete()
-      .eq(
-        'id',
-        id
-      )
+  const {
+    error
+  } = await db
+    .from('projects')
+    .delete()
+    .eq(
+      'id',
+      id
+    )
 
   if (error) {
     return toast(
@@ -3608,7 +3738,9 @@ const GEORGIAN_WEEKDAYS = [
   'შაბათი'
 ]
 
-function meetingDay(dateValue) {
+function meetingDay(
+  dateValue
+) {
   if (!dateValue) {
     return '—'
   }
@@ -3776,8 +3908,7 @@ async function loadPublicMeeting() {
   const {
     data,
     error
-  } =
-    await getMeeting()
+  } = await getMeeting()
 
   if (error) {
     console.error(error)
@@ -3918,8 +4049,7 @@ async function loadAdminMeeting() {
   const {
     data,
     error
-  } =
-    await getMeeting()
+  } = await getMeeting()
 
   if (error) {
     status.textContent =
@@ -3933,22 +4063,22 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-        data.meeting_date || ''
+      data.meeting_date || ''
 
     $('#meeting-time')
       .value =
-        String(
-          data.meeting_time || ''
-        ).slice(
-          0,
-          5
-        )
+      String(
+        data.meeting_time || ''
+      ).slice(
+        0,
+        5
+      )
 
     $('#meeting-day-preview')
       .textContent =
-        meetingDay(
-          data.meeting_date
-        )
+      meetingDay(
+        data.meeting_date
+      )
 
     status.textContent =
       'გამოქვეყნებულია'
@@ -3963,8 +4093,7 @@ async function loadAdminMeeting() {
       'meeting-admin-status'
 
     $('#meeting-day-preview')
-      .textContent =
-        '—'
+      .textContent = '—'
   }
 }
 
@@ -3982,9 +4111,9 @@ function bindMeetingForm() {
       e => {
         $('#meeting-day-preview')
           .textContent =
-            meetingDay(
-              e.target.value
-            )
+          meetingDay(
+            e.target.value
+          )
       }
     )
 
@@ -4044,9 +4173,10 @@ async function saveMeeting(
 
   try {
     const {
-      data: { user }
-    } =
-      await db.auth.getUser()
+      data: {
+        user
+      }
+    } = await db.auth.getUser()
 
     if (!user) {
       throw new Error(
@@ -4054,21 +4184,21 @@ async function saveMeeting(
       )
     }
 
-    const { error } =
-      await db
-        .from('club_meeting')
-        .upsert(
-          {
-            id: 1,
-            meeting_date: date,
-            meeting_time: time,
-            updated_by:
-              user.id
-          },
-          {
-            onConflict: 'id'
-          }
-        )
+    const {
+      error
+    } = await db
+      .from('club_meeting')
+      .upsert(
+        {
+          id: 1,
+          meeting_date: date,
+          meeting_time: time,
+          updated_by: user.id
+        },
+        {
+          onConflict: 'id'
+        }
+      )
 
     if (error) {
       throw error
@@ -4107,14 +4237,15 @@ async function clearMeeting() {
     return
   }
 
-  const { error } =
-    await db
-      .from('club_meeting')
-      .delete()
-      .eq(
-        'id',
-        1
-      )
+  const {
+    error
+  } = await db
+    .from('club_meeting')
+    .delete()
+    .eq(
+      'id',
+      1
+    )
 
   if (error) {
     return toast(
@@ -4133,11 +4264,11 @@ async function clearMeeting() {
 
   $('#meeting-admin-status')
     .textContent =
-      'არ არის გამოქვეყნებული'
+    'არ არის გამოქვეყნებული'
 
   $('#meeting-admin-status')
     .className =
-      'meeting-admin-status'
+    'meeting-admin-status'
 
   toast(
     'შეკრება გაუქმდა.',
@@ -4156,7 +4287,7 @@ async function initPasswordReset() {
   if (!db) {
     $('#reset-error')
       .textContent =
-        'Supabase ჯერ არ არის კონფიგურირებული.'
+      'Supabase ჯერ არ არის კონფიგურირებული.'
 
     form
       .querySelector('button')
@@ -4209,9 +4340,10 @@ async function initPasswordReset() {
       }
 
       const {
-        data: { session }
-      } =
-        await db.auth.getSession()
+        data: {
+          session
+        }
+      } = await db.auth.getSession()
 
       if (!session) {
         error.textContent =
@@ -4228,8 +4360,8 @@ async function initPasswordReset() {
 
       const {
         error: updateError
-      } =
-        await db.auth.updateUser({
+      } = await db.auth
+        .updateUser({
           password
         })
 
@@ -4259,50 +4391,78 @@ async function initPasswordReset() {
   )
 }
 
+let authUIUpdating = false
+let authUIQueued = false
+let authUIListenerStarted = false
+
 function findLoginElement() {
-  const candidates =
-    document.querySelectorAll(
-      'a, button'
+  const elements =
+    Array.from(
+      document.querySelectorAll(
+        'a[href], button'
+      )
     )
 
-  for (
-    const element
-    of candidates
-  ) {
-    const text =
-      element.textContent
-        .trim()
-        .toLowerCase()
+  return (
+    elements.find(
+      element => {
+        if (
+          element.closest(
+            '.account-menu'
+          )
+        ) {
+          return false
+        }
 
-    const href =
-      element.getAttribute(
-        'href'
-      )
+        const href =
+          element.getAttribute(
+            'href'
+          ) || ''
 
-    if (
-      text === 'log in' ||
-      text === 'login' ||
-      text === 'ადმინისტრატორი' ||
-      (
-        href &&
-        href.includes(
-          'admin.html'
-        ) &&
-        text.length < 40
-      )
-    ) {
-      return element
-    }
-  }
+        const text =
+          element.textContent
+            .trim()
+            .toLowerCase()
 
-  return null
+        return (
+          href === 'admin.html' ||
+          href.endsWith(
+            '/admin.html'
+          ) ||
+          text === 'log in' ||
+          text === 'login' ||
+          text === 'ადმინისტრატორი'
+        )
+      }
+    ) || null
+  )
+}
+
+function closeAllAccountMenus(
+  except = null
+) {
+  document
+    .querySelectorAll(
+      '.account-menu'
+    )
+    .forEach(
+      menu => {
+        if (
+          menu !== except
+        ) {
+          menu.remove()
+        }
+      }
+    )
 }
 
 function createAccountMenu(
   user
 ) {
   const name =
-    getUserDisplayName(user)
+    getUserDisplayName(
+      user
+    )
 
   const wrapper =
     document.createElement(
@@ -4319,9 +4479,11 @@ function createAccountMenu(
       aria-expanded="false"
     >
       ${icon('user-round')}
+
       <span class="account-name">
         ${esc(name)}
       </span>
+
       ${icon('chevron-down')}
     </button>
 
@@ -4331,6 +4493,7 @@ function createAccountMenu(
     >
       <div class="account-dropdown-name">
         ${icon('user-round')}
+
         <span>
           ${esc(name)}
         </span>
@@ -4366,15 +4529,38 @@ function createAccountMenu(
     event => {
       event.stopPropagation()
 
-      const open =
-        !dropdown.hidden
+      const shouldOpen =
+        dropdown.hidden
+
+      document
+        .querySelectorAll(
+          '.account-dropdown'
+        )
+        .forEach(
+          item => {
+            item.hidden = true
+          }
+        )
+
+      document
+        .querySelectorAll(
+          '.account-button'
+        )
+        .forEach(
+          item => {
+            item.setAttribute(
+              'aria-expanded',
+              'false'
+            )
+          }
+        )
 
       dropdown.hidden =
-        open
+        !shouldOpen
 
       button.setAttribute(
         'aria-expanded',
-        String(!open)
+        String(shouldOpen)
       )
     }
   )
@@ -4398,25 +4584,6 @@ function createAccountMenu(
     }
   )
 
-  document.addEventListener(
-    'click',
-    event => {
-      if (
-        !wrapper.contains(
-          event.target
-        )
-      ) {
-        dropdown.hidden =
-          true
-
-        button?.setAttribute(
-          'aria-expanded',
-          'false'
-        )
-      }
-    }
-  )
-
   return wrapper
 }
 
@@ -4425,55 +4592,134 @@ async function updateAuthUI() {
     return
   }
 
-  const loginElement =
-    findLoginElement()
-
-  if (!loginElement) {
+  if (authUIUpdating) {
+    authUIQueued = true
     return
   }
 
-  const user =
-    await getCurrentUser()
+  authUIUpdating = true
 
-  const oldMenu =
-    document.querySelector(
-      '.account-menu'
-    )
+  try {
+    const user =
+      await getCurrentUser()
 
-  if (oldMenu) {
-    oldMenu.remove()
-  }
+    const existingMenus =
+      Array.from(
+        document.querySelectorAll(
+          '.account-menu'
+        )
+      )
 
-  if (!user) {
+    const loginElement =
+      findLoginElement()
+
+    if (!user) {
+      existingMenus.forEach(
+        menu =>
+          menu.remove()
+      )
+
+      if (loginElement) {
+        loginElement.hidden =
+          false
+      }
+
+      return
+    }
+
+    const admin =
+      await isAdmin(user)
+
+    if (admin) {
+      existingMenus.forEach(
+        menu =>
+          menu.remove()
+      )
+
+      if (loginElement) {
+        loginElement.hidden =
+          false
+      }
+
+      return
+    }
+
+    if (!loginElement) {
+      if (
+        existingMenus.length > 1
+      ) {
+        existingMenus
+          .slice(1)
+          .forEach(
+            menu =>
+              menu.remove()
+          )
+      }
+
+      return
+    }
+
+    const currentMenu =
+      existingMenus[0]
+
+    if (currentMenu) {
+      existingMenus
+        .slice(1)
+        .forEach(
+          menu =>
+            menu.remove()
+        )
+
+      loginElement.hidden =
+        true
+
+      return
+    }
+
+    closeAllAccountMenus()
+
+    const menu =
+      createAccountMenu(
+        user
+      )
+
     loginElement.hidden =
-      false
+      true
 
+    loginElement.parentElement
+      ?.appendChild(menu)
+
+    refreshIcons()
+  } finally {
+    authUIUpdating = false
+
+    if (authUIQueued) {
+      authUIQueued = false
+
+      setTimeout(
+        () =>
+          updateAuthUI(),
+        0
+      )
+    }
+  }
+}
+
+function queueAuthUIUpdate() {
+  if (authUIQueued) {
     return
   }
 
-  const admin =
-    await isAdmin(user)
+  authUIQueued = true
 
-  if (admin) {
-    loginElement.hidden =
-      false
+  setTimeout(
+    async () => {
+      authUIQueued = false
 
-    return
-  }
-
-  const menu =
-    createAccountMenu(
-      user
-    )
-
-  loginElement.hidden =
-    true
-
-  loginElement.parentElement?.appendChild(
-    menu
+      await updateAuthUI()
+    },
+    0
   )
-
-  refreshIcons()
 }
 
 async function initAuthUI() {
@@ -4483,26 +4729,27 @@ async function initAuthUI() {
 
   await updateAuthUI()
 
+  if (
+    authUIListenerStarted
+  ) {
+    return
+  }
+
+  authUIListenerStarted =
+    true
+
   db.auth.onAuthStateChange(
     (
       _event,
       session
     ) => {
-      setTimeout(
-        async () => {
-          await updateAuthUI()
+      if (session?.user) {
+        detectAIAdmin()
+      } else {
+        aiAdminGreeting = ''
+      }
 
-          if (
-            session?.user
-          ) {
-            await detectAIAdmin()
-          } else {
-            aiAdminGreeting =
-              ''
-          }
-        },
-        0
-      )
+      queueAuthUIUpdate()
     }
   )
 }
