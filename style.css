@@ -596,7 +596,7 @@ nav>a:hover,nav>a.active{
 
  @media(max-width:600px){
     .account-button{
-        width:320px;
+        width:200px;
         height:42px;
         min-height:42px;
         padding:0 14px;
@@ -618,7 +618,7 @@ nav>a:hover,nav>a.active{
 
     .account-name{
         display:block;
-        max-width:80px;
+        max-width:200px;
     }
 
     .account-dropdown{
