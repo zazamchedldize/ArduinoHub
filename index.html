@@ -264,145 +264,139 @@
 
 
 <div class="circuit-visual" aria-hidden="true">
-  <div class="uno-3d">
-    <div class="pcb-edge"></div>
+  <div class="arduino-3d">
 
-    <div class="pcb-traces">
-      <i class="trace-a"></i>
-      <i class="trace-b"></i>
-      <i class="trace-c"></i>
-      <i class="trace-d"></i>
-      <i class="trace-e"></i>
-      <i class="trace-f"></i>
-      <i class="trace-g"></i>
-      <i class="trace-h"></i>
-      <i class="trace-i"></i>
-      <i class="trace-j"></i>
-    </div>
+    <div class="arduino-board">
 
-    <div class="arduino-brand">
-      <div class="arduino-symbol">∞</div>
-      <div class="arduino-name">ARDUINO</div>
-      <div class="arduino-uno">UNO</div>
-    </div>
+      <div class="board-surface"></div>
 
-    <div class="usb-port">
-      <div class="usb-metal">
-        <div class="usb-cavity"></div>
-        <div class="usb-reflection"></div>
+      <div class="mount-hole mh1"><span></span></div>
+      <div class="mount-hole mh2"><span></span></div>
+      <div class="mount-hole mh3"><span></span></div>
+      <div class="mount-hole mh4"><span></span></div>
+
+      <div class="usb">
+        <div class="usb-shell">
+          <div class="usb-inside"></div>
+          <div class="usb-metal-line"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="power-jack">
-      <div class="power-body">
-        <div class="power-hole"></div>
-        <div class="power-ring"></div>
+      <div class="power">
+        <div class="power-shell">
+          <div class="power-hole"></div>
+          <div class="power-inner"></div>
+        </div>
       </div>
-    </div>
 
-    <button class="reset-button">
-      <span></span>
-    </button>
-
-    <div class="main-chip">
-      <div class="chip-top">
-        <span>ATMEGA328P-PU</span>
+      <div class="reset">
+        <div class="reset-button"></div>
       </div>
-      <div class="chip-notch"></div>
-      <div class="chip-pin-row top">
-        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+
+      <div class="brand">
+        <div class="brand-symbol">∞</div>
+        <div class="brand-text">ARDUINO</div>
+        <div class="brand-uno">UNO</div>
       </div>
-      <div class="chip-pin-row bottom">
-        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+
+      <div class="main-ic">
+        <div class="ic-notch"></div>
+        <div class="ic-label">ATMEGA328P</div>
+        <div class="ic-pins ic-top">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="ic-pins ic-bottom">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
       </div>
+
+      <div class="usb-ic">
+        <span>16U2</span>
+      </div>
+
+      <div class="crystal">
+        <span>16.000</span>
+      </div>
+
+      <div class="capacitor c1">
+        <span>47</span>
+      </div>
+
+      <div class="capacitor c2">
+        <span>47</span>
+      </div>
+
+      <div class="capacitor c3">
+        <span>100</span>
+      </div>
+
+      <div class="resistor r1"></div>
+      <div class="resistor r2"></div>
+      <div class="resistor r3"></div>
+      <div class="resistor r4"></div>
+      <div class="resistor r5"></div>
+
+      <div class="led power-led"></div>
+      <div class="led rx-led"></div>
+      <div class="led tx-led"></div>
+      <div class="led l-led"></div>
+
+      <div class="header digital-header">
+        <span>0</span>
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+        <span>5</span>
+        <span>6</span>
+        <span>7</span>
+        <span>8</span>
+        <span>9</span>
+        <span>10</span>
+        <span>11</span>
+        <span>12</span>
+        <span>13</span>
+      </div>
+
+      <div class="header analog-header">
+        <span>A0</span>
+        <span>A1</span>
+        <span>A2</span>
+        <span>A3</span>
+        <span>A4</span>
+        <span>A5</span>
+      </div>
+
+      <div class="header power-header">
+        <span>IOREF</span>
+        <span>RESET</span>
+        <span>3V3</span>
+        <span>5V</span>
+        <span>GND</span>
+        <span>GND</span>
+        <span>VIN</span>
+      </div>
+
+      <div class="icsp">
+        <i></i><i></i><i></i>
+        <i></i><i></i><i></i>
+      </div>
+
+      <div class="silk silk1"></div>
+      <div class="silk silk2"></div>
+      <div class="silk silk3"></div>
+
+      <div class="trace trace1"></div>
+      <div class="trace trace2"></div>
+      <div class="trace trace3"></div>
+      <div class="trace trace4"></div>
+      <div class="trace trace5"></div>
+
     </div>
-
-    <div class="usb-chip">
-      <span>16U2</span>
-    </div>
-
-    <div class="resonator">
-      <span>16.000</span>
-      <small>MHz</small>
-    </div>
-
-    <div class="capacitor capacitor-one">
-      <span>47</span>
-      <small>16V</small>
-    </div>
-
-    <div class="capacitor capacitor-two">
-      <span>47</span>
-      <small>16V</small>
-    </div>
-
-    <div class="small-chip chip-one"></div>
-    <div class="small-chip chip-two"></div>
-    <div class="small-chip chip-three"></div>
-
-    <div class="resistor resistor-one"></div>
-    <div class="resistor resistor-two"></div>
-    <div class="resistor resistor-three"></div>
-    <div class="resistor resistor-four"></div>
-    <div class="resistor resistor-five"></div>
-
-    <div class="led led-power"></div>
-    <div class="led led-rx"></div>
-    <div class="led led-tx"></div>
-    <div class="led led-l"></div>
-
-    <div class="header digital">
-      <div>0</div>
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
-      <div>9</div>
-      <div>10</div>
-      <div>11</div>
-      <div>12</div>
-      <div>13</div>
-    </div>
-
-    <div class="header power">
-      <div>IOREF</div>
-      <div>RESET</div>
-      <div>3V3</div>
-      <div>5V</div>
-      <div>GND</div>
-      <div>GND</div>
-      <div>VIN</div>
-    </div>
-
-    <div class="header analog">
-      <div>A0</div>
-      <div>A1</div>
-      <div>A2</div>
-      <div>A3</div>
-      <div>A4</div>
-      <div>A5</div>
-    </div>
-
-    <div class="icsp icsp-one">
-      <i></i><i></i><i></i><i></i><i></i><i></i>
-    </div>
-
-    <div class="icsp icsp-two">
-      <i></i><i></i><i></i><i></i><i></i><i></i>
-    </div>
-
-    <div class="mount mount-one"></div>
-    <div class="mount mount-two"></div>
-    <div class="mount mount-three"></div>
-    <div class="mount mount-four"></div>
   </div>
 </div>
-
-  </section>
 
   <section
     id="how-it-works"
