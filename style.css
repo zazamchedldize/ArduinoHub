@@ -596,7 +596,7 @@ nav>a:hover,nav>a.active{
 
  @media(max-width:600px){
     .account-button{
-        width:160px;
+        width:320px;
         height:42px;
         min-height:42px;
         padding:0 14px;
