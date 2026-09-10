@@ -594,35 +594,36 @@ nav>a:hover,nav>a.active{
     display:none;
   }
 
-  @media(max-width:600px){
-  .account-button{
-    width:160px;
-    height:42px;
-    min-height:42px;
-    padding:0 14px;
-    border-radius:8px;
-    justify-content:center;
-    transform:translateX(35px)
-  }
+ @media(max-width:600px){
+    .account-button{
+        width:160px;
+        height:42px;
+        min-height:42px;
+        padding:0 14px;
+        border-radius:8px;
+        justify-content:center;
+        transform:none;
+    }
 
-  .account-button svg:first-child{
-    width:20px;
-    height:20px;
-  }
+    .account-button svg:first-child{
+        width:20px;
+        height:20px;
+        flex:none;
+    }
 
-  .account-button svg:last-child{
-    display:none;
-  }
+    .account-button svg:last-child{
+        display:none;
+    }
 
-  .account-name{
-    display:block;
-    max-width:80px;
-  }
+    .account-name{
+        display:block;
+        max-width:80px;
+    }
 
-  .account-dropdown{
-    right:0;
-    width:210px;
-  }
+    .account-dropdown{
+        right:0;
+        width:210px;
+    }
 }
 }
 body.modal-open{
