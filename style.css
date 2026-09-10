@@ -594,11 +594,28 @@ nav>a:hover,nav>a.active{
     display:none;
   }
 
+  @media (max-width:600px){
   .account-button{
-    width:36px;
-    height:36px;
-    justify-content:center;
+    width:46px;
+    height:46px;
+    min-height:46px;
     padding:0;
+    border-radius:50%;
+    border:1px solid #35e4a766;
+    background:radial-gradient(circle at 35% 30%,#164535,#0b201b 70%);
+    color:var(--green2);
+    box-shadow:0 0 16px #22d39518,inset 0 0 12px #22d3950d;
+  }
+
+  .account-button:hover{
+    border-color:var(--green);
+    background:radial-gradient(circle at 35% 30%,#1b5946,#0b201b 72%);
+    box-shadow:0 0 22px #22d39528,inset 0 0 14px #22d39512;
+  }
+
+  .account-button svg:first-child{
+    width:22px;
+    height:22px;
   }
 
   .account-button svg:last-child{
@@ -606,8 +623,10 @@ nav>a:hover,nav>a.active{
   }
 
   .account-dropdown{
-    right:-4px;
-    width:200px;
+    right:-2px;
+    width:210px;
+  }
+}
   }
 }
 body.modal-open{
