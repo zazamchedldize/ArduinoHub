@@ -934,776 +934,123 @@ body.modal-open{
 }
 
 .circuit-visual{
-  height:420px;
+  height:370px;
   display:grid;
   place-items:center;
-  position:relative;
   min-width:0;
-  perspective:1600px;
+  position:relative;
 }
 
 .circuit-visual:before{
   content:"";
   position:absolute;
-  width:430px;
-  height:280px;
-  border-radius:50%;
-  background:radial-gradient(ellipse,#22d39535,transparent 68%);
-  filter:blur(25px);
-  transform:translateY(65px);
-  animation:arduinoGlow 5s ease-in-out infinite alternate;
-}
-
-@keyframes arduinoGlow{
-  from{
-    opacity:.55;
-    transform:translateY(65px) scale(.92);
-  }
-  to{
-    opacity:1;
-    transform:translateY(72px) scale(1.06);
-  }
-}
-
-.arduino-3d{
-  width:430px;
+  width:330px;
   height:330px;
-  position:relative;
-  transform-style:preserve-3d;
-  transform:rotateX(55deg) rotateZ(-27deg) rotateY(4deg);
-  transition:transform .8s cubic-bezier(.2,.8,.2,1);
-  filter:drop-shadow(30px 35px 22px #000b);
-}
-
-.circuit-visual:hover .arduino-3d{
-  transform:rotateX(52deg) rotateZ(-24deg) rotateY(5deg) translateY(-8px) scale(1.025);
-}
-
-.arduino-board{
-  position:absolute;
-  inset:0;
-  border-radius:9px;
-  transform-style:preserve-3d;
-  background:
-    linear-gradient(145deg,#198db8 0%,#087ca7 35%,#086b95 72%,#075878 100%);
-  border:1px solid #07516f;
-  box-shadow:
-    inset 0 1px 0 #ffffff55,
-    inset 2px 0 0 #44c5e333,
-    inset -3px -4px 0 #043e5b,
-    0 7px 0 #043c58,
-    0 11px 0 #022b40;
-}
-
-.arduino-board:after{
-  content:"";
-  position:absolute;
-  inset:4px;
-  border-radius:6px;
-  border:1px solid #65d2ed22;
-  pointer-events:none;
-  z-index:50;
-}
-
-.board-surface{
-  position:absolute;
-  inset:0;
-  border-radius:8px;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 25% 30%,#51d0e522 0 1px,transparent 2px),
-    radial-gradient(circle at 75% 70%,#51d0e51c 0 1px,transparent 2px);
-  background-size:17px 17px,23px 23px;
-}
-
-.mount-hole{
-  position:absolute;
-  width:18px;
-  height:18px;
   border-radius:50%;
-  background:#dce8e8;
-  border:2px solid #07516e;
-  box-shadow:
-    inset 0 0 0 4px #17343f,
-    inset 0 0 0 6px #06191f,
-    0 2px 3px #0008;
-  z-index:40;
-  transform:translateZ(5px);
+  background:radial-gradient(circle,#22d3950d,transparent 65%);
+  filter:blur(2px);
+  animation:boardGlow 5s ease-in-out infinite alternate;
 }
 
-.mount-hole span{
-  display:block;
-  width:6px;
-  height:6px;
-  margin:4px auto;
-  border-radius:50%;
-  background:#020607;
-  box-shadow:inset 0 1px 2px #000;
+@keyframes boardGlow{
+  from{transform:scale(.94);opacity:.6}
+  to{transform:scale(1.06);opacity:1}
 }
 
-.mh1{
-  left:12px;
-  top:12px;
-}
-
-.mh2{
-  right:12px;
-  top:12px;
-}
-
-.mh3{
-  left:12px;
-  bottom:12px;
-}
-
-.mh4{
-  right:12px;
-  bottom:12px;
-}
-
-.usb{
-  position:absolute;
-  left:-38px;
-  top:38px;
-  width:72px;
-  height:78px;
-  transform:translateZ(16px);
-  z-index:30;
-}
-
-.usb-shell{
-  position:absolute;
-  inset:0;
-  border-radius:7px 4px 4px 7px;
-  background:
-    linear-gradient(105deg,#747c7e,#f2f4f3 23%,#a8afb0 46%,#f8faf9 66%,#777e80);
-  border:1px solid #555b5d;
-  box-shadow:
-    inset 2px 2px 3px #fff8,
-    inset -3px -4px 5px #555,
-    6px 7px 8px #000a;
-}
-
-.usb-inside{
-  position:absolute;
-  left:8px;
-  top:15px;
-  width:53px;
-  height:47px;
-  border-radius:4px;
-  background:
-    linear-gradient(145deg,#1b2529,#020607);
-  box-shadow:
-    inset 0 2px 4px #000,
-    inset 0 -2px 3px #67757a;
-}
-
-.usb-inside:after{
-  content:"";
-  position:absolute;
-  left:10px;
-  right:10px;
-  bottom:8px;
-  height:3px;
-  border-radius:4px;
-  background:#aab5b8;
-}
-
-.usb-metal-line{
-  position:absolute;
-  left:9px;
-  right:9px;
-  top:7px;
-  height:4px;
-  border-radius:5px;
-  background:#ffffff99;
-  filter:blur(1px);
-}
-
-.power{
-  position:absolute;
-  left:-28px;
-  bottom:30px;
-  width:67px;
-  height:68px;
-  z-index:31;
-  transform:translateZ(16px);
-}
-
-.power-shell{
-  position:absolute;
-  inset:0;
-  border-radius:8px;
-  background:
-    linear-gradient(145deg,#303537,#0b0e0f 55%,#202526);
-  border:1px solid #060809;
-  box-shadow:
-    inset 2px 2px 5px #ffffff0c,
-    inset -4px -5px 7px #000,
-    6px 8px 8px #000b;
-}
-
-.power-hole{
-  position:absolute;
-  width:31px;
-  height:31px;
-  left:17px;
-  top:17px;
-  border-radius:50%;
-  background:#050708;
-  box-shadow:
-    inset 0 0 0 5px #303638,
-    inset 0 0 0 9px #080a0b;
-}
-
-.power-inner{
-  position:absolute;
-  width:12px;
-  height:12px;
-  left:26px;
-  top:26px;
-  border-radius:50%;
-  background:#020304;
-  box-shadow:inset 0 1px 4px #000;
-}
-
-.reset{
-  position:absolute;
-  left:48px;
-  top:30px;
-  z-index:25;
-  transform:translateZ(12px);
-}
-
-.reset-button{
-  width:28px;
-  height:28px;
-  border-radius:5px;
-  background:linear-gradient(145deg,#f4f5f4,#9fa5a5);
-  border:1px solid #717778;
-  box-shadow:
-    inset 0 2px 2px #fff,
-    2px 3px 5px #0009;
-}
-
-.reset-button:after{
-  content:"";
-  display:block;
-  width:15px;
-  height:15px;
-  margin:5px auto;
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#ff7a7a,#dc2028 65%,#8d1117);
-  box-shadow:0 2px 3px #0009;
-}
-
-.brand{
-  position:absolute;
-  left:160px;
-  top:42px;
-  width:135px;
-  height:76px;
-  z-index:5;
-  color:#e8faff;
-  text-shadow:0 1px 1px #03415f;
-}
-
-.brand-symbol{
-  position:absolute;
-  left:0;
-  top:0;
-  font:700 46px/1 Inter,sans-serif;
-  letter-spacing:-10px;
-}
-
-.brand-text{
-  position:absolute;
-  left:5px;
-  top:50px;
-  font:800 12px/1 Inter,sans-serif;
-  letter-spacing:1.6px;
-}
-
-.brand-uno{
-  position:absolute;
-  right:0;
-  top:5px;
-  padding:6px 11px;
-  border:2px solid #e9fbff;
+.board{
+  width:min(350px,90%);
+  height:260px;
+  border:1px solid #35e4a766;
+  background:linear-gradient(135deg,#14372d,#0b201b);
   border-radius:20px;
-  font:600 17px/1 Inter,sans-serif;
+  position:relative;
+  box-shadow:inset 0 0 50px #2effb012,0 0 70px #19cf8c17;
+  transform:rotate(-6deg);
+  z-index:1;
 }
 
-.main-ic{
+.chip{
   position:absolute;
-  right:62px;
-  bottom:65px;
-  width:166px;
-  height:56px;
-  border-radius:5px;
-  background:linear-gradient(145deg,#303536,#090b0c 55%,#1b1e1f);
-  border:1px solid #050606;
-  box-shadow:
-    inset 0 2px 3px #ffffff18,
-    inset 0 -3px 4px #000,
-    5px 6px 8px #000b;
-  transform:translateZ(15px);
-  z-index:20;
-}
-
-.ic-notch{
-  position:absolute;
-  width:15px;
-  height:6px;
   left:50%;
-  top:-1px;
-  transform:translateX(-50%);
-  border-radius:0 0 10px 10px;
-  background:#050607;
-}
-
-.ic-label{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  color:#bfc5c5;
-  font:700 8px/1 Inter,sans-serif;
-  letter-spacing:.7px;
-}
-
-.ic-pins{
-  position:absolute;
-  left:9px;
-  right:9px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.ic-top{
-  top:-7px;
-}
-
-.ic-bottom{
-  bottom:-7px;
-}
-
-.ic-pins i{
-  width:4px;
-  height:10px;
-  border-radius:1px;
-  background:linear-gradient(90deg,#777,#eee,#888);
-  box-shadow:0 1px 2px #000;
-}
-
-.usb-ic{
-  position:absolute;
-  left:88px;
-  bottom:73px;
-  width:45px;
-  height:37px;
-  border-radius:4px;
-  background:linear-gradient(145deg,#303536,#080a0b);
-  border:1px solid #050606;
-  transform:translateZ(12px);
-  z-index:18;
-  box-shadow:3px 4px 6px #0009;
-}
-
-.usb-ic:before,
-.usb-ic:after{
-  content:"";
-  position:absolute;
-  left:-4px;
-  right:-4px;
-  height:3px;
-  background:repeating-linear-gradient(90deg,#c7cccb 0 3px,transparent 3px 7px);
-}
-
-.usb-ic:before{
-  top:5px;
-}
-
-.usb-ic:after{
-  bottom:5px;
-}
-
-.usb-ic span{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  color:#bbb;
-  font:700 6px/1 Inter,sans-serif;
-}
-
-.crystal{
-  position:absolute;
-  left:120px;
-  bottom:120px;
-  width:53px;
-  height:20px;
-  border-radius:10px;
-  background:linear-gradient(180deg,#f8faf8,#a1a9aa 45%,#f1f3f1);
-  border:1px solid #777f80;
-  transform:translateZ(10px);
-  z-index:16;
-  box-shadow:2px 3px 4px #0008;
-  color:#5c6466;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:145px;
+  padding:35px 0;
+  border-radius:5px;
+  background:#06100e;
+  border:1px solid #315c4e;
   text-align:center;
-  font:700 5px/18px Inter,sans-serif;
+  color:var(--green2);
+  font:700 19px/1.2 Inter,sans-serif;
+  letter-spacing:2px;
+  box-shadow:0 0 22px #000;
 }
 
-.capacitor{
+.pin{
   position:absolute;
-  width:30px;
-  height:31px;
-  border-radius:50%;
-  background:linear-gradient(110deg,#343839,#090a0a 40%,#5c6162 73%,#151718);
-  border:1px solid #080909;
-  transform:translateZ(11px);
-  z-index:16;
-  box-shadow:
-    inset 3px 3px 5px #fff2,
-    3px 4px 5px #0009;
-  color:#d4d8d7;
-  text-align:center;
-  font:700 6px/30px Inter,sans-serif;
-}
-
-.c1{
-  left:45px;
-  bottom:119px;
-}
-
-.c2{
-  left:78px;
-  bottom:127px;
-}
-
-.c3{
-  left:47px;
-  top:113px;
-}
-
-.resistor{
-  position:absolute;
-  width:27px;
-  height:8px;
-  border-radius:2px;
-  background:linear-gradient(180deg,#f0d39d,#ad8251,#e9c891);
-  border:1px solid #86633d;
-  transform:translateZ(8px);
-  z-index:14;
-  box-shadow:1px 2px 3px #0008;
-}
-
-.resistor:before,
-.resistor:after{
-  content:"";
-  position:absolute;
-  top:2px;
   width:9px;
-  height:2px;
-  background:#cbd6d5;
+  height:36px;
+  background:#c5a85c;
+  border-radius:2px;
 }
 
-.resistor:before{
-  left:-9px;
+.p1,.p2{
+  top:95px;
 }
 
-.resistor:after{
-  right:-9px;
+.p3,.p4{
+  bottom:95px;
 }
 
-.r1{
-  left:43px;
-  top:141px;
-  transform:translateZ(8px) rotate(8deg);
+.p1,.p3{
+  left:75px;
 }
 
-.r2{
-  left:80px;
-  top:77px;
-  transform:translateZ(8px) rotate(-8deg);
-}
-
-.r3{
-  right:48px;
-  top:92px;
-  transform:translateZ(8px) rotate(10deg);
-}
-
-.r4{
-  right:43px;
-  bottom:121px;
-  transform:translateZ(8px) rotate(-7deg);
-}
-
-.r5{
-  left:150px;
-  bottom:47px;
-  transform:translateZ(8px) rotate(5deg);
+.p2,.p4{
+  right:75px;
 }
 
 .led{
   position:absolute;
-  width:10px;
-  height:10px;
+  width:17px;
+  height:17px;
   border-radius:50%;
-  transform:translateZ(12px);
-  z-index:22;
-  border:1px solid #263334;
+  right:38px;
+  top:39px;
+  background:var(--green);
+  box-shadow:0 0 18px var(--green);
+  animation:ledPulse 2.5s ease-in-out infinite;
 }
 
-.power-led{
-  right:34px;
-  top:48px;
-  background:#35e89c;
-  box-shadow:0 0 8px #35e89c,0 0 20px #35e89c77;
-  animation:greenLed 2.4s ease-in-out infinite;
-}
-
-.rx-led{
-  right:53px;
-  top:68px;
-  background:#31df98;
-  box-shadow:0 0 7px #31df98;
-}
-
-.tx-led{
-  right:39px;
-  top:68px;
-  background:#31df98;
-  box-shadow:0 0 7px #31df98;
-}
-
-.l-led{
-  right:63px;
-  top:48px;
-  background:#ffe04a;
-  box-shadow:0 0 8px #ffe04a;
-  animation:yellowLed 3s infinite;
-}
-
-@keyframes greenLed{
-  0%,100%{
-    opacity:.65;
-  }
-  50%{
-    opacity:1;
-  }
-}
-
-@keyframes yellowLed{
-  0%,82%,100%{
-    opacity:.3;
-  }
-  86%,94%{
-    opacity:1;
-  }
-}
-
-.header{
-  position:absolute;
-  display:flex;
-  z-index:25;
-  transform:translateZ(14px);
-  background:linear-gradient(180deg,#1d2122,#080a0b);
-  border-radius:4px;
-  padding:4px;
-  box-shadow:
-    0 5px 7px #000b,
-    inset 0 1px 0 #ffffff12;
-}
-
-.header span{
-  position:relative;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  color:#bfc5c5;
-  font:700 5px/1 Inter,sans-serif;
-}
-
-.header span:before{
-  content:"";
-  position:absolute;
-  top:-2px;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#111516;
-  box-shadow:inset 0 1px 2px #000;
-}
-
-.digital-header{
-  left:91px;
-  top:7px;
-  width:276px;
-  height:27px;
-  justify-content:space-around;
-}
-
-.digital-header span{
-  width:15px;
-  padding-top:9px;
-}
-
-.power-header{
-  left:124px;
-  bottom:10px;
-  width:124px;
-  height:27px;
-  justify-content:space-around;
-}
-
-.power-header span{
-  width:14px;
-  font-size:4px;
-  padding-top:9px;
-}
-
-.analog-header{
-  right:10px;
-  bottom:10px;
-  width:95px;
-  height:27px;
-  justify-content:space-around;
-}
-
-.analog-header span{
-  width:11px;
-  padding-top:9px;
-}
-
-.icsp{
-  position:absolute;
-  left:45px;
-  top:177px;
-  display:grid;
-  grid-template-columns:repeat(3,7px);
-  gap:4px;
-  padding:5px;
-  border-radius:3px;
-  background:#101415;
-  box-shadow:0 3px 5px #0009;
-  transform:translateZ(11px);
-  z-index:20;
-}
-
-.icsp i{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:linear-gradient(145deg,#ddd,#777);
-  box-shadow:0 1px 2px #000;
-}
-
-.silk{
-  position:absolute;
-  border:1px solid #c9edf044;
-  z-index:3;
-  opacity:.65;
-}
-
-.silk1{
-  left:30px;
-  top:78px;
-  width:60px;
-  height:34px;
-  border-right:0;
-  border-bottom:0;
-  border-radius:12px 0 0 0;
-}
-
-.silk2{
-  left:29px;
-  bottom:78px;
-  width:70px;
-  height:34px;
-  border-right:0;
-  border-top:0;
-  border-radius:0 0 0 12px;
-}
-
-.silk3{
-  right:31px;
-  top:87px;
-  width:55px;
-  height:27px;
-  border-left:0;
-  border-bottom:0;
-  border-radius:0 12px 0 0;
+@keyframes ledPulse{
+  0%,100%{opacity:.7;box-shadow:0 0 12px var(--green)}
+  50%{opacity:1;box-shadow:0 0 25px var(--green),0 0 45px #22d39535}
 }
 
 .trace{
   position:absolute;
-  height:2px;
-  border-radius:3px;
-  background:#6ed8e544;
-  box-shadow:0 0 3px #65d5e522;
-  z-index:2;
+  border:2px solid #23b77c;
+  border-radius:12px;
 }
 
-.trace1{
-  left:34px;
-  top:128px;
-  width:88px;
-  transform:rotate(7deg);
+.t1{
+  width:85px;
+  height:60px;
+  left:21px;
+  top:37px;
+  border-left:0;
+  border-bottom:0;
 }
 
-.trace2{
-  left:72px;
-  top:151px;
-  width:105px;
-  transform:rotate(-9deg);
+.t2{
+  width:85px;
+  height:60px;
+  right:21px;
+  bottom:37px;
+  border-right:0;
+  border-top:0;
 }
 
-.trace3{
-  right:30px;
-  top:132px;
-  width:92px;
-  transform:rotate(10deg);
-}
-
-.trace4{
-  right:52px;
-  bottom:82px;
-  width:104px;
-  transform:rotate(-6deg);
-}
-
-.trace5{
-  left:28px;
-  bottom:67px;
-  width:95px;
-  transform:rotate(9deg);
-}
-
-@media(max-width:900px){
-  .arduino-3d{
-    transform:rotateX(55deg) rotateZ(-27deg) scale(.82);
-  }
-
-  .circuit-visual:hover .arduino-3d{
-    transform:rotateX(52deg) rotateZ(-24deg) translateY(-6px) scale(.85);
-  }
-}
-
-@media(max-width:600px){
-  .circuit-visual{
-    height:330px;
-  }
-
-  .arduino-3d{
-    transform:rotateX(55deg) rotateZ(-27deg) scale(.64);
-  }
-
-  .circuit-visual:hover .arduino-3d{
-    transform:rotateX(52deg) rotateZ(-24deg) translateY(-5px) scale(.67);
-  }
-}
 .section{
   max-width:1216px;
   margin:0 auto;
