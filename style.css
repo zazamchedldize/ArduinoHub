@@ -968,88 +968,357 @@ body.modal-open{
   transform:rotate(-6deg);
   z-index:1;
 }
+.circuit-visual{
+  height:370px;
+  display:grid;
+  place-items:center;
+  min-width:0;
+  position:relative;
+  perspective:1200px;
+}
+
+.circuit-visual:before{
+  content:"";
+  position:absolute;
+  width:390px;
+  height:390px;
+  border-radius:50%;
+  background:radial-gradient(circle,#22d39520 0%,#22d3950c 32%,transparent 68%);
+  filter:blur(5px);
+  animation:boardAmbient 5s ease-in-out infinite alternate;
+}
+
+.circuit-visual:after{
+  content:"";
+  position:absolute;
+  width:300px;
+  height:300px;
+  border:1px solid #22d39512;
+  border-radius:50%;
+  box-shadow:0 0 45px #22d3950a,inset 0 0 45px #22d39507;
+  animation:boardRing 12s linear infinite;
+}
+
+@keyframes boardAmbient{
+  from{
+    transform:scale(.88);
+    opacity:.55;
+  }
+  to{
+    transform:scale(1.08);
+    opacity:1;
+  }
+}
+
+@keyframes boardRing{
+  from{
+    transform:rotate(0deg) scale(.96);
+  }
+  to{
+    transform:rotate(360deg) scale(1.04);
+  }
+}
+
+.board{
+  width:min(390px,92%);
+  height:270px;
+  position:relative;
+  z-index:2;
+  overflow:hidden;
+  border-radius:18px;
+  transform:rotate(-5deg) rotateX(3deg);
+  background:
+    radial-gradient(circle at 72% 25%,#1d5542 0 2px,transparent 3px),
+    radial-gradient(circle at 18% 72%,#1d5542 0 2px,transparent 3px),
+    linear-gradient(145deg,#163d32,#0b241d 52%,#081a15);
+  border:1px solid #42e6ad55;
+  box-shadow:
+    0 28px 55px #0009,
+    0 0 35px #22d39518,
+    inset 0 1px 0 #ffffff10,
+    inset 0 0 55px #22d3950b;
+}
+
+.board:before{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border:1px solid #4ae8b52a;
+  border-radius:11px;
+  background:
+    linear-gradient(90deg,transparent 49.7%,#36c59610 50%,transparent 50.3%),
+    linear-gradient(0deg,transparent 49.7%,#36c59608 50%,transparent 50.3%);
+}
+
+.board:after{
+  content:"ARDUINOCHEMISTRYHUB";
+  position:absolute;
+  left:23px;
+  bottom:17px;
+  color:#74d8b455;
+  font:700 7px Inter,sans-serif;
+  letter-spacing:2.5px;
+}
 
 .chip{
   position:absolute;
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
-  width:145px;
-  padding:35px 0;
-  border-radius:5px;
-  background:#06100e;
-  border:1px solid #315c4e;
+  width:126px;
+  height:92px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border-radius:8px;
+  background:linear-gradient(135deg,#0a1210,#111c19 55%,#07100e);
+  border:1px solid #61766e55;
+  color:#9af8d4;
   text-align:center;
-  color:var(--green2);
-  font:700 19px/1.2 Inter,sans-serif;
+  font:800 13px/1.45 Inter,sans-serif;
   letter-spacing:2px;
-  box-shadow:0 0 22px #000;
+  box-shadow:
+    0 12px 25px #0009,
+    inset 0 1px 0 #ffffff0d,
+    0 0 22px #22d3950c;
+  z-index:5;
+}
+
+.chip:before{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border:1px solid #38dca155;
+  border-radius:10px;
+  box-shadow:0 0 15px #22d39512;
+}
+
+.chip:after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  top:9px;
+  right:10px;
+  border-radius:50%;
+  background:#22d395;
+  box-shadow:0 0 12px #22d395;
+  animation:chipStatus 2s ease-in-out infinite;
+}
+
+@keyframes chipStatus{
+  0%,100%{
+    opacity:.45;
+  }
+  50%{
+    opacity:1;
+  }
 }
 
 .pin{
   position:absolute;
-  width:9px;
-  height:36px;
-  background:#c5a85c;
-  border-radius:2px;
+  width:5px;
+  height:29px;
+  border-radius:1px;
+  background:linear-gradient(180deg,#d8bd6b,#806b32);
+  box-shadow:
+    0 0 5px #d6b75a35,
+    inset 1px 0 #fff4;
+  z-index:3;
 }
 
 .p1,.p2{
-  top:95px;
+  top:101px;
 }
 
 .p3,.p4{
-  bottom:95px;
+  bottom:101px;
 }
 
 .p1,.p3{
-  left:75px;
+  left:47px;
 }
 
 .p2,.p4{
-  right:75px;
+  right:47px;
+}
+
+.pin:before{
+  content:"";
+  position:absolute;
+  width:13px;
+  height:3px;
+  top:13px;
+  background:#b89b50;
+  opacity:.55;
+}
+
+.p1:before,
+.p3:before{
+  left:4px;
+}
+
+.p2:before,
+.p4:before{
+  right:4px;
 }
 
 .led{
   position:absolute;
-  width:17px;
-  height:17px;
+  width:9px;
+  height:9px;
+  right:32px;
+  top:29px;
   border-radius:50%;
-  right:38px;
-  top:39px;
-  background:var(--green);
-  box-shadow:0 0 18px var(--green);
-  animation:ledPulse 2.5s ease-in-out infinite;
+  background:#22d395;
+  box-shadow:
+    0 0 7px #22d395,
+    0 0 18px #22d395,
+    0 0 32px #22d39555;
+  animation:ledPulse 2.2s ease-in-out infinite;
+  z-index:6;
+}
+
+.led:before{
+  content:"STATUS";
+  position:absolute;
+  right:16px;
+  top:-3px;
+  color:#6eb6a055;
+  font:600 6px Inter,sans-serif;
+  letter-spacing:1.5px;
 }
 
 @keyframes ledPulse{
-  0%,100%{opacity:.7;box-shadow:0 0 12px var(--green)}
-  50%{opacity:1;box-shadow:0 0 25px var(--green),0 0 45px #22d39535}
+  0%,100%{
+    opacity:.45;
+    box-shadow:
+      0 0 6px #22d395,
+      0 0 14px #22d395;
+  }
+  50%{
+    opacity:1;
+    box-shadow:
+      0 0 8px #22d395,
+      0 0 20px #22d395,
+      0 0 35px #22d39555;
+  }
 }
 
 .trace{
   position:absolute;
-  border:2px solid #23b77c;
-  border-radius:12px;
+  border:0;
+  z-index:2;
+}
+
+.trace:before,
+.trace:after{
+  content:"";
+  position:absolute;
+  background:#25c58b;
+  box-shadow:0 0 7px #22d39535;
 }
 
 .t1{
-  width:85px;
-  height:60px;
-  left:21px;
-  top:37px;
-  border-left:0;
-  border-bottom:0;
+  width:116px;
+  height:82px;
+  left:19px;
+  top:27px;
+  border:0;
+}
+
+.t1:before{
+  width:100%;
+  height:2px;
+  left:0;
+  top:0;
+}
+
+.t1:after{
+  width:2px;
+  height:100%;
+  left:0;
+  top:0;
 }
 
 .t2{
-  width:85px;
-  height:60px;
-  right:21px;
-  bottom:37px;
-  border-right:0;
-  border-top:0;
+  width:116px;
+  height:82px;
+  right:19px;
+  bottom:27px;
+  border:0;
 }
+
+.t2:before{
+  width:100%;
+  height:2px;
+  right:0;
+  bottom:0;
+}
+
+.t2:after{
+  width:2px;
+  height:100%;
+  right:0;
+  bottom:0;
+}
+
+.board .t1,
+.board .t2{
+  border-radius:0;
+}
+
+.board .t1:before,
+.board .t1:after,
+.board .t2:before,
+.board .t2:after{
+  border-radius:2px;
+}
+
+.board .t1:after{
+  box-shadow:
+    0 0 7px #22d39535,
+    0 0 0 4px #22d39508;
+}
+
+.board .t2:after{
+  box-shadow:
+    0 0 7px #22d39535,
+    0 0 0 4px #22d39508;
+}
+
+@media (max-width:600px){
+  .circuit-visual{
+    height:245px;
+  }
+
+  .circuit-visual:before{
+    width:280px;
+    height:280px;
+  }
+
+  .circuit-visual:after{
+    width:230px;
+    height:230px;
+  }
+
+  .board{
+    width:340px;
+    height:235px;
+    transform:scale(.78) rotate(-5deg) rotateX(3deg);
+  }
+}
+
+@media (max-height:500px) and (orientation:landscape){
+  .circuit-visual{
+    height:220px;
+  }
+
+  .board{
+    transform:scale(.7) rotate(-5deg) rotateX(3deg);
+  }
+}
+
 
 .section{
   max-width:1216px;
