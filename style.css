@@ -4651,3 +4651,288 @@ svg{
     transition: none !important;
   }
 }
+
+.attendance-admin-section {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(34, 211, 149, .12);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(34, 211, 149, .08),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(13, 27, 24, .98),
+      rgba(8, 19, 16, .98)
+    );
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, .22),
+    inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.attendance-admin-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--green),
+    transparent
+  );
+  opacity: .65;
+}
+
+.attendance-admin-section .section-header {
+  padding: 24px 26px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.attendance-admin-section .section-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.attendance-admin-section .section-header p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#attendance-admin-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid rgba(34, 211, 149, .14);
+  border-radius: 9px;
+  background: rgba(34, 211, 149, .06);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+#attendance-admin-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 9px rgba(34, 211, 149, .7);
+}
+
+#attendance-total-meetings,
+#attendance-total-members {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.attendance-admin-member {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 16px;
+  border: 1px solid rgba(255, 255, 255, .055);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, .13);
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+.attendance-admin-member:hover {
+  background: rgba(34, 211, 149, .045);
+  border-color: rgba(34, 211, 149, .18);
+  transform: translateY(-1px);
+}
+
+.attendance-admin-member > div:first-child {
+  min-width: 0;
+}
+
+.attendance-admin-member > div:first-child strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attendance-admin-member > div:first-child span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.attendance-admin-member-value {
+  min-width: 58px;
+  text-align: right;
+}
+
+.attendance-admin-member-value strong {
+  display: block;
+  color: var(--green);
+  font-size: 17px;
+  font-weight: 850;
+}
+
+.attendance-admin-member-value small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.attendance-admin-record {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, .12);
+  transition:
+    border-color .2s ease,
+    background .2s ease;
+}
+
+.attendance-admin-record:hover {
+  border-color: rgba(34, 211, 149, .18);
+  background: rgba(34, 211, 149, .025);
+}
+
+.attendance-admin-record-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 16px 17px;
+  border-bottom: 1px solid rgba(255, 255, 255, .055);
+}
+
+.attendance-admin-record-header > div {
+  min-width: 0;
+}
+
+.attendance-admin-record-header > div span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.attendance-admin-record-header > div strong {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.attendance-admin-badge {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border: 1px solid rgba(34, 211, 149, .16);
+  border-radius: 9px;
+  background: rgba(34, 211, 149, .08);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.attendance-admin-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 14px 17px 17px;
+}
+
+.attendance-admin-names > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .025);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.attendance-admin-names > span svg {
+  width: 13px;
+  height: 13px;
+  color: var(--green);
+}
+
+.attendance-no-members {
+  color: var(--muted) !important;
+  font-style: italic;
+}
+
+.attendance-admin-section .empty-state {
+  border: 1px dashed rgba(255, 255, 255, .08);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .018);
+}
+
+.attendance-admin-section .empty-state svg {
+  color: var(--green);
+  opacity: .8;
+}
+
+.attendance-admin-section .empty-state h3 {
+  color: var(--text);
+}
+
+.attendance-admin-section .empty-state p {
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .attendance-admin-section .section-header {
+    padding: 20px;
+  }
+
+  .attendance-admin-member {
+    padding: 13px;
+  }
+
+  .attendance-admin-record-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .attendance-admin-badge {
+    align-self: flex-start;
+  }
+
+  .attendance-admin-names {
+    padding: 12px 13px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attendance-admin-member,
+  .attendance-admin-record {
+    transition: none;
+  }
+}
