@@ -1,47 +1,31 @@
+import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-import {
+const db = supabaseIsConfigured ? createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
-  supabaseIsConfigured
-} from './supabase-config.js'
-
-import {
-  createClient
-} from 'https://esm.sh/@supabase/supabase-js@2'
-
-const db = supabaseIsConfigured
-  ? createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true
-        }
-      }
-    )
-  : null
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+) : null
 
 const page = document.body.dataset.page
+const $ = (s, root = document) => root.querySelector(s)
+const esc = (value = '') => String(value).replace(
+  /[&<>'"]/g,
+  c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[c])
+)
 
-const $ = (s, root = document) =>
-  root.querySelector(s)
-
-const esc = (value = '') =>
-  String(value).replace(
-    /[&<>'"]/g,
-    c =>
-      ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-      }[c])
-  )
-
-const icon = name =>
-  `<i data-lucide="${name}"></i>`
+const icon = name => `<i data-lucide="${name}"></i>`
 
 function refreshIcons() {
   window.lucide?.createIcons()
@@ -94,11 +78,9 @@ function configuredMessage(target) {
   target.innerHTML = `
     <div class="empty-state">
       ${icon('settings')}
-
       <h2>
         Supabase ჯერ არ არის კონფიგურირებული
       </h2>
-
       <p>
         დაამატეთ პროექტის URL და anon key
         <code>supabase-config.js</code>-ში,
@@ -145,12 +127,8 @@ function initChrome() {
 }
 
 const AI_FUNCTION_URL =
-  supabaseIsConfigured &&
-  SUPABASE_URL
-    ? `${SUPABASE_URL.replace(
-        /\/+$/,
-        ''
-      )}/functions/v1/ai-chat`
+  supabaseIsConfigured && SUPABASE_URL
+    ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
     : null
 
 let aiHistory = []
@@ -284,9 +262,7 @@ async function detectAIAdmin() {
     }
 
     const admin =
-      await isAdmin(
-        session.user
-      )
+      await isAdmin(session.user)
 
     if (!admin?.username) {
       aiAdminGreeting = ''
@@ -304,16 +280,14 @@ async function detectAIAdmin() {
       username.includes('ზაზა') ||
       username.includes('zaza')
     ) {
-      aiAdminGreeting =
-        'ბატონო ზაზა'
+      aiAdminGreeting = 'ბატონო ზაზა'
     } else if (
       username === 'tekla' ||
       username === 'თეკლა' ||
       username.includes('თეკლა') ||
       username.includes('tekla')
     ) {
-      aiAdminGreeting =
-        'ქალბატონო თეკლა'
+      aiAdminGreeting = 'ქალბატონო თეკლა'
     } else {
       aiAdminGreeting = ''
     }
@@ -662,6 +636,7 @@ function formatAIResponse(text) {
     }
 
     closeList()
+
     paragraph.push(line)
   }
 
@@ -805,7 +780,8 @@ function getAIUserErrorMessage(error) {
         </p>
 
         <small>
-          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას. ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
+          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას.
+          ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
         </small>
       </div>
     `
@@ -1038,31 +1014,27 @@ async function askAI(question) {
   let response
 
   try {
-    response =
-      await fetch(
-        AI_FUNCTION_URL,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type':
-              'application/json',
-            'Authorization':
-              `Bearer ${authorizationToken}`,
-            'apikey':
-              SUPABASE_ANON_KEY
-          },
-          body: JSON.stringify({
-            message:
-              cleanQuestion,
-            history,
-            context:
-              finalContext,
-            adminGreeting:
-              aiAdminGreeting,
-            currentUser
-          })
-        }
-      )
+    response = await fetch(
+      AI_FUNCTION_URL,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+            `Bearer ${authorizationToken}`,
+          'apikey':
+            SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          message: cleanQuestion,
+          history,
+          context: finalContext,
+          adminGreeting:
+            aiAdminGreeting,
+          currentUser
+        })
+      }
+    )
   } catch (networkError) {
     const error =
       new Error(
@@ -1183,10 +1155,8 @@ function addAISafetyWarning() {
       </strong>
 
       <p>
-        გთხოვთ, არ გამოიყენოთ ArduinoHub AI
-        18+ ან შეუფერებელი შინაარსისთვის.
-        პლატფორმა განკუთვნილია სასწავლო,
-        Arduino-სა და ქიმიის საკითხებისთვის.
+        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის.
+        პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
       </p>
     </div>
   `
@@ -1218,16 +1188,15 @@ async function saveAIChatMessage(message) {
 
     const {
       error
-    } =
-      await db
-        .from('ai_chat_history')
-        .insert({
-          user_id: user.id,
-          username:
-            String(username).trim(),
-          message:
-            String(message).trim()
-        })
+    } = await db
+      .from('ai_chat_history')
+      .insert({
+        user_id: user.id,
+        username:
+          String(username).trim(),
+        message:
+          String(message).trim()
+      })
 
     if (error) {
       console.warn(
@@ -1253,10 +1222,9 @@ async function getZazaHistory() {
   const {
     data,
     error
-  } =
-    await db.rpc(
-      'get_zaza_history'
-    )
+  } = await db.rpc(
+    'get_zaza_history'
+  )
 
   if (error) {
     throw error
@@ -1287,13 +1255,12 @@ async function deleteZazaHistoryItem(id) {
 
   const {
     error
-  } =
-    await db.rpc(
-      'delete_zaza_history_item',
-      {
-        p_id: numericId
-      }
-    )
+  } = await db.rpc(
+    'delete_zaza_history_item',
+    {
+      p_id: numericId
+    }
+  )
 
   if (error) {
     console.error(
@@ -1307,10 +1274,9 @@ async function deleteZazaHistoryItem(id) {
   const {
     data: remainingData,
     error: verifyError
-  } =
-    await db.rpc(
-      'get_zaza_history'
-    )
+  } = await db.rpc(
+    'get_zaza_history'
+  )
 
   if (verifyError) {
     throw verifyError
@@ -1336,8 +1302,7 @@ function formatZazaHistory(items) {
   if (!items.length) {
     return `
       <p>
-        „ზაზა“-ს შესახებ სხვა მომხმარებლების
-        შეტყობინებები ვერ მოიძებნა.
+        „ზაზა“-ს შესახებ სხვა მომხმარებლების შეტყობინებები ვერ მოიძებნა.
       </p>
     `
   }
@@ -1374,10 +1339,8 @@ function formatZazaHistory(items) {
           ? new Intl.DateTimeFormat(
               'ka-GE',
               {
-                dateStyle:
-                  'medium',
-                timeStyle:
-                  'short'
+                dateStyle: 'medium',
+                timeStyle: 'short'
               }
             ).format(
               new Date(
@@ -1459,9 +1422,7 @@ function setupZazaHistoryDelete() {
             )
 
           if (
-            !Number.isSafeInteger(
-              id
-            )
+            !Number.isSafeInteger(id)
           ) {
             toast(
               'შეტყობინების ID არასწორია.'
@@ -1501,7 +1462,7 @@ function setupZazaHistoryDelete() {
                       button
                     ) &&
                     button.dataset.deleteConfirm ===
-                      'true' &&
+                    'true' &&
                     !button.disabled
                   ) {
                     button.dataset.deleteConfirm =
@@ -1529,9 +1490,7 @@ function setupZazaHistoryDelete() {
             button.deleteConfirmTimer
           )
 
-          button.disabled =
-            true
-
+          button.disabled = true
           button.dataset.deleteConfirm =
             'false'
 
@@ -1633,8 +1592,7 @@ function setupZazaHistoryDelete() {
                   </h3>
 
                   <p>
-                    ყველა ნაპოვნი შეტყობინება
-                    სამუდამოდ წაიშალა.
+                    ყველა ნაპოვნი შეტყობინება სამუდამოდ წაიშალა.
                   </p>
                 </div>
               `
@@ -1667,8 +1625,7 @@ function setupZazaHistoryDelete() {
               error?.hint
             )
 
-            button.disabled =
-              false
+            button.disabled = false
 
             button.dataset.deleteConfirm =
               'false'
@@ -1762,8 +1719,7 @@ async function handleAIQuestion(
             </strong>
 
             <p>
-              /history ბრძანების გამოყენება
-              მხოლოდ ბატონ ზაზას შეუძლია.
+              /history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.
             </p>
           </div>
         `
@@ -1851,9 +1807,7 @@ async function handleAIQuestion(
     typing?.remove()
 
     const finalReply =
-      applyAIGreeting(
-        reply
-      )
+      applyAIGreeting(reply)
 
     addAIMessage(
       'assistant',
@@ -1864,8 +1818,7 @@ async function handleAIQuestion(
 
     aiHistory.push({
       role: 'assistant',
-      content:
-        finalReply
+      content: finalReply
     })
 
     if (
@@ -2046,8 +1999,7 @@ async function initAIChat() {
               )
               .forEach(
                 b => {
-                  b.disabled =
-                    true
+                  b.disabled = true
                 }
               )
 
@@ -2061,8 +2013,7 @@ async function initAIChat() {
               )
               .forEach(
                 b => {
-                  b.disabled =
-                    false
+                  b.disabled = false
                 }
               )
           }
@@ -2148,13 +2099,9 @@ function card(project) {
           </span>
 
           <time
-            datetime="${esc(
-              project.created_at
-            )}"
+            datetime="${esc(project.created_at)}"
           >
-            ${dateText(
-              project.created_at
-            )}
+            ${dateText(project.created_at)}
           </time>
         </div>
 
@@ -2163,9 +2110,7 @@ function card(project) {
         </h2>
 
         <p>
-          ${esc(
-            project.description
-          )}
+          ${esc(project.description)}
         </p>
 
         <div class="card-footer">
@@ -2176,9 +2121,7 @@ function card(project) {
 
           <a
             class="text-link"
-            href="project.html?id=${encodeURIComponent(
-              project.id
-            )}"
+            href="project.html?id=${encodeURIComponent(project.id)}"
           >
             ნახვა
             ${icon('arrow-up-right')}
@@ -2253,7 +2196,7 @@ async function initProjects() {
           (
             !category ||
             p.category ===
-              category
+            category
           ) &&
           (
             !q ||
@@ -2329,7 +2272,9 @@ async function initDetail() {
     !id ||
     !/^[0-9a-f-]{36}$/i.test(id)
   ) {
-    return notFound(target)
+    return notFound(
+      target
+    )
   }
 
   const {
@@ -2338,10 +2283,7 @@ async function initDetail() {
   } = await db
     .from('projects')
     .select('*')
-    .eq(
-      'id',
-      id
-    )
+    .eq('id', id)
     .eq(
       'published',
       true
@@ -2352,7 +2294,9 @@ async function initDetail() {
     error ||
     !p
   ) {
-    return notFound(target)
+    return notFound(
+      target
+    )
   }
 
   const image =
@@ -2412,9 +2356,7 @@ async function initDetail() {
           </h2>
 
           <div class="prose lines">
-            ${esc(
-              p.how_it_was_made
-            )}
+            ${esc(p.how_it_was_made)}
           </div>
         </section>
       `
@@ -2485,9 +2427,7 @@ async function initDetail() {
             </span>
 
             <time>
-              ${dateText(
-                p.created_at
-              )}
+              ${dateText(p.created_at)}
             </time>
           </div>
 
@@ -2496,9 +2436,7 @@ async function initDetail() {
           </h1>
 
           <p>
-            ${esc(
-              p.description
-            )}
+            ${esc(p.description)}
           </p>
 
           <div class="author-line">
@@ -2525,14 +2463,11 @@ async function initDetail() {
       async () => {
         try {
           await navigator.clipboard
-            .writeText(
-              p.code
-            )
+            .writeText(p.code)
 
           const isChemistry =
-            String(
-              p.category
-            ).toLowerCase() ===
+            String(p.category)
+              .toLowerCase() ===
             'chemistry'
 
           toast(
@@ -2606,7 +2541,11 @@ function fileOkay(
     return true
   }
 
-  if (!types.includes(file.type)) {
+  if (
+    !types.includes(
+      file.type
+    )
+  ) {
     toast(
       `${label}: ფაილის ტიპი მიუღებელია.`
     )
@@ -2614,7 +2553,9 @@ function fileOkay(
     return false
   }
 
-  if (file.size > max) {
+  if (
+    file.size > max
+  ) {
     toast(
       `${label}: ფაილი ზედმეტად დიდია.`
     )
@@ -2661,21 +2602,17 @@ async function upload(
 
   const {
     error
-  } =
-    await db.storage
-      .from(bucket)
-      .upload(
-        path,
-        file,
-        {
-          cacheControl:
-            '3600',
-          upsert:
-            false,
-          contentType:
-            file.type
-        }
-      )
+  } = await db.storage
+    .from(bucket)
+    .upload(
+      path,
+      file,
+      {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type
+      }
+    )
 
   if (error) {
     throw error
@@ -2683,10 +2620,9 @@ async function upload(
 
   const {
     data
-  } =
-    db.storage
-      .from(bucket)
-      .getPublicUrl(path)
+  } = db.storage
+    .from(bucket)
+    .getPublicUrl(path)
 
   return {
     url: data.publicUrl,
@@ -2709,7 +2645,7 @@ function storagePath(
       ? decodeURIComponent(
           url.slice(
             index +
-              marker.length
+            marker.length
           )
         )
       : null
@@ -2731,10 +2667,9 @@ async function removeStored(
   if (path) {
     const {
       error
-    } =
-      await db.storage
-        .from(bucket)
-        .remove([path])
+    } = await db.storage
+      .from(bucket)
+      .remove([path])
 
     if (error) {
       console.warn(
@@ -2756,15 +2691,14 @@ async function isAdmin(user) {
   const {
     data,
     error
-  } =
-    await db
-      .from('admin_users')
-      .select('username')
-      .eq(
-        'user_id',
-        user.id
-      )
-      .maybeSingle()
+  } = await db
+    .from('admin_users')
+    .select('username')
+    .eq(
+      'user_id',
+      user.id
+    )
+    .maybeSingle()
 
   if (
     error ||
@@ -2793,8 +2727,7 @@ async function initAdmin() {
     data: {
       session
     }
-  } =
-    await db.auth.getSession()
+  } = await db.auth.getSession()
 
   if (session) {
     const admin =
@@ -2830,8 +2763,7 @@ async function initAdmin() {
   $('#new-project-button')
     ?.addEventListener(
       'click',
-      () =>
-        openEditor()
+      () => openEditor()
     )
 
   $('#cancel-edit')
@@ -2916,9 +2848,8 @@ function updateCodeFieldLabel() {
   }
 
   const isChemistry =
-    String(
-      category.value
-    ).toLowerCase() ===
+    String(category.value)
+      .toLowerCase() ===
     'chemistry'
 
   const textNodes =
@@ -3002,12 +2933,11 @@ async function login(event) {
     const {
       data,
       error
-    } =
-      await db.auth
-        .signInWithPassword({
-          email,
-          password
-        })
+    } = await db.auth
+      .signInWithPassword({
+        email,
+        password
+      })
 
     if (
       error ||
@@ -3097,7 +3027,8 @@ async function showDashboard(
 
   await Promise.all([
     loadAdminProjects(),
-    loadAdminMeeting()
+    loadAdminMeeting(),
+    loadAdminAttendance()
   ])
 }
 
@@ -3109,13 +3040,11 @@ function showLogin() {
     $('#auth-panel')
 
   if (dashboard) {
-    dashboard.hidden =
-      true
+    dashboard.hidden = true
   }
 
   if (authPanel) {
-    authPanel.hidden =
-      false
+    authPanel.hidden = false
   }
 
   closeEditor()
@@ -3129,8 +3058,7 @@ async function logout() {
   try {
     const {
       error
-    } =
-      await db.auth.signOut()
+    } = await db.auth.signOut()
 
     if (error) {
       throw error
@@ -3233,19 +3161,17 @@ async function loadAdminProjects() {
   const {
     data,
     error
-  } =
-    await db
-      .from('projects')
-      .select(
-        'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
-      )
-      .order(
-        'created_at',
-        {
-          ascending:
-            false
-        }
-      )
+  } = await db
+    .from('projects')
+    .select(
+      'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
+    )
+    .order(
+      'created_at',
+      {
+        ascending: false
+      }
+    )
 
   if (error) {
     status.textContent =
@@ -3280,9 +3206,7 @@ async function loadAdminProjects() {
                   <p>
                     ${esc(p.category)}
                     ·
-                    ${dateText(
-                      p.created_at
-                    )}
+                    ${dateText(p.created_at)}
                   </p>
                 </div>
 
@@ -3447,20 +3371,16 @@ function openEditor(p) {
 
   if (p) {
     $('#edit-id')
-      .value =
-      p.id
+      .value = p.id
 
     $('#title')
-      .value =
-      p.title
+      .value = p.title
 
     $('#category')
-      .value =
-      p.category
+      .value = p.category
 
     $('#author')
-      .value =
-      p.author
+      .value = p.author
 
     $('#published')
       .checked =
@@ -3472,18 +3392,15 @@ function openEditor(p) {
 
     $('#components')
       .value =
-      p.components ||
-      ''
+      p.components || ''
 
     $('#how-made')
       .value =
-      p.how_it_was_made ||
-      ''
+      p.how_it_was_made || ''
 
     $('#code')
       .value =
-      p.code ||
-      ''
+      p.code || ''
   }
 
   updateCodeFieldLabel()
@@ -3493,10 +3410,8 @@ function openEditor(p) {
 
   $('#project-editor')
     .scrollIntoView({
-      behavior:
-        'smooth',
-      block:
-        'start'
+      behavior: 'smooth',
+      block: 'start'
     })
 
   refreshIcons()
@@ -3538,14 +3453,11 @@ function imagePreview() {
         file
       )
 
-    preview.hidden =
-      false
+    preview.hidden = false
   }
 }
 
-async function saveProject(
-  event
-) {
+async function saveProject(event) {
   event.preventDefault()
 
   const button =
@@ -3702,23 +3614,21 @@ async function saveProject(
     if (id) {
       ({
         error
-      } =
-        await db
-          .from('projects')
-          .update(value)
-          .eq(
-            'id',
-            id
-          ))
+      } = await db
+        .from('projects')
+        .update(value)
+        .eq(
+          'id',
+          id
+        ))
     } else {
       ({
         error
-      } =
-        await db
-          .from('projects')
-          .insert(
-            value
-          ))
+      } = await db
+        .from('projects')
+        .insert(
+          value
+        ))
     }
 
     if (error) {
@@ -3756,15 +3666,10 @@ async function saveProject(
 
     await loadAdminProjects()
   } catch (error) {
-    console.error(
-      error
-    )
+    console.error(error)
 
     for (
-      const [
-        kind,
-        file
-      ] of uploads
+      const [kind, file] of uploads
     ) {
       if (!file?.url) {
         continue
@@ -3792,9 +3697,7 @@ async function saveProject(
   }
 }
 
-async function togglePublished(
-  id
-) {
+async function togglePublished(id) {
   const p =
     adminProjects.find(
       x =>
@@ -3807,17 +3710,16 @@ async function togglePublished(
 
   const {
     error
-  } =
-    await db
-      .from('projects')
-      .update({
-        published:
-          !p.published
-      })
-      .eq(
-        'id',
-        id
-      )
+  } = await db
+    .from('projects')
+    .update({
+      published:
+        !p.published
+    })
+    .eq(
+      'id',
+      id
+    )
 
   if (error) {
     return toast(
@@ -3835,9 +3737,7 @@ async function togglePublished(
   loadAdminProjects()
 }
 
-async function deleteProject(
-  id
-) {
+async function deleteProject(id) {
   const p =
     adminProjects.find(
       x =>
@@ -3855,14 +3755,13 @@ async function deleteProject(
 
   const {
     error
-  } =
-    await db
-      .from('projects')
-      .delete()
-      .eq(
-        'id',
-        id
-      )
+  } = await db
+    .from('projects')
+    .delete()
+    .eq(
+      'id',
+      id
+    )
 
   if (error) {
     return toast(
@@ -3947,12 +3846,9 @@ function meetingDateText(
   return new Intl.DateTimeFormat(
     'ka-GE',
     {
-      day:
-        'numeric',
-      month:
-        'long',
-      year:
-        'numeric'
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     }
   ).format(d)
 }
@@ -4018,7 +3914,8 @@ function renderMeetingContent(
         </h3>
 
         <p>
-          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
+          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს,
+          ინფორმაცია აქ გამოჩნდება.
         </p>
       </div>
     `
@@ -4071,13 +3968,10 @@ async function loadPublicMeeting() {
   const {
     data,
     error
-  } =
-    await getMeeting()
+  } = await getMeeting()
 
   if (error) {
-    console.error(
-      error
-    )
+    console.error(error)
 
     const target =
       $('#meeting-content')
@@ -4193,11 +4087,9 @@ function initMeetingPublic() {
     'keydown',
     e => {
       if (
-        e.key ===
-          'Escape' &&
+        e.key === 'Escape' &&
         $('#meeting-modal') &&
-        !$('#meeting-modal')
-          .hidden
+        !$('#meeting-modal').hidden
       ) {
         closeMeetingModal()
       }
@@ -4216,16 +4108,13 @@ async function loadAdminMeeting() {
   const {
     data,
     error
-  } =
-    await getMeeting()
+  } = await getMeeting()
 
   if (error) {
     status.textContent =
       'ჩატვირთვა ვერ მოხერხდა'
 
-    console.error(
-      error
-    )
+    console.error(error)
 
     return
   }
@@ -4233,14 +4122,13 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-      data.meeting_date ||
-      ''
+      data.meeting_date || ''
 
     $('#meeting-time')
       .value =
       String(
         data.meeting_time ||
-          ''
+        ''
       ).slice(
         0,
         5
@@ -4349,8 +4237,7 @@ async function saveMeeting(
       data: {
         user
       }
-    } =
-      await db.auth.getUser()
+    } = await db.auth.getUser()
 
     if (!user) {
       throw new Error(
@@ -4360,24 +4247,19 @@ async function saveMeeting(
 
     const {
       error
-    } =
-      await db
-        .from('club_meeting')
-        .upsert(
-          {
-            id: 1,
-            meeting_date:
-              date,
-            meeting_time:
-              time,
-            updated_by:
-              user.id
-          },
-          {
-            onConflict:
-              'id'
-          }
-        )
+    } = await db
+      .from('club_meeting')
+      .upsert(
+        {
+          id: 1,
+          meeting_date: date,
+          meeting_time: time,
+          updated_by: user.id
+        },
+        {
+          onConflict: 'id'
+        }
+      )
 
     if (error) {
       throw error
@@ -4418,14 +4300,13 @@ async function clearMeeting() {
 
   const {
     error
-  } =
-    await db
-      .from('club_meeting')
-      .delete()
-      .eq(
-        'id',
-        1
-      )
+  } = await db
+    .from('club_meeting')
+    .delete()
+    .eq(
+      'id',
+      1
+    )
 
   if (error) {
     return toast(
@@ -4440,8 +4321,7 @@ async function clearMeeting() {
     .value = ''
 
   $('#meeting-day-preview')
-    .textContent =
-    '—'
+    .textContent = '—'
 
   $('#meeting-admin-status')
     .textContent =
@@ -4514,8 +4394,7 @@ async function initPasswordReset() {
       }
 
       if (
-        password.length <
-        10
+        password.length < 10
       ) {
         error.textContent =
           'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.'
@@ -4527,8 +4406,7 @@ async function initPasswordReset() {
         data: {
           session
         }
-      } =
-        await db.auth.getSession()
+      } = await db.auth.getSession()
 
       if (!session) {
         error.textContent =
@@ -4545,11 +4423,10 @@ async function initPasswordReset() {
 
       const {
         error: updateError
-      } =
-        await db.auth
-          .updateUser({
-            password
-          })
+      } = await db.auth
+        .updateUser({
+          password
+        })
 
       if (updateError) {
         error.textContent =
@@ -4577,14 +4454,1066 @@ async function initPasswordReset() {
   )
 }
 
-let authUIUpdating =
-  false
+const MARIA_USER_ID =
+  'a02cb2e0-c4d0-4978-ab26-e8af583e4f58'
 
-let authUIQueued =
-  false
+let attendanceMembers = []
+let attendanceRecords = []
 
-let authUIListenerStarted =
-  false
+async function isAttendanceManager(
+  user
+) {
+  return !!user &&
+    user.id ===
+    MARIA_USER_ID
+}
+
+async function getAttendanceMembers() {
+  if (!db) {
+    return []
+  }
+
+  const {
+    data,
+    error
+  } = await db
+    .from('club_members')
+    .select(
+      'id,full_name,sort_order,active'
+    )
+    .eq(
+      'active',
+      true
+    )
+    .order(
+      'sort_order',
+      {
+        ascending: true
+      }
+    )
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+async function getAttendanceRecords() {
+  if (!db) {
+    return []
+  }
+
+  const {
+    data,
+    error
+  } = await db
+    .from('club_attendance')
+    .select(`
+      id,
+      meeting_date,
+      recorded_by,
+      created_at,
+      updated_at,
+      club_attendance_members (
+        member_id,
+        club_members (
+          id,
+          full_name,
+          sort_order
+        )
+      )
+    `)
+    .order(
+      'meeting_date',
+      {
+        ascending: false
+      }
+    )
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+function attendanceDateText(
+  value
+) {
+  if (!value) {
+    return '—'
+  }
+
+  const date =
+    new Date(
+      `${value}T12:00:00`
+    )
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return value
+  }
+
+  return new Intl.DateTimeFormat(
+    'ka-GE',
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }
+  ).format(date)
+}
+
+async function saveAttendanceRecord(
+  date,
+  memberIds
+) {
+  if (!db) {
+    throw new Error(
+      'Supabase არ არის კონფიგურირებული.'
+    )
+  }
+
+  const {
+    data: {
+      user
+    }
+  } = await db.auth.getUser()
+
+  if (!user) {
+    throw new Error(
+      'ანგარიშში შესვლა აუცილებელია.'
+    )
+  }
+
+  const manager =
+    await isAttendanceManager(
+      user
+    )
+
+  if (!manager) {
+    throw new Error(
+      'დასწრების აღრიცხვაზე წვდომა არ გაქვთ.'
+    )
+  }
+
+  let {
+    data: record,
+    error
+  } = await db
+    .from('club_attendance')
+    .select('id')
+    .eq(
+      'meeting_date',
+      date
+    )
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (record) {
+    const {
+      error: updateError
+    } = await db
+      .from('club_attendance')
+      .update({
+        recorded_by:
+          user.id,
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq(
+        'id',
+        record.id
+      )
+
+    if (updateError) {
+      throw updateError
+    }
+  } else {
+    const {
+      data: created,
+      error: insertError
+    } = await db
+      .from('club_attendance')
+      .insert({
+        meeting_date:
+          date,
+        recorded_by:
+          user.id
+      })
+      .select('id')
+      .single()
+
+    if (insertError) {
+      throw insertError
+    }
+
+    record = created
+  }
+
+  const {
+    error: deleteError
+  } = await db
+    .from('club_attendance_members')
+    .delete()
+    .eq(
+      'attendance_id',
+      record.id
+    )
+
+  if (deleteError) {
+    throw deleteError
+  }
+
+  if (
+    memberIds.length
+  ) {
+    const rows =
+      memberIds.map(
+        member_id => ({
+          attendance_id:
+            record.id,
+          member_id
+        })
+      )
+
+    const {
+      error: insertMembersError
+    } = await db
+      .from('club_attendance_members')
+      .insert(rows)
+
+    if (insertMembersError) {
+      throw insertMembersError
+    }
+  }
+
+  return record.id
+}
+
+function closeAttendancePanel() {
+  const panel =
+    $('#attendance-panel')
+
+  if (!panel) {
+    return
+  }
+
+  panel.remove()
+
+  document.body.classList.remove(
+    'modal-open'
+  )
+}
+
+function renderAttendancePanel(
+  records
+) {
+  const panel =
+    $('#attendance-panel')
+
+  if (!panel) {
+    return
+  }
+
+  const currentDate =
+    $('#attendance-date')
+      ?.value || ''
+
+  const selectedRecord =
+    records.find(
+      record =>
+        record.meeting_date ===
+        currentDate
+    )
+
+  const selectedIds =
+    selectedRecord
+      ? selectedRecord.club_attendance_members
+          .map(
+            item =>
+              item.member_id
+          )
+      : []
+
+  const memberList =
+    $('#attendance-member-select')
+
+  if (!memberList) {
+    return
+  }
+
+  memberList.innerHTML =
+    attendanceMembers
+      .map(
+        member => `
+          <label class="attendance-member-option">
+            <input
+              type="checkbox"
+              value="${esc(member.id)}"
+              ${
+                selectedIds.includes(
+                  member.id
+                )
+                  ? 'checked'
+                  : ''
+              }
+            >
+
+            <span>
+              ${esc(member.full_name)}
+            </span>
+          </label>
+        `
+      )
+      .join('')
+
+  const history =
+    $('#attendance-personal-history')
+
+  if (history) {
+    history.innerHTML =
+      records.length
+        ? records
+            .map(
+              record => {
+                const names =
+                  record.club_attendance_members
+                    .map(
+                      item =>
+                        item.club_members
+                          ?.full_name
+                    )
+                    .filter(Boolean)
+
+                return `
+                  <button
+                    type="button"
+                    class="attendance-history-item"
+                    data-attendance-date="${esc(record.meeting_date)}"
+                  >
+                    <span>
+                      ${esc(
+                        attendanceDateText(
+                          record.meeting_date
+                        )
+                      )}
+                    </span>
+
+                    <strong>
+                      ${names.length}
+                      წევრი
+                    </strong>
+                  </button>
+                `
+              }
+            )
+            .join('')
+        : `
+          <div class="empty-state compact-empty">
+            ${icon('calendar-x')}
+
+            <h3>
+              ჩანაწერები ჯერ არ არის
+            </h3>
+
+            <p>
+              პირველი დასწრების ჩანაწერი აქ გამოჩნდება.
+            </p>
+          </div>
+        `
+
+    history
+      .querySelectorAll(
+        '[data-attendance-date]'
+      )
+      .forEach(
+        button => {
+          button.addEventListener(
+            'click',
+            () => {
+              const date =
+                button.dataset
+                  .attendanceDate
+
+              const input =
+                $('#attendance-date')
+
+              if (input) {
+                input.value =
+                  date
+              }
+
+              renderAttendancePanel(
+                attendanceRecords
+              )
+            }
+          )
+        }
+      )
+  }
+
+  refreshIcons()
+}
+
+async function openAttendancePanel() {
+  const user =
+    await getCurrentUser()
+
+  if (!user) {
+    toast(
+      'დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.'
+    )
+
+    return
+  }
+
+  const manager =
+    await isAttendanceManager(
+      user
+    )
+
+  if (!manager) {
+    toast(
+      'დასწრების აღრიცხვაზე წვდომა არ გაქვთ.'
+    )
+
+    return
+  }
+
+  closeAttendancePanel()
+
+  const panel =
+    document.createElement('div')
+
+  panel.id =
+    'attendance-panel'
+
+  panel.className =
+    'attendance-panel'
+
+  panel.innerHTML = `
+    <div
+      class="attendance-panel-backdrop"
+      data-attendance-close
+    ></div>
+
+    <section
+      class="attendance-panel-content"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="attendance-panel-title"
+    >
+      <div class="attendance-panel-header">
+        <div>
+          <p class="eyebrow">
+            CLUB ATTENDANCE
+          </p>
+
+          <h2 id="attendance-panel-title">
+            დასწრების აღრიცხვა
+          </h2>
+
+          <p>
+            მონიშნე იმ შეხვედრაზე დამსწრე კლუბის წევრები.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="icon-button"
+          id="attendance-close"
+          aria-label="დახურვა"
+        >
+          ${icon('x')}
+        </button>
+      </div>
+
+      <div class="attendance-panel-body">
+        <div class="attendance-date-box">
+          <label>
+            შეხვედრის თარიღი
+
+            <input
+              id="attendance-date"
+              type="date"
+            >
+          </label>
+
+          <span
+            id="attendance-record-status"
+            class="attendance-record-status"
+          ></span>
+        </div>
+
+        <div class="attendance-select-box">
+          <div class="attendance-subheading">
+            <div>
+              <h3>
+                დამსწრე წევრები
+              </h3>
+
+              <p>
+                მონიშნე ყველა, ვინც შეხვედრას დაესწრო.
+              </p>
+            </div>
+
+            <span id="attendance-selected-count">
+              0
+            </span>
+          </div>
+
+          <div
+            id="attendance-member-select"
+            class="attendance-member-select"
+          ></div>
+        </div>
+
+        <p
+          id="attendance-form-error"
+          class="form-message"
+          role="alert"
+          aria-live="polite"
+        ></p>
+
+        <div class="attendance-actions">
+          <button
+            type="button"
+            class="button primary"
+            id="save-attendance"
+          >
+            ${icon('save')}
+            დასწრების შენახვა
+          </button>
+
+          <button
+            type="button"
+            class="button ghost"
+            id="attendance-cancel"
+          >
+            გაუქმება
+          </button>
+        </div>
+
+        <div class="attendance-history-box">
+          <div class="attendance-subheading">
+            <div>
+              <h3>
+                შენახული ჩანაწერები
+              </h3>
+
+              <p>
+                დააჭირე თარიღს ჩანაწერის შესაცვლელად.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="attendance-personal-history"
+            class="attendance-personal-history"
+          ></div>
+        </div>
+      </div>
+    </section>
+  `
+
+  document.body.appendChild(
+    panel
+  )
+
+  document.body.classList.add(
+    'modal-open'
+  )
+
+  try {
+    attendanceMembers =
+      await getAttendanceMembers()
+
+    attendanceRecords =
+      await getAttendanceRecords()
+
+    const dateInput =
+      $('#attendance-date')
+
+    if (dateInput) {
+      const latest =
+        attendanceRecords[0]
+
+      dateInput.value =
+        latest?.meeting_date ||
+        new Date()
+          .toISOString()
+          .slice(0, 10)
+    }
+
+    renderAttendancePanel(
+      attendanceRecords
+    )
+
+    updateAttendanceSelectedCount()
+
+    $('#attendance-close')
+      ?.addEventListener(
+        'click',
+        closeAttendancePanel
+      )
+
+    $('#attendance-cancel')
+      ?.addEventListener(
+        'click',
+        closeAttendancePanel
+      )
+
+    panel
+      .querySelector(
+        '[data-attendance-close]'
+      )
+      ?.addEventListener(
+        'click',
+        closeAttendancePanel
+      )
+
+    $('#attendance-date')
+      ?.addEventListener(
+        'change',
+        () => {
+          renderAttendancePanel(
+            attendanceRecords
+          )
+
+          updateAttendanceSelectedCount()
+        }
+      )
+
+    $('#attendance-member-select')
+      ?.addEventListener(
+        'change',
+        updateAttendanceSelectedCount
+      )
+
+    $('#save-attendance')
+      ?.addEventListener(
+        'click',
+        saveAttendanceFromPanel
+      )
+
+    document.addEventListener(
+      'keydown',
+      attendanceEscapeHandler
+    )
+
+    refreshIcons()
+  } catch (error) {
+    console.error(
+      'Attendance panel error:',
+      error
+    )
+
+    const errorTarget =
+      $('#attendance-form-error')
+
+    if (errorTarget) {
+      errorTarget.textContent =
+        error?.message ||
+        'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
+    }
+  }
+}
+
+function attendanceEscapeHandler(
+  event
+) {
+  if (
+    event.key === 'Escape' &&
+    $('#attendance-panel')
+  ) {
+    closeAttendancePanel()
+
+    document.removeEventListener(
+      'keydown',
+      attendanceEscapeHandler
+    )
+  }
+}
+
+function updateAttendanceSelectedCount() {
+  const checked =
+    document.querySelectorAll(
+      '#attendance-member-select input[type="checkbox"]:checked'
+    )
+
+  const counter =
+    $('#attendance-selected-count')
+
+  if (counter) {
+    counter.textContent =
+      String(
+        checked.length
+      )
+  }
+}
+
+async function saveAttendanceFromPanel() {
+  const date =
+    $('#attendance-date')
+      ?.value
+
+  const errorTarget =
+    $('#attendance-form-error')
+
+  const button =
+    $('#save-attendance')
+
+  if (errorTarget) {
+    errorTarget.textContent =
+      ''
+  }
+
+  if (!date) {
+    if (errorTarget) {
+      errorTarget.textContent =
+        'აირჩიე შეხვედრის თარიღი.'
+    }
+
+    return
+  }
+
+  const selected =
+    Array.from(
+      document.querySelectorAll(
+        '#attendance-member-select input[type="checkbox"]:checked'
+      )
+    ).map(
+      input =>
+        input.value
+    )
+
+  setBusy(
+    button,
+    true,
+    'ინახება...'
+  )
+
+  try {
+    await saveAttendanceRecord(
+      date,
+      selected
+    )
+
+    attendanceRecords =
+      await getAttendanceRecords()
+
+    renderAttendancePanel(
+      attendanceRecords
+    )
+
+    updateAttendanceSelectedCount()
+
+    toast(
+      'დასწრების ჩანაწერი შენახულია.',
+      'success'
+    )
+  } catch (error) {
+    console.error(
+      'Attendance save error:',
+      error
+    )
+
+    if (errorTarget) {
+      errorTarget.textContent =
+        error?.message ||
+        'დასწრების შენახვა ვერ მოხერხდა.'
+    }
+  } finally {
+    setBusy(
+      button,
+      false
+    )
+  }
+}
+
+async function loadAdminAttendance() {
+  const status =
+    $('#attendance-admin-status')
+
+  const memberList =
+    $('#attendance-member-list')
+
+  const historyList =
+    $('#attendance-history-list')
+
+  const totalMeetings =
+    $('#attendance-total-meetings')
+
+  const totalMembers =
+    $('#attendance-total-members')
+
+  if (
+    !status &&
+    !memberList &&
+    !historyList
+  ) {
+    return
+  }
+
+  if (!db) {
+    if (status) {
+      status.textContent =
+        'Supabase არ არის კონფიგურირებული'
+    }
+
+    return
+  }
+
+  try {
+    const [
+      members,
+      records
+    ] = await Promise.all([
+      getAttendanceMembers(),
+      getAttendanceRecords()
+    ])
+
+    attendanceMembers =
+      members
+
+    attendanceRecords =
+      records
+
+    if (status) {
+      status.textContent =
+        'განახლებულია'
+    }
+
+    if (totalMeetings) {
+      totalMeetings.textContent =
+        String(
+          records.length
+        )
+    }
+
+    if (totalMembers) {
+      totalMembers.textContent =
+        String(
+          members.length
+        )
+    }
+
+    const counts =
+      new Map()
+
+    members.forEach(
+      member => {
+        counts.set(
+          member.id,
+          0
+        )
+      }
+    )
+
+    records.forEach(
+      record => {
+        record.club_attendance_members
+          .forEach(
+            item => {
+              counts.set(
+                item.member_id,
+                (
+                  counts.get(
+                    item.member_id
+                  ) || 0
+                ) + 1
+              )
+            }
+          )
+      }
+    )
+
+    if (memberList) {
+      memberList.innerHTML =
+        members.length
+          ? members
+              .map(
+                member => {
+                  const count =
+                    counts.get(
+                      member.id
+                    ) || 0
+
+                  const percent =
+                    records.length
+                      ? Math.round(
+                          count /
+                          records.length *
+                          100
+                        )
+                      : 0
+
+                  return `
+                    <div class="attendance-admin-member">
+                      <div>
+                        <strong>
+                          ${esc(member.full_name)}
+                        </strong>
+
+                        <span>
+                          ${count}
+                          შეხვედრა
+                        </span>
+                      </div>
+
+                      <div class="attendance-admin-member-value">
+                        <strong>
+                          ${percent}%
+                        </strong>
+
+                        <small>
+                          დასწრება
+                        </small>
+                      </div>
+                    </div>
+                  `
+                }
+              )
+              .join('')
+          : `
+            <div class="empty-state compact-empty">
+              ${icon('users-round')}
+
+              <h3>
+                წევრები ვერ მოიძებნა
+              </h3>
+
+              <p>
+                კლუბის წევრების სია ცარიელია.
+              </p>
+            </div>
+          `
+    }
+
+    if (historyList) {
+      historyList.innerHTML =
+        records.length
+          ? records
+              .map(
+                record => {
+                  const names =
+                    record.club_attendance_members
+                      .map(
+                        item =>
+                          item.club_members
+                            ?.full_name
+                      )
+                      .filter(Boolean)
+
+                  return `
+                    <article class="attendance-admin-record">
+                      <div class="attendance-admin-record-header">
+                        <div>
+                          <span>
+                            შეხვედრა
+                          </span>
+
+                          <strong>
+                            ${esc(
+                              attendanceDateText(
+                                record.meeting_date
+                              )
+                            )}
+                          </strong>
+                        </div>
+
+                        <span class="attendance-admin-badge">
+                          ${names.length}
+                          დამსწრე
+                        </span>
+                      </div>
+
+                      <div class="attendance-admin-names">
+                        ${
+                          names.length
+                            ? names
+                                .map(
+                                  name => `
+                                    <span>
+                                      ${icon('check')}
+                                      ${esc(name)}
+                                    </span>
+                                  `
+                                )
+                                .join('')
+                            : `
+                              <span class="attendance-no-members">
+                                არავინ იყო მონიშნული
+                              </span>
+                            `
+                        }
+                      </div>
+                    </article>
+                  `
+                }
+              )
+              .join('')
+          : `
+            <div class="empty-state compact-empty">
+              ${icon('calendar-x')}
+
+              <h3>
+                დასწრების ისტორია ცარიელია
+              </h3>
+
+              <p>
+                მარიამის მიერ შენახული ჩანაწერები აქ გამოჩნდება.
+              </p>
+            </div>
+          `
+    }
+
+    refreshIcons()
+  } catch (error) {
+    console.error(
+      'Admin attendance error:',
+      error
+    )
+
+    if (status) {
+      status.textContent =
+        'ჩატვირთვა ვერ მოხერხდა'
+    }
+
+    if (memberList) {
+      memberList.innerHTML = `
+        <div class="empty-state compact-empty">
+          ${icon('triangle-alert')}
+
+          <h3>
+            დასწრების მონაცემები ვერ ჩაიტვირთა
+          </h3>
+
+          <p>
+            ${esc(
+              error?.message ||
+              'სცადეთ ხელახლა.'
+            )}
+          </p>
+        </div>
+      `
+    }
+
+    refreshIcons()
+  }
+}
+
+let authUIUpdating = false
+let authUIQueued = false
+let authUIListenerStarted = false
 
 function findLoginElement() {
   const elements =
@@ -4650,1049 +5579,16 @@ function closeAllAccountMenus(
       }
     )
 }
-const ATTENDANCE_MANAGER_ID =
-  'a02cb2e0-c4d0-4978-ab26-e8af583e4f58'
 
-async function isAttendanceManager(user) {
-  if (!user || !db) {
-    return false
-  }
-
-  try {
-    const { data, error } = await db
-      .rpc('is_attendance_manager')
-
-    if (error) {
-      console.error(
-        'Attendance manager check error:',
-        error
-      )
-
-      return user.id === ATTENDANCE_MANAGER_ID
-    }
-
-    return !!data
-  } catch (error) {
-    console.error(
-      'Attendance manager check failed:',
-      error
-    )
-
-    return user.id === ATTENDANCE_MANAGER_ID
-  }
-}
-
-const ATTENDANCE_MEMBERS = [
-  'ზაზა მჭედლიძე',
-  'თეკლა შველიძე',
-  'ანასტასია ხონელიძე',
-  'ანასტასია თევდორაძე',
-  'ანი მუმლაძე',
-  'გიორგი ბაღდავაძე',
-  'მარიამ მიშვიძე',
-  'ანი ძაგნიძე',
-  'ანასტასია თოდუა'
-]
-
-let attendanceMembers = []
-let attendanceRecords = []
-let attendanceEditingId = null
-
-async function loadAttendanceMembers() {
-  if (!db) {
-    return []
-  }
-
-  const {
-    data,
-    error
-  } = await db
-    .from('club_members')
-    .select('id,full_name,sort_order,active')
-    .eq('active', true)
-    .order('sort_order', {
-      ascending: true
-    })
-
-  if (error) {
-    console.error(
-      'Attendance members error:',
-      error
-    )
-
-    return []
-  }
-
-  attendanceMembers = data || []
-
-  return attendanceMembers
-}
-
-async function loadAttendanceRecords() {
-  if (!db) {
-    return []
-  }
-
-  const {
-    data,
-    error
-  } = await db
-    .from('club_attendance')
-    .select(`
-      id,
-      meeting_date,
-      recorded_by,
-      created_at,
-      updated_at,
-      club_attendance_members (
-        member_id,
-        club_members (
-          id,
-          full_name
-        )
-      )
-    `)
-    .order('meeting_date', {
-      ascending: false
-    })
-
-  if (error) {
-    console.error(
-      'Attendance records error:',
-      error
-    )
-
-    throw error
-  }
-
-  attendanceRecords = data || []
-
-  return attendanceRecords
-}
-
-function createAttendancePanel() {
-  if ($('#attendance-modal')) {
-    return
-  }
-
-  const modal = document.createElement('div')
-
-  modal.id = 'attendance-modal'
-
-  modal.className =
-    'attendance-modal'
-
-  modal.hidden = true
-
-  modal.setAttribute(
-    'aria-hidden',
-    'true'
-  )
-
-  modal.innerHTML = `
-    <div
-      class="attendance-backdrop"
-      data-attendance-close
-    ></div>
-
-    <section
-      class="attendance-panel"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="attendance-title"
-    >
-      <div class="attendance-header">
-        <div>
-          <p class="eyebrow">
-            CLUB ATTENDANCE
-          </p>
-
-          <h2 id="attendance-title">
-            დასწრების აღრიცხვა
-          </h2>
-
-          <p>
-            აირჩიეთ შეხვედრის თარიღი და
-            მონიშნეთ დამსწრე წევრები.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          class="attendance-close icon-button"
-          id="attendance-close"
-          aria-label="დახურვა"
-        >
-          ${icon('x')}
-        </button>
-      </div>
-
-      <div class="attendance-content">
-
-        <form
-          id="attendance-form"
-          class="attendance-form"
-        >
-          <label class="attendance-date-field">
-            <span>
-              შეხვედრის თარიღი
-            </span>
-
-            <input
-              id="attendance-date"
-              type="date"
-              required
-            >
-          </label>
-
-          <div class="attendance-members-heading">
-            <div>
-              <strong>
-                კლუბის წევრები
-              </strong>
-
-              <span id="attendance-selected-count">
-                0 მონიშნულია
-              </span>
-            </div>
-
-            <button
-              type="button"
-              id="attendance-select-all"
-              class="button secondary compact"
-            >
-              ყველას მონიშვნა
-            </button>
-          </div>
-
-          <div
-            id="attendance-member-list"
-            class="attendance-member-list"
-          ></div>
-
-          <p
-            id="attendance-form-error"
-            class="form-message"
-            role="alert"
-            aria-live="polite"
-          ></p>
-
-          <button
-            id="attendance-save"
-            class="button primary full"
-            type="submit"
-          >
-            ${icon('save')}
-            დასწრების შენახვა
-          </button>
-        </form>
-
-        <section class="attendance-history">
-          <div class="attendance-history-heading">
-            <div>
-              <p class="eyebrow">
-                SAVED RECORDS
-              </p>
-
-              <h3>
-                შენახული შეხვედრები
-              </h3>
-            </div>
-
-            <span
-              id="attendance-record-count"
-              class="attendance-record-count"
-            >
-              0
-            </span>
-          </div>
-
-          <div
-            id="attendance-record-list"
-            class="attendance-record-list"
-          ></div>
-        </section>
-
-      </div>
-    </section>
-  `
-
-  document.body.appendChild(modal)
-
-  $('#attendance-close')
-    ?.addEventListener(
-      'click',
-      closeAttendanceModal
-    )
-
-  modal
-    .querySelectorAll(
-      '[data-attendance-close]'
-    )
-    .forEach(element => {
-      element.addEventListener(
-        'click',
-        closeAttendanceModal
-      )
-    })
-
-  $('#attendance-form')
-    ?.addEventListener(
-      'submit',
-      saveAttendance
-    )
-
-  $('#attendance-date')
-    ?.addEventListener(
-      'change',
-      loadAttendanceForSelectedDate
-    )
-
-  $('#attendance-select-all')
-    ?.addEventListener(
-      'click',
-      toggleAllAttendanceMembers
-    )
-
-  refreshIcons()
-}
-
-function renderAttendanceMembers(
-  selectedIds = []
-) {
-  const list =
-    $('#attendance-member-list')
-
-  if (!list) {
-    return
-  }
-
-  if (!attendanceMembers.length) {
-    list.innerHTML = `
-      <div class="empty-state compact-empty">
-        ${icon('users-round')}
-
-        <h3>
-          წევრები ვერ მოიძებნა
-        </h3>
-
-        <p>
-          კლუბის წევრების სია ცარიელია.
-        </p>
-      </div>
-    `
-
-    refreshIcons()
-
-    return
-  }
-
-  const selected =
-    new Set(
-      selectedIds.map(String)
-    )
-
-  list.innerHTML =
-    attendanceMembers
-      .map(member => {
-        const checked =
-          selected.has(
-            String(member.id)
-          )
-
-        return `
-          <label class="attendance-member">
-            <input
-              type="checkbox"
-              name="attendance-member"
-              value="${esc(member.id)}"
-              ${checked ? 'checked' : ''}
-            >
-
-            <span class="attendance-check">
-              ${icon('check')}
-            </span>
-
-            <span class="attendance-member-name">
-              ${esc(member.full_name)}
-            </span>
-          </label>
-        `
-      })
-      .join('')
-
-  list
-    .querySelectorAll(
-      'input[name="attendance-member"]'
-    )
-    .forEach(input => {
-      input.addEventListener(
-        'change',
-        updateAttendanceSelectedCount
-      )
-    })
-
-  updateAttendanceSelectedCount()
-
-  refreshIcons()
-}
-
-function updateAttendanceSelectedCount() {
-  const count =
-    document.querySelectorAll(
-      'input[name="attendance-member"]:checked'
-    ).length
-
-  const target =
-    $('#attendance-selected-count')
-
-  if (target) {
-    target.textContent =
-      `${count} მონიშნულია`
-  }
-}
-
-function toggleAllAttendanceMembers() {
-  const inputs =
-    document.querySelectorAll(
-      'input[name="attendance-member"]'
-    )
-
-  if (!inputs.length) {
-    return
-  }
-
-  const allChecked =
-    Array.from(inputs)
-      .every(input => input.checked)
-
-  inputs.forEach(input => {
-    input.checked = !allChecked
-  })
-
-  const button =
-    $('#attendance-select-all')
-
-  if (button) {
-    button.textContent =
-      allChecked
-        ? 'ყველას მონიშვნა'
-        : 'ყველას მოხსნა'
-  }
-
-  updateAttendanceSelectedCount()
-}
-
-function getAttendanceSelectedIds() {
-  return Array.from(
-    document.querySelectorAll(
-      'input[name="attendance-member"]:checked'
-    )
-  ).map(
-    input => input.value
-  )
-}
-
-function getAttendanceRecordForDate(
-  date
-) {
-  return attendanceRecords.find(
-    record =>
-      record.meeting_date === date
-  ) || null
-}
-
-async function loadAttendanceForSelectedDate() {
-  const date =
-    $('#attendance-date')?.value
-
-  if (!date) {
-    renderAttendanceMembers([])
-    attendanceEditingId = null
-    return
-  }
-
-  const record =
-    getAttendanceRecordForDate(date)
-
-  if (!record) {
-    attendanceEditingId = null
-    renderAttendanceMembers([])
-
-    const save =
-      $('#attendance-save')
-
-    if (save) {
-      save.innerHTML =
-        `${icon('save')} დასწრების შენახვა`
-    }
-
-    refreshIcons()
-
-    return
-  }
-
-  attendanceEditingId =
-    record.id
-
-  const selectedIds =
-    (record.club_attendance_members || [])
-      .map(item =>
-        item.member_id
-      )
-
-  renderAttendanceMembers(
-    selectedIds
-  )
-
-  const save =
-    $('#attendance-save')
-
-  if (save) {
-    save.innerHTML =
-      `${icon('save')} ცვლილებების შენახვა`
-  }
-
-  refreshIcons()
-}
-
-function renderAttendanceRecords() {
-  const list =
-    $('#attendance-record-list')
-
-  const count =
-    $('#attendance-record-count')
-
-  if (!list) {
-    return
-  }
-
-  if (count) {
-    count.textContent =
-      String(
-        attendanceRecords.length
-      )
-  }
-
-  if (!attendanceRecords.length) {
-    list.innerHTML = `
-      <div class="attendance-empty">
-        ${icon('calendar-x')}
-
-        <p>
-          ჯერ არცერთი შეხვედრის
-          დასწრება არ არის შენახული.
-        </p>
-      </div>
-    `
-
-    refreshIcons()
-
-    return
-  }
-
-  list.innerHTML =
-    attendanceRecords
-      .map(record => {
-        const members =
-          record.club_attendance_members || []
-
-        return `
-          <article
-            class="attendance-record"
-            data-record-id="${record.id}"
-          >
-            <div class="attendance-record-main">
-              <div class="attendance-record-date">
-                ${icon('calendar-days')}
-
-                <div>
-                  <strong>
-                    ${esc(
-                      meetingDateText(
-                        record.meeting_date
-                      )
-                    )}
-                  </strong>
-
-                  <span>
-                    ${members.length}
-                    დამსწრე
-                  </span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                class="button secondary compact attendance-edit"
-                data-attendance-id="${record.id}"
-              >
-                ${icon('pencil')}
-                რედაქტირება
-              </button>
-            </div>
-
-            <div class="attendance-record-members">
-              ${
-                members.length
-                  ? members
-                      .map(item =>
-                        `<span>${esc(
-                          item.club_members?.full_name ||
-                          'უცნობი წევრი'
-                        )}</span>`
-                      )
-                      .join('')
-                  : '<span>არავინ არის მონიშნული</span>'
-              }
-            </div>
-          </article>
-        `
-      })
-      .join('')
-
-  list
-    .querySelectorAll(
-      '.attendance-edit'
-    )
-    .forEach(button => {
-      button.addEventListener(
-        'click',
-        () => {
-          editAttendanceRecord(
-            button.dataset.attendanceId
-          )
-        }
-      )
-    })
-
-  refreshIcons()
-}
-
-function editAttendanceRecord(id) {
-  const record =
-    attendanceRecords.find(
-      item =>
-        String(item.id) === String(id)
-    )
-
-  if (!record) {
-    return
-  }
-
-  const date =
-    $('#attendance-date')
-
-  if (date) {
-    date.value =
-      record.meeting_date
-  }
-
-  attendanceEditingId =
-    record.id
-
-  const selectedIds =
-    (record.club_attendance_members || [])
-      .map(item =>
-        item.member_id
-      )
-
-  renderAttendanceMembers(
-    selectedIds
-  )
-
-  const save =
-    $('#attendance-save')
-
-  if (save) {
-    save.innerHTML =
-      `${icon('save')} ცვლილებების შენახვა`
-  }
-
-  refreshIcons()
-
-  $('#attendance-date')
-    ?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    })
-}
-
-async function saveAttendance(event) {
-  event.preventDefault()
-
-  if (!db) {
-    return
-  }
-
-  const date =
-    $('#attendance-date')?.value
-
-  const selectedIds =
-    getAttendanceSelectedIds()
-
-  const errorTarget =
-    $('#attendance-form-error')
-
-  if (errorTarget) {
-    errorTarget.textContent = ''
-  }
-
-  if (!date) {
-    if (errorTarget) {
-      errorTarget.textContent =
-        'აირჩიეთ შეხვედრის თარიღი.'
-    }
-
-    return
-  }
-
-  const button =
-    $('#attendance-save')
-
-  setBusy(
-    button,
-    true,
-    'ინახება...'
-  )
-
-  try {
-    const {
-      data: {
-        user
-      }
-    } = await db.auth.getUser()
-
-    if (!user) {
-      throw new Error(
-        'ანგარიშში შესვლა აუცილებელია.'
-      )
-    }
-
-    const manager =
-      await isAttendanceManager(user)
-
-    if (!manager) {
-      throw new Error(
-        'დასწრების აღრიცხვის უფლება არ გაქვთ.'
-      )
-    }
-
-    let attendanceId =
-      attendanceEditingId
-
-    if (attendanceId) {
-      const {
-        error
-      } = await db
-        .from('club_attendance')
-        .update({
-          meeting_date: date,
-          recorded_by: user.id,
-          updated_at: new Date().toISOString()
-        })
-        .eq(
-          'id',
-          attendanceId
-        )
-
-      if (error) {
-        throw error
-      }
-    } else {
-      const existing =
-        getAttendanceRecordForDate(
-          date
-        )
-
-      if (existing) {
-        attendanceId =
-          existing.id
-
-        const {
-          error
-        } = await db
-          .from('club_attendance')
-          .update({
-            recorded_by: user.id,
-            updated_at:
-              new Date().toISOString()
-          })
-          .eq(
-            'id',
-            attendanceId
-          )
-
-        if (error) {
-          throw error
-        }
-      } else {
-        const {
-          data,
-          error
-        } = await db
-          .from('club_attendance')
-          .insert({
-            meeting_date: date,
-            recorded_by: user.id
-          })
-          .select('id')
-          .single()
-
-        if (error) {
-          throw error
-        }
-
-        attendanceId =
-          data.id
-      }
-    }
-
-    const {
-      error: deleteError
-    } = await db
-      .from('club_attendance_members')
-      .delete()
-      .eq(
-        'attendance_id',
-        attendanceId
-      )
-
-    if (deleteError) {
-      throw deleteError
-    }
-
-    if (selectedIds.length) {
-      const rows =
-        selectedIds.map(memberId => ({
-          attendance_id:
-            attendanceId,
-          member_id:
-            memberId
-        }))
-
-      const {
-        error: insertError
-      } = await db
-        .from(
-          'club_attendance_members'
-        )
-        .insert(rows)
-
-      if (insertError) {
-        throw insertError
-      }
-    }
-
-    attendanceEditingId =
-      attendanceId
-
-    await loadAttendanceRecords()
-
-    renderAttendanceRecords()
-
-    renderAttendanceMembers(
-      selectedIds
-    )
-
-    const save =
-      $('#attendance-save')
-
-    if (save) {
-      save.innerHTML =
-        `${icon('save')} ცვლილებების შენახვა`
-    }
-
-    refreshIcons()
-
-    toast(
-      'დასწრების მონაცემები შენახულია.',
-      'success'
-    )
-  } catch (error) {
-    console.error(
-      'Save attendance error:',
-      error
-    )
-
-    if (errorTarget) {
-      errorTarget.textContent =
-        neutralError(
-          error,
-          'დასწრების შენახვა ვერ მოხერხდა.'
-        )
-    }
-  } finally {
-    setBusy(
-      button,
-      false
-    )
-  }
-}
-
-async function openAttendanceModal() {
-  createAttendancePanel()
-
-  const modal =
-    $('#attendance-modal')
-
-  if (!modal) {
-    return
-  }
-
-  modal.hidden = false
-
-  modal.setAttribute(
-    'aria-hidden',
-    'false'
-  )
-
-  document.body.classList.add(
-    'modal-open'
-  )
-
-  attendanceEditingId = null
-
-  const date =
-    $('#attendance-date')
-
-  if (date) {
-    date.value = ''
-  }
-
-  const error =
-    $('#attendance-form-error')
-
-  if (error) {
-    error.textContent = ''
-  }
-
-  const save =
-    $('#attendance-save')
-
-  if (save) {
-    save.innerHTML =
-      `${icon('save')} დასწრების შენახვა`
-  }
-
-  try {
-    await loadAttendanceMembers()
-    await loadAttendanceRecords()
-
-    renderAttendanceMembers([])
-    renderAttendanceRecords()
-  } catch (error) {
-    console.error(
-      'Open attendance error:',
-      error
-    )
-
-    toast(
-      'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
-    )
-  }
-
-  setTimeout(() => {
-    $('#attendance-date')
-      ?.focus()
-  }, 50)
-
-  refreshIcons()
-}
-
-function closeAttendanceModal() {
-  const modal =
-    $('#attendance-modal')
-
-  if (!modal) {
-    return
-  }
-
-  modal.hidden = true
-
-  modal.setAttribute(
-    'aria-hidden',
-    'true'
-  )
-
-  document.body.classList.remove(
-    'modal-open'
-  )
-}
-
-async function addAttendanceButton(
-  user,
-  wrapper
-) {
-  const manager =
-    await isAttendanceManager(user)
-
-  if (!manager || !wrapper) {
-    return
-  }
-
-  const dropdown =
-    wrapper.querySelector(
-      '.account-dropdown'
-    )
-
-  const logoutButton =
-    wrapper.querySelector(
-      '.account-logout'
-    )
-
-  if (!dropdown || !logoutButton) {
-    return
-  }
-
-  const attendanceButton =
-    document.createElement('button')
-
-  attendanceButton.type =
-    'button'
-
-  attendanceButton.className =
-    'account-attendance'
-
-  attendanceButton.innerHTML = `
-    ${icon('calendar-check-2')}
-    დასწრების აღრიცხვა
-  `
-
-  attendanceButton.addEventListener(
-    'click',
-    async event => {
-      event.stopPropagation()
-
-      dropdown.hidden = true
-
-      wrapper
-        .querySelector(
-          '.account-button'
-        )
-        ?.setAttribute(
-          'aria-expanded',
-          'false'
-        )
-
-      await openAttendanceModal()
-    }
-  )
-
-  dropdown.insertBefore(
-    attendanceButton,
-    logoutButton
-  )
-
-  refreshIcons()
-}
 function createAccountMenu(
   user
 ) {
   const name =
-    getUserDisplayName(
-      user
-    )
+    getUserDisplayName(user)
+
+  const isMaria =
+    user?.id ===
+    MARIA_USER_ID
 
   const wrapper =
     document.createElement(
@@ -5729,6 +5625,20 @@ function createAccountMenu(
         </span>
       </div>
 
+      ${
+        isMaria
+          ? `
+            <button
+              type="button"
+              class="account-attendance"
+            >
+              ${icon('clipboard-check')}
+              დასწრების აღრიცხვა
+            </button>
+          `
+          : ''
+      }
+
       <button
         type="button"
         class="account-logout"
@@ -5747,6 +5657,11 @@ function createAccountMenu(
   const dropdown =
     wrapper.querySelector(
       '.account-dropdown'
+    )
+
+  const attendanceButton =
+    wrapper.querySelector(
+      '.account-attendance'
     )
 
   const logoutButton =
@@ -5768,8 +5683,7 @@ function createAccountMenu(
         )
         .forEach(
           item => {
-            item.hidden =
-              true
+            item.hidden = true
           }
         )
 
@@ -5791,10 +5705,24 @@ function createAccountMenu(
 
       button.setAttribute(
         'aria-expanded',
-        String(
-          shouldOpen
-        )
+        String(shouldOpen)
       )
+    }
+  )
+
+  attendanceButton?.addEventListener(
+    'click',
+    async event => {
+      event.stopPropagation()
+
+      dropdown.hidden = true
+
+      button.setAttribute(
+        'aria-expanded',
+        'false'
+      )
+
+      await openAttendancePanel()
     }
   )
 
@@ -5847,10 +5775,11 @@ async function updateAuthUI() {
       findLoginElement()
 
     if (!user) {
-      existingMenus.forEach(
-        menu =>
-          menu.remove()
-      )
+      existingMenus
+        .forEach(
+          menu =>
+            menu.remove()
+        )
 
       if (loginElement) {
         loginElement.hidden =
@@ -5864,10 +5793,11 @@ async function updateAuthUI() {
       await isAdmin(user)
 
     if (admin) {
-      existingMenus.forEach(
-        menu =>
-          menu.remove()
-      )
+      existingMenus
+        .forEach(
+          menu =>
+            menu.remove()
+        )
 
       if (loginElement) {
         loginElement.hidden =
@@ -6026,4 +5956,3 @@ if (
 }
 
 initAuthUI()
-
