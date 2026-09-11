@@ -4650,7 +4650,1042 @@ function closeAllAccountMenus(
       }
     )
 }
+const ATTENDANCE_MANAGER_ID =
+  'a02cb2e0-c4d0-4978-ab26-e8af583e4f58'
 
+async function isAttendanceManager(user) {
+  if (!user || !db) {
+    return false
+  }
+
+  try {
+    const { data, error } = await db
+      .rpc('is_attendance_manager')
+
+    if (error) {
+      console.error(
+        'Attendance manager check error:',
+        error
+      )
+
+      return user.id === ATTENDANCE_MANAGER_ID
+    }
+
+    return !!data
+  } catch (error) {
+    console.error(
+      'Attendance manager check failed:',
+      error
+    )
+
+    return user.id === ATTENDANCE_MANAGER_ID
+  }
+}
+
+const ATTENDANCE_MEMBERS = [
+  'ზაზა მჭედლიძე',
+  'თეკლა შველიძე',
+  'ანასტასია ხონელიძე',
+  'ანასტასია თევდორაძე',
+  'ანი მუმლაძე',
+  'გიორგი ბაღდავაძე',
+  'მარიამ მიშვიძე',
+  'ანი ძაგნიძე',
+  'ანასტასია თოდუა'
+]
+
+let attendanceMembers = []
+let attendanceRecords = []
+let attendanceEditingId = null
+
+async function loadAttendanceMembers() {
+  if (!db) {
+    return []
+  }
+
+  const {
+    data,
+    error
+  } = await db
+    .from('club_members')
+    .select('id,full_name,sort_order,active')
+    .eq('active', true)
+    .order('sort_order', {
+      ascending: true
+    })
+
+  if (error) {
+    console.error(
+      'Attendance members error:',
+      error
+    )
+
+    return []
+  }
+
+  attendanceMembers = data || []
+
+  return attendanceMembers
+}
+
+async function loadAttendanceRecords() {
+  if (!db) {
+    return []
+  }
+
+  const {
+    data,
+    error
+  } = await db
+    .from('club_attendance')
+    .select(`
+      id,
+      meeting_date,
+      recorded_by,
+      created_at,
+      updated_at,
+      club_attendance_members (
+        member_id,
+        club_members (
+          id,
+          full_name
+        )
+      )
+    `)
+    .order('meeting_date', {
+      ascending: false
+    })
+
+  if (error) {
+    console.error(
+      'Attendance records error:',
+      error
+    )
+
+    throw error
+  }
+
+  attendanceRecords = data || []
+
+  return attendanceRecords
+}
+
+function createAttendancePanel() {
+  if ($('#attendance-modal')) {
+    return
+  }
+
+  const modal = document.createElement('div')
+
+  modal.id = 'attendance-modal'
+
+  modal.className =
+    'attendance-modal'
+
+  modal.hidden = true
+
+  modal.setAttribute(
+    'aria-hidden',
+    'true'
+  )
+
+  modal.innerHTML = `
+    <div
+      class="attendance-backdrop"
+      data-attendance-close
+    ></div>
+
+    <section
+      class="attendance-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="attendance-title"
+    >
+      <div class="attendance-header">
+        <div>
+          <p class="eyebrow">
+            CLUB ATTENDANCE
+          </p>
+
+          <h2 id="attendance-title">
+            დასწრების აღრიცხვა
+          </h2>
+
+          <p>
+            აირჩიეთ შეხვედრის თარიღი და
+            მონიშნეთ დამსწრე წევრები.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="attendance-close icon-button"
+          id="attendance-close"
+          aria-label="დახურვა"
+        >
+          ${icon('x')}
+        </button>
+      </div>
+
+      <div class="attendance-content">
+
+        <form
+          id="attendance-form"
+          class="attendance-form"
+        >
+          <label class="attendance-date-field">
+            <span>
+              შეხვედრის თარიღი
+            </span>
+
+            <input
+              id="attendance-date"
+              type="date"
+              required
+            >
+          </label>
+
+          <div class="attendance-members-heading">
+            <div>
+              <strong>
+                კლუბის წევრები
+              </strong>
+
+              <span id="attendance-selected-count">
+                0 მონიშნულია
+              </span>
+            </div>
+
+            <button
+              type="button"
+              id="attendance-select-all"
+              class="button secondary compact"
+            >
+              ყველას მონიშვნა
+            </button>
+          </div>
+
+          <div
+            id="attendance-member-list"
+            class="attendance-member-list"
+          ></div>
+
+          <p
+            id="attendance-form-error"
+            class="form-message"
+            role="alert"
+            aria-live="polite"
+          ></p>
+
+          <button
+            id="attendance-save"
+            class="button primary full"
+            type="submit"
+          >
+            ${icon('save')}
+            დასწრების შენახვა
+          </button>
+        </form>
+
+        <section class="attendance-history">
+          <div class="attendance-history-heading">
+            <div>
+              <p class="eyebrow">
+                SAVED RECORDS
+              </p>
+
+              <h3>
+                შენახული შეხვედრები
+              </h3>
+            </div>
+
+            <span
+              id="attendance-record-count"
+              class="attendance-record-count"
+            >
+              0
+            </span>
+          </div>
+
+          <div
+            id="attendance-record-list"
+            class="attendance-record-list"
+          ></div>
+        </section>
+
+      </div>
+    </section>
+  `
+
+  document.body.appendChild(modal)
+
+  $('#attendance-close')
+    ?.addEventListener(
+      'click',
+      closeAttendanceModal
+    )
+
+  modal
+    .querySelectorAll(
+      '[data-attendance-close]'
+    )
+    .forEach(element => {
+      element.addEventListener(
+        'click',
+        closeAttendanceModal
+      )
+    })
+
+  $('#attendance-form')
+    ?.addEventListener(
+      'submit',
+      saveAttendance
+    )
+
+  $('#attendance-date')
+    ?.addEventListener(
+      'change',
+      loadAttendanceForSelectedDate
+    )
+
+  $('#attendance-select-all')
+    ?.addEventListener(
+      'click',
+      toggleAllAttendanceMembers
+    )
+
+  refreshIcons()
+}
+
+function renderAttendanceMembers(
+  selectedIds = []
+) {
+  const list =
+    $('#attendance-member-list')
+
+  if (!list) {
+    return
+  }
+
+  if (!attendanceMembers.length) {
+    list.innerHTML = `
+      <div class="empty-state compact-empty">
+        ${icon('users-round')}
+
+        <h3>
+          წევრები ვერ მოიძებნა
+        </h3>
+
+        <p>
+          კლუბის წევრების სია ცარიელია.
+        </p>
+      </div>
+    `
+
+    refreshIcons()
+
+    return
+  }
+
+  const selected =
+    new Set(
+      selectedIds.map(String)
+    )
+
+  list.innerHTML =
+    attendanceMembers
+      .map(member => {
+        const checked =
+          selected.has(
+            String(member.id)
+          )
+
+        return `
+          <label class="attendance-member">
+            <input
+              type="checkbox"
+              name="attendance-member"
+              value="${esc(member.id)}"
+              ${checked ? 'checked' : ''}
+            >
+
+            <span class="attendance-check">
+              ${icon('check')}
+            </span>
+
+            <span class="attendance-member-name">
+              ${esc(member.full_name)}
+            </span>
+          </label>
+        `
+      })
+      .join('')
+
+  list
+    .querySelectorAll(
+      'input[name="attendance-member"]'
+    )
+    .forEach(input => {
+      input.addEventListener(
+        'change',
+        updateAttendanceSelectedCount
+      )
+    })
+
+  updateAttendanceSelectedCount()
+
+  refreshIcons()
+}
+
+function updateAttendanceSelectedCount() {
+  const count =
+    document.querySelectorAll(
+      'input[name="attendance-member"]:checked'
+    ).length
+
+  const target =
+    $('#attendance-selected-count')
+
+  if (target) {
+    target.textContent =
+      `${count} მონიშნულია`
+  }
+}
+
+function toggleAllAttendanceMembers() {
+  const inputs =
+    document.querySelectorAll(
+      'input[name="attendance-member"]'
+    )
+
+  if (!inputs.length) {
+    return
+  }
+
+  const allChecked =
+    Array.from(inputs)
+      .every(input => input.checked)
+
+  inputs.forEach(input => {
+    input.checked = !allChecked
+  })
+
+  const button =
+    $('#attendance-select-all')
+
+  if (button) {
+    button.textContent =
+      allChecked
+        ? 'ყველას მონიშვნა'
+        : 'ყველას მოხსნა'
+  }
+
+  updateAttendanceSelectedCount()
+}
+
+function getAttendanceSelectedIds() {
+  return Array.from(
+    document.querySelectorAll(
+      'input[name="attendance-member"]:checked'
+    )
+  ).map(
+    input => input.value
+  )
+}
+
+function getAttendanceRecordForDate(
+  date
+) {
+  return attendanceRecords.find(
+    record =>
+      record.meeting_date === date
+  ) || null
+}
+
+async function loadAttendanceForSelectedDate() {
+  const date =
+    $('#attendance-date')?.value
+
+  if (!date) {
+    renderAttendanceMembers([])
+    attendanceEditingId = null
+    return
+  }
+
+  const record =
+    getAttendanceRecordForDate(date)
+
+  if (!record) {
+    attendanceEditingId = null
+    renderAttendanceMembers([])
+
+    const save =
+      $('#attendance-save')
+
+    if (save) {
+      save.innerHTML =
+        `${icon('save')} დასწრების შენახვა`
+    }
+
+    refreshIcons()
+
+    return
+  }
+
+  attendanceEditingId =
+    record.id
+
+  const selectedIds =
+    (record.club_attendance_members || [])
+      .map(item =>
+        item.member_id
+      )
+
+  renderAttendanceMembers(
+    selectedIds
+  )
+
+  const save =
+    $('#attendance-save')
+
+  if (save) {
+    save.innerHTML =
+      `${icon('save')} ცვლილებების შენახვა`
+  }
+
+  refreshIcons()
+}
+
+function renderAttendanceRecords() {
+  const list =
+    $('#attendance-record-list')
+
+  const count =
+    $('#attendance-record-count')
+
+  if (!list) {
+    return
+  }
+
+  if (count) {
+    count.textContent =
+      String(
+        attendanceRecords.length
+      )
+  }
+
+  if (!attendanceRecords.length) {
+    list.innerHTML = `
+      <div class="attendance-empty">
+        ${icon('calendar-x')}
+
+        <p>
+          ჯერ არცერთი შეხვედრის
+          დასწრება არ არის შენახული.
+        </p>
+      </div>
+    `
+
+    refreshIcons()
+
+    return
+  }
+
+  list.innerHTML =
+    attendanceRecords
+      .map(record => {
+        const members =
+          record.club_attendance_members || []
+
+        return `
+          <article
+            class="attendance-record"
+            data-record-id="${record.id}"
+          >
+            <div class="attendance-record-main">
+              <div class="attendance-record-date">
+                ${icon('calendar-days')}
+
+                <div>
+                  <strong>
+                    ${esc(
+                      meetingDateText(
+                        record.meeting_date
+                      )
+                    )}
+                  </strong>
+
+                  <span>
+                    ${members.length}
+                    დამსწრე
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="button secondary compact attendance-edit"
+                data-attendance-id="${record.id}"
+              >
+                ${icon('pencil')}
+                რედაქტირება
+              </button>
+            </div>
+
+            <div class="attendance-record-members">
+              ${
+                members.length
+                  ? members
+                      .map(item =>
+                        `<span>${esc(
+                          item.club_members?.full_name ||
+                          'უცნობი წევრი'
+                        )}</span>`
+                      )
+                      .join('')
+                  : '<span>არავინ არის მონიშნული</span>'
+              }
+            </div>
+          </article>
+        `
+      })
+      .join('')
+
+  list
+    .querySelectorAll(
+      '.attendance-edit'
+    )
+    .forEach(button => {
+      button.addEventListener(
+        'click',
+        () => {
+          editAttendanceRecord(
+            button.dataset.attendanceId
+          )
+        }
+      )
+    })
+
+  refreshIcons()
+}
+
+function editAttendanceRecord(id) {
+  const record =
+    attendanceRecords.find(
+      item =>
+        String(item.id) === String(id)
+    )
+
+  if (!record) {
+    return
+  }
+
+  const date =
+    $('#attendance-date')
+
+  if (date) {
+    date.value =
+      record.meeting_date
+  }
+
+  attendanceEditingId =
+    record.id
+
+  const selectedIds =
+    (record.club_attendance_members || [])
+      .map(item =>
+        item.member_id
+      )
+
+  renderAttendanceMembers(
+    selectedIds
+  )
+
+  const save =
+    $('#attendance-save')
+
+  if (save) {
+    save.innerHTML =
+      `${icon('save')} ცვლილებების შენახვა`
+  }
+
+  refreshIcons()
+
+  $('#attendance-date')
+    ?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    })
+}
+
+async function saveAttendance(event) {
+  event.preventDefault()
+
+  if (!db) {
+    return
+  }
+
+  const date =
+    $('#attendance-date')?.value
+
+  const selectedIds =
+    getAttendanceSelectedIds()
+
+  const errorTarget =
+    $('#attendance-form-error')
+
+  if (errorTarget) {
+    errorTarget.textContent = ''
+  }
+
+  if (!date) {
+    if (errorTarget) {
+      errorTarget.textContent =
+        'აირჩიეთ შეხვედრის თარიღი.'
+    }
+
+    return
+  }
+
+  const button =
+    $('#attendance-save')
+
+  setBusy(
+    button,
+    true,
+    'ინახება...'
+  )
+
+  try {
+    const {
+      data: {
+        user
+      }
+    } = await db.auth.getUser()
+
+    if (!user) {
+      throw new Error(
+        'ანგარიშში შესვლა აუცილებელია.'
+      )
+    }
+
+    const manager =
+      await isAttendanceManager(user)
+
+    if (!manager) {
+      throw new Error(
+        'დასწრების აღრიცხვის უფლება არ გაქვთ.'
+      )
+    }
+
+    let attendanceId =
+      attendanceEditingId
+
+    if (attendanceId) {
+      const {
+        error
+      } = await db
+        .from('club_attendance')
+        .update({
+          meeting_date: date,
+          recorded_by: user.id,
+          updated_at: new Date().toISOString()
+        })
+        .eq(
+          'id',
+          attendanceId
+        )
+
+      if (error) {
+        throw error
+      }
+    } else {
+      const existing =
+        getAttendanceRecordForDate(
+          date
+        )
+
+      if (existing) {
+        attendanceId =
+          existing.id
+
+        const {
+          error
+        } = await db
+          .from('club_attendance')
+          .update({
+            recorded_by: user.id,
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq(
+            'id',
+            attendanceId
+          )
+
+        if (error) {
+          throw error
+        }
+      } else {
+        const {
+          data,
+          error
+        } = await db
+          .from('club_attendance')
+          .insert({
+            meeting_date: date,
+            recorded_by: user.id
+          })
+          .select('id')
+          .single()
+
+        if (error) {
+          throw error
+        }
+
+        attendanceId =
+          data.id
+      }
+    }
+
+    const {
+      error: deleteError
+    } = await db
+      .from('club_attendance_members')
+      .delete()
+      .eq(
+        'attendance_id',
+        attendanceId
+      )
+
+    if (deleteError) {
+      throw deleteError
+    }
+
+    if (selectedIds.length) {
+      const rows =
+        selectedIds.map(memberId => ({
+          attendance_id:
+            attendanceId,
+          member_id:
+            memberId
+        }))
+
+      const {
+        error: insertError
+      } = await db
+        .from(
+          'club_attendance_members'
+        )
+        .insert(rows)
+
+      if (insertError) {
+        throw insertError
+      }
+    }
+
+    attendanceEditingId =
+      attendanceId
+
+    await loadAttendanceRecords()
+
+    renderAttendanceRecords()
+
+    renderAttendanceMembers(
+      selectedIds
+    )
+
+    const save =
+      $('#attendance-save')
+
+    if (save) {
+      save.innerHTML =
+        `${icon('save')} ცვლილებების შენახვა`
+    }
+
+    refreshIcons()
+
+    toast(
+      'დასწრების მონაცემები შენახულია.',
+      'success'
+    )
+  } catch (error) {
+    console.error(
+      'Save attendance error:',
+      error
+    )
+
+    if (errorTarget) {
+      errorTarget.textContent =
+        neutralError(
+          error,
+          'დასწრების შენახვა ვერ მოხერხდა.'
+        )
+    }
+  } finally {
+    setBusy(
+      button,
+      false
+    )
+  }
+}
+
+async function openAttendanceModal() {
+  createAttendancePanel()
+
+  const modal =
+    $('#attendance-modal')
+
+  if (!modal) {
+    return
+  }
+
+  modal.hidden = false
+
+  modal.setAttribute(
+    'aria-hidden',
+    'false'
+  )
+
+  document.body.classList.add(
+    'modal-open'
+  )
+
+  attendanceEditingId = null
+
+  const date =
+    $('#attendance-date')
+
+  if (date) {
+    date.value = ''
+  }
+
+  const error =
+    $('#attendance-form-error')
+
+  if (error) {
+    error.textContent = ''
+  }
+
+  const save =
+    $('#attendance-save')
+
+  if (save) {
+    save.innerHTML =
+      `${icon('save')} დასწრების შენახვა`
+  }
+
+  try {
+    await loadAttendanceMembers()
+    await loadAttendanceRecords()
+
+    renderAttendanceMembers([])
+    renderAttendanceRecords()
+  } catch (error) {
+    console.error(
+      'Open attendance error:',
+      error
+    )
+
+    toast(
+      'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
+    )
+  }
+
+  setTimeout(() => {
+    $('#attendance-date')
+      ?.focus()
+  }, 50)
+
+  refreshIcons()
+}
+
+function closeAttendanceModal() {
+  const modal =
+    $('#attendance-modal')
+
+  if (!modal) {
+    return
+  }
+
+  modal.hidden = true
+
+  modal.setAttribute(
+    'aria-hidden',
+    'true'
+  )
+
+  document.body.classList.remove(
+    'modal-open'
+  )
+}
+
+async function addAttendanceButton(
+  user,
+  wrapper
+) {
+  const manager =
+    await isAttendanceManager(user)
+
+  if (!manager || !wrapper) {
+    return
+  }
+
+  const dropdown =
+    wrapper.querySelector(
+      '.account-dropdown'
+    )
+
+  const logoutButton =
+    wrapper.querySelector(
+      '.account-logout'
+    )
+
+  if (!dropdown || !logoutButton) {
+    return
+  }
+
+  const attendanceButton =
+    document.createElement('button')
+
+  attendanceButton.type =
+    'button'
+
+  attendanceButton.className =
+    'account-attendance'
+
+  attendanceButton.innerHTML = `
+    ${icon('calendar-check-2')}
+    დასწრების აღრიცხვა
+  `
+
+  attendanceButton.addEventListener(
+    'click',
+    async event => {
+      event.stopPropagation()
+
+      dropdown.hidden = true
+
+      wrapper
+        .querySelector(
+          '.account-button'
+        )
+        ?.setAttribute(
+          'aria-expanded',
+          'false'
+        )
+
+      await openAttendanceModal()
+    }
+  )
+
+  dropdown.insertBefore(
+    attendanceButton,
+    logoutButton
+  )
+
+  refreshIcons()
+}
 function createAccountMenu(
   user
 ) {
