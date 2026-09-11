@@ -1,31 +1,38 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const db = supabaseIsConfigured ? createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
-) : null
+const db = supabaseIsConfigured
+  ? createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true
+        }
+      }
+    )
+  : null
 
 const page = document.body.dataset.page
-const $ = (s, root = document) => root.querySelector(s)
-const esc = (value = '') => String(value).replace(
-  /[&<>'"]/g,
-  c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;'
-  }[c])
-)
 
-const icon = name => `<i data-lucide="${name}"></i>`
+const $ = (s, root = document) => root.querySelector(s)
+
+const esc = (value = '') =>
+  String(value).replace(
+    /[&<>'"]/g,
+    c =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[c])
+  )
+
+const icon = name =>
+  `<i data-lucide="${name}"></i>`
 
 function refreshIcons() {
   window.lucide?.createIcons()
@@ -78,13 +85,14 @@ function configuredMessage(target) {
   target.innerHTML = `
     <div class="empty-state">
       ${icon('settings')}
+
       <h2>
         Supabase ჯერ არ არის კონფიგურირებული
       </h2>
+
       <p>
         დაამატეთ პროექტის URL და anon key
-        <code>supabase-config.js</code>-ში,
-        შემდეგ გაუშვით schema SQL.
+        <code>supabase-config.js</code>-ში, შემდეგ გაუშვით schema SQL.
       </p>
     </div>
   `
@@ -95,10 +103,12 @@ function configuredMessage(target) {
 function initChrome() {
   document
     .querySelectorAll('[data-year]')
-    .forEach(el => {
-      el.textContent =
-        new Date().getFullYear()
-    })
+    .forEach(
+      el => {
+        el.textContent =
+          new Date().getFullYear()
+      }
+    )
 
   const button = $('.menu-toggle')
 
@@ -189,9 +199,7 @@ async function getCurrentUser() {
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth.getUser()
 
     return user || null
@@ -251,9 +259,7 @@ async function detectAIAdmin() {
 
   try {
     const {
-      data: {
-        session
-      }
+      data: { session }
     } = await db.auth.getSession()
 
     if (!session?.user) {
@@ -280,14 +286,16 @@ async function detectAIAdmin() {
       username.includes('ზაზა') ||
       username.includes('zaza')
     ) {
-      aiAdminGreeting = 'ბატონო ზაზა'
+      aiAdminGreeting =
+        'ბატონო ზაზა'
     } else if (
       username === 'tekla' ||
       username === 'თეკლა' ||
       username.includes('თეკლა') ||
       username.includes('tekla')
     ) {
-      aiAdminGreeting = 'ქალბატონო თეკლა'
+      aiAdminGreeting =
+        'ქალბატონო თეკლა'
     } else {
       aiAdminGreeting = ''
     }
@@ -497,9 +505,7 @@ function formatAIResponse(text) {
 
       const code =
         codeBlocks[
-          Number(
-            codeMatch[1]
-          )
+          Number(codeMatch[1])
         ] || ''
 
       html += `
@@ -593,10 +599,8 @@ function formatAIResponse(text) {
 
       if (listType !== 'ul') {
         closeList()
-
         html +=
           '<ul class="ai-list">'
-
         listType = 'ul'
       }
 
@@ -619,10 +623,8 @@ function formatAIResponse(text) {
 
       if (listType !== 'ol') {
         closeList()
-
         html +=
           '<ol class="ai-ordered-list">'
-
         listType = 'ol'
       }
 
@@ -636,7 +638,6 @@ function formatAIResponse(text) {
     }
 
     closeList()
-
     paragraph.push(line)
   }
 
@@ -697,7 +698,9 @@ function getAIErrorStatus(error) {
   }
 
   const message =
-    String(error?.message || '')
+    String(
+      error?.message || ''
+    )
 
   const match =
     message.match(
@@ -780,8 +783,7 @@ function getAIUserErrorMessage(error) {
         </p>
 
         <small>
-          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას.
-          ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
+          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას. ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
         </small>
       </div>
     `
@@ -943,16 +945,18 @@ async function askAI(question) {
   const history =
     aiHistory
       .slice(-8)
-      .map(message => ({
-        role:
-          message.role === 'assistant'
-            ? 'assistant'
-            : 'user',
-        text:
-          String(
-            message.content || ''
-          ).slice(0, 1800)
-      }))
+      .map(
+        message => ({
+          role:
+            message.role === 'assistant'
+              ? 'assistant'
+              : 'user',
+          text:
+            String(
+              message.content || ''
+            ).slice(0, 1800)
+        })
+      )
 
   const currentUser =
     await getCurrentUserContext()
@@ -963,9 +967,7 @@ async function askAI(question) {
   if (db) {
     try {
       const {
-        data: {
-          session
-        }
+        data: { session }
       } = await db.auth.getSession()
 
       if (session?.access_token) {
@@ -1014,27 +1016,32 @@ async function askAI(question) {
   let response
 
   try {
-    response = await fetch(
-      AI_FUNCTION_URL,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-            `Bearer ${authorizationToken}`,
-          'apikey':
-            SUPABASE_ANON_KEY
-        },
-        body: JSON.stringify({
-          message: cleanQuestion,
-          history,
-          context: finalContext,
-          adminGreeting:
-            aiAdminGreeting,
-          currentUser
-        })
-      }
-    )
+    response =
+      await fetch(
+        AI_FUNCTION_URL,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json',
+            'Authorization':
+              `Bearer ${authorizationToken}`,
+            'apikey':
+              SUPABASE_ANON_KEY
+          },
+          body:
+            JSON.stringify({
+              message:
+                cleanQuestion,
+              history,
+              context:
+                finalContext,
+              adminGreeting:
+                aiAdminGreeting,
+              currentUser
+            })
+        }
+      )
   } catch (networkError) {
     const error =
       new Error(
@@ -1155,8 +1162,7 @@ function addAISafetyWarning() {
       </strong>
 
       <p>
-        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის.
-        პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
+        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის. პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
       </p>
     </div>
   `
@@ -1174,9 +1180,7 @@ async function saveAIChatMessage(message) {
 
   try {
     const {
-      data: {
-        user
-      }
+      data: { user }
     } = await db.auth.getUser()
 
     if (!user) {
@@ -1186,17 +1190,16 @@ async function saveAIChatMessage(message) {
     const username =
       getUserDisplayName(user)
 
-    const {
-      error
-    } = await db
-      .from('ai_chat_history')
-      .insert({
-        user_id: user.id,
-        username:
-          String(username).trim(),
-        message:
-          String(message).trim()
-      })
+    const { error } =
+      await db
+        .from('ai_chat_history')
+        .insert({
+          user_id: user.id,
+          username:
+            String(username).trim(),
+          message:
+            String(message).trim()
+        })
 
     if (error) {
       console.warn(
@@ -1219,12 +1222,10 @@ async function getZazaHistory() {
     )
   }
 
-  const {
-    data,
-    error
-  } = await db.rpc(
-    'get_zaza_history'
-  )
+  const { data, error } =
+    await db.rpc(
+      'get_zaza_history'
+    )
 
   if (error) {
     throw error
@@ -1253,14 +1254,13 @@ async function deleteZazaHistoryItem(id) {
     )
   }
 
-  const {
-    error
-  } = await db.rpc(
-    'delete_zaza_history_item',
-    {
-      p_id: numericId
-    }
-  )
+  const { error } =
+    await db.rpc(
+      'delete_zaza_history_item',
+      {
+        p_id: numericId
+      }
+    )
 
   if (error) {
     console.error(
@@ -1274,20 +1274,22 @@ async function deleteZazaHistoryItem(id) {
   const {
     data: remainingData,
     error: verifyError
-  } = await db.rpc(
-    'get_zaza_history'
-  )
+  } =
+    await db.rpc(
+      'get_zaza_history'
+    )
 
   if (verifyError) {
     throw verifyError
   }
 
   const stillExists =
-    (remainingData || []).some(
-      item =>
-        Number(item.id) ===
-        numericId
-    )
+    (remainingData || [])
+      .some(
+        item =>
+          Number(item.id) ===
+          numericId
+      )
 
   if (stillExists) {
     throw new Error(
@@ -1462,7 +1464,7 @@ function setupZazaHistoryDelete() {
                       button
                     ) &&
                     button.dataset.deleteConfirm ===
-                    'true' &&
+                      'true' &&
                     !button.disabled
                   ) {
                     button.dataset.deleteConfirm =
@@ -1491,6 +1493,7 @@ function setupZazaHistoryDelete() {
           )
 
           button.disabled = true
+
           button.dataset.deleteConfirm =
             'false'
 
@@ -1625,7 +1628,8 @@ function setupZazaHistoryDelete() {
               error?.hint
             )
 
-            button.disabled = false
+            button.disabled =
+              false
 
             button.dataset.deleteConfirm =
               'false'
@@ -2098,9 +2102,7 @@ function card(project) {
             ${esc(project.category)}
           </span>
 
-          <time
-            datetime="${esc(project.created_at)}"
-          >
+          <time datetime="${esc(project.created_at)}">
             ${dateText(project.created_at)}
           </time>
         </div>
@@ -2145,25 +2147,23 @@ async function initProjects() {
     )
   }
 
-  const {
-    data,
-    error
-  } = await db
-    .from('projects')
-    .select(
-      'id,title,description,category,author,image_url,created_at'
-    )
-    .eq(
-      'published',
-      true
-    )
-    .order(
-      'created_at',
-      {
-        ascending: false
-      }
-    )
-    .limit(60)
+  const { data, error } =
+    await db
+      .from('projects')
+      .select(
+        'id,title,description,category,author,image_url,created_at'
+      )
+      .eq(
+        'published',
+        true
+      )
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
+      .limit(60)
 
   if (error) {
     status.textContent =
@@ -2196,7 +2196,7 @@ async function initProjects() {
           (
             !category ||
             p.category ===
-            category
+              category
           ) &&
           (
             !q ||
@@ -2272,31 +2272,31 @@ async function initDetail() {
     !id ||
     !/^[0-9a-f-]{36}$/i.test(id)
   ) {
-    return notFound(
-      target
-    )
+    return notFound(target)
   }
 
   const {
     data: p,
     error
-  } = await db
-    .from('projects')
-    .select('*')
-    .eq('id', id)
-    .eq(
-      'published',
-      true
-    )
-    .maybeSingle()
+  } =
+    await db
+      .from('projects')
+      .select('*')
+      .eq(
+        'id',
+        id
+      )
+      .eq(
+        'published',
+        true
+      )
+      .maybeSingle()
 
   if (
     error ||
     !p
   ) {
-    return notFound(
-      target
-    )
+    return notFound(target)
   }
 
   const image =
@@ -2600,29 +2600,28 @@ async function upload(
   const path =
     `${folder}/${crypto.randomUUID()}-${clean}`
 
-  const {
-    error
-  } = await db.storage
-    .from(bucket)
-    .upload(
-      path,
-      file,
-      {
-        cacheControl: '3600',
-        upsert: false,
-        contentType: file.type
-      }
-    )
+  const { error } =
+    await db.storage
+      .from(bucket)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl: '3600',
+          upsert: false,
+          contentType:
+            file.type
+        }
+      )
 
   if (error) {
     throw error
   }
 
-  const {
-    data
-  } = db.storage
-    .from(bucket)
-    .getPublicUrl(path)
+  const { data } =
+    db.storage
+      .from(bucket)
+      .getPublicUrl(path)
 
   return {
     url: data.publicUrl,
@@ -2645,7 +2644,7 @@ function storagePath(
       ? decodeURIComponent(
           url.slice(
             index +
-            marker.length
+              marker.length
           )
         )
       : null
@@ -2665,11 +2664,10 @@ async function removeStored(
     )
 
   if (path) {
-    const {
-      error
-    } = await db.storage
-      .from(bucket)
-      .remove([path])
+    const { error } =
+      await db.storage
+        .from(bucket)
+        .remove([path])
 
     if (error) {
       console.warn(
@@ -2691,14 +2689,15 @@ async function isAdmin(user) {
   const {
     data,
     error
-  } = await db
-    .from('admin_users')
-    .select('username')
-    .eq(
-      'user_id',
-      user.id
-    )
-    .maybeSingle()
+  } =
+    await db
+      .from('admin_users')
+      .select('username')
+      .eq(
+        'user_id',
+        user.id
+      )
+      .maybeSingle()
 
   if (
     error ||
@@ -2724,10 +2723,9 @@ async function initAdmin() {
   }
 
   const {
-    data: {
-      session
-    }
-  } = await db.auth.getSession()
+    data: { session }
+  } =
+    await db.auth.getSession()
 
   if (session) {
     const admin =
@@ -2763,7 +2761,8 @@ async function initAdmin() {
   $('#new-project-button')
     ?.addEventListener(
       'click',
-      () => openEditor()
+      () =>
+        openEditor()
     )
 
   $('#cancel-edit')
@@ -2933,11 +2932,12 @@ async function login(event) {
     const {
       data,
       error
-    } = await db.auth
-      .signInWithPassword({
-        email,
-        password
-      })
+    } =
+      await db.auth
+        .signInWithPassword({
+          email,
+          password
+        })
 
     if (
       error ||
@@ -3056,9 +3056,8 @@ async function logout() {
   }
 
   try {
-    const {
-      error
-    } = await db.auth.signOut()
+    const { error } =
+      await db.auth.signOut()
 
     if (error) {
       throw error
@@ -3161,17 +3160,18 @@ async function loadAdminProjects() {
   const {
     data,
     error
-  } = await db
-    .from('projects')
-    .select(
-      'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
-    )
-    .order(
-      'created_at',
-      {
-        ascending: false
-      }
-    )
+  } =
+    await db
+      .from('projects')
+      .select(
+        'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
+      )
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
 
   if (error) {
     status.textContent =
@@ -3383,12 +3383,10 @@ function openEditor(p) {
       .value = p.author
 
     $('#published')
-      .checked =
-      p.published
+      .checked = p.published
 
     $('#description')
-      .value =
-      p.description
+      .value = p.description
 
     $('#components')
       .value =
@@ -3457,7 +3455,9 @@ function imagePreview() {
   }
 }
 
-async function saveProject(event) {
+async function saveProject(
+  event
+) {
   event.preventDefault()
 
   const button =
@@ -3614,21 +3614,23 @@ async function saveProject(event) {
     if (id) {
       ({
         error
-      } = await db
-        .from('projects')
-        .update(value)
-        .eq(
-          'id',
-          id
-        ))
+      } =
+        await db
+          .from('projects')
+          .update(value)
+          .eq(
+            'id',
+            id
+          ))
     } else {
       ({
         error
-      } = await db
-        .from('projects')
-        .insert(
-          value
-        ))
+      } =
+        await db
+          .from('projects')
+          .insert(
+            value
+          ))
     }
 
     if (error) {
@@ -3669,7 +3671,8 @@ async function saveProject(event) {
     console.error(error)
 
     for (
-      const [kind, file] of uploads
+      const [kind, file]
+      of uploads
     ) {
       if (!file?.url) {
         continue
@@ -3697,7 +3700,9 @@ async function saveProject(event) {
   }
 }
 
-async function togglePublished(id) {
+async function togglePublished(
+  id
+) {
   const p =
     adminProjects.find(
       x =>
@@ -3708,18 +3713,17 @@ async function togglePublished(id) {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('projects')
-    .update({
-      published:
-        !p.published
-    })
-    .eq(
-      'id',
-      id
-    )
+  const { error } =
+    await db
+      .from('projects')
+      .update({
+        published:
+          !p.published
+      })
+      .eq(
+        'id',
+        id
+      )
 
   if (error) {
     return toast(
@@ -3737,7 +3741,9 @@ async function togglePublished(id) {
   loadAdminProjects()
 }
 
-async function deleteProject(id) {
+async function deleteProject(
+  id
+) {
   const p =
     adminProjects.find(
       x =>
@@ -3753,15 +3759,14 @@ async function deleteProject(id) {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('projects')
-    .delete()
-    .eq(
-      'id',
-      id
-    )
+  const { error } =
+    await db
+      .from('projects')
+      .delete()
+      .eq(
+        'id',
+        id
+      )
 
   if (error) {
     return toast(
@@ -3774,6 +3779,7 @@ async function deleteProject(id) {
       p.image_url,
       'project-images'
     ),
+
     removeStored(
       p.video_url,
       'project-videos'
@@ -3914,8 +3920,7 @@ function renderMeetingContent(
         </h3>
 
         <p>
-          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს,
-          ინფორმაცია აქ გამოჩნდება.
+          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
         </p>
       </div>
     `
@@ -3968,7 +3973,8 @@ async function loadPublicMeeting() {
   const {
     data,
     error
-  } = await getMeeting()
+  } =
+    await getMeeting()
 
   if (error) {
     console.error(error)
@@ -4089,7 +4095,8 @@ function initMeetingPublic() {
       if (
         e.key === 'Escape' &&
         $('#meeting-modal') &&
-        !$('#meeting-modal').hidden
+        !$('#meeting-modal')
+          .hidden
       ) {
         closeMeetingModal()
       }
@@ -4108,7 +4115,8 @@ async function loadAdminMeeting() {
   const {
     data,
     error
-  } = await getMeeting()
+  } =
+    await getMeeting()
 
   if (error) {
     status.textContent =
@@ -4122,7 +4130,8 @@ async function loadAdminMeeting() {
   if (data) {
     $('#meeting-date')
       .value =
-      data.meeting_date || ''
+      data.meeting_date ||
+      ''
 
     $('#meeting-time')
       .value =
@@ -4234,10 +4243,9 @@ async function saveMeeting(
 
   try {
     const {
-      data: {
-        user
-      }
-    } = await db.auth.getUser()
+      data: { user }
+    } =
+      await db.auth.getUser()
 
     if (!user) {
       throw new Error(
@@ -4245,21 +4253,24 @@ async function saveMeeting(
       )
     }
 
-    const {
-      error
-    } = await db
-      .from('club_meeting')
-      .upsert(
-        {
-          id: 1,
-          meeting_date: date,
-          meeting_time: time,
-          updated_by: user.id
-        },
-        {
-          onConflict: 'id'
-        }
-      )
+    const { error } =
+      await db
+        .from('club_meeting')
+        .upsert(
+          {
+            id: 1,
+            meeting_date:
+              date,
+            meeting_time:
+              time,
+            updated_by:
+              user.id
+          },
+          {
+            onConflict:
+              'id'
+          }
+        )
 
     if (error) {
       throw error
@@ -4298,15 +4309,14 @@ async function clearMeeting() {
     return
   }
 
-  const {
-    error
-  } = await db
-    .from('club_meeting')
-    .delete()
-    .eq(
-      'id',
-      1
-    )
+  const { error } =
+    await db
+      .from('club_meeting')
+      .delete()
+      .eq(
+        'id',
+        1
+      )
 
   if (error) {
     return toast(
@@ -4321,7 +4331,8 @@ async function clearMeeting() {
     .value = ''
 
   $('#meeting-day-preview')
-    .textContent = '—'
+    .textContent =
+    '—'
 
   $('#meeting-admin-status')
     .textContent =
@@ -4403,10 +4414,9 @@ async function initPasswordReset() {
       }
 
       const {
-        data: {
-          session
-        }
-      } = await db.auth.getSession()
+        data: { session }
+      } =
+        await db.auth.getSession()
 
       if (!session) {
         error.textContent =
@@ -4423,8 +4433,8 @@ async function initPasswordReset() {
 
       const {
         error: updateError
-      } = await db.auth
-        .updateUser({
+      } =
+        await db.auth.updateUser({
           password
         })
 
@@ -4465,7 +4475,7 @@ async function isAttendanceManager(
 ) {
   return !!user &&
     user.id ===
-    MARIA_USER_ID
+      MARIA_USER_ID
 }
 
 async function getAttendanceMembers() {
@@ -4476,21 +4486,22 @@ async function getAttendanceMembers() {
   const {
     data,
     error
-  } = await db
-    .from('club_members')
-    .select(
-      'id,full_name,sort_order,active'
-    )
-    .eq(
-      'active',
-      true
-    )
-    .order(
-      'sort_order',
-      {
-        ascending: true
-      }
-    )
+  } =
+    await db
+      .from('club_members')
+      .select(
+        'id,full_name,sort_order,active'
+      )
+      .eq(
+        'active',
+        true
+      )
+      .order(
+        'sort_order',
+        {
+          ascending: true
+        }
+      )
 
   if (error) {
     throw error
@@ -4507,29 +4518,30 @@ async function getAttendanceRecords() {
   const {
     data,
     error
-  } = await db
-    .from('club_attendance')
-    .select(`
-      id,
-      meeting_date,
-      recorded_by,
-      created_at,
-      updated_at,
-      club_attendance_members (
-        member_id,
-        club_members (
-          id,
-          full_name,
-          sort_order
+  } =
+    await db
+      .from('club_attendance')
+      .select(`
+        id,
+        meeting_date,
+        recorded_by,
+        created_at,
+        updated_at,
+        club_attendance_members (
+          member_id,
+          club_members (
+            id,
+            full_name,
+            sort_order
+          )
         )
+      `)
+      .order(
+        'meeting_date',
+        {
+          ascending: false
+        }
       )
-    `)
-    .order(
-      'meeting_date',
-      {
-        ascending: false
-      }
-    )
 
   if (error) {
     throw error
@@ -4579,10 +4591,9 @@ async function saveAttendanceRecord(
   }
 
   const {
-    data: {
-      user
-    }
-  } = await db.auth.getUser()
+    data: { user }
+  } =
+    await db.auth.getUser()
 
   if (!user) {
     throw new Error(
@@ -4604,14 +4615,15 @@ async function saveAttendanceRecord(
   let {
     data: record,
     error
-  } = await db
-    .from('club_attendance')
-    .select('id')
-    .eq(
-      'meeting_date',
-      date
-    )
-    .maybeSingle()
+  } =
+    await db
+      .from('club_attendance')
+      .select('id')
+      .eq(
+        'meeting_date',
+        date
+      )
+      .maybeSingle()
 
   if (error) {
     throw error
@@ -4620,18 +4632,20 @@ async function saveAttendanceRecord(
   if (record) {
     const {
       error: updateError
-    } = await db
-      .from('club_attendance')
-      .update({
-        recorded_by:
-          user.id,
-        updated_at:
-          new Date().toISOString()
-      })
-      .eq(
-        'id',
-        record.id
-      )
+    } =
+      await db
+        .from('club_attendance')
+        .update({
+          recorded_by:
+            user.id,
+          updated_at:
+            new Date()
+              .toISOString()
+        })
+        .eq(
+          'id',
+          record.id
+        )
 
     if (updateError) {
       throw updateError
@@ -4640,16 +4654,17 @@ async function saveAttendanceRecord(
     const {
       data: created,
       error: insertError
-    } = await db
-      .from('club_attendance')
-      .insert({
-        meeting_date:
-          date,
-        recorded_by:
-          user.id
-      })
-      .select('id')
-      .single()
+    } =
+      await db
+        .from('club_attendance')
+        .insert({
+          meeting_date:
+            date,
+          recorded_by:
+            user.id
+        })
+        .select('id')
+        .single()
 
     if (insertError) {
       throw insertError
@@ -4660,13 +4675,14 @@ async function saveAttendanceRecord(
 
   const {
     error: deleteError
-  } = await db
-    .from('club_attendance_members')
-    .delete()
-    .eq(
-      'attendance_id',
-      record.id
-    )
+  } =
+    await db
+      .from('club_attendance_members')
+      .delete()
+      .eq(
+        'attendance_id',
+        record.id
+      )
 
   if (deleteError) {
     throw deleteError
@@ -4686,9 +4702,10 @@ async function saveAttendanceRecord(
 
     const {
       error: insertMembersError
-    } = await db
-      .from('club_attendance_members')
-      .insert(rows)
+    } =
+      await db
+        .from('club_attendance_members')
+        .insert(rows)
 
     if (insertMembersError) {
       throw insertMembersError
@@ -4703,13 +4720,33 @@ function closeAttendancePanel() {
     $('#attendance-panel')
 
   if (!panel) {
+    document.body.style.overflow =
+      ''
+
+    document.body.classList.remove(
+      'modal-open'
+    )
+
+    document.removeEventListener(
+      'keydown',
+      attendanceEscapeHandler
+    )
+
     return
   }
 
   panel.remove()
 
+  document.body.style.overflow =
+    ''
+
   document.body.classList.remove(
     'modal-open'
+  )
+
+  document.removeEventListener(
+    'keydown',
+    attendanceEscapeHandler
   )
 }
 
@@ -4736,7 +4773,8 @@ function renderAttendancePanel(
 
   const selectedIds =
     selectedRecord
-      ? selectedRecord.club_attendance_members
+      ? selectedRecord
+          .club_attendance_members
           .map(
             item =>
               item.member_id
@@ -4768,7 +4806,9 @@ function renderAttendancePanel(
             >
 
             <span>
-              ${esc(member.full_name)}
+              ${esc(
+                member.full_name
+              )}
             </span>
           </label>
         `
@@ -4785,10 +4825,12 @@ function renderAttendancePanel(
             .map(
               record => {
                 const names =
-                  record.club_attendance_members
+                  record
+                    .club_attendance_members
                     .map(
                       item =>
-                        item.club_members
+                        item
+                          .club_members
                           ?.full_name
                     )
                     .filter(Boolean)
@@ -4808,8 +4850,7 @@ function renderAttendancePanel(
                     </span>
 
                     <strong>
-                      ${names.length}
-                      წევრი
+                      ${names.length} წევრი
                     </strong>
                   </button>
                 `
@@ -4854,6 +4895,8 @@ function renderAttendancePanel(
               renderAttendancePanel(
                 attendanceRecords
               )
+
+              updateAttendanceSelectedCount()
             }
           )
         }
@@ -4891,18 +4934,58 @@ async function openAttendancePanel() {
   closeAttendancePanel()
 
   const panel =
-    document.createElement('div')
+    document.createElement(
+      'div'
+    )
 
   panel.id =
     'attendance-panel'
 
   panel.className =
-    'attendance-panel'
+    'attendance-overlay'
+
+  panel.hidden = false
+
+  panel.style.position =
+    'fixed'
+
+  panel.style.inset =
+    '0'
+
+  panel.style.zIndex =
+    '999999'
+
+  panel.style.display =
+    'flex'
+
+  panel.style.alignItems =
+    'center'
+
+  panel.style.justifyContent =
+    'center'
+
+  panel.style.overflowY =
+    'auto'
+
+  panel.style.padding =
+    '20px'
+
+  panel.style.background =
+    'rgba(0, 0, 0, 0.7)'
+
+  panel.style.boxSizing =
+    'border-box'
 
   panel.innerHTML = `
     <div
       class="attendance-panel-backdrop"
       data-attendance-close
+      style="
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+      "
     ></div>
 
     <section
@@ -4910,6 +4993,14 @@ async function openAttendancePanel() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="attendance-panel-title"
+      style="
+        position:relative;
+        z-index:2;
+        width:min(900px,100%);
+        max-height:90vh;
+        overflow-y:auto;
+        box-sizing:border-box;
+      "
     >
       <div class="attendance-panel-header">
         <div>
@@ -4937,6 +5028,7 @@ async function openAttendancePanel() {
       </div>
 
       <div class="attendance-panel-body">
+
         <div class="attendance-date-box">
           <label>
             შეხვედრის თარიღი
@@ -4954,6 +5046,7 @@ async function openAttendancePanel() {
         </div>
 
         <div class="attendance-select-box">
+
           <div class="attendance-subheading">
             <div>
               <h3>
@@ -4974,6 +5067,7 @@ async function openAttendancePanel() {
             id="attendance-member-select"
             class="attendance-member-select"
           ></div>
+
         </div>
 
         <p
@@ -4984,6 +5078,7 @@ async function openAttendancePanel() {
         ></p>
 
         <div class="attendance-actions">
+
           <button
             type="button"
             class="button primary"
@@ -5000,9 +5095,11 @@ async function openAttendancePanel() {
           >
             გაუქმება
           </button>
+
         </div>
 
         <div class="attendance-history-box">
+
           <div class="attendance-subheading">
             <div>
               <h3>
@@ -5019,7 +5116,9 @@ async function openAttendancePanel() {
             id="attendance-personal-history"
             class="attendance-personal-history"
           ></div>
+
         </div>
+
       </div>
     </section>
   `
@@ -5028,9 +5127,8 @@ async function openAttendancePanel() {
     panel
   )
 
-  document.body.classList.add(
-    'modal-open'
-  )
+  document.body.style.overflow =
+    'hidden'
 
   try {
     attendanceMembers =
@@ -5050,7 +5148,10 @@ async function openAttendancePanel() {
         latest?.meeting_date ||
         new Date()
           .toISOString()
-          .slice(0, 10)
+          .slice(
+            0,
+            10
+          )
     }
 
     renderAttendancePanel(
@@ -5135,11 +5236,6 @@ function attendanceEscapeHandler(
     $('#attendance-panel')
   ) {
     closeAttendancePanel()
-
-    document.removeEventListener(
-      'keydown',
-      attendanceEscapeHandler
-    )
   }
 }
 
@@ -5276,10 +5372,11 @@ async function loadAdminAttendance() {
     const [
       members,
       records
-    ] = await Promise.all([
-      getAttendanceMembers(),
-      getAttendanceRecords()
-    ])
+    ] =
+      await Promise.all([
+        getAttendanceMembers(),
+        getAttendanceRecords()
+      ])
 
     attendanceMembers =
       members
@@ -5320,7 +5417,8 @@ async function loadAdminAttendance() {
 
     records.forEach(
       record => {
-        record.club_attendance_members
+        record
+          .club_attendance_members
           .forEach(
             item => {
               counts.set(
@@ -5360,12 +5458,13 @@ async function loadAdminAttendance() {
                     <div class="attendance-admin-member">
                       <div>
                         <strong>
-                          ${esc(member.full_name)}
+                          ${esc(
+                            member.full_name
+                          )}
                         </strong>
 
                         <span>
-                          ${count}
-                          შეხვედრა
+                          ${count} შეხვედრა
                         </span>
                       </div>
 
@@ -5405,10 +5504,12 @@ async function loadAdminAttendance() {
               .map(
                 record => {
                   const names =
-                    record.club_attendance_members
+                    record
+                      .club_attendance_members
                       .map(
                         item =>
-                          item.club_members
+                          item
+                            .club_members
                             ?.full_name
                       )
                       .filter(Boolean)
@@ -5431,8 +5532,7 @@ async function loadAdminAttendance() {
                         </div>
 
                         <span class="attendance-admin-badge">
-                          ${names.length}
-                          დამსწრე
+                          ${names.length} დამსწრე
                         </span>
                       </div>
 
@@ -5441,12 +5541,13 @@ async function loadAdminAttendance() {
                           names.length
                             ? names
                                 .map(
-                                  name => `
-                                    <span>
-                                      ${icon('check')}
-                                      ${esc(name)}
-                                    </span>
-                                  `
+                                  name =>
+                                    `
+                                      <span>
+                                        ${icon('check')}
+                                        ${esc(name)}
+                                      </span>
+                                    `
                                 )
                                 .join('')
                             : `
@@ -5584,7 +5685,9 @@ function createAccountMenu(
   user
 ) {
   const name =
-    getUserDisplayName(user)
+    getUserDisplayName(
+      user
+    )
 
   const isMaria =
     user?.id ===
@@ -5705,7 +5808,9 @@ function createAccountMenu(
 
       button.setAttribute(
         'aria-expanded',
-        String(shouldOpen)
+        String(
+          shouldOpen
+        )
       )
     }
   )
@@ -5851,7 +5956,9 @@ async function updateAuthUI() {
       true
 
     loginElement.parentElement
-      ?.appendChild(menu)
+      ?.appendChild(
+        menu
+      )
 
     refreshIcons()
   } finally {
@@ -5913,8 +6020,7 @@ async function initAuthUI() {
       if (session?.user) {
         detectAIAdmin()
       } else {
-        aiAdminGreeting =
-          ''
+        aiAdminGreeting = ''
       }
 
       queueAuthUIUpdate()
