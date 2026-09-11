@@ -4464,18 +4464,13 @@ async function initPasswordReset() {
   )
 }
 
-const MARIA_USER_ID =
-  'a02cb2e0-c4d0-4978-ab26-e8af583e4f58'
+const MARIA_USER_ID = 'a02cb2e0-c4d0-4978-ab26-e8af583e4f58'
 
 let attendanceMembers = []
 let attendanceRecords = []
 
-async function isAttendanceManager(
-  user
-) {
-  return !!user &&
-    user.id ===
-      MARIA_USER_ID
+async function isAttendanceManager(user) {
+  return !!user && user.id === MARIA_USER_ID
 }
 
 async function getAttendanceMembers() {
@@ -4483,25 +4478,11 @@ async function getAttendanceMembers() {
     return []
   }
 
-  const {
-    data,
-    error
-  } =
-    await db
-      .from('club_members')
-      .select(
-        'id,full_name,sort_order,active'
-      )
-      .eq(
-        'active',
-        true
-      )
-      .order(
-        'sort_order',
-        {
-          ascending: true
-        }
-      )
+  const { data, error } = await db
+    .from('club_members')
+    .select('id,full_name,sort_order,active')
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
 
   if (error) {
     throw error
@@ -4515,33 +4496,25 @@ async function getAttendanceRecords() {
     return []
   }
 
-  const {
-    data,
-    error
-  } =
-    await db
-      .from('club_attendance')
-      .select(`
-        id,
-        meeting_date,
-        recorded_by,
-        created_at,
-        updated_at,
-        club_attendance_members (
-          member_id,
-          club_members (
-            id,
-            full_name,
-            sort_order
-          )
+  const { data, error } = await db
+    .from('club_attendance')
+    .select(`
+      id,
+      meeting_date,
+      recorded_by,
+      counted,
+      created_at,
+      updated_at,
+      club_attendance_members (
+        member_id,
+        club_members (
+          id,
+          full_name,
+          sort_order
         )
-      `)
-      .order(
-        'meeting_date',
-        {
-          ascending: false
-        }
       )
+    `)
+    .order('meeting_date', { ascending: false })
 
   if (error) {
     throw error
@@ -4550,23 +4523,14 @@ async function getAttendanceRecords() {
   return data || []
 }
 
-function attendanceDateText(
-  value
-) {
+function attendanceDateText(value) {
   if (!value) {
     return '—'
   }
 
-  const date =
-    new Date(
-      `${value}T12:00:00`
-    )
+  const date = new Date(`${value}T12:00:00`)
 
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
+  if (Number.isNaN(date.getTime())) {
     return value
   }
 
@@ -4580,91 +4544,56 @@ function attendanceDateText(
   ).format(date)
 }
 
-async function saveAttendanceRecord(
-  date,
-  memberIds
-) {
+async function saveAttendanceRecord(date, memberIds, counted) {
   if (!db) {
-    throw new Error(
-      'Supabase არ არის კონფიგურირებული.'
-    )
+    throw new Error('Supabase არ არის კონფიგურირებული.')
   }
 
-  const {
-    data: { user }
-  } =
-    await db.auth.getUser()
+  const { data: { user } } = await db.auth.getUser()
 
   if (!user) {
-    throw new Error(
-      'ანგარიშში შესვლა აუცილებელია.'
-    )
+    throw new Error('ანგარიშში შესვლა აუცილებელია.')
   }
 
-  const manager =
-    await isAttendanceManager(
-      user
-    )
+  const manager = await isAttendanceManager(user)
 
   if (!manager) {
-    throw new Error(
-      'დასწრების აღრიცხვაზე წვდომა არ გაქვთ.'
-    )
+    throw new Error('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
   }
 
-  let {
-    data: record,
-    error
-  } =
-    await db
-      .from('club_attendance')
-      .select('id')
-      .eq(
-        'meeting_date',
-        date
-      )
-      .maybeSingle()
+  let { data: record, error } = await db
+    .from('club_attendance')
+    .select('id')
+    .eq('meeting_date', date)
+    .maybeSingle()
 
   if (error) {
     throw error
   }
 
   if (record) {
-    const {
-      error: updateError
-    } =
-      await db
-        .from('club_attendance')
-        .update({
-          recorded_by:
-            user.id,
-          updated_at:
-            new Date()
-              .toISOString()
-        })
-        .eq(
-          'id',
-          record.id
-        )
+    const { error: updateError } = await db
+      .from('club_attendance')
+      .update({
+        recorded_by: user.id,
+        counted,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', record.id)
 
     if (updateError) {
       throw updateError
     }
   } else {
-    const {
-      data: created,
-      error: insertError
-    } =
-      await db
-        .from('club_attendance')
-        .insert({
-          meeting_date:
-            date,
-          recorded_by:
-            user.id
-        })
-        .select('id')
-        .single()
+    const { data: created, error: insertError } = await db
+      .from('club_attendance')
+      .insert({
+        meeting_date: date,
+        recorded_by: user.id,
+        counted
+      })
+      .select('id')
+      .single()
 
     if (insertError) {
       throw insertError
@@ -4673,39 +4602,26 @@ async function saveAttendanceRecord(
     record = created
   }
 
-  const {
-    error: deleteError
-  } =
-    await db
-      .from('club_attendance_members')
-      .delete()
-      .eq(
-        'attendance_id',
-        record.id
-      )
+  const { error: deleteError } = await db
+    .from('club_attendance_members')
+    .delete()
+    .eq('attendance_id', record.id)
 
   if (deleteError) {
     throw deleteError
   }
 
-  if (
-    memberIds.length
-  ) {
-    const rows =
-      memberIds.map(
-        member_id => ({
-          attendance_id:
-            record.id,
-          member_id
-        })
-      )
+  if (memberIds.length) {
+    const rows = memberIds.map(
+      member_id => ({
+        attendance_id: record.id,
+        member_id
+      })
+    )
 
-    const {
-      error: insertMembersError
-    } =
-      await db
-        .from('club_attendance_members')
-        .insert(rows)
+    const { error: insertMembersError } = await db
+      .from('club_attendance_members')
+      .insert(rows)
 
     if (insertMembersError) {
       throw insertMembersError
@@ -4716,16 +4632,11 @@ async function saveAttendanceRecord(
 }
 
 function closeAttendancePanel() {
-  const panel =
-    $('#attendance-panel')
+  const panel = $('#attendance-panel')
 
   if (!panel) {
-    document.body.style.overflow =
-      ''
-
-    document.body.classList.remove(
-      'modal-open'
-    )
+    document.body.style.overflow = ''
+    document.body.classList.remove('modal-open')
 
     document.removeEventListener(
       'keydown',
@@ -4737,12 +4648,8 @@ function closeAttendancePanel() {
 
   panel.remove()
 
-  document.body.style.overflow =
-    ''
-
-  document.body.classList.remove(
-    'modal-open'
-  )
+  document.body.style.overflow = ''
+  document.body.classList.remove('modal-open')
 
   document.removeEventListener(
     'keydown',
@@ -4750,36 +4657,38 @@ function closeAttendancePanel() {
   )
 }
 
-function renderAttendancePanel(
-  records
-) {
-  const panel =
-    $('#attendance-panel')
+function renderAttendancePanel(records) {
+  const panel = $('#attendance-panel')
 
   if (!panel) {
     return
   }
 
   const currentDate =
-    $('#attendance-date')
-      ?.value || ''
+    $('#attendance-date')?.value || ''
 
   const selectedRecord =
     records.find(
       record =>
-        record.meeting_date ===
-        currentDate
+        record.meeting_date === currentDate
     )
 
   const selectedIds =
     selectedRecord
       ? selectedRecord
-          .club_attendance_members
-          .map(
-            item =>
-              item.member_id
-          )
+        .club_attendance_members
+        .map(
+          item => item.member_id
+        )
       : []
+
+  const countedInput =
+    $('#attendance-counted')
+
+  if (countedInput) {
+    countedInput.checked =
+      selectedRecord?.counted === true
+  }
 
   const memberList =
     $('#attendance-member-select')
@@ -4806,9 +4715,7 @@ function renderAttendancePanel(
             >
 
             <span>
-              ${esc(
-                member.full_name
-              )}
+              ${esc(member.full_name)}
             </span>
           </label>
         `
@@ -4819,54 +4726,62 @@ function renderAttendancePanel(
     $('#attendance-personal-history')
 
   if (history) {
+    const countedRecords =
+      records.filter(
+        record =>
+          record.counted === true
+      )
+
     history.innerHTML =
-      records.length
-        ? records
-            .map(
-              record => {
-                const names =
-                  record
-                    .club_attendance_members
-                    .map(
-                      item =>
-                        item
-                          .club_members
-                          ?.full_name
-                    )
-                    .filter(Boolean)
+      countedRecords.length
+        ? countedRecords
+          .map(
+            record => {
+              const names =
+                record
+                  .club_attendance_members
+                  .map(
+                    item =>
+                      item
+                        .club_members
+                        ?.full_name
+                  )
+                  .filter(Boolean)
 
-                return `
-                  <button
-                    type="button"
-                    class="attendance-history-item"
-                    data-attendance-date="${esc(record.meeting_date)}"
-                  >
-                    <span>
-                      ${esc(
-                        attendanceDateText(
-                          record.meeting_date
-                        )
-                      )}
-                    </span>
+              return `
+                <button
+                  type="button"
+                  class="attendance-history-item"
+                  data-attendance-date="${esc(
+                    record.meeting_date
+                  )}"
+                >
+                  <span>
+                    ${esc(
+                      attendanceDateText(
+                        record.meeting_date
+                      )
+                    )}
+                  </span>
 
-                    <strong>
-                      ${names.length} წევრი
-                    </strong>
-                  </button>
-                `
-              }
-            )
-            .join('')
+                  <strong>
+                    ${names.length} წევრი
+                  </strong>
+                </button>
+              `
+            }
+          )
+          .join('')
         : `
           <div class="empty-state compact-empty">
             ${icon('calendar-x')}
 
             <h3>
-              ჩანაწერები ჯერ არ არის
+              შეკრებების ისტორია ცარიელია
             </h3>
 
             <p>
-              პირველი დასწრების ჩანაწერი აქ გამოჩნდება.
+              ჩათვლილი შეხვედრები აქ გამოჩნდება.
             </p>
           </div>
         `
@@ -4888,8 +4803,7 @@ function renderAttendancePanel(
                 $('#attendance-date')
 
               if (input) {
-                input.value =
-                  date
+                input.value = date
               }
 
               renderAttendancePanel(
@@ -4919,9 +4833,7 @@ async function openAttendancePanel() {
   }
 
   const manager =
-    await isAttendanceManager(
-      user
-    )
+    await isAttendanceManager(user)
 
   if (!manager) {
     toast(
@@ -4934,9 +4846,7 @@ async function openAttendancePanel() {
   closeAttendancePanel()
 
   const panel =
-    document.createElement(
-      'div'
-    )
+    document.createElement('div')
 
   panel.id =
     'attendance-panel'
@@ -5079,6 +4989,21 @@ async function openAttendancePanel() {
 
         <div class="attendance-actions">
 
+          <label class="attendance-count-toggle">
+            <input
+              type="checkbox"
+              id="attendance-counted"
+            >
+
+            <span class="attendance-count-toggle-box">
+              ${icon('check')}
+            </span>
+
+            <span>
+              ჩათვლა
+            </span>
+          </label>
+
           <button
             type="button"
             class="button primary"
@@ -5103,11 +5028,11 @@ async function openAttendancePanel() {
           <div class="attendance-subheading">
             <div>
               <h3>
-                შენახული ჩანაწერები
+                შეკრებების ისტორია
               </h3>
 
               <p>
-                დააჭირე თარიღს ჩანაწერის შესაცვლელად.
+                აქ გამოჩნდება მხოლოდ ჩათვლილი შეხვედრები.
               </p>
             </div>
           </div>
@@ -5123,9 +5048,7 @@ async function openAttendancePanel() {
     </section>
   `
 
-  document.body.appendChild(
-    panel
-  )
+  document.body.appendChild(panel)
 
   document.body.style.overflow =
     'hidden'
@@ -5148,10 +5071,7 @@ async function openAttendancePanel() {
         latest?.meeting_date ||
         new Date()
           .toISOString()
-          .slice(
-            0,
-            10
-          )
+          .slice(0, 10)
     }
 
     renderAttendancePanel(
@@ -5228,9 +5148,7 @@ async function openAttendancePanel() {
   }
 }
 
-function attendanceEscapeHandler(
-  event
-) {
+function attendanceEscapeHandler(event) {
   if (
     event.key === 'Escape' &&
     $('#attendance-panel')
@@ -5250,9 +5168,7 @@ function updateAttendanceSelectedCount() {
 
   if (counter) {
     counter.textContent =
-      String(
-        checked.length
-      )
+      String(checked.length)
   }
 }
 
@@ -5268,8 +5184,7 @@ async function saveAttendanceFromPanel() {
     $('#save-attendance')
 
   if (errorTarget) {
-    errorTarget.textContent =
-      ''
+    errorTarget.textContent = ''
   }
 
   if (!date) {
@@ -5287,9 +5202,12 @@ async function saveAttendanceFromPanel() {
         '#attendance-member-select input[type="checkbox"]:checked'
       )
     ).map(
-      input =>
-        input.value
+      input => input.value
     )
+
+  const counted =
+    $('#attendance-counted')
+      ?.checked === true
 
   setBusy(
     button,
@@ -5300,7 +5218,8 @@ async function saveAttendanceFromPanel() {
   try {
     await saveAttendanceRecord(
       date,
-      selected
+      selected,
+      counted
     )
 
     attendanceRecords =
@@ -5313,7 +5232,10 @@ async function saveAttendanceFromPanel() {
     updateAttendanceSelectedCount()
 
     toast(
-      'დასწრების ჩანაწერი შენახულია.',
+      counted
+        ? 'შეხვედრა ჩათვლილია და დასწრება შენახულია.'
+        : 'დასწრება შენახულია.'
+      ,
       'success'
     )
   } catch (error) {
@@ -5369,10 +5291,7 @@ async function loadAdminAttendance() {
   }
 
   try {
-    const [
-      members,
-      records
-    ] =
+    const [members, records] =
       await Promise.all([
         getAttendanceMembers(),
         getAttendanceRecords()
@@ -5384,6 +5303,12 @@ async function loadAdminAttendance() {
     attendanceRecords =
       records
 
+    const countedRecords =
+      records.filter(
+        record =>
+          record.counted === true
+      )
+
     if (status) {
       status.textContent =
         'განახლებულია'
@@ -5392,7 +5317,7 @@ async function loadAdminAttendance() {
     if (totalMeetings) {
       totalMeetings.textContent =
         String(
-          records.length
+          countedRecords.length
         )
     }
 
@@ -5415,7 +5340,7 @@ async function loadAdminAttendance() {
       }
     )
 
-    records.forEach(
+    countedRecords.forEach(
       record => {
         record
           .club_attendance_members
@@ -5438,50 +5363,54 @@ async function loadAdminAttendance() {
       memberList.innerHTML =
         members.length
           ? members
-              .map(
-                member => {
-                  const count =
-                    counts.get(
-                      member.id
-                    ) || 0
+            .map(
+              member => {
+                const count =
+                  counts.get(
+                    member.id
+                  ) || 0
 
-                  const percent =
-                    records.length
-                      ? Math.round(
-                          count /
-                          records.length *
-                          100
-                        )
-                      : 0
+                const percent =
+                  countedRecords.length
+                    ? Math.round(
+                        count /
+                        countedRecords.length *
+                        100
+                      )
+                    : 0
 
-                  return `
-                    <div class="attendance-admin-member">
-                      <div>
-                        <strong>
-                          ${esc(
-                            member.full_name
-                          )}
-                        </strong>
+                return `
+                  <div class="attendance-admin-member">
 
-                        <span>
-                          ${count} შეხვედრა
-                        </span>
-                      </div>
+                    <div>
+                      <strong>
+                        ${esc(
+                          member.full_name
+                        )}
+                      </strong>
 
-                      <div class="attendance-admin-member-value">
-                        <strong>
-                          ${percent}%
-                        </strong>
-
-                        <small>
-                          დასწრება
-                        </small>
-                      </div>
+                      <span>
+                        ${count} შეხვედრა
+                      </span>
                     </div>
-                  `
-                }
-              )
-              .join('')
+
+                    <div class="attendance-admin-member-value">
+
+                      <strong>
+                        ${percent}%
+                      </strong>
+
+                      <small>
+                        დასწრება
+                      </small>
+
+                    </div>
+
+                  </div>
+                `
+              }
+            )
+            .join('')
           : `
             <div class="empty-state compact-empty">
               ${icon('users-round')}
@@ -5499,69 +5428,74 @@ async function loadAdminAttendance() {
 
     if (historyList) {
       historyList.innerHTML =
-        records.length
-          ? records
-              .map(
-                record => {
-                  const names =
-                    record
-                      .club_attendance_members
-                      .map(
-                        item =>
-                          item
-                            .club_members
-                            ?.full_name
-                      )
-                      .filter(Boolean)
+        countedRecords.length
+          ? countedRecords
+            .map(
+              record => {
+                const names =
+                  record
+                    .club_attendance_members
+                    .map(
+                      item =>
+                        item
+                          .club_members
+                          ?.full_name
+                    )
+                    .filter(Boolean)
 
-                  return `
-                    <article class="attendance-admin-record">
-                      <div class="attendance-admin-record-header">
-                        <div>
-                          <span>
-                            შეხვედრა
-                          </span>
+                return `
+                  <article class="attendance-admin-record">
 
-                          <strong>
-                            ${esc(
-                              attendanceDateText(
-                                record.meeting_date
-                              )
-                            )}
-                          </strong>
-                        </div>
+                    <div class="attendance-admin-record-header">
 
-                        <span class="attendance-admin-badge">
-                          ${names.length} დამსწრე
+                      <div>
+                        <span>
+                          შეხვედრა
                         </span>
+
+                        <strong>
+                          ${esc(
+                            attendanceDateText(
+                              record.meeting_date
+                            )
+                          )}
+                        </strong>
                       </div>
 
-                      <div class="attendance-admin-names">
-                        ${
-                          names.length
-                            ? names
-                                .map(
-                                  name =>
-                                    `
-                                      <span>
-                                        ${icon('check')}
-                                        ${esc(name)}
-                                      </span>
-                                    `
-                                )
-                                .join('')
-                            : `
-                              <span class="attendance-no-members">
-                                არავინ იყო მონიშნული
-                              </span>
-                            `
-                        }
-                      </div>
-                    </article>
-                  `
-                }
-              )
-              .join('')
+                      <span class="attendance-admin-badge">
+                        ${names.length} დამსწრე
+                      </span>
+
+                    </div>
+
+                    <div class="attendance-admin-names">
+
+                      ${
+                        names.length
+                          ? names
+                            .map(
+                              name => `
+                                <span>
+                                  ${icon('check')}
+                                  ${esc(name)}
+                                </span>
+                              `
+                            )
+                            .join('')
+                          : `
+                            <span class="attendance-no-members">
+                              არავინ იყო მონიშნული
+                            </span>
+                          `
+                      }
+
+                    </div>
+
+                  </article>
+                `
+              }
+            )
+            .join('')
           : `
             <div class="empty-state compact-empty">
               ${icon('calendar-x')}
@@ -5571,8 +5505,9 @@ async function loadAdminAttendance() {
               </h3>
 
               <p>
-                მარიამის მიერ შენახული ჩანაწერები აქ გამოჩნდება.
+                ჩათვლილი შეხვედრები აქ გამოჩნდება.
               </p>
+
             </div>
           `
     }
@@ -5592,6 +5527,7 @@ async function loadAdminAttendance() {
     if (memberList) {
       memberList.innerHTML = `
         <div class="empty-state compact-empty">
+
           ${icon('triangle-alert')}
 
           <h3>
@@ -5604,6 +5540,7 @@ async function loadAdminAttendance() {
               'სცადეთ ხელახლა.'
             )}
           </p>
+
         </div>
       `
     }
