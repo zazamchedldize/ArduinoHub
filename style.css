@@ -2043,17 +2043,17 @@ input:focus,textarea:focus,select:focus{
 }
 
 .team-card-orange{
-  background:#000;
+  background:#ff6347;
   border:1px solid #d4af37;
   box-shadow:0 0 0 1px #d4af3718,0 18px 50px #000b,0 0 28px #d4af3715;
 }
 
 .team-card-orange::before{
-  background:radial-gradient(circle,#d4af3712,transparent 70%);
+  background:radial-gradient(circle,#ff6347,transparent 70%);
 }
 
 .team-card-orange:hover{
-  background:#000;
+  background:#ff6347;
   border-color:#f0d36a;
   box-shadow:0 0 0 1px #d4af3730,0 20px 55px #000c,0 0 35px #d4af3725;
 }
@@ -2065,15 +2065,15 @@ input:focus,textarea:focus,select:focus{
 }
 
 .team-card-orange .team-avatar span{
-  color:#ffe58a;
+  color:#ff6347;
 }
 
 .team-card-orange .team-role{
-  color:#f4d03f;
+  color:#ff6347;
 }
 
 .team-card-orange .team-tags span{
-  background:#050505;
+  background:#ff6347;
   border-color:#6f5a1b;
   color:#ffe58a;
 }
