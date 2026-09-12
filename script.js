@@ -5859,9 +5859,8 @@ function closePublicAttendanceModal() {
   if (modal) modal.remove();
   document.body.style.overflow = '';
 }
-window.closePublicAttendanceModal = closePublicAttendanceModal;
 
-// 2. დასწრების საჯარო მოდალური ფანჯარა
+// 2. დასწრების საჯარო მოდალური ფანჯარა (სქროლბარის გარეშე)
 async function openPublicAttendanceModal() {
   closePublicAttendanceModal();
 
@@ -5878,6 +5877,7 @@ async function openPublicAttendanceModal() {
 
   modal.innerHTML = `
     <style>
+      /* სქროლის ზოლის (Scrollbar) სრული გაქრობა ყველა ბრაუზერში */
       #public-attendance-modal, #public-attendance-modal * {
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
@@ -5888,18 +5888,12 @@ async function openPublicAttendanceModal() {
         width: 0 !important;
         height: 0 !important;
       }
-      .close-attendance-btn {
-        background: none; border: none; color: #9ca3af; font-size: 24px;
-        cursor: pointer; padding: 4px 8px; line-height: 1; transition: color 0.2s;
-        position: relative; z-index: 10;
-      }
-      .close-attendance-btn:hover { color: #ffffff; }
     </style>
-    <div id="attendance-backdrop" style="position:absolute; inset:0; z-index:1;"></div>
+    <div style="position:absolute; inset:0;" onclick="closePublicAttendanceModal()"></div>
     <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
         <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
-        <button type="button" class="close-attendance-btn" id="close-attendance-x">✕</button>
+        <button type="button" onclick="closePublicAttendanceModal()" style="background:none; border:none; color:#9ca3af; font-size:22px; cursor:pointer;">✕</button>
       </div>
       <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
         <p style="color:#9ca3af;">მონაცემები იტვირთება...</p>
@@ -5908,10 +5902,6 @@ async function openPublicAttendanceModal() {
   `;
 
   document.body.appendChild(modal);
-
-  // X ღილაკზე და გარეთა ფონზე დაჭერის პირდაპირი მიბმა
-  document.getElementById('close-attendance-x')?.addEventListener('click', closePublicAttendanceModal);
-  document.getElementById('attendance-backdrop')?.addEventListener('click', closePublicAttendanceModal);
 
   try {
     const [members, records] = await Promise.all([
@@ -5967,7 +5957,7 @@ async function openPublicAttendanceModal() {
   }
 }
 
-// 3. AI-ს პასუხის დაბლოკვა Enter-ზე
+// 3. ჩატის ბრძანების მოსმენა — AI-ს პასუხის დაბლოკვით
 document.addEventListener('keydown', (e) => {
   const chatInput = document.querySelector('#ai-chat-input');
   
@@ -5975,26 +5965,9 @@ document.addEventListener('keydown', (e) => {
     if (chatInput.value.trim() === '/დასწრება') {
       e.preventDefault();
       e.stopPropagation();
-      e.stopImmediatePropagation();
+      e.stopImmediatePropagation(); // ბლოკავს AI-ს გაგზავნის სკრიპტს
       chatInput.value = '';
       openPublicAttendanceModal();
     }
   }
-
-  // ESC ღილაკზე დაჭერით მოდალის დახურვა
-  if (e.key === 'Escape') {
-    closePublicAttendanceModal();
-  }
-}, true);
-
-// 4. AI-ს პასუხის დაბლოკვა ფორმის გაგზავნისას (Submit)
-document.addEventListener('submit', (e) => {
-  const chatInput = document.querySelector('#ai-chat-input');
-  if (chatInput && chatInput.value.trim() === '/დასწრება') {
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    chatInput.value = '';
-    openPublicAttendanceModal();
-  }
-}, true);
+}, true); // Capture ფაზა უზრუნველყოფს AI-ს სკრიპტზე ადრე ჩაჭრას
