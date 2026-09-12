@@ -4237,55 +4237,61 @@ async function saveMeeting( event ) {
   }
 }
 async function clearMeeting() {
-  if (!db) {
-    return
-  }
+  if (!db) {
+    return
+  }
 
-  if (
-    !confirm(
-      'ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?'
-    )
-  ) {
-    return
-  }
+  if (
+    !confirm(
+      'ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?'
+    )
+  ) {
+    return
+  }
 
-  const { error } =
-    await db
-      .from('club_meeting')
-      .delete()
-      .eq(
-        'id',
-        1
-      )
+  const { error } =
+    await db
+      .from('club_meeting')
+      .delete()
+      .eq(
+        'id',
+        1
+      )
 
-  if (error) {
-    return toast(
-      'შეკრების წაშლა ვერ მოხერხდა.'
-    )
-  }
+  if (error) {
+    return toast(
+      'შეკრების წაშლა ვერ მოხერხდა.'
+    )
+  }
 
-  $('#meeting-date')
-    .value = ''
+  // ✨ აქ ვამატებთ მესიჯის გაგზავნას ბაზაში (ან ჩატში), რომ შეკრება გაუქმდა
+  await db.from('messages').insert({
+    message: '⚠️ კლუბის შეკრება გაუქმდა ადმინისტრატორის მიერ.',
+    sender: 'სისტემა' // ან შენი არჩევნით
+  })
 
-  $('#meeting-time')
-    .value = ''
+  $('#meeting-date')
+    .value = ''
 
-  $('#meeting-day-preview')
-    .textContent =
-    '—'
+  $('#meeting-time')
+    .value = ''
 
-  $('#meeting-admin-status')
-    .textContent =
-    'არ არის გამოქვეყნებული'
+  $('#meeting-day-preview')
+    .textContent =
+    '—'
 
-  $('#meeting-admin-status')
-    .className =
-    'meeting-admin-status'
+  $('#meeting-admin-status')
+    .textContent =
+    'არ არის გამოქვეყნებული'
 
-  toast(
-    'შეკრება გაუქმდა.',
-    'success'
-  )
+  $('#meeting-admin-status')
+    .className =
+    'meeting-admin-status'
+
+  toast(
+    'შეკრება გაუქმდა.',
+    'success'
+  )
 }
 async function initPasswordReset() {
   const form =
