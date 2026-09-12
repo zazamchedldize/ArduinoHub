@@ -5832,3 +5832,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+// ერთიანი ფუნქცია შეხვედრის შენახვისა და ფუშ-შეტყობინების გასაგზავნად
+async function saveMeetingAndNotify(meetingTitle, meetingDesc) {
+  try {
+    // 1. ვინახავთ შეხვედრას (თუ გაქვს ძველი ლოგიკა, აქ შეგიძლია ჩასვა)
+    console.log("შეხვედრა ინახება:", meetingTitle);
+
+    // 2. ვგზავნით OneSignal ფუშ-შეტყობინებას პროქსის გავლით (CORS-ის ასავლელად)
+    const response = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://onesignal.com/api/v1/notifications"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": "Basic os_v2_app_d4psobll6rhhpg3ec66v3ae6yqagkpebweheqwnabdw4hmhlrijhncsfbiboyqyzefj5p2itv4zaujrlxccbpsaan7cegyawzjesvva"
+      },
+      body: JSON.stringify({
+        app_id: "შენი_onesignal_app_id", // აქ ჩაწერე შენი OneSignal აპის აიდი
+        included_segments: ["All"],
+        contents: { en: `ახალი შეხვედრა: ${meetingTitle}` },
+        headings: { en: "Arduino Hub" }
+      })
+    });
+
+    const data = await response.json();
+    console.log("შეტყობინება გაიგზავნა:", data);
+  } catch (error) {
+    console.error("შეცდომა შეტყობინების გაგზავნისას:", error);
+  }
+}
