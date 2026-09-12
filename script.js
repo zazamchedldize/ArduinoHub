@@ -5128,12 +5128,8 @@ async function loadAdminAttendance() {
 
             return `
               <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
+                ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
                 <div>
-                  ${isTop ? `
-                    <div class="rank-one-badge" title="პირველი ადგილი">
-                      1
-                    </div>
-                  ` : ''}
                   <div class="member-name-row">
                     <strong class="${isTop ? 'top-name' : ''}">${esc( member.full_name )}</strong>
                     ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
@@ -5141,7 +5137,7 @@ async function loadAdminAttendance() {
                   <span> ${count} შეხვედრა </span>
                 </div>
                 <div class="attendance-admin-member-value">
-                  <strong> ${percent}% </strong>
+                  <strong class="${isTop ? 'top-percent' : ''}"> ${percent}% </strong>
                   <small> დასწრება </small>
                 </div>
               </div>
