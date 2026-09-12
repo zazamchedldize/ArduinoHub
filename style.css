@@ -5001,3 +5001,64 @@ svg{
   border: 1px solid rgba(248, 113, 113, 0.3);
   font-weight: 500;
 }
+
+/* --- ლიდერი ბარათის სტილები --- */
+
+.attendance-admin-member.top-attendance-card {
+    /* ბარათის ფონი (ბნელ ფონზე გამოსაჩენად) */
+    background: linear-gradient(135deg, #1a202c 0%, #111827 100%);
+    
+    /* გარე ბზინვარება (Golden/Soft Glow) */
+    box-shadow: 
+        0 0 15px -3px rgba(245, 158, 11, 0.4), /* ოქროსფერი გლოუ */
+        0 0 4px -1px rgba(245, 158, 11, 0.2);
+        
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    
+    /* ანიმაცია (Slight Pulse Effect) */
+    animation: soft-pulse 2s infinite alternate;
+    
+    /* ოდნავ წამოწევა */
+    transform: scale(1.01); 
+}
+
+@keyframes soft-pulse {
+    0% { box-shadow: 0 0 10px -3px rgba(245, 158, 11, 0.3); }
+    100% { box-shadow: 0 0 20px 0px rgba(245, 158, 11, 0.6); }
+}
+
+/* --- მედალის/თასის ხატულას სტილები --- */
+
+.trophy-icon {
+    position: absolute;
+    top: -15px; /* ოდნავ ზემოთ და მარცხნივ */
+    left: -15px;
+    z-index: 10;
+    
+    /* ვიზუალი */
+    width: 30px;
+    height: 30px;
+    background-color: #1a202c; /* ფონი, რომ წინა ხაზზე იყოს */
+    border-radius: 50%;
+    
+    /* ხატულის ფერი და ბზინვარება */
+    color: #fbbf24; /* ოქროსფერი */
+    filter: drop-shadow(0 0 5px #fbbf24);
+    
+    /* ცენტრირება */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trophy-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* --- სურვილისამებრ: სახელიც უფრო მეტად ანათებდეს --- */
+
+.attendance-admin-member.top-attendance-card strong {
+    color: #fcd34d !important; /* უფრო ღია ოქროსფერი */
+    filter: drop-shadow(0 0 3px #fcd34d);
+}
