@@ -5127,9 +5127,12 @@ async function loadAdminAttendance() {
             const isTop = count > 0 && count === maxCount
 
             return `
-              <div class="attendance-admin-member ${isTop ? 'top-attendance-member' : ''}">
+              <div class="attendance-admin-member">
                 <div>
-                  <strong> ${esc( member.full_name )} </strong>
+                  <div class="member-name-row">
+                    <strong class="${isTop ? 'top-name' : ''}">${esc( member.full_name )}</strong>
+                    ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
+                  </div>
                   <span> ${count} შეხვედრა </span>
                 </div>
                 <div class="attendance-admin-member-value">
