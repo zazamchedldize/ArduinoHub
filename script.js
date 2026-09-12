@@ -5860,7 +5860,7 @@ function closePublicAttendanceModal() {
   document.body.style.overflow = '';
 }
 
-// 2. დასწრების საჯარო მოდალური ფანჯარა (სქროლბარის გარეშე)
+// 2. დასწრების საჯარო მოდალური ფანჯარა
 async function openPublicAttendanceModal() {
   closePublicAttendanceModal();
 
@@ -5877,7 +5877,6 @@ async function openPublicAttendanceModal() {
 
   modal.innerHTML = `
     <style>
-      /* სქროლის ზოლის (Scrollbar) სრული გაქრობა ყველა ბრაუზერში */
       #public-attendance-modal, #public-attendance-modal * {
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
@@ -5957,7 +5956,7 @@ async function openPublicAttendanceModal() {
   }
 }
 
-// 3. ჩატის ბრძანების მოსმენა — AI-ს პასუხის დაბლოკვით
+// 3. AI-ს პასუხის დაბლოკვა Enter-ზე
 document.addEventListener('keydown', (e) => {
   const chatInput = document.querySelector('#ai-chat-input');
   
@@ -5965,9 +5964,21 @@ document.addEventListener('keydown', (e) => {
     if (chatInput.value.trim() === '/დასწრება') {
       e.preventDefault();
       e.stopPropagation();
-      e.stopImmediatePropagation(); // ბლოკავს AI-ს გაგზავნის სკრიპტს
+      e.stopImmediatePropagation();
       chatInput.value = '';
       openPublicAttendanceModal();
     }
   }
-}, true); // Capture ფაზა უზრუნველყოფს AI-ს სკრიპტზე ადრე ჩაჭრას
+}, true);
+
+// 4. AI-ს პასუხის დაბლოკვა ფორმის გაგზავნისას (Submit)
+document.addEventListener('submit', (e) => {
+  const chatInput = document.querySelector('#ai-chat-input');
+  if (chatInput && chatInput.value.trim() === '/დასწრება') {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    chatInput.value = '';
+    openPublicAttendanceModal();
+  }
+}, true);
