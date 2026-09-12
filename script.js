@@ -5127,8 +5127,17 @@ async function loadAdminAttendance() {
             const isTop = count > 0 && count === maxCount
 
             return `
-              <div class="attendance-admin-member">
+              <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
                 <div>
+                  ${isTop ? `
+                    <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                        <path d="M4 22h16"/><path d="M10 18a4.5 4.5 0 0 0 9 0"/>
+                        <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
+                      </svg>
+                    </div>
+                  ` : ''}
                   <div class="member-name-row">
                     <strong class="${isTop ? 'top-name' : ''}">${esc( member.full_name )}</strong>
                     ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
