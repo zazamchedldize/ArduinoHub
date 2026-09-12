@@ -1,0 +1,20 @@
+{
+  "name": "Arduino Hub",
+  "short_name": "ArduinoHub",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    {
+      "src": "arduinuhub-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "arduinuhub-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
