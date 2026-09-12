@@ -4986,12 +4986,56 @@ svg{
   gap: 10px;
 }
 
-/* სახელი და გვარი (თუ წითელი გინდა) */
-.top-name {
-  color: #f87171 !important; /* ღია წითელი ფერი */
+.attendance-admin-member {
+  position: relative; /* აუცილებელია თასის სწორი პოზიციონირებისთვის */
 }
 
-/* „საუკეთესო მაჩვენებელი“ წარწერის სტილი */
+/* ბზინვარება და ოქროსფერი ჩარჩო ლიდერებისთვის */
+.attendance-admin-member.top-attendance-card {
+  background: linear-gradient(135deg, #1a202c 0%, #111827 100%);
+  box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.4), 0 0 4px -1px rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  animation: soft-pulse 2s infinite alternate;
+}
+
+@keyframes soft-pulse {
+  0% { box-shadow: 0 0 10px -3px rgba(245, 158, 11, 0.3); }
+  100% { box-shadow: 0 0 20px 0px rgba(245, 158, 11, 0.6); }
+}
+
+/* თასის ხატულა კუთხეში */
+.trophy-icon {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  z-index: 10;
+  width: 28px;
+  height: 28px;
+  background-color: #111827;
+  border-radius: 50%;
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px #fbbf24);
+}
+
+.trophy-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.member-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-name {
+  color: #f87171 !important;
+}
+
 .top-badge {
   font-size: 11px;
   background: rgba(248, 113, 113, 0.15);
@@ -5000,65 +5044,4 @@ svg{
   border-radius: 6px;
   border: 1px solid rgba(248, 113, 113, 0.3);
   font-weight: 500;
-}
-
-/* --- ლიდერი ბარათის სტილები --- */
-
-.attendance-admin-member.top-attendance-card {
-    /* ბარათის ფონი (ბნელ ფონზე გამოსაჩენად) */
-    background: linear-gradient(135deg, #1a202c 0%, #111827 100%);
-    
-    /* გარე ბზინვარება (Golden/Soft Glow) */
-    box-shadow: 
-        0 0 15px -3px rgba(245, 158, 11, 0.4), /* ოქროსფერი გლოუ */
-        0 0 4px -1px rgba(245, 158, 11, 0.2);
-        
-    border: 1px solid rgba(245, 158, 11, 0.5);
-    
-    /* ანიმაცია (Slight Pulse Effect) */
-    animation: soft-pulse 2s infinite alternate;
-    
-    /* ოდნავ წამოწევა */
-    transform: scale(1.01); 
-}
-
-@keyframes soft-pulse {
-    0% { box-shadow: 0 0 10px -3px rgba(245, 158, 11, 0.3); }
-    100% { box-shadow: 0 0 20px 0px rgba(245, 158, 11, 0.6); }
-}
-
-/* --- მედალის/თასის ხატულას სტილები --- */
-
-.trophy-icon {
-    position: absolute;
-    top: -15px; /* ოდნავ ზემოთ და მარცხნივ */
-    left: -15px;
-    z-index: 10;
-    
-    /* ვიზუალი */
-    width: 30px;
-    height: 30px;
-    background-color: #1a202c; /* ფონი, რომ წინა ხაზზე იყოს */
-    border-radius: 50%;
-    
-    /* ხატულის ფერი და ბზინვარება */
-    color: #fbbf24; /* ოქროსფერი */
-    filter: drop-shadow(0 0 5px #fbbf24);
-    
-    /* ცენტრირება */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.trophy-icon svg {
-    width: 18px;
-    height: 18px;
-}
-
-/* --- სურვილისამებრ: სახელიც უფრო მეტად ანათებდეს --- */
-
-.attendance-admin-member.top-attendance-card strong {
-    color: #fcd34d !important; /* უფრო ღია ოქროსფერი */
-    filter: drop-shadow(0 0 3px #fcd34d);
 }
