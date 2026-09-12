@@ -4821,333 +4821,141 @@ function renderAttendancePanel(records) {
 }
 
 async function openAttendancePanel() {
-  const user =
-    await getCurrentUser()
-
+  const user = await getCurrentUser()
   if (!user) {
-    toast(
-      'დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.'
-    )
-
+    toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
     return
   }
-
-  const manager =
-    await isAttendanceManager(user)
-
+  const manager = await isAttendanceManager(user)
   if (!manager) {
-    toast(
-      'დასწრების აღრიცხვაზე წვდომა არ გაქვთ.'
-    )
-
+    toast('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
     return
   }
-
   closeAttendancePanel()
-
-  const panel =
-    document.createElement('div')
-
-  panel.id =
-    'attendance-panel'
-
-  panel.className =
-    'attendance-overlay'
-
+  const panel = document.createElement('div')
+  panel.id = 'attendance-panel'
+  panel.className = 'attendance-overlay'
   panel.hidden = false
-
-  panel.style.position =
-    'fixed'
-
-  panel.style.inset =
-    '0'
-
-  panel.style.zIndex =
-    '999999'
-
-  panel.style.display =
-    'flex'
-
-  panel.style.alignItems =
-    'center'
-
-  panel.style.justifyContent =
-    'center'
-
-  panel.style.overflowY =
-    'auto'
-
-  panel.style.padding =
-    '20px'
-
-  panel.style.background =
-    'rgba(0, 0, 0, 0.7)'
-
-  panel.style.boxSizing =
-    'border-box'
-
+  panel.style.position = 'fixed'
+  panel.style.inset = '0'
+  panel.style.zIndex = '999999'
+  panel.style.display = 'flex'
+  panel.style.alignItems = 'center'
+  panel.style.justifyContent = 'center'
+  panel.style.overflowY = 'auto'
+  panel.style.padding = '20px'
+  panel.style.background = 'rgba(0, 0, 0, 0.7)'
+  panel.style.boxSizing = 'border-box'
   panel.innerHTML = `
-    <div
-      class="attendance-panel-backdrop"
-      data-attendance-close
-      style="
+    <div class="attendance-panel-backdrop" data-attendance-close style="
         position:absolute;
         inset:0;
         width:100%;
         height:100%;
-      "
-    ></div>
-
-    <section
-      class="attendance-panel-content"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="attendance-panel-title"
-      style="
+    "></div>
+    <section class="attendance-panel-content" role="dialog" aria-modal="true" aria-labelledby="attendance-panel-title" style="
         position:relative;
         z-index:2;
         width:min(900px,100%);
         max-height:90vh;
         overflow-y:auto;
         box-sizing:border-box;
-      "
-    >
+    ">
       <div class="attendance-panel-header">
         <div>
-          <p class="eyebrow">
-            CLUB ATTENDANCE
-          </p>
-
-          <h2 id="attendance-panel-title">
-            დასწრების აღრიცხვა
-          </h2>
-
-          <p>
-            მონიშნე იმ შეხვედრაზე დამსწრე კლუბის წევრები.
-          </p>
+          <p class="eyebrow">CLUB ATTENDANCE</p>
+          <h2 id="attendance-panel-title">დასწრების აღრიცხვა</h2>
+          <p>მონიშნე იმ შეხვედრაზე დამსწრე კლუბის წევრები.</p>
         </div>
-
-        <button
-          type="button"
-          class="icon-button"
-          id="attendance-close"
-          aria-label="დახურვა"
-        >
+        <button type="button" class="icon-button" id="attendance-close" aria-label="დახურვა">
           ${icon('x')}
         </button>
       </div>
-
       <div class="attendance-panel-body">
-
         <div class="attendance-date-box">
-          <label>
-            შეხვედრის თარიღი
-
-            <input
-              id="attendance-date"
-              type="date"
-            >
-          </label>
-
-          <span
-            id="attendance-record-status"
-            class="attendance-record-status"
-          ></span>
+          <label>შეხვედრის თარიღი <input id="attendance-date" type="date"></label>
+          <span id="attendance-record-status" class="attendance-record-status"></span>
         </div>
-
         <div class="attendance-select-box">
-
           <div class="attendance-subheading">
             <div>
-              <h3>
-                დამსწრე წევრები
-              </h3>
-
-              <p>
-                მონიშნე ყველა, ვინც შეხვედრას დაესწრო.
-              </p>
+              <h3>დამსწრე წევრები</h3>
+              <p>მონიშნე ყველა, ვინც შეხვედრას დაესწრო.</p>
             </div>
-
-            <span id="attendance-selected-count">
-              0
-            </span>
+            <span id="attendance-selected-count">0</span>
           </div>
-
-          <div
-            id="attendance-member-select"
-            class="attendance-member-select"
-          ></div>
-
+          <div id="attendance-member-select" class="attendance-member-select"></div>
         </div>
-
-        <p
-          id="attendance-form-error"
-          class="form-message"
-          role="alert"
-          aria-live="polite"
-        ></p>
-
+        <p id="attendance-form-error" class="form-message" role="alert" aria-live="polite"></p>
         <div class="attendance-actions">
-
           <label class="attendance-count-toggle">
-            <input
-              type="checkbox"
-              id="attendance-counted"
-            >
-
-            <span class="attendance-count-toggle-box">
-              ${icon('check')}
-            </span>
-
-            <span>
-              ჩათვლა
-            </span>
+            <input type="checkbox" id="attendance-counted">
+            <span class="attendance-count-toggle-box">${icon('check')}</span>
+            <span>ჩათვლა</span>
           </label>
-
-          <button
-            type="button"
-            class="button primary"
-            id="save-attendance"
-          >
-            ${icon('save')}
-            დასწრების შენახვა
+          <button type="button" class="button primary" id="save-attendance">
+            ${icon('save')} დასწრების შენახვა
           </button>
-
-          <button
-            type="button"
-            class="button ghost"
-            id="attendance-cancel"
-          >
-            გაუქმება
-          </button>
-
+          <button type="button" class="button ghost" id="attendance-cancel">გაუქმება</button>
         </div>
-
         <div class="attendance-history-box">
-
           <div class="attendance-subheading">
             <div>
-              <h3>
-                შეკრებების ისტორია
-              </h3>
-
-              <p>
-                აქ გამოჩნდება მხოლოდ ჩათვლილი შეხვედრები.
-              </p>
+              <h3>შეკრებების ისტორია</h3>
+              <p>აქ გამოჩნდება მხოლოდ ჩათვლილი შეხვედრები.</p>
             </div>
           </div>
-
-          <div
-            id="attendance-personal-history"
-            class="attendance-personal-history"
-          ></div>
-
+          <div id="attendance-personal-history" class="attendance-personal-history"></div>
         </div>
-
       </div>
     </section>
   `
-
   document.body.appendChild(panel)
-
-  document.body.style.overflow =
-    'hidden'
+  document.body.style.overflow = 'hidden'
 
   try {
-    attendanceMembers =
-      await getAttendanceMembers()
-
-    attendanceRecords =
-      await getAttendanceRecords()
-
-    const dateInput =
-      $('#attendance-date')
-
+    attendanceMembers = await getAttendanceMembers()
+    attendanceRecords = await getAttendanceRecords()
+    const dateInput = $('#attendance-date')
     if (dateInput) {
-      const latest =
-        attendanceRecords[0]
-
+      const latest = attendanceRecords[0]
       dateInput.value =
-        latest?.meeting_date ||
-        new Date()
-          .toISOString()
-          .slice(0, 10)
+        latest?.meeting_date || new Date().toISOString().slice(0, 10)
     }
 
-    renderAttendancePanel(
-      attendanceRecords
-    )
-
+    renderAttendancePanel(attendanceRecords)
     updateAttendanceSelectedCount()
 
-    $('#attendance-close')
-      ?.addEventListener(
-        'click',
-        closeAttendancePanel
-      )
-
-    $('#attendance-cancel')
-      ?.addEventListener(
-        'click',
-        closeAttendancePanel
-      )
-
+    $('#attendance-close')?.addEventListener('click', closeAttendancePanel)
+    $('#attendance-cancel')?.addEventListener('click', closeAttendancePanel)
     panel
-      .querySelector(
-        '[data-attendance-close]'
-      )
-      ?.addEventListener(
-        'click',
-        closeAttendancePanel
-      )
+      .querySelector('[data-attendance-close]')
+      ?.addEventListener('click', closeAttendancePanel)
 
-    $('#attendance-date')
-      ?.addEventListener(
-        'change',
-        () => {
-          renderAttendancePanel(
-            attendanceRecords
-          )
+    $('#attendance-date')?.addEventListener('change', () => {
+      renderAttendancePanel(attendanceRecords)
+      updateAttendanceSelectedCount()
+    })
 
-          updateAttendanceSelectedCount()
-        }
-      )
-
-    $('#attendance-member-select')
-      ?.addEventListener(
-        'change',
-        updateAttendanceSelectedCount
-      )
-
-    $('#save-attendance')
-      ?.addEventListener(
-        'click',
-        saveAttendanceFromPanel
-      )
-
-    document.addEventListener(
-      'keydown',
-      attendanceEscapeHandler
+    $('#attendance-member-select')?.addEventListener(
+      'change',
+      updateAttendanceSelectedCount
     )
-
+    $('#save-attendance')?.addEventListener('click', saveAttendanceFromPanel)
+    document.addEventListener('keydown', attendanceEscapeHandler)
     refreshIcons()
   } catch (error) {
-    console.error(
-      'Attendance panel error:',
-      error
-    )
-
-    const errorTarget =
-      $('#attendance-form-error')
-
+    console.error('Attendance panel error:', error)
+    const errorTarget = $('#attendance-form-error')
     if (errorTarget) {
       errorTarget.textContent =
-        error?.message ||
-        'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
+        error?.message || 'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
     }
   }
 }
 
+// გლობალურად გახსნა - ფუნქციის გარეთ!
+window.openAttendancePanel = openAttendancePanel;
 function attendanceEscapeHandler(event) {
   if (
     event.key === 'Escape' &&
