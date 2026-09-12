@@ -5113,70 +5113,35 @@ async function loadAdminAttendance() {
     )
 
     if (memberList) {
-      memberList.innerHTML =
-        members.length
-          ? members
-            .map(
-              member => {
-                const count =
-                  counts.get(
-                    member.id
-                  ) || 0
+      let maxCount = 0
+      members.forEach(member => {
+        const count = counts.get(member.id) || 0
+        if (count > maxCount) maxCount = count
+      })
 
-                const percent =
-                  countedRecords.length
-                    ? Math.round(
-                        count /
-                        countedRecords.length *
-                        100
-                      )
-                    : 0
+      memberList.innerHTML = members.length ? members
+        .map(
+          member => {
+            const count = counts.get( member.id ) || 0
+            const percent = countedRecords.length ? Math.round( count / countedRecords.length * 100 ) : 0
+            const isTop = count > 0 && count === maxCount
 
-                return `
-                  <div class="attendance-admin-member">
-
-                    <div>
-                      <strong>
-                        ${esc(
-                          member.full_name
-                        )}
-                      </strong>
-
-                      <span>
-                        ${count} შეხვედრა
-                      </span>
-                    </div>
-
-                    <div class="attendance-admin-member-value">
-
-                      <strong>
-                        ${percent}%
-                      </strong>
-
-                      <small>
-                        დასწრება
-                      </small>
-
-                    </div>
-
-                  </div>
-                `
-              }
-            )
-            .join('')
-          : `
-            <div class="empty-state compact-empty">
-              ${icon('users-round')}
-
-              <h3>
-                წევრები ვერ მოიძებნა
-              </h3>
-
-              <p>
-                კლუბის წევრების სია ცარიელია.
-              </p>
-            </div>
-          `
+            return `
+              <div class="attendance-admin-member ${isTop ? 'top-attendance-member' : ''}">
+                <div>
+                  <strong> ${esc( member.full_name )} </strong>
+                  <span> ${count} შეხვედრა </span>
+                </div>
+                <div class="attendance-admin-member-value">
+                  <strong> ${percent}% </strong>
+                  <small> დასწრება </small>
+                </div>
+              </div>
+            `
+          }
+        )
+        .join('')
+      : ` <div class="empty-state compact-empty"> ${icon('users-round')} <h3> წევრები ვერ მოიძებნა </h3> <p> კლუბის წევრების სია ცარიელია. </p> </div> `
     }
 
     if (historyList) {
