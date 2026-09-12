@@ -4986,43 +4986,54 @@ svg{
   gap: 10px;
 }
 
-/* სახელი და გვარი ახლა სრულად ოქროსფერია */
-.top-name {
-  color: #fbbf24 !important;
-  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+.attendance-admin-member {
+  position: relative;
 }
 
-/* „საუკეთესო მაჩვენებელი“ ბეჯი ოქროსფერი სტილით */
+/* ბარათის ოქროსფერი გლოუ და ბზინვარება */
+.attendance-admin-member.top-attendance-card {
+  background: linear-gradient(135deg, #1a202c 0%, #111827 100%);
+  box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.4), 0 0 4px -1px rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  animation: soft-pulse 2s infinite alternate;
+}
+
+@keyframes soft-pulse {
+  0% { box-shadow: 0 0 10px -3px rgba(245, 158, 11, 0.3); }
+  100% { box-shadow: 0 0 20px 0px rgba(245, 158, 11, 0.6); }
+}
+
+/* წინა წითელი ფერის ნაცვლად სახელი და ბეჯი ისევ ოქროსფერია */
+.top-name {
+  color: #fbbf24 !important;
+}
+
 .top-badge {
   font-size: 11px;
   background: rgba(251, 191, 36, 0.1);
   color: #fbbf24;
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 6px;
   border: 1px solid rgba(251, 191, 36, 0.3);
   font-weight: 500;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.15);
 }
 
-/* მედალის ხატულის სტილი კუთხეში */
-.medal-icon {
+/* მანათობელი „1“-იანი კუთხეში */
+.rank-one-badge {
   position: absolute;
-  top: -14px;
-  left: -14px;
+  top: -12px;
+  left: -12px;
   z-index: 10;
-  width: 32px;
-  height: 32px;
-  background-color: #0d131f;
+  width: 28px;
+  height: 28px;
+  background-color: #111827;
   border-radius: 50%;
   color: #fbbf24;
-  border: 1px solid rgba(251, 191, 36, 0.6);
+  border: 1px solid #fbbf24;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
-}
-
-.medal-icon svg {
-  width: 18px;
-  height: 18px;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 0 10px #fbbf24, 0 0 5px #fbbf24 inset;
 }
