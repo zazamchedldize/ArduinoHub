@@ -5852,3 +5852,97 @@ function enhanceTopAttendance() {
 // ... შენი არსებული loadAdminAttendance() კოდის ბოლოში ...
 // refreshIcons();
 // enhanceTopAttendance(); // <--- დაამატე ეს ხაზი
+
+// 1. დასწრების საჯარო მოდალური ფანჯრის გახსნის ფუნქცია
+async function openPublicAttendanceModal() {
+  document.getElementById('public-attendance-modal')?.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'public-attendance-modal';
+  modal.style.cssText = `
+    position: fixed; inset: 0; z-index: 999999; display: flex;
+    align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box;
+  `;
+
+  modal.innerHTML = `
+    <div style="position:absolute; inset:0;" onclick="this.parentElement.remove()"></div>
+    <div style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background:#0b1120; border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+        <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
+        <button type="button" onclick="document.getElementById('public-attendance-modal').remove()" style="background:none; border:none; color:#9ca3af; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+      <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
+        <p style="color:#9ca3af;">მონაცემები იტვირთება...</p>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  try {
+    const [members, records] = await Promise.all([
+      getAttendanceMembers(),
+      getAttendanceRecords()
+    ]);
+
+    const countedRecords = records.filter(r => r.counted === true);
+    const counts = new Map();
+    members.forEach(m => counts.set(m.id, 0));
+
+    countedRecords.forEach(r => {
+      r.club_attendance_members?.forEach(item => {
+        counts.set(item.member_id, (counts.get(item.member_id) || 0) + 1);
+      });
+    });
+
+    let maxCount = 0;
+    members.forEach(m => {
+      const count = counts.get(m.id) || 0;
+      if (count > maxCount) maxCount = count;
+    });
+
+    const listEl = document.getElementById('public-attendance-list');
+    if (listEl) {
+      listEl.innerHTML = members.length ? members.map(member => {
+        const count = counts.get(member.id) || 0;
+        const percent = countedRecords.length ? Math.round((count / countedRecords.length) * 100) : 0;
+        const isTop = count > 0 && count === maxCount;
+
+        return `
+          <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
+            ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
+            <div>
+              <div class="member-name-row">
+                <strong class="${isTop ? 'top-name' : ''}">${esc(member.full_name)}</strong>
+                ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
+              </div>
+              <span>${count} შეხვედრა</span>
+            </div>
+            <div class="attendance-admin-member-value">
+              <strong class="${isTop ? 'top-percent' : ''}">${percent}%</strong>
+              <small>დასწრება</small>
+            </div>
+          </div>
+        `;
+      }).join('') : '<p style="color:#9ca3af;">წევრები ვერ მოიძებნა.</p>';
+    }
+  } catch (err) {
+    console.error('Public attendance load error:', err);
+    const listEl = document.getElementById('public-attendance-list');
+    if (listEl) listEl.innerHTML = '<p style="color:#ef4444;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>';
+  }
+}
+
+// 2. ჩატში /დასწრება ბრძანების მოსმენა (#ai-chat-input-ისთვის)
+document.addEventListener('keydown', (e) => {
+  const chatInput = document.querySelector('#ai-chat-input');
+  
+  if (e.target === chatInput && e.key === 'Enter' && !e.shiftKey) {
+    if (chatInput.value.trim() === '/დასწრება') {
+      e.preventDefault();
+      chatInput.value = '';
+      openPublicAttendanceModal();
+    }
+  }
+});
