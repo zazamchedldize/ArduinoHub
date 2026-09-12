@@ -223,5 +223,21 @@
   </footer>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script type="module" src="script.js"></script>
+  <!-- შეტყობინებების ჩართვის ღილაკი -->
+<button id="subscribe-btn" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  შეტყობინებების ჩართვა 🔔
+</button>
+
+<script>
+  document.getElementById('subscribe-btn').addEventListener('click', async function() {
+    await OneSignalDeferred.push(async function(OneSignal) {
+      try {
+        await OneSignal.Slidedown.promptPush();
+      } catch (error) {
+        console.error("Error triggering push prompt:", error);
+      }
+    });
+  });
+</script>
 </body>
 </html>
