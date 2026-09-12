@@ -4938,3 +4938,16 @@ svg{
     transition: none;
   }
 }
+.attendance-count-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.attendance-count-toggle input[type="checkbox"] {
+  accent-color: #10b981; /* ან შენი საიტის მთავარი ფერი */
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
