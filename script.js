@@ -5853,7 +5853,7 @@ function enhanceTopAttendance() {
 // refreshIcons();
 // enhanceTopAttendance(); // <--- დაამატე ეს ხაზი
 
-// 1. დასწრების საჯარო მოდალური ფანჯარა (გამჭვირვალე Glassmorphism ფონით)
+// 1. დასწრების საჯარო მოდალური ფანჯარა (უფრო გამჭვირვალე ფონით და სქროლბარის გარეშე)
 async function openPublicAttendanceModal() {
   document.getElementById('public-attendance-modal')?.remove();
 
@@ -5861,13 +5861,16 @@ async function openPublicAttendanceModal() {
   modal.id = 'public-attendance-modal';
   modal.style.cssText = `
     position: fixed; inset: 0; z-index: 999999; display: flex;
-    align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.4);
+    align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;
   `;
 
   modal.innerHTML = `
+    <style>
+      #public-attendance-modal-content::-webkit-scrollbar { display: none; }
+    </style>
     <div style="position:absolute; inset:0;" onclick="this.parentElement.remove()"></div>
-    <div style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);">
+    <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
         <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
         <button type="button" onclick="document.getElementById('public-attendance-modal').remove()" style="background:none; border:none; color:#9ca3af; font-size:22px; cursor:pointer;">✕</button>
