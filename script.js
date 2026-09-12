@@ -5112,7 +5112,7 @@ async function loadAdminAttendance() {
       }
     )
 
-    if (memberList) {
+ if (memberList) {
       let maxCount = 0
       members.forEach(member => {
         const count = counts.get(member.id) || 0
@@ -5130,11 +5130,11 @@ async function loadAdminAttendance() {
               <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
                 <div>
                   ${isTop ? `
-                    <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-                        <path d="M4 22h16"/><path d="M10 18a4.5 4.5 0 0 0 9 0"/>
-                        <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
+                    <div class="medal-icon" title="საუკეთესო მაჩვენებელი">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l2.4 3.3 4.1-.4 1.2 3.9 3.5 2.1-1.8 3.7 1.1 4-4 1.3L12 22l-3.5-1.5-4-1.3 1.1-4-1.8-3.7 3.5-2.1 1.2-3.9 4.1.4L12 2z" opacity="0.2"/>
+                        <circle cx="12" cy="13" r="5"/>
+                        <path d="M12 2l3 4.5-3 1.5-3-1.5L12 2z"/>
                       </svg>
                     </div>
                   ` : ''}
