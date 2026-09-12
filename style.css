@@ -4979,3 +4979,12 @@ svg{
 .attendance-count-toggle:hover .attendance-count-toggle-box {
   border-color: rgba(255, 255, 255, 0.4);
 }
+
+.attendance-admin-member.top-attendance-member {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.attendance-admin-member.top-attendance-member strong {
+  color: #34d399;
+}
