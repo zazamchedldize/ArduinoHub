@@ -5787,3 +5787,34 @@ async function saveMeetingAndNotify(meetingTitle, meetingDesc) {
     console.error("შეცდომა შეტყობინების გაგზავნისას:", error);
   }
 }
+
+// ავტომატურად ამატებს გამორჩეულ სტილს ლიდერ წევრებს
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const memberCards = document.querySelectorAll('.attendance-admin-member');
+    if (!memberCards.length) return;
+
+    let maxMeetings = 0;
+    const memberData = [];
+
+    // 1. ვკითხულობთ თითოეული ბარათიდან შეხვედრების რაოდენობას
+    memberCards.forEach(card => {
+      const textSpan = card.querySelector('div > span');
+      if (textSpan) {
+        const match = textSpan.textContent.match(/\d+/);
+        const count = match ? parseInt(match[0], 10) : 0;
+        memberData.push({ card, count });
+        if (count > maxMeetings) maxMeetings = count;
+      }
+    });
+
+    // 2. ვამატებთ top-attendance-member კლასს მათ, ვისაც აქვთ მაქსიმუმი (და მეტია 0-ზე)
+    if (maxMeetings > 0) {
+      memberData.forEach(item => {
+        if (item.count === maxMeetings) {
+          item.card.classList.add('top-attendance-member');
+        }
+      });
+    }
+  }, 500); // მცირე დაყოვნება სანამ მონაცემები ჩაიტვირთება
+});
