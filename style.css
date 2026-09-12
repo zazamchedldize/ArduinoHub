@@ -4941,13 +4941,45 @@ svg{
 .attendance-count-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  color: #fff;
 }
 
 .attendance-count-toggle input[type="checkbox"] {
-  accent-color: #10b981; /* ან შენი საიტის მთავარი ფერი */
-  width: 16px;
-  height: 16px;
+  position: absolute;
+  opacity: 0;
   cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.attendance-count-toggle-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: transparent;
+}
+
+.attendance-count-toggle-box svg {
+  width: 12px;
+  height: 12px;
+}
+
+.attendance-count-toggle input[type="checkbox"]:checked ~ .attendance-count-toggle-box {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+}
+
+.attendance-count-toggle:hover .attendance-count-toggle-box {
+  border-color: rgba(255, 255, 255, 0.4);
 }
