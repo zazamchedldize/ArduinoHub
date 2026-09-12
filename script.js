@@ -4280,6 +4280,23 @@ async function saveMeeting(
       'კლუბის შეკრება გამოქვეყნდა.',
       'success'
     )
+    try {
+      await fetch("https://onesignal.com/api/v1/notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Authorization": "Basic os_v2_app_d4psobll6rhhpg3ec66v3ae6yqagkpebweheqwnabdw4hmhlrijhncsfbiboyqyzefj5p2itv4zaujrlxccbpsaan7cegyawzjesvva"
+        },
+        body: JSON.stringify({
+          app_id: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4",
+          included_segments: ["All"],
+          headings: { en: "ArduinoHub - ახალი შეხვედრა 🔔" },
+          contents: { en: `ჩაინიშნა კლუბის შეკრება! თარიღი: ${date}, დრო: ${time}` }
+        })
+      });
+    } catch (err) {
+      console.error("Error sending push notification:", err);
+    }
 
     await loadAdminMeeting()
   } catch (error) {
