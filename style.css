@@ -604,7 +604,8 @@ nav>a:hover,nav>a.active{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto; /* ზუსტად ცენტრში აყენებს ჰორიზონტალურად */
+    margin: 0 auto;
+    transform: translateX(-15px); /* ცოტათი წევს მარცხნივ ვიზუალური ცენტრისთვის */
 }
 
 .account-button svg:first-child {
