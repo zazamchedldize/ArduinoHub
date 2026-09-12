@@ -4199,89 +4199,37 @@ function bindMeetingForm() {
     )
 }
 
-async function saveMeeting(
-  event
-) {
+async function saveMeeting( event ) {
   event.preventDefault()
-
-  if (!db) {
+  if (!db) { return }
+  const button = $('#save-meeting')
+  const errorTarget = $('#meeting-form-error')
+  const date = $('#meeting-date') .value
+  const time = $('#meeting-time') .value
+  errorTarget.textContent = ''
+  if ( !date || !time ) {
+    errorTarget.textContent = 'აირჩიეთ თარიღი და დრო.'
     return
   }
-
-  const button =
-    $('#save-meeting')
-
-  const errorTarget =
-    $('#meeting-form-error')
-
-  const date =
-    $('#meeting-date')
-      .value
-
-  const time =
-    $('#meeting-time')
-      .value
-
-  errorTarget.textContent =
-    ''
-
-  if (
-    !date ||
-    !time
-  ) {
-    errorTarget.textContent =
-      'აირჩიეთ თარიღი და დრო.'
-
-    return
-  }
-
-  setBusy(
-    button,
-    true,
-    'ქვეყნდება...'
-  )
-
+  setBusy( button, true, 'ქვეყნდება...' )
   try {
-    const {
-      data: { user }
-    } =
-      await db.auth.getUser()
-
+    const { data: { user } } = await db.auth.getUser()
     if (!user) {
-      throw new Error(
-        'not-authenticated'
-      )
+      throw new Error( 'not-authenticated' )
     }
-
-    const { error } =
-      await db
-        .from('club_meeting')
-        .upsert(
-          {
-            id: 1,
-            meeting_date:
-              date,
-            meeting_time:
-              time,
-            updated_by:
-              user.id
-          },
-          {
-            onConflict:
-              'id'
-          }
-        )
-
+    const { error } = await db
+      .from('club_meeting')
+      .upsert(
+        { id: 1, meeting_date: date, meeting_time: time, updated_by: user.id },
+        { onConflict: 'id' }
+      )
     if (error) {
       throw error
     }
-
-    toast(
-      'კლუბის შეკრება გამოქვეყნდა.',
-      'success'
-    )
+    toast( 'კლუბის შეკრება გამოქვეყნდა.', 'success' )
+    
     try {
-      await fetch("https://onesignal.com/api/v1/notifications", {
+      await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://onesignal.com/api/v1/notifications"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
@@ -4297,22 +4245,14 @@ async function saveMeeting(
     } catch (err) {
       console.error("Error sending push notification:", err);
     }
-
+    
     await loadAdminMeeting()
   } catch (error) {
-    errorTarget.textContent =
-      neutralError(
-        error,
-        'შეკრების გამოქვეყნება ვერ მოხერხდა.'
-      )
+    errorTarget.textContent = neutralError( error, 'შეკრების გამოქვეყნება ვერ მოხერხდა.' )
   } finally {
-    setBusy(
-      button,
-      false
-    )
+    setBusy( button, false )
   }
 }
-
 async function clearMeeting() {
   if (!db) {
     return
