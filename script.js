@@ -5786,3 +5786,68 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }, 500); // მცირე დაყოვნება სანამ მონაცემები ჩაიტვირთება
 });
+// ლიდერების ვიზუალურად გამოყოფის ცალკე ფუნქცია
+function enhanceTopAttendance() {
+    // ვპოულობთ ყველა წევრის ბარათს
+    const memberCards = document.querySelectorAll('.attendance-admin-member');
+    if (!memberCards.length) return;
+
+    let maxMeetings = 0;
+    const memberData = [];
+
+    // 1. ვკითხულობთ შეხვედრების რაოდენობას და ვპოულობთ მაქსიმუმს
+    memberCards.forEach(card => {
+        const countSpan = card.querySelector('div > span'); // სადაც წერია "N შეხვედრა"
+        if (countSpan) {
+            const match = countSpan.textContent.match(/\d+/); // ვპოულობთ ციფრს ტექსტში
+            const count = match ? parseInt(match[0], 10) : 0;
+            memberData.push({ card, count });
+            if (count > maxMeetings) maxMeetings = count;
+        }
+    });
+
+    // 2. თუ maxMeetings 0-ზე მეტია, ვამუშავებთ ლიდერებს
+    if (maxMeetings > 0) {
+        memberData.forEach(item => {
+            const { card, count } = item;
+            const nameContainer = card.querySelector('div'); // სადაც არის სახელი და შეხვედრები
+
+            if (count === maxMeetings) {
+                // ვამატებთ მთავარ კლასს
+                card.classList.add('top-attendance-card');
+
+                // ვამოწმებთ, ხომ არ არის უკვე დამატებული მედალი, რომ ორჯერ არ ჩაისვას
+                if (!card.querySelector('.trophy-icon')) {
+                    // ვქმნით მედალის ან თასის ელემენტს (SVG)
+                    const trophyHTML = `
+                        <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                                <path d="M4 22h16"/><path d="M10 18a4.5 4.5 0 0 0 9 0"/>
+                                <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
+                            </svg>
+                        </div>
+                    `;
+                    
+                    // ვამატებთ სახელი-გვარის კონტეინერში
+                    if (nameContainer) {
+                         nameContainer.style.position = 'relative'; // აუცილებელია აბსოლუტური პოზიციონირებისთვის
+                         nameContainer.insertAdjacentHTML('afterbegin', trophyHTML);
+                    }
+                }
+            } else {
+                // თუ აღარ არის ლიდერი, ვასუფთავებთ სტილებს (სურვილისამებრ)
+                card.classList.remove('top-attendance-card');
+            }
+        });
+    }
+}
+
+// ეს ფუნქცია უნდა გაეშვას მას შემდეგ, რაც loadAdminAttendance დაასრულებს მუშაობას.
+// თუ შენს კოდში იყენებ `Promise.all` ან ასინქრონულ `load` ფუნქციებს, 
+// ყველაზე მარტივია უბრალოდ ამ ფუნქციის გამოძახება მონაცემების ჩატვირთვის ბოლოს,
+// ანუ loadAdminAttendance()-ის შიგნით, ბლოკის ბოლოს, refreshIcons()-ის შემდეგ:
+//
+// ... შენი არსებული loadAdminAttendance() კოდის ბოლოში ...
+// refreshIcons();
+// enhanceTopAttendance(); // <--- დაამატე ეს ხაზი
