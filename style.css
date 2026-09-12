@@ -595,26 +595,27 @@ nav>a:hover,nav>a.active{
   }
 
  @media(max-width:600px){
-    .account-button{
-        width:160px;
-        height:42px;
-        min-height:42px;
-        padding:0 14px;
-        border-radius:8px;
-        justify-content:center;
-        transform:translateX(80px);
-      
-    }
+    .account-button {
+    width: 160px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto; /* ზუსტად ცენტრში აყენებს ჰორიზონტალურად */
+}
 
-    .account-button svg:first-child{
-        width:20px;
-        height:20px;
-        flex:none;
-    }
+.account-button svg:first-child {
+    width: 20px;
+    height: 20px;
+    flex: none;
+}
 
-    .account-button svg:last-child{
-        display:none;
-    }
+.account-button svg:last-child {
+    display: none;
+}
 
     .account-name{
         display:block;
