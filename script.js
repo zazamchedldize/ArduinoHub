@@ -4228,8 +4228,8 @@ async function saveMeeting( event ) {
     }
     toast( 'კლუბის შეკრება გამოქვეყნდა.', 'success' )
     
-    try {
-      await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://onesignal.com/api/v1/notifications"), {
+try {
+      const res = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://onesignal.com/api/v1/notifications"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
@@ -4242,6 +4242,8 @@ async function saveMeeting( event ) {
           contents: { en: `ჩაინიშნა კლუბის შეკრება! თარიღი: ${date}, დრო: ${time}` }
         })
       });
+      const resText = await res.text();
+      console.log("OneSignal Proxy Response:", resText);
     } catch (err) {
       console.error("Error sending push notification:", err);
     }
