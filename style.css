@@ -4986,62 +4986,43 @@ svg{
   gap: 10px;
 }
 
-.attendance-admin-member {
-  position: relative; /* აუცილებელია თასის სწორი პოზიციონირებისთვის */
+/* სახელი და გვარი ახლა სრულად ოქროსფერია */
+.top-name {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
 }
 
-/* ბზინვარება და ოქროსფერი ჩარჩო ლიდერებისთვის */
-.attendance-admin-member.top-attendance-card {
-  background: linear-gradient(135deg, #1a202c 0%, #111827 100%);
-  box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.4), 0 0 4px -1px rgba(245, 158, 11, 0.2);
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  animation: soft-pulse 2s infinite alternate;
+/* „საუკეთესო მაჩვენებელი“ ბეჯი ოქროსფერი სტილით */
+.top-badge {
+  font-size: 11px;
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  font-weight: 500;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.15);
 }
 
-@keyframes soft-pulse {
-  0% { box-shadow: 0 0 10px -3px rgba(245, 158, 11, 0.3); }
-  100% { box-shadow: 0 0 20px 0px rgba(245, 158, 11, 0.6); }
-}
-
-/* თასის ხატულა კუთხეში */
-.trophy-icon {
+/* მედალის ხატულის სტილი კუთხეში */
+.medal-icon {
   position: absolute;
-  top: -12px;
-  left: -12px;
+  top: -14px;
+  left: -14px;
   z-index: 10;
-  width: 28px;
-  height: 28px;
-  background-color: #111827;
+  width: 32px;
+  height: 32px;
+  background-color: #0d131f;
   border-radius: 50%;
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.5);
+  border: 1px solid rgba(251, 191, 36, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 4px #fbbf24);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
 }
 
-.trophy-icon svg {
-  width: 16px;
-  height: 16px;
-}
-
-.member-name-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.top-name {
-  color: #f87171 !important;
-}
-
-.top-badge {
-  font-size: 11px;
-  background: rgba(248, 113, 113, 0.15);
-  color: #f87171;
-  padding: 2px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(248, 113, 113, 0.3);
-  font-weight: 500;
+.medal-icon svg {
+  width: 18px;
+  height: 18px;
 }
