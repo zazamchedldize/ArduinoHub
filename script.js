@@ -5853,9 +5853,19 @@ function enhanceTopAttendance() {
 // refreshIcons();
 // enhanceTopAttendance(); // <--- დაამატე ეს ხაზი
 
-// 1. დასწრების საჯარო მოდალური ფანჯარა (უფრო გამჭვირვალე ფონით და სქროლბარის გარეშე)
+// 1. დამხმარე ფუნქცია მოდალის დახურვისა და სქროლის აღდგენისთვის
+function closePublicAttendanceModal() {
+  const modal = document.getElementById('public-attendance-modal');
+  if (modal) modal.remove();
+  document.body.style.overflow = '';
+}
+
+// 2. დასწრების საჯარო მოდალური ფანჯარა (სქროლბარის გარეშე)
 async function openPublicAttendanceModal() {
-  document.getElementById('public-attendance-modal')?.remove();
+  closePublicAttendanceModal();
+
+  // მოდალის ღიაობისას ძირითადი გვერდის სქროლის გათიშვა
+  document.body.style.overflow = 'hidden';
 
   const modal = document.createElement('div');
   modal.id = 'public-attendance-modal';
@@ -5867,13 +5877,23 @@ async function openPublicAttendanceModal() {
 
   modal.innerHTML = `
     <style>
-      #public-attendance-modal-content::-webkit-scrollbar { display: none; }
+      /* სქროლის ზოლის (Scrollbar) სრული გაქრობა ყველა ბრაუზერში */
+      #public-attendance-modal, #public-attendance-modal * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+      #public-attendance-modal::-webkit-scrollbar,
+      #public-attendance-modal *::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+      }
     </style>
-    <div style="position:absolute; inset:0;" onclick="this.parentElement.remove()"></div>
-    <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+    <div style="position:absolute; inset:0;" onclick="closePublicAttendanceModal()"></div>
+    <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
         <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
-        <button type="button" onclick="document.getElementById('public-attendance-modal').remove()" style="background:none; border:none; color:#9ca3af; font-size:22px; cursor:pointer;">✕</button>
+        <button type="button" onclick="closePublicAttendanceModal()" style="background:none; border:none; color:#9ca3af; font-size:22px; cursor:pointer;">✕</button>
       </div>
       <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
         <p style="color:#9ca3af;">მონაცემები იტვირთება...</p>
@@ -5937,15 +5957,17 @@ async function openPublicAttendanceModal() {
   }
 }
 
-// 2. ჩატის ბრძანების მოსმენა (#ai-chat-input-ისთვის)
+// 3. ჩატის ბრძანების მოსმენა — AI-ს პასუხის დაბლოკვით
 document.addEventListener('keydown', (e) => {
   const chatInput = document.querySelector('#ai-chat-input');
   
   if (e.target === chatInput && e.key === 'Enter' && !e.shiftKey) {
     if (chatInput.value.trim() === '/დასწრება') {
       e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation(); // ბლოკავს AI-ს გაგზავნის სკრიპტს
       chatInput.value = '';
       openPublicAttendanceModal();
     }
   }
-});
+}, true); // Capture ფაზა უზრუნველყოფს AI-ს სკრიპტზე ადრე ჩაჭრას
