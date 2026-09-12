@@ -4986,54 +4986,57 @@ svg{
   gap: 10px;
 }
 
+/* ბარათის პოზიციონირება და სრული განათება/Glow */
 .attendance-admin-member {
-  position: relative;
+  position: relative !important;
+  overflow: visible !important;
 }
 
-/* ბარათის ოქროსფერი გლოუ და ბზინვარება */
 .attendance-admin-member.top-attendance-card {
-  background: linear-gradient(135deg, #1a202c 0%, #111827 100%);
-  box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.4), 0 0 4px -1px rgba(245, 158, 11, 0.2);
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  animation: soft-pulse 2s infinite alternate;
+  border: 2px solid #fbbf24 !important;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), inset 0 0 15px rgba(251, 191, 36, 0.2) !important;
 }
 
-@keyframes soft-pulse {
-  0% { box-shadow: 0 0 10px -3px rgba(245, 158, 11, 0.3); }
-  100% { box-shadow: 0 0 20px 0px rgba(245, 158, 11, 0.6); }
+/* კუთხეში მანათობელი ოქროსფერი "1"-იანის წრე */
+.top-rank-badge {
+  position: absolute !important;
+  top: -12px !important;
+  left: -12px !important;
+  width: 30px !important;
+  height: 30px !important;
+  background: #fbbf24 !important;
+  color: #0d131f !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 0 15px #fbbf24, 0 0 30px rgba(251, 191, 36, 0.8) !important;
+  border: 2px solid #ffffff !important;
+  z-index: 20 !important;
 }
 
-/* წინა წითელი ფერის ნაცვლად სახელი და ბეჯი ისევ ოქროსფერია */
-.top-name {
+/* ტექსტებისა და პროცენტის განათება */
+.member-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-name, .top-percent {
   color: #fbbf24 !important;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.7) !important;
 }
 
 .top-badge {
   font-size: 11px;
-  background: rgba(251, 191, 36, 0.1);
-  color: #fbbf24;
-  padding: 2px 8px;
+  background: rgba(251, 191, 36, 0.2) !important;
+  color: #fbbf24 !important;
+  padding: 3px 10px;
   border-radius: 6px;
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  font-weight: 500;
-}
-
-/* მანათობელი „1“-იანი კუთხეში */
-.rank-one-badge {
-  position: absolute;
-  top: -12px;
-  left: -12px;
-  z-index: 10;
-  width: 28px;
-  height: 28px;
-  background-color: #111827;
-  border-radius: 50%;
-  color: #fbbf24;
-  border: 1px solid #fbbf24;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid #fbbf24 !important;
   font-weight: bold;
-  font-size: 14px;
-  box-shadow: 0 0 10px #fbbf24, 0 0 5px #fbbf24 inset;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4) !important;
 }
