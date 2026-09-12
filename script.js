@@ -5807,3 +5807,11 @@ if (
 }
 
 initAuthUI()
+document.addEventListener('DOMContentLoaded', () => {
+    const meetingBtn = document.getElementById('meeting-button');
+    if (meetingBtn) {
+        meetingBtn.addEventListener('click', () => {
+            openAttendancePanel();
+        });
+    }
+});
