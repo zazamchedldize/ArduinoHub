@@ -5857,7 +5857,10 @@ function enhanceTopAttendance() {
 // საჯარო დასწრების მოდალი & ჩატის ბრძანება
 // ==========================================
 
-// 1. მოდალის დახურვა და გვერდის სქროლის აღდგენა
+// ==========================================
+// საჯარო დასწრების მოდალი & ჩატის ბრძანება
+// ==========================================
+
 function closePublicAttendanceModal() {
   const modal = document.getElementById('public-attendance-modal');
   if (modal) modal.remove();
@@ -5865,7 +5868,6 @@ function closePublicAttendanceModal() {
 }
 window.closePublicAttendanceModal = closePublicAttendanceModal;
 
-// 2. დასწრების მოდალური ფანჯრის გახსნა
 async function openPublicAttendanceModal() {
   closePublicAttendanceModal();
   document.body.style.overflow = 'hidden';
@@ -5904,30 +5906,34 @@ async function openPublicAttendanceModal() {
         <button type="button" class="close-attendance-btn" id="close-attendance-x">✕</button>
       </div>
       <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
-        <p style="color:#9ca3af;">მონაცემები იტვირთება...</p>
+        <p style="color:#9ca3af; text-align:center;">მონაცემები იტვირთება...</p>
       </div>
     </div>
   `;
 
   document.body.appendChild(modal);
 
-  // X ღილაკზე და გარეთა ფონზე დაჭერის მიბმა
   document.getElementById('close-attendance-x')?.addEventListener('click', closePublicAttendanceModal);
   document.getElementById('attendance-backdrop')?.addEventListener('click', closePublicAttendanceModal);
 
   try {
-    const [members, records] = await Promise.all([
+    const [rawMembers, rawRecords] = await Promise.all([
       getAttendanceMembers(),
       getAttendanceRecords()
     ]);
 
-    const countedRecords = records.filter(r => r.counted === true);
+    const members = Array.isArray(rawMembers) ? rawMembers : (rawMembers?.data || rawMembers?.members || []);
+    const records = Array.isArray(rawRecords) ? rawRecords : (rawRecords?.data || rawRecords?.records || []);
+
+    const countedRecords = records.filter(r => r && (r.counted === true || r.counted === undefined));
     const counts = new Map();
     members.forEach(m => counts.set(m.id, 0));
 
     countedRecords.forEach(r => {
-      r.club_attendance_members?.forEach(item => {
-        counts.set(item.member_id, (counts.get(item.member_id) || 0) + 1);
+      const memberList = r.club_attendance_members || r.members || [];
+      memberList.forEach(item => {
+        const mId = item.member_id || item.id || item;
+        counts.set(mId, (counts.get(mId) || 0) + 1);
       });
     });
 
@@ -5939,7 +5945,12 @@ async function openPublicAttendanceModal() {
 
     const listEl = document.getElementById('public-attendance-list');
     if (listEl) {
-      listEl.innerHTML = members.length ? members.map(member => {
+      if (!members || members.length === 0) {
+        listEl.innerHTML = '<p style="color:#9ca3af; text-align:center;">წევრები ვერ მოიძებნა.</p>';
+        return;
+      }
+
+      listEl.innerHTML = members.map(member => {
         const count = counts.get(member.id) || 0;
         const percent = countedRecords.length ? Math.round((count / countedRecords.length) * 100) : 0;
         const isTop = count > 0 && count === maxCount;
@@ -5949,7 +5960,7 @@ async function openPublicAttendanceModal() {
             ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
             <div>
               <div class="member-name-row">
-                <strong class="${isTop ? 'top-name' : ''}">${esc(member.full_name)}</strong>
+                <strong class="${isTop ? 'top-name' : ''}">${esc(member.full_name || member.name || '')}</strong>
                 ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
               </div>
               <span>${count} შეხვედრა</span>
@@ -5960,16 +5971,15 @@ async function openPublicAttendanceModal() {
             </div>
           </div>
         `;
-      }).join('') : '<p style="color:#9ca3af;">წევრები ვერ მოიძებნა.</p>';
+      }).join('');
     }
   } catch (err) {
     console.error('Public attendance load error:', err);
     const listEl = document.getElementById('public-attendance-list');
-    if (listEl) listEl.innerHTML = '<p style="color:#ef4444;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>';
+    if (listEl) listEl.innerHTML = '<p style="color:#ef4444; text-align:center;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>';
   }
 }
 
-// 3. შემოწმება და AI-ს პასუხის დაბლოკვა
 function checkAndOpenAttendance(e) {
   const chatInput = document.querySelector('#ai-chat-input');
   if (chatInput && chatInput.value.trim() === '/დასწრება') {
@@ -5985,7 +5995,6 @@ function checkAndOpenAttendance(e) {
   return false;
 }
 
-// დესკტოპისა და მობილურის კლავიატურა (Enter / ESC)
 document.addEventListener('keydown', (e) => {
   const chatInput = document.querySelector('#ai-chat-input');
   if (e.target === chatInput && (e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey) {
@@ -5996,12 +6005,10 @@ document.addEventListener('keydown', (e) => {
   }
 }, true);
 
-// მობილურიდან ფორმის გაგზავნა (Submit)
 document.addEventListener('submit', (e) => {
   checkAndOpenAttendance(e);
 }, true);
 
-// მობილურზე გაგზავნის ღილაკზე დაჭერა
 document.addEventListener('click', (e) => {
   const chatInput = document.querySelector('#ai-chat-input');
   if (chatInput && chatInput.value.trim() === '/დასწრება') {
