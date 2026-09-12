@@ -161,7 +161,21 @@ body:after{
   cursor: not-allowed;
   transform: none;
 }
+@media (max-width: 1200px) {
+    /* ჰედერის შიგნით არსებული ნავიგაციის ბმულები */
+    nav a {
+        font-size: 14px;
+        margin: 0 6px;
+    }
 
+    /* ღილაკების ზომების მცირე კომპაქტურობა */
+    .account-button, 
+    nav button, 
+    .header-actions a {
+        padding: 0 10px;
+        font-size: 13px;
+    }
+}
 .ai-history-delete svg {
   width: 14px;
   height: 14px;
