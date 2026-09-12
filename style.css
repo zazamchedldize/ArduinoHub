@@ -4969,10 +4969,6 @@ svg{
   color: transparent;
 }
 
-.attendance-count-toggle-box svg {
-  width: 12px;
-  height: 12px;
-}
 
 .attendance-count-toggle input[type="checkbox"]:checked ~ .attendance-count-toggle-box {
   background: #10b981;
