@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="ka">
-
 <head>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -11,921 +10,280 @@
     });
   });
 </script>
-    <meta charset="utf-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
-
-    <link
-        rel="icon"
-        type="image/png"
-        href="arduinuhub-icon.png"
-    >
-
-    <title>ადმინისტრატორი — ArduinoHub</title>
-
-    <meta
-        name="description"
-        content="ArduinoHub-ის ადმინისტრატორის მართვის პანელი."
-    >
-
-    <meta
-        name="robots"
-        content="noindex, nofollow, noarchive, nosnippet"
-    >
-
-    <meta
-        name="googlebot"
-        content="noindex, nofollow, noarchive, nosnippet"
-    >
-
-
-    <!-- =========================================
-         GOOGLE FONTS
-    ========================================== -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-
-    <!-- =========================================
-         MAIN CSS
-    ========================================== -->
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="arduinuhub-icon.png">
+<title>ადმინისტრატორი — ArduinoHub</title>
+<meta name="description" content="ArduinoHub-ის ადმინისტრატორის მართვის პანელი.">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+<!-- ========================================= GOOGLE FONTS ========================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- ========================================= MAIN CSS ========================================== -->
+<link rel="stylesheet" href="style.css">
 </head>
-
-
 <body data-page="admin">
-
-
 <main class="admin-page">
+<!-- ========================================= BRAND ========================================== -->
+<a class="brand admin-brand" href="index.html" aria-label="ArduinoHub — მთავარი გვერდი">
+  <span class="brand-mark">∞</span> ArduinoChemistry<span>Hub</span>
+</a>
 
-
-    <!-- =========================================
-         BRAND
-    ========================================== -->
-
-    <a
-        class="brand admin-brand"
-        href="index.html"
-        aria-label="ArduinoHub — მთავარი გვერდი"
-    >
-
-        <span class="brand-mark">∞</span>
-
-        ArduinoChemistry<span>Hub</span>
-
+<!-- ========================================= LOGIN ========================================== -->
+<section id="auth-panel" class="auth-card">
+  <p class="eyebrow"> სარეგისტრაციო სივრცე </p>
+  <h1> კეთილი იყოს თქვენი დაბრუნება </h1>
+  <p> გამოიყენეთ სპეციალური ემაილი და პაროლი. </p>
+  <form id="login-form">
+    <label> ელფოსტა 
+      <input id="login-email" type="email" required autocomplete="email" placeholder="თქვენი ელფოსტა"> 
+    </label>
+    <label> პაროლი 
+      <input id="login-password" type="password" required autocomplete="current-password" placeholder="თქვენი პაროლი"> 
+    </label>
+    <p id="login-error" class="form-message" role="alert" aria-live="polite"></p>
+    <button class="button primary full" type="submit"> 
+      შესვლა <i data-lucide="arrow-right"></i> 
+    </button>
+  </form>
+  <a class="back-link centered" href="index.html"> 
+    <i data-lucide="arrow-left"></i> მთავარ გვერდზე დაბრუნება 
   </a>
-
-
-
-    <!-- =========================================
-         LOGIN
-    ========================================== -->
-
-    <section
-        id="auth-panel"
-        class="auth-card"
-    >
-
-        <p class="eyebrow">
-            სარეგისტრაციო სივრცე
-        </p>
-
-
-        <h1>
-            კეთილი იყოს თქვენი დაბრუნება
-        </h1>
-
-
-        <p>
-            გამოიყენეთ სპეციალური ემაილი და პაროლი.
-        </p>
-
-
-        <form id="login-form">
-
-
-            <label>
-
-                ელფოსტა
-
-                <input
-                    id="login-email"
-                    type="email"
-                    required
-                    autocomplete="email"
-                    placeholder="თქვენი ელფოსტა"
-                >
-
-            </label>
-
-
-
-            <label>
-
-                პაროლი
-
-                <input
-                    id="login-password"
-                    type="password"
-                    required
-                    autocomplete="current-password"
-                    placeholder="თქვენი პაროლი"
-                >
-
-            </label>
-
-
-
-            <p
-                id="login-error"
-                class="form-message"
-                role="alert"
-                aria-live="polite"
-            ></p>
-
-
-
-            <button
-                class="button primary full"
-                type="submit"
-            >
-
-                შესვლა
-
-                <i data-lucide="arrow-right"></i>
-
-            </button>
-
-
-        </form>
-
-
-
-        <a
-            class="back-link centered"
-            href="index.html"
-        >
-
-            <i data-lucide="arrow-left"></i>
-
-            მთავარ გვერდზე დაბრუნება
-
-        </a>
-
-
-    </section>
-
-
-
-
-    <!-- =========================================
-         DASHBOARD
-    ========================================== -->
-
-    <section
-        id="dashboard"
-        hidden
-    >
-
-
-        <!-- =========================================
-             DASHBOARD HEADER
-        ========================================== -->
-
-        <header class="dashboard-header">
-
-            <div>
-
-                <span id="admin-name"></span>
-
-
-                <a
-                    class="button secondary compact"
-                    href="index.html"
-                >
-
-                    მთავარ გვერდზე დაბრუნება
-
-                </a>
-
-
-                <button
-                    id="logout-button"
-                    class="button ghost compact"
-                    type="button"
-                >
-
-                    გასვლა
-
-                    <i data-lucide="log-out"></i>
-
-                </button>
-
-                <!-- ხმოვანი საუბრის (Voice Chat) ღილაკი -->
-                <button
-                    id="voice-chat-toggle"
-                    class="button ghost compact"
-                    type="button"
-                    title="ხმოვანი საუბრის ჩართვა"
-                >
-                    <i data-lucide="mic"></i>
-                    ხმოვანი საუბარი
-                </button>
-
-            </div>
-
-        </header>
-
-
-
-
-        <main class="dashboard-shell">
-
-
-            <!-- =========================================
-                 DASHBOARD INTRO
-            ========================================== -->
-
-            <div class="dashboard-intro">
-
-                <div>
-
-                    <p class="eyebrow">
-                        მართვის პანელი
-                    </p>
-
-
-                    <h1>
-                        პროექტების მართვა
-                    </h1>
-
-                </div>
-
-
-                <button
-                    id="new-project-button"
-                    class="button primary"
-                    type="button"
-                >
-
-                    <i data-lucide="plus"></i>
-
-                    ახალი პროექტი
-
-                </button>
-
-            </div>
-
-
-
-
-            <!-- =========================================
-                 CLUB MEETING MANAGEMENT
-            ========================================== -->
-
-            <section class="meeting-admin-card">
-
-
-                <div class="section-heading">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            CLUB MEETING
-                        </p>
-
-
-                        <h2>
-                            კლუბის შეკრება
-                        </h2>
-
-                    </div>
-
-
-                    <span
-                        id="meeting-admin-status"
-                        class="meeting-admin-status"
-                    >
-                        იტვირთება...
-                    </span>
-
-                </div>
-
-
-
-                <p class="meeting-admin-help">
-
-                    აქვეყნებთ მხოლოდ შეკრების თარიღს, დღეს და დროს.
-                    ადგილმდებარეობა არ ინახება.
-
-                </p>
-
-
-
-                <form
-                    id="meeting-form"
-                    class="meeting-form"
-                >
-
-
-                    <!-- DATE -->
-
-                    <label>
-
-                        თარიღი
-
-                        <input
-                            id="meeting-date"
-                            type="date"
-                            required
-                        >
-
-                    </label>
-
-
-
-                    <!-- TIME -->
-
-                    <label>
-
-                        დრო
-
-                        <input
-                            id="meeting-time"
-                            type="time"
-                            required
-                        >
-
-                    </label>
-
-
-
-                    <!-- DAY PREVIEW -->
-
-                    <div class="meeting-day-preview">
-
-                        <span>
-                            დღე
-                        </span>
-
-
-                        <strong id="meeting-day-preview">
-                            —
-                        </strong>
-
-                    </div>
-
-
-
-                    <!-- ACTIONS -->
-
-                    <div class="meeting-form-actions">
-
-
-                        <button
-                            id="save-meeting"
-                            class="button primary"
-                            type="submit"
-                        >
-
-                            <i data-lucide="send"></i>
-
-                            შეკრების გამოქვეყნება
-
-                        </button>
-
-
-
-                        <button
-                            id="clear-meeting"
-                            class="button ghost"
-                            type="button"
-                        >
-
-                            <i data-lucide="trash-2"></i>
-
-                            გაუქმება
-
-                        </button>
-
-
-                    </div>
-
-
-
-                    <!-- ERROR -->
-
-                    <p
-                        id="meeting-form-error"
-                        class="form-message"
-                        role="alert"
-                        aria-live="polite"
-                    ></p>
-
-
-                </form>
-
-
-            </section>
-
-<section class="attendance-admin-card">
-  <div class="section-heading">
-    <div>
-      <p class="eyebrow">CLUB ATTENDANCE</p>
-      <h2>დასწრების აღრიცხვა</h2>
-    </div>
-    <span id="attendance-admin-status" class="meeting-admin-status">
-      იტვირთება...
-    </span>
-  </div>
-
-  <div class="attendance-stats">
-    <div class="attendance-stat">
-      <span>შეკრებები</span>
-      <strong id="attendance-total-meetings">0</strong>
-    </div>
-
-    <div class="attendance-stat">
-      <span>წევრები</span>
-      <strong id="attendance-total-members">0</strong>
-    </div>
-  </div>
-
-  <div class="attendance-member-stats">
-    <h3>წევრების დასწრება</h3>
-    <div id="attendance-member-list"></div>
-  </div>
-
-  <div class="attendance-history">
-    <div class="section-heading">
-      <div>
-        <h3>შეკრებების ისტორია</h3>
-      </div>
-    </div>
-
-    <div id="attendance-history-list"></div>
-  </div>
 </section>
 
-
-
-
-            <!-- =========================================
-                 PROJECT EDITOR
-            ========================================== -->
-
-            <section
-                id="project-editor"
-                class="editor-card"
-                hidden
-            >
-
-
-                <div class="editor-heading">
-
-                    <h2 id="editor-title">
-                        ახალი პროექტი
-                    </h2>
-
-
-                    <button
-                        id="cancel-edit"
-                        class="icon-button"
-                        type="button"
-                        aria-label="დახურვა"
-                    >
-
-                        <i data-lucide="x"></i>
-
-                    </button>
-
-                </div>
-
-
-
-
-                <form id="project-form">
-
-
-                    <input
-                        id="edit-id"
-                        type="hidden"
-                    >
-
-
-
-                    <!-- =========================================
-                         BASIC INFO
-                    ========================================== -->
-
-                    <div class="form-grid">
-
-
-                        <!-- TITLE -->
-
-                        <label>
-
-                            პროექტის სახელი
-
-                            <input
-                                id="title"
-                                required
-                                maxlength="120"
-                            >
-
-                        </label>
-
-
-
-                        <!-- CATEGORY -->
-
-                        <label>
-
-                            კატეგორია
-
-                            <select
-                                id="category"
-                                required
-                            >
-
-                                <option value="Arduino">
-                                    Arduino
-                                </option>
-
-
-                                <option value="Robotics">
-                                    Robotics
-                                </option>
-
-
-                                <option value="Sensors">
-                                    Sensors
-                                </option>
-
-
-                                <option value="Automation">
-                                    Automation
-                                </option>
-
-
-                                <option value="LED">
-                                    LED
-                                </option>
-
-
-                                <option value="LCD">
-                                    LCD
-                                </option>
-
-
-                                <option value="IoT">
-                                    IoT
-                                </option>
-
-
-                                <option value="Chemistry">
-                                    Chemistry
-                                </option>
-
-
-                                <option value="Other">
-                                    Other
-                                </option>
-
-                            </select>
-
-                        </label>
-
-
-
-                        <!-- AUTHOR -->
-
-                        <label>
-
-                            ავტორი
-
-                            <input
-                                id="author"
-                                required
-                                maxlength="80"
-                            >
-
-                        </label>
-
-
-
-                        <!-- PUBLISHED -->
-
-                        <label class="checkbox-label">
-
-                            <input
-                                id="published"
-                                type="checkbox"
-                            >
-
-                            გამოქვეყნდეს დაუყოვნებლივ
-
-                        </label>
-
-
-                    </div>
-
-
-
-
-                    <!-- =========================================
-                         DESCRIPTION
-                    ========================================== -->
-
-                    <label>
-
-                        მოკლე/სრული აღწერა
-
-                        <textarea
-                            id="description"
-                            required
-                            rows="4"
-                            maxlength="5000"
-                        ></textarea>
-
-                    </label>
-
-
-
-
-                    <!-- =========================================
-                         COMPONENTS / HOW MADE
-                    ========================================== -->
-
-                    <div class="form-grid">
-
-
-                        <label>
-
-                            საჭირო კომპონენტები
-
-                            <textarea
-                                id="components"
-                                rows="5"
-                                placeholder="მაგ.: არდუინო უნო, რეზისტორი, ქიმიური საშვალებები"
-                            ></textarea>
-
-                        </label>
-
-
-
-                        <label>
-
-                            გაკეთების პროცესი
-
-                            <textarea
-                                id="how-made"
-                                rows="5"
-                            ></textarea>
-
-                        </label>
-
-
-                    </div>
-
-
-
-
-                    <!-- =========================================
-                         CODE
-                    ========================================== -->
-
-                    <label>
-
-                        Arduino Code/Chemistry Reaction
-
-                        <textarea
-                            id="code"
-                            class="code-input"
-                            rows="10"
-                            spellcheck="false"
-                        ></textarea>
-
-                    </label>
-
-
-
-
-                    <!-- =========================================
-                         FILE UPLOADS
-                    ========================================== -->
-
-                    <div class="upload-grid">
-
-
-                        <!-- IMAGE -->
-
-                        <label class="upload-field">
-
-                            სურათი
-
-                            <small>
-                                JPG, PNG, WebP ან GIF • მაქს. 5 MB
-                            </small>
-
-
-                            <input
-                                id="image-file"
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp,image/gif"
-                            >
-
-
-                            <span id="image-name">
-                                ფაილი არჩეული არ არის
-                            </span>
-
-
-                            <img
-                                id="image-preview"
-                                hidden
-                                alt="არჩეული სურათის preview"
-                            >
-
-                        </label>
-
-
-
-
-                        <!-- VIDEO -->
-
-                        <label class="upload-field">
-
-                            ვიდეო
-
-                            <small>
-                                MP4, WebM ან OGG • მაქს. 50 MB
-                            </small>
-
-
-                            <input
-                                id="video-file"
-                                type="file"
-                                accept="video/mp4,video/webm,video/ogg"
-                            >
-
-
-                            <span id="video-name">
-                                ფაილი არჩეული არ არის
-                            </span>
-
-                        </label>
-
-
-                    </div>
-
-
-
-
-                    <!-- =========================================
-                         FORM ERROR
-                    ========================================== -->
-
-                    <p
-                        id="form-error"
-                        class="form-message"
-                        role="alert"
-                        aria-live="polite"
-                    ></p>
-
-
-
-
-                    <!-- =========================================
-                         SAVE
-                    ========================================== -->
-
-                    <button
-                        id="save-project"
-                        class="button primary"
-                        type="submit"
-                    >
-
-                        პროექტის დამატება
-
-                        <i data-lucide="save"></i>
-
-                    </button>
-
-
-                </form>
-
-
-            </section>
-
-
-
-
-            <!-- =========================================
-                 PROJECT MANAGEMENT
-            ========================================== -->
-
-            <section class="management">
-
-
-                <div class="section-heading">
-
-                    <h2>
-                        თქვენი პროექტები
-                    </h2>
-
-
-                    <span id="admin-count"></span>
-
-                </div>
-
-
-
-                <div
-                    id="admin-status"
-                    class="loading"
-                    role="status"
-                    aria-live="polite"
-                >
-
-                    პროექტები იტვირთება...
-
-                </div>
-
-
-
-                <div
-                    id="admin-project-list"
-                    class="admin-project-list"
-                ></div>
-
-
-            </section>
-
-
-        </main>
-
-
+<!-- ========================================= DASHBOARD ========================================== -->
+<section id="dashboard" hidden>
+  <!-- ========================================= DASHBOARD HEADER ========================================== -->
+  <header class="dashboard-header">
+    <div> 
+      <span id="admin-name"></span> 
+      <a class="button secondary compact" href="index.html"> მთავარ გვერდზე დაბრუნება </a> 
+      <button id="logout-button" class="button ghost compact" type="button"> 
+        გასვლა <i data-lucide="log-out"></i> 
+      </button> 
+    </div>
+  </header>
+
+  <main class="dashboard-shell">
+    <!-- ========================================= DASHBOARD INTRO ========================================== -->
+    <div class="dashboard-intro">
+      <div> 
+        <p class="eyebrow"> მართვის პანელი </p> 
+        <h1> პროექტების მართვა </h1> 
+      </div> 
+      <button id="new-project-button" class="button primary" type="button"> 
+        <i data-lucide="plus"></i> ახალი პროექტი 
+      </button>
+    </div>
+
+    <!-- ========================================= CLUB MEETING MANAGEMENT ========================================== -->
+    <section class="meeting-admin-card">
+      <div class="section-heading">
+        <div> 
+          <p class="eyebrow"> CLUB MEETING </p> 
+          <h2> კლუბის შეკრება </h2> 
+        </div> 
+        <span id="meeting-admin-status" class="meeting-admin-status"> იტვირთება... </span>
+      </div>
+      <p class="meeting-admin-help"> აქვეყნებთ მხოლოდ შეკრების თარიღს, დღეს და დროს. ადგილმდებარეობა არ ინახება. </p>
+      <form id="meeting-form" class="meeting-form">
+        <!-- DATE --> 
+        <label> თარიღი <input id="meeting-date" type="date" required> </label>
+        <!-- TIME --> 
+        <label> დრო <input id="meeting-time" type="time" required> </label>
+        <!-- DAY PREVIEW -->
+        <div class="meeting-day-preview"> 
+          <span> დღე </span> 
+          <strong id="meeting-day-preview"> — </strong> 
+        </div>
+        <!-- ACTIONS -->
+        <div class="meeting-form-actions"> 
+          <button id="save-meeting" class="button primary" type="submit"> 
+            <i data-lucide="send"></i> შეკრების გამოქვეყნება 
+          </button> 
+          <button id="clear-meeting" class="button ghost" type="button"> 
+            <i data-lucide="trash-2"></i> გაუქმება 
+          </button> 
+        </div>
+        <!-- ERROR --> 
+        <p id="meeting-form-error" class="form-message" role="alert" aria-live="polite"></p>
+      </form>
     </section>
 
+    <section class="attendance-admin-card">
+      <div class="section-heading">
+        <div> 
+          <p class="eyebrow">CLUB ATTENDANCE</p> 
+          <h2>დასწრების აღრიცხვა</h2> 
+        </div> 
+        <span id="attendance-admin-status" class="meeting-admin-status"> იტვირთება... </span>
+      </div>
+      <div class="attendance-stats">
+        <div class="attendance-stat"> 
+          <span>შეკრებები</span> 
+          <strong id="attendance-total-meetings">0</strong> 
+        </div>
+        <div class="attendance-stat"> 
+          <span>წევრები</span> 
+          <strong id="attendance-total-members">0</strong> 
+        </div>
+      </div>
+      <div class="attendance-member-stats">
+        <h3>წევრების დასწრება</h3>
+        <div id="attendance-member-list"></div>
+      </div>
+      <div class="attendance-history">
+        <div class="section-heading">
+          <div> 
+            <h3>შეკრებების ისტორია</h3> 
+          </div>
+        </div>
+        <div id="attendance-history-list"></div>
+      </div>
+    </section>
 
+    <!-- ========================================= PROJECT EDITOR ========================================== -->
+    <section id="project-editor" class="editor-card" hidden>
+      <div class="editor-heading">
+        <h2 id="editor-title"> ახალი პროექტი </h2> 
+        <button id="cancel-edit" class="icon-button" type="button" aria-label="დახურვა"> 
+          <i data-lucide="x"></i> 
+        </button>
+      </div>
+      <form id="project-form">
+        <input id="edit-id" type="hidden">
+        <!-- ========================================= BASIC INFO ========================================== -->
+        <div class="form-grid">
+          <!-- TITLE --> 
+          <label> პროექტის სახელი <input id="title" required maxlength="120"> </label>
+          <!-- CATEGORY --> 
+          <label> კატეგორია 
+            <select id="category" required>
+              <option value="Arduino"> Arduino </option>
+              <option value="Robotics"> Robotics </option>
+              <option value="Sensors"> Sensors </option>
+              <option value="Automation"> Automation </option>
+              <option value="LED"> LED </option>
+              <option value="LCD"> LCD </option>
+              <option value="IoT"> IoT </option>
+              <option value="Chemistry"> Chemistry </option>
+              <option value="Other"> Other </option>
+            </select> 
+          </label>
+          <!-- AUTHOR --> 
+          <label> ავტორი <input id="author" required maxlength="80"> </label>
+          <!-- PUBLISHED --> 
+          <label class="checkbox-label"> 
+            <input id="published" type="checkbox"> გამოქვეყნდეს დაუყოვნებლივ 
+          </label>
+        </div>
+        <!-- ========================================= DESCRIPTION ========================================== -->
+        <label> მოკლე/სრული აღწერა 
+          <textarea id="description" required rows="4" maxlength="5000"></textarea> 
+        </label>
+        <!-- ========================================= COMPONENTS / HOW MADE ========================================== -->
+        <div class="form-grid">
+          <label> საჭირო კომპონენტები 
+            <textarea id="components" rows="5" placeholder="მაგ.: არდუინო უნო, რეზისტორი, ქიმიური საშვალებები"></textarea> 
+          </label>
+          <label> გაკეთების პროცესი 
+            <textarea id="how-made" rows="5"></textarea> 
+          </label>
+        </div>
+        <!-- ========================================= CODE ========================================== -->
+        <label> Arduino Code/Chemistry Reaction 
+          <textarea id="code" class="code-input" rows="10" spellcheck="false"></textarea> 
+        </label>
+        <!-- ========================================= FILE UPLOADS ========================================== -->
+        <div class="upload-grid">
+          <!-- IMAGE --> 
+          <label class="upload-field"> სურათი 
+            <small> JPG, PNG, WebP ან GIF • მაქს. 5 MB </small> 
+            <input id="image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif"> 
+            <span id="image-name"> ფაილი არჩეული არ არის </span> 
+            <img id="image-preview" hidden alt="არჩეული სურათის preview"> 
+          </label>
+          <!-- VIDEO --> 
+          <label class="upload-field"> ვიდეო 
+            <small> MP4, WebM ან OGG • მაქს. 50 MB </small> 
+            <input id="video-file" type="file" accept="video/mp4,video/webm,video/ogg"> 
+            <span id="video-name"> ფაილი არჩეული არ არის </span> 
+          </label>
+        </div>
+        <!-- ========================================= FORM ERROR ========================================== -->
+        <p id="form-error" class="form-message" role="alert" aria-live="polite"></p>
+        <!-- ========================================= SAVE ========================================== -->
+        <button id="save-project" class="button primary" type="submit"> 
+          პროექტის დამატება <i data-lucide="save"></i> 
+        </button>
+      </form>
+    </section>
+
+    <!-- ========================================= PROJECT MANAGEMENT ========================================== -->
+    <section class="management">
+      <div class="section-heading">
+        <h2> თქვენი პროექტები </h2> 
+        <span id="admin-count"></span>
+      </div>
+      <div id="admin-status" class="loading" role="status" aria-live="polite"> პროექტები იტვირთება... </div>
+      <div id="admin-project-list" class="admin-project-list"></div>
+    </section>
+  </main>
+</section>
 </main>
 
+<!-- ========================================= AI CHAT WIDGET ========================================== -->
+<div id="ai-chat-widget" class="ai-chat-container">
+  <!-- Header -->
+  <div class="ai-chat-header">
+    <div class="ai-chat-title-area">
+      <div class="ai-avatar-glow">
+        <i data-lucide="sparkles"></i>
+      </div>
+      <div>
+        <h3>ArduinoHub AI</h3>
+        <span class="ai-status"><span class="status-dot"></span> ონლაინ ასისტენტი</span>
+      </div>
+    </div>
+    <button id="close-chat-btn" class="ai-close-btn" title="დახურვა">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
 
+  <!-- Messages Body -->
+  <div id="ai-chat-messages" class="ai-chat-messages">
+    <div class="ai-message bot">
+      <div class="msg-icon"><i data-lucide="bot"></i></div>
+      <div class="msg-bubble">
+        გამარჯობა! 👋<br>
+        მე ვარ <b>ArduinoHub AI</b>. შეგიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
+      </div>
+    </div>
+  </div>
 
+  <!-- Input Area -->
+  <div class="ai-chat-input-area">
+    <div class="ai-input-wrapper">
+      <input type="text" id="ai-user-input" placeholder="დაწერე კითხვა...">
+      <button id="voice-input-btn" class="ai-tool-btn" title="ხმოვანი შეყვანა">
+        <i data-lucide="mic"></i>
+      </button>
+      <button id="send-msg-btn" class="ai-send-btn" title="გაგზავნა">
+        <i data-lucide="send"></i>
+      </button>
+    </div>
+    <div class="ai-footer-note">AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.</div>
+  </div>
+</div>
 
-<!-- =========================================
-     TOAST
-========================================== -->
+<!-- ========================================= TOAST ========================================== -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-></div>
-
-
-
-
-<!-- =========================================
-     LUCIDE ICONS
-========================================== -->
-
+<!-- ========================================= LUCIDE ICONS ========================================== -->
 <script src="https://unpkg.com/lucide@latest"></script>
-
-
-
-
-<!-- =========================================
-     MAIN JAVASCRIPT
-========================================== -->
-
-<script
-    type="module"
-    src="script.js"
-></script>
-
-
+<!-- ========================================= MAIN JAVASCRIPT ========================================== -->
+<script type="module" src="script.js"></script>
 </body>
-
 </html>
