@@ -6295,6 +6295,7 @@ function closeSuggestionModal() {
   suggestionModal.hidden = true
   suggestionModal.setAttribute("aria-hidden", "true")
   suggestionStatus.textContent = ""
+  document.body.style.overflow = ""
 }
 
 closeSuggestion?.addEventListener("click", closeSuggestionModal)
