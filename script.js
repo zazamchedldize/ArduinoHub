@@ -6103,7 +6103,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiChatWindow = document.getElementById('ai-chat-window');
 
   if (aiChatForm && aiChatInput) {
-    // true პარამეტრის წყალობით ეს ივენთი გაეშვება AI-ს გაგზავნამდე!
     aiChatForm.addEventListener('submit', async (e) => {
       const text = aiChatInput.value.trim();
 
@@ -6159,25 +6158,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ბ) OneSignal API-თ შეტყობინების გაგზავნა
-        const REST_KEY = "შენი_ONESIGNAL_REST_API_KEY"; // <--- აქ ჩასვი შენი OneSignal REST API Key
+        const REST_KEY = "os_v2_app_d4psobll6rhhpg3ec66v3ae6yte2g54hgdkuytufjzecjk7rus6xqp6q3qsxvdhgkheew34tccvv47uwvfcytakg7fp3pc4u5zhm67i";
 
-        if (REST_KEY !== "შენი_ONESIGNAL_REST_API_KEY") {
-          await fetch("https://onesignal.com/api/v1/notifications", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              "Authorization": `Basic ${REST_KEY}`
-            },
-            body: JSON.stringify({
-              app_id: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4",
-              included_segments: ["Subscribed Users"],
-              headings: { ka: title, en: title },
-              contents: { ka: message, en: message }
-            })
-          });
+        const response = await fetch("https://onesignal.com/api/v1/notifications", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": `Basic ${REST_KEY}`
+          },
+          body: JSON.stringify({
+            app_id: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4",
+            included_segments: ["Subscribed Users"],
+            headings: { ka: title, en: title },
+            contents: { ka: message, en: message }
+          })
+        });
+
+        const resData = await response.json();
+
+        if (response.ok && !resData.errors) {
+          alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
+        } else {
+          alert('OneSignal შეცდომა: ' + (resData.errors ? JSON.stringify(resData.errors) : 'უცნობი შეცდომა'));
         }
 
-        alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
         window.closeGlobalModal();
       } catch (err) {
         console.error('Error sending global notification:', err);
