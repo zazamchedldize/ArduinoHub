@@ -6110,7 +6110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         aiChatInput.value = '';
 
         let isLoggedIn = true;
-        const activeSupabase = window.supabase || window._supabase || (typeof supabase !== 'undefined' ? supabase : null);
+        const activeSupabase = window.supabase || window._supabase || window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
 
         if (activeSupabase && activeSupabase.auth) {
           try {
@@ -6142,7 +6142,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const title = document.getElementById('global-title').value.trim();
       const message = document.getElementById('global-message').value.trim();
 
-      // ეძებს ყველა შესაძლო გლობალურ Supabase ცვლადს
+      // ზუსტი მიმართვა იმ ინიციალიზებული კლიენტისთვის, რომელიც საიტზე ავტორიზაციისთვის მუშაობს
       const client = window.supabase || window._supabase || window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
 
       if (!client || typeof client.from !== 'function') {
@@ -6153,7 +6153,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const { data, error: dbError } = await client
           .from('global_notifications')
-          .insert([{ title, message }]);
+          .insert([{ title: title, message: message }]);
 
         if (dbError) {
           console.error('Supabase Error:', dbError);
