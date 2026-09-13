@@ -5078,7 +5078,41 @@ svg{
   color: #20e399;
 }
 
-/* ვიდეო მოდალის კონტეინერი */
+/* ==========================================
+   ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
+   ========================================== */
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.button.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.button.secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #20e399;
+  color: #20e399;
+}
+
 .video-modal {
   display: none;
   position: fixed;
@@ -5094,7 +5128,6 @@ svg{
   display: flex;
 }
 
-/* ფონის დაბურვა */
 .video-modal-backdrop {
   position: absolute;
   inset: 0;
@@ -5103,7 +5136,6 @@ svg{
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* მოდალის ბარათი */
 .video-modal-card {
   position: relative;
   z-index: 2;
@@ -5111,12 +5143,11 @@ svg{
   background: #0b1120;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
-  padding: 16px;
+  padding: 20px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
   box-sizing: border-box;
 }
 
-/* დახურვის ღილაკი */
 .video-modal-close {
   position: absolute;
   top: -12px;
@@ -5141,7 +5172,42 @@ svg{
   color: #fff;
 }
 
-/* 16:9 ვიდეო პლეერი */
+/* მოწყობილობის არჩევის ღილაკები */
+.video-device-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.device-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.device-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.device-tab.active {
+  background: #20e399;
+  border-color: #20e399;
+  color: #0b1120;
+  font-weight: 600;
+}
+
 .video-container {
   width: 100%;
   aspect-ratio: 16 / 9;
