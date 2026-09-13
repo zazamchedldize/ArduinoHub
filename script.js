@@ -6096,6 +6096,7 @@ window.closeGlobalModal = function() {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. /global ბრძანების გადაჭერა AI ჩატში
   const aiChatForm = document.getElementById('ai-chat-form');
   const aiChatInput = document.getElementById('ai-chat-input');
   const aiChatWindow = document.getElementById('ai-chat-window');
@@ -6103,11 +6104,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (aiChatForm && aiChatInput) {
     aiChatForm.addEventListener('submit', async (e) => {
       const text = aiChatInput.value.trim();
-
       if (text === '/global') {
         e.preventDefault();
         e.stopPropagation();
-
         aiChatInput.value = '';
 
         let isLoggedIn = true;
@@ -6128,43 +6127,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (aiChatWindow) {
           aiChatWindow.setAttribute('aria-hidden', 'true');
         }
-
         window.openGlobalModal();
       }
     }, true);
   }
 
+  // 2. ფორმის გაგზავნა Supabase-ში
   const globalForm = document.getElementById('global-notif-form');
-if (globalForm) {
-  globalForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = document.getElementById('global-title').value.trim();
-    const message = document.getElementById('global-message').value.trim();
+  if (globalForm) {
+    globalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('global-title').value.trim();
+      const message = document.getElementById('global-message').value.trim();
 
-    // ვპოულობთ Supabase კლიენტს
-    const client = typeof supabase !== 'undefined' ? supabase : (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+      const client = typeof supabase !== 'undefined' ? supabase : (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
 
-    if (!client) {
-      alert('შეცდომა: Supabase კლიენტი ვერ იპოვა script.js-ში!');
-      return;
-    }
-
-    try {
-      const { data, error: dbError } = await client
-        .from('global_notifications')
-        .insert([{ title, message }]);
-
-      if (dbError) {
-        console.error('Supabase Error:', dbError);
-        alert('შეცდომა ბაზაში ჩაწერისას: ' + dbError.message);
+      if (!client) {
+        alert('შეცდომა: Supabase კლიენტი ვერ იპოვა!');
         return;
       }
 
-      alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
-      window.closeGlobalModal();
-    } catch (err) {
-      console.error('Error sending global notification:', err);
-      alert('შეცდომა: ' + err.message);
-    }
-  });
-}
+      try {
+        const { data, error: dbError } = await client
+          .from('global_notifications')
+          .insert([{ title, message }]);
+
+        if (dbError) {
+          console.error('Supabase Error:', dbError);
+          alert('შეცდომა ბაზაში ჩაწერისას: ' + dbError.message);
+          return;
+        }
+
+        alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
+        window.closeGlobalModal();
+      } catch (err) {
+        console.error('Error sending global notification:', err);
+        alert('შეცდომა: ' + err.message);
+      }
+    });
+  }
+});
