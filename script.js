@@ -6132,7 +6132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, true);
   }
 
-  // 2. ფორმის გაგზავნა Supabase-ში
   const globalForm = document.getElementById('global-notif-form');
   if (globalForm) {
     globalForm.addEventListener('submit', async (e) => {
@@ -6140,9 +6139,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const title = document.getElementById('global-title').value.trim();
       const message = document.getElementById('global-message').value.trim();
 
-      const client = typeof supabase !== 'undefined' ? supabase : (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+      // იპოვის Supabase-ის კლიენტს
+      const client = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
 
-      if (!client) {
+      if (!client || typeof client.from !== 'function') {
         alert('შეცდომა: Supabase კლიენტი ვერ იპოვა!');
         return;
       }
@@ -6166,4 +6166,3 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-});
