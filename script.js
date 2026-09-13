@@ -6106,12 +6106,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiChatInput = document.getElementById('ai-chat-input')
   const aiChatWindow = document.getElementById('ai-chat-window')
 
-  const activeSupabase =
-    window.supabase ||
-    window._supabase ||
-    window.supabaseClient ||
-    (typeof supabase !== 'undefined' ? supabase : null)
-
   if (aiChatForm && aiChatInput) {
     aiChatForm.addEventListener('submit', async (e) => {
       const text = aiChatInput.value.trim()
@@ -6125,7 +6119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       aiChatInput.value = ''
 
-      if (!activeSupabase || !activeSupabase.auth) {
+      if (!db || !db.auth) {
         alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
         return
       }
@@ -6133,10 +6127,20 @@ document.addEventListener('DOMContentLoaded', () => {
       let session = null
 
       try {
-        const result = await activeSupabase.auth.getSession()
-        session = result?.data?.session || null
-      } catch (err) {
-        console.error('Supabase auth check error:', err)
+        const {
+          data: { session: currentSession },
+          error
+        } = await db.auth.getSession()
+
+        if (error) {
+          console.error('Session error:', error)
+          alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
+          return
+        }
+
+        session = currentSession
+      } catch (error) {
+        console.error('Supabase auth check error:', error)
         alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
         return
       }
@@ -6181,7 +6185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
 
-      if (!activeSupabase || !activeSupabase.auth) {
+      if (!db || !db.auth) {
         alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
         return
       }
@@ -6196,28 +6200,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const {
           data: { session },
           error: sessionError
-        } = await activeSupabase.auth.getSession()
+        } = await db.auth.getSession()
 
         if (sessionError || !session?.access_token) {
           alert('სესია აღარ არის აქტიური. გთხოვთ თავიდან შეხვიდეთ ანგარიშში.')
           return
         }
 
-        const response = await fetch(
-          `${window.SUPABASE_URL}/functions/v1/send-global-notification`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-              'apikey': window.SUPABASE_ANON_KEY,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              title,
-              message
-            })
-          }
-        )
+        const functionUrl =
+          `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/send-global-notification`
+
+        const response = await fetch(functionUrl, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            apikey: SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title,
+            message
+          })
+        })
 
         let result = null
 
@@ -6238,18 +6242,18 @@ document.addEventListener('DOMContentLoaded', () => {
           return
         }
 
+        console.log('Global notification result:', result)
+
         alert(
           result?.message ||
           'გლობალური შეტყობინება წარმატებით გაიგზავნა!'
         )
 
         window.closeGlobalModal()
-      } catch (err) {
-        console.error('Error sending global notification:', err)
+      } catch (error) {
+        console.error('Error sending global notification:', error)
 
-        alert(
-          'შეცდომა: გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!'
-        )
+        alert('შეცდომა: გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!')
       } finally {
         if (submitButton) {
           submitButton.disabled = false
@@ -6258,5 +6262,3 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 })
-
-
