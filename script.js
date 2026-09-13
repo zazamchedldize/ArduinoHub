@@ -6096,7 +6096,7 @@ window.closeGlobalModal = function() {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. /global ბრძანების გადაჭერა AI ჩატში
+  // 1. AI ჩატში /global ბრძანების გადაჭერა
   const aiChatForm = document.getElementById('ai-chat-form');
   const aiChatInput = document.getElementById('ai-chat-input');
   const aiChatWindow = document.getElementById('ai-chat-window');
@@ -6110,12 +6110,14 @@ document.addEventListener('DOMContentLoaded', () => {
         aiChatInput.value = '';
 
         let isLoggedIn = true;
-        if (typeof supabase !== 'undefined' && supabase.auth) {
+        const activeSupabase = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+
+        if (activeSupabase && activeSupabase.auth) {
           try {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await activeSupabase.auth.getSession();
             if (!session) isLoggedIn = false;
           } catch (err) {
-            console.warn('Supabase check error:', err);
+            console.warn('Supabase auth check error:', err);
           }
         }
 
@@ -6132,6 +6134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, true);
   }
 
+  // 2. ფორმის გაგზავნა Supabase-ში
   const globalForm = document.getElementById('global-notif-form');
   if (globalForm) {
     globalForm.addEventListener('submit', async (e) => {
@@ -6139,11 +6142,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const title = document.getElementById('global-title').value.trim();
       const message = document.getElementById('global-message').value.trim();
 
-      // იპოვის Supabase-ის კლიენტს
       const client = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
 
       if (!client || typeof client.from !== 'function') {
-        alert('შეცდომა: Supabase კლიენტი ვერ იპოვა!');
+        alert('შეცდომა: Supabase კლიენტი ჯერ არ არის ინიციალიზებული!');
         return;
       }
 
@@ -6166,3 +6168,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+});
