@@ -350,6 +350,39 @@
     </div>
   </div>
 
+  <!-- გლობალური შეტყობინების მოდალი ადმინისთვის (/global) -->
+  <div id="global-modal" class="meeting-modal" hidden aria-hidden="true">
+    <div class="meeting-backdrop" onclick="closeGlobalModal()"></div>
+    <div class="meeting-dialog" style="max-width: 440px;">
+      <button class="meeting-close" type="button" onclick="closeGlobalModal()" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="meeting-icon">
+        <i data-lucide="mega-phone"></i>
+      </div>
+
+      <p class="eyebrow">ადმინისტრატორის პანელი</p>
+      <h2>გლობალური შეტყობინება</h2>
+
+      <form id="global-notif-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+        <div>
+          <label for="global-title" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;">სათაური</label>
+          <input type="text" id="global-title" placeholder="მაგ: ახალი სიახლე!" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+        </div>
+
+        <div>
+          <label for="global-message" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;">შეტყობინება</label>
+          <textarea id="global-message" rows="4" placeholder="დაწერე შეტყობინების ტექსტი..." required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;"></textarea>
+        </div>
+
+        <button type="submit" class="button primary" style="justify-content: center; margin-top: 8px;">
+          გაგზავნა <i data-lucide="send"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
   <footer>
     <a class="brand" href="index.html">
       <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
