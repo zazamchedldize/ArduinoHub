@@ -6304,17 +6304,12 @@ sendSuggestion?.addEventListener("click", async () => {
 
   suggestionStatus.textContent = ""
 
-  const supabaseClient = window.supabase
-
-if (!supabaseClient || !supabaseClient.functions) {
-  throw new Error("Supabase client is not initialized correctly")
-}
-
-const { error } = await supabaseClient.functions.invoke("send-suggestion", {
-  body: {
-    message
-  }
-})
+  try {
+    const { error } = await supabase.functions.invoke("send-suggestion", {
+      body: {
+        message
+      }
+    })
 
     if (error) {
       throw error
