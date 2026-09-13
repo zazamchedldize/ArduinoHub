@@ -6073,7 +6073,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-```js
 // ==========================================
 // GLOBAL NOTIFICATION SYSTEM (/global)
 // ==========================================
@@ -6259,5 +6258,5 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 })
-```
+
 
