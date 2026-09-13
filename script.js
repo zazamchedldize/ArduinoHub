@@ -6020,12 +6020,17 @@ document.addEventListener('click', (e) => {
 }, true);
 
 
+// ==========================================
+// ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   const openBtn = document.getElementById('video-tutorial-btn');
   const modal = document.getElementById('video-modal');
   const closeBtn = document.getElementById('video-close');
   const backdrop = document.getElementById('video-backdrop');
   const video = document.getElementById('tutorial-video');
+  const videoSource = document.getElementById('video-source');
+  const deviceTabs = document.querySelectorAll('.device-tab');
 
   function openVideoModal() {
     modal?.classList.add('active');
@@ -6037,6 +6042,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
     if (video) video.pause();
   }
+
+  // მოწყობილობის ტაბების გადართვის ლოგიკა
+  deviceTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      deviceTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const newSrc = tab.getAttribute('data-video-src');
+      if (video && videoSource) {
+        video.pause();
+        videoSource.src = newSrc || '';
+        video.load();
+        if (newSrc) {
+          video.play().catch(err => console.log('Autoplay prevented:', err));
+        }
+      }
+    });
+  });
 
   openBtn?.addEventListener('click', openVideoModal);
   closeBtn?.addEventListener('click', closeVideoModal);
