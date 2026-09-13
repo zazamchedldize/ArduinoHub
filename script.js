@@ -6272,10 +6272,23 @@ const sendSuggestion = document.getElementById("send-suggestion")
 const suggestionStatus = document.getElementById("suggestion-status")
 const suggestionCounter = document.getElementById("suggestion-counter")
 
-openSuggestion?.addEventListener("click", () => {
+openSuggestion?.addEventListener("click", event => {
+  event.preventDefault()
+
   suggestionModal.hidden = false
   suggestionModal.setAttribute("aria-hidden", "false")
-  suggestionMessage.focus()
+
+  document.body.style.overflow = "hidden"
+
+  suggestionMessage.removeAttribute("readonly")
+  suggestionMessage.removeAttribute("disabled")
+
+  suggestionMessage.focus({ preventScroll: true })
+
+  if (document.activeElement !== suggestionMessage) {
+    suggestionMessage.click()
+    suggestionMessage.focus({ preventScroll: true })
+  }
 })
 
 function closeSuggestionModal() {
