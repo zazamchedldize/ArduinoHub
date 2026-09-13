@@ -69,7 +69,6 @@
       <a class="nav-admin" href="admin.html"> შესვლა <i data-lucide="shield"></i> </a>
     </nav>
   </header>
-
   <main>
     <section class="hero">
       <div class="hero-copy">
@@ -101,7 +100,6 @@
         </div>
       </div>
     </section>
-
     <section id="how-it-works" class="section">
       <p class="eyebrow"> მარტივი პროცესი </p>
       <h2> როგორ მუშაობს Arduino & Chemistry Hub? </h2>
@@ -112,7 +110,6 @@
         <article> <b>04</b> <i data-lucide="graduation-cap"></i> <h3> ისწავლე პრაქტიკიდან </h3> <p> გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად. </p> </article>
       </div>
     </section>
-
     <section id="about" class="about section">
       <div>
         <p class="eyebrow"> ARDUINO•CHEMISTRY•HUB-ის შესახებ </p>
@@ -120,14 +117,12 @@
       </div>
       <p> ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები. </p>
     </section>
-
     <section class="cta">
       <i data-lucide="cpu"></i>
       <h2> აღმოაჩინე ახალი იდეები<br> და გაიცანი Arduino-ს შესაძლებლობები. </h2>
       <a class="button primary" href="projects.html"> პროექტების ნახვა <i data-lucide="arrow-right"></i> </a>
     </section>
   </main>
-
   <div id="meeting-modal" class="meeting-modal" hidden aria-hidden="true">
     <div class="meeting-backdrop" data-meeting-close></div>
     <section class="meeting-dialog" role="dialog" aria-modal="true" aria-labelledby="meeting-title">
@@ -146,7 +141,6 @@
       </div>
     </section>
   </div>
-
   <div id="ai-chat" class="ai-chat">
     <section id="ai-chat-window" class="ai-chat-window" aria-hidden="true" aria-label="ArduinoHub AI ასისტენტი">
       <div class="ai-chat-header">
@@ -191,16 +185,30 @@
     </button>
   </div>
 
-  <!-- ვიდეო ტუტორიალის მოდალი -->
+  <!-- ვიდეო ტუტორიალის მოდალი 3 მოწყობილობის გადამრთველით -->
   <div id="video-modal" class="video-modal">
     <div class="video-modal-backdrop" id="video-backdrop"></div>
     <div class="video-modal-card">
       <button type="button" class="video-modal-close" id="video-close" aria-label="დახურვა">
         <i data-lucide="x"></i>
       </button>
+      
+      <!-- მოწყობილობის არჩევის ღილაკები -->
+      <div class="video-device-selector">
+        <button type="button" class="device-tab active" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/AQN2VdauWqg_VgUJZdR3tYpyNXlAk-ce99yS33BcxGlMxTyYAB22QNGxGEXr87Z6LPYEof_YaYSRVP_2eXFUZ_esENlL_KDxyszfthdN5g.mp4">
+          <i data-lucide="smartphone"></i> iPhone
+        </button>
+        <button type="button" class="device-tab" data-video-src="">
+          <i data-lucide="smartphone"></i> Android
+        </button>
+        <button type="button" class="device-tab" data-video-src="">
+          <i data-lucide="laptop"></i> ლეპტოპი
+        </button>
+      </div>
+
       <div class="video-container">
         <video id="tutorial-video" controls>
-          <source src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/AQN2VdauWqg_VgUJZdR3tYpyNXlAk-ce99yS33BcxGlMxTyYAB22QNGxGEXr87Z6LPYEof_YaYSRVP_2eXFUZ_esENlL_KDxyszfthdN5g.mp4">
+          <source id="video-source" src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/AQN2VdauWqg_VgUJZdR3tYpyNXlAk-ce99yS33BcxGlMxTyYAB22QNGxGEXr87Z6LPYEof_YaYSRVP_2eXFUZ_esENlL_KDxyszfthdN5g.mp4" type="video/mp4">
           თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს.
         </video>
       </div>
@@ -217,7 +225,6 @@
     </div>
     <small> © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია. </small>
   </footer>
-
   <script src="https://unpkg.com/lucide@latest"></script>
   <script type="module" src="script.js"></script>
 </body>
