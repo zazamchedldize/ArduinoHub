@@ -2,14 +2,14 @@
 <html lang="ka">
 <head>
   <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
-  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+<link rel="icon" type="image/png" href="arduinohub-icon.png">
   <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="manifest" href="manifest.json">
-  <!-- Supabase ინიციალიზაცია (შენი URL და ANON KEY-ით) -->
-  <script>
-    window.supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="manifest" href="manifest.json">
+<!-- Supabase ინიციალიზაცია (შენი URL და ANON KEY-ით) -->
+<script>
+  window.supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+</script>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -29,7 +29,9 @@
   <meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
+
   <link rel="canonical" href="https://arduinohub.onrender.com/">
+
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://arduinohub.onrender.com/">
   <meta property="og:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
@@ -37,15 +39,20 @@
   <meta property="og:site_name" content="ArduinoHub">
   <meta property="og:locale" content="ka_GE">
   <meta property="og:image" content="https://arduinohub.onrender.com/arduinuhub-icon.png">
+
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
   <meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.">
   <meta name="twitter:image" content="https://arduinohub.onrender.com/arduinuhub-icon.png">
-  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+
+  <link rel="icon" type="image/png" href="arduinuhub-icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -62,34 +69,54 @@
   }
   </script>
 </head>
+
 <body data-page="home">
+
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
       <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
     </a>
+
     <button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">
       ☰
     </button>
+
     <nav>
-      <a class="active" href="index.html"> მთავარი </a>
-      <a href="projects.html"> პროექტები </a>
-      <a href="#how-it-works"> როგორ მუშაობს </a>
-      <a href="team.html"> ჩვენი გუნდი </a>
+      <a class="active" href="index.html">
+        მთავარი
+      </a>
+      <a href="projects.html">
+        პროექტები
+      </a>
+      <a href="#how-it-works">
+        როგორ მუშაობს
+      </a>
+      <a href="team.html">
+        ჩვენი გუნდი
+      </a>
       <button id="meeting-button" class="nav-meeting" type="button" onclick="openAttendancePanel()">
         <i data-lucide="calendar-days"></i> კლუბის შეკრება
       </button>
-      <a class="nav-admin" href="admin.html"> შესვლა <i data-lucide="shield"></i> </a>
+      <a class="nav-admin" href="admin.html">
+        შესვლა <i data-lucide="shield"></i>
+      </a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow"> ARDUINO & CHEMISTRY PROJECT COMMUNITY </p>
-        <h1> იდეებიდან,<br> <em>რეალურ</em> პროექტებზე </h1>
+        <p class="eyebrow">
+          ARDUINO & CHEMISTRY PROJECT COMMUNITY
+        </p>
+        <h1>
+          იდეებიდან,<br>
+          <em>რეალურ</em> პროექტებზე
+        </h1>
         <p class="hero-text">
           ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
         </p>
+
         <div class="hero-actions">
           <a class="button primary" href="projects.html">
             პროექტების ნახვა <i data-lucide="arrow-right"></i>
@@ -98,21 +125,29 @@
             <i data-lucide="play-circle"></i> ვიდეო ინსტრუქცია
           </button>
         </div>
+
         <div class="hero-stats">
           <div>
-            <strong>∞</strong> <span>შესაძლებლობა</span>
+            <strong>∞</strong>
+            <span>შესაძლებლობა</span>
           </div>
           <div>
-            <strong>1</strong> <span>საერთო სივრცე</span>
+            <strong>1</strong>
+            <span>საერთო სივრცე</span>
           </div>
           <div>
-            <strong>100%</strong> <span>რეალური პროექტები</span>
+            <strong>100%</strong>
+            <span>რეალური პროექტები</span>
           </div>
         </div>
       </div>
+
       <div class="circuit-visual" aria-hidden="true">
         <div class="board">
-          <span class="chip"> ARDUINO<br> HUB </span>
+          <span class="chip">
+            ARDUINO<br>
+            HUB
+          </span>
           <span class="pin p1"></span>
           <span class="pin p2"></span>
           <span class="pin p3"></span>
@@ -125,41 +160,70 @@
     </section>
 
     <section id="how-it-works" class="section">
-      <p class="eyebrow"> მარტივი პროცესი </p>
-      <h2> როგორ მუშაობს Arduino & Chemistry Hub? </h2>
+      <p class="eyebrow">
+        მარტივი პროცესი
+      </p>
+      <h2>
+        როგორ მუშაობს Arduino & Chemistry Hub?
+      </h2>
+
       <div class="steps">
         <article>
           <b>01</b>
           <i data-lucide="search"></i>
-          <h3> დაათვალიერე პროექტები </h3>
-          <p> აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები. </p>
+          <h3>
+            დაათვალიერე პროექტები
+          </h3>
+          <p>
+            აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
+          </p>
         </article>
+
         <article>
           <b>02</b>
           <i data-lucide="lightbulb"></i>
-          <h3> იპოვე ახალი იდეები </h3>
-          <p> გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები. </p>
+          <h3>
+            იპოვე ახალი იდეები
+          </h3>
+          <p>
+            გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
+          </p>
         </article>
+
         <article>
           <b>03</b>
           <i data-lucide="file-text"></i>
-          <h3> გაეცანი დეტალებს </h3>
-          <p> იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები. </p>
+          <h3>
+            გაეცანი დეტალებს
+          </h3>
+          <p>
+            იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
+          </p>
         </article>
+
         <article>
           <b>04</b>
           <i data-lucide="graduation-cap"></i>
-          <h3> ისწავლე პრაქტიკიდან </h3>
-          <p> გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად. </p>
+          <h3>
+            ისწავლე პრაქტიკიდან
+          </h3>
+          <p>
+            გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.
+          </p>
         </article>
       </div>
     </section>
 
     <section id="about" class="about section">
       <div>
-        <p class="eyebrow"> ARDUINO•CHEMISTRY•HUB-ის შესახებ </p>
-        <h2> იდეები უკეთესია, როცა გაზიარებულია. </h2>
+        <p class="eyebrow">
+          ARDUINO•CHEMISTRY•HUB-ის შესახებ
+        </p>
+        <h2>
+          იდეები უკეთესია, როცა გაზიარებულია.
+        </h2>
       </div>
+
       <p>
         ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
       </p>
@@ -167,7 +231,10 @@
 
     <section class="cta">
       <i data-lucide="cpu"></i>
-      <h2> აღმოაჩინე ახალი იდეები<br> და გაიცანი Arduino-ს შესაძლებლობები. </h2>
+      <h2>
+        აღმოაჩინე ახალი იდეები<br>
+        და გაიცანი Arduino-ს შესაძლებლობები.
+      </h2>
       <a class="button primary" href="projects.html">
         პროექტების ნახვა <i data-lucide="arrow-right"></i>
       </a>
@@ -180,15 +247,25 @@
       <button id="meeting-close" class="meeting-close" type="button" aria-label="დახურვა">
         <i data-lucide="x"></i>
       </button>
+
       <div class="meeting-icon">
         <i data-lucide="calendar-days"></i>
       </div>
-      <p class="eyebrow"> მოაზროვნე ქიმიკოსთა კლუბი </p>
-      <h2 id="meeting-title"> კლუბის შეკრება </h2>
+
+      <p class="eyebrow">
+        მოაზროვნე ქიმიკოსთა კლუბი
+      </p>
+
+      <h2 id="meeting-title">
+        კლუბის შეკრება
+      </h2>
+
       <div id="meeting-content" class="meeting-content">
         <div class="meeting-loading">
           <i data-lucide="loader-circle"></i>
-          <span> მონაცემები იტვირთება... </span>
+          <span>
+            მონაცემები იტვირთება...
+          </span>
         </div>
       </div>
     </section>
@@ -206,19 +283,24 @@
             <span>ონლაინ ასისტენტი</span>
           </div>
         </div>
+
         <button id="ai-chat-close" class="ai-chat-close" type="button" aria-label="ჩატის დახურვა">
           <i data-lucide="x"></i>
         </button>
       </div>
-      
+
       <div id="ai-chat-messages" class="ai-chat-messages">
         <div class="ai-message assistant">
           <div class="ai-message-avatar">
             <i data-lucide="bot"></i>
           </div>
           <div class="ai-message-bubble">
-            <p> გამარჯობა! 👋 </p>
-            <p> მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში. </p>
+            <p>
+              გამარჯობა! 👋
+            </p>
+            <p>
+              მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
+            </p>
           </div>
         </div>
       </div>
@@ -226,15 +308,13 @@
       <form id="ai-chat-form" class="ai-chat-form">
         <div class="ai-chat-input-wrap">
           <input id="ai-chat-input" type="text" autocomplete="off" maxlength="1000" placeholder="დაწერე კითხვა..." aria-label="შეიყვანე კითხვა">
-          <!-- ხმოვანი მოსმენის (Text-to-Speech) ღილაკი -->
-          <button id="ai-chat-speak" type="button" aria-label="პასუხის მოსმენა" title="ბოლო პასუხის მოსმენა" style="background: none; border: none; cursor: pointer; padding: 0 6px; display: flex; align-items: center; color: inherit;">
-            <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i>
-          </button>
           <button id="ai-chat-send" type="submit" aria-label="გაგზავნა">
             <i data-lucide="send"></i>
           </button>
         </div>
-        <small> AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია. </small>
+        <small>
+          AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.
+        </small>
       </form>
     </section>
 
@@ -242,7 +322,9 @@
       <span class="ai-chat-pulse"></span>
       <i data-lucide="message-circle" class="ai-chat-icon chat-icon"></i>
       <i data-lucide="x" class="ai-chat-icon close-icon"></i>
-      <span class="ai-chat-badge"> AI </span>
+      <span class="ai-chat-badge">
+        AI
+      </span>
     </button>
   </div>
 
@@ -253,18 +335,22 @@
       <button type="button" class="video-modal-close" id="video-close" aria-label="დახურვა">
         <i data-lucide="x"></i>
       </button>
+
       <!-- მოწყობილობის არჩევის ღილაკები -->
       <div class="video-device-selector">
         <button type="button" class="device-tab active" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4">
           <i data-lucide="smartphone"></i> iPhone
         </button>
+
         <button type="button" class="device-tab" data-video-src="">
           <i data-lucide="smartphone"></i> Android
         </button>
+
         <button type="button" class="device-tab" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4">
           <i data-lucide="laptop"></i> ლეპტოპი
         </button>
       </div>
+
       <div class="video-container">
         <video id="tutorial-video" controls>
           <source id="video-source" src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4" type="video/mp4">
@@ -281,20 +367,25 @@
       <button class="meeting-close" type="button" onclick="closeGlobalModal()" aria-label="დახურვა">
         <i data-lucide="x"></i>
       </button>
+
       <div class="meeting-icon">
         <i data-lucide="megaphone"></i>
       </div>
+
       <p class="eyebrow">ადმინისტრატორის პანელი</p>
       <h2>გლობალური შეტყობინება</h2>
+
       <form id="global-notif-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
         <div>
           <label for="global-title" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;">სათაური</label>
           <input type="text" id="global-title" placeholder="მაგ: ახალი სიახლე!" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
         </div>
+
         <div>
           <label for="global-message" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;">შეტყობინება</label>
           <textarea id="global-message" rows="4" placeholder="დაწერე შეტყობინების ტექსტი..." required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;"></textarea>
         </div>
+
         <button type="submit" class="button primary" style="justify-content: center; margin-top: 8px;">
           გაგზავნა <i data-lucide="send"></i>
         </button>
@@ -306,11 +397,19 @@
     <a class="brand" href="index.html">
       <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
     </a>
-    <p> Arduino&Chemistry პროექტები ერთ სივრცეში </p>
+    <p>
+      Arduino&Chemistry პროექტები ერთ სივრცეში
+    </p>
+
     <div class="footer-credit">
-      <span> მოაზროვნე ქიმიკოსთა კლუბი </span>
+      <span>
+        მოაზროვნე ქიმიკოსთა კლუბი
+      </span>
     </div>
-    <small> © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია. </small>
+
+    <small>
+      © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
+    </small>
   </footer>
 
   <script src="https://unpkg.com/lucide@latest"></script>
