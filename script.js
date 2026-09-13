@@ -6263,44 +6263,79 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-// ხმოვანი სინთეზის (Text-to-Speech) ინტეგრაცია AI ჩატისთვის
+// რეალური ხმოვანი საუბრის (Voice Chat) რეჟიმი
 document.addEventListener('DOMContentLoaded', () => {
-  const speakBtn = document.getElementById('ai-chat-speak');
+  const voiceToggleBtn = document.getElementById('voice-chat-toggle');
+  const chatInput = document.getElementById('ai-chat-input');
+  const sendBtn = document.getElementById('ai-chat-send');
   
-  if (speakBtn) {
-    speakBtn.addEventListener('click', () => {
-      if (!('speechSynthesis' in window)) {
-        alert('თქვენი ბრაუზერი არ უჭერს მხარს ხმოვან სინთეზს.');
-        return;
+  if (!voiceToggleBtn) return;
+
+  let isVoiceModeActive = false;
+  let recognition = null;
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'ka-GE'; // ქართული ენა
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+      const speechText = event.results[0][0].transcript;
+      if (chatInput) {
+        chatInput.value = speechText;
+        // ავტომატურად გავაგზავნოთ შეტყობინება ჩატში
+        const chatForm = document.getElementById('ai-chat-form');
+        if (chatForm) chatForm.requestSubmit();
       }
+    };
 
-      // ვიპოვოთ ბოლო შეტყობინება AI-ს მხრიდან
-      const messages = document.querySelectorAll('#ai-chat-messages .ai-message.assistant');
-      if (messages.length === 0) return;
-
-      const lastMessageBubble = messages[messages.length - 1].querySelector('.ai-message-bubble');
-      if (!lastMessageBubble) return;
-
-      const textToSpeak = lastMessageBubble.innerText;
-
-      // თუ უკვე ლაპარაკობს, გავაჩეროთ
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = 'ka-GE'; // ქართული ენა
-      utterance.rate = 1.0;     // სიჩქარე
-      utterance.pitch = 1.0;    // ტონი
-
-      // ვიზუალური ეფექტი ლაპარაკის დროს
-      speakBtn.style.color = '#38bdf8';
-      utterance.onend = () => {
-        speakBtn.style.color = '';
-      };
-      utterance.onerror = () => {
-        speakBtn.style.color = '';
-      };
-
-      window.speechSynthesis.speak(utterance);
-    });
+    recognition.onend = () => {
+      // თუ ხმოვანი რეჟიმი ისევ ჩართულია და AI არ ლაპარაკობს, თავიდან ჩავრთოთ მოსმენა
+      if (isVoiceModeActive) {
+        try { recognition.start(); } catch(e) {}
+      }
+    };
   }
+
+  voiceToggleBtn.addEventListener('click', () => {
+    isVoiceModeActive = !isVoiceModeActive;
+
+    if (isVoiceModeActive) {
+      voiceToggleBtn.style.color = '#22c55e'; // მწვანე ფერი (ჩართულია)
+      voiceToggleBtn.title = "ხმოვანი საუბრის გამორთვა";
+      alert("ხმოვანი საუბრის რეჟიმი ჩაირთო! ილაპარაკე...");
+      try { recognition.start(); } catch(e) {}
+    } else {
+      voiceToggleBtn.style.color = '';
+      voiceToggleBtn.title = "ხმოვანი საუბრის ჩართვა";
+      if (recognition) recognition.stop();
+      window.speechSynthesis.cancel();
+      alert("ხმოვანი საუბარი გამოირთო.");
+    }
+  });
+
+  // ფუნქცია, რომელიც AI-ს პასუხის მიღებისთანავე ახმოვანებს ტექსტს და აგრძელებს მოსმენას
+  window.speakAiResponseAndListen = function(text) {
+    if (!isVoiceModeActive || !('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ka-GE';
+    
+    // სანამ AI ლაპარაკობს, მიკროფონი გავაჩეროთ რომ საკუთარი თავი არ მოუსმინოს
+    if (recognition) recognition.stop();
+
+    utterance.onend = () => {
+      // ლაპარაკი დაამთავრა — თავიდან ვრთავთ მიკროფონს რომ შენ უპასუხო
+      if (isVoiceModeActive) {
+        setTimeout(() => {
+          try { recognition.start(); } catch(e) {}
+        }, 500);
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
 });
