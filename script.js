@@ -6073,100 +6073,191 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+```js
 // ==========================================
 // GLOBAL NOTIFICATION SYSTEM (/global)
 // ==========================================
 
 window.openGlobalModal = function() {
-  const modal = document.getElementById('global-modal');
+  const modal = document.getElementById('global-modal')
+
   if (modal) {
-    modal.hidden = false;
-    modal.setAttribute('aria-hidden', 'false');
+    modal.hidden = false
+    modal.setAttribute('aria-hidden', 'false')
   }
-};
+}
 
 window.closeGlobalModal = function() {
-  const modal = document.getElementById('global-modal');
+  const modal = document.getElementById('global-modal')
+
   if (modal) {
-    modal.hidden = true;
-    modal.setAttribute('aria-hidden', 'true');
-    const form = document.getElementById('global-notif-form');
-    if (form) form.reset();
+    modal.hidden = true
+    modal.setAttribute('aria-hidden', 'true')
+
+    const form = document.getElementById('global-notif-form')
+
+    if (form) {
+      form.reset()
+    }
   }
-};
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. AI ჩატში /global ბრძანების გადაჭერა
-  const aiChatForm = document.getElementById('ai-chat-form');
-  const aiChatInput = document.getElementById('ai-chat-input');
-  const aiChatWindow = document.getElementById('ai-chat-window');
+  const aiChatForm = document.getElementById('ai-chat-form')
+  const aiChatInput = document.getElementById('ai-chat-input')
+  const aiChatWindow = document.getElementById('ai-chat-window')
+
+  const activeSupabase =
+    window.supabase ||
+    window._supabase ||
+    window.supabaseClient ||
+    (typeof supabase !== 'undefined' ? supabase : null)
 
   if (aiChatForm && aiChatInput) {
     aiChatForm.addEventListener('submit', async (e) => {
-      const text = aiChatInput.value.trim();
-      if (text === '/global') {
-        e.preventDefault();
-        e.stopPropagation();
-        aiChatInput.value = '';
+      const text = aiChatInput.value.trim()
 
-        let isLoggedIn = true;
-        const activeSupabase = window.supabase || window._supabase || window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
-
-        if (activeSupabase && activeSupabase.auth) {
-          try {
-            const { data: { session } } = await activeSupabase.auth.getSession();
-            if (!session) isLoggedIn = false;
-          } catch (err) {
-            console.warn('Supabase auth check error:', err);
-          }
-        }
-
-        if (!isLoggedIn) {
-          alert('გლობალური შეტყობინების გასაგზავნად საჭიროა ადმინისტრატორით შესვლა!');
-          return;
-        }
-
-        if (aiChatWindow) {
-          aiChatWindow.setAttribute('aria-hidden', 'true');
-        }
-        window.openGlobalModal();
+      if (text !== '/global') {
+        return
       }
-    }, true);
+
+      e.preventDefault()
+      e.stopPropagation()
+
+      aiChatInput.value = ''
+
+      if (!activeSupabase || !activeSupabase.auth) {
+        alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
+        return
+      }
+
+      let session = null
+
+      try {
+        const result = await activeSupabase.auth.getSession()
+        session = result?.data?.session || null
+      } catch (err) {
+        console.error('Supabase auth check error:', err)
+        alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
+        return
+      }
+
+      if (!session) {
+        alert('გლობალური შეტყობინების გასაგზავნად საჭიროა ადმინისტრატორით შესვლა!')
+        return
+      }
+
+      if (aiChatWindow) {
+        aiChatWindow.setAttribute('aria-hidden', 'true')
+      }
+
+      window.openGlobalModal()
+    }, true)
   }
 
-  // 2. ფორმის გაგზავნა Supabase-ში
-  const globalForm = document.getElementById('global-notif-form');
+  const globalForm = document.getElementById('global-notif-form')
+
   if (globalForm) {
     globalForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('global-title').value.trim();
-      const message = document.getElementById('global-message').value.trim();
+      e.preventDefault()
 
-      // ზუსტი მიმართვა იმ ინიციალიზებული კლიენტისთვის, რომელიც საიტზე ავტორიზაციისთვის მუშაობს
-      const client = window.supabase || window._supabase || window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
+      const titleElement = document.getElementById('global-title')
+      const messageElement = document.getElementById('global-message')
 
-      if (!client || typeof client.from !== 'function') {
-        alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა ფაილში!');
-        return;
+      if (!titleElement || !messageElement) {
+        alert('შეცდომა: შეტყობინების ველები ვერ მოიძებნა!')
+        return
+      }
+
+      const title = titleElement.value.trim()
+      const message = messageElement.value.trim()
+
+      if (!title) {
+        alert('გთხოვთ შეიყვანოთ შეტყობინების სათაური!')
+        return
+      }
+
+      if (!message) {
+        alert('გთხოვთ შეიყვანოთ შეტყობინების ტექსტი!')
+        return
+      }
+
+      if (!activeSupabase || !activeSupabase.auth) {
+        alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
+        return
+      }
+
+      const submitButton = globalForm.querySelector('button[type="submit"]')
+
+      if (submitButton) {
+        submitButton.disabled = true
       }
 
       try {
-        const { data, error: dbError } = await client
-          .from('global_notifications')
-          .insert([{ title: title, message: message }]);
+        const {
+          data: { session },
+          error: sessionError
+        } = await activeSupabase.auth.getSession()
 
-        if (dbError) {
-          console.error('Supabase Error:', dbError);
-          alert('შეცდომა ბაზაში ჩაწერისას: ' + dbError.message);
-          return;
+        if (sessionError || !session?.access_token) {
+          alert('სესია აღარ არის აქტიური. გთხოვთ თავიდან შეხვიდეთ ანგარიშში.')
+          return
         }
 
-        alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
-        window.closeGlobalModal();
+        const response = await fetch(
+          `${window.SUPABASE_URL}/functions/v1/send-global-notification`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'apikey': window.SUPABASE_ANON_KEY,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              title,
+              message
+            })
+          }
+        )
+
+        let result = null
+
+        try {
+          result = await response.json()
+        } catch {
+          result = null
+        }
+
+        if (!response.ok) {
+          console.error('Global notification error:', result)
+
+          alert(
+            result?.error ||
+            'გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!'
+          )
+
+          return
+        }
+
+        alert(
+          result?.message ||
+          'გლობალური შეტყობინება წარმატებით გაიგზავნა!'
+        )
+
+        window.closeGlobalModal()
       } catch (err) {
-        console.error('Error sending global notification:', err);
-        alert('შეცდომა: ' + err.message);
+        console.error('Error sending global notification:', err)
+
+        alert(
+          'შეცდომა: გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!'
+        )
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false
+        }
       }
-    });
+    })
   }
-});
+})
+```
+
