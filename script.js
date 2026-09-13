@@ -6110,7 +6110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         aiChatInput.value = '';
 
         let isLoggedIn = true;
-        const activeSupabase = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+        const activeSupabase = window.supabase || window._supabase || (typeof supabase !== 'undefined' ? supabase : null);
 
         if (activeSupabase && activeSupabase.auth) {
           try {
@@ -6142,10 +6142,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const title = document.getElementById('global-title').value.trim();
       const message = document.getElementById('global-message').value.trim();
 
-      const client = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+      // ეძებს ყველა შესაძლო გლობალურ Supabase ცვლადს
+      const client = window.supabase || window._supabase || window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
 
       if (!client || typeof client.from !== 'function') {
-        alert('შეცდომა: Supabase კლიენტი ჯერ არ არის ინიციალიზებული!');
+        alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა ფაილში!');
         return;
       }
 
