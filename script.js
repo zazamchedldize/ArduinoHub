@@ -6262,3 +6262,45 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 })
+
+// ხმოვანი სინთეზის (Text-to-Speech) ინტეგრაცია AI ჩატისთვის
+document.addEventListener('DOMContentLoaded', () => {
+  const speakBtn = document.getElementById('ai-chat-speak');
+  
+  if (speakBtn) {
+    speakBtn.addEventListener('click', () => {
+      if (!('speechSynthesis' in window)) {
+        alert('თქვენი ბრაუზერი არ უჭერს მხარს ხმოვან სინთეზს.');
+        return;
+      }
+
+      // ვიპოვოთ ბოლო შეტყობინება AI-ს მხრიდან
+      const messages = document.querySelectorAll('#ai-chat-messages .ai-message.assistant');
+      if (messages.length === 0) return;
+
+      const lastMessageBubble = messages[messages.length - 1].querySelector('.ai-message-bubble');
+      if (!lastMessageBubble) return;
+
+      const textToSpeak = lastMessageBubble.innerText;
+
+      // თუ უკვე ლაპარაკობს, გავაჩეროთ
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = 'ka-GE'; // ქართული ენა
+      utterance.rate = 1.0;     // სიჩქარე
+      utterance.pitch = 1.0;    // ტონი
+
+      // ვიზუალური ეფექტი ლაპარაკის დროს
+      speakBtn.style.color = '#38bdf8';
+      utterance.onend = () => {
+        speakBtn.style.color = '';
+      };
+      utterance.onerror = () => {
+        speakBtn.style.color = '';
+      };
+
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+});
