@@ -6262,3 +6262,75 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 })
+
+const suggestionModal = document.getElementById("suggestion-modal")
+const openSuggestion = document.getElementById("open-suggestion")
+const closeSuggestion = document.getElementById("close-suggestion")
+const suggestionBackdrop = document.getElementById("suggestion-backdrop")
+const suggestionMessage = document.getElementById("suggestion-message")
+const sendSuggestion = document.getElementById("send-suggestion")
+const suggestionStatus = document.getElementById("suggestion-status")
+const suggestionCounter = document.getElementById("suggestion-counter")
+
+openSuggestion?.addEventListener("click", () => {
+  suggestionModal.hidden = false
+  suggestionModal.setAttribute("aria-hidden", "false")
+  suggestionMessage.focus()
+})
+
+function closeSuggestionModal() {
+  suggestionModal.hidden = true
+  suggestionModal.setAttribute("aria-hidden", "true")
+  suggestionStatus.textContent = ""
+}
+
+closeSuggestion?.addEventListener("click", closeSuggestionModal)
+suggestionBackdrop?.addEventListener("click", closeSuggestionModal)
+
+suggestionMessage?.addEventListener("input", () => {
+  suggestionCounter.textContent = `${suggestionMessage.value.length} / 3000`
+})
+
+sendSuggestion?.addEventListener("click", async () => {
+  const message = suggestionMessage.value.trim()
+
+  if (!message) {
+    suggestionStatus.textContent = "გთხოვ, დაწერე შენი შეფასება"
+    return
+  }
+
+  sendSuggestion.disabled = true
+  sendSuggestion.innerHTML = "იგზავნება..."
+
+  suggestionStatus.textContent = ""
+
+  try {
+    const { error } = await supabase.functions.invoke("send-suggestion", {
+      body: {
+        message
+      }
+    })
+
+    if (error) {
+      throw error
+    }
+
+    suggestionStatus.textContent = "შეფასება წარმატებით გაიგზავნა ❤️"
+    suggestionMessage.value = ""
+    suggestionCounter.textContent = "0 / 3000"
+
+    setTimeout(() => {
+      closeSuggestionModal()
+    }, 1800)
+  } catch (error) {
+    console.error(error)
+    suggestionStatus.textContent = "გაგზავნა ვერ მოხერხდა. სცადე თავიდან."
+  }
+
+  sendSuggestion.disabled = false
+  sendSuggestion.innerHTML = `გაგზავნა <i data-lucide="send"></i>`
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+})
