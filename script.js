@@ -6018,3 +6018,33 @@ document.addEventListener('click', (e) => {
     }
   }
 }, true);
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const openBtn = document.getElementById('video-tutorial-btn');
+  const modal = document.getElementById('video-modal');
+  const closeBtn = document.getElementById('video-close');
+  const backdrop = document.getElementById('video-backdrop');
+  const video = document.getElementById('tutorial-video');
+
+  function openVideoModal() {
+    modal?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    modal?.classList.remove('active');
+    document.body.style.overflow = '';
+    if (video) video.pause();
+  }
+
+  openBtn?.addEventListener('click', openVideoModal);
+  closeBtn?.addEventListener('click', closeVideoModal);
+  backdrop?.addEventListener('click', closeVideoModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+      closeVideoModal();
+    }
+  });
+});
