@@ -6135,29 +6135,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const globalForm = document.getElementById('global-notif-form');
-  if (globalForm) {
-    globalForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+if (globalForm) {
+  globalForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('global-title').value.trim();
+    const message = document.getElementById('global-message').value.trim();
 
-      const title = document.getElementById('global-title').value.trim();
-      const message = document.getElementById('global-message').value.trim();
+    // ვპოულობთ Supabase კლიენტს
+    const client = typeof supabase !== 'undefined' ? supabase : (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
 
-      try {
-        // მხოლოდ Supabase-ში ჩაწერა — ბაზის ტრიგერი ავტომატურად გააგზავნის OneSignal-ში
-        if (typeof supabase !== 'undefined' && supabase.from) {
-          const { error: dbError } = await supabase
-            .from('global_notifications')
-            .insert([{ title, message }]);
+    if (!client) {
+      alert('შეცდომა: Supabase კლიენტი ვერ იპოვა script.js-ში!');
+      return;
+    }
 
-          if (dbError) throw dbError;
-        }
+    try {
+      const { data, error: dbError } = await client
+        .from('global_notifications')
+        .insert([{ title, message }]);
 
-        alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
-        window.closeGlobalModal();
-      } catch (err) {
-        console.error('Error sending global notification:', err);
-        alert('შეცდომა: ' + err.message);
+      if (dbError) {
+        console.error('Supabase Error:', dbError);
+        alert('შეცდომა ბაზაში ჩაწერისას: ' + dbError.message);
+        return;
       }
-    });
-  }
-});
+
+      alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
+      window.closeGlobalModal();
+    } catch (err) {
+      console.error('Error sending global notification:', err);
+      alert('შეცდომა: ' + err.message);
+    }
+  });
+}
