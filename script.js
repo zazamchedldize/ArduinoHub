@@ -6077,7 +6077,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // GLOBAL NOTIFICATION SYSTEM (/global)
 // ==========================================
 
-// მოდალის გახსნისა და დახურვის ფუნქციები
 window.openGlobalModal = function() {
   const modal = document.getElementById('global-modal');
   if (modal) {
@@ -6096,7 +6095,6 @@ window.closeGlobalModal = function() {
   }
 };
 
-// 1. AI ჩატში /global ბრძანების გადაჭერა
 document.addEventListener('DOMContentLoaded', () => {
   const aiChatForm = document.getElementById('ai-chat-form');
   const aiChatInput = document.getElementById('ai-chat-input');
@@ -6110,9 +6108,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         e.stopPropagation();
 
-        aiChatInput.value = ''; // ჩატის ველის გასუფთავება
+        aiChatInput.value = '';
 
-        // შემოწმება: არის თუ არა Supabase ავტორიზაცია
         let isLoggedIn = true;
         if (typeof supabase !== 'undefined' && supabase.auth) {
           try {
@@ -6128,18 +6125,15 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
-        // AI ჩატის დახურვა
         if (aiChatWindow) {
           aiChatWindow.setAttribute('aria-hidden', 'true');
         }
 
-        // მოდალის გახსნა
         window.openGlobalModal();
       }
     }, true);
   }
 
-  // 2. ფორმის გაგზავნა Supabase-ში და OneSignal Push-ის გაშვება
   const globalForm = document.getElementById('global-notif-form');
   if (globalForm) {
     globalForm.addEventListener('submit', async (e) => {
@@ -6149,39 +6143,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const message = document.getElementById('global-message').value.trim();
 
       try {
-        // ა) ჩაწერა Supabase-ის ბაზაში (თუ Supabase ჩართულია)
+        // მხოლოდ Supabase-ში ჩაწერა — ბაზის ტრიგერი ავტომატურად გააგზავნის OneSignal-ში
         if (typeof supabase !== 'undefined' && supabase.from) {
           const { error: dbError } = await supabase
             .from('global_notifications')
             .insert([{ title, message }]);
-          if (dbError) console.error('Supabase DB Error:', dbError);
+
+          if (dbError) throw dbError;
         }
 
-        // ბ) OneSignal API-თ შეტყობინების გაგზავნა
-        const REST_KEY = "os_v2_app_d4psobll6rhhpg3ec66v3ae6yte2g54hgdkuytufjzecjk7rus6xqp6q3qsxvdhgkheew34tccvv47uwvfcytakg7fp3pc4u5zhm67i";
-
-        const response = await fetch("https://onesignal.com/api/v1/notifications", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "Authorization": `Basic ${REST_KEY}`
-          },
-          body: JSON.stringify({
-            app_id: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4",
-            included_segments: ["Subscribed Users"],
-            headings: { ka: title, en: title },
-            contents: { ka: message, en: message }
-          })
-        });
-
-        const resData = await response.json();
-
-        if (response.ok && !resData.errors) {
-          alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
-        } else {
-          alert('OneSignal შეცდომა: ' + (resData.errors ? JSON.stringify(resData.errors) : 'უცნობი შეცდომა'));
-        }
-
+        alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
         window.closeGlobalModal();
       } catch (err) {
         console.error('Error sending global notification:', err);
