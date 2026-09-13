@@ -6263,79 +6263,119 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-// რეალური ხმოვანი საუბრის (Voice Chat) რეჟიმი
+// =========================================
+// ArduinoHub AI Chat Widget Logic
+// =========================================
+
 document.addEventListener('DOMContentLoaded', () => {
-  const voiceToggleBtn = document.getElementById('voice-chat-toggle');
-  const chatInput = document.getElementById('ai-chat-input');
-  const sendBtn = document.getElementById('ai-chat-send');
-  
-  if (!voiceToggleBtn) return;
+  const chatWidget = document.getElementById('ai-chat-widget');
+  const closeChatBtn = document.getElementById('close-chat-btn');
+  const userInput = document.getElementById('ai-user-input');
+  const sendBtn = document.getElementById('send-msg-btn');
+  const chatMessages = document.getElementById('ai-chat-messages');
+  const voiceBtn = document.getElementById('voice-input-btn');
 
-  let isVoiceModeActive = false;
-  let recognition = null;
-
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.lang = 'ka-GE'; // ქართული ენა
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event) => {
-      const speechText = event.results[0][0].transcript;
-      if (chatInput) {
-        chatInput.value = speechText;
-        // ავტომატურად გავაგზავნოთ შეტყობინება ჩატში
-        const chatForm = document.getElementById('ai-chat-form');
-        if (chatForm) chatForm.requestSubmit();
-      }
-    };
-
-    recognition.onend = () => {
-      // თუ ხმოვანი რეჟიმი ისევ ჩართულია და AI არ ლაპარაკობს, თავიდან ჩავრთოთ მოსმენა
-      if (isVoiceModeActive) {
-        try { recognition.start(); } catch(e) {}
-      }
-    };
+  // ვიჯეტის დახურვა 'X' ღილაკზე დაჭერით
+  if (closeChatBtn && chatWidget) {
+    closeChatBtn.addEventListener('click', () => {
+      chatWidget.style.display = 'none';
+    });
   }
 
-  voiceToggleBtn.addEventListener('click', () => {
-    isVoiceModeActive = !isVoiceModeActive;
+  // შეტყობინების დამატების ფუნქცია ინტერფეისში
+  function addMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('ai-message', sender);
 
-    if (isVoiceModeActive) {
-      voiceToggleBtn.style.color = '#22c55e'; // მწვანე ფერი (ჩართულია)
-      voiceToggleBtn.title = "ხმოვანი საუბრის გამორთვა";
-      alert("ხმოვანი საუბრის რეჟიმი ჩაირთო! ილაპარაკე...");
-      try { recognition.start(); } catch(e) {}
+    const iconDiv = document.createElement('div');
+    iconDiv.classList.add('msg-icon');
+    iconDiv.innerHTML = sender === 'bot' ? '<i data-lucide="bot"></i>' : '<i data-lucide="user"></i>';
+
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.classList.add('msg-bubble');
+    bubbleDiv.textContent = text;
+
+    if (sender === 'bot') {
+      msgDiv.appendChild(iconDiv);
+      msgDiv.appendChild(bubbleDiv);
     } else {
-      voiceToggleBtn.style.color = '';
-      voiceToggleBtn.title = "ხმოვანი საუბრის ჩართვა";
-      if (recognition) recognition.stop();
-      window.speechSynthesis.cancel();
-      alert("ხმოვანი საუბარი გამოირთო.");
+      msgDiv.appendChild(bubbleDiv);
+      msgDiv.appendChild(iconDiv);
+    }
+
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Lucide ხატულების რეინიციალიზაცია ახლადდამატებულ ელემენტებზე
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  }
+
+  // შეტყობინების გაგზავნის ლოგიკა
+  function handleSendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, 'user');
+    userInput.value = '';
+
+    // იმიტირებული AI პასუხი (შეგიძლია აქ შენი ბექენდის მოთხოვნა ჩასვა)
+    setTimeout(() => {
+      addMessage("მესმის შენი! ვამუშავებ მოთხოვნას ArduinoHub-ის სისტემიდან...", 'bot');
+    }, 1000);
+  }
+
+  sendBtn.addEventListener('click', handleSendMessage);
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
     }
   });
 
-  // ფუნქცია, რომელიც AI-ს პასუხის მიღებისთანავე ახმოვანებს ტექსტს და აგრძელებს მოსმენას
-  window.speakAiResponseAndListen = function(text) {
-    if (!isVoiceModeActive || !('speechSynthesis' in window)) return;
+  // ხმოვანი შეყვანის (Speech-to-Text) ლოგიკა მიკროფონის ღილაკისთვის
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'ka-GE'; // ქართული ენა
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ka-GE';
-    
-    // სანამ AI ლაპარაკობს, მიკროფონი გავაჩეროთ რომ საკუთარი თავი არ მოუსმინოს
-    if (recognition) recognition.stop();
-
-    utterance.onend = () => {
-      // ლაპარაკი დაამთავრა — თავიდან ვრთავთ მიკროფონს რომ შენ უპასუხო
-      if (isVoiceModeActive) {
-        setTimeout(() => {
-          try { recognition.start(); } catch(e) {}
-        }, 500);
+    voiceBtn.addEventListener('click', () => {
+      if (voiceBtn.classList.contains('listening')) {
+        recognition.stop();
+        return;
       }
+      try {
+        recognition.start();
+      } catch (err) {
+        console.error("Speech recognition error:", err);
+      }
+    });
+
+    recognition.onstart = () => {
+      voiceBtn.classList.add('listening');
+      userInput.placeholder = "მომისმინე, ვსაუბრობ...";
     };
 
-    window.speechSynthesis.speak(utterance);
-  };
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      userInput.value = transcript;
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Mic error:", event.error);
+      voiceBtn.classList.remove('listening');
+      userInput.placeholder = "დაწერე კითხვა...";
+    };
+
+    recognition.onend = () => {
+      voiceBtn.classList.remove('listening');
+      userInput.placeholder = "დაწერე კითხვა...";
+    };
+  } else {
+    // თუ ბრაუზერი არ უჭერს მხარს ხმოვან ამოცნობას, ღილაკი დაიმალება
+    voiceBtn.style.display = 'none';
+  }
 });
