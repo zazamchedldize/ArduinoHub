@@ -6319,11 +6319,32 @@ sendSuggestion?.addEventListener("click", async () => {
   suggestionStatus.textContent = ""
 
   try {
-    const { error } = await supabase.functions.invoke("send-suggestion", {
-      body: {
-        message
-      }
-    })
+    const {
+  data: {
+    user
+  }
+} = await db.auth.getUser()
+
+if (!user) {
+  throw new Error("მომხმარებელი ავტორიზებული არ არის")
+}
+
+const metadata = user.user_metadata || {}
+
+const senderName = String(
+  metadata.username ||
+  metadata.name ||
+  metadata.full_name ||
+  user.email ||
+  "მომხმარებელი"
+).trim()
+
+const { error } = await db.functions.invoke("send-suggestion", {
+  body: {
+    message,
+    senderName
+  }
+})
 
     if (error) {
       throw error
