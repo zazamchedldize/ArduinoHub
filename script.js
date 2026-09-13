@@ -6077,7 +6077,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // GLOBAL NOTIFICATION SYSTEM (/global)
 // ==========================================
 
-// მოდალის გახსნის და დახურვის ფუნქციები
+// მოდალის გახსნისა და დახურვის ფუნქციები
 window.openGlobalModal = function() {
   const modal = document.getElementById('global-modal');
   if (modal) {
@@ -6096,71 +6096,93 @@ window.closeGlobalModal = function() {
   }
 };
 
-// 1. AI ჩატში /global ბრძანების დაჭერა
-const aiChatForm = document.getElementById('ai-chat-form');
-const aiChatInput = document.getElementById('ai-chat-input');
+// 1. AI ჩატში /global ბრძანების გადაჭერა
+document.addEventListener('DOMContentLoaded', () => {
+  const aiChatForm = document.getElementById('ai-chat-form');
+  const aiChatInput = document.getElementById('ai-chat-input');
+  const aiChatWindow = document.getElementById('ai-chat-window');
 
-if (aiChatForm && aiChatInput) {
-  aiChatForm.addEventListener('submit', async (e) => {
-    const text = aiChatInput.value.trim();
+  if (aiChatForm && aiChatInput) {
+    // true პარამეტრის წყალობით ეს ივენთი გაეშვება AI-ს გაგზავნამდე!
+    aiChatForm.addEventListener('submit', async (e) => {
+      const text = aiChatInput.value.trim();
 
-    if (text === '/global') {
-      e.preventDefault();
-      e.stopPropagation();
-      aiChatInput.value = ''; // ჩატის ველის გასუფთავება
+      if (text === '/global') {
+        e.preventDefault();
+        e.stopPropagation();
 
-      // შემოწმება: არის თუ არა მომხმარებელი შესული ადმინით (Supabase Auth)
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        alert('გლობალური შეტყობინების გასაგზავნად საჭიროა ადმინისტრატორით შესვლა!');
-        return;
+        aiChatInput.value = ''; // ჩატის ველის გასუფთავება
+
+        // შემოწმება: არის თუ არა Supabase ავტორიზაცია
+        let isLoggedIn = true;
+        if (typeof supabase !== 'undefined' && supabase.auth) {
+          try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) isLoggedIn = false;
+          } catch (err) {
+            console.warn('Supabase check error:', err);
+          }
+        }
+
+        if (!isLoggedIn) {
+          alert('გლობალური შეტყობინების გასაგზავნად საჭიროა ადმინისტრატორით შესვლა!');
+          return;
+        }
+
+        // AI ჩატის დახურვა
+        if (aiChatWindow) {
+          aiChatWindow.setAttribute('aria-hidden', 'true');
+        }
+
+        // მოდალის გახსნა
+        window.openGlobalModal();
       }
+    }, true);
+  }
 
-      openGlobalModal();
-    }
-  });
-}
+  // 2. ფორმის გაგზავნა Supabase-ში და OneSignal Push-ის გაშვება
+  const globalForm = document.getElementById('global-notif-form');
+  if (globalForm) {
+    globalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-// 2. ფორმის გაგზავნა Supabase-ში და OneSignal Push-ის გაშვება
-const globalForm = document.getElementById('global-notif-form');
+      const title = document.getElementById('global-title').value.trim();
+      const message = document.getElementById('global-message').value.trim();
 
-if (globalForm) {
-  globalForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+      try {
+        // ა) ჩაწერა Supabase-ის ბაზაში (თუ Supabase ჩართულია)
+        if (typeof supabase !== 'undefined' && supabase.from) {
+          const { error: dbError } = await supabase
+            .from('global_notifications')
+            .insert([{ title, message }]);
+          if (dbError) console.error('Supabase DB Error:', dbError);
+        }
 
-    const title = document.getElementById('global-title').value.trim();
-    const message = document.getElementById('global-message').value.trim();
+        // ბ) OneSignal API-თ შეტყობინების გაგზავნა
+        const REST_KEY = "შენი_ONESIGNAL_REST_API_KEY"; // <--- აქ ჩასვი შენი OneSignal REST API Key
 
-    try {
-      // ა) ჩაწერა Supabase-ის ბაზაში
-      const { error: dbError } = await supabase
-        .from('global_notifications')
-        .insert([{ title, message }]);
+        if (REST_KEY !== "შენი_ONESIGNAL_REST_API_KEY") {
+          await fetch("https://onesignal.com/api/v1/notifications", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              "Authorization": `Basic ${REST_KEY}`
+            },
+            body: JSON.stringify({
+              app_id: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4",
+              included_segments: ["Subscribed Users"],
+              headings: { ka: title, en: title },
+              contents: { ka: message, en: message }
+            })
+          });
+        }
 
-      if (dbError) throw dbError;
-
-      // ბ) OneSignal API-თ შეტყობინების გაგზავნა ყველა გამომწერზე
-      await fetch("https://onesignal.com/api/v1/notifications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "Authorization": "Basic შენი_ONESIGNAL_REST_API_KEY" // <--- აქ ჩასვი შენი OneSignal REST API Key
-        },
-        body: JSON.stringify({
-          app_id: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4",
-          included_segments: ["Subscribed Users"],
-          headings: { ka: title, en: title },
-          contents: { ka: message, en: message }
-        })
-      });
-
-      alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
-      closeGlobalModal();
-
-    } catch (err) {
-      console.error('Error sending global notification:', err);
-      alert('შეცდომა: ' + err.message);
-    }
-  });
-}
+        alert('გლობალური შეტყობინება წარმატებით გაიგზავნა!');
+        window.closeGlobalModal();
+      } catch (err) {
+        console.error('Error sending global notification:', err);
+        alert('შეცდომა: ' + err.message);
+      }
+    });
+  }
+});
