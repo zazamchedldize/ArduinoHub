@@ -5223,3 +5223,51 @@ svg{
   display: block;
 }
 
+
+/* ==========================================
+   GLOBAL NOTIFICATION MODAL
+   ========================================== */
+#global-modal .meeting-dialog {
+  max-width: 440px;
+}
+
+#global-notif-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+  text-align: left;
+}
+
+#global-notif-form label {
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-color, #333);
+}
+
+#global-notif-form input,
+#global-notif-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#global-notif-form input:focus,
+#global-notif-form textarea:focus {
+  border-color: var(--primary-color, #0070f3);
+}
+
+#global-notif-form button[type="submit"] {
+  justify-content: center;
+  margin-top: 8px;
+  width: 100%;
+}
