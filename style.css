@@ -5691,3 +5691,66 @@ svg{
     min-height: 140px;
   }
 }
+
+.team-card-zaza{
+  background:#050505;
+  border-color:#333;
+  box-shadow:0 0 20px #000, inset 0 0 15px #ffffff08;
+  position:relative;
+  overflow:hidden;
+}
+
+.team-card-zaza::before{
+  content:"";
+  position:absolute;
+  inset:-50%;
+  background:radial-gradient(circle at 30% 30%,#ffffff08,transparent 45%);
+  pointer-events:none;
+}
+
+.team-card-zaza::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:radial-gradient(circle at 15% 25%,#ffffff 0 1.5px,transparent 2px),radial-gradient(circle at 75% 15%,#ffffffaa 0 2px,transparent 3px),radial-gradient(circle at 45% 80%,#ffffff88 0 1.5px,transparent 2.5px),radial-gradient(circle at 85% 65%,#ffffff99 0 2px,transparent 3px),radial-gradient(circle at 30% 60%,#ffffff 0 1px,transparent 2px);
+  background-size:180px 180px;
+  opacity:.35;
+  pointer-events:none;
+}
+
+.team-card-zaza:hover{
+  background:#080808;
+  border-color:#666;
+  box-shadow:0 18px 50px #000,0 0 25px #ffffff12,inset 0 0 20px #ffffff08;
+}
+
+.team-card-zaza .team-avatar{
+  border-color:#555;
+  background:radial-gradient(circle at 35% 30%,#292929,#050505 70%);
+  box-shadow:0 0 20px #000,inset 0 0 15px #ffffff0a;
+}
+
+.team-card-zaza .team-avatar span{
+  color:#fff;
+  text-shadow:0 0 10px #ffffff55;
+}
+
+.team-card-zaza .team-role{
+  color:#fff;
+  text-shadow:0 0 8px #ffffff22;
+}
+
+.team-card-zaza .team-info h2{
+  color:#fff;
+}
+
+.team-card-zaza .team-description{
+  color:#d0d0d0;
+}
+
+.team-card-zaza .team-tags span{
+  background:#151515;
+  border-color:#444;
+  color:#fff;
+  box-shadow:0 0 8px #000;
+}
