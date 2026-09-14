@@ -5754,3 +5754,15 @@ svg{
   color:#fff;
   box-shadow:0 0 8px #000;
 }
+
+.team-card-zaza{
+  order: 1
+}
+
+.team-card-orange{
+  order: 2
+}
+
+.team-card-zaza{
+  grid-column: auto
+}
