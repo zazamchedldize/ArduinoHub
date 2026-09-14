@@ -5756,13 +5756,13 @@ svg{
 }
 
 .team-card-zaza{
-  order: 1
+  order:2
 }
 
-.team-card-orange{
-  order: 2
+.team-card-tekla{
+  order:2
 }
 
-.team-card-zaza{
-  grid-column: auto
+.team-card-blue{
+  order:3
 }
