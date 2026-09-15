@@ -952,136 +952,122 @@ body.modal-open{
   color:var(--muted);
 }
 
-.circuit-visual {
-  height: 370px;
-  display: grid;
-  place-items: center;
-  min-width: 0;
-  position: relative;
+.circuit-visual{
+  height:370px;
+  display:grid;
+  place-items:center;
+  min-width:0;
+  position:relative;
 }
 
-.circuit-visual:before {
-  content: "";
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #0066cc15, transparent 65%);
-  filter: blur(2px);
-  animation: boardGlow 5s ease-in-out infinite alternate;
+.circuit-visual:before{
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  border-radius:50%;
+  background:radial-gradient(circle,#22d3950d,transparent 65%);
+  filter:blur(2px);
+  animation:boardGlow 5s ease-in-out infinite alternate;
 }
 
-@keyframes boardGlow {
-  from { transform: scale(.94); opacity: .6; }
-  to { transform: scale(1.06); opacity: 1; }
+@keyframes boardGlow{
+  from{transform:scale(.94);opacity:.6}
+  to{transform:scale(1.06);opacity:1}
 }
 
-/* Arduino Uno-ს დამახასიათებელი მართკუთხა, მოგრძო ფორმა და ლურჯი ფერი */
-.board {
-  width: min(320px, 90%);
-  height: 200px;
-  border: 1px solid #1a75ff66;
-  background: linear-gradient(135deg, #003366, #001a33);
-  border-radius: 12px;
-  position: relative;
-  box-shadow: inset 0 0 40px #0088ff12, 0 0 50px #0066cc22;
-  transform: rotate(-6deg);
-  z-index: 1;
+.board{
+  width:min(350px,90%);
+  height:260px;
+  border:1px solid #35e4a766;
+  background:linear-gradient(135deg,#14372d,#0b201b);
+  border-radius:20px;
+  position:relative;
+  box-shadow:inset 0 0 50px #2effb012,0 0 70px #19cf8c17;
+  transform:rotate(-6deg);
+  z-index:1;
 }
 
-/* მთავარი მიკროსქემის ჩიპი (ATmega328P სტილი - შავი მართკუთხედი ცენტრში) */
-.chip {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 110px;
-  padding: 20px 0;
-  border-radius: 3px;
-  background: #0f0f0f;
-  border: 1px solid #333;
-  text-align: center;
-  color: #e6f2ff;
-  font: 700 14px/1.2 Inter, sans-serif;
-  letter-spacing: 2px;
-  box-shadow: 0 0 15px #000;
+.chip{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:145px;
+  padding:35px 0;
+  border-radius:5px;
+  background:#06100e;
+  border:1px solid #315c4e;
+  text-align:center;
+  color:var(--green2);
+  font:700 19px/1.2 Inter,sans-serif;
+  letter-spacing:2px;
+  box-shadow:0 0 22px #000;
 }
 
-/* USB კონექტორი ზედა კუთხეში */
-.usb {
-  position: absolute;
-  top: -12px;
-  left: 35px;
-  width: 45px;
-  height: 15px;
-  background: #c0c0c0;
-  border: 1px solid #808080;
-  border-radius: 2px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+.pin{
+  position:absolute;
+  width:9px;
+  height:36px;
+  background:#c5a85c;
+  border-radius:2px;
 }
 
-/* პინები (ოქროსფერი კონტაქტები განლაგებული ზედა და ქვედა კიდეებზე) */
-.pin {
-  position: absolute;
-  width: 6px;
-  height: 14px;
-  background: #c5a85c;
-  border-radius: 1px;
+.p1,.p2{
+  top:95px;
 }
 
-/* ზედა მწკრივი პინებისა */
-.p1 { top: -6px; left: 100px; }
-.p2 { top: -6px; left: 120px; }
-.p3 { top: -6px; left: 140px; }
-.p4 { top: -6px; left: 160px; }
-
-/* ქვედა მწკრივი პინებისა */
-.p5 { bottom: -6px; left: 100px; }
-.p6 { bottom: -6px; left: 120px; }
-.p7 { bottom: -6px; left: 140px; }
-.p8 { bottom: -6px; left: 160px; }
-
-/* ინდიკატორი LED (ლურჯი/მწვანე ნათება) */
-.led {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  right: 25px;
-  top: 25px;
-  background: #00ffcc;
-  box-shadow: 0 0 12px #00ffcc;
-  animation: ledPulse 2.5s ease-in-out infinite;
+.p3,.p4{
+  bottom:95px;
 }
 
-@keyframes ledPulse {
-  0%, 100% { opacity: .7; box-shadow: 0 0 8px #00ffcc; }
-  50% { opacity: 1; box-shadow: 0 0 20px #00ffcc, 0 0 35px #0066cc55; }
+.p1,.p3{
+  left:75px;
 }
 
-/* მიკროსქემის ბილიკები (Traces) */
-.trace {
-  position: absolute;
-  border: 2px solid #0088ff;
-  border-radius: 6px;
+.p2,.p4{
+  right:75px;
 }
 
-.t1 {
-  width: 50px;
-  height: 40px;
-  left: 15px;
-  top: 30px;
-  border-left: 0;
-  border-bottom: 0;
+.led{
+  position:absolute;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  right:38px;
+  top:39px;
+  background:var(--green);
+  box-shadow:0 0 18px var(--green);
+  animation:ledPulse 2.5s ease-in-out infinite;
 }
 
-.t2 {
-  width: 50px;
-  height: 40px;
-  right: 15px;
-  bottom: 30px;
-  border-right: 0;
-  border-top: 0;
+@keyframes ledPulse{
+  0%,100%{opacity:.7;box-shadow:0 0 12px var(--green)}
+  50%{opacity:1;box-shadow:0 0 25px var(--green),0 0 45px #22d39535}
+}
+
+.trace{
+  position:absolute;
+  border:2px solid #23b77c;
+  border-radius:12px;
+}
+
+.t1{
+  width:85px;
+  height:60px;
+  left:21px;
+  top:37px;
+  border-left:0;
+  border-bottom:0;
+}
+
+.t2{
+  width:85px;
+  height:60px;
+  right:21px;
+  bottom:37px;
+  border-right:0;
+  border-top:0;
 }
 
 .section{
