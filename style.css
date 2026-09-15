@@ -5753,21 +5753,22 @@ svg{
   border-color:#444;
   color:#fff;
   box-shadow:0 0 8px #000;
-}
 .team-card-zaza{
   order:1;
   grid-column:1;
 }
 
-.team-card-tekla{
+.team-card-orange{
   order:1;
   grid-column:2;
 }
 
 @media (max-width:820px){
   .team-card-zaza,
-  .team-card-tekla{
+  .team-card-orange{
     grid-column:auto;
     order:1;
   }
 }
+
+
