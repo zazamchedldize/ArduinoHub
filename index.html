@@ -36,11 +36,11 @@ OneSignalDeferred.push(async function(OneSignal) {
 <meta property="og:description" content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს.">
 <meta property="og:site_name" content="ArduinoHub">
 <meta property="og:locale" content="ka_GE">
-<meta property="og:image" content="https://arduinohub.onrender.com/arduinuhub-icon.png">
+<meta property="og:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
 <meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.">
-<meta name="twitter:image" content="https://arduinohub.onrender.com/arduinuhub-icon.png">
+<meta name="twitter:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
 <link rel="icon" type="image/png" href="arduinohub-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -242,8 +242,8 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
     
     <form id="bugReportForm">
       <div class="bug-form-group">
-        <label for="bugName">სახელი და გვარი</label>
-        <input type="text" id="bugName" name="name" placeholder="მაგ: გიორგი ბერიძე" required>
+        <label for="bugTitle">ხარვეზის დასახელება / სათაური</label>
+        <input type="text" id="bugTitle" name="bug_title" placeholder="მაგ: მენიუ არ იხსნება მობილურში" required>
       </div>
       
       <div class="bug-form-group">
@@ -660,9 +660,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const templateParams = {
         title: "ხარვეზის შეტყობინება",
-        from_name: document.getElementById("bugName").value,
+        bug_title: document.getElementById("bugTitle").value,
         message: document.getElementById("bugMessage").value,
-        name: document.getElementById("bugName").value
+        from_name: document.getElementById("bugTitle").value
       };
 
       try {
