@@ -629,7 +629,15 @@ Arduino&Chemistry პროექტები ერთ სივრცეში
 <script src="https://unpkg.com/lucide@latest"></script>
 <script type="module" src="script.js"></script>
 
-<!-- ხარვეზის მოდალისა და Supabase-ში გაგზავნის სკრიპტი -->
+<!-- EmailJS ბიბლიოთეკა და ინიციალიზაცია -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("KHWLmDgpVWvHs72r4");
+   })();
+</script>
+
+<!-- ხარვეზის მოდალისა და EmailJS-ით გაგზავნის სკრიპტი -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const openBtn = document.getElementById("openBugModalBtn");
@@ -650,18 +658,16 @@ document.addEventListener("DOMContentLoaded", () => {
       statusText.style.color = "#4ade80";
       statusText.textContent = "იგზავნება...";
 
-      const name = document.getElementById("bugName").value;
-      const message = document.getElementById("bugMessage").value;
+      const templateParams = {
+        from_name: document.getElementById("bugName").value,
+        message: document.getElementById("bugMessage").value
+      };
 
       try {
-        const { error } = await window.supabase
-          .from('bug_reports')
-          .insert([{ name: name, message: message }]);
-
-        if (error) throw error;
+        await emailjs.send('service_rofiyqg', 'template_n2qk3od', templateParams);
 
         statusText.style.color = "#4ade80";
-        statusText.textContent = "მადლობა! შეტყობინება წარმატებით გაიგზავნა.";
+        statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა.";
         form.reset();
         setTimeout(() => {
           overlay.style.display = "none";
