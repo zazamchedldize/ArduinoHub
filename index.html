@@ -240,21 +240,20 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
       <button type="button" id="closeBugModalBtn" class="bug-close-btn">&times;</button>
     </div>
     
-    <!-- ჩასვი შენი Formspree ID action-ში -->
-    <form id="bugReportForm" action="https://formspree.io/f/mrpbzpaa" method="POST">
-  <div class="bug-form-group">
-    <label for="bugName">სახელი და გვარი</label>
-    <input type="text" id="bugName" name="name" placeholder="მაგ: გიორგი ბერიძე" required>
-  </div>
-  
-  <div class="bug-form-group">
-    <label for="bugMessage">პრობლემის აღწერა</label>
-    <textarea id="bugMessage" name="message" rows="4" placeholder="აღწერეთ რა ხარვეზი შეამჩნიეთ..." required></textarea>
-  </div>
-  
-  <button type="submit" class="bug-submit-btn">გაგზავნა</button>
-  <p id="bugFormStatus" class="bug-status-text"></p>
-</form>
+    <form id="bugReportForm">
+      <div class="bug-form-group">
+        <label for="bugName">სახელი და გვარი</label>
+        <input type="text" id="bugName" name="name" placeholder="მაგ: გიორგი ბერიძე" required>
+      </div>
+      
+      <div class="bug-form-group">
+        <label for="bugMessage">პრობლემის აღწერა</label>
+        <textarea id="bugMessage" name="message" rows="4" placeholder="აღწერეთ რა ხარვეზი შეამჩნიეთ..." required></textarea>
+      </div>
+      
+      <button type="submit" class="bug-submit-btn">გაგზავნა</button>
+      <p id="bugFormStatus" class="bug-status-text"></p>
+    </form>
   </div>
 </div>
 
@@ -630,7 +629,7 @@ Arduino&Chemistry პროექტები ერთ სივრცეში
 <script src="https://unpkg.com/lucide@latest"></script>
 <script type="module" src="script.js"></script>
 
-<!-- ხარვეზის მოდალის და გაგზავნის სკრიპტი -->
+<!-- ხარვეზის მოდალისა და Supabase-ში გაგზავნის სკრიპტი -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const openBtn = document.getElementById("openBugModalBtn");
@@ -651,30 +650,26 @@ document.addEventListener("DOMContentLoaded", () => {
       statusText.style.color = "#4ade80";
       statusText.textContent = "იგზავნება...";
 
-      const formData = new FormData(form);
+      const name = document.getElementById("bugName").value;
+      const message = document.getElementById("bugMessage").value;
 
       try {
-        const response = await fetch(form.action, {
-          method: "POST",
-          body: formData,
-          headers: { 'Accept': 'json' }
-        });
+        const { error } = await window.supabase
+          .from('bug_reports')
+          .insert([{ name: name, message: message }]);
 
-        if (response.ok) {
-          statusText.style.color = "#4ade80";
-          statusText.textContent = "მადლობა! შეტყობინება წარმატებით გაიგზავნა.";
-          form.reset();
-          setTimeout(() => {
-            overlay.style.display = "none";
-            statusText.textContent = "";
-          }, 2500);
-        } else {
-          statusText.style.color = "#f87171";
-          statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან.";
-        }
+        if (error) throw error;
+
+        statusText.style.color = "#4ade80";
+        statusText.textContent = "მადლობა! შეტყობინება წარმატებით გაიგზავნა.";
+        form.reset();
+        setTimeout(() => {
+          overlay.style.display = "none";
+          statusText.textContent = "";
+        }, 2500);
       } catch (error) {
         statusText.style.color = "#f87171";
-        statusText.textContent = "კავშირის შეცდომა.";
+        statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან.";
       }
     });
   }
