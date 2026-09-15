@@ -5754,17 +5754,20 @@ svg{
   color:#fff;
   box-shadow:0 0 8px #000;
 }
-
 .team-card-zaza{
-  order:2
+  order:1;
+  grid-column:1;
 }
 
 .team-card-tekla{
-  order:2
+  order:1;
+  grid-column:2;
 }
 
-
-
-.team-card-blue{
-  order:3
+@media (max-width:820px){
+  .team-card-zaza,
+  .team-card-tekla{
+    grid-column:auto;
+    order:1;
+  }
 }
