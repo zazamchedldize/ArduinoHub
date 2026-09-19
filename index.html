@@ -229,33 +229,7 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
 
 </main>
 
-<!-- ხარვეზის მცურავი ღილაკი -->
-<button id="openBugModalBtn" class="bug-float-btn" type="button">🚨 ხარვეზი</button>
 
-<!-- ხარვეზის მოდალური ფანჯარა -->
-<div id="bugModalOverlay" class="bug-modal-overlay" style="display: none;">
-  <div class="bug-modal-card">
-    <div class="bug-modal-header">
-      <h3>ხარვეზის შეტყობინება</h3>
-      <button type="button" id="closeBugModalBtn" class="bug-close-btn">&times;</button>
-    </div>
-    
-    <form id="bugReportForm">
-      <div class="bug-form-group">
-        <label for="bugTitle">ხარვეზის დასახელება / სათაური</label>
-        <input type="text" id="bugTitle" name="bug_title" placeholder="მაგ: მენიუ არ იხსნება მობილურში" required>
-      </div>
-      
-      <div class="bug-form-group">
-        <label for="bugMessage">პრობლემის აღწერა</label>
-        <textarea id="bugMessage" name="message" rows="4" placeholder="აღწერეთ რა ხარვეზი შეამჩნიეთ..." required></textarea>
-      </div>
-      
-      <button type="submit" class="bug-submit-btn">გაგზავნა</button>
-      <p id="bugFormStatus" class="bug-status-text"></p>
-    </form>
-  </div>
-</div>
 
 <div id="suggestion-modal" class="suggestion-modal" hidden>
 
