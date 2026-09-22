@@ -6378,26 +6378,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const countdownMessage = document.getElementById("countdown-message")
   const countdownDate = document.getElementById("countdown-date")
   const countdownStatus = document.getElementById("countdown-form-status")
-  const countdownLock = document.getElementById("countdown-lock")
-  let countdownLocked = false
-  if (countdownLock) {
-  countdownLock.addEventListener("click", () => {
-    countdownLocked = !countdownLocked
-
-    countdownLock.setAttribute(
-      "aria-pressed",
-      String(countdownLocked)
-    )
-
-    countdownLock.innerHTML = countdownLocked
-      ? 'ჩაკეტილი <i data-lucide="lock"></i>'
-      : 'ჩაკეტვა <i data-lucide="lock-open"></i>'
-
-    if (window.lucide) {
-      lucide.createIcons()
-    }
-  })
-}
 
   const activeCountdown = document.getElementById("active-countdown")
   const activeCountdownClose = document.getElementById("active-countdown-close")
@@ -6453,11 +6433,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     activeCountdown.hidden = false
     activeCountdown.setAttribute("aria-hidden", "false")
-    if (data.locked) {
-  activeCountdown.classList.add("locked")
-} else {
-  activeCountdown.classList.remove("locked")
-}
 
     updateCountdown()
 
@@ -6492,7 +6467,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = new Date(currentCountdown.target_at).getTime()
     const now = Date.now()
     const difference = target - now
-activeCountdown.classList.remove("locked")
+
     if (difference <= 0) {
       hideActiveCountdown()
 
@@ -6621,13 +6596,12 @@ activeCountdown.classList.remove("locked")
 
         const { error } = await db
           .from("site_countdowns")
-        .upsert({
-  id: 1,
-  title,
-  message,
-  target_at: targetDate.toISOString(),
-  locked: countdownLocked
-})
+          .upsert({
+            id: 1,
+            title,
+            message,
+            target_at: targetDate.toISOString()
+          })
 
         if (error) {
           console.error("Countdown create error:", error)
