@@ -229,8 +229,6 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
 
 </main>
 
-
-
 <div id="suggestion-modal" class="suggestion-modal" hidden>
 
 <div class="suggestion-modal-backdrop" id="suggestion-backdrop"></div>
@@ -580,6 +578,160 @@ style="justify-content: center; margin-top: 8px;"
 </div>
 </div>
 
+<div id="countdown-modal" class="countdown-modal" hidden aria-hidden="true">
+
+<div class="countdown-backdrop"></div>
+
+<section
+class="countdown-dialog"
+role="dialog"
+aria-modal="true"
+aria-labelledby="countdown-form-title"
+>
+
+<button
+id="countdown-close"
+class="countdown-close"
+type="button"
+aria-label="დახურვა"
+>
+<i data-lucide="x"></i>
+</button>
+
+<div class="countdown-icon">
+<i data-lucide="timer"></i>
+</div>
+
+<p class="eyebrow">ARDUINOHUB</p>
+
+<h2 id="countdown-form-title">ახალი Countdown</h2>
+
+<form id="countdown-form">
+
+<div class="countdown-field">
+
+<label for="countdown-title">
+სათაური
+</label>
+
+<input
+id="countdown-title"
+type="text"
+maxlength="100"
+placeholder="მაგ: კლუბის შეხვედრა"
+required
+>
+
+</div>
+
+<div class="countdown-field">
+
+<label for="countdown-message">
+ტექსტი
+</label>
+
+<textarea
+id="countdown-message"
+maxlength="500"
+rows="3"
+placeholder="მაგ: შეხვედრამდე დარჩა..."
+required
+></textarea>
+
+</div>
+
+<div class="countdown-field">
+
+<label for="countdown-date">
+თარიღი და დრო
+</label>
+
+<input
+id="countdown-date"
+type="datetime-local"
+required
+>
+
+</div>
+
+<div id="countdown-form-status"></div>
+
+<button
+type="submit"
+class="button primary countdown-submit"
+>
+დაწყება
+<i data-lucide="timer"></i>
+</button>
+
+</form>
+
+</section>
+</div>
+
+<div id="active-countdown" class="active-countdown" hidden>
+
+<div class="active-countdown-backdrop"></div>
+
+<section
+class="active-countdown-dialog"
+role="dialog"
+aria-modal="true"
+aria-labelledby="active-countdown-title"
+>
+
+<button
+id="active-countdown-close"
+class="active-countdown-close"
+type="button"
+aria-label="დახურვა"
+>
+<i data-lucide="x"></i>
+</button>
+
+<div class="active-countdown-icon">
+<i data-lucide="timer"></i>
+</div>
+
+<p class="eyebrow">ARDUINOHUB</p>
+
+<h2 id="active-countdown-title"></h2>
+
+<p id="active-countdown-message"></p>
+
+<div class="countdown-timer">
+
+<div class="countdown-unit">
+<strong id="countdown-days">00</strong>
+<span>დღე</span>
+</div>
+
+<div class="countdown-separator">:</div>
+
+<div class="countdown-unit">
+<strong id="countdown-hours">00</strong>
+<span>საათი</span>
+</div>
+
+<div class="countdown-separator">:</div>
+
+<div class="countdown-unit">
+<strong id="countdown-minutes">00</strong>
+<span>წუთი</span>
+</div>
+
+<div class="countdown-separator">:</div>
+
+<div class="countdown-unit">
+<strong id="countdown-seconds">00</strong>
+<span>წამი</span>
+</div>
+
+</div>
+
+</section>
+</div>
+
 <footer>
 
 <a class="brand" href="index.html">
@@ -603,7 +755,6 @@ Arduino&Chemistry პროექტები ერთ სივრცეში
 <script src="https://unpkg.com/lucide@latest"></script>
 <script type="module" src="script.js"></script>
 
-<!-- EmailJS ბიბლიოთეკა და ინიციალიზაცია -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script type="text/javascript">
    (function(){
@@ -611,7 +762,6 @@ Arduino&Chemistry პროექტები ერთ სივრცეში
    })();
 </script>
 
-<!-- ხარვეზის მოდალისა და EmailJS-ით გაგზავნის სკრიპტი -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const openBtn = document.getElementById("openBugModalBtn");
@@ -658,7 +808,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- მწვანე თემატიკის CSS სტილები ხარვეზის ღილაკისა და მოდალისთვის -->
 <style>
 .bug-float-btn {
   position: fixed;
@@ -675,10 +824,12 @@ document.addEventListener("DOMContentLoaded", () => {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s, background 0.2s;
 }
+
 .bug-float-btn:hover {
   transform: translateY(-2px);
   background: linear-gradient(135deg, #10b981, #059669);
 }
+
 .bug-modal-overlay {
   position: fixed;
   inset: 0;
@@ -689,6 +840,7 @@ document.addEventListener("DOMContentLoaded", () => {
   place-items: center;
   padding: 20px;
 }
+
 .bug-modal-card {
   width: 100%;
   max-width: 420px;
@@ -700,17 +852,20 @@ document.addEventListener("DOMContentLoaded", () => {
   color: #ecfdf5;
   font-family: Inter, sans-serif;
 }
+
 .bug-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
+
 .bug-modal-header h3 {
   margin: 0;
   font-size: 18px;
   color: #34d399;
 }
+
 .bug-close-btn {
   background: none;
   border: none;
@@ -718,19 +873,23 @@ document.addEventListener("DOMContentLoaded", () => {
   font-size: 24px;
   cursor: pointer;
 }
+
 .bug-close-btn:hover {
   color: #fff;
 }
+
 .bug-form-group {
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
+
 .bug-form-group label {
   font-size: 12px;
   color: #a7f3d0;
 }
+
 .bug-form-group input,
 .bug-form-group textarea {
   width: 100%;
@@ -742,10 +901,12 @@ document.addEventListener("DOMContentLoaded", () => {
   font-size: 13px;
   outline: none;
 }
+
 .bug-form-group input:focus,
 .bug-form-group textarea:focus {
   border-color: #34d399;
 }
+
 .bug-submit-btn {
   width: 100%;
   padding: 11px;
@@ -757,9 +918,11 @@ document.addEventListener("DOMContentLoaded", () => {
   cursor: pointer;
   margin-top: 5px;
 }
+
 .bug-submit-btn:hover {
   opacity: 0.9;
 }
+
 .bug-status-text {
   font-size: 12px;
   text-align: center;
