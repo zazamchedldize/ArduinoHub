@@ -6369,3 +6369,319 @@ const { error } = await db.functions.invoke("send-suggestion", {
     lucide.createIcons()
   }
 })
+
+document.addEventListener("DOMContentLoaded", () => {
+  const countdownModal = document.getElementById("countdown-modal")
+  const countdownClose = document.getElementById("countdown-close")
+  const countdownForm = document.getElementById("countdown-form")
+  const countdownTitle = document.getElementById("countdown-title")
+  const countdownMessage = document.getElementById("countdown-message")
+  const countdownDate = document.getElementById("countdown-date")
+  const countdownStatus = document.getElementById("countdown-form-status")
+
+  const activeCountdown = document.getElementById("active-countdown")
+  const activeCountdownClose = document.getElementById("active-countdown-close")
+  const activeCountdownTitle = document.getElementById("active-countdown-title")
+  const activeCountdownMessage = document.getElementById("active-countdown-message")
+
+  const countdownDays = document.getElementById("countdown-days")
+  const countdownHours = document.getElementById("countdown-hours")
+  const countdownMinutes = document.getElementById("countdown-minutes")
+  const countdownSeconds = document.getElementById("countdown-seconds")
+
+  let countdownInterval = null
+  let currentCountdown = null
+
+  function openCountdownModal() {
+    if (!countdownModal) return
+
+    countdownModal.hidden = false
+    countdownModal.setAttribute("aria-hidden", "false")
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  }
+
+  function closeCountdownModal() {
+    if (!countdownModal) return
+
+    countdownModal.hidden = true
+    countdownModal.setAttribute("aria-hidden", "true")
+
+    if (countdownForm) {
+      countdownForm.reset()
+    }
+
+    if (countdownStatus) {
+      countdownStatus.textContent = ""
+    }
+  }
+
+  function showActiveCountdown(data) {
+    if (!activeCountdown) return
+
+    currentCountdown = data
+
+    if (activeCountdownTitle) {
+      activeCountdownTitle.textContent = data.title
+    }
+
+    if (activeCountdownMessage) {
+      activeCountdownMessage.textContent = data.message
+    }
+
+    activeCountdown.hidden = false
+    activeCountdown.setAttribute("aria-hidden", "false")
+
+    updateCountdown()
+
+    if (countdownInterval) {
+      clearInterval(countdownInterval)
+    }
+
+    countdownInterval = setInterval(updateCountdown, 1000)
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  }
+
+  function hideActiveCountdown() {
+    if (!activeCountdown) return
+
+    activeCountdown.hidden = true
+    activeCountdown.setAttribute("aria-hidden", "true")
+
+    currentCountdown = null
+
+    if (countdownInterval) {
+      clearInterval(countdownInterval)
+      countdownInterval = null
+    }
+  }
+
+  async function updateCountdown() {
+    if (!currentCountdown) return
+
+    const target = new Date(currentCountdown.target_at).getTime()
+    const now = Date.now()
+    const difference = target - now
+
+    if (difference <= 0) {
+      hideActiveCountdown()
+
+      if (db) {
+        await db
+          .from("site_countdowns")
+          .delete()
+          .eq("id", 1)
+      }
+
+      return
+    }
+
+    const totalSeconds = Math.floor(difference / 1000)
+
+    const days = Math.floor(totalSeconds / 86400)
+    const hours = Math.floor((totalSeconds % 86400) / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+
+    if (countdownDays) {
+      countdownDays.textContent = String(days).padStart(2, "0")
+    }
+
+    if (countdownHours) {
+      countdownHours.textContent = String(hours).padStart(2, "0")
+    }
+
+    if (countdownMinutes) {
+      countdownMinutes.textContent = String(minutes).padStart(2, "0")
+    }
+
+    if (countdownSeconds) {
+      countdownSeconds.textContent = String(seconds).padStart(2, "0")
+    }
+  }
+
+  async function loadActiveCountdown() {
+    if (!db) return
+
+    try {
+      const { data, error } = await db
+        .from("site_countdowns")
+        .select("id, title, message, target_at, created_at")
+        .eq("id", 1)
+        .maybeSingle()
+
+      if (error) {
+        console.error("Countdown load error:", error)
+        return
+      }
+
+      if (!data) {
+        hideActiveCountdown()
+        return
+      }
+
+      if (new Date(data.target_at).getTime() <= Date.now()) {
+        await db
+          .from("site_countdowns")
+          .delete()
+          .eq("id", 1)
+
+        hideActiveCountdown()
+        return
+      }
+
+      showActiveCountdown(data)
+    } catch (error) {
+      console.error("Countdown error:", error)
+    }
+  }
+
+  if (countdownClose) {
+    countdownClose.addEventListener("click", closeCountdownModal)
+  }
+
+  if (countdownForm) {
+    countdownForm.addEventListener("submit", async event => {
+      event.preventDefault()
+
+      const title = countdownTitle?.value.trim()
+      const message = countdownMessage?.value.trim()
+      const dateValue = countdownDate?.value
+
+      if (!title || !message || !dateValue) {
+        countdownStatus.textContent = "გთხოვთ ყველა ველი შეავსოთ"
+        return
+      }
+
+      const targetDate = new Date(dateValue)
+
+      if (Number.isNaN(targetDate.getTime())) {
+        countdownStatus.textContent = "თარიღი არასწორია"
+        return
+      }
+
+      if (targetDate.getTime() <= Date.now()) {
+        countdownStatus.textContent = "აირჩიეთ მომავალი დრო"
+        return
+      }
+
+      if (!db || !db.auth) {
+        countdownStatus.textContent = "Supabase კლიენტი ვერ მოიძებნა"
+        return
+      }
+
+      const submitButton = countdownForm.querySelector('button[type="submit"]')
+
+      if (submitButton) {
+        submitButton.disabled = true
+      }
+
+      countdownStatus.textContent = ""
+
+      try {
+        const {
+          data: { session },
+          error: sessionError
+        } = await db.auth.getSession()
+
+        if (sessionError || !session) {
+          countdownStatus.textContent = "ადმინისტრატორით შესვლა აუცილებელია"
+          return
+        }
+
+        const { error } = await db
+          .from("site_countdowns")
+          .upsert({
+            id: 1,
+            title,
+            message,
+            target_at: targetDate.toISOString()
+          })
+
+        if (error) {
+          console.error("Countdown create error:", error)
+          countdownStatus.textContent = "Countdown-ის შექმნა ვერ მოხერხდა"
+          return
+        }
+
+        closeCountdownModal()
+        await loadActiveCountdown()
+      } catch (error) {
+        console.error("Countdown create error:", error)
+        countdownStatus.textContent = "შეცდომა მოხდა"
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false
+        }
+      }
+    })
+  }
+
+  if (activeCountdownClose) {
+    activeCountdownClose.addEventListener("click", hideActiveCountdown)
+  }
+
+  const aiChatForm = document.getElementById("ai-chat-form")
+  const aiChatInput = document.getElementById("ai-chat-input")
+
+  if (aiChatForm && aiChatInput) {
+    aiChatForm.addEventListener("submit", async event => {
+      const text = aiChatInput.value.trim().toLowerCase()
+
+      if (text !== "/countdown" && text !== "/countdown cancel") {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+
+      aiChatInput.value = ""
+
+      if (!db || !db.auth) {
+        alert("Supabase კლიენტი ვერ მოიძებნა!")
+        return
+      }
+
+      try {
+        const {
+          data: { session },
+          error
+        } = await db.auth.getSession()
+
+        if (error || !session) {
+          alert("Countdown-ის მართვისთვის საჭიროა ადმინისტრატორით შესვლა!")
+          return
+        }
+
+        if (text === "/countdown cancel") {
+          const { error: deleteError } = await db
+            .from("site_countdowns")
+            .delete()
+            .eq("id", 1)
+
+          if (deleteError) {
+            console.error("Countdown cancel error:", deleteError)
+            alert("Countdown-ის გაუქმება ვერ მოხერხდა!")
+            return
+          }
+
+          hideActiveCountdown()
+          alert("Countdown გაუქმებულია")
+          return
+        }
+
+        openCountdownModal()
+      } catch (error) {
+        console.error("Countdown auth error:", error)
+        alert("ავტორიზაციის შემოწმება ვერ მოხერხდა!")
+      }
+    }, true)
+  }
+
+  loadActiveCountdown()
+})
