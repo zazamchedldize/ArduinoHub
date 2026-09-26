@@ -1,814 +1,1189 @@
 <!doctype html>
 <html lang="ka">
 <head>
-<link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
-<link rel="icon" type="image/png" href="arduinohub-icon.png">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="manifest" href="manifest.json">
-<script>
-window.supabase = supabase.createClient(
-  'https://ywxunhvrwdtlqjfshiyj.supabase.co',
-  'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
-)
-</script>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-window.OneSignalDeferred = window.OneSignalDeferred || []
-OneSignalDeferred.push(async function(OneSignal) {
-  await OneSignal.init({
-    appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
-  })
-})
-</script>
-<meta charset="utf-8">
-<meta name="google-site-verification" content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ArduinoHub — Arduino & Chemistry პროექტები</title>
-<meta name="description" content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს.">
-<meta name="keywords" content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად">
-<meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
-<meta name="robots" content="index, follow">
-<meta name="googlebot" content="index, follow">
-<link rel="canonical" href="https://arduinohub.onrender.com/">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://arduinohub.onrender.com/">
-<meta property="og:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
-<meta property="og:description" content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს.">
-<meta property="og:site_name" content="ArduinoHub">
-<meta property="og:locale" content="ka_GE">
-<meta property="og:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
-<meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.">
-<meta name="twitter:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
-<link rel="icon" type="image/png" href="arduinohub-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ArduinoHub",
-  "alternateName": "ArduinoChemistryHub",
-  "url": "https://arduinohub.onrender.com/",
-  "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
-  "inLanguage": "ka",
-  "publisher": {
-    "@type": "Organization",
-    "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+  <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    window.supabase = supabase.createClient(
+      "https://ywxunhvrwdtlqjfshiyj.supabase.co",
+      "sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
+    )
+  </script>
+
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || []
+
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
+      })
+    })
+  </script>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="google-site-verification"
+    content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28"
+  >
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>ArduinoHub — Arduino & Chemistry პროექტები</title>
+
+  <meta
+    name="description"
+    content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს."
+  >
+
+  <meta
+    name="keywords"
+    content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად"
+  >
+
+  <meta
+    name="author"
+    content="ArduinoHub — 29-ე საჯარო სკოლა"
+  >
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+
+  <link
+    rel="canonical"
+    href="https://arduinohub.onrender.com/"
+  >
+
+  <meta property="og:type" content="website">
+  <meta
+    property="og:url"
+    content="https://arduinohub.onrender.com/"
+  >
+
+  <meta
+    property="og:title"
+    content="ArduinoHub — Arduino & Chemistry პროექტები"
+  >
+
+  <meta
+    property="og:description"
+    content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს."
+  >
+
+  <meta property="og:site_name" content="ArduinoHub">
+  <meta property="og:locale" content="ka_GE">
+
+  <meta
+    property="og:image"
+    content="https://arduinohub.onrender.com/arduinohub-icon.png"
+  >
+
+  <meta name="twitter:card" content="summary">
+
+  <meta
+    name="twitter:title"
+    content="ArduinoHub — Arduino & Chemistry პროექტები"
+  >
+
+  <meta
+    name="twitter:description"
+    content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა."
+  >
+
+  <meta
+    name="twitter:image"
+    content="https://arduinohub.onrender.com/arduinohub-icon.png"
+  >
+
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ArduinoHub",
+    "alternateName": "ArduinoChemistryHub",
+    "url": "https://arduinohub.onrender.com/",
+    "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
+    "inLanguage": "ka",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+    }
   }
-}
-</script>
+  </script>
 </head>
 
 <body data-page="home">
 
 <header class="site-header">
-<a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
-<span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
-</a>
 
-<button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">
-☰
-</button>
+  <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
+    <span class="brand-mark">∞</span>
+    ArduinoChemistry<span>Hub</span>
+  </a>
 
-<nav>
-<a class="active" href="index.html">მთავარი</a>
-<a href="projects.html">პროექტები</a>
-<a href="#how-it-works">როგორ მუშაობს</a>
-<a href="team.html">ჩვენი გუნდი</a>
+  <button
+    class="menu-toggle"
+    aria-label="მენიუს გახსნა"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
 
-<button id="meeting-button" class="nav-meeting" type="button" onclick="openAttendancePanel()">
-<i data-lucide="calendar-days"></i>
-კლუბის შეკრება
-</button>
+  <nav>
+    <a class="active" href="index.html">მთავარი</a>
+    <a href="projects.html">პროექტები</a>
+    <a href="#how-it-works">როგორ მუშაობს</a>
+    <a href="team.html">ჩვენი გუნდი</a>
 
-<a class="nav-admin" href="admin.html">
-შესვლა
-<i data-lucide="shield"></i>
-</a>
-</nav>
+    <button
+      id="meeting-button"
+      class="nav-meeting"
+      type="button"
+      onclick="openAttendancePanel()"
+    >
+      <i data-lucide="calendar-days"></i>
+      კლუბის შეკრება
+    </button>
+
+    <a class="nav-admin" href="admin.html">
+      შესვლა
+      <i data-lucide="shield"></i>
+    </a>
+  </nav>
+
 </header>
 
 <main>
 
 <section class="hero">
-<div class="hero-copy">
-<p class="eyebrow">ARDUINO & CHEMISTRY PROJECT COMMUNITY</p>
 
-<h1>
-იდეებიდან,<br>
-<em>რეალურ</em> პროექტებზე
-</h1>
+  <div class="hero-copy">
 
-<p class="hero-text">
-ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
-</p>
+    <p class="eyebrow">
+      ARDUINO & CHEMISTRY PROJECT COMMUNITY
+    </p>
 
-<div class="hero-actions">
-<a class="button primary" href="projects.html">
-პროექტების ნახვა
-<i data-lucide="arrow-right"></i>
-</a>
+    <h1>
+      იდეებიდან,<br>
+      <em>რეალურ</em> პროექტებზე
+    </h1>
 
-<button type="button" id="video-tutorial-btn" class="button secondary">
-<i data-lucide="play-circle"></i>
-ვიდეო ინსტრუქცია
-</button>
-</div>
+    <p class="hero-text">
+      ერთი სივრცე Arduino & Chemistry პროექტებისთვის —
+      დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს
+      და აღმოაჩინე ახალი შესაძლებლობები.
+    </p>
 
-<div class="hero-stats">
-<div>
-<strong>∞</strong>
-<span>შესაძლებლობა</span>
-</div>
+    <div class="hero-actions">
 
-<div>
-<strong>1</strong>
-<span>საერთო სივრცე</span>
-</div>
+      <a class="button primary" href="projects.html">
+        პროექტების ნახვა
+        <i data-lucide="arrow-right"></i>
+      </a>
 
-<div>
-<strong>100%</strong>
-<span>რეალური პროექტები</span>
-</div>
-</div>
-</div>
+      <button
+        type="button"
+        id="video-tutorial-btn"
+        class="button secondary"
+      >
+        <i data-lucide="play-circle"></i>
+        ვიდეო ინსტრუქცია
+      </button>
 
+    </div>
+
+    <div class="hero-stats">
+
+      <div>
+        <strong>∞</strong>
+        <span>შესაძლებლობა</span>
+      </div>
+
+      <div>
+        <strong>1</strong>
+        <span>საერთო სივრცე</span>
+      </div>
+
+      <div>
+        <strong>100%</strong>
+        <span>რეალური პროექტები</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="hero-board">
+
+    <div class="arduino-board-glow"></div>
+
+    <div class="arduino-board">
+
+      <div class="board-screw screw-1"></div>
+      <div class="board-screw screw-2"></div>
+      <div class="board-screw screw-3"></div>
+      <div class="board-screw screw-4"></div>
+
+      <div class="arduino-usb">
+        <div class="usb-metal"></div>
+        <div class="usb-inner"></div>
+      </div>
+
+      <div class="arduino-power">
+        <div class="power-metal"></div>
+      </div>
+
+      <div class="arduino-power-led"></div>
+
+      <div class="arduino-chip">
+        <span>ATMEL</span>
+        <strong>ATmega328P</strong>
+      </div>
+
+      <div class="arduino-usb-chip">
+        <span>ATmega16U2</span>
+      </div>
+
+      <div class="arduino-reset">
+        <span>RESET</span>
+      </div>
+
+      <div class="arduino-crystal">
+        16.000
+      </div>
+
+      <div class="arduino-pin-row top-pins">
+        <span>TX</span>
+        <span>RX</span>
+        <span>13</span>
+        <span>12</span>
+        <span>11</span>
+        <span>10</span>
+        <span>9</span>
+        <span>8</span>
+        <span>7</span>
+        <span>6</span>
+        <span>5</span>
+        <span>4</span>
+        <span>3</span>
+        <span>2</span>
+        <span>1</span>
+        <span>0</span>
+      </div>
+
+      <div class="arduino-pin-row bottom-pins">
+        <span>IOREF</span>
+        <span>RESET</span>
+        <span>3.3V</span>
+        <span>5V</span>
+        <span>GND</span>
+        <span>GND</span>
+        <span>VIN</span>
+        <span>A0</span>
+        <span>A1</span>
+        <span>A2</span>
+        <span>A3</span>
+        <span>A4</span>
+        <span>A5</span>
+      </div>
+
+      <div class="arduino-pin-header header-top"></div>
+      <div class="arduino-pin-header header-bottom"></div>
+
+      <div class="arduino-logo">
+        ∞
+      </div>
+
+      <div class="arduino-label">
+        <strong>ARDUINO</strong>
+        <span>UNO</span>
+      </div>
+
+      <div class="board-traces trace-1"></div>
+      <div class="board-traces trace-2"></div>
+      <div class="board-traces trace-3"></div>
+      <div class="board-traces trace-4"></div>
+
+      <div class="arduino-led led-l"></div>
+      <div class="arduino-led led-r"></div>
+
+      <div class="board-status">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    </div>
+
+    <div class="board-shadow"></div>
+
+  </div>
 
 </section>
+
 
 <section id="how-it-works" class="section">
-<p class="eyebrow">მარტივი პროცესი</p>
-<h2>როგორ მუშაობს Arduino & Chemistry Hub?</h2>
 
-<div class="steps">
+  <p class="eyebrow">
+    მარტივი პროცესი
+  </p>
 
-<article>
-<b>01</b>
-<i data-lucide="search"></i>
-<h3>დაათვალიერე პროექტები</h3>
-<p>აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.</p>
-</article>
+  <h2>
+    როგორ მუშაობს Arduino & Chemistry Hub?
+  </h2>
 
-<article>
-<b>02</b>
-<i data-lucide="lightbulb"></i>
-<h3>იპოვე ახალი იდეები</h3>
-<p>გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.</p>
-</article>
+  <div class="steps">
 
-<article>
-<b>03</b>
-<i data-lucide="file-text"></i>
-<h3>გაეცანი დეტალებს</h3>
-<p>იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.</p>
-</article>
+    <article>
+      <b>01</b>
+      <i data-lucide="search"></i>
+      <h3>დაათვალიერე პროექტები</h3>
+      <p>
+        აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
+      </p>
+    </article>
 
-<article>
-<b>04</b>
-<i data-lucide="graduation-cap"></i>
-<h3>ისწავლე პრაქტიკიდან</h3>
-<p>გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.</p>
-</article>
+    <article>
+      <b>02</b>
+      <i data-lucide="lightbulb"></i>
+      <h3>იპოვე ახალი იდეები</h3>
+      <p>
+        გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
+      </p>
+    </article>
 
-</div>
+    <article>
+      <b>03</b>
+      <i data-lucide="file-text"></i>
+      <h3>გაეცანი დეტალებს</h3>
+      <p>
+        იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
+      </p>
+    </article>
+
+    <article>
+      <b>04</b>
+      <i data-lucide="graduation-cap"></i>
+      <h3>ისწავლე პრაქტიკიდან</h3>
+      <p>
+        გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.
+      </p>
+    </article>
+
+  </div>
+
 </section>
+
 
 <section id="about" class="about section">
-<div>
-<p class="eyebrow">ARDUINO•CHEMISTRY•HUB-ის შესახებ</p>
-<h2>იდეები უკეთესია, როცა გაზიარებულია.</h2>
-</div>
 
-<p>
-ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
-</p>
+  <div>
+
+    <p class="eyebrow">
+      ARDUINO•CHEMISTRY•HUB-ის შესახებ
+    </p>
+
+    <h2>
+      იდეები უკეთესია, როცა გაზიარებულია.
+    </h2>
+
+  </div>
+
+  <p>
+    ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში:
+    აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს
+    და მიიღო ახალი იდეები.
+  </p>
+
 </section>
+
 
 <section class="cta">
-<i data-lucide="cpu"></i>
 
-<h2>
-აღმოაჩინე ახალი იდეები<br>
-და გაიცანი Arduino-ს შესაძლებლობები.
-</h2>
+  <i data-lucide="cpu"></i>
 
-<a class="button primary" href="projects.html">
-პროექტების ნახვა
-<i data-lucide="arrow-right"></i>
-</a>
+  <h2>
+    აღმოაჩინე ახალი იდეები<br>
+    და გაიცანი Arduino-ს შესაძლებლობები.
+  </h2>
+
+  <a class="button primary" href="projects.html">
+    პროექტების ნახვა
+    <i data-lucide="arrow-right"></i>
+  </a>
+
 </section>
 
+
 <section class="suggestion-section">
-<div class="suggestion-card">
 
-<div class="suggestion-icon">
-<i data-lucide="message-square-plus"></i>
-</div>
+  <div class="suggestion-card">
 
-<div class="suggestion-content">
-<p class="eyebrow">შენი აზრი მნიშვნელოვანია</p>
+    <div class="suggestion-icon">
+      <i data-lucide="message-square-plus"></i>
+    </div>
 
-<h2>გაქვს იდეა ArduinoHub-ისთვის?</h2>
+    <div class="suggestion-content">
 
-<p>
-მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.
-</p>
+      <p class="eyebrow">
+        შენი აზრი მნიშვნელოვანია
+      </p>
 
-<button type="button" id="open-suggestion" class="button primary">
-შეფასების დატოვება
-<i data-lucide="arrow-right"></i>
-</button>
+      <h2>
+        გაქვს იდეა ArduinoHub-ისთვის?
+      </h2>
 
-</div>
-</div>
+      <p>
+        მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ
+        ან უბრალოდ დაგვიტოვე შენი რჩევა.
+      </p>
+
+      <button
+        type="button"
+        id="open-suggestion"
+        class="button primary"
+      >
+        შეფასების დატოვება
+        <i data-lucide="arrow-right"></i>
+      </button>
+
+    </div>
+
+  </div>
+
 </section>
 
 </main>
 
+
 <div id="suggestion-modal" class="suggestion-modal" hidden>
 
-<div class="suggestion-modal-backdrop" id="suggestion-backdrop"></div>
+  <div
+    class="suggestion-modal-backdrop"
+    id="suggestion-backdrop"
+  ></div>
 
-<div class="suggestion-dialog">
+  <div class="suggestion-dialog">
 
-<button type="button" id="close-suggestion" class="suggestion-close" aria-label="დახურვა">
-<i data-lucide="x"></i>
-</button>
+    <button
+      type="button"
+      id="close-suggestion"
+      class="suggestion-close"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
 
-<div class="suggestion-modal-icon">
-<i data-lucide="message-square-plus"></i>
+    <div class="suggestion-modal-icon">
+      <i data-lucide="message-square-plus"></i>
+    </div>
+
+    <p class="eyebrow">
+      ARDUINOHUB
+    </p>
+
+    <h2>
+      გაგვიზიარე შენი აზრი
+    </h2>
+
+    <p class="suggestion-description">
+      დაწერე რა გინდა რომ დაემატოს, შეიცვალოს ან გაუმჯობესდეს საიტზე.
+    </p>
+
+    <textarea
+      id="suggestion-message"
+      maxlength="3000"
+      placeholder="დაწერე შენი იდეა ან რჩევა..."
+    ></textarea>
+
+    <div class="suggestion-bottom">
+
+      <span id="suggestion-counter">
+        0 / 3000
+      </span>
+
+      <button
+        type="button"
+        id="send-suggestion"
+        class="button primary"
+      >
+        გაგზავნა
+        <i data-lucide="send"></i>
+      </button>
+
+    </div>
+
+    <p id="suggestion-status"></p>
+
+  </div>
+
 </div>
 
-<p class="eyebrow">ARDUINOHUB</p>
 
-<h2>გაგვიზიარე შენი აზრი</h2>
-
-<p class="suggestion-description">
-დაწერე რა გინდა რომ დაემატოს, შეიცვალოს ან გაუმჯობესდეს საიტზე.
-</p>
-
-<textarea
-id="suggestion-message"
-maxlength="3000"
-placeholder="დაწერე შენი იდეა ან რჩევა..."
-></textarea>
-
-<div class="suggestion-bottom">
-
-<span id="suggestion-counter">
-0 / 3000
-</span>
-
-<button type="button" id="send-suggestion" class="button primary">
-გაგზავნა
-<i data-lucide="send"></i>
-</button>
-
-</div>
-
-<p id="suggestion-status"></p>
-
-</div>
-</div>
-
-<div id="meeting-modal" class="meeting-modal" hidden aria-hidden="true">
-
-<div class="meeting-backdrop" data-meeting-close></div>
-
-<section
-class="meeting-dialog"
-role="dialog"
-aria-modal="true"
-aria-labelledby="meeting-title"
+<div
+  id="meeting-modal"
+  class="meeting-modal"
+  hidden
+  aria-hidden="true"
 >
 
-<button
-id="meeting-close"
-class="meeting-close"
-type="button"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+  <div
+    class="meeting-backdrop"
+    data-meeting-close
+  ></div>
 
-<div class="meeting-icon">
-<i data-lucide="calendar-days"></i>
+  <section
+    class="meeting-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="meeting-title"
+  >
+
+    <button
+      id="meeting-close"
+      class="meeting-close"
+      type="button"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
+
+    <div class="meeting-icon">
+      <i data-lucide="calendar-days"></i>
+    </div>
+
+    <p class="eyebrow">
+      მოაზროვნე ქიმიკოსთა კლუბი
+    </p>
+
+    <h2 id="meeting-title">
+      კლუბის შეკრება
+    </h2>
+
+    <div id="meeting-content" class="meeting-content">
+
+      <div class="meeting-loading">
+        <i data-lucide="loader-circle"></i>
+        <span>მონაცემები იტვირთება...</span>
+      </div>
+
+    </div>
+
+  </section>
+
 </div>
 
-<p class="eyebrow">მოაზროვნე ქიმიკოსთა კლუბი</p>
-
-<h2 id="meeting-title">კლუბის შეკრება</h2>
-
-<div id="meeting-content" class="meeting-content">
-
-<div class="meeting-loading">
-<i data-lucide="loader-circle"></i>
-<span>მონაცემები იტვირთება...</span>
-</div>
-
-</div>
-
-</section>
-</div>
 
 <div id="ai-chat" class="ai-chat">
 
-<section
-id="ai-chat-window"
-class="ai-chat-window"
-aria-hidden="true"
-aria-label="ArduinoHub AI ასისტენტი"
->
+  <section
+    id="ai-chat-window"
+    class="ai-chat-window"
+    aria-hidden="true"
+    aria-label="ArduinoHub AI ასისტენტი"
+  >
 
-<div class="ai-chat-header">
+    <div class="ai-chat-header">
 
-<div class="ai-chat-title">
+      <div class="ai-chat-title">
 
-<div class="ai-avatar">
-<i data-lucide="sparkles"></i>
+        <div class="ai-avatar">
+          <i data-lucide="sparkles"></i>
+        </div>
+
+        <div>
+          <strong>ArduinoHub AI</strong>
+          <span>ონლაინ ასისტენტი</span>
+        </div>
+
+      </div>
+
+      <button
+        id="ai-chat-close"
+        class="ai-chat-close"
+        type="button"
+        aria-label="ჩატის დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
+
+    </div>
+
+
+    <div id="ai-chat-messages" class="ai-chat-messages">
+
+      <div class="ai-message assistant">
+
+        <div class="ai-message-avatar">
+          <i data-lucide="bot"></i>
+        </div>
+
+        <div class="ai-message-bubble">
+
+          <p>
+            გამარჯობა! 👋
+          </p>
+
+          <p>
+            მე ვარ <strong>ArduinoHub AI</strong>.
+            შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <form id="ai-chat-form" class="ai-chat-form">
+
+      <div class="ai-chat-input-wrap">
+
+        <input
+          id="ai-chat-input"
+          type="text"
+          autocomplete="off"
+          maxlength="1000"
+          placeholder="დაწერე კითხვა..."
+          aria-label="შეიყვანე კითხვა"
+        >
+
+        <button
+          id="ai-chat-send"
+          type="submit"
+          aria-label="გაგზავნა"
+        >
+          <i data-lucide="send"></i>
+        </button>
+
+      </div>
+
+      <small>
+        AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.
+      </small>
+
+    </form>
+
+  </section>
+
+
+  <button
+    id="ai-chat-toggle"
+    class="ai-chat-toggle"
+    type="button"
+    aria-label="AI ასისტენტის გახსნა"
+    aria-expanded="false"
+  >
+
+    <span class="ai-chat-pulse"></span>
+
+    <i
+      data-lucide="message-circle"
+      class="ai-chat-icon chat-icon"
+    ></i>
+
+    <i
+      data-lucide="x"
+      class="ai-chat-icon close-icon"
+    ></i>
+
+    <span class="ai-chat-badge">
+      AI
+    </span>
+
+  </button>
+
 </div>
 
-<div>
-<strong>ArduinoHub AI</strong>
-<span>ონლაინ ასისტენტი</span>
-</div>
-
-</div>
-
-<button
-id="ai-chat-close"
-class="ai-chat-close"
-type="button"
-aria-label="ჩატის დახურვა"
->
-<i data-lucide="x"></i>
-</button>
-
-</div>
-
-<div id="ai-chat-messages" class="ai-chat-messages">
-
-<div class="ai-message assistant">
-
-<div class="ai-message-avatar">
-<i data-lucide="bot"></i>
-</div>
-
-<div class="ai-message-bubble">
-
-<p>გამარჯობა! 👋</p>
-
-<p>
-მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
-</p>
-
-</div>
-</div>
-</div>
-
-<form id="ai-chat-form" class="ai-chat-form">
-
-<div class="ai-chat-input-wrap">
-
-<input
-id="ai-chat-input"
-type="text"
-autocomplete="off"
-maxlength="1000"
-placeholder="დაწერე კითხვა..."
-aria-label="შეიყვანე კითხვა"
->
-
-<button
-id="ai-chat-send"
-type="submit"
-aria-label="გაგზავნა"
->
-<i data-lucide="send"></i>
-</button>
-
-</div>
-
-<small>
-AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.
-</small>
-
-</form>
-
-</section>
-
-<button
-id="ai-chat-toggle"
-class="ai-chat-toggle"
-type="button"
-aria-label="AI ასისტენტის გახსნა"
-aria-expanded="false"
->
-
-<span class="ai-chat-pulse"></span>
-
-<i
-data-lucide="message-circle"
-class="ai-chat-icon chat-icon"
-></i>
-
-<i
-data-lucide="x"
-class="ai-chat-icon close-icon"
-></i>
-
-<span class="ai-chat-badge">AI</span>
-
-</button>
-
-</div>
 
 <div id="video-modal" class="video-modal">
 
+  <div
+    class="video-modal-backdrop"
+    id="video-backdrop"
+  ></div>
+
+  <div class="video-modal-card">
+
+    <button
+      type="button"
+      class="video-modal-close"
+      id="video-close"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
+
+    <div class="video-device-selector">
+
+      <button
+        type="button"
+        class="device-tab active"
+        data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
+      >
+        <i data-lucide="smartphone"></i>
+        iPhone
+      </button>
+
+      <button
+        type="button"
+        class="device-tab"
+        data-video-src=""
+      >
+        <i data-lucide="smartphone"></i>
+        Android
+      </button>
+
+      <button
+        type="button"
+        class="device-tab"
+        data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4"
+      >
+        <i data-lucide="laptop"></i>
+        ლეპტოპი
+      </button>
+
+    </div>
+
+
+    <div class="video-container">
+
+      <video id="tutorial-video" controls>
+
+        <source
+          id="video-source"
+          src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
+          type="video/mp4"
+        >
+
+        თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს.
+
+      </video>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <div
-class="video-modal-backdrop"
-id="video-backdrop"
-></div>
-
-<div class="video-modal-card">
-
-<button
-type="button"
-class="video-modal-close"
-id="video-close"
-aria-label="დახურვა"
+  id="global-modal"
+  class="meeting-modal"
+  hidden
+  aria-hidden="true"
 >
-<i data-lucide="x"></i>
-</button>
 
-<div class="video-device-selector">
+  <div
+    class="meeting-backdrop"
+    onclick="closeGlobalModal()"
+  ></div>
 
-<button
-type="button"
-class="device-tab active"
-data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
->
-<i data-lucide="smartphone"></i>
-iPhone
-</button>
+  <div
+    class="meeting-dialog"
+    style="max-width: 440px;"
+  >
 
-<button
-type="button"
-class="device-tab"
-data-video-src=""
->
-<i data-lucide="smartphone"></i>
-Android
-</button>
+    <button
+      class="meeting-close"
+      type="button"
+      onclick="closeGlobalModal()"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
 
-<button
-type="button"
-class="device-tab"
-data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4"
->
-<i data-lucide="laptop"></i>
-ლეპტოპი
-</button>
+    <div class="meeting-icon">
+      <i data-lucide="megaphone"></i>
+    </div>
+
+    <p class="eyebrow">
+      ადმინისტრატორის პანელი
+    </p>
+
+    <h2>
+      გლობალური შეტყობინება
+    </h2>
+
+    <form
+      id="global-notif-form"
+      style="display:flex;flex-direction:column;gap:12px;margin-top:16px;"
+    >
+
+      <div>
+
+        <label
+          for="global-title"
+          style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"
+        >
+          სათაური
+        </label>
+
+        <input
+          type="text"
+          id="global-title"
+          placeholder="მაგ: ახალი სიახლე!"
+          required
+          style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;font-family:inherit;"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label
+          for="global-message"
+          style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"
+        >
+          შეტყობინება
+        </label>
+
+        <textarea
+          id="global-message"
+          rows="4"
+          placeholder="დაწერე შეტყობინების ტექსტი..."
+          required
+          style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:vertical;font-family:inherit;"
+        ></textarea>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="button primary"
+        style="justify-content:center;margin-top:8px;"
+      >
+        გაგზავნა
+        <i data-lucide="send"></i>
+      </button>
+
+    </form>
+
+  </div>
 
 </div>
 
-<div class="video-container">
-
-<video id="tutorial-video" controls>
-
-<source
-id="video-source"
-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
-type="video/mp4"
->
-
-თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს.
-
-</video>
-
-</div>
-
-</div>
-</div>
-
-<div id="global-modal" class="meeting-modal" hidden aria-hidden="true">
 
 <div
-class="meeting-backdrop"
-onclick="closeGlobalModal()"
-></div>
-
-<div class="meeting-dialog" style="max-width: 440px;">
-
-<button
-class="meeting-close"
-type="button"
-onclick="closeGlobalModal()"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
-
-<div class="meeting-icon">
-<i data-lucide="megaphone"></i>
-</div>
-
-<p class="eyebrow">ადმინისტრატორის პანელი</p>
-
-<h2>გლობალური შეტყობინება</h2>
-
-<form
-id="global-notif-form"
-style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"
+  id="countdown-modal"
+  class="countdown-modal"
+  hidden
+  aria-hidden="true"
 >
 
-<div>
+  <div class="countdown-backdrop"></div>
 
-<label
-for="global-title"
-style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;"
->
-სათაური
-</label>
+  <section
+    class="countdown-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="countdown-form-title"
+  >
 
-<input
-type="text"
-id="global-title"
-placeholder="მაგ: ახალი სიახლე!"
-required
-style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;"
->
+    <button
+      id="countdown-close"
+      class="countdown-close"
+      type="button"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
 
-</div>
+    <div class="countdown-icon">
+      <i data-lucide="timer"></i>
+    </div>
 
-<div>
+    <p class="eyebrow">
+      ARDUINOHUB
+    </p>
 
-<label
-for="global-message"
-style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;"
->
-შეტყობინება
-</label>
+    <h2 id="countdown-form-title">
+      ახალი Countdown
+    </h2>
 
-<textarea
-id="global-message"
-rows="4"
-placeholder="დაწერე შეტყობინების ტექსტი..."
-required
-style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;"
-></textarea>
+    <form id="countdown-form">
 
-</div>
+      <div class="countdown-field">
 
-<button
-type="submit"
-class="button primary"
-style="justify-content: center; margin-top: 8px;"
->
-გაგზავნა
-<i data-lucide="send"></i>
-</button>
+        <label for="countdown-title">
+          სათაური
+        </label>
 
-</form>
+        <input
+          id="countdown-title"
+          type="text"
+          maxlength="100"
+          placeholder="მაგ: კლუბის შეხვედრა"
+          required
+        >
 
-</div>
-</div>
+      </div>
 
-<div id="countdown-modal" class="countdown-modal" hidden aria-hidden="true">
 
-<div class="countdown-backdrop"></div>
+      <div class="countdown-field">
 
-<section
-class="countdown-dialog"
-role="dialog"
-aria-modal="true"
-aria-labelledby="countdown-form-title"
->
+        <label for="countdown-message">
+          ტექსტი
+        </label>
 
-<button
-id="countdown-close"
-class="countdown-close"
-type="button"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+        <textarea
+          id="countdown-message"
+          maxlength="500"
+          rows="3"
+          placeholder="მაგ: შეხვედრამდე დარჩა..."
+          required
+        ></textarea>
 
-<div class="countdown-icon">
-<i data-lucide="timer"></i>
-</div>
+      </div>
 
-<p class="eyebrow">ARDUINOHUB</p>
 
-<h2 id="countdown-form-title">ახალი Countdown</h2>
+      <div class="countdown-field">
 
-<form id="countdown-form">
+        <label for="countdown-date">
+          თარიღი და დრო
+        </label>
 
-<div class="countdown-field">
+        <input
+          id="countdown-date"
+          type="datetime-local"
+          required
+        >
 
-<label for="countdown-title">
-სათაური
-</label>
+      </div>
 
-<input
-id="countdown-title"
-type="text"
-maxlength="100"
-placeholder="მაგ: კლუბის შეხვედრა"
-required
->
 
-</div>
+      <div id="countdown-form-status"></div>
 
-<div class="countdown-field">
 
-<label for="countdown-message">
-ტექსტი
-</label>
+      <button
+        type="submit"
+        class="button primary countdown-submit"
+      >
+        დაწყება
+        <i data-lucide="timer"></i>
+      </button>
 
-<textarea
-id="countdown-message"
-maxlength="500"
-rows="3"
-placeholder="მაგ: შეხვედრამდე დარჩა..."
-required
-></textarea>
+    </form>
+
+  </section>
 
 </div>
 
-<div class="countdown-field">
 
-<label for="countdown-date">
-თარიღი და დრო
-</label>
-
-<input
-id="countdown-date"
-type="datetime-local"
-required
+<div
+  id="active-countdown"
+  class="active-countdown"
+  hidden
 >
 
-</div>
+  <div class="active-countdown-backdrop"></div>
 
-<div id="countdown-form-status"></div>
+  <section
+    class="active-countdown-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="active-countdown-title"
+  >
 
-<button
-type="submit"
-class="button primary countdown-submit"
->
-დაწყება
-<i data-lucide="timer"></i>
-</button>
+    <button
+      id="active-countdown-close"
+      class="active-countdown-close"
+      type="button"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
 
-</form>
+    <div class="active-countdown-icon">
+      <i data-lucide="timer"></i>
+    </div>
 
-</section>
-</div>
+    <p class="eyebrow">
+      ARDUINOHUB
+    </p>
 
-<div id="active-countdown" class="active-countdown" hidden>
+    <h2 id="active-countdown-title"></h2>
 
-<div class="active-countdown-backdrop"></div>
+    <p id="active-countdown-message"></p>
 
-<section
-class="active-countdown-dialog"
-role="dialog"
-aria-modal="true"
-aria-labelledby="active-countdown-title"
->
+    <div class="countdown-timer">
 
-<button
-id="active-countdown-close"
-class="active-countdown-close"
-type="button"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+      <div class="countdown-unit">
+        <strong id="countdown-days">00</strong>
+        <span>დღე</span>
+      </div>
 
-<div class="active-countdown-icon">
-<i data-lucide="timer"></i>
-</div>
+      <div class="countdown-separator">:</div>
 
-<p class="eyebrow">ARDUINOHUB</p>
+      <div class="countdown-unit">
+        <strong id="countdown-hours">00</strong>
+        <span>საათი</span>
+      </div>
 
-<h2 id="active-countdown-title"></h2>
+      <div class="countdown-separator">:</div>
 
-<p id="active-countdown-message"></p>
+      <div class="countdown-unit">
+        <strong id="countdown-minutes">00</strong>
+        <span>წუთი</span>
+      </div>
 
-<div class="countdown-timer">
+      <div class="countdown-separator">:</div>
 
-<div class="countdown-unit">
-<strong id="countdown-days">00</strong>
-<span>დღე</span>
-</div>
+      <div class="countdown-unit">
+        <strong id="countdown-seconds">00</strong>
+        <span>წამი</span>
+      </div>
 
-<div class="countdown-separator">:</div>
+    </div>
 
-<div class="countdown-unit">
-<strong id="countdown-hours">00</strong>
-<span>საათი</span>
-</div>
-
-<div class="countdown-separator">:</div>
-
-<div class="countdown-unit">
-<strong id="countdown-minutes">00</strong>
-<span>წუთი</span>
-</div>
-
-<div class="countdown-separator">:</div>
-
-<div class="countdown-unit">
-<strong id="countdown-seconds">00</strong>
-<span>წამი</span>
-</div>
+  </section>
 
 </div>
 
-</section>
-</div>
 
 <footer>
 
-<a class="brand" href="index.html">
-<span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
-</a>
+  <a class="brand" href="index.html">
+    <span class="brand-mark">∞</span>
+    ArduinoChemistry<span>Hub</span>
+  </a>
 
-<p>
-Arduino&Chemistry პროექტები ერთ სივრცეში
-</p>
+  <p>
+    Arduino&Chemistry პროექტები ერთ სივრცეში
+  </p>
 
-<div class="footer-credit">
-<span>მოაზროვნე ქიმიკოსთა კლუბი</span>
-</div>
+  <div class="footer-credit">
+    <span>მოაზროვნე ქიმიკოსთა კლუბი</span>
+  </div>
 
-<small>
-© <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
-</small>
+  <small>
+    © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
+  </small>
 
 </footer>
 
-<script src="https://unpkg.com/lucide@latest"></script>
-<script type="module" src="script.js"></script>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script
+  type="module"
+  src="script.js"
+></script>
+
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+></script>
+
 <script type="text/javascript">
-   (function(){
-      emailjs.init("KHWLmDgpVWvHs72r4");
-   })();
+  (function() {
+    emailjs.init("KHWLmDgpVWvHs72r4")
+  })()
 </script>
+
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = document.getElementById("openBugModalBtn");
-  const closeBtn = document.getElementById("closeBugModalBtn");
-  const overlay = document.getElementById("bugModalOverlay");
-  const form = document.getElementById("bugReportForm");
-  const statusText = document.getElementById("bugFormStatus");
+  document.addEventListener("DOMContentLoaded", () => {
 
-  if(openBtn && closeBtn && overlay && form) {
-    openBtn.addEventListener("click", () => overlay.style.display = "grid");
-    closeBtn.addEventListener("click", () => overlay.style.display = "none");
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) overlay.style.display = "none";
-    });
+    const openBtn = document.getElementById("openBugModalBtn")
+    const closeBtn = document.getElementById("closeBugModalBtn")
+    const overlay = document.getElementById("bugModalOverlay")
+    const form = document.getElementById("bugReportForm")
+    const statusText = document.getElementById("bugFormStatus")
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      statusText.style.color = "#4ade80";
-      statusText.textContent = "იგზავნება...";
+    if (openBtn && closeBtn && overlay && form) {
 
-      const templateParams = {
-        title: "ხარვეზის შეტყობინება",
-        bug_title: document.getElementById("bugTitle").value,
-        message: document.getElementById("bugMessage").value,
-        from_name: document.getElementById("bugTitle").value
-      };
+      openBtn.addEventListener("click", () => {
+        overlay.style.display = "grid"
+      })
 
-      try {
-        await emailjs.send('service_rofiyqg', 'template_mhmwkcj', templateParams);
+      closeBtn.addEventListener("click", () => {
+        overlay.style.display = "none"
+      })
 
-        statusText.style.color = "#4ade80";
-        statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა.";
-        form.reset();
-        setTimeout(() => {
-          overlay.style.display = "none";
-          statusText.textContent = "";
-        }, 2500);
-      } catch (error) {
-        statusText.style.color = "#f87171";
-        statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან.";
-      }
-    });
-  }
-});
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+          overlay.style.display = "none"
+        }
+      })
+
+      form.addEventListener("submit", async (e) => {
+
+        e.preventDefault()
+
+        statusText.style.color = "#4ade80"
+        statusText.textContent = "იგზავნება..."
+
+        const templateParams = {
+          title: "ხარვეზის შეტყობინება",
+          bug_title: document.getElementById("bugTitle").value,
+          message: document.getElementById("bugMessage").value,
+          from_name: document.getElementById("bugTitle").value
+        }
+
+        try {
+
+          await emailjs.send(
+            "service_rofiyqg",
+            "template_mhmwkcj",
+            templateParams
+          )
+
+          statusText.style.color = "#4ade80"
+          statusText.textContent =
+            "მადლობა! შეტყობინება მეილზე გაიგზავნა."
+
+          form.reset()
+
+          setTimeout(() => {
+            overlay.style.display = "none"
+            statusText.textContent = ""
+          }, 2500)
+
+        } catch (error) {
+
+          statusText.style.color = "#f87171"
+          statusText.textContent =
+            "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
+
+        }
+
+      })
+
+    }
+
+  })
 </script>
 
+
 <style>
+
 .bug-float-btn {
   position: fixed;
   left: 20px;
@@ -928,6 +1303,571 @@ document.addEventListener("DOMContentLoaded", () => {
   text-align: center;
   margin-top: 10px;
 }
+
+
+/* ARDUINO UNO HERO */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
+  align-items: center;
+  gap: 40px;
+  min-height: 720px;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 5;
+}
+
+.hero-board {
+  position: relative;
+  width: 100%;
+  height: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.arduino-board-glow {
+  position: absolute;
+  width: 390px;
+  height: 390px;
+  border-radius: 50%;
+  background: rgba(34, 211, 149, 0.14);
+  filter: blur(75px);
+  animation: boardGlow 4s ease-in-out infinite;
+}
+
+.arduino-board {
+  position: relative;
+  width: 410px;
+  height: 300px;
+  border-radius: 12px;
+  transform: rotateX(7deg) rotateY(-15deg) rotateZ(2deg);
+  transform-style: preserve-3d;
+  background:
+    radial-gradient(
+      circle at 20% 25%,
+      rgba(65, 230, 168, 0.16),
+      transparent 16%
+    ),
+    linear-gradient(
+      145deg,
+      #158765 0%,
+      #087052 42%,
+      #075a43 100%
+    );
+  border: 2px solid #22d395;
+  box-shadow:
+    0 0 0 5px rgba(34, 211, 149, 0.06),
+    0 25px 55px rgba(0, 0, 0, 0.55),
+    0 0 45px rgba(34, 211, 149, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.18);
+  animation: boardFloat 5s ease-in-out infinite;
+}
+
+.arduino-board::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.arduino-board::after {
+  content: "ARDUINO UNO R3";
+  position: absolute;
+  right: 18px;
+  bottom: 10px;
+  color: rgba(255, 255, 255, 0.14);
+  font: 700 8px Inter, sans-serif;
+  letter-spacing: 1.5px;
+}
+
+.board-screw {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #d8ddd9 0 8%,
+      #7f8985 20%,
+      #252d2a 55%,
+      #101614 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.5);
+  z-index: 8;
+}
+
+.screw-1 {
+  left: 15px;
+  top: 16px;
+}
+
+.screw-2 {
+  right: 15px;
+  top: 16px;
+}
+
+.screw-3 {
+  left: 15px;
+  bottom: 16px;
+}
+
+.screw-4 {
+  right: 15px;
+  bottom: 16px;
+}
+
+.arduino-usb {
+  position: absolute;
+  left: -25px;
+  top: 70px;
+  width: 48px;
+  height: 72px;
+  border-radius: 6px 3px 3px 6px;
+  background: linear-gradient(
+    90deg,
+    #aeb7b4,
+    #edf1ef 45%,
+    #6f7774
+  );
+  border: 2px solid #454d4a;
+  box-shadow:
+    -8px 8px 15px rgba(0, 0, 0, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  z-index: 10;
+}
+
+.usb-metal {
+  position: absolute;
+  left: 8px;
+  top: 13px;
+  width: 28px;
+  height: 45px;
+  border-radius: 2px;
+  background: #1d2522;
+  border: 2px solid #67716d;
+}
+
+.usb-inner {
+  position: absolute;
+  left: 13px;
+  top: 18px;
+  width: 18px;
+  height: 35px;
+  background: #0b1511;
+  box-shadow: inset 0 0 6px rgba(34, 211, 149, 0.15);
+}
+
+.arduino-power {
+  position: absolute;
+  right: -25px;
+  top: 150px;
+  width: 42px;
+  height: 52px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #161d1b, #39423e);
+  border: 2px solid #111714;
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.35);
+  z-index: 10;
+}
+
+.power-metal {
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  width: 26px;
+  height: 34px;
+  border-radius: 50%;
+  border: 4px solid #aab1ae;
+  box-shadow: inset 0 0 5px #111;
+}
+
+.arduino-power-led {
+  position: absolute;
+  right: 70px;
+  top: 68px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22d395;
+  box-shadow:
+    0 0 10px #22d395,
+    0 0 20px rgba(34, 211, 149, 0.8);
+  animation: ledBlink 2s ease-in-out infinite;
+}
+
+.arduino-chip {
+  position: absolute;
+  left: 145px;
+  top: 112px;
+  width: 108px;
+  height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(145deg, #1a211f, #070b0a);
+  border: 1px solid #303936;
+  border-radius: 3px;
+  box-shadow:
+    0 8px 15px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  z-index: 5;
+}
+
+.arduino-chip::before,
+.arduino-chip::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 100%;
+  top: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #a8b0ad 0 5px,
+    transparent 5px 11px
+  );
+}
+
+.arduino-chip::before {
+  left: -7px;
+}
+
+.arduino-chip::after {
+  right: -7px;
+}
+
+.arduino-chip span {
+  color: #7e8985;
+  font: 600 7px Inter, sans-serif;
+  letter-spacing: 1px;
+}
+
+.arduino-chip strong {
+  color: #dce4e0;
+  font: 700 10px Inter, sans-serif;
+}
+
+.arduino-usb-chip {
+  position: absolute;
+  left: 85px;
+  top: 210px;
+  width: 64px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #101613;
+  border: 1px solid #2c3531;
+  color: #7c8783;
+  font: 600 6px Inter, sans-serif;
+  letter-spacing: 0.5px;
+  z-index: 4;
+}
+
+.arduino-reset {
+  position: absolute;
+  left: 285px;
+  top: 105px;
+  width: 42px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  background: #1b2320;
+  border: 1px solid #37423e;
+  color: #7d8884;
+  font: 600 5px Inter, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.arduino-reset::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: #b8c0bd;
+  box-shadow: inset 0 0 2px #333;
+  top: -8px;
+  left: 14px;
+}
+
+.arduino-crystal {
+  position: absolute;
+  left: 275px;
+  top: 205px;
+  color: #b8c1bd;
+  font: 700 7px Inter, sans-serif;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.arduino-pin-header {
+  position: absolute;
+  height: 18px;
+  background: repeating-linear-gradient(
+    to right,
+    #101614 0 8px,
+    #b7c0bc 8px 11px,
+    #101614 11px 16px
+  );
+  border: 1px solid #101613;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+  z-index: 6;
+}
+
+.header-top {
+  left: 95px;
+  right: 20px;
+  top: 8px;
+}
+
+.header-bottom {
+  left: 90px;
+  right: 55px;
+  bottom: 8px;
+}
+
+.arduino-pin-row {
+  position: absolute;
+  display: flex;
+  color: rgba(230, 240, 236, 0.72);
+  font: 600 6px Inter, sans-serif;
+  z-index: 7;
+  pointer-events: none;
+}
+
+.arduino-pin-row span {
+  text-align: center;
+}
+
+.top-pins {
+  top: 29px;
+  right: 19px;
+  width: 286px;
+  justify-content: space-between;
+}
+
+.bottom-pins {
+  bottom: 29px;
+  left: 90px;
+  width: 266px;
+  justify-content: space-between;
+}
+
+.arduino-logo {
+  position: absolute;
+  left: 45px;
+  top: 95px;
+  color: rgba(235, 245, 241, 0.75);
+  font: 700 40px Inter, sans-serif;
+  transform: rotate(-10deg);
+}
+
+.arduino-label {
+  position: absolute;
+  left: 40px;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  color: rgba(239, 247, 244, 0.8);
+  font-family: Inter, sans-serif;
+  transform: rotate(-5deg);
+}
+
+.arduino-label strong {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.arduino-label span {
+  font-size: 11px;
+  letter-spacing: 5px;
+  margin-left: 2px;
+}
+
+.board-traces {
+  position: absolute;
+  height: 1px;
+  background: rgba(103, 232, 183, 0.24);
+  transform-origin: left center;
+}
+
+.trace-1 {
+  left: 55px;
+  top: 75px;
+  width: 80px;
+  transform: rotate(20deg);
+}
+
+.trace-2 {
+  left: 260px;
+  top: 95px;
+  width: 90px;
+  transform: rotate(-25deg);
+}
+
+.trace-3 {
+  left: 270px;
+  top: 185px;
+  width: 80px;
+  transform: rotate(20deg);
+}
+
+.trace-4 {
+  left: 145px;
+  top: 200px;
+  width: 100px;
+  transform: rotate(-12deg);
+}
+
+.arduino-led {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8ee9cb;
+  box-shadow: 0 0 8px rgba(142, 233, 203, 0.8);
+}
+
+.led-l {
+  left: 315px;
+  top: 150px;
+}
+
+.led-r {
+  left: 335px;
+  top: 150px;
+}
+
+.board-status {
+  position: absolute;
+  right: 68px;
+  top: 165px;
+  display: flex;
+  gap: 8px;
+}
+
+.board-status span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4b625a;
+}
+
+.board-status span:first-child {
+  background: #22d395;
+  box-shadow: 0 0 8px #22d395;
+}
+
+.board-shadow {
+  position: absolute;
+  width: 370px;
+  height: 55px;
+  bottom: 95px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  filter: blur(22px);
+  transform: rotate(-5deg);
+  z-index: -1;
+}
+
+@keyframes boardFloat {
+  0%,
+  100% {
+    transform:
+      rotateX(7deg)
+      rotateY(-15deg)
+      rotateZ(2deg)
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      rotateX(9deg)
+      rotateY(-12deg)
+      rotateZ(1deg)
+      translateY(-12px);
+  }
+}
+
+@keyframes boardGlow {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes ledBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+
+@media (max-width: 1000px) {
+
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-bottom: 70px;
+  }
+
+  .hero-board {
+    height: 470px;
+    order: 2;
+  }
+
+  .hero-copy {
+    order: 1;
+  }
+
+}
+
+
+@media (max-width: 560px) {
+
+  .hero-board {
+    height: 350px;
+    transform: scale(0.72);
+    margin: -35px 0;
+  }
+
+  .arduino-board {
+    flex-shrink: 0;
+  }
+
+  .hero-board {
+    overflow: visible;
+  }
+
+}
+
 </style>
 
 </body>
