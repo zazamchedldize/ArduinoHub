@@ -61,60 +61,6 @@ OneSignalDeferred.push(async function(OneSignal) {
   }
 }
 </script>
-
-<style>
-/* დამატებითი სტილები Arduino Uno მოდელისთვის ჰერო სექციაში */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
-.hero-copy {
-  flex: 1;
-  min-width: 280px;
-}
-
-.hero-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 280px;
-}
-
-.hero-image img {
-  max-width: 100%;
-  width: 1000px;
-  height: auto;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
-  animation: floatArduino 4s ease-in-out infinite;
-}
-
-@keyframes floatArduino {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@media(max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-  }
-  .hero-actions {
-    justify-content: center;
-  }
-  .hero-stats {
-    justify-content: center;
-  }
-}
-</style>
 </head>
 
 <body data-page="home">
@@ -191,10 +137,6 @@ OneSignalDeferred.push(async function(OneSignal) {
 </div>
 </div>
 
-<!-- აქ ჩავსვით Arduino Uno-ს ფოტო -->
-<div class="hero-image">
-<img src="arduino-uno.png" alt="Arduino Uno Board" onerror="this.src='https://images.unsplash.com/photo-1555668769-ff16c68c336b?auto=format&fit=crop&w=600&q=80'">
-</div>
 
 </section>
 
@@ -937,7 +879,6 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 .bug-form-group {
-  large: 15px;
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
