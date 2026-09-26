@@ -3,49 +3,33 @@
 <head>
 <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
 <link rel="icon" type="image/png" href="arduinohub-icon.png">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <link rel="manifest" href="manifest.json">
-
 <script>
 window.supabase = supabase.createClient(
-    'https://ywxunhvrwdtlqjfshiyj.supabase.co',
-    'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
+  'https://ywxunhvrwdtlqjfshiyj.supabase.co',
+  'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
 )
 </script>
-
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-
 <script>
 window.OneSignalDeferred = window.OneSignalDeferred || []
-
 OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-        appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
-    })
+  await OneSignal.init({
+    appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
+  })
 })
 </script>
-
 <meta charset="utf-8">
-
 <meta name="google-site-verification" content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>ArduinoHub — Arduino & Chemistry პროექტები</title>
-
 <meta name="description" content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს.">
-
 <meta name="keywords" content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად">
-
 <meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
-
 <meta name="robots" content="index, follow">
 <meta name="googlebot" content="index, follow">
-
 <link rel="canonical" href="https://arduinohub.onrender.com/">
-
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://arduinohub.onrender.com/">
 <meta property="og:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
@@ -53,88 +37,70 @@ OneSignalDeferred.push(async function(OneSignal) {
 <meta property="og:site_name" content="ArduinoHub">
 <meta property="og:locale" content="ka_GE">
 <meta property="og:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
-
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
 <meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.">
 <meta name="twitter:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
-
+<link rel="icon" type="image/png" href="arduinohub-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
-
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "ArduinoHub",
-    "alternateName": "ArduinoChemistryHub",
-    "url": "https://arduinohub.onrender.com/",
-    "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
-    "inLanguage": "ka",
-    "publisher": {
-        "@type": "Organization",
-        "name": "ArduinoHub — 29-ე საჯარო სკოლა"
-    }
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ArduinoHub",
+  "alternateName": "ArduinoChemistryHub",
+  "url": "https://arduinohub.onrender.com/",
+  "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
+  "inLanguage": "ka",
+  "publisher": {
+    "@type": "Organization",
+    "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+  }
 }
 </script>
-
 </head>
 
 <body data-page="home">
 
 <header class="site-header">
-
 <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
-    <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
+<span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
 </a>
 
 <button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">
-    ☰
+☰
 </button>
 
 <nav>
-
 <a class="active" href="index.html">მთავარი</a>
-
 <a href="projects.html">პროექტები</a>
-
 <a href="#how-it-works">როგორ მუშაობს</a>
-
 <a href="team.html">ჩვენი გუნდი</a>
 
 <button id="meeting-button" class="nav-meeting" type="button" onclick="openAttendancePanel()">
-    <i data-lucide="calendar-days"></i>
-    კლუბის შეკრება
+<i data-lucide="calendar-days"></i>
+კლუბის შეკრება
 </button>
 
 <a class="nav-admin" href="admin.html">
-    შესვლა
-    <i data-lucide="shield"></i>
+შესვლა
+<i data-lucide="shield"></i>
 </a>
-
 </nav>
-
 </header>
 
 <main>
 
 <section class="hero">
-
 <div class="hero-copy">
-
-<p class="eyebrow">
-ARDUINO & CHEMISTRY PROJECT COMMUNITY
-</p>
+<p class="eyebrow">ARDUINO & CHEMISTRY PROJECT COMMUNITY</p>
 
 <h1>
-იდეებიდან,
-<br>
-<em>რეალურ</em>
-პროექტებზე
+იდეებიდან,<br>
+<em>რეალურ</em> პროექტებზე
 </h1>
 
 <p class="hero-text">
@@ -142,7 +108,6 @@ ARDUINO & CHEMISTRY PROJECT COMMUNITY
 </p>
 
 <div class="hero-actions">
-
 <a class="button primary" href="projects.html">
 პროექტების ნახვა
 <i data-lucide="arrow-right"></i>
@@ -152,11 +117,9 @@ ARDUINO & CHEMISTRY PROJECT COMMUNITY
 <i data-lucide="play-circle"></i>
 ვიდეო ინსტრუქცია
 </button>
-
 </div>
 
 <div class="hero-stats">
-
 <div>
 <strong>∞</strong>
 <span>შესაძლებლობა</span>
@@ -171,254 +134,15 @@ ARDUINO & CHEMISTRY PROJECT COMMUNITY
 <strong>100%</strong>
 <span>რეალური პროექტები</span>
 </div>
-
+</div>
 </div>
 
-</div>
-
-<div class="hero-board-area">
-
-<div class="board-glow"></div>
-
-<div class="arduino-board">
-
-<div class="board-screw screw-1"></div>
-<div class="board-screw screw-2"></div>
-<div class="board-screw screw-3"></div>
-<div class="board-screw screw-4"></div>
-
-<div class="usb-port">
-
-<div class="usb-metal">
-<div class="usb-inner"></div>
-</div>
-
-</div>
-
-<div class="power-jack">
-<div class="power-hole"></div>
-</div>
-
-<div class="digital-header">
-
-<div class="header-label">
-DIGITAL
-</div>
-
-<div class="pin-row">
-
-<span>D0</span>
-<span>D1</span>
-<span>D2</span>
-<span>D3</span>
-<span>D4</span>
-<span>D5</span>
-<span>D6</span>
-<span>D7</span>
-<span>D8</span>
-<span>D9</span>
-<span>D10</span>
-<span>D11</span>
-<span>D12</span>
-<span>D13</span>
-
-</div>
-
-<div class="pin-holes">
-
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-
-</div>
-
-</div>
-
-<div class="analog-header">
-
-<div class="header-label">
-POWER
-</div>
-
-<div class="analog-labels">
-<span>IOREF</span>
-<span>RESET</span>
-<span>3V3</span>
-<span>5V</span>
-<span>GND</span>
-<span>GND</span>
-<span>VIN</span>
-</div>
-
-<div class="analog-holes">
-
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-
-</div>
-
-<div class="analog-right-label">
-ANALOG IN
-</div>
-
-<div class="analog-right">
-
-<span>A0</span>
-<span>A1</span>
-<span>A2</span>
-<span>A3</span>
-<span>A4</span>
-<span>A5</span>
-
-</div>
-
-</div>
-
-<div class="arduino-logo">
-
-<div class="arduino-infinity">
-∞
-</div>
-
-<div class="arduino-word">
-ARDUINO
-</div>
-
-<div class="uno-text">
-UNO
-</div>
-
-<div class="r3-text">
-REV3
-</div>
-
-</div>
-
-<div class="main-chip">
-
-<div class="chip-top">
-ATMEGA328P
-</div>
-
-<div class="chip-line"></div>
-
-<div class="chip-pin left p1"></div>
-<div class="chip-pin left p2"></div>
-<div class="chip-pin left p3"></div>
-<div class="chip-pin left p4"></div>
-<div class="chip-pin left p5"></div>
-<div class="chip-pin left p6"></div>
-<div class="chip-pin left p7"></div>
-<div class="chip-pin left p8"></div>
-
-<div class="chip-pin right p1"></div>
-<div class="chip-pin right p2"></div>
-<div class="chip-pin right p3"></div>
-<div class="chip-pin right p4"></div>
-<div class="chip-pin right p5"></div>
-<div class="chip-pin right p6"></div>
-<div class="chip-pin right p7"></div>
-<div class="chip-pin right p8"></div>
-
-</div>
-
-<div class="usb-chip">
-
-<div class="micro-chip-label">
-ATmega16U2
-</div>
-
-</div>
-
-<div class="crystal">
-
-<div></div>
-
-<span>
-16.000
-</span>
-
-</div>
-
-<div class="capacitor cap-1"></div>
-<div class="capacitor cap-2"></div>
-
-<div class="reset-button">
-
-<span></span>
-
-</div>
-
-<div class="power-led">
-<span></span>
-<small>ON</small>
-</div>
-
-<div class="tx-led">
-<span></span>
-<small>TX</small>
-</div>
-
-<div class="rx-led">
-<span></span>
-<small>RX</small>
-</div>
-
-<div class="icsp-header">
-
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-<i></i>
-
-</div>
-
-<div class="board-trace trace-1"></div>
-<div class="board-trace trace-2"></div>
-<div class="board-trace trace-3"></div>
-<div class="board-trace trace-4"></div>
-<div class="board-trace trace-5"></div>
-
-<div class="made-label">
-ARDUINO.CC
-</div>
-
-</div>
-
-<div class="board-shadow"></div>
-
-</div>
 
 </section>
 
-
 <section id="how-it-works" class="section">
-
-<p class="eyebrow">
-მარტივი პროცესი
-</p>
-
-<h2>
-როგორ მუშაობს Arduino & Chemistry Hub?
-</h2>
+<p class="eyebrow">მარტივი პროცესი</p>
+<h2>როგორ მუშაობს Arduino & Chemistry Hub?</h2>
 
 <div class="steps">
 
@@ -451,38 +175,24 @@ ARDUINO.CC
 </article>
 
 </div>
-
 </section>
 
-
 <section id="about" class="about section">
-
 <div>
-
-<p class="eyebrow">
-ARDUINO•CHEMISTRY•HUB-ის შესახებ
-</p>
-
-<h2>
-იდეები უკეთესია, როცა გაზიარებულია.
-</h2>
-
+<p class="eyebrow">ARDUINO•CHEMISTRY•HUB-ის შესახებ</p>
+<h2>იდეები უკეთესია, როცა გაზიარებულია.</h2>
 </div>
 
 <p>
 ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
 </p>
-
 </section>
 
-
 <section class="cta">
-
 <i data-lucide="cpu"></i>
 
 <h2>
-აღმოაჩინე ახალი იდეები
-<br>
+აღმოაჩინე ახალი იდეები<br>
 და გაიცანი Arduino-ს შესაძლებლობები.
 </h2>
 
@@ -490,12 +200,9 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
 პროექტების ნახვა
 <i data-lucide="arrow-right"></i>
 </a>
-
 </section>
 
-
 <section class="suggestion-section">
-
 <div class="suggestion-card">
 
 <div class="suggestion-icon">
@@ -503,14 +210,9 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
 </div>
 
 <div class="suggestion-content">
+<p class="eyebrow">შენი აზრი მნიშვნელოვანია</p>
 
-<p class="eyebrow">
-შენი აზრი მნიშვნელოვანია
-</p>
-
-<h2>
-გაქვს იდეა ArduinoHub-ისთვის?
-</h2>
+<h2>გაქვს იდეა ArduinoHub-ისთვის?</h2>
 
 <p>
 მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.
@@ -522,13 +224,10 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
 </button>
 
 </div>
-
 </div>
-
 </section>
 
 </main>
-
 
 <div id="suggestion-modal" class="suggestion-modal" hidden>
 
@@ -544,19 +243,19 @@ ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს �
 <i data-lucide="message-square-plus"></i>
 </div>
 
-<p class="eyebrow">
-ARDUINOHUB
-</p>
+<p class="eyebrow">ARDUINOHUB</p>
 
-<h2>
-გაგვიზიარე შენი აზრი
-</h2>
+<h2>გაგვიზიარე შენი აზრი</h2>
 
 <p class="suggestion-description">
 დაწერე რა გინდა რომ დაემატოს, შეიცვალოს ან გაუმჯობესდეს საიტზე.
 </p>
 
-<textarea id="suggestion-message" maxlength="3000" placeholder="დაწერე შენი იდეა ან რჩევა..."></textarea>
+<textarea
+id="suggestion-message"
+maxlength="3000"
+placeholder="დაწერე შენი იდეა ან რჩევა..."
+></textarea>
 
 <div class="suggestion-bottom">
 
@@ -574,17 +273,25 @@ ARDUINOHUB
 <p id="suggestion-status"></p>
 
 </div>
-
 </div>
-
 
 <div id="meeting-modal" class="meeting-modal" hidden aria-hidden="true">
 
 <div class="meeting-backdrop" data-meeting-close></div>
 
-<section class="meeting-dialog" role="dialog" aria-modal="true" aria-labelledby="meeting-title">
+<section
+class="meeting-dialog"
+role="dialog"
+aria-modal="true"
+aria-labelledby="meeting-title"
+>
 
-<button id="meeting-close" class="meeting-close" type="button" aria-label="დახურვა">
+<button
+id="meeting-close"
+class="meeting-close"
+type="button"
+aria-label="დახურვა"
+>
 <i data-lucide="x"></i>
 </button>
 
@@ -592,13 +299,9 @@ ARDUINOHUB
 <i data-lucide="calendar-days"></i>
 </div>
 
-<p class="eyebrow">
-მოაზროვნე ქიმიკოსთა კლუბი
-</p>
+<p class="eyebrow">მოაზროვნე ქიმიკოსთა კლუბი</p>
 
-<h2 id="meeting-title">
-კლუბის შეკრება
-</h2>
+<h2 id="meeting-title">კლუბის შეკრება</h2>
 
 <div id="meeting-content" class="meeting-content">
 
@@ -610,13 +313,16 @@ ARDUINOHUB
 </div>
 
 </section>
-
 </div>
-
 
 <div id="ai-chat" class="ai-chat">
 
-<section id="ai-chat-window" class="ai-chat-window" aria-hidden="true" aria-label="ArduinoHub AI ასისტენტი">
+<section
+id="ai-chat-window"
+class="ai-chat-window"
+aria-hidden="true"
+aria-label="ArduinoHub AI ასისტენტი"
+>
 
 <div class="ai-chat-header">
 
@@ -633,12 +339,16 @@ ARDUINOHUB
 
 </div>
 
-<button id="ai-chat-close" class="ai-chat-close" type="button" aria-label="ჩატის დახურვა">
+<button
+id="ai-chat-close"
+class="ai-chat-close"
+type="button"
+aria-label="ჩატის დახურვა"
+>
 <i data-lucide="x"></i>
 </button>
 
 </div>
-
 
 <div id="ai-chat-messages" class="ai-chat-messages">
 
@@ -653,16 +363,12 @@ ARDUINOHUB
 <p>გამარჯობა! 👋</p>
 
 <p>
-მე ვარ <strong>ArduinoHub AI</strong>.
-შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
+მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
 </p>
 
 </div>
-
 </div>
-
 </div>
-
 
 <form id="ai-chat-form" class="ai-chat-form">
 
@@ -677,7 +383,11 @@ placeholder="დაწერე კითხვა..."
 aria-label="შეიყვანე კითხვა"
 >
 
-<button id="ai-chat-send" type="submit" aria-label="გაგზავნა">
+<button
+id="ai-chat-send"
+type="submit"
+aria-label="გაგზავნა"
+>
 <i data-lucide="send"></i>
 </button>
 
@@ -691,31 +401,47 @@ AI შეიძლება შეცდეს. გადაამოწმე �
 
 </section>
 
-
-<button id="ai-chat-toggle" class="ai-chat-toggle" type="button" aria-label="AI ასისტენტის გახსნა" aria-expanded="false">
+<button
+id="ai-chat-toggle"
+class="ai-chat-toggle"
+type="button"
+aria-label="AI ასისტენტის გახსნა"
+aria-expanded="false"
+>
 
 <span class="ai-chat-pulse"></span>
 
-<i data-lucide="message-circle" class="ai-chat-icon chat-icon"></i>
+<i
+data-lucide="message-circle"
+class="ai-chat-icon chat-icon"
+></i>
 
-<i data-lucide="x" class="ai-chat-icon close-icon"></i>
+<i
+data-lucide="x"
+class="ai-chat-icon close-icon"
+></i>
 
-<span class="ai-chat-badge">
-AI
-</span>
+<span class="ai-chat-badge">AI</span>
 
 </button>
 
 </div>
 
-
 <div id="video-modal" class="video-modal">
 
-<div class="video-modal-backdrop" id="video-backdrop"></div>
+<div
+class="video-modal-backdrop"
+id="video-backdrop"
+></div>
 
 <div class="video-modal-card">
 
-<button type="button" class="video-modal-close" id="video-close" aria-label="დახურვა">
+<button
+type="button"
+class="video-modal-close"
+id="video-close"
+aria-label="დახურვა"
+>
 <i data-lucide="x"></i>
 </button>
 
@@ -767,17 +493,23 @@ type="video/mp4"
 </div>
 
 </div>
-
 </div>
-
 
 <div id="global-modal" class="meeting-modal" hidden aria-hidden="true">
 
-<div class="meeting-backdrop" onclick="closeGlobalModal()"></div>
+<div
+class="meeting-backdrop"
+onclick="closeGlobalModal()"
+></div>
 
 <div class="meeting-dialog" style="max-width: 440px;">
 
-<button class="meeting-close" type="button" onclick="closeGlobalModal()" aria-label="დახურვა">
+<button
+class="meeting-close"
+type="button"
+onclick="closeGlobalModal()"
+aria-label="დახურვა"
+>
 <i data-lucide="x"></i>
 </button>
 
@@ -785,19 +517,21 @@ type="video/mp4"
 <i data-lucide="megaphone"></i>
 </div>
 
-<p class="eyebrow">
-ადმინისტრატორის პანელი
-</p>
+<p class="eyebrow">ადმინისტრატორის პანელი</p>
 
-<h2>
-გლობალური შეტყობინება
-</h2>
+<h2>გლობალური შეტყობინება</h2>
 
-<form id="global-notif-form" style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
+<form
+id="global-notif-form"
+style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"
+>
 
 <div>
 
-<label for="global-title" style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">
+<label
+for="global-title"
+style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;"
+>
 სათაური
 </label>
 
@@ -806,14 +540,17 @@ type="text"
 id="global-title"
 placeholder="მაგ: ახალი სიახლე!"
 required
-style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;font-family:inherit;"
+style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;"
 >
 
 </div>
 
 <div>
 
-<label for="global-message" style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">
+<label
+for="global-message"
+style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;"
+>
 შეტყობინება
 </label>
 
@@ -822,7 +559,7 @@ id="global-message"
 rows="4"
 placeholder="დაწერე შეტყობინების ტექსტი..."
 required
-style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:vertical;font-family:inherit;"
+style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;"
 ></textarea>
 
 </div>
@@ -830,7 +567,7 @@ style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:ve
 <button
 type="submit"
 class="button primary"
-style="justify-content:center;margin-top:8px;"
+style="justify-content: center; margin-top: 8px;"
 >
 გაგზავნა
 <i data-lucide="send"></i>
@@ -839,17 +576,25 @@ style="justify-content:center;margin-top:8px;"
 </form>
 
 </div>
-
 </div>
-
 
 <div id="countdown-modal" class="countdown-modal" hidden aria-hidden="true">
 
 <div class="countdown-backdrop"></div>
 
-<section class="countdown-dialog" role="dialog" aria-modal="true" aria-labelledby="countdown-form-title">
+<section
+class="countdown-dialog"
+role="dialog"
+aria-modal="true"
+aria-labelledby="countdown-form-title"
+>
 
-<button id="countdown-close" class="countdown-close" type="button" aria-label="დახურვა">
+<button
+id="countdown-close"
+class="countdown-close"
+type="button"
+aria-label="დახურვა"
+>
 <i data-lucide="x"></i>
 </button>
 
@@ -857,13 +602,9 @@ style="justify-content:center;margin-top:8px;"
 <i data-lucide="timer"></i>
 </div>
 
-<p class="eyebrow">
-ARDUINOHUB
-</p>
+<p class="eyebrow">ARDUINOHUB</p>
 
-<h2 id="countdown-form-title">
-ახალი Countdown
-</h2>
+<h2 id="countdown-form-title">ახალი Countdown</h2>
 
 <form id="countdown-form">
 
@@ -915,7 +656,10 @@ required
 
 <div id="countdown-form-status"></div>
 
-<button type="submit" class="button primary countdown-submit">
+<button
+type="submit"
+class="button primary countdown-submit"
+>
 დაწყება
 <i data-lucide="timer"></i>
 </button>
@@ -923,17 +667,25 @@ required
 </form>
 
 </section>
-
 </div>
-
 
 <div id="active-countdown" class="active-countdown" hidden>
 
 <div class="active-countdown-backdrop"></div>
 
-<section class="active-countdown-dialog" role="dialog" aria-modal="true" aria-labelledby="active-countdown-title">
+<section
+class="active-countdown-dialog"
+role="dialog"
+aria-modal="true"
+aria-labelledby="active-countdown-title"
+>
 
-<button id="active-countdown-close" class="active-countdown-close" type="button" aria-label="დახურვა">
+<button
+id="active-countdown-close"
+class="active-countdown-close"
+type="button"
+aria-label="დახურვა"
+>
 <i data-lucide="x"></i>
 </button>
 
@@ -941,9 +693,7 @@ required
 <i data-lucide="timer"></i>
 </div>
 
-<p class="eyebrow">
-ARDUINOHUB
-</p>
+<p class="eyebrow">ARDUINOHUB</p>
 
 <h2 id="active-countdown-title"></h2>
 
@@ -956,27 +706,21 @@ ARDUINOHUB
 <span>დღე</span>
 </div>
 
-<div class="countdown-separator">
-:
-</div>
+<div class="countdown-separator">:</div>
 
 <div class="countdown-unit">
 <strong id="countdown-hours">00</strong>
 <span>საათი</span>
 </div>
 
-<div class="countdown-separator">
-:
-</div>
+<div class="countdown-separator">:</div>
 
 <div class="countdown-unit">
 <strong id="countdown-minutes">00</strong>
 <span>წუთი</span>
 </div>
 
-<div class="countdown-separator">
-:
-</div>
+<div class="countdown-separator">:</div>
 
 <div class="countdown-unit">
 <strong id="countdown-seconds">00</strong>
@@ -986,9 +730,7 @@ ARDUINOHUB
 </div>
 
 </section>
-
 </div>
-
 
 <footer>
 
@@ -1010,965 +752,182 @@ Arduino&Chemistry პროექტები ერთ სივრცეში
 
 </footer>
 
-
 <script src="https://unpkg.com/lucide@latest"></script>
-
 <script type="module" src="script.js"></script>
 
-<script
-type="text/javascript"
-src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
-></script>
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script type="text/javascript">
-
-(function(){
-    emailjs.init("KHWLmDgpVWvHs72r4")
-})()
-
+   (function(){
+      emailjs.init("KHWLmDgpVWvHs72r4");
+   })();
 </script>
-
 
 <script>
-
 document.addEventListener("DOMContentLoaded", () => {
+  const openBtn = document.getElementById("openBugModalBtn");
+  const closeBtn = document.getElementById("closeBugModalBtn");
+  const overlay = document.getElementById("bugModalOverlay");
+  const form = document.getElementById("bugReportForm");
+  const statusText = document.getElementById("bugFormStatus");
 
-    const openBtn = document.getElementById("openBugModalBtn")
-    const closeBtn = document.getElementById("closeBugModalBtn")
-    const overlay = document.getElementById("bugModalOverlay")
-    const form = document.getElementById("bugReportForm")
-    const statusText = document.getElementById("bugFormStatus")
+  if(openBtn && closeBtn && overlay && form) {
+    openBtn.addEventListener("click", () => overlay.style.display = "grid");
+    closeBtn.addEventListener("click", () => overlay.style.display = "none");
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) overlay.style.display = "none";
+    });
 
-    if(openBtn && closeBtn && overlay && form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusText.style.color = "#4ade80";
+      statusText.textContent = "იგზავნება...";
 
-        openBtn.addEventListener("click", () => {
-            overlay.style.display = "grid"
-        })
+      const templateParams = {
+        title: "ხარვეზის შეტყობინება",
+        bug_title: document.getElementById("bugTitle").value,
+        message: document.getElementById("bugMessage").value,
+        from_name: document.getElementById("bugTitle").value
+      };
 
-        closeBtn.addEventListener("click", () => {
-            overlay.style.display = "none"
-        })
+      try {
+        await emailjs.send('service_rofiyqg', 'template_mhmwkcj', templateParams);
 
-        overlay.addEventListener("click", (e) => {
-            if(e.target === overlay) {
-                overlay.style.display = "none"
-            }
-        })
-
-        form.addEventListener("submit", async (e) => {
-
-            e.preventDefault()
-
-            statusText.style.color = "#4ade80"
-            statusText.textContent = "იგზავნება..."
-
-            const templateParams = {
-                title: "ხარვეზის შეტყობინება",
-                bug_title: document.getElementById("bugTitle").value,
-                message: document.getElementById("bugMessage").value,
-                from_name: document.getElementById("bugTitle").value
-            }
-
-            try {
-
-                await emailjs.send(
-                    "service_rofiyqg",
-                    "template_mhmwkcj",
-                    templateParams
-                )
-
-                statusText.style.color = "#4ade80"
-                statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა."
-
-                form.reset()
-
-                setTimeout(() => {
-
-                    overlay.style.display = "none"
-                    statusText.textContent = ""
-
-                }, 2500)
-
-            } catch(error) {
-
-                statusText.style.color = "#f87171"
-                statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
-
-            }
-
-        })
-
-    }
-
-})
-
+        statusText.style.color = "#4ade80";
+        statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა.";
+        form.reset();
+        setTimeout(() => {
+          overlay.style.display = "none";
+          statusText.textContent = "";
+        }, 2500);
+      } catch (error) {
+        statusText.style.color = "#f87171";
+        statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან.";
+      }
+    });
+  }
+});
 </script>
 
-
 <style>
-
-.hero {
-    position: relative;
-    min-height: 720px;
-    display: grid;
-    grid-template-columns: minmax(430px, 0.95fr) minmax(520px, 1.05fr);
-    align-items: center;
-    gap: 30px;
-    overflow: hidden;
-}
-
-.hero-copy {
-    position: relative;
-    z-index: 5;
-}
-
-.hero-board-area {
-    position: relative;
-    height: 650px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1400px;
-}
-
-.board-glow {
-    position: absolute;
-    width: 510px;
-    height: 430px;
-    border-radius: 50%;
-    background: radial-gradient(
-        ellipse,
-        rgba(34,211,149,.23) 0%,
-        rgba(34,211,149,.10) 38%,
-        transparent 72%
-    );
-    filter: blur(25px);
-}
-
-.arduino-board {
-    position: relative;
-    width: 540px;
-    height: 410px;
-    transform: rotateX(8deg) rotateY(-8deg) rotateZ(-1deg);
-    transform-style: preserve-3d;
-    border-radius: 16px 16px 11px 11px;
-    background:
-        radial-gradient(circle at 73% 18%, rgba(255,255,255,.13), transparent 3%),
-        radial-gradient(circle at 28% 62%, rgba(255,255,255,.07), transparent 4%),
-        linear-gradient(135deg, #15916d 0%, #087658 42%, #08654e 100%);
-    border: 2px solid #25d9a2;
-    box-shadow:
-        0 35px 70px rgba(0,0,0,.58),
-        0 10px 25px rgba(0,0,0,.35),
-        inset 0 1px 0 rgba(255,255,255,.22),
-        inset 0 -8px 20px rgba(0,0,0,.18);
-}
-
-.arduino-board::before {
-    content: "";
-    position: absolute;
-    inset: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,.09);
-    pointer-events: none;
-}
-
-.arduino-board::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0,
-            transparent 38px,
-            rgba(255,255,255,.015) 39px,
-            transparent 40px
-        );
-    pointer-events: none;
-}
-
-.board-shadow {
-    position: absolute;
-    width: 500px;
-    height: 50px;
-    bottom: 74px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.5);
-    filter: blur(30px);
-    z-index: -2;
-}
-
-.board-screw {
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle at 35% 30%, #e4e4e4, #6d7775 35%, #252b29 70%);
-    border: 1px solid #a8b4b0;
-    box-shadow:
-        0 1px 2px rgba(0,0,0,.8),
-        inset 0 1px 1px rgba(255,255,255,.4);
-    z-index: 20;
-}
-
-.screw-1 {
-    left: 18px;
-    top: 17px;
-}
-
-.screw-2 {
-    right: 18px;
-    top: 17px;
-}
-
-.screw-3 {
-    left: 18px;
-    bottom: 17px;
-}
-
-.screw-4 {
-    right: 18px;
-    bottom: 17px;
-}
-
-.usb-port {
-    position: absolute;
-    left: -17px;
-    top: 108px;
-    width: 72px;
-    height: 94px;
-    z-index: 25;
-    transform: translateZ(5px);
-}
-
-.usb-metal {
-    position: absolute;
-    width: 70px;
-    height: 91px;
-    border-radius: 7px 3px 3px 7px;
-    background:
-        linear-gradient(
-            90deg,
-            #7e8583 0%,
-            #d7d9d7 9%,
-            #b6b9b7 26%,
-            #eceeed 48%,
-            #7c8380 82%,
-            #4d5351 100%
-        );
-    border: 1px solid #4d5552;
-    box-shadow:
-        5px 7px 10px rgba(0,0,0,.45),
-        inset 2px 0 3px rgba(255,255,255,.5);
-}
-
-.usb-inner {
-    position: absolute;
-    left: 13px;
-    top: 12px;
-    width: 43px;
-    height: 64px;
-    border-radius: 2px;
-    background:
-        linear-gradient(
-            90deg,
-            #111 0%,
-            #26302d 35%,
-            #101615 100%
-        );
-    border: 2px solid #59615e;
-    box-shadow:
-        inset 0 0 8px #000,
-        0 1px 1px rgba(255,255,255,.35);
-}
-
-.power-jack {
-    position: absolute;
-    left: -8px;
-    bottom: 72px;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle at 50% 45%, #070908 0 18%, #202522 19% 31%, #090b0a 32% 47%, #353a38 48% 66%, #090b0a 67%);
-    border: 2px solid #0b100e;
-    box-shadow:
-        5px 7px 10px rgba(0,0,0,.5),
-        inset 1px 1px 2px rgba(255,255,255,.15);
-    z-index: 25;
-}
-
-.power-hole {
-    position: absolute;
-    width: 17px;
-    height: 17px;
-    left: 17px;
-    top: 17px;
-    border-radius: 50%;
-    background: #030504;
-    box-shadow: inset 0 0 4px #000;
-}
-
-.digital-header {
-    position: absolute;
-    top: 23px;
-    left: 111px;
-    right: 17px;
-    height: 45px;
-    background: #111615;
-    border-radius: 3px;
-    box-shadow:
-        inset 0 2px 3px rgba(0,0,0,.7),
-        0 1px 1px rgba(255,255,255,.08);
-}
-
-.header-label {
-    position: absolute;
-    left: 8px;
-    top: -13px;
-    color: rgba(255,255,255,.55);
-    font: 700 8px Inter, sans-serif;
-    letter-spacing: .8px;
-}
-
-.pin-row {
-    position: absolute;
-    left: 12px;
-    right: 8px;
-    top: 2px;
-    height: 15px;
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    color: rgba(255,255,255,.62);
-    font: 700 6px Inter, sans-serif;
-    text-align: center;
-}
-
-.pin-holes {
-    position: absolute;
-    left: 11px;
-    right: 8px;
-    bottom: 5px;
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    gap: 4px;
-}
-
-.pin-holes i {
-    width: 8px;
-    height: 8px;
-    justify-self: center;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle at 35% 30%, #6b716f, #111514 60%);
-    box-shadow:
-        inset 0 0 2px #000,
-        0 1px 0 rgba(255,255,255,.08);
-}
-
-.analog-header {
-    position: absolute;
-    left: 104px;
-    right: 17px;
-    bottom: 22px;
-    height: 48px;
-    background: #111615;
-    border-radius: 3px;
-    box-shadow:
-        inset 0 2px 3px rgba(0,0,0,.7),
-        0 1px 1px rgba(255,255,255,.08);
-}
-
-.analog-labels {
-    position: absolute;
-    left: 11px;
-    top: 4px;
-    display: flex;
-    gap: 8px;
-    color: rgba(255,255,255,.62);
-    font: 700 5.5px Inter, sans-serif;
-}
-
-.analog-holes {
-    position: absolute;
-    left: 13px;
-    top: 25px;
-    display: flex;
-    gap: 10px;
-}
-
-.analog-holes i {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle at 35% 30%, #737876, #111514 60%);
-    box-shadow: inset 0 0 2px #000;
-}
-
-.analog-right-label {
-    position: absolute;
-    right: 7px;
-    top: -12px;
-    color: rgba(255,255,255,.55);
-    font: 700 7px Inter, sans-serif;
-}
-
-.analog-right {
-    position: absolute;
-    right: 5px;
-    top: 4px;
-    display: flex;
-    gap: 7px;
-    color: rgba(255,255,255,.6);
-    font: 700 6px Inter, sans-serif;
-}
-
-.arduino-logo {
-    position: absolute;
-    left: 150px;
-    top: 105px;
-    width: 170px;
-    height: 85px;
-    color: rgba(255,255,255,.88);
-    z-index: 4;
-    transform: rotate(-1deg);
-}
-
-.arduino-infinity {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font: 700 45px Inter, sans-serif;
-    line-height: 1;
-}
-
-.arduino-word {
-    position: absolute;
-    left: 49px;
-    top: 8px;
-    font: 800 21px Inter, sans-serif;
-    letter-spacing: 1px;
-}
-
-.uno-text {
-    position: absolute;
-    left: 50px;
-    top: 38px;
-    font: 700 25px Inter, sans-serif;
-    letter-spacing: 2px;
-}
-
-.r3-text {
-    position: absolute;
-    left: 110px;
-    top: 44px;
-    font: 600 10px Inter, sans-serif;
-    opacity: .75;
-}
-
-.main-chip {
-    position: absolute;
-    width: 145px;
-    height: 86px;
-    left: 285px;
-    top: 151px;
-    background:
-        linear-gradient(145deg, #222725, #090b0a);
-    border-radius: 3px;
-    border: 1px solid #050606;
-    box-shadow:
-        7px 8px 11px rgba(0,0,0,.48),
-        inset 0 1px 0 rgba(255,255,255,.1);
-    z-index: 10;
-}
-
-.main-chip::before {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 2px;
-}
-
-.chip-top {
-    position: absolute;
-    top: 31px;
-    width: 100%;
-    text-align: center;
-    color: #b7bbb9;
-    font: 700 12px Inter, sans-serif;
-    letter-spacing: .4px;
-}
-
-.chip-line {
-    position: absolute;
-    left: 14px;
-    right: 14px;
-    top: 48px;
-    height: 1px;
-    background: rgba(255,255,255,.1);
-}
-
-.chip-pin {
-    position: absolute;
-    width: 11px;
-    height: 3px;
-    background: linear-gradient(#a9aeab,#4d5350);
-}
-
-.chip-pin.left {
-    left: -11px;
-}
-
-.chip-pin.right {
-    right: -11px;
-}
-
-.chip-pin.p1 {
-    top: 9px;
-}
-
-.chip-pin.p2 {
-    top: 19px;
-}
-
-.chip-pin.p3 {
-    top: 29px;
-}
-
-.chip-pin.p4 {
-    top: 39px;
-}
-
-.chip-pin.p5 {
-    top: 49px;
-}
-
-.chip-pin.p6 {
-    top: 59px;
-}
-
-.chip-pin.p7 {
-    top: 69px;
-}
-
-.chip-pin.p8 {
-    top: 79px;
-}
-
-.usb-chip {
-    position: absolute;
-    left: 93px;
-    bottom: 104px;
-    width: 67px;
-    height: 49px;
-    background: linear-gradient(145deg,#222826,#080b0a);
-    border: 1px solid #050606;
-    box-shadow: 4px 5px 7px rgba(0,0,0,.4);
-    z-index: 6;
-}
-
-.micro-chip-label {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,.55);
-    font: 600 6px Inter, sans-serif;
-}
-
-.crystal {
-    position: absolute;
-    left: 184px;
-    bottom: 102px;
-    width: 49px;
-    height: 18px;
-    border-radius: 8px;
-    background:
-        linear-gradient(
-            90deg,
-            #777d7a,
-            #e0e1df 22%,
-            #858a87 50%,
-            #e4e5e3 75%,
-            #686d6a
-        );
-    border: 1px solid #565c59;
-    box-shadow:
-        3px 4px 5px rgba(0,0,0,.35),
-        inset 0 1px 1px rgba(255,255,255,.6);
-    z-index: 7;
-}
-
-.crystal span {
-    position: absolute;
-    left: 5px;
-    top: 21px;
-    color: rgba(255,255,255,.5);
-    font: 600 7px Inter, sans-serif;
-}
-
-.capacitor {
-    position: absolute;
-    width: 19px;
-    height: 35px;
-    border-radius: 5px;
-    background:
-        linear-gradient(
-            90deg,
-            #6f7773,
-            #d1d4d2 28%,
-            #838986 55%,
-            #e1e3e1 75%,
-            #666d69
-        );
-    border: 1px solid #5b625e;
-    box-shadow:
-        3px 4px 6px rgba(0,0,0,.4),
-        inset 0 1px 1px rgba(255,255,255,.5);
-    z-index: 7;
-}
-
-.cap-1 {
-    left: 219px;
-    bottom: 82px;
-}
-
-.cap-2 {
-    left: 244px;
-    bottom: 82px;
-}
-
-.reset-button {
-    position: absolute;
-    left: 356px;
-    top: 82px;
-    width: 43px;
-    height: 35px;
-    border-radius: 4px;
-    background: linear-gradient(145deg,#202624,#080b0a);
-    border: 1px solid #090c0b;
-    box-shadow:
-        3px 4px 7px rgba(0,0,0,.45),
-        inset 0 1px 1px rgba(255,255,255,.08);
-    z-index: 8;
-}
-
-.reset-button::before {
-    content: "RESET";
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    bottom: -14px;
-    color: rgba(255,255,255,.42);
-    font: 700 6px Inter, sans-serif;
-}
-
-.reset-button span {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    left: 15px;
-    top: 11px;
-    border-radius: 2px;
-    background: #babfbd;
-    box-shadow:
-        inset 1px 1px 2px rgba(255,255,255,.6),
-        1px 2px 3px rgba(0,0,0,.5);
-}
-
-.power-led,
-.tx-led,
-.rx-led {
-    position: absolute;
-    z-index: 9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.power-led {
-    right: 50px;
-    top: 92px;
-}
-
-.tx-led {
-    right: 79px;
-    top: 92px;
-}
-
-.rx-led {
-    right: 105px;
-    top: 92px;
-}
-
-.power-led span,
-.tx-led span,
-.rx-led span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #27e49f;
-    box-shadow:
-        0 0 5px rgba(39,228,159,.8),
-        0 0 12px rgba(39,228,159,.35);
-}
-
-.tx-led span,
-.rx-led span {
-    opacity: .35;
-}
-
-.power-led small,
-.tx-led small,
-.rx-led small {
-    color: rgba(255,255,255,.4);
-    font: 700 5px Inter, sans-serif;
-}
-
-.icsp-header {
-    position: absolute;
-    right: 51px;
-    top: 153px;
-    width: 42px;
-    height: 35px;
-    display: grid;
-    grid-template-columns: repeat(3, 8px);
-    grid-template-rows: repeat(2, 8px);
-    gap: 5px;
-    padding: 5px;
-    background: #101412;
-    border-radius: 3px;
-}
-
-.icsp-header i {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle at 35% 30%, #747b77, #151917 60%);
-}
-
-.board-trace {
-    position: absolute;
-    height: 1px;
-    background: rgba(104,245,202,.25);
-    transform-origin: left center;
-    z-index: 2;
-}
-
-.trace-1 {
-    left: 220px;
-    top: 123px;
-    width: 90px;
-    transform: rotate(21deg);
-}
-
-.trace-2 {
-    left: 385px;
-    top: 196px;
-    width: 105px;
-    transform: rotate(-28deg);
-}
-
-.trace-3 {
-    left: 205px;
-    top: 225px;
-    width: 95px;
-    transform: rotate(-12deg);
-}
-
-.trace-4 {
-    left: 410px;
-    top: 272px;
-    width: 80px;
-    transform: rotate(18deg);
-}
-
-.trace-5 {
-    left: 150px;
-    top: 286px;
-    width: 80px;
-    transform: rotate(26deg);
-}
-
-.made-label {
-    position: absolute;
-    right: 32px;
-    bottom: 88px;
-    color: rgba(255,255,255,.3);
-    font: 700 6px Inter, sans-serif;
-    letter-spacing: 1px;
-}
-
-@media (max-width: 1050px) {
-
-    .hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        padding-top: 80px;
-    }
-
-    .hero-copy {
-        text-align: center;
-        max-width: 760px;
-        margin: auto;
-    }
-
-    .hero-actions,
-    .hero-stats {
-        justify-content: center;
-    }
-
-    .hero-board-area {
-        height: 520px;
-        margin-top: -20px;
-    }
-
-}
-
-@media (max-width: 650px) {
-
-    .hero-board-area {
-        height: 390px;
-        transform: scale(.7);
-        margin-top: -80px;
-        margin-bottom: -60px;
-    }
-
-    .hero {
-        padding-top: 50px;
-    }
-
-}
-
 .bug-float-btn {
-    position: fixed;
-    left: 20px;
-    bottom: 20px;
-    z-index: 999;
-    background: linear-gradient(135deg,#059669,#047857);
-    color: #fff;
-    border: 1px solid #34d399;
-    padding: 10px 16px;
-    border-radius: 30px;
-    font: 700 13px Inter,sans-serif;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,.4);
-    transition: transform .2s,background .2s;
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 999;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #fff;
+  border: 1px solid #34d399;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font: 700 13px Inter, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, background 0.2s;
 }
 
 .bug-float-btn:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg,#10b981,#059669);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .bug-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(3,7,5,.85);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    display: grid;
-    place-items: center;
-    padding: 20px;
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 5, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
 }
 
 .bug-modal-card {
-    width: 100%;
-    max-width: 420px;
-    background: linear-gradient(145deg,#062417,#02130c);
-    border: 1px solid #065f46;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.6);
-    color: #ecfdf5;
-    font-family: Inter,sans-serif;
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(145deg, #062417, #02130c);
+  border: 1px solid #065f46;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  color: #ecfdf5;
+  font-family: Inter, sans-serif;
 }
 
 .bug-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .bug-modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #34d399;
+  margin: 0;
+  font-size: 18px;
+  color: #34d399;
 }
 
 .bug-close-btn {
-    background: none;
-    border: none;
-    color: #6ee7b7;
-    font-size: 24px;
-    cursor: pointer;
+  background: none;
+  border: none;
+  color: #6ee7b7;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 .bug-close-btn:hover {
-    color: #fff;
+  color: #fff;
 }
 
 .bug-form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .bug-form-group label {
-    font-size: 12px;
-    color: #a7f3d0;
+  font-size: 12px;
+  color: #a7f3d0;
 }
 
 .bug-form-group input,
 .bug-form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    background: #021c12;
-    border: 1px solid #047857;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 13px;
-    outline: none;
+  width: 100%;
+  padding: 10px 12px;
+  background: #021c12;
+  border: 1px solid #047857;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
 }
 
 .bug-form-group input:focus,
 .bug-form-group textarea:focus {
-    border-color: #34d399;
+  border-color: #34d399;
 }
 
 .bug-submit-btn {
-    width: 100%;
-    padding: 11px;
-    background: linear-gradient(135deg,#059669,#10b981);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 5px;
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 5px;
 }
 
 .bug-submit-btn:hover {
-    opacity: .9;
+  opacity: 0.9;
 }
 
 .bug-status-text {
-    font-size: 12px;
-    text-align: center;
-    margin-top: 10px;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
 }
-
 </style>
 
 </body>
