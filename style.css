@@ -6084,3 +6084,1210 @@ svg{
     font-size: 16px;
   }
 }
+
+.ai-chat{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:180;
+  font-family:FiraGO,Inter,sans-serif;
+  isolation:isolate
+}
+
+.ai-chat::before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-60px;
+  bottom:-60px;
+  border-radius:50%;
+  background:radial-gradient(circle,#22d39522 0,transparent 68%);
+  filter:blur(24px);
+  pointer-events:none;
+  z-index:-2;
+  animation:arduinoAmbient 7s ease-in-out infinite alternate
+}
+
+.ai-chat::after{
+  content:"";
+  position:absolute;
+  width:4px;
+  height:4px;
+  right:24px;
+  bottom:82px;
+  border-radius:50%;
+  background:#22d395;
+  box-shadow:
+    18px -30px 0 1px #89f4c9,
+    -23px -45px 0 0 #22d395,
+    34px -72px 0 0 #4de3aa,
+    -32px -88px 0 1px #89f4c9,
+    54px -18px 0 0 #22d395;
+  animation:arduinoParticles 6s linear infinite;
+  opacity:.45;
+  pointer-events:none
+}
+
+@keyframes arduinoAmbient{
+  0%{
+    transform:scale(.85) translate3d(0,0,0);
+    opacity:.35
+  }
+  50%{
+    transform:scale(1.1) translate3d(-8px,-7px,0);
+    opacity:.65
+  }
+  100%{
+    transform:scale(.95) translate3d(7px,-12px,0);
+    opacity:.45
+  }
+}
+
+@keyframes arduinoParticles{
+  0%{
+    transform:translate3d(0,15px,0);
+    opacity:0
+  }
+  25%{
+    opacity:.65
+  }
+  70%{
+    opacity:.4
+  }
+  100%{
+    transform:translate3d(-12px,-70px,0);
+    opacity:0
+  }
+}
+
+.ai-chat-toggle{
+  position:relative;
+  width:64px;
+  height:64px;
+  border:1px solid #22d39580;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 25%,#173d31 0,#10251e 38%,#09130f 72%,#050908 100%);
+  color:#edf7f3;
+  display:grid;
+  place-items:center;
+  box-shadow:
+    0 18px 45px #000c,
+    0 0 18px #22d39518,
+    inset 0 0 20px #22d3950c,
+    inset 0 1px 0 #ffffff14;
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease,
+    background .25s ease;
+  isolation:isolate;
+  overflow:visible
+}
+
+.ai-chat-toggle::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:50%;
+  border:1px solid #22d39550;
+  box-shadow:
+    0 0 14px #22d39518,
+    inset 0 0 8px #22d3950c;
+  pointer-events:none
+}
+
+.ai-chat-toggle::after{
+  content:"";
+  position:absolute;
+  inset:-9px;
+  border-radius:50%;
+  border:1px solid #22d39520;
+  box-shadow:0 0 22px #22d39512;
+  animation:arduinoPulse 3s ease-out infinite;
+  pointer-events:none
+}
+
+@keyframes arduinoPulse{
+  0%{
+    transform:scale(.9);
+    opacity:0
+  }
+  20%{
+    opacity:.6
+  }
+  70%{
+    transform:scale(1.18);
+    opacity:0
+  }
+  100%{
+    transform:scale(1.18);
+    opacity:0
+  }
+}
+
+.ai-chat-toggle:hover{
+  transform:translateY(-4px) scale(1.05);
+  border-color:#22d395;
+  background:
+    radial-gradient(circle at 35% 25%,#1d513f 0,#123126 38%,#08130f 72%,#040806 100%);
+  box-shadow:
+    0 22px 50px #000d,
+    0 0 25px #22d39535,
+    0 0 45px #22d39512,
+    inset 0 0 22px #22d39514
+}
+
+.ai-chat-toggle:active{
+  transform:scale(.94)
+}
+
+.ai-chat-icon{
+  width:27px;
+  height:27px;
+  position:relative;
+  z-index:3;
+  transition:
+    opacity .25s ease,
+    transform .3s ease,
+    filter .25s ease;
+  filter:drop-shadow(0 0 7px #22d39555)
+}
+
+.ai-chat-toggle:hover .ai-chat-icon{
+  filter:
+    drop-shadow(0 0 8px #22d39590)
+    drop-shadow(0 0 16px #22d39535)
+}
+
+.ai-chat-toggle .close-icon{
+  position:absolute;
+  opacity:0;
+  transform:rotate(-90deg) scale(.6)
+}
+
+.ai-chat.open .chat-icon{
+  opacity:0;
+  transform:rotate(90deg) scale(.6)
+}
+
+.ai-chat.open .close-icon{
+  opacity:1;
+  transform:rotate(0) scale(1)
+}
+
+.ai-chat-badge{
+  position:absolute;
+  right:-2px;
+  top:-3px;
+  min-width:25px;
+  height:25px;
+  padding:0 6px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  background:#22d395;
+  color:#06100c;
+  border:2px solid #07110f;
+  font:900 9px/1 Inter,sans-serif;
+  letter-spacing:.4px;
+  z-index:5;
+  box-shadow:
+    0 0 10px #22d39545,
+    0 0 22px #22d39520;
+  animation:arduinoBadge 2.2s ease-in-out infinite;
+  transition:opacity .2s,transform .2s
+}
+
+@keyframes arduinoBadge{
+  0%,100%{
+    transform:translateY(0) scale(1)
+  }
+  50%{
+    transform:translateY(-2px) scale(1.05)
+  }
+}
+
+.ai-chat.open .ai-chat-badge{
+  opacity:0;
+  transform:scale(.4)
+}
+
+.ai-chat-pulse{
+  position:absolute;
+  inset:-7px;
+  border:1px solid #22d39520;
+  border-radius:50%;
+  pointer-events:none;
+  animation:arduinoChatPulse 3s ease-out infinite
+}
+
+@keyframes arduinoChatPulse{
+  0%{
+    transform:scale(.9);
+    opacity:0
+  }
+  20%{
+    opacity:.6
+  }
+  70%{
+    transform:scale(1.22);
+    opacity:0
+  }
+  100%{
+    transform:scale(1.22);
+    opacity:0
+  }
+}
+
+.ai-chat-window{
+  position:absolute;
+  right:0;
+  bottom:82px;
+  width:min(420px,calc(100vw - 32px));
+  height:min(640px,calc(100vh - 120px));
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:
+    linear-gradient(145deg,#0d1b18f7,#07110ff9 58%,#0a1713f8);
+  border:1px solid #285244;
+  border-radius:20px;
+  box-shadow:
+    0 35px 100px #000e,
+    0 0 35px #22d3950d,
+    inset 0 1px 0 #ffffff0c;
+  backdrop-filter:blur(20px) saturate(125%);
+  -webkit-backdrop-filter:blur(20px) saturate(125%);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(18px) scale(.95);
+  transform-origin:bottom right;
+  transition:
+    opacity .28s ease,
+    transform .28s cubic-bezier(.2,.8,.2,1),
+    visibility .28s;
+  isolation:isolate
+}
+
+.ai-chat-window::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 0 0,#22d3950d 0,transparent 30%),
+    radial-gradient(circle at 100% 100%,#22d39508 0,transparent 35%);
+  z-index:-2
+}
+
+.ai-chat-window::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 49.5%,#22d39503 50%,transparent 50.5%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 6px,
+      #ffffff01 7px,
+      transparent 8px
+    );
+  opacity:.35;
+  z-index:8
+}
+
+.ai-chat.open .ai-chat-window{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateY(0) scale(1)
+}
+
+.ai-chat-header{
+  position:relative;
+  flex:0 0 auto;
+  min-height:82px;
+  padding:15px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid #ffffff0b;
+  background:
+    linear-gradient(135deg,#10241edb,#0c1915e8 55%,#0b1713e8);
+  overflow:hidden
+}
+
+.ai-chat-header::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #22d395,
+    #89f4c9,
+    #22d395,
+    transparent
+  );
+  opacity:.65;
+  box-shadow:0 0 12px #22d39545
+}
+
+.ai-chat-header::after{
+  content:"⌁  ·  ⌁  ·  ⌁";
+  position:absolute;
+  right:72px;
+  top:9px;
+  color:#22d39518;
+  font:11px Inter,sans-serif;
+  letter-spacing:6px
+}
+
+.ai-chat-title{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  position:relative;
+  z-index:2
+}
+
+.ai-chat-title>div:last-child{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px
+}
+
+.ai-chat-title strong{
+  color:var(--text);
+  font:800 15px Inter,sans-serif;
+  letter-spacing:-.02em
+}
+
+.ai-chat-title span{
+  color:#89f4c9;
+  font-size:10px;
+  display:flex;
+  align-items:center;
+  gap:5px
+}
+
+.ai-chat-title span::before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#22d395;
+  box-shadow:0 0 7px #22d395;
+  animation:arduinoOnline 1.8s ease-in-out infinite
+}
+
+@keyframes arduinoOnline{
+  0%,100%{
+    opacity:.55;
+    transform:scale(.8)
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.12)
+  }
+}
+
+.ai-avatar{
+  position:relative;
+  width:46px;
+  height:46px;
+  flex:0 0 46px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid #22d39570;
+  color:#cffff0;
+  background:
+    radial-gradient(circle at 35% 25%,#205640,#102b21 45%,#07130f 78%);
+  box-shadow:
+    0 0 18px #22d39520,
+    inset 0 0 18px #22d3950d,
+    inset 0 1px 0 #ffffff12
+}
+
+.ai-avatar::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  border:1px solid #22d39535;
+  border-top-color:#89f4c9;
+  animation:arduinoAvatarRing 4s linear infinite
+}
+
+.ai-avatar::after{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:5px;
+  right:0;
+  top:4px;
+  border-radius:50%;
+  background:#89f4c9;
+  box-shadow:0 0 8px #22d395;
+  animation:arduinoAvatarSpark 2.2s ease-in-out infinite
+}
+
+@keyframes arduinoAvatarRing{
+  to{
+    transform:rotate(360deg)
+  }
+}
+
+@keyframes arduinoAvatarSpark{
+  0%,100%{
+    opacity:.25;
+    transform:scale(.5)
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.15)
+  }
+}
+
+.ai-avatar svg{
+  width:21px;
+  height:21px;
+  filter:drop-shadow(0 0 6px #22d39560);
+  position:relative;
+  z-index:2
+}
+
+.ai-chat-close{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  display:grid;
+  place-items:center;
+  border:1px solid #30483e;
+  border-radius:9px;
+  background:#ffffff04;
+  color:#91aaa2;
+  transition:
+    color .2s,
+    border-color .2s,
+    background .2s,
+    transform .2s,
+    box-shadow .2s;
+  position:relative;
+  z-index:3
+}
+
+.ai-chat-close:hover{
+  color:#edf7f3;
+  border-color:#22d39570;
+  background:#22d39509;
+  transform:rotate(90deg) scale(1.04);
+  box-shadow:0 0 15px #22d39515
+}
+
+.ai-chat-close svg{
+  width:17px;
+  height:17px
+}
+
+.ai-chat-messages{
+  position:relative;
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:20px 16px 17px;
+  scrollbar-width:thin;
+  scrollbar-color:#315d4d transparent
+}
+
+.ai-chat-messages::before{
+  content:"";
+  position:absolute;
+  width:150px;
+  height:150px;
+  right:-80px;
+  top:28%;
+  border-radius:50%;
+  background:radial-gradient(circle,#22d39508,transparent 70%);
+  filter:blur(10px);
+  pointer-events:none
+}
+
+.ai-chat-messages::-webkit-scrollbar{
+  width:5px
+}
+
+.ai-chat-messages::-webkit-scrollbar-track{
+  background:transparent
+}
+
+.ai-chat-messages::-webkit-scrollbar-thumb{
+  background:#315d4d;
+  border-radius:20px
+}
+
+.ai-chat-messages::-webkit-scrollbar-thumb:hover{
+  background:#22d395
+}
+
+.ai-message{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin-bottom:16px;
+  animation:arduinoMessageIn .3s ease
+}
+
+@keyframes arduinoMessageIn{
+  from{
+    opacity:0;
+    transform:translateY(8px)
+  }
+  to{
+    opacity:1;
+    transform:none
+  }
+}
+
+.ai-message.assistant{
+  justify-content:flex-start
+}
+
+.ai-message.user{
+  justify-content:flex-end
+}
+
+.ai-message-avatar{
+  position:relative;
+  width:31px;
+  height:31px;
+  flex:0 0 31px;
+  display:grid;
+  place-items:center;
+  margin-top:3px;
+  border:1px solid #315d4d;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 25%,#174333,#0a1913 72%);
+  color:#aef3d3;
+  box-shadow:
+    0 0 12px #22d39512,
+    inset 0 0 10px #22d39508
+}
+
+.ai-message-avatar::after{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:50%;
+  border:1px solid #22d39518;
+  border-left-color:#22d39560;
+  animation:arduinoMessageRing 5s linear infinite
+}
+
+@keyframes arduinoMessageRing{
+  to{
+    transform:rotate(360deg)
+  }
+}
+
+.ai-message-avatar svg{
+  width:15px;
+  height:15px;
+  filter:drop-shadow(0 0 5px #22d39555);
+  position:relative;
+  z-index:2
+}
+
+.ai-message.user .ai-message-avatar{
+  display:none
+}
+
+.ai-message-bubble{
+  position:relative;
+  max-width:84%;
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:13px;
+  line-height:1.65;
+  overflow:hidden
+}
+
+.ai-message-bubble::after{
+  content:"";
+  position:absolute;
+  left:-70%;
+  top:0;
+  width:40%;
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #ffffff06,
+    transparent
+  );
+  transform:skewX(-20deg);
+  pointer-events:none
+}
+
+.ai-message.assistant .ai-message-bubble{
+  color:#d8e9e2;
+  background:
+    linear-gradient(145deg,#10241edb,#0b1814ed);
+  border:1px solid #29483d;
+  border-top-left-radius:4px;
+  box-shadow:
+    0 8px 25px #0005,
+    inset 0 1px 0 #ffffff07
+}
+
+.ai-message.assistant .ai-message-bubble::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:34px;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    #22d395,
+    transparent
+  );
+  box-shadow:0 0 7px #22d39555
+}
+
+.ai-message.user .ai-message-bubble{
+  color:#06100c;
+  background:
+    linear-gradient(
+      135deg,
+      #22d395,
+      #49e0a5
+    );
+  border:1px solid #89f4c9;
+  border-top-right-radius:4px;
+  box-shadow:
+    0 9px 25px #22d39515,
+    0 0 20px #22d3950d,
+    inset 0 1px 0 #ffffff60
+}
+
+.ai-message.user .ai-message-bubble::before{
+  content:"";
+  position:absolute;
+  right:0;
+  top:0;
+  width:42px;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #ffffff
+  );
+  opacity:.55
+}
+
+.ai-message.user .ai-message-bubble::after{
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #ffffff25,
+    transparent
+  )
+}
+
+.ai-message-bubble p{
+  margin:0
+}
+
+.ai-message-bubble p+p{
+  margin-top:8px
+}
+
+.ai-message-bubble strong{
+  color:#66eeb2;
+  text-shadow:none
+}
+
+.ai-message.user .ai-message-bubble strong{
+  color:#06100c;
+  text-shadow:none
+}
+
+.ai-suggestions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding-left:40px;
+  margin:3px 0 17px
+}
+
+.ai-suggestion{
+  position:relative;
+  border:1px solid #315547;
+  border-radius:20px;
+  padding:7px 11px;
+  background:#ffffff03;
+  color:#a9c5ba;
+  font-size:11px;
+  transition:
+    border-color .2s,
+    color .2s,
+    background .2s,
+    transform .2s,
+    box-shadow .2s;
+  overflow:hidden
+}
+
+.ai-suggestion::before{
+  content:"";
+  display:inline-block;
+  width:5px;
+  height:5px;
+  margin-right:7px;
+  border-radius:50%;
+  background:#22d395;
+  box-shadow:0 0 7px #22d39555;
+  vertical-align:middle
+}
+
+.ai-suggestion:hover{
+  border-color:#22d39570;
+  color:#d9f5e8;
+  background:#22d39508;
+  transform:translateY(-2px);
+  box-shadow:0 5px 18px #22d3950c
+}
+
+.ai-chat-form{
+  position:relative;
+  flex:0 0 auto;
+  padding:13px 14px 14px;
+  border-top:1px solid #ffffff08;
+  background:
+    linear-gradient(
+      180deg,
+      #091712f2,
+      #06100df8
+    )
+}
+
+.ai-chat-form::before{
+  content:"";
+  position:absolute;
+  left:15%;
+  right:15%;
+  top:-1px;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #22d395,
+    #89f4c9,
+    #22d395,
+    transparent
+  );
+  box-shadow:0 0 12px #22d39530;
+  opacity:.55
+}
+
+.ai-chat-input-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:5px;
+  background:
+    linear-gradient(
+      145deg,
+      #10221b,
+      #091611
+    );
+  border:1px solid #29473d;
+  border-radius:13px;
+  transition:
+    border-color .2s,
+    box-shadow .2s,
+    transform .2s;
+  overflow:hidden
+}
+
+.ai-chat-input-wrap::before{
+  content:"";
+  position:absolute;
+  left:-100%;
+  top:0;
+  width:55%;
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #22d39508,
+    transparent
+  );
+  transform:skewX(-20deg);
+  pointer-events:none
+}
+
+.ai-chat-input-wrap:focus-within{
+  border-color:#22d39570;
+  box-shadow:
+    0 0 0 3px #22d39508,
+    0 0 22px #22d39508,
+    inset 0 0 15px #22d39505;
+  transform:translateY(-1px)
+}
+
+.ai-chat-input-wrap:focus-within::before{
+  animation:arduinoInputShine 1.8s ease
+}
+
+@keyframes arduinoInputShine{
+  from{
+    left:-100%
+  }
+  to{
+    left:150%
+  }
+}
+
+.ai-chat-input{
+  flex:1;
+  position:relative;
+  z-index:2
+}
+
+.ai-chat-form input{
+  min-width:0;
+  width:100%;
+  padding:9px 10px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-size:13px
+}
+
+.ai-chat-form input::placeholder{
+  color:#668078
+}
+
+.ai-chat-form input:focus{
+  border:0;
+  box-shadow:none
+}
+
+.ai-chat-form button[type="submit"]{
+  position:relative;
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  border:1px solid #89f4c980;
+  border-radius:10px;
+  background:#22d395;
+  color:#06100c;
+  transition:
+    background .2s,
+    transform .2s,
+    box-shadow .2s,
+    filter .2s;
+  overflow:hidden;
+  z-index:2;
+  box-shadow:
+    0 5px 18px #22d39518,
+    inset 0 1px 0 #ffffff70
+}
+
+.ai-chat-form button[type="submit"]::before{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:8px;
+  border:1px solid #ffffff20;
+  pointer-events:none
+}
+
+.ai-chat-form button[type="submit"]::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  top:0;
+  width:45%;
+  height:100%;
+  background:#ffffff45;
+  transform:skewX(-20deg);
+  animation:arduinoSendShine 4s ease-in-out infinite
+}
+
+@keyframes arduinoSendShine{
+  0%,65%{
+    left:-100%
+  }
+  82%,100%{
+    left:150%
+  }
+}
+
+.ai-chat-form button[type="submit"]:hover{
+  background:#49e0a5;
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:
+    0 8px 24px #22d39525,
+    0 0 25px #22d39520,
+    inset 0 1px 0 #ffffff80
+}
+
+.ai-chat-form button[type="submit"]:active{
+  transform:scale(.92)
+}
+
+.ai-chat-form button[type="submit"] svg{
+  width:17px;
+  height:17px;
+  position:relative;
+  z-index:3
+}
+
+.ai-chat-form small{
+  display:block;
+  margin-top:8px;
+  padding:0 4px;
+  color:#60776f;
+  font-size:9px;
+  line-height:1.4
+}
+
+.ai-typing{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-height:24px
+}
+
+.ai-typing::before{
+  content:"AI";
+  color:#22d395;
+  font:800 8px Inter,sans-serif;
+  letter-spacing:.5px;
+  margin-right:3px;
+  opacity:.75
+}
+
+.ai-typing span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#22d395;
+  box-shadow:0 0 8px #22d39555;
+  animation:arduinoTyping 1.3s ease-in-out infinite
+}
+
+.ai-typing span:nth-child(2){
+  animation-delay:.16s
+}
+
+.ai-typing span:nth-child(3){
+  animation-delay:.32s
+}
+
+@keyframes arduinoTyping{
+  0%,60%,100%{
+    opacity:.25;
+    transform:translateY(0) scale(.8)
+  }
+  30%{
+    opacity:1;
+    transform:translateY(-4px) scale(1.12)
+  }
+}
+
+.ai-message.error .ai-message-bubble{
+  border-color:#82434b;
+  color:#ffb9c0;
+  background:
+    linear-gradient(
+      145deg,
+      #291519,
+      #1c1013
+    );
+  box-shadow:0 0 20px #ff718010
+}
+
+.ai-message.error .ai-message-bubble::before{
+  background:linear-gradient(
+    90deg,
+    #ff7180,
+    transparent
+  );
+  box-shadow:0 0 8px #ff7180
+}
+
+.ai-chat-form button[type="submit"]:disabled{
+  opacity:.4;
+  cursor:wait;
+  transform:none;
+  box-shadow:none;
+  filter:grayscale(.3)
+}
+
+@media (max-width:600px){
+  .ai-chat{
+    right:15px;
+    bottom:15px
+  }
+
+  .ai-chat-toggle{
+    width:58px;
+    height:58px
+  }
+
+  .ai-chat-window{
+    right:0;
+    bottom:73px;
+    width:calc(100vw - 30px);
+    max-width:none;
+    height:min(600px,calc(100vh - 100px));
+    min-height:400px;
+    border-radius:18px
+  }
+
+  .ai-chat-header{
+    min-height:75px;
+    padding:13px
+  }
+
+  .ai-avatar{
+    width:42px;
+    height:42px;
+    flex-basis:42px
+  }
+
+  .ai-chat-header::after{
+    right:65px;
+    letter-spacing:4px
+  }
+
+  .ai-chat-messages{
+    padding:16px 12px 14px
+  }
+
+  .ai-message-bubble{
+    max-width:89%;
+    font-size:12.5px
+  }
+
+  .ai-suggestions{
+    padding-left:39px
+  }
+
+  .ai-chat-form{
+    padding:10px
+  }
+
+  .ai-chat-form button[type="submit"]{
+    width:39px;
+    height:39px;
+    flex-basis:39px
+  }
+}
+
+@media (max-width:380px){
+  .ai-chat{
+    right:12px;
+    bottom:12px
+  }
+
+  .ai-chat-toggle{
+    width:55px;
+    height:55px
+  }
+
+  .ai-chat-window{
+    width:calc(100vw - 24px);
+    bottom:69px;
+    height:calc(100vh - 88px);
+    min-height:380px;
+    border-radius:17px
+  }
+
+  .ai-chat-title strong{
+    font-size:14px
+  }
+
+  .ai-chat-title span{
+    font-size:9px
+  }
+
+  .ai-message-bubble{
+    max-width:91%
+  }
+
+  .ai-suggestions{
+    padding-left:0
+  }
+}
+
+@media (max-height:500px) and (orientation:landscape){
+  .ai-chat-window{
+    height:calc(100vh - 80px);
+    width:min(410px,calc(100vw - 30px))
+  }
+}
+
+@media (hover:none) and (pointer:coarse){
+  .ai-chat-toggle:hover{
+    transform:none
+  }
+
+  .ai-suggestion:hover{
+    transform:none
+  }
+
+  .ai-chat-form button[type="submit"]:hover{
+    transform:none
+  }
+
+  .ai-chat-input-wrap:focus-within{
+    transform:none
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .ai-chat-pulse,
+  .ai-typing span,
+  .ai-chat-toggle::after,
+  .ai-chat-badge,
+  .ai-avatar::before,
+  .ai-avatar::after,
+  .ai-message-avatar::after,
+  .ai-chat-form button[type="submit"]::after{
+    animation:none
+  }
+
+  .ai-chat-window,
+  .ai-message{
+    transition:none;
+    animation:none
+  }
+
+  .ai-chat-window::before,
+  .ai-chat-window::after{
+    animation:none
+  }
+}
