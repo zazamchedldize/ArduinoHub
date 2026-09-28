@@ -7291,3 +7291,12 @@ svg{
     animation:none
   }
 }
+
+.ai-chat-input{
+  font-size:16px
+}
+
+.ai-chat-input-wrap input,
+.ai-chat-input-wrap textarea{
+  font-size:16px
+}
