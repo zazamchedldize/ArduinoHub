@@ -7291,3 +7291,32 @@ svg{
     animation:none
   }
 }
+
+.ai-message.user .ai-message-bubble{
+  color:#edf7f3;
+  background:#16352a;
+  border:1px solid #2d6b52;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:13px;
+  border-bottom-left-radius:13px;
+  box-shadow:0 5px 18px #0005;
+}
+
+.ai-message.user .ai-message-bubble::before{
+  content:"";
+  position:absolute;
+  right:0;
+  top:0;
+  width:28px;
+  height:1px;
+  background:#22d395;
+  box-shadow:0 0 7px #22d39535
+}
+
+.ai-message.user .ai-message-bubble::after{
+  display:none
+}
+
+.ai-message.user .ai-message-bubble strong{
+  color:#89f4c9
+}
