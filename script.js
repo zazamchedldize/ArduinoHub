@@ -4409,7 +4409,7 @@ async function initPasswordReset() {
   )
 }
 
-const MARIA_USER_ID = 'a02cb2e0-c4d0-4978-ab26-e8af583e4f58'
+const MARIA_USER_ID = '33070dee-6006-4fe9-9a0e-4fff43768dc5'
 
 let attendanceMembers = []
 let attendanceRecords = []
