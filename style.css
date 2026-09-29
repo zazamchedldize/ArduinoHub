@@ -7454,3 +7454,15 @@ svg{
     padding: 0 16px;
   }
 }
+
+.team-card-blue{
+  order:1;
+}
+
+.team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
+  order:2;
+}
+
+.team-card-new{
+  order:3;
+}
