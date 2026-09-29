@@ -5789,236 +5789,69 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 // ლიდერების ვიზუალურად გამოყოფის ცალკე ფუნქცია
 function enhanceTopAttendance() {
-    // ვპოულობთ ყველა წევრის ბარათს
-    const memberCards = document.querySelectorAll('.attendance-admin-member');
-    if (!memberCards.length) return;
+    const container = document.querySelector('.attendance-admin-members, .attendance-admin-list')
+    const memberCards = [...document.querySelectorAll('.attendance-admin-member')]
 
-    let maxMeetings = 0;
-    const memberData = [];
+    if (!memberCards.length) return
 
-    // 1. ვკითხულობთ შეხვედრების რაოდენობას და ვპოულობთ მაქსიმუმს
-    memberCards.forEach(card => {
-        const countSpan = card.querySelector('div > span'); // სადაც წერია "N შეხვედრა"
-        if (countSpan) {
-            const match = countSpan.textContent.match(/\d+/); // ვპოულობთ ციფრს ტექსტში
-            const count = match ? parseInt(match[0], 10) : 0;
-            memberData.push({ card, count });
-            if (count > maxMeetings) maxMeetings = count;
-        }
-    });
+    const memberData = memberCards.map(card => {
+        const countSpan = card.querySelector('div > span')
+        const match = countSpan?.textContent.match(/\d+/)
+        const count = match ? parseInt(match[0], 10) : 0
 
-    // 2. თუ maxMeetings 0-ზე მეტია, ვამუშავებთ ლიდერებს
-    if (maxMeetings > 0) {
-        memberData.forEach(item => {
-            const { card, count } = item;
-            const nameContainer = card.querySelector('div'); // სადაც არის სახელი და შეხვედრები
+        return { card, count }
+    })
 
-            if (count === maxMeetings) {
-                // ვამატებთ მთავარ კლასს
-                card.classList.add('top-attendance-card');
+    memberData.sort((a, b) => b.count - a.count)
 
-                // ვამოწმებთ, ხომ არ არის უკვე დამატებული მედალი, რომ ორჯერ არ ჩაისვას
-                if (!card.querySelector('.trophy-icon')) {
-                    // ვქმნით მედალის ან თასის ელემენტს (SVG)
-                    const trophyHTML = `
-                        <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-                                <path d="M4 22h16"/><path d="M10 18a4.5 4.5 0 0 0 9 0"/>
-                                <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
-                            </svg>
-                        </div>
-                    `;
-                    
-                    // ვამატებთ სახელი-გვარის კონტეინერში
-                    if (nameContainer) {
-                         nameContainer.style.position = 'relative'; // აუცილებელია აბსოლუტური პოზიციონირებისთვის
-                         nameContainer.insertAdjacentHTML('afterbegin', trophyHTML);
-                    }
-                }
-            } else {
-                // თუ აღარ არის ლიდერი, ვასუფთავებთ სტილებს (სურვილისამებრ)
-                card.classList.remove('top-attendance-card');
+    memberData.forEach(({ card, count }, index) => {
+        const isFirst = index === 0 && count > 0
+
+        card.classList.toggle('top-attendance-card', isFirst)
+        card.classList.toggle('regular-attendance-card', !isFirst)
+
+        const oldBadge = card.querySelector('.top-rank-badge')
+        if (oldBadge) oldBadge.remove()
+
+        const oldTrophy = card.querySelector('.trophy-icon')
+        if (oldTrophy) oldTrophy.remove()
+
+        const oldTopBadge = card.querySelector('.top-badge')
+        if (oldTopBadge) oldTopBadge.remove()
+
+        const name = card.querySelector('.member-name-row strong')
+        const percent = card.querySelector('.attendance-admin-member-value strong')
+
+        name?.classList.toggle('top-name', isFirst)
+        percent?.classList.toggle('top-percent', isFirst)
+
+        if (isFirst) {
+            const nameContainer = card.querySelector('div')
+
+            if (nameContainer) {
+                nameContainer.style.position = 'relative'
+
+                nameContainer.insertAdjacentHTML('afterbegin', `
+                    <div class="top-rank-badge">1</div>
+                `)
             }
-        });
-    }
+
+            const nameRow = card.querySelector('.member-name-row')
+
+            if (nameRow) {
+                nameRow.insertAdjacentHTML('beforeend', `
+                    <span class="top-badge">საუკეთესო მაჩვენებელი</span>
+                `)
+            }
+        }
+
+        if (container) {
+            container.appendChild(card)
+        } else {
+            card.parentElement?.appendChild(card)
+        }
+    })
 }
-
-// ეს ფუნქცია უნდა გაეშვას მას შემდეგ, რაც loadAdminAttendance დაასრულებს მუშაობას.
-// თუ შენს კოდში იყენებ `Promise.all` ან ასინქრონულ `load` ფუნქციებს, 
-// ყველაზე მარტივია უბრალოდ ამ ფუნქციის გამოძახება მონაცემების ჩატვირთვის ბოლოს,
-// ანუ loadAdminAttendance()-ის შიგნით, ბლოკის ბოლოს, refreshIcons()-ის შემდეგ:
-//
-// ... შენი არსებული loadAdminAttendance() კოდის ბოლოში ...
-// refreshIcons();
-// enhanceTopAttendance(); // <--- დაამატე ეს ხაზი
-
-// ==========================================
-// საჯარო დასწრების მოდალი & ჩატის ბრძანება
-// ==========================================
-
-// ==========================================
-// საჯარო დასწრების მოდალი & ჩატის ბრძანება
-// ==========================================
-
-function closePublicAttendanceModal() {
-  const modal = document.getElementById('public-attendance-modal');
-  if (modal) modal.remove();
-  document.body.style.overflow = '';
-}
-window.closePublicAttendanceModal = closePublicAttendanceModal;
-
-async function openPublicAttendanceModal() {
-  closePublicAttendanceModal();
-  document.body.style.overflow = 'hidden';
-
-  const modal = document.createElement('div');
-  modal.id = 'public-attendance-modal';
-  modal.style.cssText = `
-    position: fixed; inset: 0; z-index: 999999; display: flex;
-    align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;
-  `;
-
-  modal.innerHTML = `
-    <style>
-      #public-attendance-modal, #public-attendance-modal * {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-      }
-      #public-attendance-modal::-webkit-scrollbar,
-      #public-attendance-modal *::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-      }
-      .close-attendance-btn {
-        background: none; border: none; color: #9ca3af; font-size: 24px;
-        cursor: pointer; padding: 4px 8px; line-height: 1; transition: color 0.2s;
-        position: relative; z-index: 10;
-      }
-      .close-attendance-btn:hover { color: #ffffff; }
-    </style>
-    <div id="attendance-backdrop" style="position:absolute; inset:0; z-index:1;"></div>
-    <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-        <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
-        <button type="button" class="close-attendance-btn" id="close-attendance-x">✕</button>
-      </div>
-      <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
-        <p style="color:#9ca3af; text-align:center;">მონაცემები იტვირთება...</p>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  document.getElementById('close-attendance-x')?.addEventListener('click', closePublicAttendanceModal);
-  document.getElementById('attendance-backdrop')?.addEventListener('click', closePublicAttendanceModal);
-
-  try {
-    const [rawMembers, rawRecords] = await Promise.all([
-      getAttendanceMembers(),
-      getAttendanceRecords()
-    ]);
-
-    const members = Array.isArray(rawMembers) ? rawMembers : (rawMembers?.data || rawMembers?.members || []);
-    const records = Array.isArray(rawRecords) ? rawRecords : (rawRecords?.data || rawRecords?.records || []);
-
-    const countedRecords = records.filter(r => r && (r.counted === true || r.counted === undefined));
-    const counts = new Map();
-    members.forEach(m => counts.set(m.id, 0));
-
-    countedRecords.forEach(r => {
-      const memberList = r.club_attendance_members || r.members || [];
-      memberList.forEach(item => {
-        const mId = item.member_id || item.id || item;
-        counts.set(mId, (counts.get(mId) || 0) + 1);
-      });
-    });
-
-    let maxCount = 0;
-    members.forEach(m => {
-      const count = counts.get(m.id) || 0;
-      if (count > maxCount) maxCount = count;
-    });
-
-    const listEl = document.getElementById('public-attendance-list');
-    if (listEl) {
-      if (!members || members.length === 0) {
-        listEl.innerHTML = '<p style="color:#9ca3af; text-align:center;">წევრები ვერ მოიძებნა.</p>';
-        return;
-      }
-
-      listEl.innerHTML = members.map(member => {
-        const count = counts.get(member.id) || 0;
-        const percent = countedRecords.length ? Math.round((count / countedRecords.length) * 100) : 0;
-        const isTop = count > 0 && count === maxCount;
-
-        return `
-          <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
-            ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
-            <div>
-              <div class="member-name-row">
-                <strong class="${isTop ? 'top-name' : ''}">${esc(member.full_name || member.name || '')}</strong>
-                ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
-              </div>
-              <span>${count} შეხვედრა</span>
-            </div>
-            <div class="attendance-admin-member-value">
-              <strong class="${isTop ? 'top-percent' : ''}">${percent}%</strong>
-              <small>დასწრება</small>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-  } catch (err) {
-    console.error('Public attendance load error:', err);
-    const listEl = document.getElementById('public-attendance-list');
-    if (listEl) listEl.innerHTML = '<p style="color:#ef4444; text-align:center;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>';
-  }
-}
-
-function checkAndOpenAttendance(e) {
-  const chatInput = document.querySelector('#ai-chat-input');
-  if (chatInput && chatInput.value.trim() === '/დასწრება') {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-    }
-    chatInput.value = '';
-    openPublicAttendanceModal();
-    return true;
-  }
-  return false;
-}
-
-document.addEventListener('keydown', (e) => {
-  const chatInput = document.querySelector('#ai-chat-input');
-  if (e.target === chatInput && (e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey) {
-    checkAndOpenAttendance(e);
-  }
-  if (e.key === 'Escape') {
-    closePublicAttendanceModal();
-  }
-}, true);
-
-document.addEventListener('submit', (e) => {
-  checkAndOpenAttendance(e);
-}, true);
-
-document.addEventListener('click', (e) => {
-  const chatInput = document.querySelector('#ai-chat-input');
-  if (chatInput && chatInput.value.trim() === '/დასწრება') {
-    const isSendButton = e.target.closest('button, [role="button"], svg, path');
-    if (isSendButton) {
-      checkAndOpenAttendance(e);
-    }
-  }
-}, true);
-
 
 // ==========================================
 // ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
