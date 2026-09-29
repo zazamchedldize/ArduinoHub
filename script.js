@@ -6760,3 +6760,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadActiveCountdown()
 })
+
+document.getElementById('attendance-home-btn')?.addEventListener('click', () => {
+  openPublicAttendanceModal()
+})
