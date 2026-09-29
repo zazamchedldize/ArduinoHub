@@ -7533,3 +7533,8 @@ svg{
 .team-card-blue .team-role{
   color:#4da3ff;
 }
+
+.team-card-blue span{
+  color:#4da3ff;
+  border-color:#2874c7;
+}
