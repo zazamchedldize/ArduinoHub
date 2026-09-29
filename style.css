@@ -2709,290 +2709,119 @@ input:focus,textarea:focus,select:focus{
   }
 
   .team-card-blue{
-    order:1;
-  }
-
-  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
-    order:2;
-  }
-
-  .team-card-new{
-    order:3;
-  }
-
-  footer{
-    padding:25px 20px;
-    flex-wrap:wrap;
-    gap:15px 20px;
-  }
-
-  footer .brand{
-    width:100%;
-  }
-
-  footer p{
-    width:100%;
-  }
-
-  footer div{
-    margin-left:0;
-  }
-
-  .footer-credit{
-    width:100%;
-    flex-wrap:wrap;
-    gap:7px 18px;
-  }
-
-  footer small{
-    width:100%;
-    white-space:normal;
-  }
+  order:1;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 85% 15%,#3b82f612,transparent 30%),
+    radial-gradient(circle at 15% 85%,#2563eb08,transparent 35%),
+    linear-gradient(145deg,#0d1724,#08111b 55%,#0a1420);
+  border:1px solid #24527a;
+  box-shadow:
+    0 12px 35px #0009,
+    0 0 22px #3b82f610,
+    inset 0 0 22px #3b82f506;
+  transition:
+    transform .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    background .3s ease;
 }
 
-@media (max-width:600px){
-  .site-header{
-    padding:0 16px;
-  }
+.team-card-blue::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 20%,
+      #3b82f608 50%,
+      transparent 80%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      #60a5fa10,
+      transparent 38%
+    );
+  pointer-events:none;
+}
 
-  .brand{
-    font-size:18px;
-  }
+.team-card-blue::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(circle at 15% 25%,#60a5fa 0 1px,transparent 2px),
+    radial-gradient(circle at 75% 15%,#93c5fd88 0 1px,transparent 2px),
+    radial-gradient(circle at 45% 80%,#3b82f666 0 1px,transparent 2px),
+    radial-gradient(circle at 85% 65%,#60a5fa88 0 1px,transparent 2px);
+  background-size:190px 190px;
+  opacity:.16;
+  pointer-events:none;
+}
 
-  .brand-mark{
-    width:27px;
-    height:27px;
-    font-size:24px;
-  }
+.team-card-blue:hover{
+  transform:translateY(-5px);
+  border-color:#3478ad;
+  background:
+    radial-gradient(circle at 85% 15%,#3b82f61a,transparent 32%),
+    linear-gradient(145deg,#102033,#08111b 55%,#0b1724);
+  box-shadow:
+    0 18px 42px #000b,
+    0 0 30px #3b82f61a,
+    inset 0 0 28px #3b82f608;
+}
 
-  .meeting-modal{
-    padding:14px;
-  }
+.team-card-blue .team-avatar{
+  border-color:#3478ad;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #183f63,
+      #0d2236 55%,
+      #08111b 75%
+    );
+  box-shadow:
+    0 0 20px #3b82f618,
+    inset 0 0 16px #3b82f60d;
+}
 
-  .meeting-dialog{
-    padding:34px 20px 24px;
-    border-radius:14px;
-  }
+.team-card-blue .team-avatar span{
+  color:#7dbdf2;
+  text-shadow:
+    0 0 8px #3b82f640;
+}
 
-  .meeting-dialog h2{
-    font-size:27px;
-  }
+.team-card-blue .team-role{
+  color:#63a9dc;
+  text-shadow:0 0 8px #3b82f618;
+}
 
-  .meeting-date-main{
-    font-size:25px;
-  }
+.team-card-blue .team-info h2{
+  color:#edf6ff;
+  text-shadow:0 0 12px #60a5fa12;
+}
 
-  .meeting-detail-row strong{
-    font-size:17px;
-  }
+.team-card-blue .team-description{
+  color:#9aabb9;
+}
 
-  .meeting-detail-row>div{
-    padding:14px 8px;
-  }
+.team-card-blue .team-tags span{
+  background:#102438;
+  border-color:#285273;
+  color:#73b5e6;
+  box-shadow:0 0 7px #0007;
+}
 
-  .hero{
-    padding:55px 18px 40px;
-    gap:20px;
-  }
-
-  .hero h1{
-    font-size:45px;
-  }
-
-  .hero-text{
-    font-size:14px;
-    margin:20px 0;
-  }
-
-  .hero-actions{
-    flex-direction:column;
-  }
-
-  .hero-actions .button{
-    width:100%;
-  }
-
-  .hero-stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:40px;
-  }
-
-  .hero-stats strong{
-    font-size:19px;
-  }
-
-  .hero-stats span{
-    font-size:9px;
-  }
-
-  .circuit-visual{
-    height:205px;
-  }
-
-  .circuit-visual:before{
-    width:260px;
-    height:260px;
-  }
-
-  .board{
-    transform:scale(.58) rotate(-6deg);
-  }
-
-  .section{
-    padding:55px 18px;
-  }
-
-  .section h2,.cta h2{
-    font-size:30px;
-  }
-
-  .steps{
-    grid-template-columns:1fr;
-  }
-
-  .steps article{
-    min-height:165px;
-    padding:21px;
-  }
-
-  .cta{
-    margin:5px 14px 45px;
-    padding:42px 18px;
-  }
-
-  .page-shell{
-    padding:45px 16px 60px;
-  }
-
-  .page-title h1{
-    font-size:38px;
-  }
-
-  .project-grid{
-    grid-template-columns:1fr;
-  }
-
-  .card-image{
-    height:200px;
-  }
-
-  .card-body{
-    padding:18px;
-  }
-
-  .detail h1{
-    font-size:37px;
-  }
-
-  .detail-hero{
-    gap:25px;
-    padding-bottom:30px;
-  }
-
-  .detail-hero p{
-    font-size:14px;
-  }
-
-  .detail-content{
-    margin-top:30px;
-  }
-
-  .detail-section{
-    margin-bottom:32px;
-  }
-
-  .detail-section h2{
-    font-size:19px;
-  }
-
-  .detail pre{
-    font-size:11px;
-    padding:15px;
-  }
-
-  .code-heading{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .auth-card{
-    padding:24px 18px;
-    margin-top:25px;
-  }
-
-  .dashboard-shell{
-    padding-left:16px;
-    padding-right:16px;
-  }
-
-  .editor-card,.management{
-    padding:17px;
-  }
-
-  .editor-heading h2,.section-heading h2{
-    font-size:19px;
-  }
-
-  .dashboard-intro h1{
-    font-size:32px;
-  }
-
-  .admin-row{
-    grid-template-columns:1fr;
-  }
-
-  .row-actions{
-    grid-column:auto;
-  }
-
-  .status{
-    justify-self:start;
-  }
-
-  .team-page{
-    padding:45px 18px 60px;
-  }
-
-  .team-intro{
-    margin-bottom:35px;
-  }
-
-  .team-intro h1{
-    font-size:42px;
-  }
-
-  .team-intro>p:last-child{
-    font-size:14px;
-  }
-
-  .team-grid{
-    grid-template-columns:1fr;
-    gap:13px;
-  }
-
-  .team-card{
-    flex-direction:column;
-    gap:11px;
-    padding:15px;
-    min-height:auto;
-  }
-
-  .team-card-teacher{
-    grid-column:auto;
-    justify-self:stretch;
-    width:100%;
-  }
-
-  .team-card-blue{
-    order:1;
-  }
-
-  .team-card:not(.team-card-teacher):not(.team-card-orange):not(.team-card-blue):not(.team-card-new){
-    order:2;
-  }
-
+.team-card-blue .team-tags span:first-child{
+  background:#15314b;
+  border-color:#3478ad;
+  color:#83c5f4;
+  box-shadow:
+    0 0 10px #3b82f615,
+    inset 0 0 8px #3b82f608;
+}
   .team-card-new{
     order:3;
   }
