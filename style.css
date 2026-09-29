@@ -4986,52 +4986,63 @@ svg{
 }
 
 .attendance-admin-member.top-attendance-card {
-  border: 2px solid #fbbf24 !important;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
-  box-shadow: 0 0 25px rgba(251, 191, 36, 0.6), inset 0 0 15px rgba(251, 191, 36, 0.2) !important;
+  position: relative !important;
+  border: 1px solid #22d395 !important;
+  background: linear-gradient(135deg, rgba(34, 211, 149, 0.12) 0%, rgba(7, 17, 15, 0.96) 55%, rgba(15, 35, 30, 0.98) 100%) !important;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 149, 0.08),
+    0 12px 35px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(34, 211, 149, 0.12),
+    inset 0 1px 0 rgba(137, 244, 201, 0.12) !important;
+  overflow: visible !important;
 }
 
-/* კუთხეში მანათობელი ოქროსფერი "1"-იანის წრე */
 .top-rank-badge {
   position: absolute !important;
-  top: -12px !important;
-  left: -12px !important;
-  width: 30px !important;
-  height: 30px !important;
-  background: #fbbf24 !important;
-  color: #0d131f !important;
+  top: -13px !important;
+  left: -13px !important;
+  width: 32px !important;
+  height: 32px !important;
+  background: #07110f !important;
+  color: #22d395 !important;
   font-weight: 900 !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  box-shadow: 0 0 15px #fbbf24, 0 0 30px rgba(251, 191, 36, 0.8) !important;
-  border: 2px solid #ffffff !important;
+  border: 2px solid #22d395 !important;
+  box-shadow:
+    0 0 0 4px rgba(34, 211, 149, 0.08),
+    0 0 18px rgba(34, 211, 149, 0.3) !important;
   z-index: 20 !important;
 }
 
-/* ტექსტებისა და პროცენტის განათება */
 .member-name-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.top-name, .top-percent {
-  color: #fbbf24 !important;
-  text-shadow: 0 0 12px rgba(251, 191, 36, 0.7) !important;
+.top-name {
+  color: #89f4c9 !important;
+  text-shadow: 0 0 12px rgba(34, 211, 149, 0.25) !important;
+}
+
+.top-percent {
+  color: #22d395 !important;
+  text-shadow: 0 0 14px rgba(34, 211, 149, 0.3) !important;
 }
 
 .top-badge {
   font-size: 11px;
-  background: rgba(251, 191, 36, 0.2) !important;
-  color: #fbbf24 !important;
-  padding: 3px 10px;
-  border-radius: 6px;
-  border: 1px solid #fbbf24 !important;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4) !important;
+  background: rgba(34, 211, 149, 0.08) !important;
+  color: #89f4c9 !important;
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(34, 211, 149, 0.5) !important;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(34, 211, 149, 0.08) !important;
 }
 
 /* ==========================================
