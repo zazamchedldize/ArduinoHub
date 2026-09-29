@@ -7311,3 +7311,75 @@ svg{
 .ai-chat-input-wrap textarea{
   font-size:16px
 }
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero-projects-btn,
+.hero-attendance-btn {
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+.hero-projects-btn {
+  background: #22d395;
+  color: #07110f;
+  border: 1px solid #22d395;
+  box-shadow: 0 8px 25px rgba(34, 211, 149, 0.16);
+}
+
+.hero-projects-btn:hover {
+  transform: translateY(-2px);
+  background: #35e3a5;
+  border-color: #35e3a5;
+  box-shadow: 0 12px 30px rgba(34, 211, 149, 0.25);
+}
+
+.hero-attendance-btn {
+  background: rgba(34, 211, 149, 0.08);
+  color: #89f4c9;
+  border: 1px solid rgba(34, 211, 149, 0.45);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+}
+
+.hero-attendance-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(34, 211, 149, 0.14);
+  border-color: #22d395;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(34, 211, 149, 0.14);
+}
+
+.hero-attendance-btn:active,
+.hero-projects-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .hero-buttons {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-projects-btn,
+  .hero-attendance-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 0 16px;
+  }
+}
