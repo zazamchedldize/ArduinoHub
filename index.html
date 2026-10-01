@@ -3,9 +3,7 @@
 <head>
   <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
   <link rel="icon" type="image/png" href="arduinohub-icon.png">
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <link rel="manifest" href="manifest.json">
 
   <script>
@@ -56,8 +54,15 @@
     content="ArduinoHub — 29-ე საჯარო სკოლა"
   >
 
-  <meta name="robots" content="index, follow">
-  <meta name="googlebot" content="index, follow">
+  <meta
+    name="robots"
+    content="index, follow"
+  >
+
+  <meta
+    name="googlebot"
+    content="index, follow"
+  >
 
   <link
     rel="canonical"
@@ -65,6 +70,7 @@
   >
 
   <meta property="og:type" content="website">
+
   <meta
     property="og:url"
     content="https://arduinohub.onrender.com/"
@@ -80,15 +86,25 @@
     content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს."
   >
 
-  <meta property="og:site_name" content="ArduinoHub">
-  <meta property="og:locale" content="ka_GE">
+  <meta
+    property="og:site_name"
+    content="ArduinoHub"
+  >
+
+  <meta
+    property="og:locale"
+    content="ka_GE"
+  >
 
   <meta
     property="og:image"
     content="https://arduinohub.onrender.com/arduinohub-icon.png"
   >
 
-  <meta name="twitter:card" content="summary">
+  <meta
+    name="twitter:card"
+    content="summary"
+  >
 
   <meta
     name="twitter:title"
@@ -105,9 +121,14 @@
     content="https://arduinohub.onrender.com/arduinohub-icon.png"
   >
 
-  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+  <link
+    rel="icon"
+    type="image/png"
+    href="arduinohub-icon.png"
+  >
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+
   <link
     rel="preconnect"
     href="https://fonts.gstatic.com"
@@ -119,7 +140,10 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <script type="application/ld+json">
   {
@@ -141,7 +165,6 @@
 <body data-page="home">
 
 <header class="site-header">
-
   <a
     class="brand"
     href="index.html"
@@ -159,11 +182,7 @@
   </button>
 
   <nav>
-
-    <a
-      class="active"
-      href="index.html"
-    >
+    <a class="active" href="index.html">
       მთავარი
     </a>
 
@@ -196,212 +215,207 @@
       შესვლა
       <i data-lucide="shield"></i>
     </a>
-
   </nav>
-
 </header>
 
 <main>
 
-  <section class="hero">
-
-    <div class="hero-copy">
-
-      <p class="eyebrow">
-        ARDUINO & CHEMISTRY PROJECT COMMUNITY
-      </p>
-
-      <h1>
-        იდეებიდან,
-        <br>
-        <em>რეალურ</em> პროექტებზე
-      </h1>
-
-      <p class="hero-text">
-        ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
-      </p>
-
-      <div class="hero-actions">
-
-        <div class="hero-buttons">
-
-          <a
-            class="button primary"
-            href="projects.html"
-          >
-            პროექტების ნახვა
-            <i data-lucide="arrow-right"></i>
-          </a>
-
-          <button
-            type="button"
-            id="attendance-home-btn"
-            class="hero-attendance-btn"
-          >
-            დასწრება
-            <i data-lucide="calendar-check"></i>
-          </button>
-
-        </div>
-
-        <div class="hero-stats"></div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <section
-    id="how-it-works"
-    class="section"
-  >
+<section class="hero">
+  <div class="hero-copy">
 
     <p class="eyebrow">
-      მარტივი პროცესი
+      ARDUINO & CHEMISTRY PROJECT COMMUNITY
     </p>
 
-    <h2>
-      როგორ მუშაობს Arduino & Chemistry Hub?
-    </h2>
-
-    <div class="steps">
-
-      <article>
-        <b>01</b>
-        <i data-lucide="search"></i>
-
-        <h3>
-          დაათვალიერე პროექტები
-        </h3>
-
-        <p>
-          აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
-        </p>
-      </article>
-
-      <article>
-        <b>02</b>
-        <i data-lucide="lightbulb"></i>
-
-        <h3>
-          იპოვე ახალი იდეები
-        </h3>
-
-        <p>
-          გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
-        </p>
-      </article>
-
-      <article>
-        <b>03</b>
-        <i data-lucide="file-text"></i>
-
-        <h3>
-          გაეცანი დეტალებს
-        </h3>
-
-        <p>
-          იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
-        </p>
-      </article>
-
-      <article>
-        <b>04</b>
-        <i data-lucide="graduation-cap"></i>
-
-        <h3>
-          ისწავლე პრაქტიკიდან
-        </h3>
-
-        <p>
-          გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.
-        </p>
-      </article>
-
-    </div>
-
-  </section>
-
-  <section
-    id="about"
-    class="about section"
-  >
-
-    <div>
-
-      <p class="eyebrow">
-        ARDUINO•CHEMISTRY•HUB-ის შესახებ
-      </p>
-
-      <h2>
-        იდეები უკეთესია, როცა გაზიარებულია.
-      </h2>
-
-    </div>
-
-    <p>
-      ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
-    </p>
-
-  </section>
-
-  <section class="cta">
-
-    <i data-lucide="cpu"></i>
-
-    <h2>
-      აღმოაჩინე ახალი იდეები
+    <h1>
+      იდეებიდან,
       <br>
-      და გაიცანი Arduino-ს შესაძლებლობები.
-    </h2>
+      <em>რეალურ</em> პროექტებზე
+    </h1>
 
-    <a
-      class="button primary"
-      href="projects.html"
-    >
-      პროექტების ნახვა
-      <i data-lucide="arrow-right"></i>
-    </a>
+    <p class="hero-text">
+      ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
+    </p>
 
-  </section>
+    <div class="hero-actions">
 
-  <section class="suggestion-section">
+      <div class="hero-buttons">
 
-    <div class="suggestion-card">
-
-      <div class="suggestion-icon">
-        <i data-lucide="message-square-plus"></i>
-      </div>
-
-      <div class="suggestion-content">
-
-        <p class="eyebrow">
-          შენი აზრი მნიშვნელოვანია
-        </p>
-
-        <h2>
-          გაქვს იდეა ArduinoHub-ისთვის?
-        </h2>
-
-        <p>
-          მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.
-        </p>
+        <a
+          class="button primary"
+          href="projects.html"
+        >
+          პროექტების ნახვა
+          <i data-lucide="arrow-right"></i>
+        </a>
 
         <button
           type="button"
-          id="open-suggestion"
-          class="button primary"
+          id="attendance-home-btn"
+          class="hero-attendance-btn"
         >
-          შეფასების დატოვება
-          <i data-lucide="arrow-right"></i>
+          დასწრება
+          <i data-lucide="calendar-check"></i>
         </button>
 
       </div>
 
+      <div class="hero-stats"></div>
+
     </div>
 
-  </section>
+  </div>
+</section>
+
+<section
+  id="how-it-works"
+  class="section"
+>
+
+  <p class="eyebrow">
+    მარტივი პროცესი
+  </p>
+
+  <h2>
+    როგორ მუშაობს Arduino & Chemistry Hub?
+  </h2>
+
+  <div class="steps">
+
+    <article>
+      <b>01</b>
+      <i data-lucide="search"></i>
+
+      <h3>
+        დაათვალიერე პროექტები
+      </h3>
+
+      <p>
+        აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
+      </p>
+    </article>
+
+    <article>
+      <b>02</b>
+      <i data-lucide="lightbulb"></i>
+
+      <h3>
+        იპოვე ახალი იდეები
+      </h3>
+
+      <p>
+        გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
+      </p>
+    </article>
+
+    <article>
+      <b>03</b>
+      <i data-lucide="file-text"></i>
+
+      <h3>
+        გაეცანი დეტალებს
+      </h3>
+
+      <p>
+        იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
+      </p>
+    </article>
+
+    <article>
+      <b>04</b>
+      <i data-lucide="graduation-cap"></i>
+
+      <h3>
+        ისწავლე პრაქტიკიდან
+      </h3>
+
+      <p>
+        გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.
+      </p>
+    </article>
+
+  </div>
+</section>
+
+<section
+  id="about"
+  class="about section"
+>
+
+  <div>
+
+    <p class="eyebrow">
+      ARDUINO•CHEMISTRY•HUB-ის შესახებ
+    </p>
+
+    <h2>
+      იდეები უკეთესია, როცა გაზიარებულია.
+    </h2>
+
+  </div>
+
+  <p>
+    ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
+  </p>
+
+</section>
+
+<section class="cta">
+
+  <i data-lucide="cpu"></i>
+
+  <h2>
+    აღმოაჩინე ახალი იდეები
+    <br>
+    და გაიცანი Arduino-ს შესაძლებლობები.
+  </h2>
+
+  <a
+    class="button primary"
+    href="projects.html"
+  >
+    პროექტების ნახვა
+    <i data-lucide="arrow-right"></i>
+  </a>
+
+</section>
+
+<section class="suggestion-section">
+
+  <div class="suggestion-card">
+
+    <div class="suggestion-icon">
+      <i data-lucide="message-square-plus"></i>
+    </div>
+
+    <div class="suggestion-content">
+
+      <p class="eyebrow">
+        შენი აზრი მნიშვნელოვანია
+      </p>
+
+      <h2>
+        გაქვს იდეა ArduinoHub-ისთვის?
+      </h2>
+
+      <p>
+        მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.
+      </p>
+
+      <button
+        type="button"
+        id="open-suggestion"
+        class="button primary"
+      >
+        შეფასების დატოვება
+        <i data-lucide="arrow-right"></i>
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 
 </main>
 
@@ -469,7 +483,6 @@
     <p id="suggestion-status"></p>
 
   </div>
-
 </div>
 
 <div
@@ -518,16 +531,18 @@
     >
 
       <div class="meeting-loading">
+
         <i data-lucide="loader-circle"></i>
+
         <span>
           მონაცემები იტვირთება...
         </span>
+
       </div>
 
     </div>
 
   </section>
-
 </div>
 
 <div
@@ -591,8 +606,7 @@
           </p>
 
           <p>
-            მე ვარ <strong>ArduinoHub AI</strong>.
-            შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
+            მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
           </p>
 
         </div>
@@ -1196,6 +1210,59 @@
 
 </div>
 
+<div
+  id="hbd-cancel-modal"
+  class="hbd-admin-modal"
+  hidden
+  aria-hidden="true"
+>
+
+  <div
+    class="hbd-admin-backdrop"
+    data-hbd-cancel-close
+  ></div>
+
+  <section
+    class="hbd-admin-dialog hbd-cancel-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="hbd-cancel-title"
+  >
+
+    <button
+      id="hbd-cancel-close"
+      class="hbd-admin-close"
+      type="button"
+      aria-label="დახურვა"
+    >
+      <i data-lucide="x"></i>
+    </button>
+
+    <div class="hbd-admin-icon">
+      🎂
+    </div>
+
+    <p class="eyebrow">
+      ARDUINOHUB
+    </p>
+
+    <h2 id="hbd-cancel-title">
+      დაბადების დღის გაუქმება
+    </h2>
+
+    <p class="hbd-admin-description">
+      აირჩიე დაბადების დღე, რომლის გაუქმებაც გინდა.
+    </p>
+
+    <div
+      id="hbd-cancel-list"
+      class="hbd-cancel-list"
+    ></div>
+
+  </section>
+
+</div>
+
 <footer>
 
   <a
@@ -1242,21 +1309,33 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
 
-    const attendanceButton = document.getElementById("attendance-home-btn")
+    const attendanceButton =
+      document.getElementById("attendance-home-btn")
 
     if (attendanceButton) {
       attendanceButton.addEventListener("click", () => {
+
         if (typeof openPublicAttendanceModal === "function") {
           openPublicAttendanceModal()
         }
+
       })
     }
 
-    const openBtn = document.getElementById("openBugModalBtn")
-    const closeBtn = document.getElementById("closeBugModalBtn")
-    const overlay = document.getElementById("bugModalOverlay")
-    const form = document.getElementById("bugReportForm")
-    const statusText = document.getElementById("bugFormStatus")
+    const openBtn =
+      document.getElementById("openBugModalBtn")
+
+    const closeBtn =
+      document.getElementById("closeBugModalBtn")
+
+    const overlay =
+      document.getElementById("bugModalOverlay")
+
+    const form =
+      document.getElementById("bugReportForm")
+
+    const statusText =
+      document.getElementById("bugFormStatus")
 
     if (openBtn && closeBtn && overlay && form) {
 
@@ -1268,13 +1347,15 @@
         overlay.style.display = "none"
       })
 
-      overlay.addEventListener("click", (e) => {
+      overlay.addEventListener("click", e => {
+
         if (e.target === overlay) {
           overlay.style.display = "none"
         }
+
       })
 
-      form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async e => {
 
         e.preventDefault()
 
@@ -1291,25 +1372,31 @@
         try {
 
           await emailjs.send(
-            'service_rofiyqg',
-            'template_mhmwkcj',
+            "service_rofiyqg",
+            "template_mhmwkcj",
             templateParams
           )
 
           statusText.style.color = "#4ade80"
-          statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა."
+
+          statusText.textContent =
+            "მადლობა! შეტყობინება მეილზე გაიგზავნა."
 
           form.reset()
 
           setTimeout(() => {
+
             overlay.style.display = "none"
             statusText.textContent = ""
+
           }, 2500)
 
         } catch (error) {
 
           statusText.style.color = "#f87171"
-          statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
+
+          statusText.textContent =
+            "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
 
         }
 
@@ -1322,578 +1409,691 @@
 
 <style>
 
-  .bug-float-btn {
-    position: fixed;
-    left: 20px;
-    bottom: 20px;
-    z-index: 999;
-    background: linear-gradient(135deg, #059669, #047857);
-    color: #fff;
-    border: 1px solid #34d399;
-    padding: 10px 16px;
-    border-radius: 30px;
-    font: 700 13px Inter, sans-serif;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    transition: transform 0.2s, background 0.2s;
+.bug-float-btn {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 999;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #fff;
+  border: 1px solid #34d399;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font: 700 13px Inter, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.bug-float-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.bug-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 5, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.bug-modal-card {
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(145deg, #062417, #02130c);
+  border: 1px solid #065f46;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  color: #ecfdf5;
+  font-family: Inter, sans-serif;
+}
+
+.bug-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bug-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #34d399;
+}
+
+.bug-close-btn {
+  background: none;
+  border: none;
+  color: #6ee7b7;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.bug-close-btn:hover {
+  color: #fff;
+}
+
+.bug-form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bug-form-group label {
+  font-size: 12px;
+  color: #a7f3d0;
+}
+
+.bug-form-group input,
+.bug-form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: #021c12;
+  border: 1px solid #047857;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+
+.bug-form-group input:focus,
+.bug-form-group textarea:focus {
+  border-color: #34d399;
+}
+
+.bug-submit-btn {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.bug-submit-btn:hover {
+  opacity: 0.9;
+}
+
+.bug-status-text {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.hbd-admin-modal,
+.birthday-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.hbd-admin-modal[hidden],
+.birthday-modal[hidden] {
+  display: none;
+}
+
+.hbd-admin-backdrop,
+.birthday-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 6, 0.86);
+  backdrop-filter: blur(10px);
+}
+
+.hbd-admin-dialog {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 500px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 32px;
+  border: 1px solid rgba(34, 211, 149, 0.35);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(34, 211, 149, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(145deg, #071a14, #03100c);
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.7),
+    0 0 50px rgba(34, 211, 149, 0.08);
+  color: #ecfdf5;
+  animation: hbd-admin-in 0.3s ease;
+}
+
+@keyframes hbd-admin-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
   }
 
-  .bug-float-btn:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, #10b981, #059669);
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hbd-admin-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  color: #a7f3d0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.hbd-admin-close:hover {
+  color: #fff;
+  background: rgba(34, 211, 149, 0.12);
+  border-color: rgba(34, 211, 149, 0.4);
+}
+
+.hbd-admin-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 22px;
+  background: rgba(34, 211, 149, 0.1);
+  border: 1px solid rgba(34, 211, 149, 0.2);
+  font-size: 36px;
+}
+
+.hbd-admin-dialog .eyebrow {
+  text-align: center;
+}
+
+.hbd-admin-dialog h2 {
+  margin: 8px 0 10px;
+  text-align: center;
+  color: #f0fdf4;
+}
+
+.hbd-admin-description {
+  margin: 0 auto 24px;
+  max-width: 400px;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.hbd-admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.hbd-admin-field label {
+  color: #a7f3d0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hbd-admin-field input,
+.hbd-admin-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border: 1px solid rgba(34, 211, 149, 0.22);
+  border-radius: 12px;
+  outline: none;
+  background: #03150e;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.hbd-admin-field textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.hbd-admin-field input:focus,
+.hbd-admin-field textarea:focus {
+  border-color: #22d395;
+  box-shadow: 0 0 0 3px rgba(34, 211, 149, 0.08);
+}
+
+.hbd-admin-field input[type="date"] {
+  color-scheme: dark;
+}
+
+.hbd-admin-status {
+  min-height: 20px;
+  margin: 5px 0 10px;
+  color: #a7f3d0;
+  font-size: 13px;
+  text-align: center;
+}
+
+.hbd-admin-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 18px;
+  border: 1px solid #34d399;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.hbd-admin-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.birthday-dialog {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 560px);
+  overflow: hidden;
+  padding: 48px 38px 34px;
+  border: 1px solid rgba(34, 211, 149, 0.4);
+  border-radius: 30px;
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(34, 211, 149, 0.2),
+      transparent 42%
+    ),
+    linear-gradient(145deg, #08231a, #03110c 70%);
+  box-shadow:
+    0 40px 120px rgba(0, 0, 0, 0.8),
+    0 0 80px rgba(34, 211, 149, 0.12);
+  color: #fff;
+  text-align: center;
+  animation: birthday-dialog-in 0.55s cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes birthday-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.86) rotate(-1deg);
   }
 
-  .bug-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(3, 7, 5, 0.85);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    display: grid;
-    place-items: center;
-    padding: 20px;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+.birthday-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  color: #d1fae5;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.birthday-close:hover {
+  background: rgba(34, 211, 149, 0.15);
+  color: #fff;
+  transform: rotate(5deg);
+}
+
+.birthday-glow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(34, 211, 149, 0.12);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.birthday-icon {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  background: rgba(34, 211, 149, 0.1);
+  border: 1px solid rgba(34, 211, 149, 0.25);
+  font-size: 55px;
+  animation: birthday-icon-float 2.5s ease-in-out infinite;
+}
+
+@keyframes birthday-icon-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg);
   }
 
-  .bug-modal-card {
-    width: 100%;
-    max-width: 420px;
-    background: linear-gradient(145deg, #062417, #02130c);
-    border: 1px solid #065f46;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    color: #ecfdf5;
-    font-family: Inter, sans-serif;
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+.birthday-eyebrow {
+  position: relative;
+  margin: 0 0 8px;
+  color: #6ee7b7;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+#birthday-title {
+  position: relative;
+  margin: 0;
+  color: #f0fdf4;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1.15;
+}
+
+.birthday-name {
+  position: relative;
+  margin-top: 13px;
+  color: #34d399;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 800;
+}
+
+.birthday-message {
+  position: relative;
+  max-width: 440px;
+  margin: 18px auto 0;
+  color: #d1d5db;
+  font-size: 16px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.birthday-decoration {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin: 25px 0;
+  font-size: 25px;
+}
+
+.birthday-decoration span {
+  display: inline-block;
+  animation: birthday-decoration 2s ease-in-out infinite;
+}
+
+.birthday-decoration span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.birthday-decoration span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.birthday-decoration span:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.birthday-decoration span:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+@keyframes birthday-decoration {
+  0%, 100% {
+    transform: translateY(0) rotate(0);
   }
 
-  .bug-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  50% {
+    transform: translateY(-7px) rotate(5deg);
+  }
+}
+
+.birthday-finish {
+  position: relative;
+  padding: 13px 25px;
+  border: 1px solid #34d399;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.18);
+  transition: 0.2s;
+}
+
+.birthday-finish:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(16, 185, 129, 0.28);
+}
+
+.birthday-confetti,
+.birthday-ribbons {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.birthday-confetti-piece {
+  position: absolute;
+  top: -30px;
+  width: 9px;
+  height: 15px;
+  border-radius: 2px;
+  animation: birthday-confetti-fall linear forwards;
+}
+
+@keyframes birthday-confetti-fall {
+  from {
+    transform: translate3d(0, -30px, 0) rotate(0deg);
+    opacity: 1;
   }
 
-  .bug-modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #34d399;
+  to {
+    transform: translate3d(var(--drift), 110vh, 0) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.birthday-ribbon {
+  position: absolute;
+  top: -80px;
+  width: 8px;
+  height: 75px;
+  border-radius: 10px;
+  transform-origin: top center;
+  animation: birthday-ribbon-fall linear forwards;
+}
+
+@keyframes birthday-ribbon-fall {
+  from {
+    transform: translateY(-80px) rotate(0deg);
+    opacity: 0;
   }
 
-  .bug-close-btn {
-    background: none;
-    border: none;
-    color: #6ee7b7;
-    font-size: 24px;
-    cursor: pointer;
+  10% {
+    opacity: 1;
   }
 
-  .bug-close-btn:hover {
-    color: #fff;
+  to {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0;
   }
+}
 
-  .bug-form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+.hbd-cancel-dialog {
+  width: min(100%, 560px);
+}
 
-  .bug-form-group label {
-    font-size: 12px;
-    color: #a7f3d0;
-  }
+.hbd-cancel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
 
-  .bug-form-group input,
-  .bug-form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    background: #021c12;
-    border: 1px solid #047857;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 13px;
-    outline: none;
-  }
+.hbd-cancel-list::-webkit-scrollbar {
+  width: 5px;
+}
 
-  .bug-form-group input:focus,
-  .bug-form-group textarea:focus {
-    border-color: #34d399;
-  }
+.hbd-cancel-list::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 149, 0.3);
+  border-radius: 10px;
+}
 
-  .bug-submit-btn {
-    width: 100%;
-    padding: 11px;
-    background: linear-gradient(135deg, #059669, #10b981);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 5px;
-  }
+.hbd-cancel-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid rgba(34, 211, 149, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  transition: 0.2s ease;
+}
 
-  .bug-submit-btn:hover {
-    opacity: 0.9;
-  }
+.hbd-cancel-item:hover {
+  border-color: rgba(34, 211, 149, 0.4);
+  background: rgba(34, 211, 149, 0.06);
+}
 
-  .bug-status-text {
-    font-size: 12px;
-    text-align: center;
-    margin-top: 10px;
-  }
+.hbd-cancel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
 
-  .hbd-admin-modal,
-  .birthday-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    display: grid;
-    place-items: center;
-    padding: 20px;
-  }
+.hbd-cancel-info strong {
+  color: #f0fdf4;
+  font-size: 16px;
+  font-weight: 800;
+}
 
-  .hbd-admin-modal[hidden],
-  .birthday-modal[hidden] {
-    display: none;
-  }
+.hbd-cancel-info span {
+  color: #94a3b8;
+  font-size: 13px;
+}
 
-  .hbd-admin-backdrop,
-  .birthday-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(2, 8, 6, 0.86);
-    backdrop-filter: blur(10px);
-  }
+.hbd-delete-button {
+  flex-shrink: 0;
+  padding: 10px 15px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 10px;
+  background: rgba(248, 113, 113, 0.08);
+  color: #f87171;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.hbd-delete-button:hover {
+  background: #f87171;
+  border-color: #f87171;
+  color: #07110f;
+  transform: translateY(-1px);
+}
+
+.hbd-cancel-loading,
+.hbd-cancel-empty,
+.hbd-cancel-error {
+  padding: 28px 15px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.hbd-cancel-error {
+  color: #f87171;
+}
+
+@media (max-width: 600px) {
 
   .hbd-admin-dialog {
-    position: relative;
-    z-index: 2;
-    width: min(100%, 500px);
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    padding: 32px;
-    border: 1px solid rgba(34, 211, 149, 0.35);
-    border-radius: 24px;
-    background:
-      radial-gradient(circle at top, rgba(34, 211, 149, 0.12), transparent 45%),
-      linear-gradient(145deg, #071a14, #03100c);
-    box-shadow:
-      0 30px 100px rgba(0, 0, 0, 0.7),
-      0 0 50px rgba(34, 211, 149, 0.08);
-    color: #ecfdf5;
-    animation: hbd-admin-in 0.3s ease;
-  }
-
-  @keyframes hbd-admin-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px) scale(0.96);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  .hbd-admin-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-    color: #a7f3d0;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .hbd-admin-close:hover {
-    color: #fff;
-    background: rgba(34, 211, 149, 0.12);
-    border-color: rgba(34, 211, 149, 0.4);
-  }
-
-  .hbd-admin-icon {
-    width: 72px;
-    height: 72px;
-    display: grid;
-    place-items: center;
-    margin: 0 auto 18px;
-    border-radius: 22px;
-    background: rgba(34, 211, 149, 0.1);
-    border: 1px solid rgba(34, 211, 149, 0.2);
-    font-size: 36px;
-  }
-
-  .hbd-admin-dialog .eyebrow {
-    text-align: center;
-  }
-
-  .hbd-admin-dialog h2 {
-    margin: 8px 0 10px;
-    text-align: center;
-    color: #f0fdf4;
-  }
-
-  .hbd-admin-description {
-    margin: 0 auto 24px;
-    max-width: 400px;
-    color: #94a3b8;
-    text-align: center;
-    line-height: 1.6;
-    font-size: 14px;
-  }
-
-  .hbd-admin-field {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-bottom: 16px;
-  }
-
-  .hbd-admin-field label {
-    color: #a7f3d0;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .hbd-admin-field input,
-  .hbd-admin-field textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 13px 14px;
-    border: 1px solid rgba(34, 211, 149, 0.22);
-    border-radius: 12px;
-    outline: none;
-    background: #03150e;
-    color: #fff;
-    font-family: inherit;
-    font-size: 14px;
-    transition: 0.2s;
-  }
-
-  .hbd-admin-field textarea {
-    resize: vertical;
-    min-height: 130px;
-  }
-
-  .hbd-admin-field input:focus,
-  .hbd-admin-field textarea:focus {
-    border-color: #22d395;
-    box-shadow: 0 0 0 3px rgba(34, 211, 149, 0.08);
-  }
-
-  .hbd-admin-field input[type="date"] {
-    color-scheme: dark;
-  }
-
-  .hbd-admin-status {
-    min-height: 20px;
-    margin: 5px 0 10px;
-    color: #a7f3d0;
-    font-size: 13px;
-    text-align: center;
-  }
-
-  .hbd-admin-submit {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 18px;
-    border: 1px solid #34d399;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #059669, #10b981);
-    color: #fff;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .hbd-admin-submit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+    padding: 28px 20px 22px;
+    border-radius: 20px;
   }
 
   .birthday-dialog {
-    position: relative;
-    z-index: 3;
-    width: min(100%, 560px);
-    overflow: hidden;
-    padding: 48px 38px 34px;
-    border: 1px solid rgba(34, 211, 149, 0.4);
-    border-radius: 30px;
-    background:
-      radial-gradient(circle at 50% -10%, rgba(34, 211, 149, 0.2), transparent 42%),
-      linear-gradient(145deg, #08231a, #03110c 70%);
-    box-shadow:
-      0 40px 120px rgba(0, 0, 0, 0.8),
-      0 0 80px rgba(34, 211, 149, 0.12);
-    color: #fff;
-    text-align: center;
-    animation: birthday-dialog-in 0.55s cubic-bezier(.2,.8,.2,1);
-  }
-
-  @keyframes birthday-dialog-in {
-    from {
-      opacity: 0;
-      transform: translateY(40px) scale(0.86) rotate(-1deg);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1) rotate(0);
-    }
-  }
-
-  .birthday-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 5;
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 50%;
-    background: rgba(0,0,0,0.2);
-    color: #d1fae5;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .birthday-close:hover {
-    background: rgba(34, 211, 149, 0.15);
-    color: #fff;
-    transform: rotate(5deg);
-  }
-
-  .birthday-glow {
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    background: rgba(34, 211, 149, 0.12);
-    filter: blur(60px);
-    pointer-events: none;
+    padding: 42px 22px 25px;
+    border-radius: 24px;
   }
 
   .birthday-icon {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    display: grid;
-    place-items: center;
-    margin: 0 auto 15px;
-    border-radius: 50%;
-    background: rgba(34, 211, 149, 0.1);
-    border: 1px solid rgba(34, 211, 149, 0.25);
-    font-size: 55px;
-    animation: birthday-icon-float 2.5s ease-in-out infinite;
-  }
-
-  @keyframes birthday-icon-float {
-    0%, 100% {
-      transform: translateY(0) rotate(-2deg);
-    }
-
-    50% {
-      transform: translateY(-8px) rotate(2deg);
-    }
-  }
-
-  .birthday-eyebrow {
-    position: relative;
-    margin: 0 0 8px;
-    color: #6ee7b7;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 2px;
-  }
-
-  #birthday-title {
-    position: relative;
-    margin: 0;
-    color: #f0fdf4;
-    font-size: clamp(28px, 5vw, 42px);
-    line-height: 1.15;
-  }
-
-  .birthday-name {
-    position: relative;
-    margin-top: 13px;
-    color: #34d399;
-    font-size: clamp(22px, 4vw, 30px);
-    font-weight: 800;
-  }
-
-  .birthday-message {
-    position: relative;
-    max-width: 440px;
-    margin: 18px auto 0;
-    color: #d1d5db;
-    font-size: 16px;
-    line-height: 1.75;
-    white-space: pre-wrap;
+    width: 82px;
+    height: 82px;
+    font-size: 44px;
   }
 
   .birthday-decoration {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin: 25px 0;
-    font-size: 25px;
+    gap: 12px;
+    font-size: 22px;
   }
 
-  .birthday-decoration span {
-    display: inline-block;
-    animation: birthday-decoration 2s ease-in-out infinite;
-  }
-
-  .birthday-decoration span:nth-child(2) {
-    animation-delay: 0.15s;
-  }
-
-  .birthday-decoration span:nth-child(3) {
-    animation-delay: 0.3s;
-  }
-
-  .birthday-decoration span:nth-child(4) {
-    animation-delay: 0.45s;
-  }
-
-  .birthday-decoration span:nth-child(5) {
-    animation-delay: 0.6s;
-  }
-
-  @keyframes birthday-decoration {
-    0%, 100% {
-      transform: translateY(0) rotate(0);
-    }
-
-    50% {
-      transform: translateY(-7px) rotate(5deg);
-    }
-  }
-
-  .birthday-finish {
-    position: relative;
-    padding: 13px 25px;
-    border: 1px solid #34d399;
-    border-radius: 13px;
-    background: linear-gradient(135deg, #059669, #10b981);
-    color: #fff;
-    font-family: inherit;
+  .birthday-message {
     font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.18);
-    transition: 0.2s;
   }
 
-  .birthday-finish:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 35px rgba(16, 185, 129, 0.28);
+  .hbd-cancel-dialog {
+    width: min(100%, 500px);
   }
 
-  .birthday-confetti,
-  .birthday-ribbons {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    pointer-events: none;
-    overflow: hidden;
+  .hbd-cancel-item {
+    align-items: stretch;
+    flex-direction: column;
   }
 
-  .birthday-confetti-piece {
-    position: absolute;
-    top: -30px;
-    width: 9px;
-    height: 15px;
-    border-radius: 2px;
-    animation: birthday-confetti-fall linear forwards;
+  .hbd-delete-button {
+    width: 100%;
   }
 
-  @keyframes birthday-confetti-fall {
-    from {
-      transform: translate3d(0, -30px, 0) rotate(0deg);
-      opacity: 1;
-    }
-
-    to {
-      transform: translate3d(var(--drift), 110vh, 0) rotate(720deg);
-      opacity: 0;
-    }
-  }
-
-  .birthday-ribbon {
-    position: absolute;
-    top: -80px;
-    width: 8px;
-    height: 75px;
-    border-radius: 10px;
-    transform-origin: top center;
-    animation: birthday-ribbon-fall linear forwards;
-  }
-
-  @keyframes birthday-ribbon-fall {
-    from {
-      transform: translateY(-80px) rotate(0deg);
-      opacity: 0;
-    }
-
-    10% {
-      opacity: 1;
-    }
-
-    to {
-      transform: translateY(110vh) rotate(540deg);
-      opacity: 0;
-    }
-  }
-
-  @media (max-width: 600px) {
-
-    .hbd-admin-dialog {
-      padding: 28px 20px 22px;
-      border-radius: 20px;
-    }
-
-    .birthday-dialog {
-      padding: 42px 22px 25px;
-      border-radius: 24px;
-    }
-
-    .birthday-icon {
-      width: 82px;
-      height: 82px;
-      font-size: 44px;
-    }
-
-    .birthday-decoration {
-      gap: 12px;
-      font-size: 22px;
-    }
-
-    .birthday-message {
-      font-size: 14px;
-    }
-
-  }
+}
 
 </style>
 
