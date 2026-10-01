@@ -6766,3 +6766,362 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById('attendance-home-btn')?.addEventListener('click', () => {
   openPublicAttendanceModal()
 })
+
+
+const hbdAdminModal = document.getElementById("hbd-admin-modal")
+const hbdAdminForm = document.getElementById("hbd-admin-form")
+const hbdAdminClose = document.getElementById("hbd-admin-close")
+const hbdAdminStatus = document.getElementById("hbd-admin-status")
+const hbdNameInput = document.getElementById("hbd-name")
+const hbdMessageInput = document.getElementById("hbd-message")
+const hbdDateInput = document.getElementById("hbd-date")
+
+function openHbdAdminModal() {
+  if (!hbdAdminModal) return
+
+  hbdAdminModal.hidden = false
+  hbdAdminModal.setAttribute("aria-hidden", "false")
+
+  hbdAdminStatus.textContent = ""
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+
+  setTimeout(() => {
+    hbdNameInput?.focus()
+  }, 100)
+}
+
+function closeHbdAdminModal() {
+  if (!hbdAdminModal) return
+
+  hbdAdminModal.hidden = true
+  hbdAdminModal.setAttribute("aria-hidden", "true")
+}
+
+hbdAdminClose?.addEventListener("click", closeHbdAdminModal)
+
+document.querySelector("[data-hbd-admin-close]")?.addEventListener("click", closeHbdAdminModal)
+
+async function isHbdAdmin() {
+  try {
+    const { data: userData, error: userError } = await window.supabase.auth.getUser()
+
+    if (userError || !userData?.user) {
+      return false
+    }
+
+    const userId = userData.user.id
+
+    const { data, error } = await window.supabase
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", userId)
+      .maybeSingle()
+
+    if (error || !data) {
+      return false
+    }
+
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function handleHbdCommand() {
+  const admin = await isHbdAdmin()
+
+  if (!admin) {
+    return false
+  }
+
+  openHbdAdminModal()
+
+  return true
+}
+
+async function saveHbd() {
+  const name = hbdNameInput?.value.trim()
+  const message = hbdMessageInput?.value.trim()
+  const date = hbdDateInput?.value
+
+  if (!name || !message || !date) {
+    hbdAdminStatus.textContent = "ყველა ველი შეავსე"
+    hbdAdminStatus.style.color = "#f87171"
+    return
+  }
+
+  hbdAdminStatus.textContent = "ინახება..."
+  hbdAdminStatus.style.color = "#a7f3d0"
+
+  const admin = await isHbdAdmin()
+
+  if (!admin) {
+    hbdAdminStatus.textContent = "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
+    hbdAdminStatus.style.color = "#f87171"
+    return
+  }
+
+  try {
+    const { data: userData } = await window.supabase.auth.getUser()
+
+    const { error } = await window.supabase
+      .from("birthday_messages")
+      .insert({
+        name,
+        message,
+        birthday_date: date,
+        created_by: userData?.user?.id || null
+      })
+
+    if (error) {
+      throw error
+    }
+
+    hbdAdminStatus.textContent = "დაბადების დღე წარმატებით დაემატა 🎉"
+    hbdAdminStatus.style.color = "#4ade80"
+
+    hbdAdminForm.reset()
+
+    setTimeout(() => {
+      closeHbdAdminModal()
+    }, 1200)
+
+  } catch (error) {
+    console.error(error)
+
+    hbdAdminStatus.textContent = "შენახვისას შეცდომა მოხდა"
+    hbdAdminStatus.style.color = "#f87171"
+  }
+}
+
+hbdAdminForm?.addEventListener("submit", async (event) => {
+  event.preventDefault()
+  await saveHbd()
+})
+
+function getGeorgiaDate() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tbilisi"
+  }).format(new Date())
+}
+
+function createBirthdayConfetti() {
+  const container = document.getElementById("birthday-confetti")
+
+  if (!container) return
+
+  container.innerHTML = ""
+
+  const pieces = 100
+
+  const colors = [
+    "#22d395",
+    "#34d399",
+    "#facc15",
+    "#f472b6",
+    "#60a5fa",
+    "#fb7185",
+    "#a78bfa",
+    "#ffffff"
+  ]
+
+  for (let i = 0; i < pieces; i++) {
+    const piece = document.createElement("span")
+
+    piece.className = "birthday-confetti-piece"
+
+    piece.style.left = `${Math.random() * 100}%`
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)]
+    piece.style.animationDuration = `${3 + Math.random() * 4}s`
+    piece.style.animationDelay = `${Math.random() * 2}s`
+    piece.style.setProperty(
+      "--drift",
+      `${-150 + Math.random() * 300}px`
+    )
+
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`
+
+    container.appendChild(piece)
+  }
+}
+
+function createBirthdayRibbons() {
+  const container = document.getElementById("birthday-ribbons")
+
+  if (!container) return
+
+  container.innerHTML = ""
+
+  const colors = [
+    "#22d395",
+    "#facc15",
+    "#f472b6",
+    "#60a5fa",
+    "#a78bfa",
+    "#fb7185"
+  ]
+
+  for (let i = 0; i < 28; i++) {
+    const ribbon = document.createElement("span")
+
+    ribbon.className = "birthday-ribbon"
+
+    ribbon.style.left = `${Math.random() * 100}%`
+    ribbon.style.background = colors[Math.floor(Math.random() * colors.length)]
+    ribbon.style.animationDuration = `${4 + Math.random() * 5}s`
+    ribbon.style.animationDelay = `${Math.random() * 3}s`
+    ribbon.style.height = `${50 + Math.random() * 80}px`
+    ribbon.style.width = `${5 + Math.random() * 6}px`
+
+    container.appendChild(ribbon)
+  }
+}
+
+function openBirthdayModal(name, message) {
+  const modal = document.getElementById("birthday-modal")
+  const nameElement = document.getElementById("birthday-name")
+  const messageElement = document.getElementById("birthday-message")
+
+  if (!modal) return
+
+  if (nameElement) {
+    nameElement.textContent = name
+  }
+
+  if (messageElement) {
+    messageElement.textContent = message
+  }
+
+  createBirthdayConfetti()
+  createBirthdayRibbons()
+
+  modal.hidden = false
+  modal.setAttribute("aria-hidden", "false")
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function closeBirthdayModal() {
+  const modal = document.getElementById("birthday-modal")
+
+  if (!modal) return
+
+  modal.hidden = true
+  modal.setAttribute("aria-hidden", "true")
+
+  const confetti = document.getElementById("birthday-confetti")
+  const ribbons = document.getElementById("birthday-ribbons")
+
+  if (confetti) {
+    confetti.innerHTML = ""
+  }
+
+  if (ribbons) {
+    ribbons.innerHTML = ""
+  }
+}
+
+document.getElementById("birthday-close")?.addEventListener(
+  "click",
+  closeBirthdayModal
+)
+
+document.getElementById("birthday-finish")?.addEventListener(
+  "click",
+  closeBirthdayModal
+)
+
+document.querySelector(".birthday-backdrop")?.addEventListener(
+  "click",
+  closeBirthdayModal
+)
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeBirthdayModal()
+    closeHbdAdminModal()
+  }
+})
+
+async function checkTodayBirthday() {
+  try {
+    const today = getGeorgiaDate()
+
+    const { data, error } = await window.supabase
+      .from("birthday_messages")
+      .select("id, name, message, birthday_date")
+      .eq("birthday_date", today)
+      .order("created_at", { ascending: true })
+
+    if (error) {
+      console.error(error)
+      return
+    }
+
+    if (!data || data.length === 0) {
+      return
+    }
+
+    const birthday = data[0]
+
+    setTimeout(() => {
+      openBirthdayModal(
+        birthday.name,
+        birthday.message
+      )
+    }, 900)
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+window.showBirthday = openBirthdayModal
+
+window.openHbdAdminModal = openHbdAdminModal
+
+window.checkTodayBirthday = checkTodayBirthday
+
+document.addEventListener("DOMContentLoaded", () => {
+  checkTodayBirthday()
+})
+
+document.addEventListener(
+  "submit",
+  async (event) => {
+    const form = event.target
+
+    if (!form) return
+
+    const input = form.querySelector(
+      "input[type='text'], textarea"
+    )
+
+    if (!input) return
+
+    const value = input.value.trim()
+
+    if (!value.startsWith("/hbd")) {
+      return
+    }
+
+    const admin = await isHbdAdmin()
+
+    if (!admin) {
+      return
+    }
+
+    event.preventDefault()
+    event.stopImmediatePropagation()
+
+    input.value = ""
+
+    openHbdAdminModal()
+  },
+  true
+)
