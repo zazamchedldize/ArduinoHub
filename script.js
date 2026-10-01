@@ -6782,7 +6782,9 @@ function openHbdAdminModal() {
   hbdAdminModal.hidden = false
   hbdAdminModal.setAttribute("aria-hidden", "false")
 
-  hbdAdminStatus.textContent = ""
+  if (hbdAdminStatus) {
+    hbdAdminStatus.textContent = ""
+  }
 
   if (window.lucide) {
     lucide.createIcons()
@@ -6802,22 +6804,24 @@ function closeHbdAdminModal() {
 
 hbdAdminClose?.addEventListener("click", closeHbdAdminModal)
 
-document.querySelector("[data-hbd-admin-close]")?.addEventListener("click", closeHbdAdminModal)
+document.querySelector("[data-hbd-admin-close]")?.addEventListener(
+  "click",
+  closeHbdAdminModal
+)
 
 async function isHbdAdmin() {
   try {
-    const { data: userData, error: userError } = await window.supabase.auth.getUser()
+    const { data: userData, error: userError } =
+      await window.supabase.auth.getUser()
 
     if (userError || !userData?.user) {
       return false
     }
 
-    const userId = userData.user.id
-
     const { data, error } = await window.supabase
       .from("admin_users")
       .select("user_id")
-      .eq("user_id", userId)
+      .eq("user_id", userData.user.id)
       .maybeSingle()
 
     if (error || !data) {
@@ -6828,18 +6832,6 @@ async function isHbdAdmin() {
   } catch {
     return false
   }
-}
-
-async function handleHbdCommand() {
-  const admin = await isHbdAdmin()
-
-  if (!admin) {
-    return false
-  }
-
-  openHbdAdminModal()
-
-  return true
 }
 
 async function saveHbd() {
@@ -6859,7 +6851,8 @@ async function saveHbd() {
   const admin = await isHbdAdmin()
 
   if (!admin) {
-    hbdAdminStatus.textContent = "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
+    hbdAdminStatus.textContent =
+      "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
     hbdAdminStatus.style.color = "#f87171"
     return
   }
@@ -6880,7 +6873,9 @@ async function saveHbd() {
       throw error
     }
 
-    hbdAdminStatus.textContent = "დაბადების დღე წარმატებით დაემატა 🎉"
+    hbdAdminStatus.textContent =
+      "დაბადების დღე წარმატებით დაემატა 🎉"
+
     hbdAdminStatus.style.color = "#4ade80"
 
     hbdAdminForm.reset()
@@ -6892,12 +6887,14 @@ async function saveHbd() {
   } catch (error) {
     console.error(error)
 
-    hbdAdminStatus.textContent = "შენახვისას შეცდომა მოხდა"
+    hbdAdminStatus.textContent =
+      "შენახვისას შეცდომა მოხდა"
+
     hbdAdminStatus.style.color = "#f87171"
   }
 }
 
-hbdAdminForm?.addEventListener("submit", async (event) => {
+hbdAdminForm?.addEventListener("submit", async event => {
   event.preventDefault()
   await saveHbd()
 })
@@ -6915,8 +6912,6 @@ function createBirthdayConfetti() {
 
   container.innerHTML = ""
 
-  const pieces = 100
-
   const colors = [
     "#22d395",
     "#34d399",
@@ -6928,21 +6923,22 @@ function createBirthdayConfetti() {
     "#ffffff"
   ]
 
-  for (let i = 0; i < pieces; i++) {
+  for (let i = 0; i < 100; i++) {
     const piece = document.createElement("span")
 
     piece.className = "birthday-confetti-piece"
-
     piece.style.left = `${Math.random() * 100}%`
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)]
-    piece.style.animationDuration = `${3 + Math.random() * 4}s`
-    piece.style.animationDelay = `${Math.random() * 2}s`
+    piece.style.background =
+      colors[Math.floor(Math.random() * colors.length)]
+    piece.style.animationDuration =
+      `${3 + Math.random() * 4}s`
+    piece.style.animationDelay =
+      `${Math.random() * 2}s`
+
     piece.style.setProperty(
       "--drift",
       `${-150 + Math.random() * 300}px`
     )
-
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`
 
     container.appendChild(piece)
   }
@@ -6968,13 +6964,17 @@ function createBirthdayRibbons() {
     const ribbon = document.createElement("span")
 
     ribbon.className = "birthday-ribbon"
-
     ribbon.style.left = `${Math.random() * 100}%`
-    ribbon.style.background = colors[Math.floor(Math.random() * colors.length)]
-    ribbon.style.animationDuration = `${4 + Math.random() * 5}s`
-    ribbon.style.animationDelay = `${Math.random() * 3}s`
-    ribbon.style.height = `${50 + Math.random() * 80}px`
-    ribbon.style.width = `${5 + Math.random() * 6}px`
+    ribbon.style.background =
+      colors[Math.floor(Math.random() * colors.length)]
+    ribbon.style.animationDuration =
+      `${4 + Math.random() * 5}s`
+    ribbon.style.animationDelay =
+      `${Math.random() * 3}s`
+    ribbon.style.height =
+      `${50 + Math.random() * 80}px`
+    ribbon.style.width =
+      `${5 + Math.random() * 6}px`
 
     container.appendChild(ribbon)
   }
@@ -7041,13 +7041,6 @@ document.querySelector(".birthday-backdrop")?.addEventListener(
   closeBirthdayModal
 )
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeBirthdayModal()
-    closeHbdAdminModal()
-  }
-})
-
 async function checkTodayBirthday() {
   try {
     const today = getGeorgiaDate()
@@ -7056,7 +7049,9 @@ async function checkTodayBirthday() {
       .from("birthday_messages")
       .select("id, name, message, birthday_date")
       .eq("birthday_date", today)
-      .order("created_at", { ascending: true })
+      .order("created_at", {
+        ascending: true
+      })
 
     if (error) {
       console.error(error)
@@ -7082,46 +7077,231 @@ async function checkTodayBirthday() {
 }
 
 window.showBirthday = openBirthdayModal
-
 window.openHbdAdminModal = openHbdAdminModal
-
 window.checkTodayBirthday = checkTodayBirthday
 
 document.addEventListener("DOMContentLoaded", () => {
   checkTodayBirthday()
 })
 
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeBirthdayModal()
+    closeHbdAdminModal()
+  }
+})
+
+let hbdCommandLocked = false
+
 document.addEventListener(
   "submit",
-  async (event) => {
+  event => {
     const form = event.target
 
     if (!form) return
 
-    const input = form.querySelector(
-      "input[type='text'], textarea"
-    )
+    const elements = Array.from(form.elements || [])
 
-    if (!input) return
+    const commandInput = elements.find(element => {
+      if (!element) return false
 
-    const value = input.value.trim()
+      const tag = element.tagName?.toLowerCase()
 
-    if (!value.startsWith("/hbd")) {
-      return
-    }
+      if (tag !== "input" && tag !== "textarea") {
+        return false
+      }
 
-    const admin = await isHbdAdmin()
+      const type = element.getAttribute("type")
 
-    if (!admin) {
+      return !type || type === "text"
+    })
+
+    if (!commandInput) return
+
+    const value = commandInput.value.trim().toLowerCase()
+
+    if (value !== "/hbd" && value !== "/hbd cancel") {
       return
     }
 
     event.preventDefault()
     event.stopImmediatePropagation()
 
-    input.value = ""
+    commandInput.value = ""
 
-    openHbdAdminModal()
+    if (hbdCommandLocked) {
+      return
+    }
+
+    hbdCommandLocked = true
+
+    isHbdAdmin()
+      .then(admin => {
+        if (!admin) {
+          return
+        }
+
+        if (value === "/hbd") {
+          openHbdAdminModal()
+        }
+
+        if (value === "/hbd cancel") {
+          openHbdCancelModal()
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          hbdCommandLocked = false
+        }, 300)
+      })
   },
   true
 )
+
+const hbdCancelModal = document.getElementById("hbd-cancel-modal")
+const hbdCancelList = document.getElementById("hbd-cancel-list")
+const hbdCancelClose = document.getElementById("hbd-cancel-close")
+
+function openHbdCancelModal() {
+  if (!hbdCancelModal) return
+
+  hbdCancelModal.hidden = false
+  hbdCancelModal.setAttribute("aria-hidden", "false")
+
+  loadHbdList()
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function closeHbdCancelModal() {
+  if (!hbdCancelModal) return
+
+  hbdCancelModal.hidden = true
+  hbdCancelModal.setAttribute("aria-hidden", "true")
+}
+
+hbdCancelClose?.addEventListener(
+  "click",
+  closeHbdCancelModal
+)
+
+document.querySelector("[data-hbd-cancel-close]")?.addEventListener(
+  "click",
+  closeHbdCancelModal
+)
+
+async function loadHbdList() {
+  if (!hbdCancelList) return
+
+  hbdCancelList.innerHTML =
+    `<div class="hbd-cancel-loading">იტვირთება...</div>`
+
+  try {
+    const { data, error } = await window.supabase
+      .from("birthday_messages")
+      .select("id, name, message, birthday_date")
+      .order("birthday_date", {
+        ascending: true
+      })
+
+    if (error) {
+      throw error
+    }
+
+    if (!data || data.length === 0) {
+      hbdCancelList.innerHTML =
+        `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
+      return
+    }
+
+    hbdCancelList.innerHTML = ""
+
+    data.forEach(birthday => {
+      const item = document.createElement("div")
+
+      item.className = "hbd-cancel-item"
+
+      const date = new Date(
+        `${birthday.birthday_date}T00:00:00`
+      )
+
+      const formattedDate =
+        date.toLocaleDateString("ka-GE", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        })
+
+      item.innerHTML = `
+        <div class="hbd-cancel-info">
+          <strong>${escapeHbdHtml(birthday.name)}</strong>
+          <span>${formattedDate}</span>
+        </div>
+        <button
+          type="button"
+          class="hbd-delete-button"
+          data-hbd-id="${birthday.id}"
+        >
+          გაუქმება
+        </button>
+      `
+
+      hbdCancelList.appendChild(item)
+    })
+
+    hbdCancelList
+      .querySelectorAll("[data-hbd-id]")
+      .forEach(button => {
+        button.addEventListener("click", async () => {
+          await deleteHbd(button.dataset.hbdId)
+        })
+      })
+
+  } catch (error) {
+    console.error(error)
+
+    hbdCancelList.innerHTML =
+      `<div class="hbd-cancel-error">დაბადების დღეების ჩატვირთვა ვერ მოხერხდა</div>`
+  }
+}
+
+async function deleteHbd(id) {
+  const confirmed = confirm(
+    "ნამდვილად გინდა ამ დაბადების დღის გაუქმება?"
+  )
+
+  if (!confirmed) {
+    return
+  }
+
+  try {
+    const admin = await isHbdAdmin()
+
+    if (!admin) {
+      return
+    }
+
+    const { error } = await window.supabase
+      .from("birthday_messages")
+      .delete()
+      .eq("id", id)
+
+    if (error) {
+      throw error
+    }
+
+    await loadHbdList()
+
+  } catch (error) {
+    console.error(error)
+    alert("დაბადების დღის გაუქმება ვერ მოხერხდა")
+  }
+}
+
+function escapeHbdHtml(value) {
+  const div = document.createElement("div")
+  div.textContent = value
+  return div.innerHTML
+}
