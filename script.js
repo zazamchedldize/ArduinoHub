@@ -6766,3 +6766,295 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById('attendance-home-btn')?.addEventListener('click', () => {
   openPublicAttendanceModal()
 })
+
+<script>
+(() => {
+
+  const birthdayModal = document.getElementById("birthday-modal")
+  const birthdayClose = document.getElementById("birthday-close")
+  const birthdayFinish = document.getElementById("birthday-finish")
+  const birthdayName = document.getElementById("birthday-name")
+  const birthdayMessage = document.getElementById("birthday-message")
+  const birthdayConfetti = document.getElementById("birthday-confetti")
+  const birthdayRibbons = document.getElementById("birthday-ribbons")
+
+  if (!birthdayModal) return
+
+
+  function createConfetti() {
+
+    birthdayConfetti.innerHTML = ""
+
+    const pieces = 90
+
+    for (let i = 0; i < pieces; i++) {
+
+      const piece = document.createElement("span")
+
+      piece.className = "birthday-confetti-piece"
+
+      piece.style.left = `${Math.random() * 100}%`
+
+      piece.style.animationDuration =
+        `${3 + Math.random() * 4}s`
+
+      piece.style.animationDelay =
+        `${Math.random() * 2}s`
+
+      piece.style.transform =
+        `rotate(${Math.random() * 360}deg)`
+
+      const size =
+        5 + Math.random() * 8
+
+      piece.style.width = `${size}px`
+      piece.style.height = `${size * 1.8}px`
+
+      const colors = [
+        "#22d395",
+        "#34d399",
+        "#86efac",
+        "#facc15",
+        "#fb7185",
+        "#60a5fa",
+        "#c084fc",
+        "#ffffff"
+      ]
+
+      piece.style.background =
+        colors[Math.floor(Math.random() * colors.length)]
+
+      birthdayConfetti.appendChild(piece)
+    }
+  }
+
+
+  function createRibbons() {
+
+    birthdayRibbons.innerHTML = ""
+
+    const ribbons = 25
+
+    for (let i = 0; i < ribbons; i++) {
+
+      const ribbon = document.createElement("span")
+
+      ribbon.className = "birthday-ribbon"
+
+      ribbon.style.left =
+        `${Math.random() * 100}%`
+
+      ribbon.style.animationDuration =
+        `${4 + Math.random() * 5}s`
+
+      ribbon.style.animationDelay =
+        `${Math.random() * 2}s`
+
+      ribbon.style.height =
+        `${60 + Math.random() * 80}px`
+
+      ribbon.style.width =
+        `${5 + Math.random() * 7}px`
+
+      ribbon.style.background =
+        `linear-gradient(
+          180deg,
+          #22d395,
+          #34d399,
+          #86efac
+        )`
+
+      birthdayRibbons.appendChild(ribbon)
+    }
+  }
+
+
+  function openBirthdayModal(name, message) {
+
+    birthdayName.textContent =
+      name || "ჩვენს კლუბის წევრს"
+
+    birthdayMessage.textContent =
+      message || "გილოცავთ დაბადების დღეს! 🎉"
+
+    birthdayModal.hidden = false
+
+    birthdayModal.setAttribute(
+      "aria-hidden",
+      "false"
+    )
+
+    document.body.style.overflow = "hidden"
+
+    createConfetti()
+    createRibbons()
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  }
+
+
+  function closeBirthdayModal() {
+
+    birthdayModal.hidden = true
+
+    birthdayModal.setAttribute(
+      "aria-hidden",
+      "true"
+    )
+
+    document.body.style.overflow = ""
+
+    birthdayConfetti.innerHTML = ""
+    birthdayRibbons.innerHTML = ""
+  }
+
+
+  birthdayClose?.addEventListener(
+    "click",
+    closeBirthdayModal
+  )
+
+
+  birthdayFinish?.addEventListener(
+    "click",
+    closeBirthdayModal
+  )
+
+
+  birthdayModal.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target.classList.contains(
+          "birthday-backdrop"
+        )
+      ) {
+        closeBirthdayModal()
+      }
+
+    }
+  )
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Escape" &&
+        !birthdayModal.hidden
+      ) {
+        closeBirthdayModal()
+      }
+
+    }
+  )
+
+
+  /*
+    ეს ფუნქცია შეგვიძლია შემდეგ script.js-დანაც გამოვიყენოთ:
+
+    showBirthday("სახელი გვარი", "მისალოცი ტექსტი")
+  */
+
+  window.showBirthday = function(
+    name,
+    message
+  ) {
+
+    openBirthdayModal(
+      name,
+      message
+    )
+
+  }
+
+
+  /*
+    თარიღის შემოწმება
+
+    ფორმატი:
+    {
+      name: "სახელი გვარი",
+      message: "მისალოცი ტექსტი",
+      date: "2026-10-05"
+    }
+
+    ეს მონაცემი შემდეგ Supabase-დან მოვა.
+  */
+
+  window.checkBirthday = function(
+    birthday
+  ) {
+
+    if (!birthday) return
+
+    if (!birthday.date) return
+
+    const now = new Date()
+
+    const today =
+      `${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, "0")}-${String(
+        now.getDate()
+      ).padStart(2, "0")}`
+
+
+    if (birthday.date !== today) {
+      return
+    }
+
+
+    const storageKey =
+      `arduinohub_hbd_${birthday.date}_${birthday.name}`
+
+
+    if (
+      localStorage.getItem(storageKey)
+    ) {
+      return
+    }
+
+
+    localStorage.setItem(
+      storageKey,
+      "shown"
+    )
+
+
+    setTimeout(() => {
+
+      showBirthday(
+        birthday.name,
+        birthday.message
+      )
+
+    }, 700)
+
+  }
+
+
+  /*
+    სატესტო ფუნქცია
+
+    ბრაუზერის Console-ში შეგიძლია გაუშვა:
+
+    testBirthday()
+  */
+
+  window.testBirthday = function() {
+
+    showBirthday(
+      "ზაზა მჭედლიძე",
+      "გილოცავ დაბადების დღეს! 🎂🎉\nგისურვებთ უამრავ წარმატებას, ბედნიერებას და საინტერესო პროექტებს! 💚"
+    )
+
+  }
+
+
+})()
+</script>
