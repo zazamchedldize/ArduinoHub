@@ -1,993 +1,1835 @@
 <!doctype html>
 <html lang="ka">
+
 <head>
-<link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
-<link rel="icon" type="image/png" href="arduinohub-icon.png">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
 
-<script>
-window.supabase = supabase.createClient(
-  'https://ywxunhvrwdtlqjfshiyj.supabase.co',
-  'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
-)
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <link rel="manifest" href="manifest.json">
 
-<script>
-window.OneSignalDeferred = window.OneSignalDeferred || []
-OneSignalDeferred.push(async function(OneSignal) {
-  await OneSignal.init({
-    appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
-  })
-})
-</script>
+  <script>
+    window.supabase = supabase.createClient(
+      'https://ywxunhvrwdtlqjfshiyj.supabase.co',
+      'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
+    )
+  </script>
 
-<meta charset="utf-8">
-<meta name="google-site-verification" content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
-<title>ArduinoHub — Arduino & Chemistry პროექტები</title>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || []
 
-<meta name="description" content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს.">
-<meta name="keywords" content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად">
-<meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
-<meta name="robots" content="index, follow">
-<meta name="googlebot" content="index, follow">
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
+      })
+    })
+  </script>
 
-<link rel="canonical" href="https://arduinohub.onrender.com/">
+  <meta charset="utf-8">
 
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://arduinohub.onrender.com/">
-<meta property="og:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
-<meta property="og:description" content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს.">
-<meta property="og:site_name" content="ArduinoHub">
-<meta property="og:locale" content="ka_GE">
-<meta property="og:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
+  <meta
+    name="google-site-verification"
+    content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28"
+  >
 
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
-<meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.">
-<meta name="twitter:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="icon" type="image/png" href="arduinohub-icon.png">
+  <title>ArduinoHub — Arduino & Chemistry პროექტები</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta
+    name="description"
+    content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს."
+  >
 
-<link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta
+    name="keywords"
+    content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად"
+  >
 
-<link rel="stylesheet" href="style.css">
+  <meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ArduinoHub",
-  "alternateName": "ArduinoChemistryHub",
-  "url": "https://arduinohub.onrender.com/",
-  "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
-  "inLanguage": "ka",
-  "publisher": {
-    "@type": "Organization",
-    "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+  <link
+    rel="canonical"
+    href="https://arduinohub.onrender.com/"
+  >
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://arduinohub.onrender.com/">
+
+  <meta
+    property="og:title"
+    content="ArduinoHub — Arduino & Chemistry პროექტები"
+  >
+
+  <meta
+    property="og:description"
+    content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს."
+  >
+
+  <meta property="og:site_name" content="ArduinoHub">
+  <meta property="og:locale" content="ka_GE">
+
+  <meta
+    property="og:image"
+    content="https://arduinohub.onrender.com/arduinohub-icon.png"
+  >
+
+  <meta name="twitter:card" content="summary">
+
+  <meta
+    name="twitter:title"
+    content="ArduinoHub — Arduino & Chemistry პროექტები"
+  >
+
+  <meta
+    name="twitter:description"
+    content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა."
+  >
+
+  <meta
+    name="twitter:image"
+    content="https://arduinohub.onrender.com/arduinohub-icon.png"
+  >
+
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ArduinoHub",
+    "alternateName": "ArduinoChemistryHub",
+    "url": "https://arduinohub.onrender.com/",
+    "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
+    "inLanguage": "ka",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+    }
   }
-}
-</script>
+  </script>
 </head>
 
 <body data-page="home">
 
-<header class="site-header">
+  <header class="site-header">
+
+    <a
+      class="brand"
+      href="index.html"
+      aria-label="ArduinoHub მთავარი"
+    >
+      <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      aria-label="მენიუს გახსნა"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
 
-<a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
-<span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
-</a>
+    <nav>
 
-<button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">
-☰
-</button>
+      <a class="active" href="index.html">
+        მთავარი
+      </a>
 
-<nav>
+      <a href="projects.html">
+        პროექტები
+      </a>
 
-<a class="active" href="index.html">მთავარი</a>
-<a href="projects.html">პროექტები</a>
-<a href="#how-it-works">როგორ მუშაობს</a>
-<a href="team.html">ჩვენი გუნდი</a>
+      <a href="#how-it-works">
+        როგორ მუშაობს
+      </a>
 
-<button id="meeting-button" class="nav-meeting" type="button" onclick="openAttendancePanel()">
-<i data-lucide="calendar-days"></i>
-კლუბის შეკრება
-</button>
+      <a href="team.html">
+        ჩვენი გუნდი
+      </a>
 
-<a class="nav-admin" href="admin.html">
-შესვლა
-<i data-lucide="shield"></i>
-</a>
+      <button
+        id="meeting-button"
+        class="nav-meeting"
+        type="button"
+        onclick="openAttendancePanel()"
+      >
+        <i data-lucide="calendar-days"></i>
+        კლუბის შეკრება
+      </button>
 
-</nav>
-</header>
+      <a
+        class="nav-admin"
+        href="admin.html"
+      >
+        შესვლა
+        <i data-lucide="shield"></i>
+      </a>
 
-<main>
+    </nav>
 
-<section class="hero">
+  </header>
 
-<div class="hero-copy">
 
-<p class="eyebrow">ARDUINO & CHEMISTRY PROJECT COMMUNITY</p>
+  <main>
 
-<h1>
-იდეებიდან,<br>
-<em>რეალურ</em> პროექტებზე
-</h1>
+    <section class="hero">
 
-<p class="hero-text">
-ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
-</p>
+      <div class="hero-copy">
 
-<div class="hero-actions">
+        <p class="eyebrow">
+          ARDUINO & CHEMISTRY PROJECT COMMUNITY
+        </p>
 
-<div class="hero-buttons">
+        <h1>
+          იდეებიდან,<br>
+          <em>რეალურ</em> პროექტებზე
+        </h1>
+
+        <p class="hero-text">
+          ერთი სივრცე Arduino & Chemistry პროექტებისთვის —
+          დაათვალიერე საინტერესო ნამუშევრები,
+          გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
+        </p>
 
-<a class="button primary" href="projects.html">
-პროექტების ნახვა
-<i data-lucide="arrow-right"></i>
-</a>
+        <div class="hero-actions">
 
-<button
-type="button"
-id="attendance-home-btn"
-class="hero-attendance-btn"
->
-დასწრება
-<i data-lucide="calendar-check"></i>
-</button>
+          <div class="hero-buttons">
 
-</div>
+            <a
+              class="button primary"
+              href="projects.html"
+            >
+              პროექტების ნახვა
+              <i data-lucide="arrow-right"></i>
+            </a>
 
-<div class="hero-stats">
-</div>
+            <button
+              type="button"
+              id="attendance-home-btn"
+              class="hero-attendance-btn"
+            >
+              დასწრება
+              <i data-lucide="calendar-check"></i>
+            </button>
 
-</div>
+          </div>
 
-</div>
+          <div class="hero-stats"></div>
 
-</section>
+        </div>
 
-<section id="how-it-works" class="section">
+      </div>
 
-<p class="eyebrow">მარტივი პროცესი</p>
+    </section>
 
-<h2>როგორ მუშაობს Arduino & Chemistry Hub?</h2>
 
-<div class="steps">
+    <section
+      id="how-it-works"
+      class="section"
+    >
 
-<article>
-<b>01</b>
-<i data-lucide="search"></i>
-<h3>დაათვალიერე პროექტები</h3>
-<p>აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.</p>
-</article>
+      <p class="eyebrow">
+        მარტივი პროცესი
+      </p>
 
-<article>
-<b>02</b>
-<i data-lucide="lightbulb"></i>
-<h3>იპოვე ახალი იდეები</h3>
-<p>გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.</p>
-</article>
+      <h2>
+        როგორ მუშაობს Arduino & Chemistry Hub?
+      </h2>
 
-<article>
-<b>03</b>
-<i data-lucide="file-text"></i>
-<h3>გაეცანი დეტალებს</h3>
-<p>იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.</p>
-</article>
+      <div class="steps">
 
-<article>
-<b>04</b>
-<i data-lucide="graduation-cap"></i>
-<h3>ისწავლე პრაქტიკიდან</h3>
-<p>გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.</p>
-</article>
+        <article>
+          <b>01</b>
+          <i data-lucide="search"></i>
 
-</div>
-</section>
+          <h3>
+            დაათვალიერე პროექტები
+          </h3>
 
-<section id="about" class="about section">
+          <p>
+            აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.
+          </p>
+        </article>
 
-<div>
+        <article>
+          <b>02</b>
+          <i data-lucide="lightbulb"></i>
 
-<p class="eyebrow">ARDUINO•CHEMISTRY•HUB-ის შესახებ</p>
+          <h3>
+            იპოვე ახალი იდეები
+          </h3>
 
-<h2>იდეები უკეთესია, როცა გაზიარებულია.</h2>
+          <p>
+            გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.
+          </p>
+        </article>
 
-</div>
+        <article>
+          <b>03</b>
+          <i data-lucide="file-text"></i>
 
-<p>
-ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
-</p>
+          <h3>
+            გაეცანი დეტალებს
+          </h3>
 
-</section>
+          <p>
+            იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.
+          </p>
+        </article>
 
-<section class="cta">
+        <article>
+          <b>04</b>
+          <i data-lucide="graduation-cap"></i>
 
-<i data-lucide="cpu"></i>
+          <h3>
+            ისწავლე პრაქტიკიდან
+          </h3>
 
-<h2>
-აღმოაჩინე ახალი იდეები<br>
-და გაიცანი Arduino-ს შესაძლებლობები.
-</h2>
+          <p>
+            გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.
+          </p>
+        </article>
 
-<a class="button primary" href="projects.html">
-პროექტების ნახვა
-<i data-lucide="arrow-right"></i>
-</a>
+      </div>
 
-</section>
+    </section>
 
-<section class="suggestion-section">
 
-<div class="suggestion-card">
+    <section
+      id="about"
+      class="about section"
+    >
 
-<div class="suggestion-icon">
-<i data-lucide="message-square-plus"></i>
-</div>
+      <div>
 
-<div class="suggestion-content">
+        <p class="eyebrow">
+          ARDUINO•CHEMISTRY•HUB-ის შესახებ
+        </p>
 
-<p class="eyebrow">შენი აზრი მნიშვნელოვანია</p>
+        <h2>
+          იდეები უკეთესია, როცა გაზიარებულია.
+        </h2>
 
-<h2>გაქვს იდეა ArduinoHub-ისთვის?</h2>
+      </div>
 
-<p>
-მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.
-</p>
+      <p>
+        ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში:
+        აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები,
+        გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
+      </p>
 
-<button type="button" id="open-suggestion" class="button primary">
-შეფასების დატოვება
-<i data-lucide="arrow-right"></i>
-</button>
+    </section>
 
-</div>
-</div>
-</section>
 
-</main>
+    <section class="cta">
 
-<div id="suggestion-modal" class="suggestion-modal" hidden>
+      <i data-lucide="cpu"></i>
 
-<div class="suggestion-modal-backdrop" id="suggestion-backdrop"></div>
+      <h2>
+        აღმოაჩინე ახალი იდეები<br>
+        და გაიცანი Arduino-ს შესაძლებლობები.
+      </h2>
 
-<div class="suggestion-dialog">
+      <a
+        class="button primary"
+        href="projects.html"
+      >
+        პროექტების ნახვა
+        <i data-lucide="arrow-right"></i>
+      </a>
 
-<button type="button" id="close-suggestion" class="suggestion-close" aria-label="დახურვა">
-<i data-lucide="x"></i>
-</button>
+    </section>
 
-<div class="suggestion-modal-icon">
-<i data-lucide="message-square-plus"></i>
-</div>
 
-<p class="eyebrow">ARDUINOHUB</p>
+    <section class="suggestion-section">
 
-<h2>გაგვიზიარე შენი აზრი</h2>
+      <div class="suggestion-card">
 
-<p class="suggestion-description">
-დაწერე რა გინდა რომ დაემატოს, შეიცვალოს ან გაუმჯობესდეს საიტზე.
-</p>
+        <div class="suggestion-icon">
+          <i data-lucide="message-square-plus"></i>
+        </div>
 
-<textarea
-id="suggestion-message"
-maxlength="3000"
-placeholder="დაწერე შენი იდეა ან რჩევა..."
-></textarea>
+        <div class="suggestion-content">
 
-<div class="suggestion-bottom">
+          <p class="eyebrow">
+            შენი აზრი მნიშვნელოვანია
+          </p>
 
-<span id="suggestion-counter">
-0 / 3000
-</span>
+          <h2>
+            გაქვს იდეა ArduinoHub-ისთვის?
+          </h2>
 
-<button type="button" id="send-suggestion" class="button primary">
-გაგზავნა
-<i data-lucide="send"></i>
-</button>
+          <p>
+            მოგვწერე რა ფუნქციის დამატება გინდა,
+            რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.
+          </p>
 
-</div>
+          <button
+            type="button"
+            id="open-suggestion"
+            class="button primary"
+          >
+            შეფასების დატოვება
+            <i data-lucide="arrow-right"></i>
+          </button>
 
-<p id="suggestion-status"></p>
+        </div>
 
-</div>
-</div>
+      </div>
 
-<div id="meeting-modal" class="meeting-modal" hidden aria-hidden="true">
+    </section>
 
-<div class="meeting-backdrop" data-meeting-close></div>
+  </main>
 
-<section
-class="meeting-dialog"
-role="dialog"
-aria-modal="true"
-aria-labelledby="meeting-title"
->
 
-<button
-id="meeting-close"
-class="meeting-close"
-type="button"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+  <!-- SUGGESTION MODAL -->
 
-<div class="meeting-icon">
-<i data-lucide="calendar-days"></i>
-</div>
+  <div
+    id="suggestion-modal"
+    class="suggestion-modal"
+    hidden
+  >
 
-<p class="eyebrow">მოაზროვნე ქიმიკოსთა კლუბი</p>
+    <div
+      class="suggestion-modal-backdrop"
+      id="suggestion-backdrop"
+    ></div>
 
-<h2 id="meeting-title">კლუბის შეკრება</h2>
+    <div class="suggestion-dialog">
 
-<div id="meeting-content" class="meeting-content">
+      <button
+        type="button"
+        id="close-suggestion"
+        class="suggestion-close"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
 
-<div class="meeting-loading">
-<i data-lucide="loader-circle"></i>
-<span>მონაცემები იტვირთება...</span>
-</div>
+      <div class="suggestion-modal-icon">
+        <i data-lucide="message-square-plus"></i>
+      </div>
 
-</div>
+      <p class="eyebrow">
+        ARDUINOHUB
+      </p>
 
-</section>
-</div>
+      <h2>
+        გაგვიზიარე შენი აზრი
+      </h2>
 
-<div id="ai-chat" class="ai-chat">
+      <p class="suggestion-description">
+        დაწერე რა გინდა რომ დაემატოს,
+        შეიცვალოს ან გაუმჯობესდეს საიტზე.
+      </p>
 
-<section
-id="ai-chat-window"
-class="ai-chat-window"
-aria-hidden="true"
-aria-label="ArduinoHub AI ასისტენტი"
->
+      <textarea
+        id="suggestion-message"
+        maxlength="3000"
+        placeholder="დაწერე შენი იდეა ან რჩევა..."
+      ></textarea>
 
-<div class="ai-chat-header">
+      <div class="suggestion-bottom">
 
-<div class="ai-chat-title">
+        <span id="suggestion-counter">
+          0 / 3000
+        </span>
 
-<div class="ai-avatar">
-<i data-lucide="sparkles"></i>
-</div>
+        <button
+          type="button"
+          id="send-suggestion"
+          class="button primary"
+        >
+          გაგზავნა
+          <i data-lucide="send"></i>
+        </button>
 
-<div>
-<strong>ArduinoHub AI</strong>
-<span>ონლაინ ასისტენტი</span>
-</div>
+      </div>
 
-</div>
+      <p id="suggestion-status"></p>
 
-<button
-id="ai-chat-close"
-class="ai-chat-close"
-type="button"
-aria-label="ჩატის დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+    </div>
 
-</div>
+  </div>
 
-<div id="ai-chat-messages" class="ai-chat-messages">
 
-<div class="ai-message assistant">
+  <!-- ATTENDANCE MODAL -->
 
-<div class="ai-message-avatar">
-<i data-lucide="bot"></i>
-</div>
+  <div
+    id="meeting-modal"
+    class="meeting-modal"
+    hidden
+    aria-hidden="true"
+  >
 
-<div class="ai-message-bubble">
+    <div
+      class="meeting-backdrop"
+      data-meeting-close
+    ></div>
 
-<p>გამარჯობა! 👋</p>
+    <section
+      class="meeting-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="meeting-title"
+    >
 
-<p>
-მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
-</p>
+      <button
+        id="meeting-close"
+        class="meeting-close"
+        type="button"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
 
-</div>
-</div>
-</div>
+      <div class="meeting-icon">
+        <i data-lucide="calendar-days"></i>
+      </div>
 
-<form id="ai-chat-form" class="ai-chat-form">
+      <p class="eyebrow">
+        მოაზროვნე ქიმიკოსთა კლუბი
+      </p>
 
-<div class="ai-chat-input-wrap">
+      <h2 id="meeting-title">
+        კლუბის შეკრება
+      </h2>
 
-<input
-id="ai-chat-input"
-type="text"
-autocomplete="off"
-maxlength="1000"
-placeholder="დაწერე კითხვა..."
-aria-label="შეიყვანე კითხვა"
->
+      <div
+        id="meeting-content"
+        class="meeting-content"
+      >
 
-<button
-id="ai-chat-send"
-type="submit"
-aria-label="გაგზავნა"
->
-<i data-lucide="send"></i>
-</button>
+        <div class="meeting-loading">
 
-</div>
+          <i data-lucide="loader-circle"></i>
 
-<small>
-AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.
-</small>
+          <span>
+            მონაცემები იტვირთება...
+          </span>
 
-</form>
+        </div>
 
-</section>
+      </div>
 
-<button
-id="ai-chat-toggle"
-class="ai-chat-toggle"
-type="button"
-aria-label="AI ასისტენტის გახსნა"
-aria-expanded="false"
->
+    </section>
 
-<span class="ai-chat-pulse"></span>
+  </div>
 
-<i
-data-lucide="message-circle"
-class="ai-chat-icon chat-icon"
-></i>
 
-<i
-data-lucide="x"
-class="ai-chat-icon close-icon"
-></i>
+  <!-- AI CHAT -->
 
-<span class="ai-chat-badge">AI</span>
+  <div id="ai-chat" class="ai-chat">
 
-</button>
+    <section
+      id="ai-chat-window"
+      class="ai-chat-window"
+      aria-hidden="true"
+      aria-label="ArduinoHub AI ასისტენტი"
+    >
 
-</div>
+      <div class="ai-chat-header">
 
-<div id="video-modal" class="video-modal">
+        <div class="ai-chat-title">
 
-<div
-class="video-modal-backdrop"
-id="video-backdrop"
-></div>
+          <div class="ai-avatar">
+            <i data-lucide="sparkles"></i>
+          </div>
 
-<div class="video-modal-card">
+          <div>
 
-<button
-type="button"
-class="video-modal-close"
-id="video-close"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+            <strong>
+              ArduinoHub AI
+            </strong>
 
-<div class="video-device-selector">
+            <span>
+              ონლაინ ასისტენტი
+            </span>
 
-<button
-type="button"
-class="device-tab active"
-data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
->
-<i data-lucide="smartphone"></i>
-iPhone
-</button>
+          </div>
 
-<button
-type="button"
-class="device-tab"
-data-video-src=""
->
-<i data-lucide="smartphone"></i>
-Android
-</button>
+        </div>
 
-<button
-type="button"
-class="device-tab"
-data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4"
->
-<i data-lucide="laptop"></i>
-ლეპტოპი
-</button>
+        <button
+          id="ai-chat-close"
+          class="ai-chat-close"
+          type="button"
+          aria-label="ჩატის დახურვა"
+        >
+          <i data-lucide="x"></i>
+        </button>
 
-</div>
+      </div>
 
-<div class="video-container">
 
-<video id="tutorial-video" controls>
+      <div
+        id="ai-chat-messages"
+        class="ai-chat-messages"
+      >
 
-<source
-id="video-source"
-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
-type="video/mp4"
->
+        <div class="ai-message assistant">
 
-თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს.
+          <div class="ai-message-avatar">
+            <i data-lucide="bot"></i>
+          </div>
 
-</video>
+          <div class="ai-message-bubble">
 
-</div>
+            <p>
+              გამარჯობა! 👋
+            </p>
 
-</div>
-</div>
+            <p>
+              მე ვარ
+              <strong>ArduinoHub AI</strong>.
+              შემიძლია დაგეხმარო Arduino-ს,
+              ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.
+            </p>
 
-<div id="global-modal" class="meeting-modal" hidden aria-hidden="true">
+          </div>
 
-<div
-class="meeting-backdrop"
-onclick="closeGlobalModal()"
-></div>
+        </div>
 
-<div class="meeting-dialog" style="max-width: 440px;">
+      </div>
 
-<button
-class="meeting-close"
-type="button"
-onclick="closeGlobalModal()"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
 
-<div class="meeting-icon">
-<i data-lucide="megaphone"></i>
-</div>
+      <form
+        id="ai-chat-form"
+        class="ai-chat-form"
+      >
 
-<p class="eyebrow">ადმინისტრატორის პანელი</p>
+        <div class="ai-chat-input-wrap">
 
-<h2>გლობალური შეტყობინება</h2>
+          <input
+            id="ai-chat-input"
+            type="text"
+            autocomplete="off"
+            maxlength="1000"
+            placeholder="დაწერე კითხვა..."
+            aria-label="შეიყვანე კითხვა"
+          >
 
-<form
-id="global-notif-form"
-style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"
->
+          <button
+            id="ai-chat-send"
+            type="submit"
+            aria-label="გაგზავნა"
+          >
+            <i data-lucide="send"></i>
+          </button>
 
-<div>
+        </div>
 
-<label
-for="global-title"
-style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;"
->
-სათაური
-</label>
+        <small>
+          AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.
+        </small>
 
-<input
-type="text"
-id="global-title"
-placeholder="მაგ: ახალი სიახლე!"
-required
-style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;"
->
+      </form>
 
-</div>
+    </section>
 
-<div>
 
-<label
-for="global-message"
-style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;"
->
-შეტყობინება
-</label>
+    <button
+      id="ai-chat-toggle"
+      class="ai-chat-toggle"
+      type="button"
+      aria-label="AI ასისტენტის გახსნა"
+      aria-expanded="false"
+    >
 
-<textarea
-id="global-message"
-rows="4"
-placeholder="დაწერე შეტყობინების ტექსტი..."
-required
-style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;"
-></textarea>
+      <span class="ai-chat-pulse"></span>
 
-</div>
+      <i
+        data-lucide="message-circle"
+        class="ai-chat-icon chat-icon"
+      ></i>
 
-<button
-type="submit"
-class="button primary"
-style="justify-content: center; margin-top: 8px;"
->
-გაგზავნა
-<i data-lucide="send"></i>
-</button>
+      <i
+        data-lucide="x"
+        class="ai-chat-icon close-icon"
+      ></i>
 
-</form>
+      <span class="ai-chat-badge">
+        AI
+      </span>
 
-</div>
-</div>
+    </button>
 
-<div id="countdown-modal" class="countdown-modal" hidden aria-hidden="true">
+  </div>
 
-<div class="countdown-backdrop"></div>
 
-<section
-class="countdown-dialog"
-role="dialog"
-aria-modal="true"
-aria-labelledby="countdown-form-title"
->
+  <!-- VIDEO MODAL -->
 
-<button
-id="countdown-close"
-class="countdown-close"
-type="button"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+  <div id="video-modal" class="video-modal">
 
-<div class="countdown-icon">
-<i data-lucide="timer"></i>
-</div>
+    <div
+      class="video-modal-backdrop"
+      id="video-backdrop"
+    ></div>
 
-<p class="eyebrow">ARDUINOHUB</p>
+    <div class="video-modal-card">
 
-<h2 id="countdown-form-title">ახალი Countdown</h2>
+      <button
+        type="button"
+        class="video-modal-close"
+        id="video-close"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
 
-<form id="countdown-form">
+      <div class="video-device-selector">
 
-<div class="countdown-field">
+        <button
+          type="button"
+          class="device-tab active"
+          data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
+        >
+          <i data-lucide="smartphone"></i>
+          iPhone
+        </button>
 
-<label for="countdown-title">
-სათაური
-</label>
+        <button
+          type="button"
+          class="device-tab"
+          data-video-src=""
+        >
+          <i data-lucide="smartphone"></i>
+          Android
+        </button>
 
-<input
-id="countdown-title"
-type="text"
-maxlength="100"
-placeholder="მაგ: კლუბის შეხვედრა"
-required
->
+        <button
+          type="button"
+          class="device-tab"
+          data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4"
+        >
+          <i data-lucide="laptop"></i>
+          ლეპტოპი
+        </button>
 
-</div>
+      </div>
 
-<div class="countdown-field">
+      <div class="video-container">
 
-<label for="countdown-message">
-ტექსტი
-</label>
+        <video
+          id="tutorial-video"
+          controls
+        >
 
-<textarea
-id="countdown-message"
-maxlength="500"
-rows="3"
-placeholder="მაგ: შეხვედრამდე დარჩა..."
-required
-></textarea>
+          <source
+            id="video-source"
+            src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4"
+            type="video/mp4"
+          >
 
-</div>
+          თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს.
 
-<div class="countdown-field">
+        </video>
 
-<label for="countdown-date">
-თარიღი და დრო
-</label>
+      </div>
 
-<input
-id="countdown-date"
-type="datetime-local"
-required
->
+    </div>
 
-</div>
+  </div>
 
-<div id="countdown-form-status"></div>
 
-<button
-type="submit"
-class="button primary countdown-submit"
->
-დაწყება
-<i data-lucide="timer"></i>
-</button>
+  <!-- GLOBAL NOTIFICATION -->
 
-</form>
+  <div
+    id="global-modal"
+    class="meeting-modal"
+    hidden
+    aria-hidden="true"
+  >
 
-</section>
-</div>
+    <div
+      class="meeting-backdrop"
+      onclick="closeGlobalModal()"
+    ></div>
 
-<div id="active-countdown" class="active-countdown" hidden>
+    <div
+      class="meeting-dialog"
+      style="max-width: 440px;"
+    >
 
-<div class="active-countdown-backdrop"></div>
+      <button
+        class="meeting-close"
+        type="button"
+        onclick="closeGlobalModal()"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
 
-<section
-class="active-countdown-dialog"
-role="dialog"
-aria-modal="true"
-aria-labelledby="active-countdown-title"
->
+      <div class="meeting-icon">
+        <i data-lucide="megaphone"></i>
+      </div>
 
-<button
-id="active-countdown-close"
-class="active-countdown-close"
-type="button"
-aria-label="დახურვა"
->
-<i data-lucide="x"></i>
-</button>
+      <p class="eyebrow">
+        ადმინისტრატორის პანელი
+      </p>
 
-<div class="active-countdown-icon">
-<i data-lucide="timer"></i>
-</div>
+      <h2>
+        გლობალური შეტყობინება
+      </h2>
 
-<p class="eyebrow">ARDUINOHUB</p>
+      <form
+        id="global-notif-form"
+        style="display:flex;flex-direction:column;gap:12px;margin-top:16px;"
+      >
 
-<h2 id="active-countdown-title"></h2>
+        <div>
 
-<p id="active-countdown-message"></p>
+          <label
+            for="global-title"
+            style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"
+          >
+            სათაური
+          </label>
 
-<div class="countdown-timer">
+          <input
+            type="text"
+            id="global-title"
+            placeholder="მაგ: ახალი სიახლე!"
+            required
+            style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;font-family:inherit;"
+          >
 
-<div class="countdown-unit">
-<strong id="countdown-days">00</strong>
-<span>დღე</span>
-</div>
+        </div>
 
-<div class="countdown-separator">:</div>
+        <div>
 
-<div class="countdown-unit">
-<strong id="countdown-hours">00</strong>
-<span>საათი</span>
-</div>
+          <label
+            for="global-message"
+            style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;"
+          >
+            შეტყობინება
+          </label>
 
-<div class="countdown-separator">:</div>
+          <textarea
+            id="global-message"
+            rows="4"
+            placeholder="დაწერე შეტყობინების ტექსტი..."
+            required
+            style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;resize:vertical;font-family:inherit;"
+          ></textarea>
 
-<div class="countdown-unit">
-<strong id="countdown-minutes">00</strong>
-<span>წუთი</span>
-</div>
+        </div>
 
-<div class="countdown-separator">:</div>
+        <button
+          type="submit"
+          class="button primary"
+          style="justify-content:center;margin-top:8px;"
+        >
+          გაგზავნა
+          <i data-lucide="send"></i>
+        </button>
 
-<div class="countdown-unit">
-<strong id="countdown-seconds">00</strong>
-<span>წამი</span>
-</div>
+      </form>
 
-</div>
+    </div>
 
-</section>
-</div>
+  </div>
 
-<footer>
 
-<a class="brand" href="index.html">
-<span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
-</a>
+  <!-- COUNTDOWN CREATE MODAL -->
 
-<p>
-Arduino&Chemistry პროექტები ერთ სივრცეში
-</p>
+  <div
+    id="countdown-modal"
+    class="countdown-modal"
+    hidden
+    aria-hidden="true"
+  >
 
-<div class="footer-credit">
-<span>მოაზროვნე ქიმიკოსთა კლუბი</span>
-</div>
+    <div class="countdown-backdrop"></div>
 
-<small>
-© <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
-</small>
+    <section
+      class="countdown-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="countdown-form-title"
+    >
 
-</footer>
+      <button
+        id="countdown-close"
+        class="countdown-close"
+        type="button"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
 
-<script src="https://unpkg.com/lucide@latest"></script>
-<script type="module" src="script.js"></script>
+      <div class="countdown-icon">
+        <i data-lucide="timer"></i>
+      </div>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+      <p class="eyebrow">
+        ARDUINOHUB
+      </p>
 
-<script type="text/javascript">
-(function(){
-  emailjs.init("KHWLmDgpVWvHs72r4")
-})()
-</script>
+      <h2 id="countdown-form-title">
+        ახალი Countdown
+      </h2>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+      <form id="countdown-form">
 
-  const attendanceButton = document.getElementById("attendance-home-btn")
+        <div class="countdown-field">
 
-  if (attendanceButton) {
-    attendanceButton.addEventListener("click", () => {
-      if (typeof openPublicAttendanceModal === "function") {
-        openPublicAttendanceModal()
+          <label for="countdown-title">
+            სათაური
+          </label>
+
+          <input
+            id="countdown-title"
+            type="text"
+            maxlength="100"
+            placeholder="მაგ: კლუბის შეხვედრა"
+            required
+          >
+
+        </div>
+
+        <div class="countdown-field">
+
+          <label for="countdown-message">
+            ტექსტი
+          </label>
+
+          <textarea
+            id="countdown-message"
+            maxlength="500"
+            rows="3"
+            placeholder="მაგ: შეხვედრამდე დარჩა..."
+            required
+          ></textarea>
+
+        </div>
+
+        <div class="countdown-field">
+
+          <label for="countdown-date">
+            თარიღი და დრო
+          </label>
+
+          <input
+            id="countdown-date"
+            type="datetime-local"
+            required
+          >
+
+        </div>
+
+        <div id="countdown-form-status"></div>
+
+        <button
+          type="submit"
+          class="button primary countdown-submit"
+        >
+          დაწყება
+          <i data-lucide="timer"></i>
+        </button>
+
+      </form>
+
+    </section>
+
+  </div>
+
+
+  <!-- ACTIVE COUNTDOWN -->
+
+  <div
+    id="active-countdown"
+    class="active-countdown"
+    hidden
+  >
+
+    <div class="active-countdown-backdrop"></div>
+
+    <section
+      class="active-countdown-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="active-countdown-title"
+    >
+
+      <button
+        id="active-countdown-close"
+        class="active-countdown-close"
+        type="button"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="active-countdown-icon">
+        <i data-lucide="timer"></i>
+      </div>
+
+      <p class="eyebrow">
+        ARDUINOHUB
+      </p>
+
+      <h2 id="active-countdown-title"></h2>
+
+      <p id="active-countdown-message"></p>
+
+      <div class="countdown-timer">
+
+        <div class="countdown-unit">
+          <strong id="countdown-days">00</strong>
+          <span>დღე</span>
+        </div>
+
+        <div class="countdown-separator">
+          :
+        </div>
+
+        <div class="countdown-unit">
+          <strong id="countdown-hours">00</strong>
+          <span>საათი</span>
+        </div>
+
+        <div class="countdown-separator">
+          :
+        </div>
+
+        <div class="countdown-unit">
+          <strong id="countdown-minutes">00</strong>
+          <span>წუთი</span>
+        </div>
+
+        <div class="countdown-separator">
+          :
+        </div>
+
+        <div class="countdown-unit">
+          <strong id="countdown-seconds">00</strong>
+          <span>წამი</span>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <!-- 🎂 BIRTHDAY MODAL -->
+
+  <div
+    id="birthday-modal"
+    class="birthday-modal"
+    hidden
+    aria-hidden="true"
+  >
+
+    <div
+      id="birthday-confetti"
+      class="birthday-confetti"
+    ></div>
+
+    <div
+      id="birthday-ribbons"
+      class="birthday-ribbons"
+    ></div>
+
+    <div class="birthday-backdrop"></div>
+
+    <section
+      class="birthday-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="birthday-title"
+    >
+
+      <button
+        id="birthday-close"
+        class="birthday-close"
+        type="button"
+        aria-label="დახურვა"
+      >
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="birthday-glow"></div>
+
+      <div class="birthday-icon">
+        🎂
+      </div>
+
+      <p class="birthday-eyebrow">
+        🎉 ARDUINOHUB 🎉
+      </p>
+
+      <h2 id="birthday-title">
+        გილოცავთ დაბადების დღეს!
+      </h2>
+
+      <div
+        id="birthday-name"
+        class="birthday-name"
+      ></div>
+
+      <div
+        id="birthday-message"
+        class="birthday-message"
+      ></div>
+
+      <div class="birthday-decoration">
+        <span>🎈</span>
+        <span>🎉</span>
+        <span>🎁</span>
+        <span>✨</span>
+        <span>🎈</span>
+      </div>
+
+      <button
+        id="birthday-finish"
+        type="button"
+        class="birthday-finish"
+      >
+        გმადლობ! 🎉
+      </button>
+
+    </section>
+
+  </div>
+
+
+  <footer>
+
+    <a
+      class="brand"
+      href="index.html"
+    >
+      <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
+    </a>
+
+    <p>
+      Arduino&Chemistry პროექტები ერთ სივრცეში
+    </p>
+
+    <div class="footer-credit">
+      <span>
+        მოაზროვნე ქიმიკოსთა კლუბი
+      </span>
+    </div>
+
+    <small>
+      © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.
+    </small>
+
+  </footer>
+
+
+  <!-- LIBRARIES -->
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script
+    type="module"
+    src="script.js"
+  ></script>
+
+  <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+  ></script>
+
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("KHWLmDgpVWvHs72r4")
+    })()
+  </script>
+
+
+  <!-- ATTENDANCE BUTTON -->
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const attendanceButton =
+        document.getElementById("attendance-home-btn")
+
+      if (attendanceButton) {
+
+        attendanceButton.addEventListener("click", () => {
+
+          if (typeof openPublicAttendanceModal === "function") {
+            openPublicAttendanceModal()
+          }
+
+        })
+
       }
-    })
-  }
 
-  const openBtn = document.getElementById("openBugModalBtn")
-  const closeBtn = document.getElementById("closeBugModalBtn")
-  const overlay = document.getElementById("bugModalOverlay")
-  const form = document.getElementById("bugReportForm")
-  const statusText = document.getElementById("bugFormStatus")
 
-  if(openBtn && closeBtn && overlay && form) {
+      const openBtn =
+        document.getElementById("openBugModalBtn")
 
-    openBtn.addEventListener("click", () => {
-      overlay.style.display = "grid"
-    })
+      const closeBtn =
+        document.getElementById("closeBugModalBtn")
 
-    closeBtn.addEventListener("click", () => {
-      overlay.style.display = "none"
-    })
+      const overlay =
+        document.getElementById("bugModalOverlay")
 
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) {
-        overlay.style.display = "none"
-      }
-    })
+      const form =
+        document.getElementById("bugReportForm")
 
-    form.addEventListener("submit", async (e) => {
+      const statusText =
+        document.getElementById("bugFormStatus")
 
-      e.preventDefault()
 
-      statusText.style.color = "#4ade80"
-      statusText.textContent = "იგზავნება..."
+      if (
+        openBtn &&
+        closeBtn &&
+        overlay &&
+        form
+      ) {
 
-      const templateParams = {
-        title: "ხარვეზის შეტყობინება",
-        bug_title: document.getElementById("bugTitle").value,
-        message: document.getElementById("bugMessage").value,
-        from_name: document.getElementById("bugTitle").value
-      }
+        openBtn.addEventListener("click", () => {
+          overlay.style.display = "grid"
+        })
 
-      try {
 
-        await emailjs.send(
-          'service_rofiyqg',
-          'template_mhmwkcj',
-          templateParams
-        )
-
-        statusText.style.color = "#4ade80"
-        statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა."
-
-        form.reset()
-
-        setTimeout(() => {
+        closeBtn.addEventListener("click", () => {
           overlay.style.display = "none"
-          statusText.textContent = ""
-        }, 2500)
+        })
 
-      } catch (error) {
 
-        statusText.style.color = "#f87171"
-        statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
+        overlay.addEventListener("click", (e) => {
+
+          if (e.target === overlay) {
+            overlay.style.display = "none"
+          }
+
+        })
+
+
+        form.addEventListener("submit", async (e) => {
+
+          e.preventDefault()
+
+          statusText.style.color = "#4ade80"
+          statusText.textContent = "იგზავნება..."
+
+
+          const templateParams = {
+
+            title: "ხარვეზის შეტყობინება",
+
+            bug_title:
+              document.getElementById("bugTitle").value,
+
+            message:
+              document.getElementById("bugMessage").value,
+
+            from_name:
+              document.getElementById("bugTitle").value
+
+          }
+
+
+          try {
+
+            await emailjs.send(
+              "service_rofiyqg",
+              "template_mhmwkcj",
+              templateParams
+            )
+
+
+            statusText.style.color = "#4ade80"
+
+            statusText.textContent =
+              "მადლობა! შეტყობინება მეილზე გაიგზავნა."
+
+
+            form.reset()
+
+
+            setTimeout(() => {
+
+              overlay.style.display = "none"
+
+              statusText.textContent = ""
+
+            }, 2500)
+
+
+          } catch (error) {
+
+            statusText.style.color = "#f87171"
+
+            statusText.textContent =
+              "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
+
+          }
+
+        })
 
       }
+
     })
-  }
-})
-</script>
+  </script>
 
-<style>
-.bug-float-btn {
-  position: fixed;
-  left: 20px;
-  bottom: 20px;
-  z-index: 999;
-  background: linear-gradient(135deg, #059669, #047857);
-  color: #fff;
-  border: 1px solid #34d399;
-  padding: 10px 16px;
-  border-radius: 30px;
-  font: 700 13px Inter, sans-serif;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s, background 0.2s;
-}
 
-.bug-float-btn:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #10b981, #059669);
-}
+  <!-- BUG REPORT STYLES -->
 
-.bug-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 7, 5, 0.85);
-  backdrop-filter: blur(5px);
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-}
+  <style>
 
-.bug-modal-card {
-  width: 100%;
-  max-width: 420px;
-  background: linear-gradient(145deg, #062417, #02130c);
-  border: 1px solid #065f46;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  color: #ecfdf5;
-  font-family: Inter, sans-serif;
-}
+    .bug-float-btn {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 999;
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff;
+      border: 1px solid #34d399;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font: 700 13px Inter, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition:
+        transform 0.2s,
+        background 0.2s;
+    }
 
-.bug-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
 
-.bug-modal-header h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #34d399;
-}
+    .bug-float-btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
 
-.bug-close-btn {
-  background: none;
-  border: none;
-  color: #6ee7b7;
-  font-size: 24px;
-  cursor: pointer;
-}
 
-.bug-close-btn:hover {
-  color: #fff;
-}
+    .bug-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 5, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
 
-.bug-form-group {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
 
-.bug-form-group label {
-  font-size: 12px;
-  color: #a7f3d0;
-}
+    .bug-modal-card {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(145deg, #062417, #02130c);
+      border: 1px solid #065f46;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      color: #ecfdf5;
+      font-family: Inter, sans-serif;
+    }
 
-.bug-form-group input,
-.bug-form-group textarea {
-  width: 100%;
-  padding: 10px 12px;
-  background: #021c12;
-  border: 1px solid #047857;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 13px;
-  outline: none;
-}
 
-.bug-form-group input:focus,
-.bug-form-group textarea:focus {
-  border-color: #34d399;
-}
+    .bug-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-.bug-submit-btn {
-  width: 100%;
-  padding: 11px;
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 5px;
-}
 
-.bug-submit-btn:hover {
-  opacity: 0.9;
-}
+    .bug-modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #34d399;
+    }
 
-.bug-status-text {
-  font-size: 12px;
-  text-align: center;
-  margin-top: 10px;
-}
-</style>
+
+    .bug-close-btn {
+      background: none;
+      border: none;
+      color: #6ee7b7;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+
+    .bug-close-btn:hover {
+      color: #fff;
+    }
+
+
+    .bug-form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+
+    .bug-form-group label {
+      font-size: 12px;
+      color: #a7f3d0;
+    }
+
+
+    .bug-form-group input,
+    .bug-form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      background: #021c12;
+      border: 1px solid #047857;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+
+    .bug-form-group input:focus,
+    .bug-form-group textarea:focus {
+      border-color: #34d399;
+    }
+
+
+    .bug-submit-btn {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+
+    .bug-submit-btn:hover {
+      opacity: 0.9;
+    }
+
+
+    .bug-status-text {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+
+    /* ============================= */
+    /* 🎂 BIRTHDAY MODAL             */
+    /* ============================= */
+
+    .birthday-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+
+    .birthday-modal[hidden] {
+      display: none;
+    }
+
+
+    .birthday-backdrop {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(34, 211, 149, 0.12),
+          rgba(0, 0, 0, 0.88) 65%
+        );
+      backdrop-filter: blur(8px);
+    }
+
+
+    .birthday-dialog {
+      position: relative;
+      width: min(100%, 540px);
+      padding: 48px 38px 36px;
+      border-radius: 30px;
+      text-align: center;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        linear-gradient(
+          145deg,
+          #09251b,
+          #03120d 55%,
+          #061b13
+        );
+      border: 1px solid rgba(34, 211, 149, 0.45);
+      box-shadow:
+        0 35px 100px rgba(0, 0, 0, 0.75),
+        0 0 70px rgba(34, 211, 149, 0.12);
+      animation: birthday-dialog-in 0.65s cubic-bezier(.16, 1, .3, 1);
+    }
+
+
+    .birthday-dialog::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          120deg,
+          transparent 20%,
+          rgba(255,255,255,0.04),
+          transparent 80%
+        );
+      pointer-events: none;
+    }
+
+
+    .birthday-glow {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: rgba(34, 211, 149, 0.18);
+      filter: blur(60px);
+      z-index: -1;
+    }
+
+
+    .birthday-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      color: #d1fae5;
+      cursor: pointer;
+      transition:
+        transform 0.2s,
+        background 0.2s;
+    }
+
+
+    .birthday-close:hover {
+      transform: rotate(90deg);
+      background: rgba(255,255,255,0.1);
+    }
+
+
+    .birthday-icon {
+      width: 105px;
+      height: 105px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 58px;
+      background:
+        radial-gradient(
+          circle,
+          rgba(34, 211, 149, 0.22),
+          rgba(34, 211, 149, 0.04)
+        );
+      border: 1px solid rgba(34, 211, 149, 0.3);
+      box-shadow:
+        0 0 35px rgba(34, 211, 149, 0.15);
+      animation: birthday-icon-float 2.4s ease-in-out infinite;
+    }
+
+
+    .birthday-eyebrow {
+      margin: 0 0 10px;
+      color: #6ee7b7;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+
+    #birthday-title {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(27px, 5vw, 42px);
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+
+    .birthday-name {
+      margin-top: 13px;
+      color: #34d399;
+      font-size: clamp(23px, 4vw, 32px);
+      font-weight: 800;
+      text-shadow:
+        0 0 25px rgba(34, 211, 149, 0.25);
+    }
+
+
+    .birthday-message {
+      max-width: 420px;
+      margin: 20px auto 0;
+      color: #d1d5db;
+      font-size: 16px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+
+    .birthday-decoration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 25px 0;
+      font-size: 25px;
+    }
+
+
+    .birthday-decoration span {
+      display: inline-block;
+      animation: birthday-decoration 1.8s ease-in-out infinite;
+    }
+
+
+    .birthday-decoration span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+
+    .birthday-decoration span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+
+    .birthday-decoration span:nth-child(4) {
+      animation-delay: 0.45s;
+    }
+
+
+    .birthday-decoration span:nth-child(5) {
+      animation-delay: 0.6s;
+    }
+
+
+    .birthday-finish {
+      border: none;
+      padding: 13px 25px;
+      border-radius: 14px;
+      background: linear-gradient(
+        135deg,
+        #059669,
+        #22c55e
+      );
+      color: white;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow:
+        0 10px 30px rgba(34, 197, 94, 0.18);
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    }
+
+
+    .birthday-finish:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 15px 35px rgba(34, 197, 94, 0.28);
+    }
+
+
+    /* CONFETTI */
+
+    .birthday-confetti,
+    .birthday-ribbons {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+
+    .birthday-confetti-piece {
+      position: absolute;
+      top: -30px;
+      width: 9px;
+      height: 18px;
+      border-radius: 2px;
+      animation:
+        birthday-confetti-fall
+        linear
+        forwards;
+    }
+
+
+    .birthday-ribbon {
+      position: absolute;
+      top: -100px;
+      width: 10px;
+      height: 90px;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation:
+        birthday-ribbon-fall
+        ease-in
+        forwards;
+    }
+
+
+    @keyframes birthday-dialog-in {
+
+      from {
+        opacity: 0;
+        transform:
+          translateY(40px)
+          scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform:
+          translateY(0)
+          scale(1);
+      }
+
+    }
+
+
+    @keyframes birthday-icon-float {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(2deg);
+      }
+
+    }
+
+
+    @keyframes birthday-decoration {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(8deg);
+      }
+
+    }
+
+
+    @keyframes birthday-confetti-fall {
+
+      0% {
+        transform:
+          translateY(-40px)
+          rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translateY(110vh)
+          rotate(720deg);
+        opacity: 0;
+      }
+
+    }
+
+
+    @keyframes birthday-ribbon-fall {
+
+      0% {
+        transform:
+          translateY(-100px)
+          rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.9;
+      }
+
+      100% {
+        transform:
+          translateY(115vh)
+          rotate(540deg);
+        opacity: 0;
+      }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+      .birthday-modal {
+        padding: 12px;
+      }
+
+
+      .birthday-dialog {
+        padding:
+          40px
+          22px
+          28px;
+        border-radius: 24px;
+      }
+
+
+      .birthday-icon {
+        width: 85px;
+        height: 85px;
+        font-size: 45px;
+      }
+
+
+      .birthday-decoration {
+        gap: 9px;
+        font-size: 21px;
+      }
+
+
+      .birthday-message {
+        font-size: 14px;
+      }
+
+    }
+
+  </style>
 
 </body>
+
 </html>
