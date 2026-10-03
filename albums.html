@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ka">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07110f">
+  <title>ფოტოალბომები — ArduinoHub</title>
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root{color-scheme:dark;--bg:#07110f;--panel:#0d1b16;--panel2:#10231b;--green:#22d395;--mint:#a7f3d0;--muted:#91a69b;--line:rgba(34,211,149,.17);--white:#f0fdf4}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at 50% -15%,rgba(34,211,149,.12),transparent 45%),var(--bg);color:var(--white);font-family:FiraGO,Inter,sans-serif;min-height:100vh}
+    a{color:inherit;text-decoration:none}
+    button,input,textarea{font:inherit}
+    .wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+    header{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center}
+    .head{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{font-family:Inter,sans-serif;font-weight:800;letter-spacing:-.5px}.brand span{color:var(--green)}
+    .back{display:inline-flex;align-items:center;gap:8px;color:var(--mint);font-size:14px}
+    main{padding:62px 0 90px}
+    .eyebrow{color:var(--green);font:700 11px Inter,sans-serif;letter-spacing:2px;text-transform:uppercase}
+    h1{font-size:clamp(32px,5vw,52px);line-height:1.12;margin:12px 0}
+    .intro{max-width:650px;color:#a7b9af;line-height:1.75;margin:0}
+    .top{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:34px}
+    .primary,.secondary,.danger{border-radius:12px;padding:12px 17px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-weight:700;border:1px solid transparent;transition:.2s}
+    .primary{background:linear-gradient(135deg,#059669,#22d395);color:#042016}
+    .primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+    .secondary{background:#10231b;color:var(--mint);border-color:var(--line)}
+    .danger{background:rgba(248,113,113,.08);color:#fca5a5;border-color:rgba(248,113,113,.25)}
+    button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .admin-tools{display:none;gap:10px;flex-wrap:wrap;margin:0 0 24px}
+    .admin-tools.show{display:flex}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+    .album{border:1px solid var(--line);background:linear-gradient(145deg,rgba(16,35,27,.96),rgba(8,20,15,.96));border-radius:20px;overflow:hidden;min-width:0;transition:transform .22s,border-color .22s}
+    .album:hover{transform:translateY(-4px);border-color:rgba(34,211,149,.45)}
+    .cover{height:210px;background:#10231b;position:relative;overflow:hidden;cursor:pointer}
+    .cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+    .album:hover .cover img{transform:scale(1.04)}
+    .cover-empty{height:100%;display:grid;place-items:center;color:#4b8068;background:radial-gradient(circle,rgba(34,211,149,.1),transparent 65%)}
+    .cover-empty i{width:46px;height:46px}
+    .album-info{padding:18px}
+    .album-info h2{font-size:19px;margin:0 0 8px}
+    .album-info p{font-size:13px;color:var(--muted);line-height:1.6;margin:0;min-height:21px}
+    .album-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:17px}
+    .count{font-size:12px;color:var(--mint);display:flex;align-items:center;gap:6px}
+    .album-actions{display:flex;gap:7px}
+    .icon-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#10231b;color:var(--mint);display:grid;place-items:center;cursor:pointer}
+    .icon-btn:hover{border-color:var(--green)}
+    .empty,.loading{border:1px dashed rgba(34,211,149,.25);border-radius:18px;padding:45px 20px;text-align:center;color:var(--muted);grid-column:1/-1}
+    .empty i{color:var(--green);width:38px;height:38px;margin-bottom:12px}
+    .empty strong{display:block;color:var(--white);margin-bottom:7px}
+    .gallery{display:none;margin-top:38px;border-top:1px solid var(--line);padding-top:30px}
+    .gallery.show{display:block}
+    .gallery-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:20px}
+    .gallery-head h2{font-size:25px;margin:0}
+    .photos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .photo{position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:#10231b;border:1px solid var(--line)}
+    .photo img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+    .photo .delete-photo{position:absolute;top:8px;right:8px;display:none}
+    .photo.admin .delete-photo{display:grid}
+    .photo-caption{position:absolute;bottom:0;left:0;right:0;padding:22px 10px 10px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:12px;pointer-events:none}
+    .modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);display:none;place-items:center;padding:18px}
+    .modal.show{display:grid}
+    .dialog{width:min(100%,480px);max-height:90vh;overflow:auto;background:linear-gradient(145deg,#10231b,#07110f);border:1px solid rgba(34,211,149,.3);border-radius:22px;padding:26px;box-shadow:0 25px 90px #0009}
+    .dialog h2{margin:0 0 20px;font-size:23px}
+    .field{display:grid;gap:7px;margin-bottom:15px}
+    .field label{font-size:13px;color:var(--mint);font-weight:700}
+    .field input,.field textarea{width:100%;border:1px solid var(--line);background:#06130e;color:white;border-radius:11px;padding:12px;outline:none}
+    .field input:focus,.field textarea:focus{border-color:var(--green)}
+    .field textarea{resize:vertical;min-height:90px}
+    .dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
+    .status{font-size:13px;color:var(--mint);min-height:18px;margin-top:8px}
+    .lightbox{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;padding:65px 70px}
+    .lightbox.show{display:flex}
+    .lightbox img{max-width:100%;max-height:100%;object-fit:contain}
+    .lightbox button{position:absolute;border:1px solid #ffffff30;background:#10231b;color:white;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;cursor:pointer}
+    #light-close{top:18px;right:18px}#light-prev{left:18px}#light-next{right:18px}
+    footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:12px}
+    @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.photos{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:600px){.wrap{width:min(100% - 28px,1160px)}header{height:64px}main{padding:42px 0 65px}.top{align-items:start;flex-direction:column}.grid{grid-template-columns:1fr}.cover{height:220px}.photos{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery-head{align-items:start;flex-direction:column}.lightbox{padding:60px 48px}.dialog{padding:22px}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap head">
+    <a class="brand" href="index.html">ArduinoChemistry<span>Hub</span></a>
+    <a class="back" href="index.html"><i data-lucide="arrow-left"></i> მთავარზე დაბრუნება</a>
+  </div></header>
+  <main class="wrap">
+    <div class="top">
+      <div>
+        <p class="eyebrow">ARDUINOHUB • GALLERY</p>
+        <h1>ფოტოალბომები</h1>
+        <p class="intro">კლუბის შეხვედრების, პროექტებისა და ღონისძიებების მოგონებები ერთ სივრცეში.</p>
+      </div>
+      <button id="create-open" class="primary" style="display:none"><i data-lucide="plus"></i> ალბომის შექმნა</button>
+    </div>
+    <div id="admin-tools" class="admin-tools">
+      <button id="upload-open" class="secondary" disabled><i data-lucide="upload"></i> ფოტოების ატვირთვა</button>
+      <span id="admin-label" style="align-self:center;color:var(--muted);font-size:12px"></span>
+    </div>
+    <section id="album-grid" class="grid"><div class="loading">ალბომები იტვირთება...</div></section>
+    <section id="gallery" class="gallery">
+      <div class="gallery-head">
+        <div><p class="eyebrow">ALBUM</p><h2 id="gallery-title"></h2><p id="gallery-description" class="intro" style="font-size:13px;margin-top:7px"></p></div>
+        <button id="gallery-close" class="secondary"><i data-lucide="arrow-up"></i> ალბომებზე დაბრუნება</button>
+      </div>
+      <div id="photo-grid" class="photos"></div>
+    </section>
+  </main>
+  <footer><div class="wrap">© <span id="year"></span> ArduinoHub</div></footer>
+
+  <div id="album-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="album-modal-title">
+    <form id="album-form" class="dialog">
+      <h2 id="album-modal-title">ახალი ალბომი</h2>
+      <div class="field"><label for="album-name">ალბომის სახელი</label><input id="album-name" maxlength="100" required placeholder="მაგ: 2026 წლის შეხვედრები"></div>
+      <div class="field"><label for="album-desc">აღწერა (არასავალდებულო)</label><textarea id="album-desc" maxlength="500" placeholder="მოკლე აღწერა..."></textarea></div>
+      <div id="album-status" class="status"></div>
+      <div class="dialog-actions"><button type="button" class="secondary" data-close="album-modal">გაუქმება</button><button class="primary" type="submit">შექმნა</button></div>
+    </form>
+  </div>
+
+  <div id="upload-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="upload-modal-title">
+    <form id="upload-form" class="dialog">
+      <h2 id="upload-modal-title">ფოტოების ატვირთვა</h2>
+      <div class="field"><label for="upload-album">ალბომი</label><select id="upload-album" required style="width:100%;padding:12px;border-radius:11px;background:#06130e;color:white;border:1px solid var(--line)"></select></div>
+      <div class="field"><label for="photo-files">ფოტოები (შეგიძლია რამდენიმე მონიშნო)</label><input id="photo-files" type="file" accept="image/*" multiple required></div>
+      <div class="field"><label for="photo-caption">საერთო წარწერა (არასავალდებულო)</label><input id="photo-caption" maxlength="160" placeholder="მაგ: კლუბის შეხვედრა"></div>
+      <div id="upload-status" class="status"></div>
+      <div class="dialog-actions"><button type="button" class="secondary" data-close="upload-modal">გაუქმება</button><button id="upload-submit" class="primary" type="submit">ატვირთვა</button></div>
+    </form>
+  </div>
+
+  <div id="lightbox" class="lightbox" aria-label="ფოტოს ნახვა">
+    <button id="light-close" aria-label="დახურვა"><i data-lucide="x"></i></button>
+    <button id="light-prev" aria-label="წინა ფოტო"><i data-lucide="chevron-left"></i></button>
+    <img id="light-image" alt="ალბომის ფოტო">
+    <button id="light-next" aria-label="შემდეგი ფოტო"><i data-lucide="chevron-right"></i></button>
+  </div>
+
+  <script>
+    const supabaseClient = window.supabase.createClient(
+      "https://ywxunhvrwdtlqjfshiyj.supabase.co",
+      "sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
+    )
+    const BUCKET = "album-photos"
+    const $ = id => document.getElementById(id)
+    let albums = []
+    let currentAlbum = null
+    let currentPhotos = []
+    let isAdmin = false
+    let lightIndex = 0
+
+    function showModal(id){$(id).classList.add("show")}
+    function hideModal(id){$(id).classList.remove("show")}
+    function escapeHtml(value=""){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]))}
+    function notify(id,message){$(id).textContent=message}
+    function storageUrl(path){return supabaseClient.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}
+
+    async function checkAdmin(){
+      const {data:{user}}=await supabaseClient.auth.getUser()
+      if(!user)return false
+      const {data,error}=await supabaseClient.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle()
+      if(error){console.warn("Admin check:",error.message);return false}
+      return Boolean(data)
+    }
+
+    async function loadAlbums(){
+      const {data,error}=await supabaseClient.from("photo_albums").select("id,title,description,created_at").order("created_at",{ascending:false})
+      if(error){$("album-grid").innerHTML='<div class="empty"><strong>ალბომების ჩატვირთვა ვერ მოხერხდა</strong><span>'+escapeHtml(error.message)+'</span><p>ჯერ შეასრულე მოწოდებული SQL კოდი Supabase-ში.</p></div>';return}
+      albums=data||[]
+      await renderAlbums()
+      const select=$("upload-album")
+      select.innerHTML=albums.map(a=>'<option value="'+escapeHtml(a.id)+'">'+escapeHtml(a.title)+'</option>').join("")
+      $("upload-open").disabled=albums.length===0
+    }
+
+    async function renderAlbums(){
+      const grid=$("album-grid")
+      if(!albums.length){grid.innerHTML='<div class="empty"><i data-lucide="images"></i><strong>ჯერ ალბომი არ არის</strong><span>ადმინისტრატორს შეუძლია პირველი ალბომის შექმნა.</span></div>';lucide.createIcons();return}
+      const ids=albums.map(a=>a.id)
+      const {data:photos}=await supabaseClient.from("album_photos").select("album_id,storage_path").in("album_id",ids)
+      const counts={}
+      ;(photos||[]).forEach(p=>{counts[p.album_id]=(counts[p.album_id]||0)+1})
+      grid.innerHTML=albums.map(a=>{
+        const cover=(photos||[]).find(p=>p.album_id===a.id)
+        const image=cover?'<img src="'+escapeHtml(storageUrl(cover.storage_path))+'" alt="'+escapeHtml(a.title)+'" loading="lazy">':'<div class="cover-empty"><i data-lucide="images"></i></div>'
+        const actions=isAdmin?'<div class="album-actions"><button class="icon-btn" data-edit="'+escapeHtml(a.id)+'" title="სახელის შეცვლა"><i data-lucide="pencil"></i></button><button class="icon-btn" data-delete="'+escapeHtml(a.id)+'" title="ალბომის წაშლა"><i data-lucide="trash-2"></i></button></div>':''
+        return '<article class="album"><div class="cover" data-open="'+escapeHtml(a.id)+'">'+image+'</div><div class="album-info"><h2>'+escapeHtml(a.title)+'</h2><p>'+escapeHtml(a.description||"")+'</p><div class="album-bottom"><span class="count"><i data-lucide="image"></i>'+(counts[a.id]||0)+' ფოტო</span>'+actions+'</div></div></article>'
+      }).join("")
+      lucide.createIcons()
+      grid.querySelectorAll("[data-open]").forEach(el=>el.addEventListener("click",()=>openAlbum(el.dataset.open)))
+      grid.querySelectorAll("[data-edit]").forEach(el=>el.addEventListener("click",()=>editAlbum(el.dataset.edit)))
+      grid.querySelectorAll("[data-delete]").forEach(el=>el.addEventListener("click",()=>deleteAlbum(el.dataset.delete)))
+    }
+
+    async function openAlbum(id){
+      currentAlbum=albums.find(a=>a.id===id)
+      if(!currentAlbum)return
+      $("gallery-title").textContent=currentAlbum.title
+      $("gallery-description").textContent=currentAlbum.description||""
+      $("photo-grid").innerHTML='<div class="loading">ფოტოები იტვირთება...</div>'
+      $("gallery").classList.add("show")
+      $("gallery").scrollIntoView({behavior:"smooth",block:"start"})
+      const {data,error}=await supabaseClient.from("album_photos").select("id,album_id,storage_path,caption,created_at").eq("album_id",id).order("created_at",{ascending:true})
+      if(error){$("photo-grid").innerHTML='<div class="empty">ფოტოების ჩატვირთვა ვერ მოხერხდა: '+escapeHtml(error.message)+'</div>';return}
+      currentPhotos=data||[]
+      if(!currentPhotos.length){$("photo-grid").innerHTML='<div class="empty" style="grid-column:1/-1">ამ ალბომში ფოტოები ჯერ არ არის.</div>';return}
+      $("photo-grid").innerHTML=currentPhotos.map((p,i)=>'<div class="photo '+(isAdmin?"admin":"")+'"><img src="'+escapeHtml(storageUrl(p.storage_path))+'" alt="'+escapeHtml(p.caption||currentAlbum.title)+'" data-photo="'+i+'" loading="lazy">'+(p.caption?'<div class="photo-caption">'+escapeHtml(p.caption)+'</div>':'')+(isAdmin?'<button class="icon-btn delete-photo" data-photo-delete="'+escapeHtml(p.id)+'" title="ფოტოს წაშლა"><i data-lucide="trash-2"></i></button>':'')+'</div>').join("")
+      lucide.createIcons()
+      $("photo-grid").querySelectorAll("[data-photo]").forEach(el=>el.addEventListener("click",()=>showLightbox(Number(el.dataset.photo))))
+      $("photo-grid").querySelectorAll("[data-photo-delete]").forEach(el=>el.addEventListener("click",()=>deletePhoto(el.dataset.photoDelete)))
+    }
+
+    function showLightbox(index){
+      if(!currentPhotos.length)return
+      lightIndex=(index+currentPhotos.length)%currentPhotos.length
+      $("light-image").src=storageUrl(currentPhotos[lightIndex].storage_path)
+      $("lightbox").classList.add("show")
+    }
+    function moveLight(step){showLightbox(lightIndex+step)}
+    async function createAlbum(event){
+      event.preventDefault()
+      const title=$("album-name").value.trim()
+      const description=$("album-desc").value.trim()
+      if(!title)return
+      notify("album-status","იქმნება...")
+      const {error}=await supabaseClient.from("photo_albums").insert({title,description})
+      if(error){notify("album-status","შეცდომა: "+error.message);return}
+      $("album-form").reset();hideModal("album-modal");await loadAlbums()
+    }
+    async function editAlbum(id){
+      const album=albums.find(a=>a.id===id)
+      const title=prompt("შეიყვანე ალბომის ახალი სახელი:",album.title)
+      if(title===null)return
+      if(!title.trim()){alert("ალბომის სახელი ცარიელი არ უნდა იყოს.");return}
+      const description=prompt("შეიყვანე აღწერა:",album.description||"")
+      if(description===null)return
+      const {error}=await supabaseClient.from("photo_albums").update({title:title.trim(),description:description.trim()}).eq("id",id)
+      if(error){alert("შეცდომა: "+error.message);return}
+      await loadAlbums()
+      if(currentAlbum?.id===id)await openAlbum(id)
+    }
+    async function deleteAlbum(id){
+      const album=albums.find(a=>a.id===id)
+      if(!confirm('წავშალოთ ალბომი "'+album.title+'" და მასში არსებული ფოტოები?'))return
+      const {data:photos}=await supabaseClient.from("album_photos").select("id,storage_path").eq("album_id",id)
+      if(photos?.length){
+        const {error:storageError}=await supabaseClient.storage.from(BUCKET).remove(photos.map(p=>p.storage_path))
+        if(storageError){alert("ფოტოების საცავიდან წაშლა ვერ მოხერხდა: "+storageError.message);return}
+      }
+      const {error}=await supabaseClient.from("photo_albums").delete().eq("id",id)
+      if(error){alert("შეცდომა: "+error.message);return}
+      $("gallery").classList.remove("show");currentAlbum=null;await loadAlbums()
+    }
+    async function uploadPhotos(event){
+      event.preventDefault()
+      const albumId=$("upload-album").value
+      const files=[...$("photo-files").files]
+      if(!albumId||!files.length)return
+      const submit=$("upload-submit")
+      submit.disabled=true
+      let done=0
+      for(const file of files){
+        if(!file.type.startsWith("image/"))continue
+        const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_")
+        const path=albumId+"/"+crypto.randomUUID()+"-"+safeName
+        notify("upload-status","იტვირთება "+(++done)+" / "+files.length)
+        const {error:uploadError}=await supabaseClient.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type})
+        if(uploadError){notify("upload-status","ატვირთვის შეცდომა: "+uploadError.message);submit.disabled=false;return}
+        const {error:rowError}=await supabaseClient.from("album_photos").insert({album_id:albumId,storage_path:path,caption:$("photo-caption").value.trim()})
+        if(rowError){await supabaseClient.storage.from(BUCKET).remove([path]);notify("upload-status","მონაცემის შენახვის შეცდომა: "+rowError.message);submit.disabled=false;return}
+      }
+      submit.disabled=false
+      $("upload-form").reset();hideModal("upload-modal")
+      await loadAlbums()
+      if(currentAlbum)await openAlbum(currentAlbum.id)
+    }
+    async function deletePhoto(id){
+      const photo=currentPhotos.find(p=>p.id===id)
+      if(!photo||!confirm("წავშალოთ ეს ფოტო?"))return
+      const {error:storageError}=await supabaseClient.storage.from(BUCKET).remove([photo.storage_path])
+      if(storageError){alert("ფოტოს წაშლა ვერ მოხერხდა: "+storageError.message);return}
+      const {error}=await supabaseClient.from("album_photos").delete().eq("id",id)
+      if(error){alert("მონაცემის წაშლა ვერ მოხერხდა: "+error.message);return}
+      await openAlbum(currentAlbum.id);await loadAlbums()
+    }
+
+    $("create-open").addEventListener("click",()=>{notify("album-status","");showModal("album-modal")})
+    $("upload-open").addEventListener("click",()=>{notify("upload-status","");showModal("upload-modal")})
+    $("album-form").addEventListener("submit",createAlbum)
+    $("upload-form").addEventListener("submit",uploadPhotos)
+    $("gallery-close").addEventListener("click",()=>{$("gallery").classList.remove("show");currentAlbum=null})
+    document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>hideModal(b.dataset.close)))
+    document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)hideModal(m.id)}))
+    $("light-close").addEventListener("click",()=>$("lightbox").classList.remove("show"))
+    $("light-prev").addEventListener("click",()=>moveLight(-1))
+    $("light-next").addEventListener("click",()=>moveLight(1))
+    document.addEventListener("keydown",e=>{
+      if(!$("lightbox").classList.contains("show"))return
+      if(e.key==="Escape")$("lightbox").classList.remove("show")
+      if(e.key==="ArrowLeft")moveLight(-1)
+      if(e.key==="ArrowRight")moveLight(1)
+    })
+    $("year").textContent=new Date().getFullYear()
+
+    async function init(){
+      isAdmin=await checkAdmin()
+      if(isAdmin){
+        $("create-open").style.display="inline-flex"
+        $("admin-tools").classList.add("show")
+        $("admin-label").textContent="ადმინისტრატორის რეჟიმი"
+      }
+      await loadAlbums()
+      lucide.createIcons()
+    }
+    init()
+  </script>
+</body>
+</html>
