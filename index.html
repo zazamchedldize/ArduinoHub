@@ -1,20 +1,1165 @@
-<!doctype html> <html lang="ka"> <head> <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png"> <link rel="icon" type="image/png" href="arduinohub-icon.png"> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <link rel="manifest" href="manifest.json"> <script> window.supabase = supabase.createClient( 'https://ywxunhvrwdtlqjfshiyj.supabase.co', 'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4' ) </script> <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script> <script> window.OneSignalDeferred = window.OneSignalDeferred || [] OneSignalDeferred.push(async function(OneSignal) { await OneSignal.init({ appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4" }) }) </script> <meta charset="utf-8"> <meta name="google-site-verification" content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28" > <meta name="viewport" content="width=device-width, initial-scale=1" > <title>ArduinoHub — Arduino & Chemistry პროექტები</title> <meta name="description" content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს." > <meta name="keywords" content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად" > <meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა" > <meta name="robots" content="index, follow" > <meta name="googlebot" content="index, follow" > <link rel="canonical" href="https://arduinohub.onrender.com/" > <meta property="og:type" content="website"> <meta property="og:url" content="https://arduinohub.onrender.com/" > <meta property="og:title" content="ArduinoHub — Arduino & Chemistry პროექტები" > <meta property="og:description" content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს." > <meta property="og:site_name" content="ArduinoHub" > <meta property="og:locale" content="ka_GE" > <meta property="og:image" content="https://arduinohub.onrender.com/arduinohub-icon.png" > <meta name="twitter:card" content="summary" > <meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები" > <meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა." > <meta name="twitter:image" content="https://arduinohub.onrender.com/arduinohub-icon.png" > <link rel="icon" type="image/png" href="arduinohub-icon.png" > <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin > <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" > <link rel="stylesheet" href="style.css" > <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebSite", "name": "ArduinoHub", "alternateName": "ArduinoChemistryHub", "url": "https://arduinohub.onrender.com/", "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.", "inLanguage": "ka", "publisher": { "@type": "Organization", "name": "ArduinoHub — 29-ე საჯარო სკოლა" } } </script> 
-<style>
-.albums-home-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px solid rgba(34, 211, 149, .45);
-  background: rgba(34, 211, 149, .08);
-  color: #22d395;
-  transition: transform .2s ease, background .2s ease, border-color .2s ease;
-}
-.albums-home-btn:hover {
-  transform: translateY(-2px);
-  background: rgba(34, 211, 149, .15);
-  border-color: #22d395;
-}
-</style>
+<!doctype html>
+<html lang="ka">
+<head>
+  <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    window.supabase = supabase.createClient(
+      'https://ywxunhvrwdtlqjfshiyj.supabase.co',
+      'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
+    )
+  </script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || []
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "1f1f2705-6bf4-4e77-9b64-17bd5d809ec4"
+      })
+    })
+  </script>
+  <meta charset="utf-8">
+  <meta name="google-site-verification" content="Spjm45GfaWfV1azhfc1X4LfS_TX6BpGxT2N8u8jKu28">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ArduinoHub — Arduino & Chemistry პროექტები</title>
+  <meta name="description" content="ArduinoHub — Arduino & Chemistry პროექტების პლატფორმა. აღმოაჩინე საინტერესო პროექტები, გაეცანი კოდს, მასალებსა და შექმნის პროცესს.">
+  <meta name="keywords" content="ArduinoHub, Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად">
+  <meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="https://arduinohub.onrender.com/">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://arduinohub.onrender.com/">
+  <meta property="og:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
+  <meta property="og:description" content="აღმოაჩინე Arduino & Chemistry პროექტები, გაეცანი მათ დეტალებს, კოდს, მასალებსა და შექმნის პროცესს.">
+  <meta property="og:site_name" content="ArduinoHub">
+  <meta property="og:locale" content="ka_GE">
+  <meta property="og:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ArduinoHub — Arduino & Chemistry პროექტები">
+  <meta name="twitter:description" content="Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.">
+  <meta name="twitter:image" content="https://arduinohub.onrender.com/arduinohub-icon.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ArduinoHub",
+    "alternateName": "ArduinoChemistryHub",
+    "url": "https://arduinohub.onrender.com/",
+    "description": "Arduino & Chemistry პროექტების აღმოჩენისა და სწავლის პლატფორმა.",
+    "inLanguage": "ka",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ArduinoHub — 29-ე საჯარო სკოლა"
+    }
+  }
+  </script>
+  
+  <style>
+    .albums-home-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid rgba(34, 211, 149, .45);
+      background: rgba(34, 211, 149, .08);
+      color: #22d395;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .albums-home-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(34, 211, 149, .15);
+      border-color: #22d395;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .hero-buttons-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hero-buttons-bottom {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 360px;
+    }
+  </style>
+</head>
+<body data-page="home">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
+      <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
+    </a>
+    <button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false">
+      ☰
+    </button>
+    <nav>
+      <a class="active" href="index.html">მთავარი</a>
+      <a href="projects.html">პროექტები</a>
+      <a href="albums.html">ფოტოალბომები</a>
+      <a href="team.html">ჩვენი გუნდი</a>
+      <button id="meeting-button" class="nav-meeting" type="button" onclick="openAttendancePanel()">
+        <i data-lucide="calendar-days"></i> კლუბის შეკრება
+      </button>
+      <a class="nav-admin" href="admin.html">
+        შესვლა <i data-lucide="shield"></i>
+      </a>
+    </nav>
+  </header>
 
-</head> <body data-page="home"> <header class="site-header"> <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი" > <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span> </a> <button class="menu-toggle" aria-label="მენიუს გახსნა" aria-expanded="false" > ☰ </button> <nav> <a class="active" href="index.html"> მთავარი </a> <a href="projects.html"> პროექტები </a> <a href="#how-it-works"> როგორ მუშაობს </a> <a href="team.html"> ჩვენი გუნდი </a> <button id="meeting-button" class="nav-meeting" type="button" onclick="openAttendancePanel()" > <i data-lucide="calendar-days"></i> კლუბის შეკრება </button> <a class="nav-admin" href="admin.html" > შესვლა <i data-lucide="shield"></i> </a> </nav> </header> <main> <section class="hero"> <div class="hero-copy"> <p class="eyebrow"> ARDUINO & CHEMISTRY PROJECT COMMUNITY </p> <h1> იდეებიდან, <br> <em>რეალურ</em> პროექტებზე </h1> <p class="hero-text"> ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები. </p> <div class="hero-actions"> <div class="hero-buttons"> <a class="button primary" href="projects.html" > პროექტების ნახვა <i data-lucide="arrow-right"></i> </a> <button type="button" id="attendance-home-btn" class="hero-attendance-btn" > დასწრება <i data-lucide="calendar-check"></i> </button> <a class="button albums-home-btn" href="albums.html"> ფოტოალბომები <i data-lucide="images"></i> </a> </div> <div class="hero-stats"></div> </div> </div> </section> <section id="how-it-works" class="section" > <p class="eyebrow"> მარტივი პროცესი </p> <h2> როგორ მუშაობს Arduino & Chemistry Hub? </h2> <div class="steps"> <article> <b>01</b> <i data-lucide="search"></i> <h3> დაათვალიერე პროექტები </h3> <p> აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები. </p> </article> <article> <b>02</b> <i data-lucide="lightbulb"></i> <h3> იპოვე ახალი იდეები </h3> <p> გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები. </p> </article> <article> <b>03</b> <i data-lucide="file-text"></i> <h3> გაეცანი დეტალებს </h3> <p> იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები. </p> </article> <article> <b>04</b> <i data-lucide="graduation-cap"></i> <h3> ისწავლე პრაქტიკიდან </h3> <p> გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად. </p> </article> </div> </section> <section id="about" class="about section" > <div> <p class="eyebrow"> ARDUINO•CHEMISTRY•HUB-ის შესახებ </p> <h2> იდეები უკეთესია, როცა გაზიარებულია. </h2> </div> <p> ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები. </p> </section> <section class="cta"> <i data-lucide="cpu"></i> <h2> აღმოაჩინე ახალი იდეები <br> და გაიცანი Arduino-ს შესაძლებლობები. </h2> <a class="button primary" href="projects.html" > პროექტების ნახვა <i data-lucide="arrow-right"></i> </a> </section> <section class="suggestion-section"> <div class="suggestion-card"> <div class="suggestion-icon"> <i data-lucide="message-square-plus"></i> </div> <div class="suggestion-content"> <p class="eyebrow"> შენი აზრი მნიშვნელოვანია </p> <h2> გაქვს იდეა ArduinoHub-ისთვის? </h2> <p> მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა. </p> <button type="button" id="open-suggestion" class="button primary" > შეფასების დატოვება <i data-lucide="arrow-right"></i> </button> </div> </div> </section> </main> <div id="suggestion-modal" class="suggestion-modal" hidden > <div class="suggestion-modal-backdrop" id="suggestion-backdrop" ></div> <div class="suggestion-dialog"> <button type="button" id="close-suggestion" class="suggestion-close" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="suggestion-modal-icon"> <i data-lucide="message-square-plus"></i> </div> <p class="eyebrow"> ARDUINOHUB </p> <h2> გაგვიზიარე შენი აზრი </h2> <p class="suggestion-description"> დაწერე რა გინდა რომ დაემატოს, შეიცვალოს ან გაუმჯობესდეს საიტზე. </p> <textarea id="suggestion-message" maxlength="3000" placeholder="დაწერე შენი იდეა ან რჩევა..." ></textarea> <div class="suggestion-bottom"> <span id="suggestion-counter"> 0 / 3000 </span> <button type="button" id="send-suggestion" class="button primary" > გაგზავნა <i data-lucide="send"></i> </button> </div> <p id="suggestion-status"></p> </div> </div> <div id="meeting-modal" class="meeting-modal" hidden aria-hidden="true" > <div class="meeting-backdrop" data-meeting-close ></div> <section class="meeting-dialog" role="dialog" aria-modal="true" aria-labelledby="meeting-title" > <button id="meeting-close" class="meeting-close" type="button" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="meeting-icon"> <i data-lucide="calendar-days"></i> </div> <p class="eyebrow"> მოაზროვნე ქიმიკოსთა კლუბი </p> <h2 id="meeting-title"> კლუბის შეკრება </h2> <div id="meeting-content" class="meeting-content" > <div class="meeting-loading"> <i data-lucide="loader-circle"></i> <span> მონაცემები იტვირთება... </span> </div> </div> </section> </div> <div id="ai-chat" class="ai-chat" > <section id="ai-chat-window" class="ai-chat-window" aria-hidden="true" aria-label="ArduinoHub AI ასისტენტი" > <div class="ai-chat-header"> <div class="ai-chat-title"> <div class="ai-avatar"> <i data-lucide="sparkles"></i> </div> <div> <strong> ArduinoHub AI </strong> <span> ონლაინ ასისტენტი </span> </div> </div> <button id="ai-chat-close" class="ai-chat-close" type="button" aria-label="ჩატის დახურვა" > <i data-lucide="x"></i> </button> </div> <div id="ai-chat-messages" class="ai-chat-messages" > <div class="ai-message assistant"> <div class="ai-message-avatar"> <i data-lucide="bot"></i> </div> <div class="ai-message-bubble"> <p> გამარჯობა! 👋 </p> <p> მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში. </p> </div> </div> </div> <form id="ai-chat-form" class="ai-chat-form" > <div class="ai-chat-input-wrap"> <input id="ai-chat-input" type="text" autocomplete="off" maxlength="1000" placeholder="დაწერე კითხვა..." aria-label="შეიყვანე კითხვა" > <button id="ai-chat-send" type="submit" aria-label="გაგზავნა" > <i data-lucide="send"></i> </button> </div> <small> AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია. </small> </form> </section> <button id="ai-chat-toggle" class="ai-chat-toggle" type="button" aria-label="AI ასისტენტის გახსნა" aria-expanded="false" > <span class="ai-chat-pulse"></span> <i data-lucide="message-circle" class="ai-chat-icon chat-icon" ></i> <i data-lucide="x" class="ai-chat-icon close-icon" ></i> <span class="ai-chat-badge"> AI </span> </button> </div> <div id="video-modal" class="video-modal" > <div class="video-modal-backdrop" id="video-backdrop" ></div> <div class="video-modal-card"> <button type="button" class="video-modal-close" id="video-close" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="video-device-selector"> <button type="button" class="device-tab active" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4" > <i data-lucide="smartphone"></i> iPhone </button> <button type="button" class="device-tab" data-video-src="" > <i data-lucide="smartphone"></i> Android </button> <button type="button" class="device-tab" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4" > <i data-lucide="laptop"></i> ლეპტოპი </button> </div> <div class="video-container"> <video id="tutorial-video" controls > <source id="video-source" src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4" type="video/mp4" > თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს. </video> </div> </div> </div> <div id="global-modal" class="meeting-modal" hidden aria-hidden="true" > <div class="meeting-backdrop" onclick="closeGlobalModal()" ></div> <div class="meeting-dialog" style="max-width: 440px;" > <button class="meeting-close" type="button" onclick="closeGlobalModal()" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="meeting-icon"> <i data-lucide="megaphone"></i> </div> <p class="eyebrow"> ადმინისტრატორის პანელი </p> <h2> გლობალური შეტყობინება </h2> <form id="global-notif-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;" > <div> <label for="global-title" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;" > სათაური </label> <input type="text" id="global-title" placeholder="მაგ: ახალი სიახლე!" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;" > </div> <div> <label for="global-message" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;" > შეტყობინება </label> <textarea id="global-message" rows="4" placeholder="დაწერე შეტყობინების ტექსტი..." required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;" ></textarea> </div> <button type="submit" class="button primary" style="justify-content: center; margin-top: 8px;" > გაგზავნა <i data-lucide="send"></i> </button> </form> </div> </div> <div id="countdown-modal" class="countdown-modal" hidden aria-hidden="true" > <div class="countdown-backdrop"></div> <section class="countdown-dialog" role="dialog" aria-modal="true" aria-labelledby="countdown-form-title" > <button id="countdown-close" class="countdown-close" type="button" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="countdown-icon"> <i data-lucide="timer"></i> </div> <p class="eyebrow"> ARDUINOHUB </p> <h2 id="countdown-form-title"> ახალი Countdown </h2> <form id="countdown-form"> <div class="countdown-field"> <label for="countdown-title"> სათაური </label> <input id="countdown-title" type="text" maxlength="100" placeholder="მაგ: კლუბის შეხვედრა" required > </div> <div class="countdown-field"> <label for="countdown-message"> ტექსტი </label> <textarea id="countdown-message" maxlength="500" rows="3" placeholder="მაგ: შეხვედრამდე დარჩა..." required ></textarea> </div> <div class="countdown-field"> <label for="countdown-date"> თარიღი და დრო </label> <input id="countdown-date" type="datetime-local" required > </div> <div id="countdown-form-status"></div> <button type="submit" class="button primary countdown-submit" > დაწყება <i data-lucide="timer"></i> </button> </form> </section> </div> <div id="active-countdown" class="active-countdown" hidden > <div class="active-countdown-backdrop"></div> <section class="active-countdown-dialog" role="dialog" aria-modal="true" aria-labelledby="active-countdown-title" > <button id="active-countdown-close" class="active-countdown-close" type="button" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="active-countdown-icon"> <i data-lucide="timer"></i> </div> <p class="eyebrow"> ARDUINOHUB </p> <h2 id="active-countdown-title"></h2> <p id="active-countdown-message"></p> <div class="countdown-timer"> <div class="countdown-unit"> <strong id="countdown-days">00</strong> <span>დღე</span> </div> <div class="countdown-separator">:</div> <div class="countdown-unit"> <strong id="countdown-hours">00</strong> <span>საათი</span> </div> <div class="countdown-separator">:</div> <div class="countdown-unit"> <strong id="countdown-minutes">00</strong> <span>წუთი</span> </div> <div class="countdown-separator">:</div> <div class="countdown-unit"> <strong id="countdown-seconds">00</strong> <span>წამი</span> </div> </div> </section> </div> <div id="hbd-admin-modal" class="hbd-admin-modal" hidden aria-hidden="true" > <div class="hbd-admin-backdrop" data-hbd-admin-close ></div> <section class="hbd-admin-dialog" role="dialog" aria-modal="true" aria-labelledby="hbd-admin-title" > <button id="hbd-admin-close" class="hbd-admin-close" type="button" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="hbd-admin-icon"> 🎂 </div> <p class="eyebrow"> ARDUINOHUB </p> <h2 id="hbd-admin-title"> დაბადების დღის დამატება </h2> <p class="hbd-admin-description"> შეავსე ინფორმაცია და არჩეულ დღეს საიტზე დაბადების დღის შეტყობინება გამოჩნდება. </p> <form id="hbd-admin-form"> <div class="hbd-admin-field"> <label for="hbd-name"> სახელი და გვარი </label> <input id="hbd-name" type="text" maxlength="100" placeholder="მაგ: ზაზა მჭედლიძე" required > </div> <div class="hbd-admin-field"> <label for="hbd-message"> მისალოცი ტექსტი </label> <textarea id="hbd-message" maxlength="2000" rows="6" placeholder="დაწერე დაბადების დღის მისალოცი ტექსტი..." required ></textarea> </div> <div class="hbd-admin-field"> <label for="hbd-date"> გამოჩენის თარიღი </label> <input id="hbd-date" type="date" required > </div> <div id="hbd-admin-status" class="hbd-admin-status" ></div> <button id="hbd-admin-submit" type="submit" class="hbd-admin-submit" > დასრულება <i data-lucide="check"></i> </button> </form> </section> </div> <div id="birthday-modal" class="birthday-modal" hidden aria-hidden="true" > <div id="birthday-confetti" class="birthday-confetti" ></div> <div id="birthday-ribbons" class="birthday-ribbons" ></div> <div class="birthday-backdrop"></div> <section class="birthday-dialog" role="dialog" aria-modal="true" aria-labelledby="birthday-title" > <button id="birthday-close" class="birthday-close" type="button" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="birthday-glow"></div> <div class="birthday-icon"> 🎂 </div> <p class="birthday-eyebrow"> 🎉 ARDUINOHUB 🎉 </p> <h2 id="birthday-title"> გილოცავთ დაბადების დღეს! </h2> <div id="birthday-name" class="birthday-name" ></div> <div id="birthday-message" class="birthday-message" ></div> <div class="birthday-decoration"> <span>🎈</span> <span>🎉</span> <span>🎁</span> <span>✨</span> <span>🎈</span> </div> <button id="birthday-finish" type="button" class="birthday-finish" > გმადლობ! 🎉 </button> </section> </div> <div id="hbd-cancel-modal" class="hbd-admin-modal" hidden aria-hidden="true" > <div class="hbd-admin-backdrop" data-hbd-cancel-close ></div> <section class="hbd-admin-dialog hbd-cancel-dialog" role="dialog" aria-modal="true" aria-labelledby="hbd-cancel-title" > <button id="hbd-cancel-close" class="hbd-admin-close" type="button" aria-label="დახურვა" > <i data-lucide="x"></i> </button> <div class="hbd-admin-icon"> 🎂 </div> <p class="eyebrow"> ARDUINOHUB </p> <h2 id="hbd-cancel-title"> დაბადების დღის გაუქმება </h2> <p class="hbd-admin-description"> აირჩიე დაბადების დღე, რომლის გაუქმებაც გინდა. </p> <div id="hbd-cancel-list" class="hbd-cancel-list" ></div> </section> </div> <footer> <a class="brand" href="index.html" > <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span> </a> <p> Arduino&Chemistry პროექტები ერთ სივრცეში </p> <div class="footer-credit"> <span> მოაზროვნე ქიმიკოსთა კლუბი </span> </div> <small> © <span data-year></span> ArduinoHub. ყველა უფლება დაცულია. </small> </footer> <script src="https://unpkg.com/lucide@latest"></script> <script type="module" src="script.js" ></script> <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" ></script> <script type="text/javascript"> (function(){ emailjs.init("KHWLmDgpVWvHs72r4") })() </script> <script> document.addEventListener("DOMContentLoaded", () => { const attendanceButton = document.getElementById("attendance-home-btn") if (attendanceButton) { attendanceButton.addEventListener("click", () => { if (typeof openPublicAttendanceModal === "function") { openPublicAttendanceModal() } }) } const openBtn = document.getElementById("openBugModalBtn") const closeBtn = document.getElementById("closeBugModalBtn") const overlay = document.getElementById("bugModalOverlay") const form = document.getElementById("bugReportForm") const statusText = document.getElementById("bugFormStatus") if (openBtn && closeBtn && overlay && form) { openBtn.addEventListener("click", () => { overlay.style.display = "grid" }) closeBtn.addEventListener("click", () => { overlay.style.display = "none" }) overlay.addEventListener("click", e => { if (e.target === overlay) { overlay.style.display = "none" } }) form.addEventListener("submit", async e => { e.preventDefault() statusText.style.color = "#4ade80" statusText.textContent = "იგზავნება..." const templateParams = { title: "ხარვეზის შეტყობინება", bug_title: document.getElementById("bugTitle").value, message: document.getElementById("bugMessage").value, from_name: document.getElementById("bugTitle").value } try { await emailjs.send( "service_rofiyqg", "template_mhmwkcj", templateParams ) statusText.style.color = "#4ade80" statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა." form.reset() setTimeout(() => { overlay.style.display = "none" statusText.textContent = "" }, 2500) } catch (error) { statusText.style.color = "#f87171" statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან." } }) } }) </script> <style> .bug-float-btn { position: fixed; left: 20px; bottom: 20px; z-index: 999; background: linear-gradient(135deg, #059669, #047857); color: #fff; border: 1px solid #34d399; padding: 10px 16px; border-radius: 30px; font: 700 13px Inter, sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); transition: transform 0.2s, background 0.2s; } .bug-float-btn:hover { transform: translateY(-2px); background: linear-gradient(135deg, #10b981, #059669); } .bug-modal-overlay { position: fixed; inset: 0; background: rgba(3, 7, 5, 0.85); backdrop-filter: blur(5px); z-index: 1000; display: grid; place-items: center; padding: 20px; } .bug-modal-card { width: 100%; max-width: 420px; background: linear-gradient(145deg, #062417, #02130c); border: 1px solid #065f46; border-radius: 16px; padding: 24px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); color: #ecfdf5; font-family: Inter, sans-serif; } .bug-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; } .bug-modal-header h3 { margin: 0; font-size: 18px; color: #34d399; } .bug-close-btn { background: none; border: none; color: #6ee7b7; font-size: 24px; cursor: pointer; } .bug-close-btn:hover { color: #fff; } .bug-form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; } .bug-form-group label { font-size: 12px; color: #a7f3d0; } .bug-form-group input, .bug-form-group textarea { width: 100%; padding: 10px 12px; background: #021c12; border: 1px solid #047857; border-radius: 8px; color: #fff; font-size: 13px; outline: none; } .bug-form-group input:focus, .bug-form-group textarea:focus { border-color: #34d399; } .bug-submit-btn { width: 100%; padding: 11px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 5px; } .bug-submit-btn:hover { opacity: 0.9; } .bug-status-text { font-size: 12px; text-align: center; margin-top: 10px; } .hbd-admin-modal, .birthday-modal { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; padding: 20px; } .hbd-admin-modal[hidden], .birthday-modal[hidden] { display: none; } .hbd-admin-backdrop, .birthday-backdrop { position: absolute; inset: 0; background: rgba(2, 8, 6, 0.86); backdrop-filter: blur(10px); } .hbd-admin-dialog { position: relative; z-index: 2; width: min(100%, 500px); max-height: calc(100vh - 40px); overflow-y: auto; padding: 32px; border: 1px solid rgba(34, 211, 149, 0.35); border-radius: 24px; background: radial-gradient( circle at top, rgba(34, 211, 149, 0.12), transparent 45% ), linear-gradient(145deg, #071a14, #03100c); box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7), 0 0 50px rgba(34, 211, 149, 0.08); color: #ecfdf5; animation: hbd-admin-in 0.3s ease; } @keyframes hbd-admin-in { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } } .hbd-admin-close { position: absolute; top: 15px; right: 15px; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%; background: rgba(255, 255, 255, 0.04); color: #a7f3d0; cursor: pointer; transition: 0.2s; } .hbd-admin-close:hover { color: #fff; background: rgba(34, 211, 149, 0.12); border-color: rgba(34, 211, 149, 0.4); } .hbd-admin-icon { width: 72px; height: 72px; display: grid; place-items: center; margin: 0 auto 18px; border-radius: 22px; background: rgba(34, 211, 149, 0.1); border: 1px solid rgba(34, 211, 149, 0.2); font-size: 36px; } .hbd-admin-dialog .eyebrow { text-align: center; } .hbd-admin-dialog h2 { margin: 8px 0 10px; text-align: center; color: #f0fdf4; } .hbd-admin-description { margin: 0 auto 24px; max-width: 400px; color: #94a3b8; text-align: center; line-height: 1.6; font-size: 14px; } .hbd-admin-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; } .hbd-admin-field label { color: #a7f3d0; font-size: 13px; font-weight: 700; } .hbd-admin-field input, .hbd-admin-field textarea { width: 100%; box-sizing: border-box; padding: 13px 14px; border: 1px solid rgba(34, 211, 149, 0.22); border-radius: 12px; outline: none; background: #03150e; color: #fff; font-family: inherit; font-size: 14px; transition: 0.2s; } .hbd-admin-field textarea { resize: vertical; min-height: 130px; } .hbd-admin-field input:focus, .hbd-admin-field textarea:focus { border-color: #22d395; box-shadow: 0 0 0 3px rgba(34, 211, 149, 0.08); } .hbd-admin-field input[type="date"] { color-scheme: dark; } .hbd-admin-status { min-height: 20px; margin: 5px 0 10px; color: #a7f3d0; font-size: 13px; text-align: center; } .hbd-admin-submit { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 18px; border: 1px solid #34d399; border-radius: 12px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.2s; } .hbd-admin-submit:hover { transform: translateY(-1px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2); } .birthday-dialog { position: relative; z-index: 3; width: min(100%, 560px); overflow: hidden; padding: 48px 38px 34px; border: 1px solid rgba(34, 211, 149, 0.4); border-radius: 30px; background: radial-gradient( circle at 50% -10%, rgba(34, 211, 149, 0.2), transparent 42% ), linear-gradient(145deg, #08231a, #03110c 70%); box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8), 0 0 80px rgba(34, 211, 149, 0.12); color: #fff; text-align: center; animation: birthday-dialog-in 0.55s cubic-bezier(.2, .8, .2, 1); } @keyframes birthday-dialog-in { from { opacity: 0; transform: translateY(40px) scale(0.86) rotate(-1deg); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); } } .birthday-close { position: absolute; top: 16px; right: 16px; z-index: 5; width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 50%; background: rgba(0, 0, 0, 0.2); color: #d1fae5; cursor: pointer; transition: 0.2s; } .birthday-close:hover { background: rgba(34, 211, 149, 0.15); color: #fff; transform: rotate(5deg); } .birthday-glow { position: absolute; top: -100px; left: 50%; width: 300px; height: 300px; transform: translateX(-50%); border-radius: 50%; background: rgba(34, 211, 149, 0.12); filter: blur(60px); pointer-events: none; } .birthday-icon { position: relative; width: 100px; height: 100px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 50%; background: rgba(34, 211, 149, 0.1); border: 1px solid rgba(34, 211, 149, 0.25); font-size: 55px; animation: birthday-icon-float 2.5s ease-in-out infinite; } @keyframes birthday-icon-float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } } .birthday-eyebrow { position: relative; margin: 0 0 8px; color: #6ee7b7; font-size: 12px; font-weight: 800; letter-spacing: 2px; } #birthday-title { position: relative; margin: 0; color: #f0fdf4; font-size: clamp(28px, 5vw, 42px); line-height: 1.15; } .birthday-name { position: relative; margin-top: 13px; color: #34d399; font-size: clamp(22px, 4vw, 30px); font-weight: 800; } .birthday-message { position: relative; max-width: 440px; margin: 18px auto 0; color: #d1d5db; font-size: 16px; line-height: 1.75; white-space: pre-wrap; } .birthday-decoration { position: relative; display: flex; justify-content: center; align-items: center; gap: 18px; margin: 25px 0; font-size: 25px; } .birthday-decoration span { display: inline-block; animation: birthday-decoration 2s ease-in-out infinite; } .birthday-decoration span:nth-child(2) { animation-delay: 0.15s; } .birthday-decoration span:nth-child(3) { animation-delay: 0.3s; } .birthday-decoration span:nth-child(4) { animation-delay: 0.45s; } .birthday-decoration span:nth-child(5) { animation-delay: 0.6s; } @keyframes birthday-decoration { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-7px) rotate(5deg); } } .birthday-finish { position: relative; padding: 13px 25px; border: 1px solid #34d399; border-radius: 13px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.18); transition: 0.2s; } .birthday-finish:hover { transform: translateY(-2px); box-shadow: 0 14px 35px rgba(16, 185, 129, 0.28); } .birthday-confetti, .birthday-ribbons { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; } .birthday-confetti-piece { position: absolute; top: -30px; width: 9px; height: 15px; border-radius: 2px; animation: birthday-confetti-fall linear forwards; } @keyframes birthday-confetti-fall { from { transform: translate3d(0, -30px, 0) rotate(0deg); opacity: 1; } to { transform: translate3d(var(--drift), 110vh, 0) rotate(720deg); opacity: 0; } } .birthday-ribbon { position: absolute; top: -80px; width: 8px; height: 75px; border-radius: 10px; transform-origin: top center; animation: birthday-ribbon-fall linear forwards; } @keyframes birthday-ribbon-fall { from { transform: translateY(-80px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } to { transform: translateY(110vh) rotate(540deg); opacity: 0; } } .hbd-cancel-dialog { width: min(100%, 560px); } .hbd-cancel-list { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; max-height: 400px; overflow-y: auto; padding-right: 3px; } .hbd-cancel-list::-webkit-scrollbar { width: 5px; } .hbd-cancel-list::-webkit-scrollbar-thumb { background: rgba(34, 211, 149, 0.3); border-radius: 10px; } .hbd-cancel-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 1px solid rgba(34, 211, 149, 0.18); border-radius: 16px; background: rgba(255, 255, 255, 0.035); transition: 0.2s ease; } .hbd-cancel-item:hover { border-color: rgba(34, 211, 149, 0.4); background: rgba(34, 211, 149, 0.06); } .hbd-cancel-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; } .hbd-cancel-info strong { color: #f0fdf4; font-size: 16px; font-weight: 800; } .hbd-cancel-info span { color: #94a3b8; font-size: 13px; } .hbd-delete-button { flex-shrink: 0; padding: 10px 15px; border: 1px solid rgba(248, 113, 113, 0.3); border-radius: 10px; background: rgba(248, 113, 113, 0.08); color: #f87171; font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: 0.2s ease; } .hbd-delete-button:hover { background: #f87171; border-color: #f87171; color: #07110f; transform: translateY(-1px); } .hbd-cancel-loading, .hbd-cancel-empty, .hbd-cancel-error { padding: 28px 15px; text-align: center; color: #94a3b8; font-size: 14px; } .hbd-cancel-error { color: #f87171; } @media (max-width: 600px) { .hbd-admin-dialog { padding: 28px 20px 22px; border-radius: 20px; } .birthday-dialog { padding: 42px 22px 25px; border-radius: 24px; } .birthday-icon { width: 82px; height: 82px; font-size: 44px; } .birthday-decoration { gap: 12px; font-size: 22px; } .birthday-message { font-size: 14px; } .hbd-cancel-dialog { width: min(100%, 500px); } .hbd-cancel-item { align-items: stretch; flex-direction: column; } .hbd-delete-button { width: 100%; } } </style> </body> </html>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">ARDUINO & CHEMISTRY PROJECT COMMUNITY</p>
+        <h1>იდეებიდან, <br><em>რეალურ</em> პროექტებზე</h1>
+        <p class="hero-text">
+          ერთი სივრცე Arduino & Chemistry პროექტებისთვის — დაათვალიერე საინტერესო ნამუშევრები, გაეცანი მათ დეტალებს და აღმოაჩინე ახალი შესაძლებლობები.
+        </p>
+        <div class="hero-actions">
+          <div class="hero-buttons">
+            <div class="hero-buttons-row">
+              <a class="button primary" href="projects.html">
+                პროექტების ნახვა <i data-lucide="arrow-right"></i>
+              </a>
+              <button type="button" id="attendance-home-btn" class="hero-attendance-btn">
+                დასწრება <i data-lucide="calendar-check"></i>
+              </button>
+            </div>
+            <div class="hero-buttons-bottom">
+              <a class="button albums-home-btn" href="albums.html">
+                ფოტოალბომები <i data-lucide="images"></i>
+              </a>
+            </div>
+          </div>
+          <div class="hero-stats"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="section">
+      <p class="eyebrow">მარტივი პროცესი</p>
+      <h2>როგორ მუშაობს Arduino & Chemistry Hub?</h2>
+      <div class="steps">
+        <article>
+          <b>01</b>
+          <i data-lucide="search"></i>
+          <h3>დაათვალიერე პროექტები</h3>
+          <p>აღმოაჩინე Arduino-ს საინტერესო და პრაქტიკული პროექტები.</p>
+        </article>
+        <article>
+          <b>02</b>
+          <i data-lucide="lightbulb"></i>
+          <h3>იპოვე ახალი იდეები</h3>
+          <p>გაეცანი სხვადასხვა პროექტს და აღმოაჩინე ახალი შესაძლებლობები.</p>
+        </article>
+        <article>
+          <b>03</b>
+          <i data-lucide="file-text"></i>
+          <h3>გაეცანი დეტალებს</h3>
+          <p>იხილე პროექტის აღწერა, კოდი, ინსტრუქცია და საჭირო მასალები.</p>
+        </article>
+        <article>
+          <b>04</b>
+          <i data-lucide="graduation-cap"></i>
+          <h3>ისწავლე პრაქტიკიდან</h3>
+          <p>გამოიყენე რეალური პროექტები ცოდნის გასაღრმავებლად და გასავითარებლად.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="about section">
+      <div>
+        <p class="eyebrow">ARDUINO•CHEMISTRY•HUB-ის შესახებ</p>
+        <h2>იდეები უკეთესია, როცა გაზიარებულია.</h2>
+      </div>
+      <p>
+        ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
+      </p>
+    </section>
+
+    <section class="cta">
+      <i data-lucide="cpu"></i>
+      <h2>აღმოაჩინე ახალი იდეები <br> და გაიცანი Arduino-ს შესაძლებლობები.</h2>
+      <a class="button primary" href="projects.html">
+        პროექტების ნახვა <i data-lucide="arrow-right"></i>
+      </a>
+    </section>
+
+    <section class="suggestion-section">
+      <div class="suggestion-card">
+        <div class="suggestion-icon">
+          <i data-lucide="message-square-plus"></i>
+        </div>
+        <div class="suggestion-content">
+          <p class="eyebrow">შენი აზრი მნიშვნელოვანია</p>
+          <h2>გაქვს იდეა ArduinoHub-ისთვის?</h2>
+          <p>მოგვწერე რა ფუნქციის დამატება გინდა, რა შეგვიძლია გავაუმჯობესოთ ან უბრალოდ დაგვიტოვე შენი რჩევა.</p>
+          <button type="button" id="open-suggestion" class="button primary">
+            შეფასების დატოვება <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="suggestion-modal" class="suggestion-modal" hidden>
+    <div class="suggestion-modal-backdrop" id="suggestion-backdrop"></div>
+    <div class="suggestion-dialog">
+      <button type="button" id="close-suggestion" class="suggestion-close" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="suggestion-modal-icon">
+        <i data-lucide="message-square-plus"></i>
+      </div>
+      <p class="eyebrow">ARDUINOHUB</p>
+      <h2>გაგვიზიარე შენი აზრი</h2>
+      <p class="suggestion-description">დაწერე რა გინდა რომ დაემატოს, შეიცვალოს ან გაუმჯობესდეს საიტზე.</p>
+      <textarea id="suggestion-message" maxlength="3000" placeholder="დაწერე შენი იდეა ან რჩევა..."></textarea>
+      <div class="suggestion-bottom">
+        <span id="suggestion-counter">0 / 3000</span>
+        <button type="button" id="send-suggestion" class="button primary">
+          გაგზავნა <i data-lucide="send"></i>
+        </button>
+      </div>
+      <p id="suggestion-status"></p>
+    </div>
+  </div>
+
+  <div id="meeting-modal" class="meeting-modal" hidden aria-hidden="true">
+    <div class="meeting-backdrop" data-meeting-close></div>
+    <section class="meeting-dialog" role="dialog" aria-modal="true" aria-labelledby="meeting-title">
+      <button id="meeting-close" class="meeting-close" type="button" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="meeting-icon">
+        <i data-lucide="calendar-days"></i>
+      </div>
+      <p class="eyebrow">მოაზროვნე ქიმიკოსთა კლუბი</p>
+      <h2 id="meeting-title">კლუბის შეკრება</h2>
+      <div id="meeting-content" class="meeting-content">
+        <div class="meeting-loading">
+          <i data-lucide="loader-circle"></i>
+          <span>მონაცემები იტვირთება...</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="ai-chat" class="ai-chat">
+    <section id="ai-chat-window" class="ai-chat-window" aria-hidden="true" aria-label="ArduinoHub AI ასისტენტი">
+      <div class="ai-chat-header">
+        <div class="ai-chat-title">
+          <div class="ai-avatar">
+            <i data-lucide="sparkles"></i>
+          </div>
+          <div>
+            <strong>ArduinoHub AI</strong>
+            <span>ონლაინ ასისტენტი</span>
+          </div>
+        </div>
+        <button id="ai-chat-close" class="ai-chat-close" type="button" aria-label="ჩატის დახურვა">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div id="ai-chat-messages" class="ai-chat-messages">
+        <div class="ai-message assistant">
+          <div class="ai-message-avatar">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="ai-message-bubble">
+            <p>გამარჯობა! 👋</p>
+            <p>მე ვარ <strong>ArduinoHub AI</strong>. შემიძლია დაგეხმარო Arduino-ს, ქიმიისა და ჩვენი პროექტების შესახებ კითხვებში.</p>
+          </div>
+        </div>
+      </div>
+      <form id="ai-chat-form" class="ai-chat-form">
+        <div class="ai-chat-input-wrap">
+          <input id="ai-chat-input" type="text" autocomplete="off" maxlength="1000" placeholder="დაწერე კითხვა..." aria-label="შეიყვანე კითხვა">
+          <button id="ai-chat-send" type="submit" aria-label="გაგზავნა">
+            <i data-lucide="send"></i>
+          </button>
+        </div>
+        <small>AI შეიძლება შეცდეს. გადაამოწმე მნიშვნელოვანი ინფორმაცია.</small>
+      </form>
+    </section>
+    <button id="ai-chat-toggle" class="ai-chat-toggle" type="button" aria-label="AI ასისტენტის გახსნა" aria-expanded="false">
+      <span class="ai-chat-pulse"></span>
+      <i data-lucide="message-circle" class="ai-chat-icon chat-icon"></i>
+      <i data-lucide="x" class="ai-chat-icon close-icon"></i>
+      <span class="ai-chat-badge">AI</span>
+    </button>
+  </div>
+
+  <div id="video-modal" class="video-modal">
+    <div class="video-modal-backdrop" id="video-backdrop"></div>
+    <div class="video-modal-card">
+      <button type="button" class="video-modal-close" id="video-close" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="video-device-selector">
+        <button type="button" class="device-tab active" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4">
+          <i data-lucide="smartphone"></i> iPhone
+        </button>
+        <button type="button" class="device-tab" data-video-src="">
+          <i data-lucide="smartphone"></i> Android
+        </button>
+        <button type="button" class="device-tab" data-video-src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/0913(1).mp4">
+          <i data-lucide="laptop"></i> ლეპტოპი
+        </button>
+      </div>
+      <div class="video-container">
+        <video id="tutorial-video" controls>
+          <source id="video-source" src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/c8e7f45d-118e-42a1-a20b-e8966dce6ddf.mp4" type="video/mp4">
+          თქვენს ბრაუზერს ვიდეოს მხარდაჭერა არ აქვს.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <div id="global-modal" class="meeting-modal" hidden aria-hidden="true">
+    <div class="meeting-backdrop" onclick="closeGlobalModal()"></div>
+    <div class="meeting-dialog" style="max-width: 440px;">
+      <button class="meeting-close" type="button" onclick="closeGlobalModal()" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="meeting-icon">
+        <i data-lucide="megaphone"></i>
+      </div>
+      <p class="eyebrow">ადმინისტრატორის პანელი</p>
+      <h2>გლობალური შეტყობინება</h2>
+      <form id="global-notif-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+        <div>
+          <label for="global-title" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;">სათაური</label>
+          <input type="text" id="global-title" placeholder="მაგ: ახალი სიახლე!" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+        </div>
+        <div>
+          <label for="global-message" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px;">შეტყობინება</label>
+          <textarea id="global-message" rows="4" placeholder="დაწერე შეტყობინების ტექსტი..." required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; resize: vertical; font-family: inherit;"></textarea>
+        </div>
+        <button type="submit" class="button primary" style="justify-content: center; margin-top: 8px;">
+          გაგზავნა <i data-lucide="send"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="countdown-modal" class="countdown-modal" hidden aria-hidden="true">
+    <div class="countdown-backdrop"></div>
+    <section class="countdown-dialog" role="dialog" aria-modal="true" aria-labelledby="countdown-form-title">
+      <button id="countdown-close" class="countdown-close" type="button" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="countdown-icon">
+        <i data-lucide="timer"></i>
+      </div>
+      <p class="eyebrow">ARDUINOHUB</p>
+      <h2 id="countdown-form-title">ახალი Countdown</h2>
+      <form id="countdown-form">
+        <div class="countdown-field">
+          <label for="countdown-title">სათაური</label>
+          <input id="countdown-title" type="text" maxlength="100" placeholder="მაგ: კლუბის შეხვედრა" required>
+        </div>
+        <div class="countdown-field">
+          <label for="countdown-message">ტექსტი</label>
+          <textarea id="countdown-message" maxlength="500" rows="3" placeholder="მაგ: შეხვედრამდე დარჩა..." required></textarea>
+        </div>
+        <div class="countdown-field">
+          <label for="countdown-date">თარიღი და დრო</label>
+          <input id="countdown-date" type="datetime-local" required>
+        </div>
+        <div id="countdown-form-status"></div>
+        <button type="submit" class="button primary countdown-submit">
+          დაწყება <i data-lucide="timer"></i>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div id="active-countdown" class="active-countdown" hidden>
+    <div class="active-countdown-backdrop"></div>
+    <section class="active-countdown-dialog" role="dialog" aria-modal="true" aria-labelledby="active-countdown-title">
+      <button id="active-countdown-close" class="active-countdown-close" type="button" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="active-countdown-icon">
+        <i data-lucide="timer"></i>
+      </div>
+      <p class="eyebrow">ARDUINOHUB</p>
+      <h2 id="active-countdown-title"></h2>
+      <p id="active-countdown-message"></p>
+      <div class="countdown-timer">
+        <div class="countdown-unit">
+          <strong id="countdown-days">00</strong>
+          <span>დღე</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-unit">
+          <strong id="countdown-hours">00</strong>
+          <span>საათი</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-unit">
+          <strong id="countdown-minutes">00</strong>
+          <span>წუთი</span>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-unit">
+          <strong id="countdown-seconds">00</strong>
+          <span>წამი</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="hbd-admin-modal" class="hbd-admin-modal" hidden aria-hidden="true">
+    <div class="hbd-admin-backdrop" data-hbd-admin-close></div>
+    <section class="hbd-admin-dialog" role="dialog" aria-modal="true" aria-labelledby="hbd-admin-title">
+      <button id="hbd-admin-close" class="hbd-admin-close" type="button" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="hbd-admin-icon">🎂</div>
+      <p class="eyebrow">ARDUINOHUB</p>
+      <h2 id="hbd-admin-title">დაბადების დღის დამატება</h2>
+      <p class="hbd-admin-description">შეავსე ინფორმაცია და არჩეულ დღეს საიტზე დაბადების დღის შეტყობინება გამოჩნდება.</p>
+      <form id="hbd-admin-form">
+        <div class="hbd-admin-field">
+          <label for="hbd-name">სახელი და გვარი</label>
+          <input id="hbd-name" type="text" maxlength="100" placeholder="მაგ: ზაზა მჭედლიძე" required>
+        </div>
+        <div class="hbd-admin-field">
+          <label for="hbd-message">მისალოცი ტექსტი</label>
+          <textarea id="hbd-message" maxlength="2000" rows="6" placeholder="დაწერე დაბადების დღის მისალოცი ტექსტი..." required></textarea>
+        </div>
+        <div class="hbd-admin-field">
+          <label for="hbd-date">გამოჩენის თარიღი</label>
+          <input id="hbd-date" type="date" required>
+        </div>
+        <div id="hbd-admin-status" class="hbd-admin-status"></div>
+        <button id="hbd-admin-submit" type="submit" class="hbd-admin-submit">
+          დასრულება <i data-lucide="check"></i>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div id="birthday-modal" class="birthday-modal" hidden aria-hidden="true">
+    <div id="birthday-confetti" class="birthday-confetti"></div>
+    <div id="birthday-ribbons" class="birthday-ribbons"></div>
+    <div class="birthday-backdrop"></div>
+    <section class="birthday-dialog" role="dialog" aria-modal="true" aria-labelledby="birthday-title">
+      <button id="birthday-close" class="birthday-close" type="button" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="birthday-glow"></div>
+      <div class="birthday-icon">🎂</div>
+      <p class="birthday-eyebrow">🎉 ARDUINOHUB 🎉</p>
+      <h2 id="birthday-title">გილოცავთ დაბადების დღეს!</h2>
+      <div id="birthday-name" class="birthday-name"></div>
+      <div id="birthday-message" class="birthday-message"></div>
+      <div class="birthday-decoration">
+        <span>🎈</span>
+        <span>🎉</span>
+        <span>🎁</span>
+        <span>✨</span>
+        <span>🎈</span>
+      </div>
+      <button id="birthday-finish" type="button" class="birthday-finish">
+        გმადლობ! 🎉
+      </button>
+    </section>
+  </div>
+
+  <div id="hbd-cancel-modal" class="hbd-admin-modal" hidden aria-hidden="true">
+    <div class="hbd-admin-backdrop" data-hbd-cancel-close></div>
+    <section class="hbd-admin-dialog hbd-cancel-dialog" role="dialog" aria-modal="true" aria-labelledby="hbd-cancel-title">
+      <button id="hbd-cancel-close" class="hbd-admin-close" type="button" aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="hbd-admin-icon">🎂</div>
+      <p class="eyebrow">ARDUINOHUB</p>
+      <h2 id="hbd-cancel-title">დაბადების დღის გაუქმება</h2>
+      <p class="hbd-admin-description">აირჩიე დაბადების დღე, რომლის გაუქმებაც გინდა.</p>
+      <div id="hbd-cancel-list" class="hbd-cancel-list"></div>
+    </section>
+  </div>
+
+  <footer>
+    <a class="brand" href="index.html">
+      <span class="brand-mark">∞</span>ArduinoChemistry<span>Hub</span>
+    </a>
+    <p>Arduino&Chemistry პროექტები ერთ სივრცეში</p>
+    <div class="footer-credit">
+      <span>მოაზროვნე ქიმიკოსთა კლუბი</span>
+    </div>
+    <small>© <span data-year></span> ArduinoHub. ყველა უფლება დაცულია.</small>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script type="module" src="script.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      emailjs.init("KHWLmDgpVWvHs72r4")
+    })()
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const attendanceButton = document.getElementById("attendance-home-btn")
+      if (attendanceButton) {
+        attendanceButton.addEventListener("click", () => {
+          if (typeof openPublicAttendanceModal === "function") {
+            openPublicAttendanceModal()
+          }
+        })
+      }
+
+      const openBtn = document.getElementById("openBugModalBtn")
+      const closeBtn = document.getElementById("closeBugModalBtn")
+      const overlay = document.getElementById("bugModalOverlay")
+      const form = document.getElementById("bugReportForm")
+      const statusText = document.getElementById("bugFormStatus")
+
+      if (openBtn && closeBtn && overlay && form) {
+        openBtn.addEventListener("click", () => {
+          overlay.style.display = "grid"
+        })
+        closeBtn.addEventListener("click", () => {
+          overlay.style.display = "none"
+        })
+        overlay.addEventListener("click", e => {
+          if (e.target === overlay) {
+            overlay.style.display = "none"
+          }
+        })
+        form.addEventListener("submit", async e => {
+          e.preventDefault()
+          statusText.style.color = "#4ade80"
+          statusText.textContent = "იგზავნება..."
+          const templateParams = {
+            title: "ხარვეზის შეტყობინება",
+            bug_title: document.getElementById("bugTitle").value,
+            message: document.getElementById("bugMessage").value,
+            from_name: document.getElementById("bugTitle").value
+          }
+          try {
+            await emailjs.send(
+              "service_rofiyqg",
+              "template_mhmwkcj",
+              templateParams
+            )
+            statusText.style.color = "#4ade80"
+            statusText.textContent = "მადლობა! შეტყობინება მეილზე გაიგზავნა."
+            form.reset()
+            setTimeout(() => {
+              overlay.style.display = "none"
+              statusText.textContent = ""
+            }, 2500)
+          } catch (error) {
+            statusText.style.color = "#f87171"
+            statusText.textContent = "შეცდომაა გაგზავნისას. სცადეთ თავიდან."
+          }
+        })
+      }
+    })
+  </script>
+
+  <style>
+    .bug-float-btn {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 999;
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff;
+      border: 1px solid #34d399;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font: 700 13px Inter, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .bug-float-btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+    .bug-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 5, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .bug-modal-card {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(145deg, #062417, #02130c);
+      border: 1px solid #065f46;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      color: #ecfdf5;
+      font-family: Inter, sans-serif;
+    }
+    .bug-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .bug-modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #34d399;
+    }
+    .bug-close-btn {
+      background: none;
+      border: none;
+      color: #6ee7b7;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .bug-close-btn:hover {
+      color: #fff;
+    }
+    .bug-form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .bug-form-group label {
+      font-size: 12px;
+      color: #a7f3d0;
+    }
+    .bug-form-group input,
+    .bug-form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      background: #021c12;
+      border: 1px solid #047857;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+    .bug-form-group input:focus,
+    .bug-form-group textarea:focus {
+      border-color: #34d399;
+    }
+    .bug-submit-btn {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .bug-submit-btn:hover {
+      opacity: 0.9;
+    }
+    .bug-status-text {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .hbd-admin-modal,
+    .birthday-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .hbd-admin-modal[hidden],
+    .birthday-modal[hidden] {
+      display: none;
+    }
+    .hbd-admin-backdrop,
+    .birthday-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 8, 6, 0.86);
+      backdrop-filter: blur(10px);
+    }
+    .hbd-admin-dialog {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 500px);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 32px;
+      border: 1px solid rgba(34, 211, 149, 0.35);
+      border-radius: 24px;
+      background: radial-gradient(circle at top, rgba(34, 211, 149, 0.12), transparent 45%), linear-gradient(145deg, #071a14, #03100c);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7), 0 0 50px rgba(34, 211, 149, 0.08);
+      color: #ecfdf5;
+      animation: hbd-admin-in 0.3s ease;
+    }
+    @keyframes hbd-admin-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .hbd-admin-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      color: #a7f3d0;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .hbd-admin-close:hover {
+      color: #fff;
+      background: rgba(34, 211, 149, 0.12);
+      border-color: rgba(34, 211, 149, 0.4);
+    }
+    .hbd-admin-icon {
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      border-radius: 22px;
+      background: rgba(34, 211, 149, 0.1);
+      border: 1px solid rgba(34, 211, 149, 0.2);
+      font-size: 36px;
+    }
+    .hbd-admin-dialog .eyebrow {
+      text-align: center;
+    }
+    .hbd-admin-dialog h2 {
+      margin: 8px 0 10px;
+      text-align: center;
+      color: #f0fdf4;
+    }
+    .hbd-admin-description {
+      margin: 0 auto 24px;
+      max-width: 400px;
+      color: #94a3b8;
+      text-align: center;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .hbd-admin-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+    .hbd-admin-field label {
+      color: #a7f3d0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .hbd-admin-field input,
+    .hbd-admin-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 13px 14px;
+      border: 1px solid rgba(34, 211, 149, 0.22);
+      border-radius: 12px;
+      outline: none;
+      background: #03150e;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .hbd-admin-field textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+    .hbd-admin-field input:focus,
+    .hbd-admin-field textarea:focus {
+      border-color: #22d395;
+      box-shadow: 0 0 0 3px rgba(34, 211, 149, 0.08);
+    }
+    .hbd-admin-field input[type="date"] {
+      color-scheme: dark;
+    }
+    .hbd-admin-status {
+      min-height: 20px;
+      margin: 5px 0 10px;
+      color: #a7f3d0;
+      font-size: 13px;
+      text-align: center;
+    }
+    .hbd-admin-submit {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border: 1px solid #34d399;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .hbd-admin-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+    }
+    .birthday-dialog {
+      position: relative;
+      z-index: 3;
+      width: min(100%, 560px);
+      overflow: hidden;
+      padding: 48px 38px 34px;
+      border: 1px solid rgba(34, 211, 149, 0.4);
+      border-radius: 30px;
+      background: radial-gradient(circle at 50% -10%, rgba(34, 211, 149, 0.2), transparent 42%), linear-gradient(145deg, #08231a, #03110c 70%);
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8), 0 0 80px rgba(34, 211, 149, 0.12);
+      color: #fff;
+      text-align: center;
+      animation: birthday-dialog-in 0.55s cubic-bezier(.2, .8, .2, 1);
+    }
+    @keyframes birthday-dialog-in {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.86) rotate(-1deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .birthday-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 5;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      color: #d1fae5;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .birthday-close:hover {
+      background: rgba(34, 211, 149, 0.15);
+      color: #fff;
+      transform: rotate(5deg);
+    }
+    .birthday-glow {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: rgba(34, 211, 149, 0.12);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .birthday-icon {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: rgba(34, 211, 149, 0.1);
+      border: 1px solid rgba(34, 211, 149, 0.25);
+      font-size: 55px;
+      animation: birthday-icon-float 2.5s ease-in-out infinite;
+    }
+    @keyframes birthday-icon-float {
+      0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+      50% {
+        transform: translateY(-8px) rotate(2deg);
+      }
+    }
+    .birthday-eyebrow {
+      position: relative;
+      margin: 0 0 8px;
+      color: #6ee7b7;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+    #birthday-title {
+      position: relative;
+      margin: 0;
+      color: #f0fdf4;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+    }
+    .birthday-name {
+      position: relative;
+      margin-top: 13px;
+      color: #34d399;
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 800;
+    }
+    .birthday-message {
+      position: relative;
+      max-width: 440px;
+      margin: 18px auto 0;
+      color: #d1d5db;
+      font-size: 16px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+    .birthday-decoration {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin: 25px 0;
+      font-size: 25px;
+    }
+    .birthday-decoration span {
+      display: inline-block;
+      animation: birthday-decoration 2s ease-in-out infinite;
+    }
+    .birthday-decoration span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    .birthday-decoration span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    .birthday-decoration span:nth-child(4) {
+      animation-delay: 0.45s;
+    }
+    .birthday-decoration span:nth-child(5) {
+      animation-delay: 0.6s;
+    }
+    @keyframes birthday-decoration {
+      0%, 100% {
+        transform: translateY(0) rotate(0);
+      }
+      50% {
+        transform: translateY(-7px) rotate(5deg);
+      }
+    }
+    .birthday-finish {
+      position: relative;
+      padding: 13px 25px;
+      border: 1px solid #34d399;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.18);
+      transition: 0.2s;
+    }
+    .birthday-finish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 35px rgba(16, 185, 129, 0.28);
+    }
+    .birthday-confetti,
+    .birthday-ribbons {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .birthday-confetti-piece {
+      position: absolute;
+      top: -30px;
+      width: 9px;
+      height: 15px;
+      border-radius: 2px;
+      animation: birthday-confetti-fall linear forwards;
+    }
+    @keyframes birthday-confetti-fall {
+      from {
+        transform: translate3d(0, -30px, 0) rotate(0deg);
+        opacity: 1;
+      }
+      to {
+        transform: translate3d(var(--drift), 110vh, 0) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    .birthday-ribbon {
+      position: absolute;
+      top: -80px;
+      width: 8px;
+      height: 75px;
+      border-radius: 10px;
+      transform-origin: top center;
+      animation: birthday-ribbon-fall linear forwards;
+    }
+    @keyframes birthday-ribbon-fall {
+      from {
+        transform: translateY(-80px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      to {
+        transform: translateY(110vh) rotate(540deg);
+        opacity: 0;
+      }
+    }
+    .hbd-cancel-dialog {
+      width: min(100%, 560px);
+    }
+    .hbd-cancel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 3px;
+    }
+    .hbd-cancel-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .hbd-cancel-list::-webkit-scrollbar-thumb {
+      background: rgba(34, 211, 149, 0.3);
+      border-radius: 10px;
+    }
+    .hbd-cancel-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid rgba(34, 211, 149, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.035);
+      transition: 0.2s ease;
+    }
+    .hbd-cancel-item:hover {
+      border-color: rgba(34, 211, 149, 0.4);
+      background: rgba(34, 211, 149, 0.06);
+    }
+    .hbd-cancel-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+    .hbd-cancel-info strong {
+      color: #f0fdf4;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .hbd-cancel-info span {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+    .hbd-delete-button {
+      flex-shrink: 0;
+      padding: 10px 15px;
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      border-radius: 10px;
+      background: rgba(248, 113, 113, 0.08);
+      color: #f87171;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .hbd-delete-button:hover {
+      background: #f87171;
+      border-color: #f87171;
+      color: #07110f;
+      transform: translateY(-1px);
+    }
+    .hbd-cancel-loading,
+    .hbd-cancel-empty,
+    .hbd-cancel-error {
+      padding: 28px 15px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .hbd-cancel-error {
+      color: #f87171;
+    }
+    @media (max-width: 600px) {
+      .hbd-admin-dialog {
+        padding: 28px 20px 22px;
+        border-radius: 20px;
+      }
+      .birthday-dialog {
+        padding: 42px 22px 25px;
+        border-radius: 24px;
+      }
+      .birthday-icon {
+        width: 82px;
+        height: 82px;
+        font-size: 44px;
+      }
+      .birthday-decoration {
+        gap: 12px;
+        font-size: 22px;
+      }
+      .birthday-message {
+        font-size: 14px;
+      }
+      .hbd-cancel-dialog {
+        width: min(100%, 500px);
+      }
+      .hbd-cancel-item {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .hbd-delete-button {
+        width: 100%;
+      }
+    }
+  </style>
+</body>
+</html>
