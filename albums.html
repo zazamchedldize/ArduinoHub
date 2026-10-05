@@ -27,7 +27,9 @@
   --red:#fb7185
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box
+}
 
 body{
   margin:0;
@@ -37,11 +39,18 @@ body{
   min-height:100vh
 }
 
-a{color:inherit;text-decoration:none}
+a{
+  color:inherit;
+  text-decoration:none
+}
 
-button,input,textarea,select{font:inherit}
+button,input,textarea,select{
+  font:inherit
+}
 
-button{cursor:pointer}
+button{
+  cursor:pointer
+}
 
 .wrap{
   width:min(1160px,calc(100% - 40px));
@@ -68,7 +77,9 @@ header{
   letter-spacing:-.5px
 }
 
-.brand span{color:var(--green)}
+.brand span{
+  color:var(--green)
+}
 
 .back{
   display:inline-flex;
@@ -78,7 +89,9 @@ header{
   font-size:14px
 }
 
-main{padding:62px 0 90px}
+main{
+  padding:62px 0 90px
+}
 
 .eyebrow{
   color:var(--green);
@@ -108,7 +121,9 @@ h1{
   margin-bottom:34px
 }
 
-.primary,.secondary,.danger{
+.primary,
+.secondary,
+.danger{
   border-radius:12px;
   padding:12px 17px;
   display:inline-flex;
@@ -137,7 +152,9 @@ h1{
   border-color:var(--line)
 }
 
-.secondary:hover{border-color:var(--green)}
+.secondary:hover{
+  border-color:var(--green)
+}
 
 .danger{
   background:rgba(248,113,113,.08);
@@ -158,7 +175,9 @@ button:disabled{
   margin:0 0 24px
 }
 
-.admin-tools.show{display:flex}
+.admin-tools.show{
+  display:flex
+}
 
 .grid{
   display:grid;
@@ -242,7 +261,9 @@ button:disabled{
   margin-left:3px
 }
 
-.album-info{padding:18px}
+.album-info{
+  padding:18px
+}
 
 .album-info h2{
   font-size:19px;
@@ -290,7 +311,9 @@ button:disabled{
   cursor:pointer
 }
 
-.icon-btn:hover{border-color:var(--green)}
+.icon-btn:hover{
+  border-color:var(--green)
+}
 
 .social-bar{
   display:flex;
@@ -381,7 +404,9 @@ button:disabled{
   padding-top:30px
 }
 
-.gallery.show{display:block}
+.gallery.show{
+  display:block
+}
 
 .gallery-head{
   display:flex;
@@ -428,7 +453,9 @@ button:disabled{
   z-index:4
 }
 
-.photo.admin .delete-photo{display:grid}
+.photo.admin .delete-photo{
+  display:grid
+}
 
 .photo-caption{
   position:absolute;
@@ -513,7 +540,9 @@ button:disabled{
   padding:18px
 }
 
-.modal.show{display:grid}
+.modal.show{
+  display:grid
+}
 
 .dialog{
   width:min(100%,480px);
@@ -697,7 +726,16 @@ button:disabled{
   padding:5px 7px;
   border-radius:7px;
   background:rgba(34,211,149,.055);
-  border:1px solid rgba(34,211,149,.12)
+  border:1px solid rgba(34,211,149,.12);
+  flex-wrap:wrap
+}
+
+.reply-to strong{
+  color:var(--mint)
+}
+
+.comment-item.admin-comment .reply-to strong:first-of-type{
+  color:var(--gold)
 }
 
 .comment-actions{
@@ -749,7 +787,9 @@ button:disabled{
   place-items:center
 }
 
-.comment-delete:hover{color:var(--red)}
+.comment-delete:hover{
+  color:var(--red)
+}
 
 .comment-admin-like{
   display:inline-flex;
@@ -784,7 +824,9 @@ button:disabled{
   font-size:11px
 }
 
-.replying.show{display:flex}
+.replying.show{
+  display:flex
+}
 
 .cancel-reply{
   border:0;
@@ -793,7 +835,9 @@ button:disabled{
   font-size:11px
 }
 
-.cancel-reply:hover{color:var(--white)}
+.cancel-reply:hover{
+  color:var(--white)
+}
 
 .comment-form textarea{
   width:100%;
@@ -884,7 +928,9 @@ button:disabled{
   padding:65px 70px
 }
 
-.lightbox.show{display:flex}
+.lightbox.show{
+  display:flex
+}
 
 .lightbox-content{
   width:min(100%,1000px);
@@ -911,6 +957,14 @@ button:disabled{
   font-size:13px
 }
 
+.lightbox-social{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap
+}
+
 .lightbox button{
   position:absolute;
   border:1px solid #ffffff30;
@@ -929,9 +983,13 @@ button:disabled{
   right:18px
 }
 
-#light-prev{left:18px}
+#light-prev{
+  left:18px
+}
 
-#light-next{right:18px}
+#light-next{
+  right:18px
+}
 
 footer{
   border-top:1px solid var(--line);
@@ -955,18 +1013,26 @@ footer{
     width:min(100% - 28px,1160px)
   }
 
-  header{height:64px}
+  header{
+    height:64px
+  }
 
-  main{padding:42px 0 65px}
+  main{
+    padding:42px 0 65px
+  }
 
   .top{
     align-items:start;
     flex-direction:column
   }
 
-  .grid{grid-template-columns:1fr}
+  .grid{
+    grid-template-columns:1fr
+  }
 
-  .cover{height:220px}
+  .cover{
+    height:220px
+  }
 
   .photos{
     grid-template-columns:repeat(2,minmax(0,1fr))
@@ -981,7 +1047,9 @@ footer{
     padding:60px 48px
   }
 
-  .dialog{padding:22px}
+  .dialog{
+    padding:22px
+  }
 
   .comment-item.reply{
     margin-left:14px
@@ -999,7 +1067,9 @@ footer{
     height:31px
   }
 
-  .reply-line{left:-12px}
+  .reply-line{
+    left:-12px
+  }
 }
 </style>
 </head>
@@ -1046,7 +1116,9 @@ footer{
   </div>
 
   <section id="album-grid" class="grid">
-    <div class="loading">ალბომები იტვირთება...</div>
+    <div class="loading">
+      ალბომები იტვირთება...
+    </div>
   </section>
 
   <section id="gallery" class="gallery">
@@ -1084,12 +1156,21 @@ footer{
 
     <div class="field">
       <label for="album-name">ალბომის სახელი</label>
-      <input id="album-name" maxlength="100" required placeholder="მაგ: 2026 წლის შეხვედრები">
+      <input
+        id="album-name"
+        maxlength="100"
+        required
+        placeholder="მაგ: 2026 წლის შეხვედრები"
+      >
     </div>
 
     <div class="field">
       <label for="album-desc">აღწერა</label>
-      <textarea id="album-desc" maxlength="500" placeholder="მოკლე აღწერა..."></textarea>
+      <textarea
+        id="album-desc"
+        maxlength="500"
+        placeholder="მოკლე აღწერა..."
+      ></textarea>
     </div>
 
     <div id="album-status" class="status"></div>
@@ -1124,12 +1205,24 @@ footer{
 
     <div class="field">
       <label for="photo-files">ფოტოები და ვიდეოები</label>
-      <input id="photo-files" type="file" accept="image/*,video/*" multiple required>
+
+      <input
+        id="photo-files"
+        type="file"
+        accept="image/*,video/*"
+        multiple
+        required
+      >
     </div>
 
     <div class="field">
       <label for="photo-caption">საერთო წარწერა</label>
-      <input id="photo-caption" maxlength="160" placeholder="მაგ: კლუბის შეხვედრა">
+
+      <input
+        id="photo-caption"
+        maxlength="160"
+        placeholder="მაგ: კლუბის შეხვედრა"
+      >
     </div>
 
     <div id="upload-status" class="status"></div>
@@ -1151,22 +1244,32 @@ footer{
 
   <div class="dialog comments-dialog">
 
-    <h2 id="comments-title">კომენტარები</h2>
+    <h2 id="comments-title">
+      კომენტარები
+    </h2>
 
     <div id="comments-target" class="comments-target"></div>
 
     <div id="comment-list" class="comment-list">
-      <div class="loading">კომენტარები იტვირთება...</div>
+      <div class="loading">
+        კომენტარები იტვირთება...
+      </div>
     </div>
 
     <form id="comment-form" class="comment-form">
 
       <div id="replying" class="replying">
+
         <span id="replying-text"></span>
 
-        <button type="button" class="cancel-reply" id="cancel-reply">
+        <button
+          type="button"
+          class="cancel-reply"
+          id="cancel-reply"
+        >
           გაუქმება
         </button>
+
       </div>
 
       <textarea
@@ -1189,7 +1292,11 @@ footer{
     </form>
 
     <div class="dialog-actions">
-      <button type="button" class="secondary" data-close="comments-modal">
+      <button
+        type="button"
+        class="secondary"
+        data-close="comments-modal"
+      >
         დახურვა
       </button>
     </div>
@@ -1225,6 +1332,7 @@ footer{
 </div>
 
 <script>
+
 const supabaseClient=window.supabase.createClient(
   "https://ywxunhvrwdtlqjfshiyj.supabase.co",
   "sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
@@ -1232,6 +1340,7 @@ const supabaseClient=window.supabase.createClient(
 
 const BUCKET="album-photos"
 const MAX_FILE_SIZE=50*1024*1024
+
 const $=id=>document.getElementById(id)
 
 const ADMIN_DISPLAY_NAMES={
@@ -1263,13 +1372,16 @@ function hideModal(id){
 }
 
 function escapeHtml(value=""){
-  return String(value).replace(/[&<>"']/g,char=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[char]))
+  return String(value).replace(
+    /[&<>"']/g,
+    char=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char])
+  )
 }
 
 function notify(id,message){
@@ -1277,7 +1389,12 @@ function notify(id,message){
 }
 
 function storageUrl(path){
-  return supabaseClient.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+  return supabaseClient
+    .storage
+    .from(BUCKET)
+    .getPublicUrl(path)
+    .data
+    .publicUrl
 }
 
 function getExtension(name=""){
@@ -1286,6 +1403,7 @@ function getExtension(name=""){
 }
 
 function getMimeType(file){
+
   if(file.type){
     return file.type.toLowerCase()
   }
@@ -1314,6 +1432,7 @@ function getMimeType(file){
 }
 
 function getMediaType(item){
+
   const extension=getExtension(
     item.name||item.storage_path||""
   )
@@ -1338,6 +1457,7 @@ function getMediaType(item){
 }
 
 function isAllowedMedia(file){
+
   const mime=getMimeType(file)
 
   if(mime.startsWith("image/")){
@@ -1360,6 +1480,7 @@ function isAllowedMedia(file){
 }
 
 function normalizeAdminDisplayName(value){
+
   const original=String(value||"").trim()
   const normalized=original.toLowerCase()
 
@@ -1377,6 +1498,7 @@ function normalizeAdminDisplayName(value){
 }
 
 function getUserDisplayName(user){
+
   if(!user){
     return "მომხმარებელი"
   }
@@ -1413,7 +1535,58 @@ function getUserDisplayName(user){
   return normalizeAdminDisplayName(name)
 }
 
+function isAdminAuthorName(value){
+
+  const name=String(value||"").trim().toLowerCase()
+
+  return (
+    name==="ზაზა მჭედლიძე"||
+    name==="ზაზა"||
+    name==="ზმ"||
+    name==="zaza"||
+    name==="mchedlidze.zaza1000"||
+    name==="mchedlidze.zaza1000@gmail.com"
+  )
+}
+
+function isAdminUserId(userId){
+
+  if(!userId){
+    return false
+  }
+
+  if(adminUserIds.has(userId)){
+    return true
+  }
+
+  if(
+    currentUser &&
+    currentUser.id===userId &&
+    ADMIN_DISPLAY_NAMES[
+      String(currentUser.email||"").trim().toLowerCase()
+    ]
+  ){
+    adminUserIds.add(userId)
+    return true
+  }
+
+  const adminComment=albumComments.some(comment=>{
+    return (
+      comment.user_id===userId &&
+      isAdminAuthorName(comment.author_name)
+    )
+  })
+
+  if(adminComment){
+    adminUserIds.add(userId)
+    return true
+  }
+
+  return false
+}
+
 function getCommentDisplayName(comment){
+
   if(!comment){
     return "მომხმარებელი"
   }
@@ -1426,7 +1599,10 @@ function getCommentDisplayName(comment){
     comment.author_name||""
   ).trim()
 
-  if(!name||name.includes("@")){
+  if(
+    !name||
+    name.includes("@")
+  ){
     return "მომხმარებელი"
   }
 
@@ -1434,6 +1610,7 @@ function getCommentDisplayName(comment){
 }
 
 function getInitials(name){
+
   const value=String(
     name||"მომხმარებელი"
   ).trim()
@@ -1459,6 +1636,7 @@ function getInitials(name){
 }
 
 function formatDate(date){
+
   if(!date){
     return ""
   }
@@ -1480,22 +1658,28 @@ function formatDate(date){
 }
 
 async function getCurrentUser(){
+
   const {data}=await supabaseClient.auth.getUser()
+
   currentUser=data?.user||null
+
   return currentUser
 }
 
 async function loadAdminUsers(){
+
   const {data,error}=await supabaseClient
     .from("admin_users")
     .select("user_id")
 
   if(!error&&data){
+
     data.forEach(item=>{
       if(item.user_id){
         adminUserIds.add(item.user_id)
       }
     })
+
   }
 
   if(error){
@@ -1506,51 +1690,38 @@ async function loadAdminUsers(){
   }
 
   if(currentUser){
-    isAdmin=adminUserIds.has(currentUser.id)
-  }
-}
-
-function isAdminUserId(userId){
-  if(!userId){
-    return false
-  }
-
-  if(adminUserIds.has(userId)){
-    return true
-  }
-
-  const adminComment=albumComments.some(comment=>{
-    if(comment.user_id!==userId){
-      return false
-    }
-
-    const authorName=String(
-      comment.author_name||""
-    ).trim().toLowerCase()
-
-    return (
-      authorName==="ზაზა მჭედლიძე"||
-      authorName==="ზაზა"||
-      authorName==="ზმ"||
-      authorName==="zaza"||
-      authorName==="mchedlidze.zaza1000"||
-      authorName==="mchedlidze.zaza1000@gmail.com"
+    isAdmin=adminUserIds.has(
+      currentUser.id
     )
-  })
 
-  if(adminComment){
-    adminUserIds.add(userId)
-    return true
+    if(
+      ADMIN_DISPLAY_NAMES[
+        String(currentUser.email||"")
+          .trim()
+          .toLowerCase()
+      ]
+    ){
+      isAdmin=true
+    }
   }
-
-  return false
 }
 
 async function checkAdmin(){
+
   const user=await getCurrentUser()
 
   if(!user){
     return false
+  }
+
+  if(
+    ADMIN_DISPLAY_NAMES[
+      String(user.email||"")
+        .trim()
+        .toLowerCase()
+    ]
+  ){
+    return true
   }
 
   const {data,error}=await supabaseClient
@@ -1564,22 +1735,27 @@ async function checkAdmin(){
       "Admin check:",
       error.message
     )
+
     return false
   }
 
   if(data?.user_id){
-    adminUserIds.add(data.user_id)
+    adminUserIds.add(
+      data.user_id
+    )
   }
 
   return Boolean(data)
 }
 
 async function loadSocialData(){
+
   const [
     {data:likes,error:likesError},
     {data:comments,error:commentsError},
     {data:commentLikeRows,error:commentLikesError}
   ]=await Promise.all([
+
     supabaseClient
       .from("album_likes")
       .select(
@@ -1601,6 +1777,7 @@ async function loadSocialData(){
       .select(
         "id,user_id,comment_id"
       )
+
   ])
 
   if(likesError){
@@ -1629,66 +1806,57 @@ async function loadSocialData(){
   commentLikes=commentLikeRows||[]
 
   albumComments.forEach(comment=>{
-    const authorName=String(
-      comment.author_name||""
-    ).trim().toLowerCase()
 
     if(
-      authorName==="ზაზა მჭედლიძე"||
-      authorName==="ზაზა"||
-      authorName==="ზმ"||
-      authorName==="zaza"||
-      authorName==="mchedlidze.zaza1000"||
-      authorName==="mchedlidze.zaza1000@gmail.com"
-    ){
-      adminUserIds.add(comment.user_id)
-    }
-  })
-
-  commentLikes.forEach(like=>{
-    if(
-      albumComments.some(
-        comment=>
-          comment.user_id===like.user_id&&
-          isAdminUserId(comment.user_id)
+      isAdminAuthorName(
+        comment.author_name
       )
     ){
-      adminUserIds.add(like.user_id)
+      adminUserIds.add(
+        comment.user_id
+      )
     }
+
   })
 }
 
 function getLikesForAlbum(id){
+
   return albumLikes.filter(
     item=>item.album_id===id
   )
 }
 
 function getLikesForPhoto(id){
+
   return albumLikes.filter(
     item=>item.photo_id===id
   )
 }
 
 function getCommentsForAlbum(id){
+
   return albumComments.filter(
     item=>item.album_id===id
   )
 }
 
 function getCommentsForPhoto(id){
+
   return albumComments.filter(
     item=>item.photo_id===id
   )
 }
 
 function getCommentLikes(id){
+
   return commentLikes.filter(
     item=>item.comment_id===id
   )
 }
 
 function userLiked(items){
+
   if(!currentUser){
     return false
   }
@@ -1699,12 +1867,14 @@ function userLiked(items){
 }
 
 function adminLiked(items){
+
   return items.some(
     item=>isAdminUserId(item.user_id)
   )
 }
 
 function socialButtons(type,id){
+
   const items=
     type==="album"
       ?getLikesForAlbum(id)
@@ -1741,13 +1911,13 @@ function socialButtons(type,id){
 
       ${
         adminLike
-          ?`
-            <span class="admin-like-badge">
-              <i data-lucide="shield-check"></i>
-              ADMIN LIKE
-            </span>
-          `
-          :""
+        ?`
+          <span class="admin-like-badge">
+            <i data-lucide="shield-check"></i>
+            ADMIN LIKE
+          </span>
+        `
+        :""
       }
 
     </div>
@@ -1755,6 +1925,7 @@ function socialButtons(type,id){
 }
 
 async function loadAlbums(){
+
   const {data,error}=await supabaseClient
     .from("photo_albums")
     .select(
@@ -1766,12 +1937,14 @@ async function loadAlbums(){
     )
 
   if(error){
+
     $("album-grid").innerHTML=`
       <div class="empty">
         <strong>ალბომების ჩატვირთვა ვერ მოხერხდა</strong>
         <span>${escapeHtml(error.message)}</span>
       </div>
     `
+
     return
   }
 
@@ -1795,18 +1968,23 @@ async function loadAlbums(){
 }
 
 async function renderAlbums(){
+
   const grid=$("album-grid")
 
   if(!albums.length){
+
     grid.innerHTML=`
       <div class="empty">
         <i data-lucide="images"></i>
         <strong>ჯერ ალბომი არ არის</strong>
-        <span>ადმინისტრატორს შეუძლია პირველი ალბომის შექმნა.</span>
+        <span>
+          ადმინისტრატორს შეუძლია პირველი ალბომის შექმნა.
+        </span>
       </div>
     `
 
     lucide.createIcons()
+
     return
   }
 
@@ -1819,7 +1997,10 @@ async function renderAlbums(){
     .select(
       "id,album_id,storage_path,caption,created_at"
     )
-    .in("album_id",ids)
+    .in(
+      "album_id",
+      ids
+    )
     .order(
       "created_at",
       {ascending:true}
@@ -1836,15 +2017,18 @@ async function renderAlbums(){
   const mediaByAlbum={}
 
   mediaList.forEach(item=>{
+
     if(!mediaByAlbum[item.album_id]){
       mediaByAlbum[item.album_id]=[]
     }
 
     mediaByAlbum[item.album_id].push(item)
+
   })
 
   grid.innerHTML=albums
     .map(album=>{
+
       const albumMedia=
         mediaByAlbum[album.id]||[]
 
@@ -1853,11 +2037,14 @@ async function renderAlbums(){
       let coverHtml=""
 
       if(cover){
+
         const type=getMediaType(cover)
 
         if(type==="video"){
+
           coverHtml=`
             <div class="cover-media">
+
               <video
                 src="${escapeHtml(
                   storageUrl(
@@ -1876,9 +2063,12 @@ async function renderAlbums(){
                   <i data-lucide="play"></i>
                 </span>
               </div>
+
             </div>
           `
+
         }else{
+
           coverHtml=`
             <img
               src="${escapeHtml(
@@ -1891,7 +2081,9 @@ async function renderAlbums(){
             >
           `
         }
+
       }else{
+
         coverHtml=`
           <div class="cover-empty">
             <i data-lucide="images"></i>
@@ -1971,6 +2163,7 @@ async function renderAlbums(){
   grid
     .querySelectorAll("[data-open]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         ()=>{
@@ -1979,11 +2172,13 @@ async function renderAlbums(){
           )
         }
       )
+
     })
 
   grid
     .querySelectorAll("[data-edit]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -1994,11 +2189,13 @@ async function renderAlbums(){
           )
         }
       )
+
     })
 
   grid
     .querySelectorAll("[data-delete]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -2009,11 +2206,13 @@ async function renderAlbums(){
           )
         }
       )
+
     })
 
   grid
     .querySelectorAll("[data-like-type]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -2025,11 +2224,13 @@ async function renderAlbums(){
           )
         }
       )
+
     })
 
   grid
     .querySelectorAll("[data-comments-type]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -2041,10 +2242,12 @@ async function renderAlbums(){
           )
         }
       )
+
     })
 }
 
 async function openAlbum(id){
+
   currentAlbum=albums.find(
     album=>album.id===id
   )
@@ -2089,18 +2292,21 @@ async function openAlbum(id){
     )
 
   if(error){
+
     $("photo-grid").innerHTML=`
       <div class="empty">
         მედიის ჩატვირთვა ვერ მოხერხდა:
         ${escapeHtml(error.message)}
       </div>
     `
+
     return
   }
 
   currentPhotos=data||[]
 
   if(!currentPhotos.length){
+
     $("photo-grid").innerHTML=`
       <div
         class="empty"
@@ -2109,53 +2315,54 @@ async function openAlbum(id){
         ამ ალბომში ფოტოები ან ვიდეოები ჯერ არ არის.
       </div>
     `
+
     return
   }
 
   $("photo-grid").innerHTML=
     currentPhotos
       .map((media,index)=>{
+
         const type=getMediaType(media)
 
-        const source=
-          storageUrl(
-            media.storage_path
-          )
+        const source=storageUrl(
+          media.storage_path
+        )
 
         const mediaHtml=
           type==="video"
-            ?`
-              <video
-                src="${escapeHtml(source)}"
-                muted
-                loop
-                autoplay
-                playsinline
-                preload="metadata"
-                data-photo="${index}"
-              ></video>
+          ?`
+            <video
+              src="${escapeHtml(source)}"
+              muted
+              loop
+              autoplay
+              playsinline
+              preload="metadata"
+              data-photo="${index}"
+            ></video>
 
-              <span class="media-type">
-                <i data-lucide="video"></i>
-                VIDEO
-              </span>
-            `
-            :`
-              <img
-                src="${escapeHtml(source)}"
-                alt="${escapeHtml(
-                  media.caption||
-                  currentAlbum.title
-                )}"
-                data-photo="${index}"
-                loading="lazy"
-              >
+            <span class="media-type">
+              <i data-lucide="video"></i>
+              VIDEO
+            </span>
+          `
+          :`
+            <img
+              src="${escapeHtml(source)}"
+              alt="${escapeHtml(
+                media.caption||
+                currentAlbum.title
+              )}"
+              data-photo="${index}"
+              loading="lazy"
+            >
 
-              <span class="media-type">
-                <i data-lucide="image"></i>
-                PHOTO
-              </span>
-            `
+            <span class="media-type">
+              <i data-lucide="image"></i>
+              PHOTO
+            </span>
+          `
 
         const likes=
           getLikesForPhoto(media.id)
@@ -2170,29 +2377,33 @@ async function openAlbum(id){
           adminLiked(likes)
 
         return `
-          <div class="photo ${isAdmin?"admin":""}">
+          <div
+            class="photo ${isAdmin?"admin":""}"
+          >
 
             ${mediaHtml}
 
             ${
               adminLike
-                ?`
-                  <span class="media-admin-like">
-                    <i data-lucide="shield-check"></i>
-                    ADMIN LIKE
-                  </span>
-                `
-                :""
+              ?`
+                <span class="media-admin-like">
+                  <i data-lucide="shield-check"></i>
+                  ADMIN LIKE
+                </span>
+              `
+              :""
             }
 
             ${
               media.caption
-                ?`
-                  <div class="photo-caption">
-                    ${escapeHtml(media.caption)}
-                  </div>
-                `
-                :""
+              ?`
+                <div class="photo-caption">
+                  ${escapeHtml(
+                    media.caption
+                  )}
+                </div>
+              `
+              :""
             }
 
             <div class="photo-social">
@@ -2217,16 +2428,16 @@ async function openAlbum(id){
 
             ${
               isAdmin
-                ?`
-                  <button
-                    class="icon-btn delete-photo"
-                    data-photo-delete="${escapeHtml(media.id)}"
-                    title="წაშლა"
-                  >
-                    <i data-lucide="trash-2"></i>
-                  </button>
-                `
-                :""
+              ?`
+                <button
+                  class="icon-btn delete-photo"
+                  data-photo-delete="${escapeHtml(media.id)}"
+                  title="წაშლა"
+                >
+                  <i data-lucide="trash-2"></i>
+                </button>
+              `
+              :""
             }
 
           </div>
@@ -2239,9 +2450,11 @@ async function openAlbum(id){
   $("photo-grid")
     .querySelectorAll("[data-photo]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
+
           if(
             event.target.closest(
               "[data-photo-like]"
@@ -2273,11 +2486,13 @@ async function openAlbum(id){
           )
         }
       )
+
     })
 
   $("photo-grid")
     .querySelectorAll("[data-photo-like]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -2289,11 +2504,13 @@ async function openAlbum(id){
           )
         }
       )
+
     })
 
   $("photo-grid")
     .querySelectorAll("[data-photo-comments]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -2305,11 +2522,13 @@ async function openAlbum(id){
           )
         }
       )
+
     })
 
   $("photo-grid")
     .querySelectorAll("[data-photo-delete]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         event=>{
@@ -2320,10 +2539,12 @@ async function openAlbum(id){
           )
         }
       )
+
     })
 }
 
 function renderAlbumSocial(){
+
   if(!currentAlbum){
     return
   }
@@ -2339,6 +2560,7 @@ function renderAlbumSocial(){
   $("gallery-social")
     .querySelectorAll("[data-like-type]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         ()=>{
@@ -2348,11 +2570,13 @@ function renderAlbumSocial(){
           )
         }
       )
+
     })
 
   $("gallery-social")
     .querySelectorAll("[data-comments-type]")
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         ()=>{
@@ -2362,16 +2586,20 @@ function renderAlbumSocial(){
           )
         }
       )
+
     })
 }
 
 async function toggleLike(type,id){
+
   const user=await getCurrentUser()
 
   if(!user){
+
     alert(
       "Like-ის დასაწერად ანგარიშში უნდა შეხვიდე."
     )
+
     return
   }
 
@@ -2386,33 +2614,41 @@ async function toggleLike(type,id){
   )
 
   if(existing){
+
     const {error}=await supabaseClient
       .from("album_likes")
       .delete()
-      .eq("id",existing.id)
+      .eq(
+        "id",
+        existing.id
+      )
 
     if(error){
+
       alert(
         "Like-ის წაშლა ვერ მოხერხდა: "+
         error.message
       )
+
       return
     }
 
     albumLikes=albumLikes.filter(
       item=>item.id!==existing.id
     )
+
   }else{
+
     const payload=
       type==="album"
-        ?{
-            user_id:user.id,
-            album_id:id
-          }
-        :{
-            user_id:user.id,
-            photo_id:id
-          }
+      ?{
+        user_id:user.id,
+        album_id:id
+      }
+      :{
+        user_id:user.id,
+        photo_id:id
+      }
 
     const {data,error}=
       await supabaseClient
@@ -2424,10 +2660,12 @@ async function toggleLike(type,id){
         .single()
 
     if(error){
+
       alert(
         "Like ვერ დაემატა: "+
         error.message
       )
+
       return
     }
 
@@ -2447,6 +2685,7 @@ async function toggleLike(type,id){
 }
 
 async function openComments(type,id){
+
   commentsTargetType=type
   commentsTargetId=id
   replyParentId=null
@@ -2454,19 +2693,18 @@ async function openComments(type,id){
   let title=""
 
   if(type==="album"){
-    const album=
-      albums.find(
-        item=>item.id===id
-      )
 
-    title=
-      album?.title||
-      "ალბომი"
+    const album=albums.find(
+      item=>item.id===id
+    )
+
+    title=album?.title||"ალბომი"
+
   }else{
-    const photo=
-      currentPhotos.find(
-        item=>item.id===id
-      )
+
+    const photo=currentPhotos.find(
+      item=>item.id===id
+    )
 
     title=
       photo?.caption||
@@ -2488,10 +2726,11 @@ async function openComments(type,id){
   const user=await getCurrentUser()
 
   if(user){
+
     const authorName=
       isAdminUserId(user.id)
-        ?"ზაზა მჭედლიძე"
-        :getUserDisplayName(user)
+      ?"ზაზა მჭედლიძე"
+      :getUserDisplayName(user)
 
     $("comment-login-note").textContent=
       "კომენტარი გამოქვეყნდება სახელით: "+
@@ -2499,7 +2738,9 @@ async function openComments(type,id){
 
     $("comment-submit").disabled=false
     $("comment-text").disabled=false
+
   }else{
+
     $("comment-login-note").textContent=
       "კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე."
 
@@ -2517,6 +2758,7 @@ async function openComments(type,id){
 }
 
 function getCommentChildren(parentId){
+
   return albumComments
     .filter(
       item=>
@@ -2531,6 +2773,7 @@ function getCommentChildren(parentId){
 }
 
 function getParentComment(comment){
+
   if(!comment?.parent_comment_id){
     return null
   }
@@ -2542,43 +2785,78 @@ function getParentComment(comment){
   )||null
 }
 
-function buildReplyTargetHtml(parent){
+function buildReplyTargetHtml(
+  comment,
+  parent
+){
+
   if(!parent){
     return ""
   }
+
+  const authorName=
+    getCommentDisplayName(comment)
+
+  const parentName=
+    getCommentDisplayName(parent)
+
+  const authorAdmin=
+    isAdminUserId(
+      comment.user_id
+    )
 
   const parentAdmin=
     isAdminUserId(
       parent.user_id
     )
 
-  const parentName=
-    getCommentDisplayName(parent)
-
   return `
     <div class="reply-to">
+
       <i data-lucide="corner-down-right"></i>
-      პასუხი:
-      <strong>
-        ${escapeHtml(parentName)}
-      </strong>
+
+      <span>
+        <strong>
+          ${escapeHtml(authorName)}
+        </strong>
+
+        პასუხობს
+
+        <strong>
+          ${escapeHtml(parentName)}
+        </strong>-ს
+      </span>
+
+      ${
+        authorAdmin
+        ?`
+          <span style="
+            color:var(--gold);
+            font-size:9px;
+            font-weight:800;
+            letter-spacing:.5px
+          ">
+            ADMIN
+          </span>
+        `
+        :""
+      }
 
       ${
         parentAdmin
-          ?`
-            <span
-              style="
-                color:var(--gold);
-                font-size:9px;
-                font-weight:800;
-                letter-spacing:.5px
-              "
-            >
-              ADMIN
-            </span>
-          `
-          :""
+        ?`
+          <span style="
+            color:var(--gold);
+            font-size:9px;
+            font-weight:800;
+            letter-spacing:.5px
+          ">
+            ← ADMIN
+          </span>
+        `
+        :""
       }
+
     </div>
   `
 }
@@ -2587,6 +2865,7 @@ function buildCommentHtml(
   comment,
   isReply=false
 ){
+
   const likes=
     getCommentLikes(
       comment.id
@@ -2624,6 +2903,7 @@ function buildCommentHtml(
     )
 
   return `
+
     <article
       class="
         comment-item
@@ -2635,10 +2915,10 @@ function buildCommentHtml(
 
       ${
         isReply
-          ?`
-            <span class="reply-line"></span>
-          `
-          :""
+        ?`
+          <span class="reply-line"></span>
+        `
+        :""
       }
 
       <div class="comment-top">
@@ -2657,14 +2937,12 @@ function buildCommentHtml(
 
           <div class="author-details">
 
-            <div
-              style="
-                display:flex;
-                align-items:center;
-                gap:7px;
-                flex-wrap:wrap
-              "
-            >
+            <div style="
+              display:flex;
+              align-items:center;
+              gap:7px;
+              flex-wrap:wrap
+            ">
 
               <span class="author-name">
                 ${escapeHtml(author)}
@@ -2672,13 +2950,13 @@ function buildCommentHtml(
 
               ${
                 admin
-                  ?`
-                    <span class="admin-badge">
-                      <i data-lucide="shield-check"></i>
-                      ADMIN
-                    </span>
-                  `
-                  :""
+                ?`
+                  <span class="admin-badge">
+                    <i data-lucide="shield-check"></i>
+                    ADMIN
+                  </span>
+                `
+                :""
               }
 
             </div>
@@ -2695,7 +2973,10 @@ function buildCommentHtml(
 
       </div>
 
-      ${buildReplyTargetHtml(parent)}
+      ${buildReplyTargetHtml(
+        comment,
+        parent
+      )}
 
       <div class="comment-text">
         ${escapeHtml(
@@ -2728,39 +3009,28 @@ function buildCommentHtml(
         </button>
 
         ${
-          adminLike&&!admin
-            ?`
-              <span class="comment-admin-like">
-                <i data-lucide="shield-check"></i>
-                დალაიქებულია ადმინის მიერ
-              </span>
-            `
-            :""
-        }
-
-        ${
-          admin&&adminLike
-            ?`
-              <span class="comment-admin-like">
-                <i data-lucide="shield-check"></i>
-                ADMIN LIKE
-              </span>
-            `
-            :""
+          adminLike
+          ?`
+            <span class="comment-admin-like">
+              <i data-lucide="shield-check"></i>
+              დალაიქებულია ადმინის მიერ
+            </span>
+          `
+          :""
         }
 
         ${
           canDelete
-            ?`
-              <button
-                class="comment-delete"
-                data-comment-delete="${escapeHtml(comment.id)}"
-                title="კომენტარის წაშლა"
-              >
-                <i data-lucide="trash-2"></i>
-              </button>
-            `
-            :""
+          ?`
+            <button
+              class="comment-delete"
+              data-comment-delete="${escapeHtml(comment.id)}"
+              title="კომენტარის წაშლა"
+            >
+              <i data-lucide="trash-2"></i>
+            </button>
+          `
+          :""
         }
 
       </div>
@@ -2769,34 +3039,38 @@ function buildCommentHtml(
 
     ${
       children.length
-        ?`
-          <div class="comment-thread">
-            ${
-              children
-                .map(child=>
-                  buildCommentHtml(
-                    child,
-                    true
-                  )
+      ?`
+        <div class="comment-thread">
+
+          ${
+            children
+              .map(child=>
+                buildCommentHtml(
+                  child,
+                  true
                 )
-                .join("")
-            }
-          </div>
-        `
-        :""
+              )
+              .join("")
+          }
+
+        </div>
+      `
+      :""
     }
+
   `
 }
 
 async function renderComments(){
+
   let comments=
     commentsTargetType==="album"
       ?getCommentsForAlbum(
-          commentsTargetId
-        )
+        commentsTargetId
+      )
       :getCommentsForPhoto(
-          commentsTargetId
-        )
+        commentsTargetId
+      )
 
   comments=
     comments
@@ -2810,6 +3084,7 @@ async function renderComments(){
       )
 
   if(!comments.length){
+
     $("comment-list").innerHTML=`
       <div class="empty">
 
@@ -2827,6 +3102,7 @@ async function renderComments(){
     `
 
     lucide.createIcons()
+
     return
   }
 
@@ -2847,6 +3123,7 @@ async function renderComments(){
       "[data-comment-like]"
     )
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         ()=>{
@@ -2855,6 +3132,7 @@ async function renderComments(){
           )
         }
       )
+
     })
 
   $("comment-list")
@@ -2862,6 +3140,7 @@ async function renderComments(){
       "[data-comment-reply]"
     )
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         ()=>{
@@ -2870,6 +3149,7 @@ async function renderComments(){
           )
         }
       )
+
     })
 
   $("comment-list")
@@ -2877,6 +3157,7 @@ async function renderComments(){
       "[data-comment-delete]"
     )
     .forEach(element=>{
+
       element.addEventListener(
         "click",
         ()=>{
@@ -2885,17 +3166,20 @@ async function renderComments(){
           )
         }
       )
+
     })
 }
 
 async function toggleCommentLike(id){
-  const user=
-    await getCurrentUser()
+
+  const user=await getCurrentUser()
 
   if(!user){
+
     alert(
       "კომენტარის დასალაიქებლად ანგარიშში უნდა შეხვიდე."
     )
+
     return
   }
 
@@ -2909,6 +3193,7 @@ async function toggleCommentLike(id){
     )
 
   if(existing){
+
     const {error}=
       await supabaseClient
         .from("album_comment_likes")
@@ -2919,19 +3204,24 @@ async function toggleCommentLike(id){
         )
 
     if(error){
+
       alert(
         "კომენტარის Like-ის წაშლა ვერ მოხერხდა: "+
         error.message
       )
+
       return
     }
 
     commentLikes=
       commentLikes.filter(
         item=>
-          item.id!==existing.id
+          item.id!==
+          existing.id
       )
+
   }else{
+
     const {data,error}=
       await supabaseClient
         .from("album_comment_likes")
@@ -2945,10 +3235,12 @@ async function toggleCommentLike(id){
         .single()
 
     if(error){
+
       alert(
         "კომენტარის Like ვერ დაემატა: "+
         error.message
       )
+
       return
     }
 
@@ -2963,6 +3255,7 @@ async function toggleCommentLike(id){
 }
 
 function startReply(commentId){
+
   const comment=
     albumComments.find(
       item=>item.id===commentId
@@ -2979,28 +3272,28 @@ function startReply(commentId){
       comment
     )
 
-  $("replying-text").innerHTML=
-    `
-      პასუხობ:
-      <strong>
-        ${escapeHtml(author)}
-      </strong>
-      ${
-        isAdminUserId(comment.user_id)
-          ?`
-            <span
-              style="
-                color:var(--gold);
-                font-size:9px;
-                font-weight:800
-              "
-            >
-              ADMIN
-            </span>
-          `
-          :""
-      }
-    `
+  $("replying-text").innerHTML=`
+    პასუხობ:
+    <strong>
+      ${escapeHtml(author)}
+    </strong>
+
+    ${
+      isAdminUserId(
+        comment.user_id
+      )
+      ?`
+        <span style="
+          color:var(--gold);
+          font-size:9px;
+          font-weight:800
+        ">
+          ADMIN
+        </span>
+      `
+      :""
+    }
+  `
 
   $("replying").classList.add(
     "show"
@@ -3014,6 +3307,7 @@ function startReply(commentId){
 }
 
 function cancelReply(){
+
   replyParentId=null
 
   $("replying").classList.remove(
@@ -3025,15 +3319,18 @@ function cancelReply(){
 }
 
 async function submitComment(event){
+
   event.preventDefault()
 
   const user=
     await getCurrentUser()
 
   if(!user){
+
     alert(
       "კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე."
     )
+
     return
   }
 
@@ -3047,9 +3344,11 @@ async function submitComment(event){
   }
 
   if(text.length>500){
+
     alert(
       "კომენტარი მაქსიმუმ 500 სიმბოლო უნდა იყოს."
     )
+
     return
   }
 
@@ -3073,14 +3372,18 @@ async function submitComment(event){
     commentsTargetType===
     "album"
   ){
+
     payload.album_id=
       commentsTargetId
+
   }else{
+
     payload.photo_id=
       commentsTargetId
   }
 
   if(replyParentId){
+
     payload.parent_comment_id=
       replyParentId
   }
@@ -3095,20 +3398,25 @@ async function submitComment(event){
       .single()
 
   if(error){
+
     alert(
       "კომენტარი ვერ დაემატა: "+
       error.message
     )
 
     button.disabled=false
+
     return
   }
 
   if(data){
+
     albumComments.push(data)
 
     if(
-      isAdminUserId(data.user_id)
+      isAdminAuthorName(
+        data.author_name
+      )
     ){
       adminUserIds.add(
         data.user_id
@@ -3129,10 +3437,12 @@ async function submitComment(event){
 }
 
 async function refreshSocialAfterComment(){
+
   await loadSocialData()
   await renderAlbums()
 
   if(currentAlbum){
+
     await openAlbum(
       currentAlbum.id
     )
@@ -3140,6 +3450,7 @@ async function refreshSocialAfterComment(){
 }
 
 async function deleteComment(id){
+
   if(
     !confirm(
       "წავშალოთ ეს კომენტარი და მისი პასუხებიც?"
@@ -3164,9 +3475,11 @@ async function deleteComment(id){
     !user||
     user.id!==comment.user_id
   ){
+
     alert(
       "ამ კომენტარის წაშლა მხოლოდ მის ავტორს შეუძლია."
     )
+
     return
   }
 
@@ -3180,10 +3493,12 @@ async function deleteComment(id){
       )
 
   if(error){
+
     alert(
       "კომენტარის წაშლა ვერ მოხერხდა: "+
       error.message
     )
+
     return
   }
 
@@ -3206,6 +3521,7 @@ async function deleteComment(id){
 }
 
 function showLightbox(index){
+
   if(!currentPhotos.length){
     return
   }
@@ -3225,6 +3541,7 @@ function showLightbox(index){
 }
 
 function renderLightboxMedia(){
+
   const media=
     currentPhotos[lightIndex]
 
@@ -3241,6 +3558,7 @@ function renderLightboxMedia(){
     )
 
   if(type==="video"){
+
     $("light-media").innerHTML=`
       <video
         src="${escapeHtml(source)}"
@@ -3249,7 +3567,9 @@ function renderLightboxMedia(){
         playsinline
       ></video>
     `
+
   }else{
+
     $("light-media").innerHTML=`
       <img
         src="${escapeHtml(source)}"
@@ -3284,6 +3604,7 @@ function renderLightboxMedia(){
     adminLiked(likes)
 
   $("lightbox-social").innerHTML=`
+
     <button
       class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
       id="light-like"
@@ -3302,14 +3623,15 @@ function renderLightboxMedia(){
 
     ${
       adminLike
-        ?`
-          <span class="admin-like-badge">
-            <i data-lucide="shield-check"></i>
-            ADMIN LIKE
-          </span>
-        `
-        :""
+      ?`
+        <span class="admin-like-badge">
+          <i data-lucide="shield-check"></i>
+          ADMIN LIKE
+        </span>
+      `
+      :""
     }
+
   `
 
   $("light-like").addEventListener(
@@ -3338,6 +3660,7 @@ function renderLightboxMedia(){
 }
 
 function moveLight(step){
+
   if(!currentPhotos.length){
     return
   }
@@ -3354,6 +3677,7 @@ function moveLight(step){
 }
 
 async function createAlbum(event){
+
   event.preventDefault()
 
   const title=
@@ -3384,11 +3708,13 @@ async function createAlbum(event){
       })
 
   if(error){
+
     notify(
       "album-status",
       "შეცდომა: "+
       error.message
     )
+
     return
   }
 
@@ -3402,6 +3728,7 @@ async function createAlbum(event){
 }
 
 async function editAlbum(id){
+
   const album=
     albums.find(
       item=>item.id===id
@@ -3422,9 +3749,11 @@ async function editAlbum(id){
   }
 
   if(!title.trim()){
+
     alert(
       "ალბომის სახელი ცარიელი არ უნდა იყოს."
     )
+
     return
   }
 
@@ -3451,21 +3780,25 @@ async function editAlbum(id){
       )
 
   if(error){
+
     alert(
       "შეცდომა: "+
       error.message
     )
+
     return
   }
 
   await loadAlbums()
 
   if(currentAlbum?.id===id){
+
     await openAlbum(id)
   }
 }
 
 async function deleteAlbum(id){
+
   const album=
     albums.find(
       item=>item.id===id
@@ -3497,6 +3830,7 @@ async function deleteAlbum(id){
       )
 
   if(media?.length){
+
     const {
       error:storageError
     }=
@@ -3510,10 +3844,12 @@ async function deleteAlbum(id){
         )
 
     if(storageError){
+
       alert(
         "ფაილების საცავიდან წაშლა ვერ მოხერხდა: "+
         storageError.message
       )
+
       return
     }
   }
@@ -3528,10 +3864,12 @@ async function deleteAlbum(id){
       )
 
   if(error){
+
     alert(
       "ალბომის წაშლა ვერ მოხერხდა: "+
       error.message
     )
+
     return
   }
 
@@ -3546,6 +3884,7 @@ async function deleteAlbum(id){
 }
 
 async function uploadPhotos(event){
+
   event.preventDefault()
 
   const albumId=
@@ -3570,24 +3909,29 @@ async function uploadPhotos(event){
   let done=0
 
   for(const file of files){
+
     if(
       file.size>
       MAX_FILE_SIZE
     ){
+
       notify(
         "upload-status",
         file.name+
         " 50 MB-ზე დიდია."
       )
+
       continue
     }
 
     if(!isAllowedMedia(file)){
+
       notify(
         "upload-status",
         file.name+
         " მხარდაჭერილი ფოტო ან ვიდეო არ არის."
       )
+
       continue
     }
 
@@ -3631,6 +3975,7 @@ async function uploadPhotos(event){
         )
 
     if(uploadError){
+
       notify(
         "upload-status",
         "ატვირთვის შეცდომა: "+
@@ -3638,6 +3983,7 @@ async function uploadPhotos(event){
       )
 
       submit.disabled=false
+
       return
     }
 
@@ -3654,6 +4000,7 @@ async function uploadPhotos(event){
         })
 
     if(rowError){
+
       await supabaseClient
         .storage
         .from(BUCKET)
@@ -3666,6 +4013,7 @@ async function uploadPhotos(event){
       )
 
       submit.disabled=false
+
       return
     }
   }
@@ -3681,6 +4029,7 @@ async function uploadPhotos(event){
   await loadAlbums()
 
   if(currentAlbum){
+
     await openAlbum(
       currentAlbum.id
     )
@@ -3688,6 +4037,7 @@ async function uploadPhotos(event){
 }
 
 async function deletePhoto(id){
+
   const photo=
     currentPhotos.find(
       item=>item.id===id
@@ -3713,10 +4063,12 @@ async function deletePhoto(id){
       ])
 
   if(storageError){
+
     alert(
       "ფაილის წაშლა ვერ მოხერხდა: "+
       storageError.message
     )
+
     return
   }
 
@@ -3730,10 +4082,12 @@ async function deletePhoto(id){
       )
 
   if(error){
+
     alert(
       "მონაცემის წაშლა ვერ მოხერხდა: "+
       error.message
     )
+
     return
   }
 
@@ -3745,6 +4099,7 @@ async function deletePhoto(id){
   await loadSocialData()
 
   if(currentAlbum){
+
     await openAlbum(
       currentAlbum.id
     )
@@ -3815,6 +4170,7 @@ $("gallery-close").addEventListener(
 document
   .querySelectorAll("[data-close]")
   .forEach(button=>{
+
     button.addEventListener(
       "click",
       ()=>{
@@ -3823,11 +4179,13 @@ document
         )
       }
     )
+
   })
 
 document
   .querySelectorAll(".modal")
   .forEach(modal=>{
+
     modal.addEventListener(
       "click",
       event=>{
@@ -3841,6 +4199,7 @@ document
         }
       }
     )
+
   })
 
 $("light-close").addEventListener(
@@ -3871,6 +4230,7 @@ $("light-next").addEventListener(
 document.addEventListener(
   "keydown",
   event=>{
+
     if(
       !$("lightbox")
         .classList
@@ -3880,9 +4240,10 @@ document.addEventListener(
     }
 
     if(event.key==="Escape"){
-      $("lightbox").classList.remove(
-        "show"
-      )
+
+      $("lightbox")
+        .classList
+        .remove("show")
 
       $("light-media").innerHTML=""
     }
@@ -3894,6 +4255,7 @@ document.addEventListener(
     if(event.key==="ArrowRight"){
       moveLight(1)
     }
+
   }
 )
 
@@ -3901,6 +4263,7 @@ $("year").textContent=
   new Date().getFullYear()
 
 async function init(){
+
   currentUser=
     await getCurrentUser()
 
@@ -3910,6 +4273,7 @@ async function init(){
     await checkAdmin()
 
   if(isAdmin){
+
     $("create-open").style.display=
       "inline-flex"
 
@@ -3927,6 +4291,7 @@ async function init(){
 }
 
 init()
+
 </script>
 
 </body>
