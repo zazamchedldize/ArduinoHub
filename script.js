@@ -1458,7 +1458,7 @@ function setupZazaHistoryDelete() {
               button.deleteConfirmTimer
             )
 
-            button.deleteConfirmTimer =
+            button.deeConfirmTimer =
               setTimeout(
                 () => {
                   if (
@@ -7436,20 +7436,17 @@ async function openLiveAdminModal() {
       return
     }
 
-    const titleInput =
-      liveGetElement(
-        'live-title-input'
-      )
+    const titleInput = liveGetElement(
+      'live-title-input'
+    )
 
-    const descriptionInput =
-      liveGetElement(
-        'live-description-input'
-      )
+    const descriptionInput = liveGetElement(
+      'live-description-input'
+    )
 
-    const error =
-      liveGetElement(
-        'live-admin-error'
-      )
+    const error = liveGetElement(
+      'live-admin-error'
+    )
 
     if (titleInput) {
       titleInput.value = ''
@@ -7486,17 +7483,15 @@ function closeLiveAdminModal() {
 }
 
 function liveSetError(message) {
-  const error =
-    liveGetElement(
-      'live-admin-error'
-    )
+  const error = liveGetElement(
+    'live-admin-error'
+  )
 
   if (!error) {
     return
   }
 
-  error.textContent =
-    message
+  error.textContent = message
 
   error.classList.toggle(
     'active',
@@ -7514,8 +7509,7 @@ async function liveGetAccessToken() {
   const {
     data,
     error
-  } =
-    await window.supabase.auth.getSession()
+  } = await window.supabase.auth.getSession()
 
   if (
     error ||
@@ -7539,15 +7533,11 @@ async function liveCallFunction(body) {
       {
         method: 'POST',
         headers: {
-          Authorization:
-            `Bearer ${token}`,
-          apikey:
-            window.supabase.supabaseKey,
-          'Content-Type':
-            'application/json'
+          Authorization: `Bearer ${token}`,
+          apikey: window.supabase.supabaseKey,
+          'Content-Type': 'application/json'
         },
-        body:
-          JSON.stringify(body)
+        body: JSON.stringify(body)
       }
     )
 
@@ -7568,45 +7558,43 @@ async function liveCallFunction(body) {
 }
 
 function liveWaitForIceGathering(pc) {
-  return new Promise(
-    resolve => {
+  return new Promise(resolve => {
+    if (
+      pc.iceGatheringState ===
+      'complete'
+    ) {
+      resolve()
+      return
+    }
+
+    const check = () => {
       if (
         pc.iceGatheringState ===
         'complete'
       ) {
-        resolve()
-        return
-      }
-
-      const check = () => {
-        if (
-          pc.iceGatheringState ===
-          'complete'
-        ) {
-          pc.removeEventListener(
-            'icegatheringstatechange',
-            check
-          )
-
-          resolve()
-        }
-      }
-
-      pc.addEventListener(
-        'icegatheringstatechange',
-        check
-      )
-
-      setTimeout(() => {
         pc.removeEventListener(
           'icegatheringstatechange',
           check
         )
 
         resolve()
-      }, 10000)
+      }
     }
-  )
+
+    pc.addEventListener(
+      'icegatheringstatechange',
+      check
+    )
+
+    setTimeout(() => {
+      pc.removeEventListener(
+        'icegatheringstatechange',
+        check
+      )
+
+      resolve()
+    }, 10000)
+  })
 }
 
 function liveCreatePeerConnection() {
@@ -7622,56 +7610,126 @@ function liveCreatePeerConnection() {
   })
 }
 
-function liveEnsureHostCommentsPanel() {
-  const hostModal =
-    liveGetElement(
-      'live-host-modal'
-    )
+function liveEnsureChatLayout(modalId, listId) {
+  const modal =
+    liveGetElement(modalId)
 
-  if (!hostModal) {
+  if (!modal) {
     return null
   }
 
-  let panel =
-    liveGetElement(
-      'live-host-comments-panel'
+  const card =
+    modal.querySelector(
+      '.live-modal-card'
     )
 
-  if (panel) {
-    return panel
+  if (!card) {
+    return null
   }
 
-  panel =
-    document.createElement('div')
+  let layout =
+    card.querySelector(
+      '.live-stream-layout'
+    )
 
-  panel.id =
-    'live-host-comments-panel'
+  if (!layout) {
+    const videoWrapper =
+      card.querySelector(
+        '.live-video-wrapper'
+      )
 
-  panel.className =
-    'live-host-comments-panel'
+    if (!videoWrapper) {
+      return null
+    }
 
-  panel.innerHTML = `
-    <div class="live-host-comments-header">
-      <div class="live-host-comments-title">
-        <i data-lucide="message-circle"></i>
-        <span>ლაივის კომენტარები</span>
+    layout =
+      document.createElement('div')
+
+    layout.className =
+      'live-stream-layout'
+
+    videoWrapper.parentNode.insertBefore(
+      layout,
+      videoWrapper
+    )
+
+    layout.appendChild(
+      videoWrapper
+    )
+  }
+
+  let chat =
+    layout.querySelector(
+      '.live-stream-chat'
+    )
+
+  if (!chat) {
+    chat =
+      document.createElement('div')
+
+    chat.className =
+      'live-stream-chat'
+
+    chat.innerHTML = `
+      <div class="live-stream-chat-header">
+        <div class="live-stream-chat-title">
+          <i data-lucide="message-circle"></i>
+          <span>ლაივის ჩატი</span>
+        </div>
+        <span class="live-stream-chat-live">LIVE</span>
       </div>
-      <span class="live-host-comments-live">
-        LIVE
-      </span>
-    </div>
-    <div id="live-host-comments-list" class="live-host-comments-list"></div>
-  `
 
-  hostModal.appendChild(
-    panel
-  )
+      <div id="${listId}" class="live-stream-chat-list"></div>
 
-  if (window.lucide) {
-    lucide.createIcons()
+      <form class="live-stream-chat-form">
+        <input
+          type="text"
+          maxlength="300"
+          placeholder="დაწერე კომენტარი..."
+          autocomplete="off"
+        >
+        <button type="submit" aria-label="გაგზავნა">
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    `
+
+    layout.appendChild(
+      chat
+    )
+
+    const form =
+      chat.querySelector(
+        'form'
+      )
+
+    if (form) {
+      form.addEventListener(
+        'submit',
+        liveSendChatComment
+      )
+    }
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
   }
 
-  return panel
+  return chat
+}
+
+function livePrepareViewerChat() {
+  return liveEnsureChatLayout(
+    'live-viewer-modal',
+    'live-comments-list'
+  )
+}
+
+function livePrepareHostChat() {
+  return liveEnsureChatLayout(
+    'live-host-modal',
+    'live-host-comments-list'
+  )
 }
 
 function liveClearCommentLists() {
@@ -7878,8 +7936,7 @@ async function startLiveStream() {
         'none'
     }
 
-    liveEnsureHostCommentsPanel()
-
+    livePrepareHostChat()
     liveClearCommentLists()
 
     await livePublishHost()
@@ -7890,7 +7947,7 @@ async function startLiveStream() {
       'live-host-modal'
     )
 
-    liveStartCommentRealtime(
+    await liveStartCommentRealtime(
       stream.id
     )
 
@@ -7903,9 +7960,7 @@ async function startLiveStream() {
       error
     )
 
-    if (
-      liveCurrentStream?.id
-    ) {
+    if (liveCurrentStream?.id) {
       await window.supabase
         .from('live_streams')
         .update({
@@ -7927,15 +7982,11 @@ async function startLiveStream() {
             track.stop()
         )
 
-      liveHostStream =
-        null
+      liveHostStream = null
     }
 
-    liveHostSessionId =
-      null
-
-    liveCurrentStream =
-      null
+    liveHostSessionId = null
+    liveCurrentStream = null
 
     liveSetError(
       error?.message ||
@@ -7943,8 +7994,7 @@ async function startLiveStream() {
     )
   } finally {
     if (button) {
-      button.disabled =
-        false
+      button.disabled = false
 
       button.innerHTML =
         '<i data-lucide="radio"></i><span>ლაივის დაწყება</span>'
@@ -7966,9 +8016,7 @@ async function livePublishHost() {
     )
   }
 
-  if (
-    liveHostPeerConnection
-  ) {
+  if (liveHostPeerConnection) {
     liveHostPeerConnection.close()
   }
 
@@ -7990,30 +8038,25 @@ async function livePublishHost() {
   }
 
   const videoTransceiver =
-    liveHostPeerConnection
-      .addTransceiver(
-        videoTrack,
-        {
-          direction:
-            'sendonly'
-        }
-      )
+    liveHostPeerConnection.addTransceiver(
+      videoTrack,
+      {
+        direction: 'sendonly'
+      }
+    )
 
   const audioTransceiver =
     audioTrack
-      ? liveHostPeerConnection
-          .addTransceiver(
-            audioTrack,
-            {
-              direction:
-                'sendonly'
-            }
-          )
+      ? liveHostPeerConnection.addTransceiver(
+          audioTrack,
+          {
+            direction: 'sendonly'
+          }
+        )
       : null
 
   const offer =
-    await liveHostPeerConnection
-      .createOffer()
+    await liveHostPeerConnection.createOffer()
 
   await liveHostPeerConnection
     .setLocalDescription(
@@ -8025,8 +8068,7 @@ async function livePublishHost() {
   )
 
   const localDescription =
-    liveHostPeerConnection
-      .localDescription
+    liveHostPeerConnection.localDescription
 
   if (!localDescription) {
     throw new Error(
@@ -8037,21 +8079,16 @@ async function livePublishHost() {
   const tracks = [
     {
       location: 'local',
-      mid:
-        videoTransceiver.mid,
+      mid: videoTransceiver.mid,
       trackName: 'camera'
     }
   ]
 
-  if (
-    audioTransceiver?.mid
-  ) {
+  if (audioTransceiver?.mid) {
     tracks.push({
       location: 'local',
-      mid:
-        audioTransceiver.mid,
-      trackName:
-        'microphone'
+      mid: audioTransceiver.mid,
+      trackName: 'microphone'
     })
   }
 
@@ -8066,8 +8103,7 @@ async function livePublishHost() {
     })
 
   if (
-    !result?.result
-      ?.sessionDescription
+    !result?.result?.sessionDescription
   ) {
     throw new Error(
       'Cloudflare publisher answer ვერ მიიღო'
@@ -8076,8 +8112,7 @@ async function livePublishHost() {
 
   await liveHostPeerConnection
     .setRemoteDescription(
-      result.result
-        .sessionDescription
+      result.result.sessionDescription
     )
 
   liveHostTracks =
@@ -8124,15 +8159,13 @@ async function endLiveStream() {
       liveHostTracks.length
     ) {
       await liveCallFunction({
-        action:
-          'close_tracks',
+        action: 'close_tracks',
         sessionId:
           liveHostSessionId,
         tracks:
           liveHostTracks.map(
             track => ({
-              mid:
-                track.mid
+              mid: track.mid
             })
           )
       }).catch(
@@ -8175,17 +8208,12 @@ function closeLiveHost() {
           track.stop()
       )
 
-    liveHostStream =
-      null
+    liveHostStream = null
   }
 
-  if (
-    liveHostPeerConnection
-  ) {
+  if (liveHostPeerConnection) {
     liveHostPeerConnection.close()
-
-    liveHostPeerConnection =
-      null
+    liveHostPeerConnection = null
   }
 
   if (liveCommentChannel) {
@@ -8194,21 +8222,13 @@ function closeLiveHost() {
         liveCommentChannel
       )
 
-    liveCommentChannel =
-      null
+    liveCommentChannel = null
   }
 
-  liveHostSessionId =
-    null
-
-  liveHostTracks =
-    []
-
-  liveCurrentStream =
-    null
-
-  liveCommentsLoadedStreamId =
-    null
+  liveHostSessionId = null
+  liveHostTracks = []
+  liveCurrentStream = null
+  liveCommentsLoadedStreamId = null
 
   liveHideModal(
     'live-host-modal'
@@ -8221,8 +8241,7 @@ function toggleLiveMicrophone() {
   }
 
   const tracks =
-    liveHostStream
-      .getAudioTracks()
+    liveHostStream.getAudioTracks()
 
   if (!tracks.length) {
     return
@@ -8266,8 +8285,7 @@ function toggleLiveCamera() {
   }
 
   const tracks =
-    liveHostStream
-      .getVideoTracks()
+    liveHostStream.getVideoTracks()
 
   if (!tracks.length) {
     return
@@ -8321,8 +8339,7 @@ async function loadActiveLive() {
         .order(
           'started_at',
           {
-            ascending:
-              false
+            ascending: false
           }
         )
         .limit(1)
@@ -8390,8 +8407,7 @@ function closeLiveNotification() {
     'live-notification-modal'
   )
 
-  liveNotificationStream =
-    null
+  liveNotificationStream = null
 }
 
 async function openLiveFromNotification() {
@@ -8409,9 +8425,7 @@ async function openLiveFromNotification() {
   )
 }
 
-async function openLiveViewer(
-  stream = null
-) {
+async function openLiveViewer(stream = null) {
   try {
     if (!stream) {
       stream =
@@ -8460,14 +8474,16 @@ async function openLiveViewer(
     }
 
     if (video) {
-      video.srcObject =
-        null
+      video.srcObject = null
     }
 
     if (placeholder) {
       placeholder.style.display =
         'flex'
     }
+
+    livePrepareViewerChat()
+    liveClearCommentLists()
 
     liveShowModal(
       'live-viewer-modal'
@@ -8477,7 +8493,7 @@ async function openLiveViewer(
       stream
     )
 
-    liveStartCommentRealtime(
+    await liveStartCommentRealtime(
       stream.id
     )
   } catch (error) {
@@ -8506,8 +8522,7 @@ async function liveCreateViewerConnection(
 
   const sessionResult =
     await liveCallFunction({
-      action:
-        'create_viewer_session'
+      action: 'create_viewer_session'
     })
 
   const session =
@@ -8522,9 +8537,7 @@ async function liveCreateViewerConnection(
   liveViewerSessionId =
     session.sessionId
 
-  if (
-    liveViewerPeerConnection
-  ) {
+  if (liveViewerPeerConnection) {
     liveViewerPeerConnection.close()
   }
 
@@ -8541,8 +8554,7 @@ async function liveCreateViewerConnection(
       'live-viewer-placeholder'
     )
 
-  liveViewerPeerConnection
-    .ontrack =
+  liveViewerPeerConnection.ontrack =
     event => {
       if (!video) {
         return
@@ -8576,13 +8588,12 @@ async function liveCreateViewerConnection(
         )
       }
 
-      video.play().catch(
-        () => {}
-      )
+      video
+        .play()
+        .catch(() => {})
 
       if (
-        event.track.kind ===
-        'video' &&
+        event.track.kind === 'video' &&
         placeholder
       ) {
         placeholder.style.display =
@@ -8592,26 +8603,21 @@ async function liveCreateViewerConnection(
 
   const result =
     await liveCallFunction({
-      action:
-        'subscribe',
+      action: 'subscribe',
       sessionId:
         liveViewerSessionId,
       tracks: [
         {
-          location:
-            'remote',
+          location: 'remote',
           sessionId:
             stream.session_id,
-          trackName:
-            'camera'
+          trackName: 'camera'
         },
         {
-          location:
-            'remote',
+          location: 'remote',
           sessionId:
             stream.session_id,
-          trackName:
-            'microphone'
+          trackName: 'microphone'
         }
       ]
     })
@@ -8619,9 +8625,7 @@ async function liveCreateViewerConnection(
   const response =
     result?.result
 
-  if (
-    !response?.sessionDescription
-  ) {
+  if (!response?.sessionDescription) {
     throw new Error(
       'Cloudflare viewer offer ვერ მიიღო'
     )
@@ -8646,8 +8650,7 @@ async function liveCreateViewerConnection(
   )
 
   const localDescription =
-    liveViewerPeerConnection
-      .localDescription
+    liveViewerPeerConnection.localDescription
 
   if (!localDescription) {
     throw new Error(
@@ -8656,8 +8659,7 @@ async function liveCreateViewerConnection(
   }
 
   await liveCallFunction({
-    action:
-      'renegotiate',
+    action: 'renegotiate',
     sessionId:
       liveViewerSessionId,
     sessionDescription:
@@ -8676,9 +8678,7 @@ async function liveCreateViewerConnection(
         state
       )
 
-      if (
-        state === 'failed'
-      ) {
+      if (state === 'failed') {
         console.warn(
           'Cloudflare viewer connection failed'
         )
@@ -8687,13 +8687,9 @@ async function liveCreateViewerConnection(
 }
 
 function closeLiveViewer() {
-  if (
-    liveViewerPeerConnection
-  ) {
+  if (liveViewerPeerConnection) {
     liveViewerPeerConnection.close()
-
-    liveViewerPeerConnection =
-      null
+    liveViewerPeerConnection = null
   }
 
   const video =
@@ -8703,8 +8699,7 @@ function closeLiveViewer() {
 
   if (video) {
     video.pause()
-    video.srcObject =
-      null
+    video.srcObject = null
   }
 
   if (liveCommentChannel) {
@@ -8713,41 +8708,36 @@ function closeLiveViewer() {
         liveCommentChannel
       )
 
-    liveCommentChannel =
-      null
+    liveCommentChannel = null
   }
 
-  liveViewerSessionId =
-    null
+  liveViewerSessionId = null
+  liveCurrentStream = null
+  liveCommentsLoadedStreamId = null
 
   liveHideModal(
     'live-viewer-modal'
   )
-
-  liveCurrentStream =
-    null
-
-  liveCommentsLoadedStreamId =
-    null
 }
 
-function liveStartCommentRealtime(
+async function liveStartCommentRealtime(
   streamId
 ) {
   if (!streamId) {
     return
   }
 
-  if (
-    liveCommentChannel
-  ) {
-    window.supabase
+  if (liveCommentChannel) {
+    await window.supabase
       .removeChannel(
         liveCommentChannel
       )
+
+    liveCommentChannel = null
   }
 
-  liveEnsureHostCommentsPanel()
+  livePrepareViewerChat()
+  livePrepareHostChat()
 
   liveClearCommentLists()
 
@@ -8762,24 +8752,35 @@ function liveStartCommentRealtime(
       .on(
         'postgres_changes',
         {
-          event:
-            'INSERT',
-          schema:
-            'public',
-          table:
-            'live_comments',
+          event: 'INSERT',
+          schema: 'public',
+          table: 'live_comments',
           filter:
             `stream_id=eq.${streamId}`
         },
         payload => {
+          if (
+            payload?.new
+              ?.stream_id !== streamId
+          ) {
+            return
+          }
+
           liveRenderComment(
             payload.new
           )
         }
       )
-      .subscribe()
+      .subscribe(
+        status => {
+          console.log(
+            'Live comments realtime:',
+            status
+          )
+        }
+      )
 
-  liveLoadExistingComments(
+  await liveLoadExistingComments(
     streamId
   )
 }
@@ -8802,8 +8803,7 @@ async function liveLoadExistingComments(
         .order(
           'created_at',
           {
-            ascending:
-              true
+            ascending: true
           }
         )
         .limit(200)
@@ -8817,25 +8817,7 @@ async function liveLoadExistingComments(
       return
     }
 
-    const viewerList =
-      liveGetElement(
-        'live-comments-list'
-      )
-
-    const hostList =
-      liveGetElement(
-        'live-host-comments-list'
-      )
-
-    if (viewerList) {
-      viewerList.innerHTML =
-        ''
-    }
-
-    if (hostList) {
-      hostList.innerHTML =
-        ''
-    }
+    liveClearCommentLists()
 
     for (
       const comment of
@@ -8886,7 +8868,7 @@ function liveRenderComment(
         )
 
       item.className =
-        'live-comment'
+        'live-chat-message'
 
       const author =
         document.createElement(
@@ -8894,21 +8876,21 @@ function liveRenderComment(
         )
 
       author.className =
-        'live-comment-author'
+        'live-chat-author'
 
       author.textContent =
         comment.author_name ||
         'მომხმარებელი'
 
-      const text =
+      const message =
         document.createElement(
           'div'
         )
 
-      text.className =
-        'live-comment-text'
+      message.className =
+        'live-chat-text'
 
-      text.textContent =
+      message.textContent =
         comment.message || ''
 
       const time =
@@ -8917,16 +8899,14 @@ function liveRenderComment(
         )
 
       time.className =
-        'live-comment-time'
+        'live-chat-time'
 
       time.textContent =
         date.toLocaleTimeString(
           'ka-GE',
           {
-            hour:
-              '2-digit',
-            minute:
-              '2-digit'
+            hour: '2-digit',
+            minute: '2-digit'
           }
         )
 
@@ -8935,7 +8915,7 @@ function liveRenderComment(
       )
 
       item.appendChild(
-        text
+        message
       )
 
       item.appendChild(
@@ -8946,13 +8926,17 @@ function liveRenderComment(
         item
       )
 
-      list.scrollTop =
-        list.scrollHeight
+      requestAnimationFrame(
+        () => {
+          list.scrollTop =
+            list.scrollHeight
+        }
+      )
     }
   )
 }
 
-async function liveSendComment(
+async function liveSendChatComment(
   event
 ) {
   event.preventDefault()
@@ -8961,9 +8945,12 @@ async function liveSendComment(
     return
   }
 
+  const form =
+    event.currentTarget
+
   const input =
-    liveGetElement(
-      'live-comment-input'
+    form.querySelector(
+      'input'
     )
 
   if (!input) {
@@ -9025,8 +9012,7 @@ async function liveSendComment(
       throw error
     }
 
-    input.value =
-      ''
+    input.value = ''
   } catch (error) {
     console.error(
       'Live comment error:',
@@ -9072,17 +9058,8 @@ async function liveCheckStatus() {
 document.addEventListener(
   'DOMContentLoaded',
   () => {
-    const commentForm =
-      liveGetElement(
-        'live-comment-form'
-      )
-
-    if (commentForm) {
-      commentForm.addEventListener(
-        'submit',
-        liveSendComment
-      )
-    }
+    livePrepareViewerChat()
+    livePrepareHostChat()
 
     if (window.lucide) {
       lucide.createIcons()
