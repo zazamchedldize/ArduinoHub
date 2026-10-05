@@ -7370,6 +7370,7 @@ let liveViewerSessionId = null
 let liveHostTracks = []
 let liveCameraEnabled = true
 let liveMicrophoneEnabled = true
+let liveCommentsLoadedStreamId = null
 
 const LIVE_SUPABASE_FUNCTION = 'live-session'
 
@@ -7401,76 +7402,159 @@ function liveHideModal(id) {
   modal.classList.remove('active')
 }
 
-function openLiveAdminModal() {
-  const titleInput = liveGetElement('live-title-input')
-  const descriptionInput = liveGetElement('live-description-input')
-  const error = liveGetElement('live-admin-error')
+async function openLiveAdminModal() {
+  try {
+    if (!window.supabase) {
+      return
+    }
 
-  if (titleInput) {
-    titleInput.value = ''
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await window.supabase.auth.getSession()
+
+    if (
+      sessionError ||
+      !sessionData.session
+    ) {
+      alert('ლაივის გასაშვებად ანგარიშში შესვლა აუცილებელია')
+      return
+    }
+
+    const {
+      data: isAdmin,
+      error: adminError
+    } = await window.supabase.rpc(
+      'check_is_admin'
+    )
+
+    if (
+      adminError ||
+      isAdmin !== true
+    ) {
+      alert('ლაივის გაშვება მხოლოდ ადმინისტრატორს შეუძლია')
+      return
+    }
+
+    const titleInput =
+      liveGetElement(
+        'live-title-input'
+      )
+
+    const descriptionInput =
+      liveGetElement(
+        'live-description-input'
+      )
+
+    const error =
+      liveGetElement(
+        'live-admin-error'
+      )
+
+    if (titleInput) {
+      titleInput.value = ''
+    }
+
+    if (descriptionInput) {
+      descriptionInput.value = ''
+    }
+
+    if (error) {
+      error.textContent = ''
+      error.classList.remove('active')
+    }
+
+    liveShowModal(
+      'live-admin-modal'
+    )
+  } catch (error) {
+    console.error(
+      'Live admin check error:',
+      error
+    )
+
+    alert(
+      'ადმინისტრატორის შემოწმება ვერ მოხერხდა'
+    )
   }
-
-  if (descriptionInput) {
-    descriptionInput.value = ''
-  }
-
-  if (error) {
-    error.textContent = ''
-    error.classList.remove('active')
-  }
-
-  liveShowModal('live-admin-modal')
 }
 
 function closeLiveAdminModal() {
-  liveHideModal('live-admin-modal')
+  liveHideModal(
+    'live-admin-modal'
+  )
 }
 
 function liveSetError(message) {
-  const error = liveGetElement('live-admin-error')
+  const error =
+    liveGetElement(
+      'live-admin-error'
+    )
 
   if (!error) {
     return
   }
 
-  error.textContent = message
-  error.classList.toggle('active', !!message)
+  error.textContent =
+    message
+
+  error.classList.toggle(
+    'active',
+    !!message
+  )
 }
 
 async function liveGetAccessToken() {
   if (!window.supabase) {
-    throw new Error('Supabase არ არის ჩატვირთული')
+    throw new Error(
+      'Supabase არ არის ჩატვირთული'
+    )
   }
 
   const {
     data,
     error
-  } = await window.supabase.auth.getSession()
+  } =
+    await window.supabase.auth.getSession()
 
-  if (error || !data.session) {
-    throw new Error('ანგარიშში შესვლა აუცილებელია')
+  if (
+    error ||
+    !data.session
+  ) {
+    throw new Error(
+      'ანგარიშში შესვლა აუცილებელია'
+    )
   }
 
   return data.session.access_token
 }
 
 async function liveCallFunction(body) {
-  const token = await liveGetAccessToken()
+  const token =
+    await liveGetAccessToken()
 
-  const response = await fetch(
-    `${window.supabase.supabaseUrl}/functions/v1/${LIVE_SUPABASE_FUNCTION}`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        apikey: window.supabase.supabaseKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    }
-  )
+  const response =
+    await fetch(
+      `${window.supabase.supabaseUrl}/functions/v1/${LIVE_SUPABASE_FUNCTION}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+          apikey:
+            window.supabase.supabaseKey,
+          'Content-Type':
+            'application/json'
+        },
+        body:
+          JSON.stringify(body)
+      }
+    )
 
-  const data = await response.json().catch(() => ({}))
+  const data =
+    await response
+      .json()
+      .catch(() => ({}))
 
   if (!response.ok) {
     throw new Error(
@@ -7484,37 +7568,45 @@ async function liveCallFunction(body) {
 }
 
 function liveWaitForIceGathering(pc) {
-  return new Promise(resolve => {
-    if (pc.iceGatheringState === 'complete') {
-      resolve()
-      return
-    }
+  return new Promise(
+    resolve => {
+      if (
+        pc.iceGatheringState ===
+        'complete'
+      ) {
+        resolve()
+        return
+      }
 
-    const check = () => {
-      if (pc.iceGatheringState === 'complete') {
+      const check = () => {
+        if (
+          pc.iceGatheringState ===
+          'complete'
+        ) {
+          pc.removeEventListener(
+            'icegatheringstatechange',
+            check
+          )
+
+          resolve()
+        }
+      }
+
+      pc.addEventListener(
+        'icegatheringstatechange',
+        check
+      )
+
+      setTimeout(() => {
         pc.removeEventListener(
           'icegatheringstatechange',
           check
         )
 
         resolve()
-      }
+      }, 10000)
     }
-
-    pc.addEventListener(
-      'icegatheringstatechange',
-      check
-    )
-
-    setTimeout(() => {
-      pc.removeEventListener(
-        'icegatheringstatechange',
-        check
-      )
-
-      resolve()
-    }, 10000)
-  })
+  )
 }
 
 function liveCreatePeerConnection() {
@@ -7530,16 +7622,105 @@ function liveCreatePeerConnection() {
   })
 }
 
-async function startLiveStream() {
-  const titleInput = liveGetElement('live-title-input')
-  const descriptionInput = liveGetElement('live-description-input')
-  const button = liveGetElement('live-start-btn')
+function liveEnsureHostCommentsPanel() {
+  const hostModal =
+    liveGetElement(
+      'live-host-modal'
+    )
 
-  const title = titleInput?.value.trim()
-  const description = descriptionInput?.value.trim() || ''
+  if (!hostModal) {
+    return null
+  }
+
+  let panel =
+    liveGetElement(
+      'live-host-comments-panel'
+    )
+
+  if (panel) {
+    return panel
+  }
+
+  panel =
+    document.createElement('div')
+
+  panel.id =
+    'live-host-comments-panel'
+
+  panel.className =
+    'live-host-comments-panel'
+
+  panel.innerHTML = `
+    <div class="live-host-comments-header">
+      <div class="live-host-comments-title">
+        <i data-lucide="message-circle"></i>
+        <span>ლაივის კომენტარები</span>
+      </div>
+      <span class="live-host-comments-live">
+        LIVE
+      </span>
+    </div>
+    <div id="live-host-comments-list" class="live-host-comments-list"></div>
+  `
+
+  hostModal.appendChild(
+    panel
+  )
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+
+  return panel
+}
+
+function liveClearCommentLists() {
+  const viewerList =
+    liveGetElement(
+      'live-comments-list'
+    )
+
+  const hostList =
+    liveGetElement(
+      'live-host-comments-list'
+    )
+
+  if (viewerList) {
+    viewerList.innerHTML = ''
+  }
+
+  if (hostList) {
+    hostList.innerHTML = ''
+  }
+}
+
+async function startLiveStream() {
+  const titleInput =
+    liveGetElement(
+      'live-title-input'
+    )
+
+  const descriptionInput =
+    liveGetElement(
+      'live-description-input'
+    )
+
+  const button =
+    liveGetElement(
+      'live-start-btn'
+    )
+
+  const title =
+    titleInput?.value.trim()
+
+  const description =
+    descriptionInput?.value.trim() || ''
 
   if (!title) {
-    liveSetError('ლაივის სათაური აუცილებელია')
+    liveSetError(
+      'ლაივის სათაური აუცილებელია'
+    )
+
     return
   }
 
@@ -7548,124 +7729,213 @@ async function startLiveStream() {
 
     if (button) {
       button.disabled = true
-      button.innerHTML = '<i data-lucide="loader-circle"></i><span>მზადდება...</span>'
+
+      button.innerHTML =
+        '<i data-lucide="loader-circle"></i><span>მზადდება...</span>'
 
       if (window.lucide) {
         lucide.createIcons()
       }
     }
 
-    if (!navigator.mediaDevices?.getUserMedia) {
-      throw new Error('ამ ბრაუზერს კამერისა და მიკროფონის გამოყენება არ შეუძლია')
+    const {
+      data: adminCheck,
+      error: adminError
+    } =
+      await window.supabase.rpc(
+        'check_is_admin'
+      )
+
+    if (
+      adminError ||
+      adminCheck !== true
+    ) {
+      throw new Error(
+        'ლაივის გაშვება მხოლოდ ადმინისტრატორს შეუძლია'
+      )
     }
 
-    liveHostStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        width: {
-          ideal: 1280
-        },
-        height: {
-          ideal: 720
-        },
-        facingMode: 'user'
-      },
-      audio: true
-    })
+    if (
+      !navigator.mediaDevices?.getUserMedia
+    ) {
+      throw new Error(
+        'ამ ბრაუზერს კამერისა და მიკროფონის გამოყენება არ შეუძლია'
+      )
+    }
 
-    const sessionResult = await liveCallFunction({
-      action: 'create_session'
-    })
+    liveHostStream =
+      await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: {
+            ideal: 1280
+          },
+          height: {
+            ideal: 720
+          },
+          facingMode: 'user'
+        },
+        audio: true
+      })
 
-    const session = sessionResult?.session
+    const sessionResult =
+      await liveCallFunction({
+        action: 'create_session'
+      })
+
+    const session =
+      sessionResult?.session
 
     if (!session?.sessionId) {
-      throw new Error('Cloudflare Live session ვერ შეიქმნა')
+      throw new Error(
+        'Cloudflare Live session ვერ შეიქმნა'
+      )
     }
 
-    liveHostSessionId = session.sessionId
+    liveHostSessionId =
+      session.sessionId
 
     const {
       data: authData,
       error: authError
-    } = await window.supabase.auth.getUser()
+    } =
+      await window.supabase.auth.getUser()
 
-    if (authError || !authData.user) {
-      throw new Error('მომხმარებლის დადგენა ვერ მოხერხდა')
+    if (
+      authError ||
+      !authData.user
+    ) {
+      throw new Error(
+        'მომხმარებლის დადგენა ვერ მოხერხდა'
+      )
     }
 
     const {
       data: stream,
       error: streamError
-    } = await window.supabase
-      .from('live_streams')
-      .insert({
-        title,
-        description,
-        host_id: authData.user.id,
-        status: 'live',
-        session_id: liveHostSessionId
-      })
-      .select()
-      .single()
+    } =
+      await window.supabase
+        .from('live_streams')
+        .insert({
+          title,
+          description,
+          host_id:
+            authData.user.id,
+          status: 'live',
+          session_id:
+            liveHostSessionId
+        })
+        .select()
+        .single()
 
     if (streamError) {
       throw streamError
     }
 
-    liveCurrentStream = stream
+    liveCurrentStream =
+      stream
 
-    const hostTitle = liveGetElement('live-host-title')
-    const hostDescription = liveGetElement('live-host-description')
-    const hostVideo = liveGetElement('live-host-video')
-    const placeholder = liveGetElement('live-host-placeholder')
+    const hostTitle =
+      liveGetElement(
+        'live-host-title'
+      )
+
+    const hostDescription =
+      liveGetElement(
+        'live-host-description'
+      )
+
+    const hostVideo =
+      liveGetElement(
+        'live-host-video'
+      )
+
+    const placeholder =
+      liveGetElement(
+        'live-host-placeholder'
+      )
 
     if (hostTitle) {
-      hostTitle.textContent = title
+      hostTitle.textContent =
+        title
     }
 
     if (hostDescription) {
-      hostDescription.textContent = description
+      hostDescription.textContent =
+        description
     }
 
     if (hostVideo) {
-      hostVideo.srcObject = liveHostStream
-      await hostVideo.play().catch(() => {})
+      hostVideo.srcObject =
+        liveHostStream
+
+      await hostVideo
+        .play()
+        .catch(() => {})
     }
 
     if (placeholder) {
-      placeholder.style.display = 'none'
+      placeholder.style.display =
+        'none'
     }
+
+    liveEnsureHostCommentsPanel()
+
+    liveClearCommentLists()
 
     await livePublishHost()
 
     closeLiveAdminModal()
-    liveShowModal('live-host-modal')
 
-    liveStartCommentRealtime(stream.id)
+    liveShowModal(
+      'live-host-modal'
+    )
+
+    liveStartCommentRealtime(
+      stream.id
+    )
 
     if (window.lucide) {
       lucide.createIcons()
     }
   } catch (error) {
-    console.error('Live start error:', error)
+    console.error(
+      'Live start error:',
+      error
+    )
 
-    if (liveCurrentStream?.id) {
+    if (
+      liveCurrentStream?.id
+    ) {
       await window.supabase
         .from('live_streams')
         .update({
           status: 'ended',
-          ended_at: new Date().toISOString()
+          ended_at:
+            new Date().toISOString()
         })
-        .eq('id', liveCurrentStream.id)
+        .eq(
+          'id',
+          liveCurrentStream.id
+        )
     }
 
     if (liveHostStream) {
-      liveHostStream.getTracks().forEach(track => track.stop())
-      liveHostStream = null
+      liveHostStream
+        .getTracks()
+        .forEach(
+          track =>
+            track.stop()
+        )
+
+      liveHostStream =
+        null
     }
 
-    liveHostSessionId = null
-    liveCurrentStream = null
+    liveHostSessionId =
+      null
+
+    liveCurrentStream =
+      null
 
     liveSetError(
       error?.message ||
@@ -7673,8 +7943,11 @@ async function startLiveStream() {
     )
   } finally {
     if (button) {
-      button.disabled = false
-      button.innerHTML = '<i data-lucide="radio"></i><span>ლაივის დაწყება</span>'
+      button.disabled =
+        false
+
+      button.innerHTML =
+        '<i data-lucide="radio"></i><span>ლაივის დაწყება</span>'
 
       if (window.lucide) {
         lucide.createIcons()
@@ -7684,99 +7957,150 @@ async function startLiveStream() {
 }
 
 async function livePublishHost() {
-  if (!liveHostStream || !liveHostSessionId) {
-    throw new Error('Live publisher მზად არ არის')
+  if (
+    !liveHostStream ||
+    !liveHostSessionId
+  ) {
+    throw new Error(
+      'Live publisher მზად არ არის'
+    )
   }
 
-  if (liveHostPeerConnection) {
+  if (
+    liveHostPeerConnection
+  ) {
     liveHostPeerConnection.close()
   }
 
-  liveHostPeerConnection = liveCreatePeerConnection()
+  liveHostPeerConnection =
+    liveCreatePeerConnection()
 
-  const videoTrack = liveHostStream.getVideoTracks()[0]
-  const audioTrack = liveHostStream.getAudioTracks()[0]
+  const videoTrack =
+    liveHostStream
+      .getVideoTracks()[0]
+
+  const audioTrack =
+    liveHostStream
+      .getAudioTracks()[0]
 
   if (!videoTrack) {
-    throw new Error('კამერის ვიდეო track ვერ მოიძებნა')
+    throw new Error(
+      'კამერის ვიდეო track ვერ მოიძებნა'
+    )
   }
 
-  const videoTransceiver = liveHostPeerConnection.addTransceiver(
-    videoTrack,
-    {
-      direction: 'sendonly'
-    }
-  )
-
-  const audioTransceiver = audioTrack
-    ? liveHostPeerConnection.addTransceiver(
-        audioTrack,
+  const videoTransceiver =
+    liveHostPeerConnection
+      .addTransceiver(
+        videoTrack,
         {
-          direction: 'sendonly'
+          direction:
+            'sendonly'
         }
       )
-    : null
 
-  const offer = await liveHostPeerConnection.createOffer()
+  const audioTransceiver =
+    audioTrack
+      ? liveHostPeerConnection
+          .addTransceiver(
+            audioTrack,
+            {
+              direction:
+                'sendonly'
+            }
+          )
+      : null
 
-  await liveHostPeerConnection.setLocalDescription(offer)
+  const offer =
+    await liveHostPeerConnection
+      .createOffer()
+
+  await liveHostPeerConnection
+    .setLocalDescription(
+      offer
+    )
 
   await liveWaitForIceGathering(
     liveHostPeerConnection
   )
 
   const localDescription =
-    liveHostPeerConnection.localDescription
+    liveHostPeerConnection
+      .localDescription
 
   if (!localDescription) {
-    throw new Error('Publisher SDP ვერ შეიქმნა')
+    throw new Error(
+      'Publisher SDP ვერ შეიქმნა'
+    )
   }
 
   const tracks = [
     {
       location: 'local',
-      mid: videoTransceiver.mid,
+      mid:
+        videoTransceiver.mid,
       trackName: 'camera'
     }
   ]
 
-  if (audioTransceiver?.mid) {
+  if (
+    audioTransceiver?.mid
+  ) {
     tracks.push({
       location: 'local',
-      mid: audioTransceiver.mid,
-      trackName: 'microphone'
+      mid:
+        audioTransceiver.mid,
+      trackName:
+        'microphone'
     })
   }
 
-  const result = await liveCallFunction({
-    action: 'publish',
-    sessionId: liveHostSessionId,
-    sessionDescription: localDescription,
-    tracks
-  })
+  const result =
+    await liveCallFunction({
+      action: 'publish',
+      sessionId:
+        liveHostSessionId,
+      sessionDescription:
+        localDescription,
+      tracks
+    })
 
-  if (!result?.result?.sessionDescription) {
-    throw new Error('Cloudflare publisher answer ვერ მიიღო')
+  if (
+    !result?.result
+      ?.sessionDescription
+  ) {
+    throw new Error(
+      'Cloudflare publisher answer ვერ მიიღო'
+    )
   }
 
-  await liveHostPeerConnection.setRemoteDescription(
-    result.result.sessionDescription
-  )
-
-  liveHostTracks = tracks
-
-  liveHostPeerConnection.onconnectionstatechange = () => {
-    const state = liveHostPeerConnection?.connectionState
-
-    console.log(
-      'Cloudflare host connection:',
-      state
+  await liveHostPeerConnection
+    .setRemoteDescription(
+      result.result
+        .sessionDescription
     )
 
-    if (state === 'failed') {
-      liveSetError('Cloudflare Live კავშირი ვერ დამყარდა')
+  liveHostTracks =
+    tracks
+
+  liveHostPeerConnection
+    .onconnectionstatechange =
+    () => {
+      const state =
+        liveHostPeerConnection
+          ?.connectionState
+
+      console.log(
+        'Cloudflare host connection:',
+        state
+      )
+
+      if (state === 'failed') {
+        liveSetError(
+          'Cloudflare Live კავშირი ვერ დამყარდა'
+        )
+      }
     }
-  }
 }
 
 async function endLiveStream() {
@@ -7785,37 +8109,53 @@ async function endLiveStream() {
     return
   }
 
-  const confirmed = confirm(
-    'ნამდვილად გინდა ლაივის დასრულება?'
-  )
+  const confirmed =
+    confirm(
+      'ნამდვილად გინდა ლაივის დასრულება?'
+    )
 
   if (!confirmed) {
     return
   }
 
   try {
-    if (liveHostSessionId && liveHostTracks.length) {
+    if (
+      liveHostSessionId &&
+      liveHostTracks.length
+    ) {
       await liveCallFunction({
-        action: 'close_tracks',
-        sessionId: liveHostSessionId,
-        tracks: liveHostTracks.map(track => ({
-          mid: track.mid
-        }))
-      }).catch(error => {
-        console.warn(
-          'Cloudflare track close error:',
-          error
-        )
-      })
+        action:
+          'close_tracks',
+        sessionId:
+          liveHostSessionId,
+        tracks:
+          liveHostTracks.map(
+            track => ({
+              mid:
+                track.mid
+            })
+          )
+      }).catch(
+        error => {
+          console.warn(
+            'Cloudflare track close error:',
+            error
+          )
+        }
+      )
     }
 
     await window.supabase
       .from('live_streams')
       .update({
         status: 'ended',
-        ended_at: new Date().toISOString()
+        ended_at:
+          new Date().toISOString()
       })
-      .eq('id', liveCurrentStream.id)
+      .eq(
+        'id',
+        liveCurrentStream.id
+      )
   } catch (error) {
     console.error(
       'Live end error:',
@@ -7830,29 +8170,49 @@ function closeLiveHost() {
   if (liveHostStream) {
     liveHostStream
       .getTracks()
-      .forEach(track => track.stop())
+      .forEach(
+        track =>
+          track.stop()
+      )
 
-    liveHostStream = null
+    liveHostStream =
+      null
   }
 
-  if (liveHostPeerConnection) {
+  if (
+    liveHostPeerConnection
+  ) {
     liveHostPeerConnection.close()
-    liveHostPeerConnection = null
+
+    liveHostPeerConnection =
+      null
   }
 
   if (liveCommentChannel) {
-    window.supabase.removeChannel(
-      liveCommentChannel
-    )
+    window.supabase
+      .removeChannel(
+        liveCommentChannel
+      )
 
-    liveCommentChannel = null
+    liveCommentChannel =
+      null
   }
 
-  liveHostSessionId = null
-  liveHostTracks = []
-  liveCurrentStream = null
+  liveHostSessionId =
+    null
 
-  liveHideModal('live-host-modal')
+  liveHostTracks =
+    []
+
+  liveCurrentStream =
+    null
+
+  liveCommentsLoadedStreamId =
+    null
+
+  liveHideModal(
+    'live-host-modal'
+  )
 }
 
 function toggleLiveMicrophone() {
@@ -7861,7 +8221,8 @@ function toggleLiveMicrophone() {
   }
 
   const tracks =
-    liveHostStream.getAudioTracks()
+    liveHostStream
+      .getAudioTracks()
 
   if (!tracks.length) {
     return
@@ -7870,13 +8231,17 @@ function toggleLiveMicrophone() {
   liveMicrophoneEnabled =
     !liveMicrophoneEnabled
 
-  tracks.forEach(track => {
-    track.enabled =
-      liveMicrophoneEnabled
-  })
+  tracks.forEach(
+    track => {
+      track.enabled =
+        liveMicrophoneEnabled
+    }
+  )
 
   const button =
-    liveGetElement('live-mic-btn')
+    liveGetElement(
+      'live-mic-btn'
+    )
 
   if (button) {
     button.classList.toggle(
@@ -7901,7 +8266,8 @@ function toggleLiveCamera() {
   }
 
   const tracks =
-    liveHostStream.getVideoTracks()
+    liveHostStream
+      .getVideoTracks()
 
   if (!tracks.length) {
     return
@@ -7910,13 +8276,17 @@ function toggleLiveCamera() {
   liveCameraEnabled =
     !liveCameraEnabled
 
-  tracks.forEach(track => {
-    track.enabled =
-      liveCameraEnabled
-  })
+  tracks.forEach(
+    track => {
+      track.enabled =
+        liveCameraEnabled
+    }
+  )
 
   const button =
-    liveGetElement('live-camera-btn')
+    liveGetElement(
+      'live-camera-btn'
+    )
 
   if (button) {
     button.classList.toggle(
@@ -7940,15 +8310,23 @@ async function loadActiveLive() {
     const {
       data,
       error
-    } = await window.supabase
-      .from('live_streams')
-      .select('*')
-      .eq('status', 'live')
-      .order('started_at', {
-        ascending: false
-      })
-      .limit(1)
-      .maybeSingle()
+    } =
+      await window.supabase
+        .from('live_streams')
+        .select('*')
+        .eq(
+          'status',
+          'live'
+        )
+        .order(
+          'started_at',
+          {
+            ascending:
+              false
+          }
+        )
+        .limit(1)
+        .maybeSingle()
 
     if (error) {
       console.error(
@@ -8026,10 +8404,14 @@ async function openLiveFromNotification() {
     return
   }
 
-  await openLiveViewer(stream)
+  await openLiveViewer(
+    stream
+  )
 }
 
-async function openLiveViewer(stream = null) {
+async function openLiveViewer(
+  stream = null
+) {
   try {
     if (!stream) {
       stream =
@@ -8078,7 +8460,8 @@ async function openLiveViewer(stream = null) {
     }
 
     if (video) {
-      video.srcObject = null
+      video.srcObject =
+        null
     }
 
     if (placeholder) {
@@ -8112,7 +8495,9 @@ async function openLiveViewer(stream = null) {
   }
 }
 
-async function liveCreateViewerConnection(stream) {
+async function liveCreateViewerConnection(
+  stream
+) {
   if (!stream?.session_id) {
     throw new Error(
       'Live publisher session არ არსებობს'
@@ -8121,7 +8506,8 @@ async function liveCreateViewerConnection(stream) {
 
   const sessionResult =
     await liveCallFunction({
-      action: 'create_viewer_session'
+      action:
+        'create_viewer_session'
     })
 
   const session =
@@ -8136,7 +8522,9 @@ async function liveCreateViewerConnection(stream) {
   liveViewerSessionId =
     session.sessionId
 
-  if (liveViewerPeerConnection) {
+  if (
+    liveViewerPeerConnection
+  ) {
     liveViewerPeerConnection.close()
   }
 
@@ -8153,103 +8541,77 @@ async function liveCreateViewerConnection(stream) {
       'live-viewer-placeholder'
     )
 
-  liveViewerPeerConnection.ontrack =
+  liveViewerPeerConnection
+    .ontrack =
     event => {
       if (!video) {
         return
       }
 
+      let remoteStream =
+        video.srcObject
+
       if (
-        event.track.kind === 'video'
+        !(remoteStream instanceof MediaStream)
       ) {
-        let remoteStream =
-          video.srcObject
+        remoteStream =
+          new MediaStream()
 
-        if (
-          !(remoteStream instanceof MediaStream)
-        ) {
-          remoteStream =
-            new MediaStream()
-
-          video.srcObject =
-            remoteStream
-        }
-
-        const existing =
+        video.srcObject =
           remoteStream
-            .getTracks()
-            .find(
-              track =>
-                track.id ===
-                event.track.id
-            )
-
-        if (!existing) {
-          remoteStream.addTrack(
-            event.track
-          )
-        }
-
-        video.play().catch(() => {})
-
-        if (placeholder) {
-          placeholder.style.display =
-            'none'
-        }
       }
 
-      if (
-        event.track.kind === 'audio'
-      ) {
-        let remoteStream =
-          video.srcObject
-
-        if (
-          !(remoteStream instanceof MediaStream)
-        ) {
-          remoteStream =
-            new MediaStream()
-
-          video.srcObject =
-            remoteStream
-        }
-
-        const existing =
-          remoteStream
-            .getTracks()
-            .find(
-              track =>
-                track.id ===
-                event.track.id
-            )
-
-        if (!existing) {
-          remoteStream.addTrack(
-            event.track
+      const existing =
+        remoteStream
+          .getTracks()
+          .find(
+            track =>
+              track.id ===
+              event.track.id
           )
-        }
 
-        video.play().catch(() => {})
+      if (!existing) {
+        remoteStream.addTrack(
+          event.track
+        )
+      }
+
+      video.play().catch(
+        () => {}
+      )
+
+      if (
+        event.track.kind ===
+        'video' &&
+        placeholder
+      ) {
+        placeholder.style.display =
+          'none'
       }
     }
 
   const result =
     await liveCallFunction({
-      action: 'subscribe',
+      action:
+        'subscribe',
       sessionId:
         liveViewerSessionId,
       tracks: [
         {
-          location: 'remote',
+          location:
+            'remote',
           sessionId:
             stream.session_id,
-          trackName: 'camera'
+          trackName:
+            'camera'
         },
         {
-          location: 'remote',
+          location:
+            'remote',
           sessionId:
             stream.session_id,
-          trackName: 'microphone'
+          trackName:
+            'microphone'
         }
       ]
     })
@@ -8257,29 +8619,35 @@ async function liveCreateViewerConnection(stream) {
   const response =
     result?.result
 
-  if (!response?.sessionDescription) {
+  if (
+    !response?.sessionDescription
+  ) {
     throw new Error(
       'Cloudflare viewer offer ვერ მიიღო'
     )
   }
 
-  await liveViewerPeerConnection.setRemoteDescription(
-    response.sessionDescription
-  )
+  await liveViewerPeerConnection
+    .setRemoteDescription(
+      response.sessionDescription
+    )
 
   const answer =
-    await liveViewerPeerConnection.createAnswer()
+    await liveViewerPeerConnection
+      .createAnswer()
 
-  await liveViewerPeerConnection.setLocalDescription(
-    answer
-  )
+  await liveViewerPeerConnection
+    .setLocalDescription(
+      answer
+    )
 
   await liveWaitForIceGathering(
     liveViewerPeerConnection
   )
 
   const localDescription =
-    liveViewerPeerConnection.localDescription
+    liveViewerPeerConnection
+      .localDescription
 
   if (!localDescription) {
     throw new Error(
@@ -8288,24 +8656,29 @@ async function liveCreateViewerConnection(stream) {
   }
 
   await liveCallFunction({
-    action: 'renegotiate',
+    action:
+      'renegotiate',
     sessionId:
       liveViewerSessionId,
     sessionDescription:
       localDescription
   })
 
-  liveViewerPeerConnection.onconnectionstatechange =
+  liveViewerPeerConnection
+    .onconnectionstatechange =
     () => {
       const state =
-        liveViewerPeerConnection?.connectionState
+        liveViewerPeerConnection
+          ?.connectionState
 
       console.log(
         'Cloudflare viewer connection:',
         state
       )
 
-      if (state === 'failed') {
+      if (
+        state === 'failed'
+      ) {
         console.warn(
           'Cloudflare viewer connection failed'
         )
@@ -8314,9 +8687,13 @@ async function liveCreateViewerConnection(stream) {
 }
 
 function closeLiveViewer() {
-  if (liveViewerPeerConnection) {
+  if (
+    liveViewerPeerConnection
+  ) {
     liveViewerPeerConnection.close()
-    liveViewerPeerConnection = null
+
+    liveViewerPeerConnection =
+      null
   }
 
   const video =
@@ -8326,24 +8703,32 @@ function closeLiveViewer() {
 
   if (video) {
     video.pause()
-    video.srcObject = null
+    video.srcObject =
+      null
   }
 
   if (liveCommentChannel) {
-    window.supabase.removeChannel(
-      liveCommentChannel
-    )
+    window.supabase
+      .removeChannel(
+        liveCommentChannel
+      )
 
-    liveCommentChannel = null
+    liveCommentChannel =
+      null
   }
 
-  liveViewerSessionId = null
+  liveViewerSessionId =
+    null
 
   liveHideModal(
     'live-viewer-modal'
   )
 
-  liveCurrentStream = null
+  liveCurrentStream =
+    null
+
+  liveCommentsLoadedStreamId =
+    null
 }
 
 function liveStartCommentRealtime(
@@ -8353,32 +8738,36 @@ function liveStartCommentRealtime(
     return
   }
 
-  if (liveCommentChannel) {
-    window.supabase.removeChannel(
-      liveCommentChannel
-    )
+  if (
+    liveCommentChannel
+  ) {
+    window.supabase
+      .removeChannel(
+        liveCommentChannel
+      )
   }
 
-  const list =
-    liveGetElement(
-      'live-comments-list'
-    )
+  liveEnsureHostCommentsPanel()
 
-  if (list) {
-    list.innerHTML = ''
-  }
+  liveClearCommentLists()
+
+  liveCommentsLoadedStreamId =
+    streamId
 
   liveCommentChannel =
     window.supabase
       .channel(
-        `live-comments-${streamId}`
+        `live-comments-${streamId}-${Date.now()}`
       )
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'live_comments',
+          event:
+            'INSERT',
+          schema:
+            'public',
+          table:
+            'live_comments',
           filter:
             `stream_id=eq.${streamId}`
         },
@@ -8402,14 +8791,22 @@ async function liveLoadExistingComments(
     const {
       data,
       error
-    } = await window.supabase
-      .from('live_comments')
-      .select('*')
-      .eq('stream_id', streamId)
-      .order('created_at', {
-        ascending: true
-      })
-      .limit(200)
+    } =
+      await window.supabase
+        .from('live_comments')
+        .select('*')
+        .eq(
+          'stream_id',
+          streamId
+        )
+        .order(
+          'created_at',
+          {
+            ascending:
+              true
+          }
+        )
+        .limit(200)
 
     if (error) {
       console.error(
@@ -8420,19 +8817,29 @@ async function liveLoadExistingComments(
       return
     }
 
-    const list =
+    const viewerList =
       liveGetElement(
         'live-comments-list'
       )
 
-    if (!list) {
-      return
+    const hostList =
+      liveGetElement(
+        'live-host-comments-list'
+      )
+
+    if (viewerList) {
+      viewerList.innerHTML =
+        ''
     }
 
-    list.innerHTML = ''
+    if (hostList) {
+      hostList.innerHTML =
+        ''
+    }
 
     for (
-      const comment of data || []
+      const comment of
+      data || []
     ) {
       liveRenderComment(
         comment
@@ -8449,68 +8856,100 @@ async function liveLoadExistingComments(
 function liveRenderComment(
   comment
 ) {
-  const list =
-    liveGetElement(
-      'live-comments-list'
-    )
-
-  if (!list || !comment) {
+  if (!comment) {
     return
   }
 
-  const item =
-    document.createElement('div')
-
-  item.className =
-    'live-comment'
-
-  const author =
-    document.createElement('div')
-
-  author.className =
-    'live-comment-author'
-
-  author.textContent =
-    comment.author_name ||
-    'მომხმარებელი'
-
-  const text =
-    document.createElement('div')
-
-  text.className =
-    'live-comment-text'
-
-  text.textContent =
-    comment.message || ''
-
-  const time =
-    document.createElement('div')
-
-  time.className =
-    'live-comment-time'
+  const lists = [
+    liveGetElement(
+      'live-comments-list'
+    ),
+    liveGetElement(
+      'live-host-comments-list'
+    )
+  ]
 
   const date =
     new Date(
       comment.created_at
     )
 
-  time.textContent =
-    date.toLocaleTimeString(
-      'ka-GE',
-      {
-        hour: '2-digit',
-        minute: '2-digit'
+  lists.forEach(
+    list => {
+      if (!list) {
+        return
       }
-    )
 
-  item.appendChild(author)
-  item.appendChild(text)
-  item.appendChild(time)
+      const item =
+        document.createElement(
+          'div'
+        )
 
-  list.appendChild(item)
+      item.className =
+        'live-comment'
 
-  list.scrollTop =
-    list.scrollHeight
+      const author =
+        document.createElement(
+          'div'
+        )
+
+      author.className =
+        'live-comment-author'
+
+      author.textContent =
+        comment.author_name ||
+        'მომხმარებელი'
+
+      const text =
+        document.createElement(
+          'div'
+        )
+
+      text.className =
+        'live-comment-text'
+
+      text.textContent =
+        comment.message || ''
+
+      const time =
+        document.createElement(
+          'div'
+        )
+
+      time.className =
+        'live-comment-time'
+
+      time.textContent =
+        date.toLocaleTimeString(
+          'ka-GE',
+          {
+            hour:
+              '2-digit',
+            minute:
+              '2-digit'
+          }
+        )
+
+      item.appendChild(
+        author
+      )
+
+      item.appendChild(
+        text
+      )
+
+      item.appendChild(
+        time
+      )
+
+      list.appendChild(
+        item
+      )
+
+      list.scrollTop =
+        list.scrollHeight
+    }
+  )
 }
 
 async function liveSendComment(
@@ -8543,7 +8982,9 @@ async function liveSendComment(
       data: authData,
       error: authError
     } =
-      await window.supabase.auth.getUser()
+      await window.supabase
+        .auth
+        .getUser()
 
     if (
       authError ||
@@ -8584,7 +9025,8 @@ async function liveSendComment(
       throw error
     }
 
-    input.value = ''
+    input.value =
+      ''
   } catch (error) {
     console.error(
       'Live comment error:',
@@ -8612,10 +9054,14 @@ async function liveCheckStatus() {
   if (
     liveGetElement(
       'live-viewer-modal'
-    )?.classList.contains('active') ||
+    )?.classList.contains(
+      'active'
+    ) ||
     liveGetElement(
       'live-host-modal'
-    )?.classList.contains('active')
+    )?.classList.contains(
+      'active'
+    )
   ) {
     return
   }
@@ -8642,13 +9088,19 @@ document.addEventListener(
       lucide.createIcons()
     }
 
-    setTimeout(() => {
-      liveCheckStatus()
-    }, 1800)
+    setTimeout(
+      () => {
+        liveCheckStatus()
+      },
+      1800
+    )
 
-    setInterval(() => {
-      liveCheckStatus()
-    }, 10000)
+    setInterval(
+      () => {
+        liveCheckStatus()
+      },
+      10000
+    )
   }
 )
 
