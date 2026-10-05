@@ -29,7 +29,7 @@
   --line:rgba(34,211,149,.16);
   --line2:rgba(255,255,255,.08);
   --danger:#fb7185;
-  --warning:#fbbf24;
+  --warning:#fbbf24
 }
 
 *{
@@ -837,8 +837,7 @@ button:disabled{
   padding:15px;
   border-radius:17px;
   border:1px solid rgba(34,211,149,.18);
-  background:
-    linear-gradient(145deg,rgba(34,211,149,.07),rgba(255,255,255,.018))
+  background:linear-gradient(145deg,rgba(34,211,149,.07),rgba(255,255,255,.018))
 }
 
 .upload-dashboard.show{
@@ -1173,14 +1172,12 @@ footer{
   </div>
 
   <div id="admin-tools" class="admin-tools">
-
     <button id="upload-open" class="secondary" disabled>
       <i data-lucide="upload-cloud"></i>
       მედიის ატვირთვა
     </button>
 
     <span id="admin-label" class="admin-label"></span>
-
   </div>
 
   <section id="album-grid" class="grid">
@@ -1194,15 +1191,17 @@ footer{
     <div class="gallery-head">
 
       <div>
-
         <p class="eyebrow">ALBUM</p>
 
         <h2 id="gallery-title"></h2>
 
-        <p id="gallery-description" class="intro" style="font-size:13px;margin-top:7px"></p>
+        <p
+          id="gallery-description"
+          class="intro"
+          style="font-size:13px;margin-top:7px"
+        ></p>
 
         <div id="gallery-meta" class="gallery-meta"></div>
-
       </div>
 
       <button id="gallery-close" class="secondary">
@@ -1231,7 +1230,6 @@ footer{
     <h2>ახალი ალბომი</h2>
 
     <div class="field">
-
       <label for="album-name">ალბომის სახელი</label>
 
       <input
@@ -1240,11 +1238,9 @@ footer{
         required
         placeholder="მაგ: 2026 წლის შეხვედრები"
       >
-
     </div>
 
     <div class="field">
-
       <label for="album-desc">აღწერა (არასავალდებულო)</label>
 
       <textarea
@@ -1252,14 +1248,17 @@ footer{
         maxlength="500"
         placeholder="მოკლე აღწერა..."
       ></textarea>
-
     </div>
 
     <div id="album-status" class="status"></div>
 
     <div class="dialog-actions">
 
-      <button type="button" class="secondary" data-close="album-modal">
+      <button
+        type="button"
+        class="secondary"
+        data-close="album-modal"
+      >
         გაუქმება
       </button>
 
@@ -1292,20 +1291,23 @@ footer{
       <label for="photo-files">ფოტოები და ვიდეოები</label>
 
       <div class="file-box">
-<input
-  id="photo-files"
-  type="file"
-  accept="image/*,video/*,.mov,.mp4,.webm,.m4v"
-  multiple
->
+
+        <input
+          id="photo-files"
+          type="file"
+          accept="image/*,video/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic,.heif,.mp4,.mov,.webm,.m4v,.ogg,.ogv,.avi"
+          multiple
+        >
 
         <div class="file-types">
           <span class="file-type">JPG</span>
           <span class="file-type">PNG</span>
           <span class="file-type">WEBP</span>
+          <span class="file-type">GIF</span>
           <span class="file-type">MP4</span>
           <span class="file-type">MOV</span>
           <span class="file-type">WEBM</span>
+          <span class="file-type">M4V</span>
         </div>
 
         <div class="file-hint">
@@ -1313,7 +1315,11 @@ footer{
           არჩეული ფაილების ზომა და ტიპი ქვემოთ გამოჩნდება.
         </div>
 
-        <div id="selected-summary" class="selected-summary" style="display:none">
+        <div
+          id="selected-summary"
+          class="selected-summary"
+          style="display:none"
+        >
           <span id="selected-count">0 ფაილი</span>
           <strong id="selected-size">0 MB</strong>
         </div>
@@ -1326,7 +1332,9 @@ footer{
 
     <div class="field">
 
-      <label for="photo-caption">საერთო წარწერა (არასავალდებულო)</label>
+      <label for="photo-caption">
+        საერთო წარწერა (არასავალდებულო)
+      </label>
 
       <input
         id="photo-caption"
@@ -1359,39 +1367,54 @@ footer{
       </div>
 
       <div class="progress">
-        <div id="upload-progress-bar" class="progress-bar"></div>
+        <div
+          id="upload-progress-bar"
+          class="progress-bar"
+        ></div>
       </div>
 
       <div class="upload-stats">
 
         <div class="upload-stat">
           <div class="upload-stat-label">ატვირთული</div>
-          <div id="upload-uploaded" class="upload-stat-value">0 MB</div>
+          <div id="upload-uploaded" class="upload-stat-value">
+            0 MB
+          </div>
         </div>
 
         <div class="upload-stat">
           <div class="upload-stat-label">სრული ზომა</div>
-          <div id="upload-total" class="upload-stat-value">0 MB</div>
+          <div id="upload-total" class="upload-stat-value">
+            0 MB
+          </div>
         </div>
 
         <div class="upload-stat">
           <div class="upload-stat-label">სიჩქარე</div>
-          <div id="upload-speed" class="upload-stat-value">0 MB/s</div>
+          <div id="upload-speed" class="upload-stat-value">
+            0 MB/s
+          </div>
         </div>
 
         <div class="upload-stat">
           <div class="upload-stat-label">დარჩენილი</div>
-          <div id="upload-eta" class="upload-stat-value">--</div>
+          <div id="upload-eta" class="upload-stat-value">
+            --
+          </div>
         </div>
 
         <div class="upload-stat">
           <div class="upload-stat-label">ფაილი</div>
-          <div id="upload-file-index" class="upload-stat-value">0 / 0</div>
+          <div id="upload-file-index" class="upload-stat-value">
+            0 / 0
+          </div>
         </div>
 
         <div class="upload-stat">
           <div class="upload-stat-label">სულ</div>
-          <div id="upload-total-size" class="upload-stat-value">0 MB</div>
+          <div id="upload-total-size" class="upload-stat-value">
+            0 MB
+          </div>
         </div>
 
       </div>
@@ -1404,7 +1427,10 @@ footer{
         </div>
 
         <div class="progress">
-          <div id="total-progress-bar" class="progress-bar"></div>
+          <div
+            id="total-progress-bar"
+            class="progress-bar"
+          ></div>
         </div>
 
       </div>
@@ -1415,11 +1441,19 @@ footer{
 
     <div class="dialog-actions">
 
-      <button type="button" class="secondary" data-close="upload-modal">
+      <button
+        type="button"
+        class="secondary"
+        data-close="upload-modal"
+      >
         გაუქმება
       </button>
 
-      <button id="upload-submit" class="primary" type="submit">
+      <button
+        id="upload-submit"
+        class="primary"
+        type="submit"
+      >
         ატვირთვა
       </button>
 
@@ -1433,23 +1467,43 @@ footer{
 
   <div id="light-counter" class="light-counter"></div>
 
-  <button id="light-close" aria-label="დახურვა">
+  <button
+    id="light-close"
+    aria-label="დახურვა"
+  >
     <i data-lucide="x"></i>
   </button>
 
-  <button id="light-download" aria-label="ჩამოტვირთვა" title="ჩამოტვირთვა">
+  <button
+    id="light-download"
+    aria-label="ჩამოტვირთვა"
+    title="ჩამოტვირთვა"
+  >
     <i data-lucide="download"></i>
   </button>
 
-  <button id="light-prev" aria-label="წინა მედია">
+  <button
+    id="light-prev"
+    aria-label="წინა მედია"
+  >
     <i data-lucide="chevron-left"></i>
   </button>
 
-  <img id="light-image" alt="ალბომის ფოტო">
+  <img
+    id="light-image"
+    alt="ალბომის ფოტო"
+  >
 
-  <video id="light-video" controls playsinline></video>
+  <video
+    id="light-video"
+    controls
+    playsinline
+  ></video>
 
-  <button id="light-next" aria-label="შემდეგი მედია">
+  <button
+    id="light-next"
+    aria-label="შემდეგი მედია"
+  >
     <i data-lucide="chevron-right"></i>
   </button>
 
@@ -1469,8 +1523,7 @@ const STORAGE_OBJECT_ENDPOINT =
 const PUBLISHABLE_KEY =
   "sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
 
-const MAX_FILE_SIZE =
-  50 * 1024 * 1024
+const MAX_FILE_SIZE = 50 * 1024 * 1024
 
 const $ = id => document.getElementById(id)
 
@@ -1488,7 +1541,7 @@ function hideModal(id){
   $(id).classList.remove("show")
 }
 
-function escapeHtml(value=""){
+function escapeHtml(value = ""){
   return String(value).replace(
     /[&<>"']/g,
     char => ({
@@ -1501,7 +1554,7 @@ function escapeHtml(value=""){
   )
 }
 
-function notify(id,message,type=""){
+function notify(id,message,type = ""){
   const element = $(id)
 
   element.textContent = message
@@ -1521,7 +1574,7 @@ function storageUrl(path){
     .publicUrl
 }
 
-function getFileName(path=""){
+function getFileName(path = ""){
   const value = String(path).split("/").pop() || "media"
 
   try{
@@ -1531,7 +1584,7 @@ function getFileName(path=""){
   }
 }
 
-function getDownloadUrl(path=""){
+function getDownloadUrl(path = ""){
   const url = storageUrl(path)
   const fileName = getFileName(path)
 
@@ -1541,7 +1594,7 @@ function getDownloadUrl(path=""){
     encodeURIComponent(fileName)
 }
 
-function downloadMedia(path=""){
+function downloadMedia(path = ""){
   if(!path){
     return
   }
@@ -1560,7 +1613,7 @@ function downloadMedia(path=""){
   link.remove()
 }
 
-function getExtension(name=""){
+function getExtension(name = ""){
   const value = String(name).toLowerCase()
   const parts = value.split(".")
 
@@ -1571,21 +1624,27 @@ function getExtension(name=""){
 
 function getMimeType(file){
   if(file.type){
-    return file.type
+    return file.type.toLowerCase()
   }
 
   const extension = getExtension(file.name)
 
   const mimeTypes = {
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/avif",
-  "video/mp4",
-  "video/webm",
-  "video/quicktime",
-  "video/x-m4v"
+    jpg:"image/jpeg",
+    jpeg:"image/jpeg",
+    png:"image/png",
+    webp:"image/webp",
+    gif:"image/gif",
+    avif:"image/avif",
+    heic:"image/heic",
+    heif:"image/heif",
+    mp4:"video/mp4",
+    webm:"video/webm",
+    mov:"video/quicktime",
+    m4v:"video/x-m4v",
+    ogg:"video/ogg",
+    ogv:"video/ogg",
+    avi:"video/x-msvideo"
   }
 
   return mimeTypes[extension] || "application/octet-stream"
@@ -1622,7 +1681,7 @@ function isAllowedMedia(file){
   ].includes(extension)
 }
 
-function getMediaType(path=""){
+function getMediaType(path = ""){
   const value = String(path).toLowerCase()
 
   if(
@@ -1640,11 +1699,11 @@ function getMediaType(path=""){
   return "image"
 }
 
-function isVideo(path=""){
+function isVideo(path = ""){
   return getMediaType(path) === "video"
 }
 
-function getMediaCounts(items=[]){
+function getMediaCounts(items = []){
   let images = 0
   let videos = 0
 
@@ -1663,7 +1722,7 @@ function getMediaCounts(items=[]){
   }
 }
 
-function mediaCountHtml(items=[]){
+function mediaCountHtml(items = []){
   const counts = getMediaCounts(items)
 
   let html = ""
@@ -1678,7 +1737,8 @@ function mediaCountHtml(items=[]){
   }
 
   if(counts.images && counts.videos){
-    html += '<span class="count-divider">•</span>'
+    html +=
+      '<span class="count-divider">•</span>'
   }
 
   if(counts.videos){
@@ -1716,15 +1776,25 @@ function formatBytes(bytes){
 }
 
 function formatSpeed(bytesPerSecond){
-  if(!Number.isFinite(bytesPerSecond) || bytesPerSecond <= 0){
+  if(
+    !Number.isFinite(bytesPerSecond) ||
+    bytesPerSecond <= 0
+  ){
     return "0 MB/s"
   }
 
-  return (bytesPerSecond / 1024 / 1024).toFixed(2) + " MB/s"
+  return (
+    bytesPerSecond /
+    1024 /
+    1024
+  ).toFixed(2) + " MB/s"
 }
 
 function formatEta(seconds){
-  if(!Number.isFinite(seconds) || seconds <= 0){
+  if(
+    !Number.isFinite(seconds) ||
+    seconds <= 0
+  ){
     return "დასრულება..."
   }
 
@@ -1736,13 +1806,23 @@ function formatEta(seconds){
   const remainingSeconds = Math.ceil(seconds % 60)
 
   if(minutes < 60){
-    return minutes + " წთ " + remainingSeconds + " წმ"
+    return (
+      minutes +
+      " წთ " +
+      remainingSeconds +
+      " წმ"
+    )
   }
 
   const hours = Math.floor(minutes / 60)
   const remainingMinutes = minutes % 60
 
-  return hours + " სთ " + remainingMinutes + " წთ"
+  return (
+    hours +
+    " სთ " +
+    remainingMinutes +
+    " წთ"
+  )
 }
 
 function renderSelectedFiles(files){
@@ -1761,8 +1841,7 @@ function renderSelectedFiles(files){
   )
 
   $("selected-count").textContent =
-    files.length +
-    (files.length === 1 ? " ფაილი" : " ფაილი")
+    files.length + " ფაილი"
 
   $("selected-size").textContent =
     formatBytes(totalSize)
@@ -1807,16 +1886,21 @@ function renderSelectedFiles(files){
 
 function resetUploadDashboard(){
   $("upload-dashboard").classList.remove("show")
+
   $("upload-progress-bar").style.width = "0%"
   $("total-progress-bar").style.width = "0%"
+
   $("upload-percent").textContent = "0%"
   $("total-progress-text").textContent = "0%"
+
   $("upload-uploaded").textContent = "0 MB"
   $("upload-total").textContent = "0 MB"
   $("upload-speed").textContent = "0 MB/s"
   $("upload-eta").textContent = "--"
+
   $("upload-file-index").textContent = "0 / 0"
   $("upload-total-size").textContent = "0 MB"
+
   $("upload-current-title").textContent = "მზადდება..."
   $("upload-current-sub").textContent = "ატვირთვა იწყება"
 }
@@ -1870,13 +1954,10 @@ function updateUploadDashboard({
   $("upload-total-size").textContent =
     formatBytes(totalBytes)
 
-  const totalPercent = totalBytes
-    ? Math.round(
-        totalUploaded /
-        totalBytes *
-        100
-      )
-    : 0
+  const totalPercent =
+    totalBytes
+      ? Math.round(totalUploaded / totalBytes * 100)
+      : 0
 
   $("total-progress-bar").style.width =
     totalPercent + "%"
@@ -1916,6 +1997,7 @@ async function checkAdmin(){
 }
 
 async function loadAlbums(){
+
   const {
     data,
     error
@@ -1930,7 +2012,6 @@ async function loadAlbums(){
     )
 
   if(error){
-
     $("album-grid").innerHTML =
       '<div class="empty">' +
       '<strong>ალბომების ჩატვირთვა ვერ მოხერხდა</strong>' +
@@ -1946,27 +2027,25 @@ async function loadAlbums(){
 
   await renderAlbums()
 
-  const select =
-    $("upload-album")
+  const select = $("upload-album")
 
-  select.innerHTML =
-    albums
-      .map(album =>
-        '<option value="' +
-        escapeHtml(album.id) +
-        '">' +
-        escapeHtml(album.title) +
-        '</option>'
-      )
-      .join("")
+  select.innerHTML = albums
+    .map(album =>
+      '<option value="' +
+      escapeHtml(album.id) +
+      '">' +
+      escapeHtml(album.title) +
+      '</option>'
+    )
+    .join("")
 
   $("upload-open").disabled =
     albums.length === 0
 }
 
 async function renderAlbums(){
-  const grid =
-    $("album-grid")
+
+  const grid = $("album-grid")
 
   if(!albums.length){
 
@@ -1992,10 +2071,7 @@ async function renderAlbums(){
     .select(
       "album_id,storage_path,created_at"
     )
-    .in(
-      "album_id",
-      ids
-    )
+    .in("album_id",ids)
     .order(
       "created_at",
       {ascending:true}
@@ -2012,138 +2088,133 @@ async function renderAlbums(){
     mediaByAlbum[item.album_id].push(item)
   })
 
-  grid.innerHTML =
-    albums
-      .map(album => {
+  grid.innerHTML = albums.map(album => {
 
-        const items =
-          mediaByAlbum[album.id] || []
+    const items =
+      mediaByAlbum[album.id] || []
 
-        const cover =
-          items[0]
+    const cover = items[0]
 
-        let coverHtml = ""
+    let coverHtml = ""
 
-        if(!cover){
+    if(!cover){
 
-          coverHtml =
-            '<div class="cover-empty">' +
-            '<i data-lucide="images"></i>' +
-            '</div>'
+      coverHtml =
+        '<div class="cover-empty">' +
+        '<i data-lucide="images"></i>' +
+        '</div>'
 
-        }else if(
-          isVideo(
-            cover.storage_path
-          )
-        ){
+    }else if(isVideo(cover.storage_path)){
 
-          coverHtml =
-            '<div class="cover-media">' +
-            '<video src="' +
-            escapeHtml(
-              storageUrl(
-                cover.storage_path
-              )
-            ) +
-            '" muted loop autoplay playsinline preload="metadata"></video>' +
-            '</div>' +
-            '<div class="cover-shade"></div>' +
-            '<div class="cover-badge">' +
-            '<i data-lucide="video"></i>' +
-            ' VIDEO' +
-            '</div>' +
-            '<div class="video-play">' +
-            '<span>' +
-            '<i data-lucide="play"></i>' +
-            '</span>' +
-            '</div>' +
-            '<div class="cover-open">' +
-            'ნახვა ' +
-            '<i data-lucide="arrow-up-right"></i>' +
-            '</div>'
+      coverHtml =
+        '<div class="cover-media">' +
+        '<video src="' +
+        escapeHtml(
+          storageUrl(cover.storage_path)
+        ) +
+        '" muted loop autoplay playsinline preload="metadata"></video>' +
+        '</div>' +
 
-        }else{
+        '<div class="cover-shade"></div>' +
 
-          coverHtml =
-            '<div class="cover-media">' +
-            '<img src="' +
-            escapeHtml(
-              storageUrl(
-                cover.storage_path
-              )
-            ) +
-            '" alt="' +
-            escapeHtml(
-              album.title
-            ) +
-            '" loading="lazy">' +
-            '</div>' +
-            '<div class="cover-shade"></div>' +
-            '<div class="cover-badge">' +
-            '<i data-lucide="image"></i>' +
-            ' PHOTO' +
-            '</div>' +
-            '<div class="cover-open">' +
-            'ნახვა ' +
-            '<i data-lucide="arrow-up-right"></i>' +
-            '</div>'
-        }
+        '<div class="cover-badge">' +
+        '<i data-lucide="video"></i>' +
+        ' VIDEO' +
+        '</div>' +
 
-        const actions =
-          isAdmin
-            ? '<div class="album-actions">' +
-              '<button class="icon-btn" data-edit="' +
-              escapeHtml(album.id) +
-              '" title="სახელის შეცვლა">' +
-              '<i data-lucide="pencil"></i>' +
-              '</button>' +
-              '<button class="icon-btn" data-delete="' +
-              escapeHtml(album.id) +
-              '" title="ალბომის წაშლა">' +
-              '<i data-lucide="trash-2"></i>' +
-              '</button>' +
-              '</div>'
-            : ""
+        '<div class="video-play">' +
+        '<span>' +
+        '<i data-lucide="play"></i>' +
+        '</span>' +
+        '</div>' +
 
-        return (
-          '<article class="album">' +
+        '<div class="cover-open">' +
+        'ნახვა ' +
+        '<i data-lucide="arrow-up-right"></i>' +
+        '</div>'
 
-            '<div class="cover" data-open="' +
-            escapeHtml(album.id) +
-            '">' +
+    }else{
 
-            coverHtml +
+      coverHtml =
+        '<div class="cover-media">' +
+        '<img src="' +
+        escapeHtml(
+          storageUrl(cover.storage_path)
+        ) +
+        '" alt="' +
+        escapeHtml(album.title) +
+        '" loading="lazy">' +
+        '</div>' +
 
-            '</div>' +
+        '<div class="cover-shade"></div>' +
 
-            '<div class="album-info">' +
+        '<div class="cover-badge">' +
+        '<i data-lucide="image"></i>' +
+        ' PHOTO' +
+        '</div>' +
 
-              '<h2>' +
-              escapeHtml(album.title) +
-              '</h2>' +
+        '<div class="cover-open">' +
+        'ნახვა ' +
+        '<i data-lucide="arrow-up-right"></i>' +
+        '</div>'
+    }
 
-              '<p>' +
-              escapeHtml(
-                album.description || ""
-              ) +
-              '</p>' +
+    const actions = isAdmin
+      ? '<div class="album-actions">' +
 
-              '<div class="album-bottom">' +
+        '<button class="icon-btn" ' +
+        'data-edit="' +
+        escapeHtml(album.id) +
+        '" title="სახელის შეცვლა">' +
+        '<i data-lucide="pencil"></i>' +
+        '</button>' +
 
-                '<span class="count">' +
-                mediaCountHtml(items) +
-                '</span>' +
+        '<button class="icon-btn" ' +
+        'data-delete="' +
+        escapeHtml(album.id) +
+        '" title="ალბომის წაშლა">' +
+        '<i data-lucide="trash-2"></i>' +
+        '</button>' +
 
-                actions +
+        '</div>'
+      : ""
 
-              '</div>' +
+    return (
+      '<article class="album">' +
 
-            '</div>' +
+      '<div class="cover" data-open="' +
+      escapeHtml(album.id) +
+      '">' +
+      coverHtml +
+      '</div>' +
 
-          '</article>'
-        )
-      })
-      .join("")
+      '<div class="album-info">' +
+
+      '<h2>' +
+      escapeHtml(album.title) +
+      '</h2>' +
+
+      '<p>' +
+      escapeHtml(
+        album.description || ""
+      ) +
+      '</p>' +
+
+      '<div class="album-bottom">' +
+
+      '<span class="count">' +
+      mediaCountHtml(items) +
+      '</span>' +
+
+      actions +
+
+      '</div>' +
+
+      '</div>' +
+
+      '</article>'
+    )
+  }).join("")
 
   lucide.createIcons()
 
@@ -2153,10 +2224,9 @@ async function renderAlbums(){
 
       element.addEventListener(
         "click",
-        () =>
-          openAlbum(
-            element.dataset.open
-          )
+        () => openAlbum(
+          element.dataset.open
+        )
       )
     })
 
@@ -2232,10 +2302,7 @@ async function openAlbum(id){
     .select(
       "id,album_id,storage_path,caption,created_at"
     )
-    .eq(
-      "album_id",
-      id
-    )
+    .eq("album_id",id)
     .order(
       "created_at",
       {ascending:true}
@@ -2252,13 +2319,10 @@ async function openAlbum(id){
     return
   }
 
-  currentPhotos =
-    data || []
+  currentPhotos = data || []
 
   const counts =
-    getMediaCounts(
-      currentPhotos
-    )
+    getMediaCounts(currentPhotos)
 
   $("gallery-meta").innerHTML =
     '<span class="meta-pill">' +
@@ -2287,6 +2351,8 @@ async function openAlbum(id){
         : ""
     )
 
+  lucide.createIcons()
+
   if(!currentPhotos.length){
 
     $("photo-grid").innerHTML =
@@ -2302,99 +2368,88 @@ async function openAlbum(id){
   }
 
   $("photo-grid").innerHTML =
-    currentPhotos
-      .map((photo,index) => {
+    currentPhotos.map(
+      (photo,index) => {
 
         const video =
-          isVideo(
-            photo.storage_path
-          )
+          isVideo(photo.storage_path)
 
-        const media =
-          video
-            ? '<video src="' +
-              escapeHtml(
-                storageUrl(
-                  photo.storage_path
-                )
-              ) +
-              '" muted playsinline preload="metadata" data-photo="' +
-              index +
-              '"></video>' +
+        const media = video
+          ? '<video src="' +
+            escapeHtml(
+              storageUrl(photo.storage_path)
+            ) +
+            '" muted playsinline preload="metadata" data-photo="' +
+            index +
+            '"></video>' +
 
-              '<div class="photo-video-badge">' +
-              '<i data-lucide="video"></i>' +
-              ' VIDEO' +
-              '</div>' +
+            '<div class="photo-video-badge">' +
+            '<i data-lucide="video"></i>' +
+            ' VIDEO' +
+            '</div>' +
 
-              '<div class="photo-play">' +
-              '<span>' +
-              '<i data-lucide="play"></i>' +
-              '</span>' +
-              '</div>'
+            '<div class="photo-play">' +
+            '<span>' +
+            '<i data-lucide="play"></i>' +
+            '</span>' +
+            '</div>'
 
-            : '<img src="' +
-              escapeHtml(
-                storageUrl(
-                  photo.storage_path
-                )
-              ) +
-              '" alt="' +
-              escapeHtml(
-                photo.caption ||
-                currentAlbum.title
-              ) +
-              '" data-photo="' +
-              index +
-              '" loading="lazy">'
+          : '<img src="' +
+            escapeHtml(
+              storageUrl(photo.storage_path)
+            ) +
+            '" alt="' +
+            escapeHtml(
+              photo.caption ||
+              currentAlbum.title
+            ) +
+            '" data-photo="' +
+            index +
+            '" loading="lazy">'
 
         return (
           '<div class="photo ' +
           (isAdmin ? "admin" : "") +
           '">' +
 
-            media +
+          media +
 
-            '<button ' +
-            'class="icon-btn download-photo" ' +
-            'data-photo-download="' +
-            escapeHtml(
-              photo.storage_path
-            ) +
-            '" ' +
-            'title="ჩამოტვირთვა">' +
-            '<i data-lucide="download"></i>' +
-            '</button>' +
+          '<button ' +
+          'class="icon-btn download-photo" ' +
+          'data-photo-download="' +
+          escapeHtml(
+            photo.storage_path
+          ) +
+          '" ' +
+          'title="ჩამოტვირთვა">' +
+          '<i data-lucide="download"></i>' +
+          '</button>' +
 
-            (
-              photo.caption
-                ? '<div class="photo-caption">' +
-                  escapeHtml(
-                    photo.caption
-                  ) +
-                  '</div>'
-                : ""
-            ) +
+          (
+            photo.caption
+              ? '<div class="photo-caption">' +
+                escapeHtml(photo.caption) +
+                '</div>'
+              : ""
+          ) +
 
-            (
-              isAdmin
-                ? '<button ' +
-                  'class="icon-btn delete-photo" ' +
-                  'data-photo-delete="' +
-                  escapeHtml(
-                    photo.id
-                  ) +
-                  '" ' +
-                  'title="მედიის წაშლა">' +
-                  '<i data-lucide="trash-2"></i>' +
-                  '</button>'
-                : ""
-            ) +
+          (
+            isAdmin
+              ? '<button ' +
+                'class="icon-btn delete-photo" ' +
+                'data-photo-delete="' +
+                escapeHtml(photo.id) +
+                '" ' +
+                'title="მედიის წაშლა">' +
+                '<i data-lucide="trash-2"></i>' +
+                '</button>'
+              : ""
+          ) +
 
           '</div>'
         )
-      })
-      .join("")
+      }
+    ).join("")
 
   lucide.createIcons()
 
@@ -2477,17 +2532,11 @@ function showLightbox(index){
 
   image.removeAttribute("src")
 
-  if(
-    isVideo(
-      item.storage_path
-    )
-  ){
+  if(isVideo(item.storage_path)){
 
-    image.style.display =
-      "none"
+    image.style.display = "none"
 
-    video.style.display =
-      "block"
+    video.style.display = "block"
 
     video.src =
       storageUrl(
@@ -2502,11 +2551,9 @@ function showLightbox(index){
 
   }else{
 
-    video.style.display =
-      "none"
+    video.style.display = "none"
 
-    image.style.display =
-      "block"
+    image.style.display = "block"
 
     image.src =
       storageUrl(
@@ -2519,9 +2566,7 @@ function showLightbox(index){
     " / " +
     currentPhotos.length
 
-  $("lightbox").classList.add(
-    "show"
-  )
+  $("lightbox").classList.add("show")
 }
 
 function closeLightbox(){
@@ -2531,16 +2576,12 @@ function closeLightbox(){
 
   video.pause()
 
-  video.removeAttribute(
-    "src"
-  )
+  video.removeAttribute("src")
 
   video.load()
 
   $("light-image")
-    .removeAttribute(
-      "src"
-    )
+    .removeAttribute("src")
 
   $("lightbox")
     .classList
@@ -2679,10 +2720,7 @@ async function editAlbum(id){
       title:title.trim(),
       description:description.trim()
     })
-    .eq(
-      "id",
-      id
-    )
+    .eq("id",id)
 
   if(error){
 
@@ -2696,9 +2734,7 @@ async function editAlbum(id){
 
   await loadAlbums()
 
-  if(
-    currentAlbum?.id === id
-  ){
+  if(currentAlbum?.id === id){
     await openAlbum(id)
   }
 }
@@ -2731,10 +2767,7 @@ async function deleteAlbum(id){
     .select(
       "id,storage_path"
     )
-    .eq(
-      "album_id",
-      id
-    )
+    .eq("album_id",id)
 
   if(media?.length){
 
@@ -2765,10 +2798,7 @@ async function deleteAlbum(id){
   } = await supabaseClient
     .from("photo_albums")
     .delete()
-    .eq(
-      "id",
-      id
-    )
+    .eq("id",id)
 
   if(error){
 
@@ -2795,6 +2825,7 @@ function uploadWithXHR(
   contentType,
   onProgress
 ){
+
   return new Promise(async resolve => {
 
     const {
@@ -2894,10 +2925,7 @@ function uploadWithXHR(
           )
 
         const instantSpeed =
-          (
-            uploaded -
-            lastLoaded
-          ) /
+          (uploaded - lastLoaded) /
           interval
 
         const averageSpeed =
@@ -2911,32 +2939,25 @@ function uploadWithXHR(
 
         const remaining =
           Math.max(
-            total -
-            uploaded,
+            total - uploaded,
             0
           )
 
         const eta =
           speed > 0
-            ? remaining /
-              speed
+            ? remaining / speed
             : 0
 
         const percent =
           Math.min(
             100,
             Math.round(
-              uploaded /
-              total *
-              100
+              uploaded / total * 100
             )
           )
 
-        lastLoaded =
-          uploaded
-
-        lastTime =
-          now
+        lastLoaded = uploaded
+        lastTime = now
 
         onProgress({
           uploaded,
@@ -2963,9 +2984,7 @@ function uploadWithXHR(
         })
 
         resolve({
-          data:{
-            path
-          }
+          data:{path}
         })
 
         return
@@ -2989,25 +3008,35 @@ function uploadWithXHR(
 
       }catch{
 
-        if(
-          xhr.responseText
-        ){
+        if(xhr.responseText){
           message =
             xhr.responseText
         }
       }
 
-      if(
-        xhr.status === 413
-      ){
+      if(xhr.status === 413){
+
         message =
           "ფაილი ძალიან დიდია ან Storage-ის ლიმიტი არასწორადაა დაყენებული."
       }
 
+      if(
+        xhr.status === 415 ||
+        xhr.status === 400
+      ){
+
+        if(
+          contentType ===
+          "video/quicktime"
+        ){
+
+          message =
+            "MOV ვიდეოს ტიპი (video/quicktime) Supabase Storage-ში დაშვებული არ არის."
+        }
+      }
+
       resolve({
-        error:new Error(
-          message
-        )
+        error:new Error(message)
       })
     }
 
@@ -3048,6 +3077,7 @@ async function uploadMediaFile(
   contentType,
   onProgress
 ){
+
   return uploadWithXHR(
     path,
     file,
@@ -3063,15 +3093,15 @@ async function uploadPhotos(event){
   const albumId =
     $("upload-album").value
 
-  const files =
-    [
-      ...$("photo-files").files
-    ]
+  const files = [
+    ...$("photo-files").files
+  ]
 
   if(
     !albumId ||
     !files.length
   ){
+
     notify(
       "upload-status",
       "აირჩიე ფოტო ან ვიდეო ფაილი",
@@ -3083,8 +3113,7 @@ async function uploadPhotos(event){
 
   const invalidFiles =
     files.filter(
-      file =>
-        !isAllowedMedia(file)
+      file => !isAllowedMedia(file)
     )
 
   if(invalidFiles.length){
@@ -3100,9 +3129,7 @@ async function uploadPhotos(event){
 
   const tooLarge =
     files.find(
-      file =>
-        file.size >
-        MAX_FILE_SIZE
+      file => file.size > MAX_FILE_SIZE
     )
 
   if(tooLarge){
@@ -3133,9 +3160,7 @@ async function uploadPhotos(event){
 
   const totalBytes =
     files.reduce(
-      (sum,file) =>
-        sum +
-        file.size,
+      (sum,file) => sum + file.size,
       0
     )
 
@@ -3145,9 +3170,7 @@ async function uploadPhotos(event){
   const uploadStarted =
     performance.now()
 
-  for(
-    const file of files
-  ){
+  for(const file of files){
 
     const safeName =
       file.name.replace(
@@ -3256,15 +3279,12 @@ async function uploadPhotos(event){
         "error"
       )
 
-      submit.disabled =
-        false
+      submit.disabled = false
 
       return
     }
 
-    totalUploaded +=
-      file.size
-
+    totalUploaded += file.size
     done++
 
     updateUploadDashboard({
@@ -3295,9 +3315,7 @@ async function uploadPhotos(event){
       await supabaseClient
         .storage
         .from(BUCKET)
-        .remove([
-          path
-        ])
+        .remove([path])
 
       notify(
         "upload-status",
@@ -3306,8 +3324,7 @@ async function uploadPhotos(event){
         "error"
       )
 
-      submit.disabled =
-        false
+      submit.disabled = false
 
       return
     }
@@ -3331,8 +3348,7 @@ async function uploadPhotos(event){
   setTimeout(
     async () => {
 
-      $("upload-form")
-        .reset()
+      $("upload-form").reset()
 
       $("selected-files")
         .innerHTML = ""
@@ -3350,7 +3366,6 @@ async function uploadPhotos(event){
       await loadAlbums()
 
       if(currentAlbum){
-
         await openAlbum(
           currentAlbum.id
         )
@@ -3372,9 +3387,7 @@ async function deletePhoto(id){
   }
 
   const type =
-    isVideo(
-      photo.storage_path
-    )
+    isVideo(photo.storage_path)
       ? "ვიდეო"
       : "ფოტო"
 
@@ -3412,10 +3425,7 @@ async function deletePhoto(id){
   } = await supabaseClient
     .from("album_photos")
     .delete()
-    .eq(
-      "id",
-      id
-    )
+    .eq("id",id)
 
   if(error){
 
@@ -3439,14 +3449,11 @@ $("photo-files")
     "change",
     event => {
 
-      const files =
-        [
-          ...event.target.files
-        ]
+      const files = [
+        ...event.target.files
+      ]
 
-      renderSelectedFiles(
-        files
-      )
+      renderSelectedFiles(files)
 
       if(!files.length){
 
@@ -3458,11 +3465,26 @@ $("photo-files")
         return
       }
 
+      const invalid =
+        files.find(
+          file => !isAllowedMedia(file)
+        )
+
+      if(invalid){
+
+        notify(
+          "upload-status",
+          invalid.name +
+          " — მხარდაჭერილი ფოტო/ვიდეო ფორმატი არ არის.",
+          "error"
+        )
+
+        return
+      }
+
       const tooLarge =
         files.find(
-          file =>
-            file.size >
-            MAX_FILE_SIZE
+          file => file.size > MAX_FILE_SIZE
         )
 
       if(tooLarge){
@@ -3484,8 +3506,7 @@ $("photo-files")
         formatBytes(
           files.reduce(
             (sum,file) =>
-              sum +
-              file.size,
+              sum + file.size,
             0
           )
         )
@@ -3555,9 +3576,7 @@ $("gallery-close")
   )
 
 document
-  .querySelectorAll(
-    "[data-close]"
-  )
+  .querySelectorAll("[data-close]")
   .forEach(button => {
 
     button.addEventListener(
@@ -3572,18 +3591,15 @@ document
   })
 
 document
-  .querySelectorAll(
-    ".modal"
-  )
+  .querySelectorAll(".modal")
   .forEach(modal => {
 
     modal.addEventListener(
       "click",
       event => {
 
-        if(
-          event.target === modal
-        ){
+        if(event.target === modal){
+
           hideModal(
             modal.id
           )
@@ -3607,15 +3623,13 @@ $("light-download")
 $("light-prev")
   .addEventListener(
     "click",
-    () =>
-      moveLight(-1)
+    () => moveLight(-1)
   )
 
 $("light-next")
   .addEventListener(
     "click",
-    () =>
-      moveLight(1)
+    () => moveLight(1)
   )
 
 document.addEventListener(
@@ -3630,21 +3644,15 @@ document.addEventListener(
       return
     }
 
-    if(
-      event.key === "Escape"
-    ){
+    if(event.key === "Escape"){
       closeLightbox()
     }
 
-    if(
-      event.key === "ArrowLeft"
-    ){
+    if(event.key === "ArrowLeft"){
       moveLight(-1)
     }
 
-    if(
-      event.key === "ArrowRight"
-    ){
+    if(event.key === "ArrowRight"){
       moveLight(1)
     }
   }
