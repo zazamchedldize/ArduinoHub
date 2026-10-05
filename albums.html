@@ -1292,14 +1292,12 @@ footer{
       <label for="photo-files">ფოტოები და ვიდეოები</label>
 
       <div class="file-box">
-
-        <input
-          id="photo-files"
-          type="file"
-          accept="image/*,video/*"
-          multiple
-          required
-        >
+<input
+  id="photo-files"
+  type="file"
+  accept="image/*,video/*,.mov,.mp4,.webm,.m4v"
+  multiple
+>
 
         <div class="file-types">
           <span class="file-type">JPG</span>
@@ -1579,21 +1577,15 @@ function getMimeType(file){
   const extension = getExtension(file.name)
 
   const mimeTypes = {
-    jpg:"image/jpeg",
-    jpeg:"image/jpeg",
-    png:"image/png",
-    gif:"image/gif",
-    webp:"image/webp",
-    avif:"image/avif",
-    heic:"image/heic",
-    heif:"image/heif",
-    mp4:"video/mp4",
-    webm:"video/webm",
-    mov:"video/quicktime",
-    m4v:"video/x-m4v",
-    ogg:"video/ogg",
-    ogv:"video/ogg",
-    avi:"video/x-msvideo"
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v"
   }
 
   return mimeTypes[extension] || "application/octet-stream"
