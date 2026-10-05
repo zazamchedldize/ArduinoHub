@@ -8835,107 +8835,58 @@ async function liveLoadExistingComments(
   }
 }
 
-function liveRenderComment(
-  comment
-) {
-  if (!comment) {
-    return
-  }
-
+function liveRenderComment(comment) {
   const lists = [
-    liveGetElement(
-      'live-comments-list'
-    ),
-    liveGetElement(
-      'live-host-comments-list'
-    )
-  ]
+    document.getElementById('live-stream-chat-list'),
+    document.getElementById('live-host-chat-list')
+  ].filter(Boolean)
 
-  const date =
-    new Date(
-      comment.created_at
-    )
+  if (!lists.length) return
 
-  lists.forEach(
-    list => {
-      if (!list) {
-        return
-      }
+  const author = comment.author_name || 'მომხმარებელი'
+  const message = comment.message || ''
+  const time = comment.created_at
+    ? new Date(comment.created_at).toLocaleTimeString('ka-GE', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    : ''
 
-      const item =
-        document.createElement(
-          'div'
-        )
+  const currentUserId = window.currentUser?.id || window.user?.id || null
+  const isHost = currentUserId && comment.user_id === currentUserId
 
-      item.className =
-        'live-chat-message'
-
-      const author =
-        document.createElement(
-          'div'
-        )
-
-      author.className =
-        'live-chat-author'
-
-      author.textContent =
-        comment.author_name ||
-        'მომხმარებელი'
-
-      const message =
-        document.createElement(
-          'div'
-        )
-
-      message.className =
-        'live-chat-text'
-
-      message.textContent =
-        comment.message || ''
-
-      const time =
-        document.createElement(
-          'div'
-        )
-
-      time.className =
-        'live-chat-time'
-
-      time.textContent =
-        date.toLocaleTimeString(
-          'ka-GE',
-          {
-            hour: '2-digit',
-            minute: '2-digit'
-          }
-        )
-
-      item.appendChild(
-        author
-      )
-
-      item.appendChild(
-        message
-      )
-
-      item.appendChild(
-        time
-      )
-
-      list.appendChild(
-        item
-      )
-
-      requestAnimationFrame(
-        () => {
-          list.scrollTop =
-            list.scrollHeight
-        }
-      )
+  lists.forEach(list => {
+    if (comment.id && list.querySelector(`[data-comment-id="${comment.id}"]`)) {
+      return
     }
-  )
-}
 
+    const item = document.createElement('div')
+    item.className = `live-chat-message${isHost ? ' live-chat-host' : ''}`
+
+    if (comment.id) {
+      item.dataset.commentId = comment.id
+    }
+
+    const authorEl = document.createElement('div')
+    authorEl.className = 'live-chat-author'
+    authorEl.textContent = author
+
+    const messageEl = document.createElement('div')
+    messageEl.className = 'live-chat-text'
+    messageEl.textContent = message
+
+    const timeEl = document.createElement('div')
+    timeEl.className = 'live-chat-time'
+    timeEl.textContent = time
+
+    item.appendChild(authorEl)
+    item.appendChild(messageEl)
+    item.appendChild(timeEl)
+
+    list.appendChild(item)
+    list.scrollTop = list.scrollHeight
+  })
+}
 async function liveSendChatComment(
   event
 ) {
