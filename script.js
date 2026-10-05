@@ -7305,3 +7305,844 @@ function escapeHbdHtml(value) {
   div.textContent = value
   return div.innerHTML
 }
+
+
+let liveCurrentStream = null
+let liveHostStream = null
+let liveHostPeerConnection = null
+let liveViewerPeerConnection = null
+let liveCommentChannel = null
+let liveCameraEnabled = true
+let liveMicrophoneEnabled = true
+let liveNotificationStream = null
+
+const LIVE_SUPABASE_FUNCTION = 'live-session'
+
+function liveGetElement(id) {
+  return document.getElementById(id)
+}
+
+function liveShowModal(id) {
+  const modal = liveGetElement(id)
+
+  if (!modal) {
+    return
+  }
+
+  modal.classList.add('active')
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function liveHideModal(id) {
+  const modal = liveGetElement(id)
+
+  if (!modal) {
+    return
+  }
+
+  modal.classList.remove('active')
+}
+
+function openLiveAdminModal() {
+  const titleInput = liveGetElement('live-title-input')
+  const descriptionInput = liveGetElement('live-description-input')
+  const error = liveGetElement('live-admin-error')
+
+  if (titleInput) {
+    titleInput.value = ''
+  }
+
+  if (descriptionInput) {
+    descriptionInput.value = ''
+  }
+
+  if (error) {
+    error.textContent = ''
+    error.classList.remove('active')
+  }
+
+  liveShowModal('live-admin-modal')
+}
+
+function closeLiveAdminModal() {
+  liveHideModal('live-admin-modal')
+}
+
+function liveSetError(message) {
+  const error = liveGetElement('live-admin-error')
+
+  if (!error) {
+    return
+  }
+
+  error.textContent = message
+  error.classList.toggle('active', !!message)
+}
+
+async function liveGetAccessToken() {
+  if (!window.supabase) {
+    throw new Error('Supabase არ არის ჩატვირთული')
+  }
+
+  const {
+    data,
+    error
+  } = await window.supabase.auth.getSession()
+
+  if (error || !data.session) {
+    throw new Error('ანგარიშში შესვლა აუცილებელია')
+  }
+
+  return data.session.access_token
+}
+
+async function liveCallFunction(body) {
+  const token = await liveGetAccessToken()
+
+  const response = await fetch(
+    `${window.supabase.supabaseUrl}/functions/v1/${LIVE_SUPABASE_FUNCTION}`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'apikey': window.supabase.supabaseKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    }
+  )
+
+  const data = await response.json().catch(() => ({}))
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      'Live სერვერთან დაკავშირება ვერ მოხერხდა'
+    )
+  }
+
+  return data
+}
+
+async function startLiveStream() {
+  const titleInput = liveGetElement('live-title-input')
+  const descriptionInput = liveGetElement('live-description-input')
+  const button = liveGetElement('live-start-btn')
+
+  const title = titleInput?.value.trim()
+  const description = descriptionInput?.value.trim() || ''
+
+  if (!title) {
+    liveSetError('ლაივის სათაური აუცილებელია')
+    return
+  }
+
+  try {
+    liveSetError('')
+
+    if (button) {
+      button.disabled = true
+      button.innerHTML = '<i data-lucide="loader-circle"></i><span>მზადდება...</span>'
+
+      if (window.lucide) {
+        lucide.createIcons()
+      }
+    }
+
+    liveHostStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: {
+          ideal: 1280
+        },
+        height: {
+          ideal: 720
+        },
+        facingMode: 'user'
+      },
+      audio: true
+    })
+
+    const result = await liveCallFunction({
+      action: 'create_session'
+    })
+
+    if (!result?.session) {
+      throw new Error('Cloudflare Live session ვერ შეიქმნა')
+    }
+
+    const session = result.session
+
+    const {
+      data: authData,
+      error: authError
+    } = await window.supabase.auth.getUser()
+
+    if (authError || !authData.user) {
+      throw new Error('მომხმარებლის დადგენა ვერ მოხერხდა')
+    }
+
+    const {
+      data: stream,
+      error: streamError
+    } = await window.supabase
+      .from('live_streams')
+      .insert({
+        title,
+        description,
+        host_id: authData.user.id,
+        status: 'live',
+        session_id: session.sessionId || session.id || null
+      })
+      .select()
+      .single()
+
+    if (streamError) {
+      throw streamError
+    }
+
+    liveCurrentStream = stream
+
+    const hostTitle = liveGetElement('live-host-title')
+    const hostDescription = liveGetElement('live-host-description')
+    const hostVideo = liveGetElement('live-host-video')
+    const placeholder = liveGetElement('live-host-placeholder')
+
+    if (hostTitle) {
+      hostTitle.textContent = title
+    }
+
+    if (hostDescription) {
+      hostDescription.textContent = description
+    }
+
+    if (hostVideo) {
+      hostVideo.srcObject = liveHostStream
+      await hostVideo.play().catch(() => {})
+    }
+
+    if (placeholder) {
+      placeholder.style.display = 'none'
+    }
+
+    closeLiveAdminModal()
+    liveShowModal('live-host-modal')
+
+    await liveCreateHostConnection()
+
+    liveStartCommentRealtime(stream.id)
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  } catch (error) {
+    console.error('Live start error:', error)
+
+    if (liveHostStream) {
+      liveHostStream.getTracks().forEach(track => track.stop())
+      liveHostStream = null
+    }
+
+    liveSetError(
+      error?.message ||
+      'ლაივის დაწყება ვერ მოხერხდა'
+    )
+  } finally {
+    if (button) {
+      button.disabled = false
+      button.innerHTML = '<i data-lucide="radio"></i><span>ლაივის დაწყება</span>'
+
+      if (window.lucide) {
+        lucide.createIcons()
+      }
+    }
+  }
+}
+
+async function liveCreateHostConnection() {
+  if (!liveHostStream) {
+    return
+  }
+
+  if (liveHostPeerConnection) {
+    liveHostPeerConnection.close()
+  }
+
+  liveHostPeerConnection = new RTCPeerConnection({
+    iceServers: [
+      {
+        urls: [
+          'stun:stun.cloudflare.com:3478',
+          'stun:stun.l.google.com:19302'
+        ]
+      }
+    ]
+  })
+
+  liveHostStream.getTracks().forEach(track => {
+    liveHostPeerConnection.addTrack(
+      track,
+      liveHostStream
+    )
+  })
+
+  liveHostPeerConnection.onconnectionstatechange = () => {
+    if (
+      liveHostPeerConnection.connectionState === 'failed' ||
+      liveHostPeerConnection.connectionState === 'disconnected'
+    ) {
+      console.warn('Live host connection:', liveHostPeerConnection.connectionState)
+    }
+  }
+
+  const offer = await liveHostPeerConnection.createOffer()
+
+  await liveHostPeerConnection.setLocalDescription(offer)
+}
+
+async function endLiveStream() {
+  if (!liveCurrentStream) {
+    closeLiveHost()
+    return
+  }
+
+  const confirmed = confirm(
+    'ნამდვილად გინდა ლაივის დასრულება?'
+  )
+
+  if (!confirmed) {
+    return
+  }
+
+  try {
+    const {
+      error
+    } = await window.supabase
+      .from('live_streams')
+      .update({
+        status: 'ended',
+        ended_at: new Date().toISOString()
+      })
+      .eq('id', liveCurrentStream.id)
+
+    if (error) {
+      throw error
+    }
+  } catch (error) {
+    console.error('Live end error:', error)
+  }
+
+  closeLiveHost()
+}
+
+function closeLiveHost() {
+  if (liveHostStream) {
+    liveHostStream.getTracks().forEach(track => {
+      track.stop()
+    })
+
+    liveHostStream = null
+  }
+
+  if (liveHostPeerConnection) {
+    liveHostPeerConnection.close()
+    liveHostPeerConnection = null
+  }
+
+  if (liveCommentChannel) {
+    window.supabase.removeChannel(liveCommentChannel)
+    liveCommentChannel = null
+  }
+
+  liveCurrentStream = null
+
+  liveHideModal('live-host-modal')
+}
+
+function toggleLiveMicrophone() {
+  if (!liveHostStream) {
+    return
+  }
+
+  const tracks = liveHostStream.getAudioTracks()
+
+  if (!tracks.length) {
+    return
+  }
+
+  liveMicrophoneEnabled = !liveMicrophoneEnabled
+
+  tracks.forEach(track => {
+    track.enabled = liveMicrophoneEnabled
+  })
+
+  const button = liveGetElement('live-mic-btn')
+
+  if (button) {
+    button.classList.toggle(
+      'off',
+      !liveMicrophoneEnabled
+    )
+
+    button.innerHTML = liveMicrophoneEnabled
+      ? '<i data-lucide="mic"></i>'
+      : '<i data-lucide="mic-off"></i>'
+  }
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function toggleLiveCamera() {
+  if (!liveHostStream) {
+    return
+  }
+
+  const tracks = liveHostStream.getVideoTracks()
+
+  if (!tracks.length) {
+    return
+  }
+
+  liveCameraEnabled = !liveCameraEnabled
+
+  tracks.forEach(track => {
+    track.enabled = liveCameraEnabled
+  })
+
+  const button = liveGetElement('live-camera-btn')
+
+  if (button) {
+    button.classList.toggle(
+      'off',
+      !liveCameraEnabled
+    )
+
+    button.innerHTML = liveCameraEnabled
+      ? '<i data-lucide="video"></i>'
+      : '<i data-lucide="video-off"></i>'
+  }
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+async function loadActiveLive() {
+  try {
+    const {
+      data,
+      error
+    } = await window.supabase
+      .from('live_streams')
+      .select('*')
+      .eq('status', 'live')
+      .order('started_at', {
+        ascending: false
+      })
+      .limit(1)
+      .maybeSingle()
+
+    if (error) {
+      console.error('Active live error:', error)
+      return null
+    }
+
+    return data || null
+  } catch (error) {
+    console.error('Active live error:', error)
+    return null
+  }
+}
+
+async function showActiveLiveNotification() {
+  const stream = await loadActiveLive()
+
+  if (!stream) {
+    return
+  }
+
+  liveNotificationStream = stream
+
+  const title = liveGetElement('live-notification-title')
+  const description = liveGetElement('live-notification-description')
+
+  if (title) {
+    title.textContent = stream.title
+  }
+
+  if (description) {
+    description.textContent = stream.description || 'პირდაპირი ჩართვა ArduinoHub-ზე'
+  }
+
+  liveShowModal('live-notification-modal')
+}
+
+function closeLiveNotification() {
+  liveHideModal('live-notification-modal')
+  liveNotificationStream = null
+}
+
+async function openLiveFromNotification() {
+  const stream = liveNotificationStream
+
+  closeLiveNotification()
+
+  if (!stream) {
+    return
+  }
+
+  await openLiveViewer(stream)
+}
+
+async function openLiveViewer(stream = null) {
+  try {
+    if (!stream) {
+      stream = await loadActiveLive()
+    }
+
+    if (!stream) {
+      alert('ამ მომენტში აქტიური ლაივი არ არის')
+      return
+    }
+
+    liveCurrentStream = stream
+
+    const title = liveGetElement('live-viewer-title')
+    const description = liveGetElement('live-viewer-description')
+    const video = liveGetElement('live-viewer-video')
+    const placeholder = liveGetElement('live-viewer-placeholder')
+
+    if (title) {
+      title.textContent = stream.title
+    }
+
+    if (description) {
+      description.textContent = stream.description || ''
+    }
+
+    if (video) {
+      video.srcObject = null
+    }
+
+    if (placeholder) {
+      placeholder.style.display = 'flex'
+    }
+
+    liveShowModal('live-viewer-modal')
+
+    await liveCreateViewerConnection(stream)
+
+    liveStartCommentRealtime(stream.id)
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  } catch (error) {
+    console.error('Live viewer error:', error)
+
+    alert(
+      error?.message ||
+      'ლაივის ჩართვა ვერ მოხერხდა'
+    )
+  }
+}
+
+function closeLiveViewer() {
+  if (liveViewerPeerConnection) {
+    liveViewerPeerConnection.close()
+    liveViewerPeerConnection = null
+  }
+
+  const video = liveGetElement('live-viewer-video')
+
+  if (video) {
+    video.srcObject = null
+  }
+
+  if (liveCommentChannel) {
+    window.supabase.removeChannel(liveCommentChannel)
+    liveCommentChannel = null
+  }
+
+  liveHideModal('live-viewer-modal')
+
+  liveCurrentStream = null
+}
+
+async function liveCreateViewerConnection(stream) {
+  if (!stream?.session_id) {
+    throw new Error('Live session არ არსებობს')
+  }
+
+  if (liveViewerPeerConnection) {
+    liveViewerPeerConnection.close()
+  }
+
+  liveViewerPeerConnection = new RTCPeerConnection({
+    iceServers: [
+      {
+        urls: [
+          'stun:stun.cloudflare.com:3478',
+          'stun:stun.l.google.com:19302'
+        ]
+      }
+    ]
+  })
+
+  liveViewerPeerConnection.ontrack = event => {
+    const video = liveGetElement('live-viewer-video')
+    const placeholder = liveGetElement('live-viewer-placeholder')
+
+    if (!video) {
+      return
+    }
+
+    if (event.streams && event.streams[0]) {
+      video.srcObject = event.streams[0]
+
+      video.play().catch(() => {})
+
+      if (placeholder) {
+        placeholder.style.display = 'none'
+      }
+    }
+  }
+
+  const offer = await liveViewerPeerConnection.createOffer({
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: true
+  })
+
+  await liveViewerPeerConnection.setLocalDescription(offer)
+}
+
+function liveStartCommentRealtime(streamId) {
+  if (!streamId) {
+    return
+  }
+
+  if (liveCommentChannel) {
+    window.supabase.removeChannel(liveCommentChannel)
+  }
+
+  const list = liveGetElement('live-comments-list')
+
+  if (list) {
+    list.innerHTML = ''
+  }
+
+  liveCommentChannel = window.supabase
+    .channel(`live-comments-${streamId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'live_comments',
+        filter: `stream_id=eq.${streamId}`
+      },
+      payload => {
+        liveRenderComment(payload.new)
+      }
+    )
+    .subscribe()
+
+  liveLoadExistingComments(streamId)
+}
+
+async function liveLoadExistingComments(streamId) {
+  try {
+    const {
+      data,
+      error
+    } = await window.supabase
+      .from('live_comments')
+      .select('*')
+      .eq('stream_id', streamId)
+      .order('created_at', {
+        ascending: true
+      })
+      .limit(200)
+
+    if (error) {
+      console.error('Live comments error:', error)
+      return
+    }
+
+    const list = liveGetElement('live-comments-list')
+
+    if (!list) {
+      return
+    }
+
+    list.innerHTML = ''
+
+    for (const comment of data || []) {
+      liveRenderComment(comment)
+    }
+  } catch (error) {
+    console.error('Live comments error:', error)
+  }
+}
+
+function liveRenderComment(comment) {
+  const list = liveGetElement('live-comments-list')
+
+  if (!list || !comment) {
+    return
+  }
+
+  const item = document.createElement('div')
+  item.className = 'live-comment'
+
+  const author = document.createElement('div')
+  author.className = 'live-comment-author'
+  author.textContent = comment.author_name || 'მომხმარებელი'
+
+  const text = document.createElement('div')
+  text.className = 'live-comment-text'
+  text.textContent = comment.message || ''
+
+  const time = document.createElement('div')
+  time.className = 'live-comment-time'
+
+  const date = new Date(comment.created_at)
+
+  time.textContent = date.toLocaleTimeString(
+    'ka-GE',
+    {
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+  )
+
+  item.appendChild(author)
+  item.appendChild(text)
+  item.appendChild(time)
+
+  list.appendChild(item)
+
+  list.scrollTop = list.scrollHeight
+}
+
+async function liveSendComment(event) {
+  event.preventDefault()
+
+  if (!liveCurrentStream) {
+    return
+  }
+
+  const input = liveGetElement('live-comment-input')
+
+  if (!input) {
+    return
+  }
+
+  const message = input.value.trim()
+
+  if (!message) {
+    return
+  }
+
+  try {
+    const {
+      data: authData,
+      error: authError
+    } = await window.supabase.auth.getUser()
+
+    if (authError || !authData.user) {
+      alert('კომენტარის დასაწერად ანგარიშში შესვლა აუცილებელია')
+      return
+    }
+
+    const user = authData.user
+
+    const authorName =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      user.email?.split('@')[0] ||
+      'მომხმარებელი'
+
+    const {
+      error
+    } = await window.supabase
+      .from('live_comments')
+      .insert({
+        stream_id: liveCurrentStream.id,
+        user_id: user.id,
+        message,
+        author_name: authorName
+      })
+
+    if (error) {
+      throw error
+    }
+
+    input.value = ''
+  } catch (error) {
+    console.error('Live comment error:', error)
+  }
+}
+
+async function liveCheckStatus() {
+  const stream = await loadActiveLive()
+
+  if (!stream) {
+    return
+  }
+
+  if (
+    liveCurrentStream &&
+    liveCurrentStream.id === stream.id
+  ) {
+    return
+  }
+
+  if (
+    liveGetElement('live-viewer-modal')?.classList.contains('active') ||
+    liveGetElement('live-host-modal')?.classList.contains('active')
+  ) {
+    return
+  }
+
+  showActiveLiveNotification()
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const commentForm = liveGetElement('live-comment-form')
+
+  if (commentForm) {
+    commentForm.addEventListener(
+      'submit',
+      liveSendComment
+    )
+  }
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+
+  setTimeout(() => {
+    liveCheckStatus()
+  }, 1800)
+
+  setInterval(() => {
+    liveCheckStatus()
+  }, 10000)
+})
+
+window.openLiveAdminModal = openLiveAdminModal
+window.closeLiveAdminModal = closeLiveAdminModal
+window.startLiveStream = startLiveStream
+window.endLiveStream = endLiveStream
+window.closeLiveViewer = closeLiveViewer
+window.openLiveViewer = openLiveViewer
+window.closeLiveNotification = closeLiveNotification
+window.openLiveFromNotification = openLiveFromNotification
+window.toggleLiveMicrophone = toggleLiveMicrophone
+window.toggleLiveCamera = toggleLiveCamera
