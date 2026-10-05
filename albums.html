@@ -1,2768 +1,3020 @@
+
 <!doctype html>
 <html lang="ka">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07110f">
-  <title>ფოტოალბომები — ArduinoHub</title>
-  <link rel="icon" type="image/png" href="arduinohub-icon.png">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    :root{
-      color-scheme:dark;
-      --bg:#07110f;
-      --panel:#0d1b16;
-      --panel2:#10231b;
-      --green:#22d395;
-      --mint:#a7f3d0;
-      --muted:#91a69b;
-      --line:rgba(34,211,149,.17);
-      --white:#f0fdf4;
-      --gold:#f5c451;
-      --red:#fb7185
-    }
-
-    *{box-sizing:border-box}
-
-    body{
-      margin:0;
-      background:
-        radial-gradient(ellipse at 50% -15%,rgba(34,211,149,.12),transparent 45%),
-        var(--bg);
-      color:var(--white);
-      font-family:FiraGO,Inter,sans-serif;
-      min-height:100vh
-    }
-
-    a{color:inherit;text-decoration:none}
-
-    button,input,textarea,select{font:inherit}
-
-    button{cursor:pointer}
-
-    .wrap{
-      width:min(1160px,calc(100% - 40px));
-      margin:auto
-    }
-
-    header{
-      height:76px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      align-items:center
-    }
-
-    .head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px
-    }
-
-    .brand{
-      font-family:Inter,sans-serif;
-      font-weight:800;
-      letter-spacing:-.5px
-    }
-
-    .brand span{color:var(--green)}
-
-    .back{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      color:var(--mint);
-      font-size:14px
-    }
-
-    main{padding:62px 0 90px}
-
-    .eyebrow{
-      color:var(--green);
-      font:700 11px Inter,sans-serif;
-      letter-spacing:2px;
-      text-transform:uppercase
-    }
-
-    h1{
-      font-size:clamp(32px,5vw,52px);
-      line-height:1.12;
-      margin:12px 0
-    }
-
-    .intro{
-      max-width:650px;
-      color:#a7b9af;
-      line-height:1.75;
-      margin:0
-    }
-
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:24px;
-      margin-bottom:34px
-    }
-
-    .primary,
-    .secondary,
-    .danger{
-      border-radius:12px;
-      padding:12px 17px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      cursor:pointer;
-      font-weight:700;
-      border:1px solid transparent;
-      transition:.2s
-    }
-
-    .primary{
-      background:linear-gradient(135deg,#059669,#22d395);
-      color:#042016
-    }
-
-    .primary:hover{
-      transform:translateY(-2px);
-      filter:brightness(1.08)
-    }
-
-    .secondary{
-      background:#10231b;
-      color:var(--mint);
-      border-color:var(--line)
-    }
-
-    .secondary:hover{
-      border-color:var(--green)
-    }
-
-    .danger{
-      background:rgba(248,113,113,.08);
-      color:#fca5a5;
-      border-color:rgba(248,113,113,.25)
-    }
-
-    button:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-      transform:none
-    }
-
-    .admin-tools{
-      display:none;
-      gap:10px;
-      flex-wrap:wrap;
-      margin:0 0 24px
-    }
-
-    .admin-tools.show{display:flex}
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:20px
-    }
-
-    .album{
-      border:1px solid var(--line);
-      background:linear-gradient(145deg,rgba(16,35,27,.96),rgba(8,20,15,.96));
-      border-radius:20px;
-      overflow:hidden;
-      min-width:0;
-      transition:transform .22s,border-color .22s
-    }
-
-    .album:hover{
-      transform:translateY(-4px);
-      border-color:rgba(34,211,149,.45)
-    }
-
-    .cover{
-      height:210px;
-      background:#10231b;
-      position:relative;
-      overflow:hidden;
-      cursor:pointer
-    }
-
-    .cover img,
-    .cover video{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      transition:transform .4s
-    }
-
-    .album:hover .cover img,
-    .album:hover .cover video{
-      transform:scale(1.04)
-    }
-
-    .cover-empty{
-      height:100%;
-      display:grid;
-      place-items:center;
-      color:#4b8068;
-      background:radial-gradient(circle,rgba(34,211,149,.1),transparent 65%)
-    }
-
-    .cover-empty i{
-      width:46px;
-      height:46px
-    }
-
-    .video-play{
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
-      pointer-events:none
-    }
-
-    .video-play span{
-      width:58px;
-      height:58px;
-      border-radius:50%;
-      background:rgba(7,17,15,.78);
-      border:1px solid rgba(255,255,255,.22);
-      display:grid;
-      place-items:center;
-      backdrop-filter:blur(8px)
-    }
-
-    .video-play svg{
-      width:25px;
-      height:25px;
-      fill:var(--green);
-      color:var(--green);
-      margin-left:3px
-    }
-
-    .album-info{padding:18px}
-
-    .album-info h2{
-      font-size:19px;
-      margin:0 0 8px
-    }
-
-    .album-info p{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.6;
-      margin:0;
-      min-height:21px
-    }
-
-    .album-bottom{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-top:17px
-    }
-
-    .count{
-      font-size:12px;
-      color:var(--mint);
-      display:flex;
-      align-items:center;
-      gap:6px
-    }
-
-    .album-actions{
-      display:flex;
-      gap:7px
-    }
-
-    .icon-btn{
-      width:34px;
-      height:34px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:#10231b;
-      color:var(--mint);
-      display:grid;
-      place-items:center;
-      cursor:pointer
-    }
-
-    .icon-btn:hover{
-      border-color:var(--green)
-    }
-
-    .social-bar{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:15px
-    }
-
-    .social-btn{
-      min-height:34px;
-      padding:7px 11px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.08);
-      background:#0a1813;
-      color:#a8bbb2;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-size:12px;
-      transition:.2s
-    }
-
-    .social-btn svg{
-      width:16px;
-      height:16px
-    }
-
-    .social-btn:hover{
-      border-color:rgba(34,211,149,.4);
-      color:var(--white)
-    }
-
-    .social-btn.liked{
-      color:#ff6b81;
-      border-color:rgba(255,107,129,.35);
-      background:rgba(255,107,129,.08)
-    }
-
-    .social-btn.admin-liked{
-      color:var(--gold);
-      border-color:rgba(245,196,81,.42);
-      background:linear-gradient(135deg,rgba(245,196,81,.1),rgba(34,211,149,.08));
-      box-shadow:0 0 18px rgba(245,196,81,.07)
-    }
-
-    .admin-like-badge{
-      display:inline-flex;
-      align-items:center;
-      gap:5px;
-      color:var(--gold);
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.6px;
-      padding:6px 8px;
-      border-radius:8px;
-      border:1px solid rgba(245,196,81,.25);
-      background:rgba(245,196,81,.06)
-    }
-
-    .empty,
-    .loading{
-      border:1px dashed rgba(34,211,149,.25);
-      border-radius:18px;
-      padding:45px 20px;
-      text-align:center;
-      color:var(--muted);
-      grid-column:1/-1
-    }
-
-    .empty i{
-      color:var(--green);
-      width:38px;
-      height:38px;
-      margin-bottom:12px
-    }
-
-    .empty strong{
-      display:block;
-      color:var(--white);
-      margin-bottom:7px
-    }
-
-    .gallery{
-      display:none;
-      margin-top:38px;
-      border-top:1px solid var(--line);
-      padding-top:30px
-    }
-
-    .gallery.show{display:block}
-
-    .gallery-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:15px;
-      margin-bottom:20px
-    }
-
-    .gallery-head h2{
-      font-size:25px;
-      margin:0
-    }
-
-    .photos{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:14px
-    }
-
-    .photo{
-      position:relative;
-      aspect-ratio:1/1;
-      border-radius:16px;
-      overflow:hidden;
-      background:#10231b;
-      border:1px solid var(--line)
-    }
-
-    .photo img,
-    .photo video{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      cursor:zoom-in
-    }
-
-    .photo .delete-photo{
-      position:absolute;
-      top:8px;
-      right:8px;
-      display:none;
-      z-index:4
-    }
-
-    .photo.admin .delete-photo{
-      display:grid
-    }
-
-    .photo-caption{
-      position:absolute;
-      bottom:0;
-      left:0;
-      right:0;
-      padding:34px 10px 10px;
-      background:linear-gradient(transparent,rgba(0,0,0,.88));
-      font-size:12px;
-      pointer-events:none;
-      z-index:2
-    }
-
-    .media-type{
-      position:absolute;
-      top:8px;
-      left:8px;
-      z-index:3;
-      display:inline-flex;
-      align-items:center;
-      gap:5px;
-      padding:6px 8px;
-      border-radius:8px;
-      background:rgba(7,17,15,.78);
-      border:1px solid rgba(255,255,255,.12);
-      color:var(--mint);
-      font-size:10px;
-      font-weight:700;
-      backdrop-filter:blur(7px)
-    }
-
-    .photo-social{
-      position:absolute;
-      left:8px;
-      right:8px;
-      bottom:8px;
-      z-index:5;
-      display:flex;
-      gap:6px;
-      pointer-events:none
-    }
-
-    .photo-social .social-btn{
-      pointer-events:auto;
-      background:rgba(7,17,15,.82);
-      backdrop-filter:blur(7px);
-      min-height:31px;
-      padding:6px 9px
-    }
-
-    .photo-social .social-btn svg{
-      width:14px;
-      height:14px
-    }
-
-    .media-admin-like{
-      position:absolute;
-      top:8px;
-      right:8px;
-      z-index:3;
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
-      padding:5px 7px;
-      border-radius:7px;
-      color:var(--gold);
-      background:rgba(7,17,15,.82);
-      border:1px solid rgba(245,196,81,.3);
-      font-size:9px;
-      font-weight:800
-    }
-
-    .modal{
-      position:fixed;
-      inset:0;
-      z-index:20;
-      background:rgba(0,0,0,.78);
-      backdrop-filter:blur(8px);
-      display:none;
-      place-items:center;
-      padding:18px
-    }
-
-    .modal.show{display:grid}
-
-    .dialog{
-      width:min(100%,480px);
-      max-height:90vh;
-      overflow:auto;
-      background:linear-gradient(145deg,#10231b,#07110f);
-      border:1px solid rgba(34,211,149,.3);
-      border-radius:22px;
-      padding:26px;
-      box-shadow:0 25px 90px #0009
-    }
-
-    .dialog.comments-dialog{
-      width:min(100%,650px)
-    }
-
-    .dialog h2{
-      margin:0 0 20px;
-      font-size:23px
-    }
-
-    .comments-target{
-      color:var(--muted);
-      font-size:13px;
-      margin-top:-10px;
-      margin-bottom:18px
-    }
-
-    .comment-list{
-      display:grid;
-      gap:11px;
-      max-height:390px;
-      overflow:auto;
-      padding-right:3px
-    }
-
-    .comment-item{
-      border:1px solid rgba(255,255,255,.07);
-      background:#091712;
-      border-radius:14px;
-      padding:13px
-    }
-
-    .comment-item.admin-comment{
-      border-color:rgba(245,196,81,.35);
-      background:
-        linear-gradient(145deg,rgba(245,196,81,.075),rgba(34,211,149,.035)),
-        #091712;
-      box-shadow:inset 0 0 0 1px rgba(245,196,81,.03)
-    }
-
-    .comment-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:7px
-    }
-
-    .comment-author{
-      display:flex;
-      align-items:center;
-      gap:7px;
-      font-size:13px;
-      font-weight:700
-    }
-
-    .comment-item.admin-comment .comment-author{
-      color:var(--gold)
-    }
-
-    .admin-badge{
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
-      padding:4px 6px;
-      border-radius:6px;
-      color:var(--gold);
-      background:rgba(245,196,81,.08);
-      border:1px solid rgba(245,196,81,.25);
-      font-size:8px;
-      font-weight:800;
-      letter-spacing:.6px
-    }
-
-    .comment-date{
-      color:#60766c;
-      font-size:10px
-    }
-
-    .comment-text{
-      color:#c4d2cb;
-      line-height:1.65;
-      font-size:13px;
-      white-space:pre-wrap;
-      word-break:break-word
-    }
-
-    .comment-delete{
-      border:0;
-      background:transparent;
-      color:#7e8e87;
-      padding:3px;
-      display:grid;
-      place-items:center
-    }
-
-    .comment-delete:hover{
-      color:var(--red)
-    }
-
-    .comment-form{
-      margin-top:17px;
-      padding-top:17px;
-      border-top:1px solid var(--line)
-    }
-
-    .comment-form textarea{
-      width:100%;
-      min-height:85px;
-      resize:vertical;
-      border:1px solid var(--line);
-      background:#06130e;
-      color:white;
-      border-radius:12px;
-      padding:12px;
-      outline:none
-    }
-
-    .comment-form textarea:focus{
-      border-color:var(--green)
-    }
-
-    .comment-form-actions{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-top:10px
-    }
-
-    .login-note{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.6
-    }
-
-    .field{
-      display:grid;
-      gap:7px;
-      margin-bottom:15px
-    }
-
-    .field label{
-      font-size:13px;
-      color:var(--mint);
-      font-weight:700
-    }
-
-    .field input,
-    .field textarea{
-      width:100%;
-      border:1px solid var(--line);
-      background:#06130e;
-      color:white;
-      border-radius:11px;
-      padding:12px;
-      outline:none
-    }
-
-    .field input:focus,
-    .field textarea:focus{
-      border-color:var(--green)
-    }
-
-    .field textarea{
-      resize:vertical;
-      min-height:90px
-    }
-
-    .dialog-actions{
-      display:flex;
-      justify-content:flex-end;
-      gap:9px;
-      margin-top:20px
-    }
-
-    .status{
-      font-size:13px;
-      color:var(--mint);
-      min-height:18px;
-      margin-top:8px
-    }
-
-    .lightbox{
-      position:fixed;
-      inset:0;
-      z-index:30;
-      background:rgba(0,0,0,.94);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:65px 70px
-    }
-
-    .lightbox.show{display:flex}
-
-    .lightbox-content{
-      width:min(100%,1000px);
-      height:min(100%,760px);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:14px
-    }
-
-    .lightbox img,
-    .lightbox video{
-      max-width:100%;
-      max-height:calc(100% - 70px);
-      object-fit:contain;
-      border-radius:8px
-    }
-
-    .lightbox-info{
-      width:min(100%,700px);
-      text-align:center;
-      color:#c9d8d1;
-      font-size:13px
-    }
-
-    .lightbox button{
-      position:absolute;
-      border:1px solid #ffffff30;
-      background:#10231b;
-      color:white;
-      border-radius:50%;
-      width:42px;
-      height:42px;
-      display:grid;
-      place-items:center;
-      cursor:pointer
-    }
-
-    #light-close{
-      top:18px;
-      right:18px
-    }
-
-    #light-prev{
-      left:18px
-    }
-
-    #light-next{
-      right:18px
-    }
-
-    .lightbox-social{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px
-    }
-
-    footer{
-      border-top:1px solid var(--line);
-      padding:22px 0;
-      color:var(--muted);
-      font-size:12px
-    }
-
-    @media(max-width:850px){
-      .grid{
-        grid-template-columns:repeat(2,minmax(0,1fr))
-      }
-
-      .photos{
-        grid-template-columns:repeat(3,minmax(0,1fr))
-      }
-    }
-
-    @media(max-width:600px){
-      .wrap{
-        width:min(100% - 28px,1160px)
-      }
-
-      header{height:64px}
-
-      main{
-        padding:42px 0 65px
-      }
-
-      .top{
-        align-items:start;
-        flex-direction:column
-      }
-
-      .grid{
-        grid-template-columns:1fr
-      }
-
-      .cover{
-        height:220px
-      }
-
-      .photos{
-        grid-template-columns:repeat(2,minmax(0,1fr))
-      }
-
-      .gallery-head{
-        align-items:start;
-        flex-direction:column
-      }
-
-      .lightbox{
-        padding:60px 48px
-      }
-
-      .dialog{
-        padding:22px
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07110f">
+<title>ფოტოალბომები — ArduinoHub</title>
+<link rel="icon" type="image/png" href="arduinohub-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+:root{
+color-scheme:dark;
+--bg:#07110f;
+--panel:#0d1b16;
+--panel2:#10231b;
+--green:#22d395;
+--mint:#a7f3d0;
+--muted:#91a69b;
+--line:rgba(34,211,149,.17);
+--white:#f0fdf4;
+--gold:#f5c451;
+--red:#fb7185
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:
+radial-gradient(ellipse at 50% -15%,rgba(34,211,149,.12),transparent 45%),
+var(--bg);
+color:var(--white);
+font-family:FiraGO,Inter,sans-serif;
+min-height:100vh
+}
+
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.wrap{
+width:min(1160px,calc(100% - 40px));
+margin:auto
+}
+
+header{
+height:76px;
+border-bottom:1px solid var(--line);
+display:flex;
+align-items:center
+}
+
+.head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px
+}
+
+.brand{
+font-family:Inter,sans-serif;
+font-weight:800;
+letter-spacing:-.5px
+}
+
+.brand span{color:var(--green)}
+
+.back{
+display:inline-flex;
+align-items:center;
+gap:8px;
+color:var(--mint);
+font-size:14px
+}
+
+main{padding:62px 0 90px}
+
+.eyebrow{
+color:var(--green);
+font:700 11px Inter,sans-serif;
+letter-spacing:2px;
+text-transform:uppercase
+}
+
+h1{
+font-size:clamp(32px,5vw,52px);
+line-height:1.12;
+margin:12px 0
+}
+
+.intro{
+max-width:650px;
+color:#a7b9af;
+line-height:1.75;
+margin:0
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:end;
+gap:24px;
+margin-bottom:34px
+}
+
+.primary,.secondary,.danger{
+border-radius:12px;
+padding:12px 17px;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+cursor:pointer;
+font-weight:700;
+border:1px solid transparent;
+transition:.2s
+}
+
+.primary{
+background:linear-gradient(135deg,#059669,#22d395);
+color:#042016
+}
+
+.primary:hover{
+transform:translateY(-2px);
+filter:brightness(1.08)
+}
+
+.secondary{
+background:#10231b;
+color:var(--mint);
+border-color:var(--line)
+}
+
+.secondary:hover{border-color:var(--green)}
+
+.danger{
+background:rgba(248,113,113,.08);
+color:#fca5a5;
+border-color:rgba(248,113,113,.25)
+}
+
+button:disabled{
+opacity:.55;
+cursor:not-allowed;
+transform:none
+}
+
+.admin-tools{
+display:none;
+gap:10px;
+flex-wrap:wrap;
+margin:0 0 24px
+}
+
+.admin-tools.show{display:flex}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:20px
+}
+
+.album{
+border:1px solid var(--line);
+background:linear-gradient(145deg,rgba(16,35,27,.96),rgba(8,20,15,.96));
+border-radius:20px;
+overflow:hidden;
+min-width:0;
+transition:transform .22s,border-color .22s
+}
+
+.album:hover{
+transform:translateY(-4px);
+border-color:rgba(34,211,149,.45)
+}
+
+.cover{
+height:210px;
+background:#10231b;
+position:relative;
+overflow:hidden;
+cursor:pointer
+}
+
+.cover img,.cover video{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+transition:transform .4s
+}
+
+.album:hover .cover img,.album:hover .cover video{
+transform:scale(1.04)
+}
+
+.cover-empty{
+height:100%;
+display:grid;
+place-items:center;
+color:#4b8068;
+background:radial-gradient(circle,rgba(34,211,149,.1),transparent 65%)
+}
+
+.cover-empty i{
+width:46px;
+height:46px
+}
+
+.video-play{
+position:absolute;
+inset:0;
+display:grid;
+place-items:center;
+pointer-events:none
+}
+
+.video-play span{
+width:58px;
+height:58px;
+border-radius:50%;
+background:rgba(7,17,15,.78);
+border:1px solid rgba(255,255,255,.22);
+display:grid;
+place-items:center;
+backdrop-filter:blur(8px)
+}
+
+.video-play svg{
+width:25px;
+height:25px;
+fill:var(--green);
+color:var(--green);
+margin-left:3px
+}
+
+.album-info{padding:18px}
+
+.album-info h2{
+font-size:19px;
+margin:0 0 8px
+}
+
+.album-info p{
+font-size:13px;
+color:var(--muted);
+line-height:1.6;
+margin:0;
+min-height:21px
+}
+
+.album-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-top:17px
+}
+
+.count{
+font-size:12px;
+color:var(--mint);
+display:flex;
+align-items:center;
+gap:6px
+}
+
+.album-actions{
+display:flex;
+gap:7px
+}
+
+.icon-btn{
+width:34px;
+height:34px;
+border-radius:10px;
+border:1px solid var(--line);
+background:#10231b;
+color:var(--mint);
+display:grid;
+place-items:center;
+cursor:pointer
+}
+
+.icon-btn:hover{border-color:var(--green)}
+
+.social-bar{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+margin-top:15px
+}
+
+.social-btn{
+min-height:34px;
+padding:7px 11px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,.08);
+background:#0a1813;
+color:#a8bbb2;
+display:inline-flex;
+align-items:center;
+gap:6px;
+font-size:12px;
+transition:.2s
+}
+
+.social-btn svg{
+width:16px;
+height:16px
+}
+
+.social-btn:hover{
+border-color:rgba(34,211,149,.4);
+color:var(--white)
+}
+
+.social-btn.liked{
+color:#ff6b81;
+border-color:rgba(255,107,129,.35);
+background:rgba(255,107,129,.08)
+}
+
+.social-btn.admin-liked{
+color:var(--gold);
+border-color:rgba(245,196,81,.42);
+background:linear-gradient(135deg,rgba(245,196,81,.1),rgba(34,211,149,.08));
+box-shadow:0 0 18px rgba(245,196,81,.07)
+}
+
+.admin-like-badge{
+display:inline-flex;
+align-items:center;
+gap:5px;
+color:var(--gold);
+font-size:10px;
+font-weight:800;
+letter-spacing:.6px;
+padding:6px 8px;
+border-radius:8px;
+border:1px solid rgba(245,196,81,.25);
+background:rgba(245,196,81,.06)
+}
+
+.empty,.loading{
+border:1px dashed rgba(34,211,149,.25);
+border-radius:18px;
+padding:45px 20px;
+text-align:center;
+color:var(--muted);
+grid-column:1/-1
+}
+
+.empty i{
+color:var(--green);
+width:38px;
+height:38px;
+margin-bottom:12px
+}
+
+.empty strong{
+display:block;
+color:var(--white);
+margin-bottom:7px
+}
+
+.gallery{
+display:none;
+margin-top:38px;
+border-top:1px solid var(--line);
+padding-top:30px
+}
+
+.gallery.show{display:block}
+
+.gallery-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+margin-bottom:20px
+}
+
+.gallery-head h2{
+font-size:25px;
+margin:0
+}
+
+.photos{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:14px
+}
+
+.photo{
+position:relative;
+aspect-ratio:1/1;
+border-radius:16px;
+overflow:hidden;
+background:#10231b;
+border:1px solid var(--line)
+}
+
+.photo img,.photo video{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+cursor:zoom-in
+}
+
+.photo .delete-photo{
+position:absolute;
+top:8px;
+right:8px;
+display:none;
+z-index:4
+}
+
+.photo.admin .delete-photo{display:grid}
+
+.photo-caption{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+padding:34px 10px 10px;
+background:linear-gradient(transparent,rgba(0,0,0,.88));
+font-size:12px;
+pointer-events:none;
+z-index:2
+}
+
+.media-type{
+position:absolute;
+top:8px;
+left:8px;
+z-index:3;
+display:inline-flex;
+align-items:center;
+gap:5px;
+padding:6px 8px;
+border-radius:8px;
+background:rgba(7,17,15,.78);
+border:1px solid rgba(255,255,255,.12);
+color:var(--mint);
+font-size:10px;
+font-weight:700;
+backdrop-filter:blur(7px)
+}
+
+.photo-social{
+position:absolute;
+left:8px;
+right:8px;
+bottom:8px;
+z-index:5;
+display:flex;
+gap:6px;
+pointer-events:none
+}
+
+.photo-social .social-btn{
+pointer-events:auto;
+background:rgba(7,17,15,.82);
+backdrop-filter:blur(7px);
+min-height:31px;
+padding:6px 9px
+}
+
+.photo-social .social-btn svg{
+width:14px;
+height:14px
+}
+
+.media-admin-like{
+position:absolute;
+top:8px;
+right:8px;
+z-index:3;
+display:inline-flex;
+align-items:center;
+gap:4px;
+padding:5px 7px;
+border-radius:7px;
+color:var(--gold);
+background:rgba(7,17,15,.82);
+border:1px solid rgba(245,196,81,.3);
+font-size:9px;
+font-weight:800
+}
+
+.modal{
+position:fixed;
+inset:0;
+z-index:20;
+background:rgba(0,0,0,.78);
+backdrop-filter:blur(8px);
+display:none;
+place-items:center;
+padding:18px
+}
+
+.modal.show{display:grid}
+
+.dialog{
+width:min(100%,480px);
+max-height:90vh;
+overflow:auto;
+background:linear-gradient(145deg,#10231b,#07110f);
+border:1px solid rgba(34,211,149,.3);
+border-radius:22px;
+padding:26px;
+box-shadow:0 25px 90px #0009
+}
+
+.dialog.comments-dialog{
+width:min(100%,700px)
+}
+
+.dialog h2{
+margin:0 0 20px;
+font-size:23px
+}
+
+.comments-target{
+color:var(--muted);
+font-size:13px;
+margin-top:-10px;
+margin-bottom:18px
+}
+
+.comment-list{
+display:grid;
+gap:13px;
+max-height:430px;
+overflow:auto;
+padding:4px
+}
+
+.comment-item{
+position:relative;
+border:1px solid rgba(255,255,255,.07);
+background:
+linear-gradient(145deg,rgba(17,36,28,.95),rgba(7,20,15,.95));
+border-radius:17px;
+padding:15px;
+box-shadow:0 8px 25px rgba(0,0,0,.12);
+transition:.2s
+}
+
+.comment-item:hover{
+border-color:rgba(34,211,149,.2);
+transform:translateY(-1px)
+}
+
+.comment-item.admin-comment{
+border-color:rgba(245,196,81,.38);
+background:
+linear-gradient(145deg,rgba(245,196,81,.09),rgba(34,211,149,.04)),
+#091712;
+box-shadow:
+0 0 25px rgba(245,196,81,.05),
+inset 0 0 0 1px rgba(245,196,81,.035)
+}
+
+.comment-item.reply{
+margin-left:34px;
+border-left:2px solid rgba(34,211,149,.35);
+border-radius:14px
+}
+
+.comment-item.reply.admin-comment{
+border-left-color:var(--gold)
+}
+
+.comment-top{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:10px;
+margin-bottom:10px
+}
+
+.comment-author{
+display:flex;
+align-items:center;
+gap:9px;
+font-size:13px;
+font-weight:800
+}
+
+.author-avatar{
+width:34px;
+height:34px;
+border-radius:11px;
+display:grid;
+place-items:center;
+background:linear-gradient(145deg,#123d2d,#0a1d15);
+border:1px solid rgba(34,211,149,.2);
+color:var(--mint);
+font-size:12px;
+font-weight:800;
+flex:none
+}
+
+.admin-comment .author-avatar{
+background:linear-gradient(145deg,#594715,#211c0c);
+border-color:rgba(245,196,81,.4);
+color:var(--gold)
+}
+
+.author-details{
+display:flex;
+flex-direction:column;
+gap:3px
+}
+
+.author-name{
+color:var(--white);
+line-height:1.2
+}
+
+.admin-comment .author-name{
+color:#ffe9a1
+}
+
+.comment-date{
+color:#60766c;
+font-size:10px
+}
+
+.admin-badge{
+display:inline-flex;
+align-items:center;
+gap:4px;
+padding:4px 6px;
+border-radius:6px;
+color:var(--gold);
+background:rgba(245,196,81,.08);
+border:1px solid rgba(245,196,81,.25);
+font-size:8px;
+font-weight:800;
+letter-spacing:.6px
+}
+
+.comment-text{
+color:#d0ddd6;
+line-height:1.7;
+font-size:13px;
+white-space:pre-wrap;
+word-break:break-word;
+padding-left:43px
+}
+
+.comment-actions{
+display:flex;
+align-items:center;
+gap:7px;
+padding-left:43px;
+margin-top:12px
+}
+
+.comment-action{
+border:1px solid rgba(255,255,255,.07);
+background:#081610;
+color:#8fa39a;
+border-radius:9px;
+padding:6px 9px;
+display:inline-flex;
+align-items:center;
+gap:5px;
+font-size:11px;
+transition:.2s
+}
+
+.comment-action:hover{
+color:var(--white);
+border-color:rgba(34,211,149,.3)
+}
+
+.comment-action.liked{
+color:#ff6b81;
+border-color:rgba(255,107,129,.3);
+background:rgba(255,107,129,.07)
+}
+
+.comment-action.admin-liked{
+color:var(--gold);
+border-color:rgba(245,196,81,.42);
+background:rgba(245,196,81,.08);
+box-shadow:0 0 15px rgba(245,196,81,.06)
+}
+
+.comment-delete{
+border:0;
+background:transparent;
+color:#7e8e87;
+padding:6px;
+display:grid;
+place-items:center
+}
+
+.comment-delete:hover{color:var(--red)}
+
+.comment-admin-like{
+display:inline-flex;
+align-items:center;
+gap:4px;
+color:var(--gold);
+font-size:9px;
+font-weight:800;
+padding:5px 7px;
+border-radius:7px;
+background:rgba(245,196,81,.07);
+border:1px solid rgba(245,196,81,.25)
+}
+
+.reply-line{
+position:absolute;
+left:16px;
+top:-13px;
+width:18px;
+height:26px;
+border-left:1px solid rgba(34,211,149,.3);
+border-bottom:1px solid rgba(34,211,149,.3);
+border-radius:0 0 0 10px
+}
+
+.comment-form{
+margin-top:18px;
+padding-top:18px;
+border-top:1px solid var(--line)
+}
+
+.replying{
+display:none;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:9px 11px;
+margin-bottom:9px;
+border-radius:10px;
+background:rgba(34,211,149,.06);
+border:1px solid rgba(34,211,149,.16);
+color:var(--mint);
+font-size:11px
+}
+
+.replying.show{display:flex}
+
+.cancel-reply{
+border:0;
+background:transparent;
+color:#8ca59a;
+font-size:11px
+}
+
+.cancel-reply:hover{color:var(--white)}
+
+.comment-form textarea{
+width:100%;
+min-height:90px;
+resize:vertical;
+border:1px solid var(--line);
+background:#06130e;
+color:white;
+border-radius:13px;
+padding:13px;
+outline:none
+}
+
+.comment-form textarea:focus{
+border-color:var(--green);
+box-shadow:0 0 0 3px rgba(34,211,149,.06)
+}
+
+.comment-form-actions{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-top:10px
+}
+
+.login-note{
+color:var(--muted);
+font-size:12px;
+line-height:1.6
+}
+
+.field{
+display:grid;
+gap:7px;
+margin-bottom:15px
+}
+
+.field label{
+font-size:13px;
+color:var(--mint);
+font-weight:700
+}
+
+.field input,.field textarea{
+width:100%;
+border:1px solid var(--line);
+background:#06130e;
+color:white;
+border-radius:11px;
+padding:12px;
+outline:none
+}
+
+.field input:focus,.field textarea:focus{
+border-color:var(--green)
+}
+
+.field textarea{
+resize:vertical;
+min-height:90px
+}
+
+.dialog-actions{
+display:flex;
+justify-content:flex-end;
+gap:9px;
+margin-top:20px
+}
+
+.status{
+font-size:13px;
+color:var(--mint);
+min-height:18px;
+margin-top:8px
+}
+
+.lightbox{
+position:fixed;
+inset:0;
+z-index:30;
+background:rgba(0,0,0,.94);
+display:none;
+align-items:center;
+justify-content:center;
+padding:65px 70px
+}
+
+.lightbox.show{display:flex}
+
+.lightbox-content{
+width:min(100%,1000px);
+height:min(100%,760px);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:14px
+}
+
+.lightbox img,.lightbox video{
+max-width:100%;
+max-height:calc(100% - 70px);
+object-fit:contain;
+border-radius:8px
+}
+
+.lightbox-info{
+width:min(100%,700px);
+text-align:center;
+color:#c9d8d1;
+font-size:13px
+}
+
+.lightbox button{
+position:absolute;
+border:1px solid #ffffff30;
+background:#10231b;
+color:white;
+border-radius:50%;
+width:42px;
+height:42px;
+display:grid;
+place-items:center;
+cursor:pointer
+}
+
+#light-close{
+top:18px;
+right:18px
+}
+
+#light-prev{left:18px}
+#light-next{right:18px}
+
+.lightbox-social{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px
+}
+
+footer{
+border-top:1px solid var(--line);
+padding:22px 0;
+color:var(--muted);
+font-size:12px
+}
+
+@media(max-width:850px){
+.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.photos{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+@media(max-width:600px){
+.wrap{width:min(100% - 28px,1160px)}
+header{height:64px}
+main{padding:42px 0 65px}
+.top{align-items:start;flex-direction:column}
+.grid{grid-template-columns:1fr}
+.cover{height:220px}
+.photos{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gallery-head{align-items:start;flex-direction:column}
+.lightbox{padding:60px 48px}
+.dialog{padding:22px}
+.comment-item.reply{margin-left:12px}
+.comment-text,.comment-actions{padding-left:0}
+.author-avatar{width:31px;height:31px}
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <div class="wrap head">
-      <a class="brand" href="index.html">ArduinoChemistry<span>Hub</span></a>
-
-      <a class="back" href="index.html">
-        <i data-lucide="arrow-left"></i>
-        მთავარზე დაბრუნება
-      </a>
-    </div>
-  </header>
-
-  <main class="wrap">
-
-    <div class="top">
-      <div>
-        <p class="eyebrow">ARDUINOHUB • GALLERY</p>
-        <h1>ფოტოალბომები</h1>
-        <p class="intro">
-          კლუბის შეხვედრების, პროექტებისა და ღონისძიებების მოგონებები ერთ სივრცეში.
-        </p>
-      </div>
-
-      <button id="create-open" class="primary" style="display:none">
-        <i data-lucide="plus"></i>
-        ალბომის შექმნა
-      </button>
-    </div>
-
-    <div id="admin-tools" class="admin-tools">
-      <button id="upload-open" class="secondary" disabled>
-        <i data-lucide="upload"></i>
-        მედიის ატვირთვა
-      </button>
-
-      <span id="admin-label" style="align-self:center;color:var(--muted);font-size:12px"></span>
-    </div>
-
-    <section id="album-grid" class="grid">
-      <div class="loading">ალბომები იტვირთება...</div>
-    </section>
-
-    <section id="gallery" class="gallery">
-
-      <div class="gallery-head">
-        <div>
-          <p class="eyebrow">ALBUM</p>
-          <h2 id="gallery-title"></h2>
-          <p id="gallery-description" class="intro" style="font-size:13px;margin-top:7px"></p>
-
-          <div id="gallery-social"></div>
-        </div>
-
-        <button id="gallery-close" class="secondary">
-          <i data-lucide="arrow-up"></i>
-          ალბომებზე დაბრუნება
-        </button>
-      </div>
-
-      <div id="photo-grid" class="photos"></div>
-
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      © <span id="year"></span> ArduinoHub
-    </div>
-  </footer>
+<header>
+<div class="wrap head">
+<a class="brand" href="index.html">ArduinoChemistry<span>Hub</span></a>
+<a class="back" href="index.html">
+<i data-lucide="arrow-left"></i>
+მთავარზე დაბრუნება
+</a>
+</div>
+</header>
+
+<main class="wrap">
+
+<div class="top">
+<div>
+<p class="eyebrow">ARDUINOHUB • GALLERY</p>
+<h1>ფოტოალბომები</h1>
+<p class="intro">
+კლუბის შეხვედრების, პროექტებისა და ღონისძიებების მოგონებები ერთ სივრცეში.
+</p>
+</div>
+
+<button id="create-open" class="primary" style="display:none">
+<i data-lucide="plus"></i>
+ალბომის შექმნა
+</button>
+</div>
+
+<div id="admin-tools" class="admin-tools">
+<button id="upload-open" class="secondary" disabled>
+<i data-lucide="upload"></i>
+მედიის ატვირთვა
+</button>
+<span id="admin-label" style="align-self:center;color:var(--muted);font-size:12px"></span>
+</div>
+
+<section id="album-grid" class="grid">
+<div class="loading">ალბომები იტვირთება...</div>
+</section>
+
+<section id="gallery" class="gallery">
 
-  <div id="album-modal" class="modal" role="dialog" aria-modal="true">
-    <form id="album-form" class="dialog">
-
-      <h2>ახალი ალბომი</h2>
-
-      <div class="field">
-        <label for="album-name">ალბომის სახელი</label>
-        <input id="album-name" maxlength="100" required placeholder="მაგ: 2026 წლის შეხვედრები">
-      </div>
+<div class="gallery-head">
 
-      <div class="field">
-        <label for="album-desc">აღწერა</label>
-        <textarea id="album-desc" maxlength="500" placeholder="მოკლე აღწერა..."></textarea>
-      </div>
+<div>
+<p class="eyebrow">ALBUM</p>
+<h2 id="gallery-title"></h2>
+<p id="gallery-description" class="intro" style="font-size:13px;margin-top:7px"></p>
+<div id="gallery-social"></div>
+</div>
 
-      <div id="album-status" class="status"></div>
+<button id="gallery-close" class="secondary">
+<i data-lucide="arrow-up"></i>
+ალბომებზე დაბრუნება
+</button>
+
+</div>
 
-      <div class="dialog-actions">
-        <button type="button" class="secondary" data-close="album-modal">
-          გაუქმება
-        </button>
+<div id="photo-grid" class="photos"></div>
 
-        <button class="primary" type="submit">
-          შექმნა
-        </button>
-      </div>
+</section>
 
-    </form>
-  </div>
+</main>
 
-  <div id="upload-modal" class="modal" role="dialog" aria-modal="true">
+<footer>
+<div class="wrap">
+© <span id="year"></span> ArduinoHub
+</div>
+</footer>
 
-    <form id="upload-form" class="dialog">
+<div id="album-modal" class="modal" role="dialog" aria-modal="true">
+<form id="album-form" class="dialog">
 
-      <h2>მედიის ატვირთვა</h2>
+<h2>ახალი ალბომი</h2>
 
-      <div class="field">
-        <label for="upload-album">ალბომი</label>
+<div class="field">
+<label for="album-name">ალბომის სახელი</label>
+<input id="album-name" maxlength="100" required placeholder="მაგ: 2026 წლის შეხვედრები">
+</div>
 
-        <select
-          id="upload-album"
-          required
-          style="width:100%;padding:12px;border-radius:11px;background:#06130e;color:white;border:1px solid var(--line)"
-        ></select>
-      </div>
+<div class="field">
+<label for="album-desc">აღწერა</label>
+<textarea id="album-desc" maxlength="500" placeholder="მოკლე აღწერა..."></textarea>
+</div>
 
-      <div class="field">
-        <label for="photo-files">ფოტოები და ვიდეოები</label>
+<div id="album-status" class="status"></div>
 
-        <input
-          id="photo-files"
-          type="file"
-          accept="image/*,video/*"
-          multiple
-          required
-        >
-      </div>
+<div class="dialog-actions">
+<button type="button" class="secondary" data-close="album-modal">
+გაუქმება
+</button>
 
-      <div class="field">
-        <label for="photo-caption">საერთო წარწერა</label>
+<button class="primary" type="submit">
+შექმნა
+</button>
+</div>
 
-        <input
-          id="photo-caption"
-          maxlength="160"
-          placeholder="მაგ: კლუბის შეხვედრა"
-        >
-      </div>
+</form>
+</div>
 
-      <div id="upload-status" class="status"></div>
+<div id="upload-modal" class="modal" role="dialog" aria-modal="true">
+<form id="upload-form" class="dialog">
 
-      <div class="dialog-actions">
-        <button type="button" class="secondary" data-close="upload-modal">
-          გაუქმება
-        </button>
+<h2>მედიის ატვირთვა</h2>
 
-        <button id="upload-submit" class="primary" type="submit">
-          ატვირთვა
-        </button>
-      </div>
+<div class="field">
+<label for="upload-album">ალბომი</label>
+<select id="upload-album" required style="width:100%;padding:12px;border-radius:11px;background:#06130e;color:white;border:1px solid var(--line)"></select>
+</div>
 
-    </form>
-  </div>
+<div class="field">
+<label for="photo-files">ფოტოები და ვიდეოები</label>
+<input id="photo-files" type="file" accept="image/*,video/*" multiple required>
+</div>
 
-  <div id="comments-modal" class="modal" role="dialog" aria-modal="true">
+<div class="field">
+<label for="photo-caption">საერთო წარწერა</label>
+<input id="photo-caption" maxlength="160" placeholder="მაგ: კლუბის შეხვედრა">
+</div>
 
-    <div class="dialog comments-dialog">
+<div id="upload-status" class="status"></div>
 
-      <h2 id="comments-title">კომენტარები</h2>
+<div class="dialog-actions">
+<button type="button" class="secondary" data-close="upload-modal">
+გაუქმება
+</button>
 
-      <div id="comments-target" class="comments-target"></div>
+<button id="upload-submit" class="primary" type="submit">
+ატვირთვა
+</button>
+</div>
 
-      <div id="comment-list" class="comment-list">
-        <div class="loading">კომენტარები იტვირთება...</div>
-      </div>
+</form>
+</div>
 
-      <form id="comment-form" class="comment-form">
+<div id="comments-modal" class="modal" role="dialog" aria-modal="true">
 
-        <textarea
-          id="comment-text"
-          maxlength="500"
-          placeholder="დაწერე კომენტარი..."
-        ></textarea>
+<div class="dialog comments-dialog">
 
-        <div class="comment-form-actions">
+<h2 id="comments-title">კომენტარები</h2>
 
-          <div id="comment-login-note" class="login-note"></div>
+<div id="comments-target" class="comments-target"></div>
 
-          <button id="comment-submit" class="primary" type="submit">
-            <i data-lucide="send"></i>
-            გაგზავნა
-          </button>
+<div id="comment-list" class="comment-list">
+<div class="loading">კომენტარები იტვირთება...</div>
+</div>
 
-        </div>
+<form id="comment-form" class="comment-form">
 
-      </form>
+<div id="replying" class="replying">
+<span id="replying-text"></span>
+<button type="button" class="cancel-reply" id="cancel-reply">
+გაუქმება
+</button>
+</div>
 
-      <div class="dialog-actions">
-        <button type="button" class="secondary" data-close="comments-modal">
-          დახურვა
-        </button>
-      </div>
+<textarea id="comment-text" maxlength="500" placeholder="დაწერე კომენტარი..."></textarea>
 
-    </div>
+<div class="comment-form-actions">
 
-  </div>
+<div id="comment-login-note" class="login-note"></div>
 
-  <div id="lightbox" class="lightbox" aria-label="მედიის ნახვა">
+<button id="comment-submit" class="primary" type="submit">
+<i data-lucide="send"></i>
+გაგზავნა
+</button>
 
-    <button id="light-close" aria-label="დახურვა">
-      <i data-lucide="x"></i>
-    </button>
+</div>
 
-    <button id="light-prev" aria-label="წინა">
-      <i data-lucide="chevron-left"></i>
-    </button>
+</form>
 
-    <div class="lightbox-content">
+<div class="dialog-actions">
+<button type="button" class="secondary" data-close="comments-modal">
+დახურვა
+</button>
+</div>
 
-      <div id="light-media"></div>
+</div>
 
-      <div id="lightbox-info" class="lightbox-info"></div>
+</div>
 
-      <div id="lightbox-social" class="lightbox-social"></div>
+<div id="lightbox" class="lightbox" aria-label="მედიის ნახვა">
 
-    </div>
+<button id="light-close" aria-label="დახურვა">
+<i data-lucide="x"></i>
+</button>
 
-    <button id="light-next" aria-label="შემდეგი">
-      <i data-lucide="chevron-right"></i>
-    </button>
+<button id="light-prev" aria-label="წინა">
+<i data-lucide="chevron-left"></i>
+</button>
 
-  </div>
+<div class="lightbox-content">
 
-  <script>
-    const supabaseClient = window.supabase.createClient(
-      "https://ywxunhvrwdtlqjfshiyj.supabase.co",
-      "sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
-    )
+<div id="light-media"></div>
 
-    const BUCKET = "album-photos"
-    const MAX_FILE_SIZE = 50 * 1024 * 1024
+<div id="lightbox-info" class="lightbox-info"></div>
 
-    const $ = id => document.getElementById(id)
+<div id="lightbox-social" class="lightbox-social"></div>
 
-    let albums = []
-    let currentAlbum = null
-    let currentPhotos = []
-    let isAdmin = false
-    let currentUser = null
-    let adminUserIds = new Set()
+</div>
 
-    let albumLikes = []
-    let albumComments = []
+<button id="light-next" aria-label="შემდეგი">
+<i data-lucide="chevron-right"></i>
+</button>
+
+</div>
+
+<script>
+
+const supabaseClient=window.supabase.createClient(
+"https://ywxunhvrwdtlqjfshiyj.supabase.co",
+"sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
+)
+
+const BUCKET="album-photos"
+const MAX_FILE_SIZE=50*1024*1024
+const $=id=>document.getElementById(id)
 
-    let lightIndex = 0
+let albums=[]
+let currentAlbum=null
+let currentPhotos=[]
+let isAdmin=false
+let currentUser=null
+let adminUserIds=new Set()
+let albumLikes=[]
+let albumComments=[]
+let commentLikes=[]
+let lightIndex=0
+let commentsTargetType=null
+let commentsTargetId=null
+let commentsTargetTitle=""
+let replyParentId=null
+
+function showModal(id){
+$(id).classList.add("show")
+}
+
+function hideModal(id){
+$(id).classList.remove("show")
+}
+
+function escapeHtml(value=""){
+return String(value).replace(/[&<>"']/g,char=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[char]))
+}
+
+function notify(id,message){
+$(id).textContent=message
+}
+
+function storageUrl(path){
+return supabaseClient.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
+}
+
+function getExtension(name=""){
+const parts=String(name).toLowerCase().split(".")
+return parts.length>1?parts.pop():""
+}
+
+function getMimeType(file){
+if(file.type){
+return file.type.toLowerCase()
+}
+
+const extension=getExtension(file.name)
+
+const mimeTypes={
+jpg:"image/jpeg",
+jpeg:"image/jpeg",
+png:"image/png",
+webp:"image/webp",
+gif:"image/gif",
+avif:"image/avif",
+heic:"image/heic",
+heif:"image/heif",
+mp4:"video/mp4",
+webm:"video/webm",
+mov:"video/quicktime",
+m4v:"video/x-m4v",
+ogg:"video/ogg",
+ogv:"video/ogg",
+avi:"video/x-msvideo"
+}
+
+return mimeTypes[extension]||"application/octet-stream"
+}
+
+function getMediaType(item){
+const extension=getExtension(item.name||item.storage_path||"")
+
+if([
+"mp4",
+"webm",
+"mov",
+"m4v",
+"ogg",
+"ogv",
+"avi"
+].includes(extension)){
+return "video"
+}
+
+if(String(item.mime_type||"").startsWith("video/")){
+return "video"
+}
+
+return "image"
+}
+
+function isAllowedMedia(file){
+const mime=getMimeType(file)
+
+if(mime.startsWith("image/")){
+return true
+}
+
+if(mime.startsWith("video/")){
+return true
+}
+
+return [
+"mp4",
+"webm",
+"mov",
+"m4v",
+"ogg",
+"ogv",
+"avi"
+].includes(getExtension(file.name))
+}
+
+function getUserDisplayName(user){
+if(!user){
+return "მომხმარებელი"
+}
+
+const metadata=user.user_metadata||{}
+
+return String(
+metadata.full_name||
+metadata.name||
+metadata.username||
+metadata.display_name||
+user.email?.split("@")[0]||
+"მომხმარებელი"
+).trim()
+}
+
+function getInitials(name){
+const value=String(name||"მომხმარებელი").trim()
+const parts=value.split(/\s+/).filter(Boolean)
+
+if(parts.length>=2){
+return (parts[0][0]+parts[1][0]).toUpperCase()
+}
+
+return value.slice(0,2).toUpperCase()
+}
+
+function formatDate(date){
+if(!date){
+return ""
+}
+
+try{
+return new Intl.DateTimeFormat("ka-GE",{
+day:"2-digit",
+month:"short",
+year:"numeric",
+hour:"2-digit",
+minute:"2-digit"
+}).format(new Date(date))
+}catch{
+return ""
+}
+}
+
+async function getCurrentUser(){
+const {data}=await supabaseClient.auth.getUser()
+currentUser=data?.user||null
+return currentUser
+}
+
+async function loadAdminUsers(){
+const {data,error}=await supabaseClient
+.from("admin_users")
+.select("user_id")
+
+if(error){
+console.warn("Admin users:",error.message)
+adminUserIds=new Set()
+return
+}
+
+adminUserIds=new Set(
+(data||[]).map(item=>item.user_id)
+)
+
+if(currentUser){
+isAdmin=adminUserIds.has(currentUser.id)
+}
+}
+
+async function checkAdmin(){
+const user=await getCurrentUser()
+
+if(!user){
+return false
+}
+
+const {data,error}=await supabaseClient
+.from("admin_users")
+.select("user_id")
+.eq("user_id",user.id)
+.maybeSingle()
+
+if(error){
+console.warn("Admin check:",error.message)
+return false
+}
+
+return Boolean(data)
+}
+
+async function loadSocialData(){
+
+const [
+{data:likes,error:likesError},
+{data:comments,error:commentsError},
+{data:commentLikeRows,error:commentLikesError}
+]=await Promise.all([
+
+supabaseClient
+.from("album_likes")
+.select("id,user_id,album_id,photo_id"),
+
+supabaseClient
+.from("album_comments")
+.select("id,user_id,album_id,photo_id,comment,author_name,created_at,parent_comment_id")
+.order("created_at",{ascending:true}),
+
+supabaseClient
+.from("album_comment_likes")
+.select("id,user_id,comment_id")
+
+])
+
+if(likesError){
+console.warn("Likes:",likesError.message)
+}
+
+if(commentsError){
+console.warn("Comments:",commentsError.message)
+}
+
+if(commentLikesError){
+console.warn("Comment likes:",commentLikesError.message)
+}
+
+albumLikes=likes||[]
+albumComments=comments||[]
+commentLikes=commentLikeRows||[]
+}
+
+function getLikesForAlbum(id){
+return albumLikes.filter(item=>item.album_id===id)
+}
+
+function getLikesForPhoto(id){
+return albumLikes.filter(item=>item.photo_id===id)
+}
+
+function getCommentsForAlbum(id){
+return albumComments.filter(item=>item.album_id===id)
+}
+
+function getCommentsForPhoto(id){
+return albumComments.filter(item=>item.photo_id===id)
+}
+
+function getCommentLikes(id){
+return commentLikes.filter(item=>item.comment_id===id)
+}
+
+function userLiked(items){
+if(!currentUser){
+return false
+}
+
+return items.some(item=>item.user_id===currentUser.id)
+}
+
+function adminLiked(items){
+return items.some(item=>adminUserIds.has(item.user_id))
+}
+
+function socialButtons(type,id){
+
+const items=type==="album"
+?getLikesForAlbum(id)
+:getLikesForPhoto(id)
+
+const comments=type==="album"
+?getCommentsForAlbum(id)
+:getCommentsForPhoto(id)
+
+const liked=userLiked(items)
+const adminLike=adminLiked(items)
+
+return `
+<div class="social-bar">
+
+<button class="social-btn ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}" data-like-type="${type}" data-like-id="${escapeHtml(id)}">
+<i data-lucide="heart"></i>
+<span>${items.length}</span>
+</button>
+
+<button class="social-btn" data-comments-type="${type}" data-comments-id="${escapeHtml(id)}">
+<i data-lucide="message-circle"></i>
+<span>${comments.length}</span>
+</button>
+
+${adminLike?`
+<span class="admin-like-badge">
+<i data-lucide="shield-check"></i>
+ADMIN LIKE
+</span>
+`:""}
+
+</div>
+`
+}
+
+async function loadAlbums(){
+
+const {data,error}=await supabaseClient
+.from("photo_albums")
+.select("id,title,description,created_at")
+.order("created_at",{ascending:false})
+
+if(error){
+
+$("album-grid").innerHTML=`
+<div class="empty">
+<strong>ალბომების ჩატვირთვა ვერ მოხერხდა</strong>
+<span>${escapeHtml(error.message)}</span>
+</div>
+`
+
+return
+}
+
+albums=data||[]
+
+await loadSocialData()
+await renderAlbums()
+
+const select=$("upload-album")
+
+select.innerHTML=albums.map(album=>`
+<option value="${escapeHtml(album.id)}">
+${escapeHtml(album.title)}
+</option>
+`).join("")
+
+$("upload-open").disabled=albums.length===0
+}
+
+async function renderAlbums(){
+
+const grid=$("album-grid")
+
+if(!albums.length){
+
+grid.innerHTML=`
+<div class="empty">
+<i data-lucide="images"></i>
+<strong>ჯერ ალბომი არ არის</strong>
+<span>ადმინისტრატორს შეუძლია პირველი ალბომის შექმნა.</span>
+</div>
+`
+
+lucide.createIcons()
+return
+}
+
+const ids=albums.map(album=>album.id)
+
+const {data:media,error}=await supabaseClient
+.from("album_photos")
+.select("id,album_id,storage_path,caption,created_at")
+.in("album_id",ids)
+.order("created_at",{ascending:true})
+
+if(error){
+console.warn("Album media:",error.message)
+}
+
+const mediaList=media||[]
+const mediaByAlbum={}
 
-    let commentsTargetType = null
-    let commentsTargetId = null
-    let commentsTargetTitle = ""
+mediaList.forEach(item=>{
+if(!mediaByAlbum[item.album_id]){
+mediaByAlbum[item.album_id]=[]
+}
 
-    function showModal(id){
-      $(id).classList.add("show")
-    }
-
-    function hideModal(id){
-      $(id).classList.remove("show")
-    }
-
-    function escapeHtml(value=""){
-      return String(value).replace(/[&<>"']/g,char=>({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#39;"
-      }[char]))
-    }
-
-    function notify(id,message){
-      $(id).textContent=message
-    }
-
-    function storageUrl(path){
-      return supabaseClient.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
-    }
-
-    function getExtension(name=""){
-      const parts=String(name).toLowerCase().split(".")
-      return parts.length>1?parts.pop():""
-    }
-
-    function getMimeType(file){
-      if(file.type){
-        return file.type.toLowerCase()
-      }
-
-      const extension=getExtension(file.name)
-
-      const mimeTypes={
-        jpg:"image/jpeg",
-        jpeg:"image/jpeg",
-        png:"image/png",
-        webp:"image/webp",
-        gif:"image/gif",
-        avif:"image/avif",
-        heic:"image/heic",
-        heif:"image/heif",
-        mp4:"video/mp4",
-        webm:"video/webm",
-        mov:"video/quicktime",
-        m4v:"video/x-m4v",
-        ogg:"video/ogg",
-        ogv:"video/ogg",
-        avi:"video/x-msvideo"
-      }
-
-      return mimeTypes[extension] || "application/octet-stream"
-    }
-
-    function getMediaType(item){
-      const extension=getExtension(item.name || item.storage_path || "")
-
-      if(
-        [
-          "mp4",
-          "webm",
-          "mov",
-          "m4v",
-          "ogg",
-          "ogv",
-          "avi"
-        ].includes(extension)
-      ){
-        return "video"
-      }
-
-      if(String(item.mime_type || "").startsWith("video/")){
-        return "video"
-      }
-
-      return "image"
-    }
-
-    function isAllowedMedia(file){
-      const mime=getMimeType(file)
-
-      if(mime.startsWith("image/")){
-        return true
-      }
-
-      if(mime.startsWith("video/")){
-        return true
-      }
-
-      return [
-        "mp4",
-        "webm",
-        "mov",
-        "m4v",
-        "ogg",
-        "ogv",
-        "avi"
-      ].includes(getExtension(file.name))
-    }
-
-    function getUserDisplayName(user){
-      if(!user){
-        return "მომხმარებელი"
-      }
-
-      const metadata=user.user_metadata || {}
-
-      return String(
-        metadata.full_name ||
-        metadata.name ||
-        metadata.username ||
-        metadata.display_name ||
-        user.email?.split("@")[0] ||
-        "მომხმარებელი"
-      ).trim()
-    }
-
-    function formatDate(date){
-      if(!date){
-        return ""
-      }
-
-      try{
-        return new Intl.DateTimeFormat("ka-GE",{
-          day:"2-digit",
-          month:"short",
-          year:"numeric",
-          hour:"2-digit",
-          minute:"2-digit"
-        }).format(new Date(date))
-      }catch{
-        return ""
-      }
-    }
-
-    async function getCurrentUser(){
-      const {data}=await supabaseClient.auth.getUser()
-      currentUser=data?.user || null
-      return currentUser
-    }
-
-    async function loadAdminUsers(){
-      const {data,error}=await supabaseClient
-        .from("admin_users")
-        .select("user_id")
-
-      if(error){
-        console.warn("Admin users:",error.message)
-        adminUserIds=new Set()
-        return
-      }
-
-      adminUserIds=new Set(
-        (data || []).map(item=>item.user_id)
-      )
-
-      if(currentUser){
-        isAdmin=adminUserIds.has(currentUser.id)
-      }
-    }
-
-    async function checkAdmin(){
-      const user=await getCurrentUser()
-
-      if(!user){
-        return false
-      }
-
-      const {data,error}=await supabaseClient
-        .from("admin_users")
-        .select("user_id")
-        .eq("user_id",user.id)
-        .maybeSingle()
-
-      if(error){
-        console.warn("Admin check:",error.message)
-        return false
-      }
-
-      return Boolean(data)
-    }
-
-    async function loadSocialData(){
-      const [
-        {data:likes, error:likesError},
-        {data:comments, error:commentsError}
-      ]=await Promise.all([
-        supabaseClient
-          .from("album_likes")
-          .select("id,user_id,album_id,photo_id"),
-
-        supabaseClient
-          .from("album_comments")
-          .select("id,user_id,album_id,photo_id,comment,author_name,created_at")
-          .order("created_at",{ascending:true})
-      ])
-
-      if(likesError){
-        console.warn("Likes:",likesError.message)
-      }
-
-      if(commentsError){
-        console.warn("Comments:",commentsError.message)
-      }
-
-      albumLikes=likes || []
-      albumComments=comments || []
-    }
-
-    function getLikesForAlbum(id){
-      return albumLikes.filter(item=>item.album_id===id)
-    }
-
-    function getLikesForPhoto(id){
-      return albumLikes.filter(item=>item.photo_id===id)
-    }
-
-    function getCommentsForAlbum(id){
-      return albumComments.filter(item=>item.album_id===id)
-    }
-
-    function getCommentsForPhoto(id){
-      return albumComments.filter(item=>item.photo_id===id)
-    }
-
-    function userLiked(items){
-      if(!currentUser){
-        return false
-      }
-
-      return items.some(item=>item.user_id===currentUser.id)
-    }
-
-    function adminLiked(items){
-      return items.some(item=>adminUserIds.has(item.user_id))
-    }
-
-    function socialButtons(type,id){
-      const items=type==="album"
-        ? getLikesForAlbum(id)
-        : getLikesForPhoto(id)
-
-      const comments=type==="album"
-        ? getCommentsForAlbum(id)
-        : getCommentsForPhoto(id)
-
-      const liked=userLiked(items)
-      const adminLike=adminLiked(items)
-
-      return `
-        <div class="social-bar">
-
-          <button
-            class="social-btn ${liked ? "liked" : ""} ${isAdmin && liked ? "admin-liked" : ""}"
-            data-like-type="${type}"
-            data-like-id="${escapeHtml(id)}"
-          >
-            <i data-lucide="${liked ? "heart" : "heart"}"></i>
-            <span>${items.length}</span>
-          </button>
-
-          <button
-            class="social-btn"
-            data-comments-type="${type}"
-            data-comments-id="${escapeHtml(id)}"
-          >
-            <i data-lucide="message-circle"></i>
-            <span>${comments.length}</span>
-          </button>
-
-          ${
-            adminLike
-              ? `
-                <span class="admin-like-badge">
-                  <i data-lucide="shield-check"></i>
-                  ADMIN LIKE
-                </span>
-              `
-              : ""
-          }
-
-        </div>
-      `
-    }
-
-    async function loadAlbums(){
-      const {data,error}=await supabaseClient
-        .from("photo_albums")
-        .select("id,title,description,created_at")
-        .order("created_at",{ascending:false})
-
-      if(error){
-        $("album-grid").innerHTML=`
-          <div class="empty">
-            <strong>ალბომების ჩატვირთვა ვერ მოხერხდა</strong>
-            <span>${escapeHtml(error.message)}</span>
-          </div>
-        `
-        return
-      }
-
-      albums=data || []
-
-      await loadSocialData()
-      await renderAlbums()
-
-      const select=$("upload-album")
-
-      select.innerHTML=albums
-        .map(album=>`
-          <option value="${escapeHtml(album.id)}">
-            ${escapeHtml(album.title)}
-          </option>
-        `)
-        .join("")
-
-      $("upload-open").disabled=albums.length===0
-    }
-
-    async function renderAlbums(){
-      const grid=$("album-grid")
-
-      if(!albums.length){
-        grid.innerHTML=`
-          <div class="empty">
-            <i data-lucide="images"></i>
-            <strong>ჯერ ალბომი არ არის</strong>
-            <span>ადმინისტრატორს შეუძლია პირველი ალბომის შექმნა.</span>
-          </div>
-        `
-
-        lucide.createIcons()
-        return
-      }
-
-      const ids=albums.map(album=>album.id)
-
-      const {data:media,error}=await supabaseClient
-        .from("album_photos")
-        .select("id,album_id,storage_path,caption,created_at")
-        .in("album_id",ids)
-        .order("created_at",{ascending:true})
-
-      if(error){
-        console.warn("Album media:",error.message)
-      }
-
-      const mediaList=media || []
-
-      const mediaByAlbum={}
-
-      mediaList.forEach(item=>{
-        if(!mediaByAlbum[item.album_id]){
-          mediaByAlbum[item.album_id]=[]
-        }
-
-        mediaByAlbum[item.album_id].push(item)
-      })
-
-      grid.innerHTML=albums.map(album=>{
-
-        const albumMedia=mediaByAlbum[album.id] || []
-        const cover=albumMedia[0]
-
-        let coverHtml=""
-
-        if(cover){
-
-          const type=getMediaType(cover)
-
-          if(type==="video"){
-            coverHtml=`
-              <div class="cover-media">
-                <video
-                  src="${escapeHtml(storageUrl(cover.storage_path))}"
-                  muted
-                  loop
-                  autoplay
-                  playsinline
-                  preload="metadata"
-                ></video>
-
-                <div class="video-play">
-                  <span>
-                    <i data-lucide="play"></i>
-                  </span>
-                </div>
-              </div>
-            `
-          }else{
-            coverHtml=`
-              <img
-                src="${escapeHtml(storageUrl(cover.storage_path))}"
-                alt="${escapeHtml(album.title)}"
-                loading="lazy"
-              >
-            `
-          }
-
-        }else{
-
-          coverHtml=`
-            <div class="cover-empty">
-              <i data-lucide="images"></i>
-            </div>
-          `
-        }
-
-        const actions=isAdmin
-          ? `
-            <div class="album-actions">
-
-              <button
-                class="icon-btn"
-                data-edit="${escapeHtml(album.id)}"
-                title="რედაქტირება"
-              >
-                <i data-lucide="pencil"></i>
-              </button>
-
-              <button
-                class="icon-btn"
-                data-delete="${escapeHtml(album.id)}"
-                title="წაშლა"
-              >
-                <i data-lucide="trash-2"></i>
-              </button>
-
-            </div>
-          `
-          : ""
-
-        return `
-          <article class="album">
-
-            <div
-              class="cover"
-              data-open="${escapeHtml(album.id)}"
-            >
-              ${coverHtml}
-            </div>
-
-            <div class="album-info">
-
-              <h2>${escapeHtml(album.title)}</h2>
-
-              <p>
-                ${escapeHtml(album.description || "")}
-              </p>
-
-              <div class="album-bottom">
-
-                <span class="count">
-                  <i data-lucide="images"></i>
-                  ${albumMedia.length} მედია
-                </span>
-
-                ${actions}
-
-              </div>
-
-              ${socialButtons("album",album.id)}
-
-            </div>
-
-          </article>
-        `
-      }).join("")
-
-      lucide.createIcons()
-
-      grid.querySelectorAll("[data-open]").forEach(element=>{
-        element.addEventListener("click",()=>{
-          openAlbum(element.dataset.open)
-        })
-      })
-
-      grid.querySelectorAll("[data-edit]").forEach(element=>{
-        element.addEventListener("click",event=>{
-          event.stopPropagation()
-          editAlbum(element.dataset.edit)
-        })
-      })
-
-      grid.querySelectorAll("[data-delete]").forEach(element=>{
-        element.addEventListener("click",event=>{
-          event.stopPropagation()
-          deleteAlbum(element.dataset.delete)
-        })
-      })
-
-      grid.querySelectorAll("[data-like-type]").forEach(element=>{
-        element.addEventListener("click",event=>{
-          event.stopPropagation()
-          toggleLike(
-            element.dataset.likeType,
-            element.dataset.likeId
-          )
-        })
-      })
-
-      grid.querySelectorAll("[data-comments-type]").forEach(element=>{
-        element.addEventListener("click",event=>{
-          event.stopPropagation()
-          openComments(
-            element.dataset.commentsType,
-            element.dataset.commentsId
-          )
-        })
-      })
-    }
-
-    async function openAlbum(id){
-      currentAlbum=albums.find(album=>album.id===id)
-
-      if(!currentAlbum){
-        return
-      }
-
-      $("gallery-title").textContent=currentAlbum.title
-      $("gallery-description").textContent=currentAlbum.description || ""
-
-      renderAlbumSocial()
-
-      $("photo-grid").innerHTML=`
-        <div class="loading">
-          მედია იტვირთება...
-        </div>
-      `
-
-      $("gallery").classList.add("show")
-
-      $("gallery").scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      })
-
-      const {data,error}=await supabaseClient
-        .from("album_photos")
-        .select("id,album_id,storage_path,caption,created_at")
-        .eq("album_id",id)
-        .order("created_at",{ascending:true})
-
-      if(error){
-        $("photo-grid").innerHTML=`
-          <div class="empty">
-            მედიის ჩატვირთვა ვერ მოხერხდა:
-            ${escapeHtml(error.message)}
-          </div>
-        `
-        return
-      }
-
-      currentPhotos=data || []
-
-      if(!currentPhotos.length){
-        $("photo-grid").innerHTML=`
-          <div class="empty" style="grid-column:1/-1">
-            ამ ალბომში ფოტოები ან ვიდეოები ჯერ არ არის.
-          </div>
-        `
-        return
-      }
-
-      $("photo-grid").innerHTML=currentPhotos.map((media,index)=>{
-
-        const type=getMediaType(media)
-
-        const source=storageUrl(media.storage_path)
-
-        const mediaHtml=type==="video"
-          ? `
-            <video
-              src="${escapeHtml(source)}"
-              muted
-              loop
-              autoplay
-              playsinline
-              preload="metadata"
-              data-photo="${index}"
-            ></video>
-
-            <span class="media-type">
-              <i data-lucide="video"></i>
-              VIDEO
-            </span>
-          `
-          : `
-            <img
-              src="${escapeHtml(source)}"
-              alt="${escapeHtml(media.caption || currentAlbum.title)}"
-              data-photo="${index}"
-              loading="lazy"
-            >
-
-            <span class="media-type">
-              <i data-lucide="image"></i>
-              PHOTO
-            </span>
-          `
-
-        const likes=getLikesForPhoto(media.id)
-        const comments=getCommentsForPhoto(media.id)
-        const liked=userLiked(likes)
-        const adminLike=adminLiked(likes)
-
-        return `
-          <div class="photo ${isAdmin ? "admin" : ""}">
-
-            ${mediaHtml}
-
-            ${
-              adminLike
-                ? `
-                  <span class="media-admin-like">
-                    <i data-lucide="shield-check"></i>
-                    ADMIN
-                  </span>
-                `
-                : ""
-            }
-
-            ${
-              media.caption
-                ? `
-                  <div class="photo-caption">
-                    ${escapeHtml(media.caption)}
-                  </div>
-                `
-                : ""
-            }
-
-            <div class="photo-social">
-
-              <button
-                class="social-btn ${liked ? "liked" : ""} ${isAdmin && liked ? "admin-liked" : ""}"
-                data-photo-like="${escapeHtml(media.id)}"
-              >
-                <i data-lucide="heart"></i>
-                <span>${likes.length}</span>
-              </button>
-
-              <button
-                class="social-btn"
-                data-photo-comments="${escapeHtml(media.id)}"
-              >
-                <i data-lucide="message-circle"></i>
-                <span>${comments.length}</span>
-              </button>
-
-            </div>
-
-            ${
-              isAdmin
-                ? `
-                  <button
-                    class="icon-btn delete-photo"
-                    data-photo-delete="${escapeHtml(media.id)}"
-                    title="წაშლა"
-                  >
-                    <i data-lucide="trash-2"></i>
-                  </button>
-                `
-                : ""
-            }
-
-          </div>
-        `
-      }).join("")
-
-      lucide.createIcons()
-
-      $("photo-grid")
-        .querySelectorAll("[data-photo]")
-        .forEach(element=>{
-          element.addEventListener("click",event=>{
-            if(event.target.closest("[data-photo-like]"))return
-            if(event.target.closest("[data-photo-comments]"))return
-            if(event.target.closest("[data-photo-delete]"))return
-
-            showLightbox(Number(element.dataset.photo))
-          })
-        })
-
-      $("photo-grid")
-        .querySelectorAll("[data-photo-like]")
-        .forEach(element=>{
-          element.addEventListener("click",event=>{
-            event.stopPropagation()
-
-            toggleLike(
-              "photo",
-              element.dataset.photoLike
-            )
-          })
-        })
-
-      $("photo-grid")
-        .querySelectorAll("[data-photo-comments]")
-        .forEach(element=>{
-          element.addEventListener("click",event=>{
-            event.stopPropagation()
-
-            openComments(
-              "photo",
-              element.dataset.photoComments
-            )
-          })
-        })
-
-      $("photo-grid")
-        .querySelectorAll("[data-photo-delete]")
-        .forEach(element=>{
-          element.addEventListener("click",event=>{
-            event.stopPropagation()
-
-            deletePhoto(
-              element.dataset.photoDelete
-            )
-          })
-        })
-    }
-
-    function renderAlbumSocial(){
-      if(!currentAlbum){
-        return
-      }
-
-      $("gallery-social").innerHTML=socialButtons(
-        "album",
-        currentAlbum.id
-      )
-
-      lucide.createIcons()
-
-      $("gallery-social")
-        .querySelectorAll("[data-like-type]")
-        .forEach(element=>{
-          element.addEventListener("click",()=>{
-            toggleLike(
-              element.dataset.likeType,
-              element.dataset.likeId
-            )
-          })
-        })
-
-      $("gallery-social")
-        .querySelectorAll("[data-comments-type]")
-        .forEach(element=>{
-          element.addEventListener("click",()=>{
-            openComments(
-              element.dataset.commentsType,
-              element.dataset.commentsId
-            )
-          })
-        })
-    }
-
-    async function toggleLike(type,id){
-
-      const user=await getCurrentUser()
-
-      if(!user){
-        alert("Like-ის დასაწერად ანგარიშში უნდა შეხვიდე.")
-        return
-      }
-
-      const existing=albumLikes.find(item=>
-        item.user_id===user.id &&
-        (
-          type==="album"
-            ? item.album_id===id
-            : item.photo_id===id
-        )
-      )
-
-      if(existing){
-
-        const {error}=await supabaseClient
-          .from("album_likes")
-          .delete()
-          .eq("id",existing.id)
-
-        if(error){
-          alert("Like-ის წაშლა ვერ მოხერხდა: "+error.message)
-          return
-        }
-
-        albumLikes=albumLikes.filter(
-          item=>item.id!==existing.id
-        )
-
-      }else{
-
-        const payload=type==="album"
-          ? {
-              user_id:user.id,
-              album_id:id
-            }
-          : {
-              user_id:user.id,
-              photo_id:id
-            }
-
-        const {data,error}=await supabaseClient
-          .from("album_likes")
-          .insert(payload)
-          .select("id,user_id,album_id,photo_id")
-          .single()
-
-        if(error){
-          alert("Like ვერ დაემატა: "+error.message)
-          return
-        }
-
-        if(data){
-          albumLikes.push(data)
-        }
-      }
-
-      await renderAlbums()
-
-      if(currentAlbum){
-        await openAlbum(currentAlbum.id)
-      }
-    }
-
-    async function openComments(type,id){
-
-      commentsTargetType=type
-      commentsTargetId=id
-
-      let title=""
-
-      if(type==="album"){
-        const album=albums.find(item=>item.id===id)
-        title=album?.title || "ალბომი"
-      }else{
-        const photo=currentPhotos.find(item=>item.id===id)
-        title=photo?.caption || "ფოტო ან ვიდეო"
-      }
-
-      commentsTargetTitle=title
-
-      $("comments-title").textContent="კომენტარები"
-
-      $("comments-target").textContent=title
-
-      $("comment-text").value=""
-
-      const user=await getCurrentUser()
-
-      if(user){
-        $("comment-login-note").textContent=
-          "კომენტარი გამოქვეყნდება სახელით: "+getUserDisplayName(user)
-
-        $("comment-submit").disabled=false
-        $("comment-text").disabled=false
-      }else{
-        $("comment-login-note").textContent=
-          "კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე."
-
-        $("comment-submit").disabled=true
-        $("comment-text").disabled=true
-      }
-
-      showModal("comments-modal")
-
-      await renderComments()
-
-      lucide.createIcons()
-    }
-
-    async function renderComments(){
-
-      let comments=commentsTargetType==="album"
-        ? getCommentsForAlbum(commentsTargetId)
-        : getCommentsForPhoto(commentsTargetId)
-
-      comments=[...comments].sort(
-        (a,b)=>new Date(a.created_at)-new Date(b.created_at)
-      )
-
-      if(!comments.length){
-        $("comment-list").innerHTML=`
-          <div class="empty">
-            <i data-lucide="message-circle"></i>
-            <strong>ჯერ კომენტარი არ არის</strong>
-            <span>იყავი პირველი ვინც კომენტარს დაწერს.</span>
-          </div>
-        `
-
-        lucide.createIcons()
-        return
-      }
-
-      $("comment-list").innerHTML=comments.map(comment=>{
-
-        const admin=adminUserIds.has(comment.user_id)
-
-        const author=comment.author_name ||
-          (
-            currentUser &&
-            currentUser.id===comment.user_id
-              ? getUserDisplayName(currentUser)
-              : admin
-                ? "ArduinoHub Admin"
-                : "მომხმარებელი"
-          )
-
-        const canDelete=
-          currentUser &&
-          (
-            currentUser.id===comment.user_id ||
-            isAdmin && currentUser.id===comment.user_id
-          )
-
-        return `
-          <article class="comment-item ${admin ? "admin-comment" : ""}">
-
-            <div class="comment-top">
-
-              <div class="comment-author">
-
-                <i data-lucide="${admin ? "shield-check" : "user"}"></i>
-
-                <span>
-                  ${escapeHtml(author)}
-                </span>
-
-                ${
-                  admin
-                    ? `
-                      <span class="admin-badge">
-                        <i data-lucide="badge-check"></i>
-                        ADMIN
-                      </span>
-                    `
-                    : ""
-                }
-
-              </div>
-
-              <div style="display:flex;align-items:center;gap:7px">
-
-                <span class="comment-date">
-                  ${formatDate(comment.created_at)}
-                </span>
-
-                ${
-                  canDelete
-                    ? `
-                      <button
-                        class="comment-delete"
-                        data-comment-delete="${escapeHtml(comment.id)}"
-                        title="კომენტარის წაშლა"
-                      >
-                        <i data-lucide="trash-2"></i>
-                      </button>
-                    `
-                    : ""
-                }
-
-              </div>
-
-            </div>
-
-            <div class="comment-text">
-              ${escapeHtml(comment.comment)}
-            </div>
-
-          </article>
-        `
-      }).join("")
-
-      lucide.createIcons()
-
-      $("comment-list")
-        .querySelectorAll("[data-comment-delete]")
-        .forEach(element=>{
-          element.addEventListener("click",()=>{
-            deleteComment(
-              element.dataset.commentDelete
-            )
-          })
-        })
-    }
-
-    async function submitComment(event){
-
-      event.preventDefault()
-
-      const user=await getCurrentUser()
-
-      if(!user){
-        alert("კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე.")
-        return
-      }
-
-      const text=$("comment-text").value.trim()
-
-      if(!text){
-        return
-      }
-
-      if(text.length>500){
-        alert("კომენტარი მაქსიმუმ 500 სიმბოლო უნდა იყოს.")
-        return
-      }
-
-      const button=$("comment-submit")
-
-      button.disabled=true
-
-      const payload={
-        user_id:user.id,
-        comment:text,
-        author_name:getUserDisplayName(user)
-      }
-
-      if(commentsTargetType==="album"){
-        payload.album_id=commentsTargetId
-      }else{
-        payload.photo_id=commentsTargetId
-      }
-
-      const {data,error}=await supabaseClient
-        .from("album_comments")
-        .insert(payload)
-        .select("id,user_id,album_id,photo_id,comment,author_name,created_at")
-        .single()
-
-      if(error){
-        alert("კომენტარი ვერ დაემატა: "+error.message)
-        button.disabled=false
-        return
-      }
-
-      if(data){
-        albumComments.push(data)
-      }
-
-      $("comment-text").value=""
-
-      await renderComments()
-
-      button.disabled=false
-
-      await refreshSocialAfterComment()
-    }
-
-    async function refreshSocialAfterComment(){
-
-      await renderAlbums()
-
-      if(currentAlbum){
-        await openAlbum(currentAlbum.id)
-      }
-    }
-
-    async function deleteComment(id){
-
-      if(!confirm("წავშალოთ ეს კომენტარი?")){
-        return
-      }
-
-      const comment=albumComments.find(item=>item.id===id)
-
-      if(!comment){
-        return
-      }
-
-      const user=await getCurrentUser()
-
-      if(!user || user.id!==comment.user_id){
-        alert("ამ კომენტარის წაშლა მხოლოდ მის ავტორს შეუძლია.")
-        return
-      }
-
-      const {error}=await supabaseClient
-        .from("album_comments")
-        .delete()
-        .eq("id",id)
-
-      if(error){
-        alert("კომენტარის წაშლა ვერ მოხერხდა: "+error.message)
-        return
-      }
-
-      albumComments=albumComments.filter(
-        item=>item.id!==id
-      )
-
-      await renderComments()
-
-      await refreshSocialAfterComment()
-    }
-
-    function showLightbox(index){
-
-      if(!currentPhotos.length){
-        return
-      }
-
-      lightIndex=
-        (index+currentPhotos.length)%currentPhotos.length
-
-      renderLightboxMedia()
-
-      $("lightbox").classList.add("show")
-    }
-
-    function renderLightboxMedia(){
-
-      const media=currentPhotos[lightIndex]
-
-      if(!media){
-        return
-      }
-
-      const type=getMediaType(media)
-      const source=storageUrl(media.storage_path)
-
-      if(type==="video"){
-
-        $("light-media").innerHTML=`
-          <video
-            src="${escapeHtml(source)}"
-            controls
-            autoplay
-            playsinline
-          ></video>
-        `
-
-      }else{
-
-        $("light-media").innerHTML=`
-          <img
-            src="${escapeHtml(source)}"
-            alt="${escapeHtml(media.caption || currentAlbum?.title || "ფოტო")}"
-          >
-        `
-      }
-
-      $("lightbox-info").textContent=
-        media.caption || currentAlbum?.title || ""
-
-      const likes=getLikesForPhoto(media.id)
-      const comments=getCommentsForPhoto(media.id)
-      const liked=userLiked(likes)
-
-      $("lightbox-social").innerHTML=`
-
-        <button
-          class="social-btn ${liked ? "liked" : ""} ${isAdmin && liked ? "admin-liked" : ""}"
-          id="light-like"
-        >
-          <i data-lucide="heart"></i>
-          <span>${likes.length}</span>
-        </button>
-
-        <button
-          class="social-btn"
-          id="light-comments"
-        >
-          <i data-lucide="message-circle"></i>
-          <span>${comments.length}</span>
-        </button>
-
-        ${
-          adminLiked(likes)
-            ? `
-              <span class="admin-like-badge">
-                <i data-lucide="shield-check"></i>
-                ADMIN LIKE
-              </span>
-            `
-            : ""
-        }
-
-      `
-
-      $("light-like").addEventListener("click",async()=>{
-        await toggleLike("photo",media.id)
-        renderLightboxMedia()
-      })
-
-      $("light-comments").addEventListener("click",async()=>{
-        await openComments("photo",media.id)
-      })
-
-      lucide.createIcons()
-    }
-
-    function moveLight(step){
-
-      if(!currentPhotos.length){
-        return
-      }
-
-      lightIndex=
-        (lightIndex+step+currentPhotos.length)%
-        currentPhotos.length
-
-      renderLightboxMedia()
-    }
-
-    async function createAlbum(event){
-
-      event.preventDefault()
-
-      const title=$("album-name").value.trim()
-      const description=$("album-desc").value.trim()
-
-      if(!title){
-        return
-      }
-
-      notify("album-status","იქმნება...")
-
-      const {error}=await supabaseClient
-        .from("photo_albums")
-        .insert({
-          title,
-          description
-        })
-
-      if(error){
-        notify(
-          "album-status",
-          "შეცდომა: "+error.message
-        )
-        return
-      }
-
-      $("album-form").reset()
-
-      hideModal("album-modal")
-
-      await loadAlbums()
-    }
-
-    async function editAlbum(id){
-
-      const album=albums.find(item=>item.id===id)
-
-      if(!album){
-        return
-      }
-
-      const title=prompt(
-        "შეიყვანე ალბომის ახალი სახელი:",
-        album.title
-      )
-
-      if(title===null){
-        return
-      }
-
-      if(!title.trim()){
-        alert("ალბომის სახელი ცარიელი არ უნდა იყოს.")
-        return
-      }
-
-      const description=prompt(
-        "შეიყვანე აღწერა:",
-        album.description || ""
-      )
-
-      if(description===null){
-        return
-      }
-
-      const {error}=await supabaseClient
-        .from("photo_albums")
-        .update({
-          title:title.trim(),
-          description:description.trim()
-        })
-        .eq("id",id)
-
-      if(error){
-        alert("შეცდომა: "+error.message)
-        return
-      }
-
-      await loadAlbums()
-
-      if(currentAlbum?.id===id){
-        await openAlbum(id)
-      }
-    }
-
-    async function deleteAlbum(id){
-
-      const album=albums.find(item=>item.id===id)
-
-      if(!album){
-        return
-      }
-
-      if(!confirm(
-        'წავშალოთ ალბომი "'+
-        album.title+
-        '" და მასში არსებული ფოტოები და ვიდეოები?'
-      )){
-        return
-      }
-
-      const {data:media}=await supabaseClient
-        .from("album_photos")
-        .select("id,storage_path")
-        .eq("album_id",id)
-
-      if(media?.length){
-
-        const {error:storageError}=
-          await supabaseClient
-            .storage
-            .from(BUCKET)
-            .remove(
-              media.map(item=>item.storage_path)
-            )
-
-        if(storageError){
-          alert(
-            "ფაილების საცავიდან წაშლა ვერ მოხერხდა: "+
-            storageError.message
-          )
-          return
-        }
-      }
-
-      const {error}=await supabaseClient
-        .from("photo_albums")
-        .delete()
-        .eq("id",id)
-
-      if(error){
-        alert("შეცდომა: "+error.message)
-        return
-      }
-
-      $("gallery").classList.remove("show")
-
-      currentAlbum=null
-
-      await loadAlbums()
-    }
-
-    async function uploadPhotos(event){
-
-      event.preventDefault()
-
-      const albumId=$("upload-album").value
-      const files=[...$("photo-files").files]
-
-      if(!albumId || !files.length){
-        return
-      }
-
-      const submit=$("upload-submit")
-
-      submit.disabled=true
-
-      let done=0
-
-      for(const file of files){
-
-        if(file.size>MAX_FILE_SIZE){
-          notify(
-            "upload-status",
-            file.name+" 50 MB-ზე დიდია."
-          )
-          continue
-        }
-
-        if(!isAllowedMedia(file)){
-          notify(
-            "upload-status",
-            file.name+" მხარდაჭერილი ფოტო ან ვიდეო არ არის."
-          )
-          continue
-        }
-
-        const mime=getMimeType(file)
-
-        const safeName=file.name.replace(
-          /[^a-zA-Z0-9._-]/g,
-          "_"
-        )
-
-        const path=
-          albumId+
-          "/"+
-          crypto.randomUUID()+
-          "-"+
-          safeName
-
-        notify(
-          "upload-status",
-          "იტვირთება "+(++done)+" / "+files.length
-        )
-
-        const {error:uploadError}=
-          await supabaseClient
-            .storage
-            .from(BUCKET)
-            .upload(
-              path,
-              file,
-              {
-                upsert:false,
-                contentType:mime
-              }
-            )
-
-        if(uploadError){
-          notify(
-            "upload-status",
-            "ატვირთვის შეცდომა: "+
-            uploadError.message
-          )
-
-          submit.disabled=false
-          return
-        }
-
-        const {error:rowError}=
-          await supabaseClient
-            .from("album_photos")
-            .insert({
-              album_id:albumId,
-              storage_path:path,
-              caption:$("photo-caption").value.trim()
-            })
-
-        if(rowError){
-
-          await supabaseClient
-            .storage
-            .from(BUCKET)
-            .remove([path])
-
-          notify(
-            "upload-status",
-            "მონაცემის შენახვის შეცდომა: "+
-            rowError.message
-          )
-
-          submit.disabled=false
-          return
-        }
-      }
-
-      submit.disabled=false
-
-      $("upload-form").reset()
-
-      hideModal("upload-modal")
-
-      await loadAlbums()
-
-      if(currentAlbum){
-        await openAlbum(currentAlbum.id)
-      }
-    }
-
-    async function deletePhoto(id){
-
-      const photo=currentPhotos.find(
-        item=>item.id===id
-      )
-
-      if(
-        !photo ||
-        !confirm("წავშალოთ ეს ფოტო ან ვიდეო?")
-      ){
-        return
-      }
-
-      const {error:storageError}=
-        await supabaseClient
-          .storage
-          .from(BUCKET)
-          .remove([
-            photo.storage_path
-          ])
-
-      if(storageError){
-        alert(
-          "ფაილის წაშლა ვერ მოხერხდა: "+
-          storageError.message
-        )
-        return
-      }
-
-      const {error}=await supabaseClient
-        .from("album_photos")
-        .delete()
-        .eq("id",id)
-
-      if(error){
-        alert(
-          "მონაცემის წაშლა ვერ მოხერხდა: "+
-          error.message
-        )
-        return
-      }
-
-      currentPhotos=currentPhotos.filter(
-        item=>item.id!==id
-      )
-
-      await loadSocialData()
-
-      if(currentAlbum){
-        await openAlbum(currentAlbum.id)
-      }
-
-      await loadAlbums()
-    }
-
-    $("create-open").addEventListener(
-      "click",
-      ()=>{
-        notify("album-status","")
-        showModal("album-modal")
-      }
-    )
-
-    $("upload-open").addEventListener(
-      "click",
-      ()=>{
-        notify("upload-status","")
-        showModal("upload-modal")
-      }
-    )
-
-    $("album-form").addEventListener(
-      "submit",
-      createAlbum
-    )
-
-    $("upload-form").addEventListener(
-      "submit",
-      uploadPhotos
-    )
-
-    $("comment-form").addEventListener(
-      "submit",
-      submitComment
-    )
-
-    $("gallery-close").addEventListener(
-      "click",
-      ()=>{
-        $("gallery").classList.remove("show")
-        currentAlbum=null
-      }
-    )
-
-    document
-      .querySelectorAll("[data-close]")
-      .forEach(button=>{
-        button.addEventListener(
-          "click",
-          ()=>{
-            hideModal(button.dataset.close)
-          }
-        )
-      })
-
-    document
-      .querySelectorAll(".modal")
-      .forEach(modal=>{
-        modal.addEventListener(
-          "click",
-          event=>{
-            if(event.target===modal){
-              hideModal(modal.id)
-            }
-          }
-        )
-      })
-
-    $("light-close").addEventListener(
-      "click",
-      ()=>{
-        $("lightbox").classList.remove("show")
-        $("light-media").innerHTML=""
-      }
-    )
-
-    $("light-prev").addEventListener(
-      "click",
-      ()=>{
-        moveLight(-1)
-      }
-    )
-
-    $("light-next").addEventListener(
-      "click",
-      ()=>{
-        moveLight(1)
-      }
-    )
-
-    document.addEventListener(
-      "keydown",
-      event=>{
-        if(!$("lightbox").classList.contains("show")){
-          return
-        }
-
-        if(event.key==="Escape"){
-          $("lightbox").classList.remove("show")
-          $("light-media").innerHTML=""
-        }
-
-        if(event.key==="ArrowLeft"){
-          moveLight(-1)
-        }
-
-        if(event.key==="ArrowRight"){
-          moveLight(1)
-        }
-      }
-    )
-
-    $("year").textContent=new Date().getFullYear()
-
-    async function init(){
-
-      currentUser=await getCurrentUser()
-
-      await loadAdminUsers()
-
-      isAdmin=await checkAdmin()
-
-      if(isAdmin){
-
-        $("create-open").style.display="inline-flex"
-
-        $("admin-tools").classList.add("show")
-
-        $("admin-label").textContent=
-          "ადმინისტრატორის რეჟიმი"
-      }
-
-      await loadAlbums()
-
-      lucide.createIcons()
-    }
-
-    init()
-  </script>
+mediaByAlbum[item.album_id].push(item)
+})
+
+grid.innerHTML=albums.map(album=>{
+
+const albumMedia=mediaByAlbum[album.id]||[]
+const cover=albumMedia[0]
+
+let coverHtml=""
+
+if(cover){
+
+const type=getMediaType(cover)
+
+if(type==="video"){
+
+coverHtml=`
+<div class="cover-media">
+<video src="${escapeHtml(storageUrl(cover.storage_path))}" muted loop autoplay playsinline preload="metadata"></video>
+
+<div class="video-play">
+<span>
+<i data-lucide="play"></i>
+</span>
+</div>
+</div>
+`
+
+}else{
+
+coverHtml=`
+<img
+src="${escapeHtml(storageUrl(cover.storage_path))}"
+alt="${escapeHtml(album.title)}"
+loading="lazy"
+>
+`
+}
+
+}else{
+
+coverHtml=`
+<div class="cover-empty">
+<i data-lucide="images"></i>
+</div>
+`
+}
+
+const actions=isAdmin?`
+<div class="album-actions">
+
+<button class="icon-btn" data-edit="${escapeHtml(album.id)}" title="რედაქტირება">
+<i data-lucide="pencil"></i>
+</button>
+
+<button class="icon-btn" data-delete="${escapeHtml(album.id)}" title="წაშლა">
+<i data-lucide="trash-2"></i>
+</button>
+
+</div>
+`:""
+
+return `
+<article class="album">
+
+<div class="cover" data-open="${escapeHtml(album.id)}">
+${coverHtml}
+</div>
+
+<div class="album-info">
+
+<h2>${escapeHtml(album.title)}</h2>
+
+<p>${escapeHtml(album.description||"")}</p>
+
+<div class="album-bottom">
+
+<span class="count">
+<i data-lucide="images"></i>
+${albumMedia.length} მედია
+</span>
+
+${actions}
+
+</div>
+
+${socialButtons("album",album.id)}
+
+</div>
+
+</article>
+`
+
+}).join("")
+
+lucide.createIcons()
+
+grid.querySelectorAll("[data-open]").forEach(element=>{
+element.addEventListener("click",()=>{
+openAlbum(element.dataset.open)
+})
+})
+
+grid.querySelectorAll("[data-edit]").forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+editAlbum(element.dataset.edit)
+})
+})
+
+grid.querySelectorAll("[data-delete]").forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+deleteAlbum(element.dataset.delete)
+})
+})
+
+grid.querySelectorAll("[data-like-type]").forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+toggleLike(
+element.dataset.likeType,
+element.dataset.likeId
+)
+})
+})
+
+grid.querySelectorAll("[data-comments-type]").forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+openComments(
+element.dataset.commentsType,
+element.dataset.commentsId
+)
+})
+})
+}
+
+async function openAlbum(id){
+
+currentAlbum=albums.find(album=>album.id===id)
+
+if(!currentAlbum){
+return
+}
+
+$("gallery-title").textContent=currentAlbum.title
+$("gallery-description").textContent=currentAlbum.description||""
+
+renderAlbumSocial()
+
+$("photo-grid").innerHTML=`
+<div class="loading">
+მედია იტვირთება...
+</div>
+`
+
+$("gallery").classList.add("show")
+
+$("gallery").scrollIntoView({
+behavior:"smooth",
+block:"start"
+})
+
+const {data,error}=await supabaseClient
+.from("album_photos")
+.select("id,album_id,storage_path,caption,created_at")
+.eq("album_id",id)
+.order("created_at",{ascending:true})
+
+if(error){
+
+$("photo-grid").innerHTML=`
+<div class="empty">
+მედიის ჩატვირთვა ვერ მოხერხდა:
+${escapeHtml(error.message)}
+</div>
+`
+
+return
+}
+
+currentPhotos=data||[]
+
+if(!currentPhotos.length){
+
+$("photo-grid").innerHTML=`
+<div class="empty" style="grid-column:1/-1">
+ამ ალბომში ფოტოები ან ვიდეოები ჯერ არ არის.
+</div>
+`
+
+return
+}
+
+$("photo-grid").innerHTML=currentPhotos.map((media,index)=>{
+
+const type=getMediaType(media)
+const source=storageUrl(media.storage_path)
+
+const mediaHtml=type==="video"
+?`
+<video
+src="${escapeHtml(source)}"
+muted
+loop
+autoplay
+playsinline
+preload="metadata"
+data-photo="${index}"
+></video>
+
+<span class="media-type">
+<i data-lucide="video"></i>
+VIDEO
+</span>
+`
+:`
+<img
+src="${escapeHtml(source)}"
+alt="${escapeHtml(media.caption||currentAlbum.title)}"
+data-photo="${index}"
+loading="lazy"
+>
+
+<span class="media-type">
+<i data-lucide="image"></i>
+PHOTO
+</span>
+`
+
+const likes=getLikesForPhoto(media.id)
+const comments=getCommentsForPhoto(media.id)
+const liked=userLiked(likes)
+const adminLike=adminLiked(likes)
+
+return `
+<div class="photo ${isAdmin?"admin":""}">
+
+${mediaHtml}
+
+${adminLike?`
+<span class="media-admin-like">
+<i data-lucide="shield-check"></i>
+ADMIN
+</span>
+`:""}
+
+${media.caption?`
+<div class="photo-caption">
+${escapeHtml(media.caption)}
+</div>
+`:""}
+
+<div class="photo-social">
+
+<button
+class="social-btn ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}"
+data-photo-like="${escapeHtml(media.id)}"
+>
+<i data-lucide="heart"></i>
+<span>${likes.length}</span>
+</button>
+
+<button
+class="social-btn"
+data-photo-comments="${escapeHtml(media.id)}"
+>
+<i data-lucide="message-circle"></i>
+<span>${comments.length}</span>
+</button>
+
+</div>
+
+${isAdmin?`
+<button
+class="icon-btn delete-photo"
+data-photo-delete="${escapeHtml(media.id)}"
+title="წაშლა"
+>
+<i data-lucide="trash-2"></i>
+</button>
+`:""}
+
+</div>
+`
+
+}).join("")
+
+lucide.createIcons()
+
+$("photo-grid")
+.querySelectorAll("[data-photo]")
+.forEach(element=>{
+element.addEventListener("click",event=>{
+
+if(event.target.closest("[data-photo-like]"))return
+if(event.target.closest("[data-photo-comments]"))return
+if(event.target.closest("[data-photo-delete]"))return
+
+showLightbox(Number(element.dataset.photo))
+})
+})
+
+$("photo-grid")
+.querySelectorAll("[data-photo-like]")
+.forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+
+toggleLike(
+"photo",
+element.dataset.photoLike
+)
+})
+})
+
+$("photo-grid")
+.querySelectorAll("[data-photo-comments]")
+.forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+
+openComments(
+"photo",
+element.dataset.photoComments
+)
+})
+})
+
+$("photo-grid")
+.querySelectorAll("[data-photo-delete]")
+.forEach(element=>{
+element.addEventListener("click",event=>{
+event.stopPropagation()
+
+deletePhoto(element.dataset.photoDelete)
+})
+})
+}
+
+function renderAlbumSocial(){
+
+if(!currentAlbum){
+return
+}
+
+$("gallery-social").innerHTML=socialButtons(
+"album",
+currentAlbum.id
+)
+
+lucide.createIcons()
+
+$("gallery-social")
+.querySelectorAll("[data-like-type]")
+.forEach(element=>{
+element.addEventListener("click",()=>{
+toggleLike(
+element.dataset.likeType,
+element.dataset.likeId
+)
+})
+})
+
+$("gallery-social")
+.querySelectorAll("[data-comments-type]")
+.forEach(element=>{
+element.addEventListener("click",()=>{
+openComments(
+element.dataset.commentsType,
+element.dataset.commentsId
+)
+})
+})
+}
+
+async function toggleLike(type,id){
+
+const user=await getCurrentUser()
+
+if(!user){
+alert("Like-ის დასაწერად ანგარიშში უნდა შეხვიდე.")
+return
+}
+
+const existing=albumLikes.find(item=>
+item.user_id===user.id&&
+(
+type==="album"
+?item.album_id===id
+:item.photo_id===id
+)
+)
+
+if(existing){
+
+const {error}=await supabaseClient
+.from("album_likes")
+.delete()
+.eq("id",existing.id)
+
+if(error){
+alert("Like-ის წაშლა ვერ მოხერხდა: "+error.message)
+return
+}
+
+albumLikes=albumLikes.filter(
+item=>item.id!==existing.id
+)
+
+}else{
+
+const payload=type==="album"
+?{user_id:user.id,album_id:id}
+:{user_id:user.id,photo_id:id}
+
+const {data,error}=await supabaseClient
+.from("album_likes")
+.insert(payload)
+.select("id,user_id,album_id,photo_id")
+.single()
+
+if(error){
+alert("Like ვერ დაემატა: "+error.message)
+return
+}
+
+if(data){
+albumLikes.push(data)
+}
+}
+
+await renderAlbums()
+
+if(currentAlbum){
+await openAlbum(currentAlbum.id)
+}
+}
+
+async function openComments(type,id){
+
+commentsTargetType=type
+commentsTargetId=id
+replyParentId=null
+
+let title=""
+
+if(type==="album"){
+
+const album=albums.find(item=>item.id===id)
+title=album?.title||"ალბომი"
+
+}else{
+
+const photo=currentPhotos.find(item=>item.id===id)
+title=photo?.caption||"ფოტო ან ვიდეო"
+}
+
+commentsTargetTitle=title
+
+$("comments-title").textContent="კომენტარები"
+$("comments-target").textContent=title
+$("comment-text").value=""
+
+cancelReply()
+
+const user=await getCurrentUser()
+
+if(user){
+
+$("comment-login-note").textContent=
+"კომენტარი გამოქვეყნდება სახელით: "+getUserDisplayName(user)
+
+$("comment-submit").disabled=false
+$("comment-text").disabled=false
+
+}else{
+
+$("comment-login-note").textContent=
+"კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე."
+
+$("comment-submit").disabled=true
+$("comment-text").disabled=true
+}
+
+showModal("comments-modal")
+
+await renderComments()
+
+lucide.createIcons()
+}
+
+function getCommentChildren(parentId){
+return albumComments
+.filter(item=>item.parent_comment_id===parentId)
+.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at))
+}
+
+function buildCommentHtml(comment,isReply=false){
+
+const likes=getCommentLikes(comment.id)
+const liked=userLiked(likes)
+const adminLike=adminLiked(likes)
+const admin=adminUserIds.has(comment.user_id)
+
+let author=comment.author_name||"მომხმარებელი"
+
+if(!comment.author_name&&currentUser&&currentUser.id===comment.user_id){
+author=getUserDisplayName(currentUser)
+}
+
+const canDelete=
+currentUser&&
+currentUser.id===comment.user_id
+
+const children=getCommentChildren(comment.id)
+
+return `
+<article class="comment-item ${admin?"admin-comment":""} ${isReply?"reply":""}">
+
+${isReply?`<span class="reply-line"></span>`:""}
+
+<div class="comment-top">
+
+<div class="comment-author">
+
+<div class="author-avatar">
+${escapeHtml(getInitials(author))}
+</div>
+
+<div class="author-details">
+
+<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+
+<span class="author-name">
+${escapeHtml(author)}
+</span>
+
+${admin?`
+<span class="admin-badge">
+<i data-lucide="shield-check"></i>
+ADMIN
+</span>
+`:""}
+
+</div>
+
+<span class="comment-date">
+${formatDate(comment.created_at)}
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="comment-text">
+${escapeHtml(comment.comment)}
+</div>
+
+<div class="comment-actions">
+
+<button
+class="comment-action ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}"
+data-comment-like="${escapeHtml(comment.id)}"
+>
+<i data-lucide="heart"></i>
+<span>${likes.length}</span>
+</button>
+
+<button
+class="comment-action"
+data-comment-reply="${escapeHtml(comment.id)}"
+>
+<i data-lucide="reply"></i>
+პასუხი
+</button>
+
+${adminLike?`
+<span class="comment-admin-like">
+<i data-lucide="shield-check"></i>
+ADMIN LIKE
+</span>
+`:""}
+
+${canDelete?`
+<button
+class="comment-delete"
+data-comment-delete="${escapeHtml(comment.id)}"
+title="კომენტარის წაშლა"
+>
+<i data-lucide="trash-2"></i>
+</button>
+`:""}
+
+</div>
+
+</article>
+
+${children.map(child=>buildCommentHtml(child,true)).join("")}
+`
+}
+
+async function renderComments(){
+
+let comments=
+commentsTargetType==="album"
+?getCommentsForAlbum(commentsTargetId)
+:getCommentsForPhoto(commentsTargetId)
+
+comments=comments
+.filter(item=>!item.parent_comment_id)
+.sort(
+(a,b)=>new Date(a.created_at)-new Date(b.created_at)
+)
+
+if(!comments.length){
+
+$("comment-list").innerHTML=`
+<div class="empty">
+<i data-lucide="message-circle"></i>
+<strong>ჯერ კომენტარი არ არის</strong>
+<span>იყავი პირველი ვინც კომენტარს დაწერს.</span>
+</div>
+`
+
+lucide.createIcons()
+return
+}
+
+$("comment-list").innerHTML=
+comments.map(comment=>buildCommentHtml(comment)).join("")
+
+lucide.createIcons()
+
+$("comment-list")
+.querySelectorAll("[data-comment-like]")
+.forEach(element=>{
+element.addEventListener("click",()=>{
+toggleCommentLike(
+element.dataset.commentLike
+)
+})
+})
+
+$("comment-list")
+.querySelectorAll("[data-comment-reply]")
+.forEach(element=>{
+element.addEventListener("click",()=>{
+startReply(
+element.dataset.commentReply
+)
+})
+})
+
+$("comment-list")
+.querySelectorAll("[data-comment-delete]")
+.forEach(element=>{
+element.addEventListener("click",()=>{
+deleteComment(
+element.dataset.commentDelete
+)
+})
+})
+}
+
+async function toggleCommentLike(id){
+
+const user=await getCurrentUser()
+
+if(!user){
+alert("კომენტარის დასალაიქებლად ანგარიშში უნდა შეხვიდე.")
+return
+}
+
+const existing=commentLikes.find(item=>
+item.user_id===user.id&&
+item.comment_id===id
+)
+
+if(existing){
+
+const {error}=await supabaseClient
+.from("album_comment_likes")
+.delete()
+.eq("id",existing.id)
+
+if(error){
+alert("კომენტარის Like-ის წაშლა ვერ მოხერხდა: "+error.message)
+return
+}
+
+commentLikes=commentLikes.filter(
+item=>item.id!==existing.id
+)
+
+}else{
+
+const {data,error}=await supabaseClient
+.from("album_comment_likes")
+.insert({
+user_id:user.id,
+comment_id:id
+})
+.select("id,user_id,comment_id")
+.single()
+
+if(error){
+alert("კომენტარის Like ვერ დაემატა: "+error.message)
+return
+}
+
+if(data){
+commentLikes.push(data)
+}
+}
+
+await renderComments()
+
+await refreshSocialAfterComment()
+}
+
+function startReply(commentId){
+
+const comment=albumComments.find(
+item=>item.id===commentId
+)
+
+if(!comment){
+return
+}
+
+replyParentId=commentId
+
+const author=comment.author_name||"მომხმარებელი"
+
+$("replying-text").textContent=
+"პასუხობ: "+author
+
+$("replying").classList.add("show")
+
+$("comment-text").placeholder=
+author+"-სთვის პასუხის დაწერა..."
+
+$("comment-text").focus()
+}
+
+function cancelReply(){
+
+replyParentId=null
+
+$("replying").classList.remove("show")
+
+$("comment-text").placeholder=
+"დაწერე კომენტარი..."
+}
+
+async function submitComment(event){
+
+event.preventDefault()
+
+const user=await getCurrentUser()
+
+if(!user){
+alert("კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე.")
+return
+}
+
+const text=$("comment-text").value.trim()
+
+if(!text){
+return
+}
+
+if(text.length>500){
+alert("კომენტარი მაქსიმუმ 500 სიმბოლო უნდა იყოს.")
+return
+}
+
+const button=$("comment-submit")
+
+button.disabled=true
+
+const payload={
+user_id:user.id,
+comment:text,
+author_name:getUserDisplayName(user)
+}
+
+if(commentsTargetType==="album"){
+payload.album_id=commentsTargetId
+}else{
+payload.photo_id=commentsTargetId
+}
+
+if(replyParentId){
+payload.parent_comment_id=replyParentId
+}
+
+const {data,error}=await supabaseClient
+.from("album_comments")
+.insert(payload)
+.select("id,user_id,album_id,photo_id,comment,author_name,created_at,parent_comment_id")
+.single()
+
+if(error){
+
+alert("კომენტარი ვერ დაემატა: "+error.message)
+
+button.disabled=false
+
+return
+}
+
+if(data){
+albumComments.push(data)
+}
+
+$("comment-text").value=""
+
+cancelReply()
+
+await renderComments()
+
+button.disabled=false
+
+await refreshSocialAfterComment()
+}
+
+async function refreshSocialAfterComment(){
+
+await loadSocialData()
+await renderAlbums()
+
+if(currentAlbum){
+await openAlbum(currentAlbum.id)
+}
+}
+
+async function deleteComment(id){
+
+if(!confirm("წავშალოთ ეს კომენტარი და მისი პასუხებიც?")){
+return
+}
+
+const comment=albumComments.find(
+item=>item.id===id
+)
+
+if(!comment){
+return
+}
+
+const user=await getCurrentUser()
+
+if(!user||user.id!==comment.user_id){
+alert("ამ კომენტარის წაშლა მხოლოდ მის ავტორს შეუძლია.")
+return
+}
+
+const {error}=await supabaseClient
+.from("album_comments")
+.delete()
+.eq("id",id)
+
+if(error){
+alert("კომენტარის წაშლა ვერ მოხერხდა: "+error.message)
+return
+}
+
+albumComments=albumComments.filter(
+item=>item.id!==id&&item.parent_comment_id!==id
+)
+
+commentLikes=commentLikes.filter(
+item=>item.comment_id!==id
+)
+
+await renderComments()
+await refreshSocialAfterComment()
+}
+
+function showLightbox(index){
+
+if(!currentPhotos.length){
+return
+}
+
+lightIndex=
+(index+currentPhotos.length)%
+currentPhotos.length
+
+renderLightboxMedia()
+
+$("lightbox").classList.add("show")
+}
+
+function renderLightboxMedia(){
+
+const media=currentPhotos[lightIndex]
+
+if(!media){
+return
+}
+
+const type=getMediaType(media)
+const source=storageUrl(media.storage_path)
+
+if(type==="video"){
+
+$("light-media").innerHTML=`
+<video
+src="${escapeHtml(source)}"
+controls
+autoplay
+playsinline
+></video>
+`
+
+}else{
+
+$("light-media").innerHTML=`
+<img
+src="${escapeHtml(source)}"
+alt="${escapeHtml(media.caption||currentAlbum?.title||"ფოტო")}"
+>
+`
+}
+
+$("lightbox-info").textContent=
+media.caption||
+currentAlbum?.title||
+""
+
+const likes=getLikesForPhoto(media.id)
+const comments=getCommentsForPhoto(media.id)
+const liked=userLiked(likes)
+
+$("lightbox-social").innerHTML=`
+
+<button
+class="social-btn ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}"
+id="light-like"
+>
+<i data-lucide="heart"></i>
+<span>${likes.length}</span>
+</button>
+
+<button class="social-btn" id="light-comments">
+<i data-lucide="message-circle"></i>
+<span>${comments.length}</span>
+</button>
+
+${adminLiked(likes)?`
+<span class="admin-like-badge">
+<i data-lucide="shield-check"></i>
+ADMIN LIKE
+</span>
+`:""}
+
+`
+
+$("light-like").addEventListener("click",async()=>{
+await toggleLike("photo",media.id)
+renderLightboxMedia()
+})
+
+$("light-comments").addEventListener("click",async()=>{
+await openComments("photo",media.id)
+})
+
+lucide.createIcons()
+}
+
+function moveLight(step){
+
+if(!currentPhotos.length){
+return
+}
+
+lightIndex=
+(lightIndex+step+currentPhotos.length)%
+currentPhotos.length
+
+renderLightboxMedia()
+}
+
+async function createAlbum(event){
+
+event.preventDefault()
+
+const title=$("album-name").value.trim()
+const description=$("album-desc").value.trim()
+
+if(!title){
+return
+}
+
+notify("album-status","იქმნება...")
+
+const {error}=await supabaseClient
+.from("photo_albums")
+.insert({
+title,
+description
+})
+
+if(error){
+
+notify(
+"album-status",
+"შეცდომა: "+error.message
+)
+
+return
+}
+
+$("album-form").reset()
+
+hideModal("album-modal")
+
+await loadAlbums()
+}
+
+async function editAlbum(id){
+
+const album=albums.find(
+item=>item.id===id
+)
+
+if(!album){
+return
+}
+
+const title=prompt(
+"შეიყვანე ალბომის ახალი სახელი:",
+album.title
+)
+
+if(title===null){
+return
+}
+
+if(!title.trim()){
+alert("ალბომის სახელი ცარიელი არ უნდა იყოს.")
+return
+}
+
+const description=prompt(
+"შეიყვანე აღწერა:",
+album.description||""
+)
+
+if(description===null){
+return
+}
+
+const {error}=await supabaseClient
+.from("photo_albums")
+.update({
+title:title.trim(),
+description:description.trim()
+})
+.eq("id",id)
+
+if(error){
+alert("შეცდომა: "+error.message)
+return
+}
+
+await loadAlbums()
+
+if(currentAlbum?.id===id){
+await openAlbum(id)
+}
+}
+
+async function deleteAlbum(id){
+
+const album=albums.find(
+item=>item.id===id
+)
+
+if(!album){
+return
+}
+
+if(!confirm(
+'წავშალოთ ალბომი "'+
+album.title+
+'" და მასში არსებული ფოტოები და ვიდეოები?'
+)){
+return
+}
+
+const {data:media}=await supabaseClient
+.from("album_photos")
+.select("id,storage_path")
+.eq("album_id",id)
+
+if(media?.length){
+
+const {error:storageError}=
+await supabaseClient
+.storage
+.from(BUCKET)
+.remove(
+media.map(item=>item.storage_path)
+)
+
+if(storageError){
+
+alert(
+"ფაილების საცავიდან წაშლა ვერ მოხერხდა: "+
+storageError.message
+)
+
+return
+}
+}
+
+const {error}=await supabaseClient
+.from("photo_albums")
+.delete()
+.eq("id",id)
+
+if(error){
+alert("შეცდომა: "+error.message)
+return
+}
+
+$("gallery").classList.remove("show")
+
+currentAlbum=null
+
+await loadSocialData()
+await loadAlbums()
+}
+
+async function uploadPhotos(event){
+
+event.preventDefault()
+
+const albumId=$("upload-album").value
+const files=[...$("photo-files").files]
+
+if(!albumId||!files.length){
+return
+}
+
+const submit=$("upload-submit")
+
+submit.disabled=true
+
+let done=0
+
+for(const file of files){
+
+if(file.size>MAX_FILE_SIZE){
+
+notify(
+"upload-status",
+file.name+" 50 MB-ზე დიდია."
+)
+
+continue
+}
+
+if(!isAllowedMedia(file)){
+
+notify(
+"upload-status",
+file.name+" მხარდაჭერილი ფოტო ან ვიდეო არ არის."
+)
+
+continue
+}
+
+const mime=getMimeType(file)
+
+const safeName=file.name.replace(
+/[^a-zA-Z0-9._-]/g,
+"_"
+)
+
+const path=
+albumId+
+"/"+
+crypto.randomUUID()+
+"-"+
+safeName
+
+notify(
+"upload-status",
+"იტვირთება "+(++done)+" / "+files.length
+)
+
+const {error:uploadError}=
+await supabaseClient
+.storage
+.from(BUCKET)
+.upload(
+path,
+file,
+{
+upsert:false,
+contentType:mime
+}
+)
+
+if(uploadError){
+
+notify(
+"upload-status",
+"ატვირთვის შეცდომა: "+
+uploadError.message
+)
+
+submit.disabled=false
+
+return
+}
+
+const {error:rowError}=
+await supabaseClient
+.from("album_photos")
+.insert({
+album_id:albumId,
+storage_path:path,
+caption:$("photo-caption").value.trim()
+})
+
+if(rowError){
+
+await supabaseClient
+.storage
+.from(BUCKET)
+.remove([path])
+
+notify(
+"upload-status",
+"მონაცემის შენახვის შეცდომა: "+
+rowError.message
+)
+
+submit.disabled=false
+
+return
+}
+}
+
+submit.disabled=false
+
+$("upload-form").reset()
+
+hideModal("upload-modal")
+
+await loadAlbums()
+
+if(currentAlbum){
+await openAlbum(currentAlbum.id)
+}
+}
+
+async function deletePhoto(id){
+
+const photo=currentPhotos.find(
+item=>item.id===id
+)
+
+if(
+!photo||
+!confirm("წავშალოთ ეს ფოტო ან ვიდეო?")
+){
+return
+}
+
+const {error:storageError}=
+await supabaseClient
+.storage
+.from(BUCKET)
+.remove([photo.storage_path])
+
+if(storageError){
+
+alert(
+"ფაილის წაშლა ვერ მოხერხდა: "+
+storageError.message
+)
+
+return
+}
+
+const {error}=await supabaseClient
+.from("album_photos")
+.delete()
+.eq("id",id)
+
+if(error){
+
+alert(
+"მონაცემის წაშლა ვერ მოხერხდა: "+
+error.message
+)
+
+return
+}
+
+currentPhotos=currentPhotos.filter(
+item=>item.id!==id
+)
+
+await loadSocialData()
+
+if(currentAlbum){
+await openAlbum(currentAlbum.id)
+}
+
+await loadAlbums()
+}
+
+$("create-open").addEventListener(
+"click",
+()=>{
+notify("album-status","")
+showModal("album-modal")
+}
+)
+
+$("upload-open").addEventListener(
+"click",
+()=>{
+notify("upload-status","")
+showModal("upload-modal")
+}
+)
+
+$("album-form").addEventListener(
+"submit",
+createAlbum
+)
+
+$("upload-form").addEventListener(
+"submit",
+uploadPhotos
+)
+
+$("comment-form").addEventListener(
+"submit",
+submitComment
+)
+
+$("cancel-reply").addEventListener(
+"click",
+cancelReply
+)
+
+$("gallery-close").addEventListener(
+"click",
+()=>{
+$("gallery").classList.remove("show")
+currentAlbum=null
+}
+)
+
+document
+.querySelectorAll("[data-close]")
+.forEach(button=>{
+button.addEventListener(
+"click",
+()=>{
+hideModal(button.dataset.close)
+}
+)
+})
+
+document
+.querySelectorAll(".modal")
+.forEach(modal=>{
+modal.addEventListener(
+"click",
+event=>{
+if(event.target===modal){
+hideModal(modal.id)
+}
+}
+)
+})
+
+$("light-close").addEventListener(
+"click",
+()=>{
+$("lightbox").classList.remove("show")
+$("light-media").innerHTML=""
+}
+)
+
+$("light-prev").addEventListener(
+"click",
+()=>{
+moveLight(-1)
+}
+)
+
+$("light-next").addEventListener(
+"click",
+()=>{
+moveLight(1)
+}
+)
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(!$("lightbox").classList.contains("show")){
+return
+}
+
+if(event.key==="Escape"){
+$("lightbox").classList.remove("show")
+$("light-media").innerHTML=""
+}
+
+if(event.key==="ArrowLeft"){
+moveLight(-1)
+}
+
+if(event.key==="ArrowRight"){
+moveLight(1)
+}
+
+}
+)
+
+$("year").textContent=
+new Date().getFullYear()
+
+async function init(){
+
+currentUser=await getCurrentUser()
+
+await loadAdminUsers()
+
+isAdmin=await checkAdmin()
+
+if(isAdmin){
+
+$("create-open").style.display="inline-flex"
+
+$("admin-tools").classList.add("show")
+
+$("admin-label").textContent=
+"ადმინისტრატორის რეჟიმი"
+}
+
+await loadAlbums()
+
+lucide.createIcons()
+}
+
+init()
+
+</script>
 
 </body>
 </html>
