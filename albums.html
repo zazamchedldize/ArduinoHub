@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ka">
 <head>
@@ -27,9 +28,7 @@
   --red:#fb7185
 }
 
-*{
-  box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -487,48 +486,6 @@ button:disabled{
   backdrop-filter:blur(7px)
 }
 
-.photo-social{
-  position:absolute;
-  left:8px;
-  right:8px;
-  bottom:8px;
-  z-index:5;
-  display:flex;
-  gap:6px;
-  pointer-events:none
-}
-
-.photo-social .social-btn{
-  pointer-events:auto;
-  background:rgba(7,17,15,.82);
-  backdrop-filter:blur(7px);
-  min-height:31px;
-  padding:6px 9px
-}
-
-.photo-social .social-btn svg{
-  width:14px;
-  height:14px
-}
-
-.media-admin-like{
-  position:absolute;
-  top:8px;
-  right:8px;
-  z-index:3;
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:5px 7px;
-  border-radius:7px;
-  color:var(--gold);
-  background:rgba(7,17,15,.86);
-  border:1px solid rgba(245,196,81,.38);
-  font-size:9px;
-  font-weight:800;
-  box-shadow:0 0 15px rgba(245,196,81,.08)
-}
-
 .modal{
   position:fixed;
   inset:0;
@@ -945,7 +902,7 @@ button:disabled{
 .lightbox img,
 .lightbox video{
   max-width:100%;
-  max-height:calc(100% - 70px);
+  max-height:calc(100% - 30px);
   object-fit:contain;
   border-radius:8px
 }
@@ -955,14 +912,6 @@ button:disabled{
   text-align:center;
   color:#c9d8d1;
   font-size:13px
-}
-
-.lightbox-social{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  flex-wrap:wrap
 }
 
 .lightbox button{
@@ -1124,10 +1073,18 @@ footer{
   <section id="gallery" class="gallery">
 
     <div class="gallery-head">
+
       <div>
         <p class="eyebrow">ALBUM</p>
+
         <h2 id="gallery-title"></h2>
-        <p id="gallery-description" class="intro" style="font-size:13px;margin-top:7px"></p>
+
+        <p
+          id="gallery-description"
+          class="intro"
+          style="font-size:13px;margin-top:7px"
+        ></p>
+
         <div id="gallery-social"></div>
       </div>
 
@@ -1135,6 +1092,7 @@ footer{
         <i data-lucide="arrow-up"></i>
         ალბომებზე დაბრუნება
       </button>
+
     </div>
 
     <div id="photo-grid" class="photos"></div>
@@ -1150,12 +1108,14 @@ footer{
 </footer>
 
 <div id="album-modal" class="modal" role="dialog" aria-modal="true">
+
   <form id="album-form" class="dialog">
 
     <h2>ახალი ალბომი</h2>
 
     <div class="field">
       <label for="album-name">ალბომის სახელი</label>
+
       <input
         id="album-name"
         maxlength="100"
@@ -1166,6 +1126,7 @@ footer{
 
     <div class="field">
       <label for="album-desc">აღწერა</label>
+
       <textarea
         id="album-desc"
         maxlength="500"
@@ -1176,24 +1137,33 @@ footer{
     <div id="album-status" class="status"></div>
 
     <div class="dialog-actions">
-      <button type="button" class="secondary" data-close="album-modal">
+
+      <button
+        type="button"
+        class="secondary"
+        data-close="album-modal"
+      >
         გაუქმება
       </button>
 
       <button class="primary" type="submit">
         შექმნა
       </button>
+
     </div>
 
   </form>
+
 </div>
 
 <div id="upload-modal" class="modal" role="dialog" aria-modal="true">
+
   <form id="upload-form" class="dialog">
 
     <h2>მედიის ატვირთვა</h2>
 
     <div class="field">
+
       <label for="upload-album">ალბომი</label>
 
       <select
@@ -1201,9 +1171,11 @@ footer{
         required
         style="width:100%;padding:12px;border-radius:11px;background:#06130e;color:white;border:1px solid var(--line)"
       ></select>
+
     </div>
 
     <div class="field">
+
       <label for="photo-files">ფოტოები და ვიდეოები</label>
 
       <input
@@ -1213,9 +1185,11 @@ footer{
         multiple
         required
       >
+
     </div>
 
     <div class="field">
+
       <label for="photo-caption">საერთო წარწერა</label>
 
       <input
@@ -1223,21 +1197,33 @@ footer{
         maxlength="160"
         placeholder="მაგ: კლუბის შეხვედრა"
       >
+
     </div>
 
     <div id="upload-status" class="status"></div>
 
     <div class="dialog-actions">
-      <button type="button" class="secondary" data-close="upload-modal">
+
+      <button
+        type="button"
+        class="secondary"
+        data-close="upload-modal"
+      >
         გაუქმება
       </button>
 
-      <button id="upload-submit" class="primary" type="submit">
+      <button
+        id="upload-submit"
+        class="primary"
+        type="submit"
+      >
         ატვირთვა
       </button>
+
     </div>
 
   </form>
+
 </div>
 
 <div id="comments-modal" class="modal" role="dialog" aria-modal="true">
@@ -1282,7 +1268,11 @@ footer{
 
         <div id="comment-login-note" class="login-note"></div>
 
-        <button id="comment-submit" class="primary" type="submit">
+        <button
+          id="comment-submit"
+          class="primary"
+          type="submit"
+        >
           <i data-lucide="send"></i>
           გაგზავნა
         </button>
@@ -1292,6 +1282,7 @@ footer{
     </form>
 
     <div class="dialog-actions">
+
       <button
         type="button"
         class="secondary"
@@ -1299,6 +1290,7 @@ footer{
       >
         დახურვა
       </button>
+
     </div>
 
   </div>
@@ -1320,8 +1312,6 @@ footer{
     <div id="light-media"></div>
 
     <div id="lightbox-info" class="lightbox-info"></div>
-
-    <div id="lightbox-social" class="lightbox-social"></div>
 
   </div>
 
@@ -1403,7 +1393,6 @@ function getExtension(name=""){
 }
 
 function getMimeType(file){
-
   if(file.type){
     return file.type.toLowerCase()
   }
@@ -1432,7 +1421,6 @@ function getMimeType(file){
 }
 
 function getMediaType(item){
-
   const extension=getExtension(
     item.name||item.storage_path||""
   )
@@ -1457,7 +1445,6 @@ function getMediaType(item){
 }
 
 function isAllowedMedia(file){
-
   const mime=getMimeType(file)
 
   if(mime.startsWith("image/")){
@@ -1480,7 +1467,6 @@ function isAllowedMedia(file){
 }
 
 function normalizeAdminDisplayName(value){
-
   const original=String(value||"").trim()
   const normalized=original.toLowerCase()
 
@@ -1498,7 +1484,6 @@ function normalizeAdminDisplayName(value){
 }
 
 function getUserDisplayName(user){
-
   if(!user){
     return "მომხმარებელი"
   }
@@ -1536,7 +1521,6 @@ function getUserDisplayName(user){
 }
 
 function isAdminAuthorName(value){
-
   const name=String(value||"").trim().toLowerCase()
 
   return (
@@ -1550,7 +1534,6 @@ function isAdminAuthorName(value){
 }
 
 function isAdminUserId(userId){
-
   if(!userId){
     return false
   }
@@ -1560,10 +1543,12 @@ function isAdminUserId(userId){
   }
 
   if(
-    currentUser &&
-    currentUser.id===userId &&
+    currentUser&&
+    currentUser.id===userId&&
     ADMIN_DISPLAY_NAMES[
-      String(currentUser.email||"").trim().toLowerCase()
+      String(currentUser.email||"")
+        .trim()
+        .toLowerCase()
     ]
   ){
     adminUserIds.add(userId)
@@ -1572,7 +1557,7 @@ function isAdminUserId(userId){
 
   const adminComment=albumComments.some(comment=>{
     return (
-      comment.user_id===userId &&
+      comment.user_id===userId&&
       isAdminAuthorName(comment.author_name)
     )
   })
@@ -1586,7 +1571,6 @@ function isAdminUserId(userId){
 }
 
 function getCommentDisplayName(comment){
-
   if(!comment){
     return "მომხმარებელი"
   }
@@ -1610,7 +1594,6 @@ function getCommentDisplayName(comment){
 }
 
 function getInitials(name){
-
   const value=String(
     name||"მომხმარებელი"
   ).trim()
@@ -1636,7 +1619,6 @@ function getInitials(name){
 }
 
 function formatDate(date){
-
   if(!date){
     return ""
   }
@@ -1658,28 +1640,22 @@ function formatDate(date){
 }
 
 async function getCurrentUser(){
-
   const {data}=await supabaseClient.auth.getUser()
-
   currentUser=data?.user||null
-
   return currentUser
 }
 
 async function loadAdminUsers(){
-
   const {data,error}=await supabaseClient
     .from("admin_users")
     .select("user_id")
 
   if(!error&&data){
-
     data.forEach(item=>{
       if(item.user_id){
         adminUserIds.add(item.user_id)
       }
     })
-
   }
 
   if(error){
@@ -1707,7 +1683,6 @@ async function loadAdminUsers(){
 }
 
 async function checkAdmin(){
-
   const user=await getCurrentUser()
 
   if(!user){
@@ -1740,9 +1715,7 @@ async function checkAdmin(){
   }
 
   if(data?.user_id){
-    adminUserIds.add(
-      data.user_id
-    )
+    adminUserIds.add(data.user_id)
   }
 
   return Boolean(data)
@@ -1806,7 +1779,6 @@ async function loadSocialData(){
   commentLikes=commentLikeRows||[]
 
   albumComments.forEach(comment=>{
-
     if(
       isAdminAuthorName(
         comment.author_name
@@ -1816,47 +1788,34 @@ async function loadSocialData(){
         comment.user_id
       )
     }
-
   })
 }
 
 function getLikesForAlbum(id){
-
   return albumLikes.filter(
     item=>item.album_id===id
   )
 }
 
-function getLikesForPhoto(id){
-
-  return albumLikes.filter(
-    item=>item.photo_id===id
-  )
-}
-
 function getCommentsForAlbum(id){
-
   return albumComments.filter(
     item=>item.album_id===id
   )
 }
 
 function getCommentsForPhoto(id){
-
   return albumComments.filter(
     item=>item.photo_id===id
   )
 }
 
 function getCommentLikes(id){
-
   return commentLikes.filter(
     item=>item.comment_id===id
   )
 }
 
 function userLiked(items){
-
   if(!currentUser){
     return false
   }
@@ -1867,7 +1826,6 @@ function userLiked(items){
 }
 
 function adminLiked(items){
-
   return items.some(
     item=>isAdminUserId(item.user_id)
   )
@@ -1875,15 +1833,12 @@ function adminLiked(items){
 
 function socialButtons(type,id){
 
-  const items=
-    type==="album"
-      ?getLikesForAlbum(id)
-      :getLikesForPhoto(id)
+  if(type!=="album"){
+    return ""
+  }
 
-  const comments=
-    type==="album"
-      ?getCommentsForAlbum(id)
-      :getCommentsForPhoto(id)
+  const items=getLikesForAlbum(id)
+  const comments=getCommentsForAlbum(id)
 
   const liked=userLiked(items)
   const adminLike=adminLiked(items)
@@ -1893,7 +1848,7 @@ function socialButtons(type,id){
 
       <button
         class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
-        data-like-type="${escapeHtml(type)}"
+        data-like-type="album"
         data-like-id="${escapeHtml(id)}"
       >
         <i data-lucide="heart"></i>
@@ -1902,7 +1857,7 @@ function socialButtons(type,id){
 
       <button
         class="social-btn"
-        data-comments-type="${escapeHtml(type)}"
+        data-comments-type="album"
         data-comments-id="${escapeHtml(id)}"
       >
         <i data-lucide="message-circle"></i>
@@ -1937,7 +1892,6 @@ async function loadAlbums(){
     )
 
   if(error){
-
     $("album-grid").innerHTML=`
       <div class="empty">
         <strong>ალბომების ჩატვირთვა ვერ მოხერხდა</strong>
@@ -2017,13 +1971,11 @@ async function renderAlbums(){
   const mediaByAlbum={}
 
   mediaList.forEach(item=>{
-
     if(!mediaByAlbum[item.album_id]){
       mediaByAlbum[item.album_id]=[]
     }
 
     mediaByAlbum[item.album_id].push(item)
-
   })
 
   grid.innerHTML=albums
@@ -2044,7 +1996,6 @@ async function renderAlbums(){
 
           coverHtml=`
             <div class="cover-media">
-
               <video
                 src="${escapeHtml(
                   storageUrl(
@@ -2063,7 +2014,6 @@ async function renderAlbums(){
                   <i data-lucide="play"></i>
                 </span>
               </div>
-
             </div>
           `
 
@@ -2163,7 +2113,6 @@ async function renderAlbums(){
   grid
     .querySelectorAll("[data-open]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         ()=>{
@@ -2172,13 +2121,11 @@ async function renderAlbums(){
           )
         }
       )
-
     })
 
   grid
     .querySelectorAll("[data-edit]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         event=>{
@@ -2189,13 +2136,11 @@ async function renderAlbums(){
           )
         }
       )
-
     })
 
   grid
     .querySelectorAll("[data-delete]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         event=>{
@@ -2206,43 +2151,38 @@ async function renderAlbums(){
           )
         }
       )
-
     })
 
   grid
     .querySelectorAll("[data-like-type]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         event=>{
           event.stopPropagation()
 
           toggleLike(
-            element.dataset.likeType,
+            "album",
             element.dataset.likeId
           )
         }
       )
-
     })
 
   grid
     .querySelectorAll("[data-comments-type]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         event=>{
           event.stopPropagation()
 
           openComments(
-            element.dataset.commentsType,
+            "album",
             element.dataset.commentsId
           )
         }
       )
-
     })
 }
 
@@ -2364,35 +2304,12 @@ async function openAlbum(id){
             </span>
           `
 
-        const likes=
-          getLikesForPhoto(media.id)
-
-        const comments=
-          getCommentsForPhoto(media.id)
-
-        const liked=
-          userLiked(likes)
-
-        const adminLike=
-          adminLiked(likes)
-
         return `
           <div
             class="photo ${isAdmin?"admin":""}"
           >
 
             ${mediaHtml}
-
-            ${
-              adminLike
-              ?`
-                <span class="media-admin-like">
-                  <i data-lucide="shield-check"></i>
-                  ADMIN LIKE
-                </span>
-              `
-              :""
-            }
 
             ${
               media.caption
@@ -2405,26 +2322,6 @@ async function openAlbum(id){
               `
               :""
             }
-
-            <div class="photo-social">
-
-              <button
-                class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
-                data-photo-like="${escapeHtml(media.id)}"
-              >
-                <i data-lucide="heart"></i>
-                <span>${likes.length}</span>
-              </button>
-
-              <button
-                class="social-btn"
-                data-photo-comments="${escapeHtml(media.id)}"
-              >
-                <i data-lucide="message-circle"></i>
-                <span>${comments.length}</span>
-              </button>
-
-            </div>
 
             ${
               isAdmin
@@ -2457,22 +2354,6 @@ async function openAlbum(id){
 
           if(
             event.target.closest(
-              "[data-photo-like]"
-            )
-          ){
-            return
-          }
-
-          if(
-            event.target.closest(
-              "[data-photo-comments]"
-            )
-          ){
-            return
-          }
-
-          if(
-            event.target.closest(
               "[data-photo-delete]"
             )
           ){
@@ -2486,43 +2367,6 @@ async function openAlbum(id){
           )
         }
       )
-
-    })
-
-  $("photo-grid")
-    .querySelectorAll("[data-photo-like]")
-    .forEach(element=>{
-
-      element.addEventListener(
-        "click",
-        event=>{
-          event.stopPropagation()
-
-          toggleLike(
-            "photo",
-            element.dataset.photoLike
-          )
-        }
-      )
-
-    })
-
-  $("photo-grid")
-    .querySelectorAll("[data-photo-comments]")
-    .forEach(element=>{
-
-      element.addEventListener(
-        "click",
-        event=>{
-          event.stopPropagation()
-
-          openComments(
-            "photo",
-            element.dataset.photoComments
-          )
-        }
-      )
-
     })
 
   $("photo-grid")
@@ -2539,7 +2383,6 @@ async function openAlbum(id){
           )
         }
       )
-
     })
 }
 
@@ -2560,42 +2403,41 @@ function renderAlbumSocial(){
   $("gallery-social")
     .querySelectorAll("[data-like-type]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         ()=>{
           toggleLike(
-            element.dataset.likeType,
+            "album",
             element.dataset.likeId
           )
         }
       )
-
     })
 
   $("gallery-social")
     .querySelectorAll("[data-comments-type]")
     .forEach(element=>{
-
       element.addEventListener(
         "click",
         ()=>{
           openComments(
-            element.dataset.commentsType,
+            "album",
             element.dataset.commentsId
           )
         }
       )
-
     })
 }
 
 async function toggleLike(type,id){
 
+  if(type!=="album"){
+    return
+  }
+
   const user=await getCurrentUser()
 
   if(!user){
-
     alert(
       "Like-ის დასაწერად ანგარიშში უნდა შეხვიდე."
     )
@@ -2606,11 +2448,7 @@ async function toggleLike(type,id){
   const existing=albumLikes.find(
     item=>
       item.user_id===user.id&&
-      (
-        type==="album"
-          ?item.album_id===id
-          :item.photo_id===id
-      )
+      item.album_id===id
   )
 
   if(existing){
@@ -2624,7 +2462,6 @@ async function toggleLike(type,id){
       )
 
     if(error){
-
       alert(
         "Like-ის წაშლა ვერ მოხერხდა: "+
         error.message
@@ -2639,21 +2476,13 @@ async function toggleLike(type,id){
 
   }else{
 
-    const payload=
-      type==="album"
-      ?{
-        user_id:user.id,
-        album_id:id
-      }
-      :{
-        user_id:user.id,
-        photo_id:id
-      }
-
     const {data,error}=
       await supabaseClient
         .from("album_likes")
-        .insert(payload)
+        .insert({
+          user_id:user.id,
+          album_id:id
+        })
         .select(
           "id,user_id,album_id,photo_id"
         )
@@ -2698,7 +2527,9 @@ async function openComments(type,id){
       item=>item.id===id
     )
 
-    title=album?.title||"ალბომი"
+    title=
+      album?.title||
+      "ალბომი"
 
   }else{
 
@@ -2795,10 +2626,14 @@ function buildReplyTargetHtml(
   }
 
   const authorName=
-    getCommentDisplayName(comment)
+    getCommentDisplayName(
+      comment
+    )
 
   const parentName=
-    getCommentDisplayName(parent)
+    getCommentDisplayName(
+      parent
+    )
 
   const authorAdmin=
     isAdminUserId(
@@ -2816,6 +2651,7 @@ function buildReplyTargetHtml(
       <i data-lucide="corner-down-right"></i>
 
       <span>
+
         <strong>
           ${escapeHtml(authorName)}
         </strong>
@@ -2825,6 +2661,7 @@ function buildReplyTargetHtml(
         <strong>
           ${escapeHtml(parentName)}
         </strong>-ს
+
       </span>
 
       ${
@@ -2903,7 +2740,6 @@ function buildCommentHtml(
     )
 
   return `
-
     <article
       class="
         comment-item
@@ -2926,13 +2762,11 @@ function buildCommentHtml(
         <div class="comment-author">
 
           <div class="author-avatar">
-            ${
-              escapeHtml(
-                admin
-                  ?"ზმ"
-                  :getInitials(author)
-              )
-            }
+            ${escapeHtml(
+              admin
+              ?"ზმ"
+              :getInitials(author)
+            )}
           </div>
 
           <div class="author-details">
@@ -3057,7 +2891,6 @@ function buildCommentHtml(
       `
       :""
     }
-
   `
 }
 
@@ -3065,12 +2898,12 @@ async function renderComments(){
 
   let comments=
     commentsTargetType==="album"
-      ?getCommentsForAlbum(
-        commentsTargetId
-      )
-      :getCommentsForPhoto(
-        commentsTargetId
-      )
+    ?getCommentsForAlbum(
+      commentsTargetId
+    )
+    :getCommentsForPhoto(
+      commentsTargetId
+    )
 
   comments=
     comments
@@ -3110,9 +2943,7 @@ async function renderComments(){
     comments
       .map(
         comment=>
-          buildCommentHtml(
-            comment
-          )
+          buildCommentHtml(comment)
       )
       .join("")
 
@@ -3132,7 +2963,6 @@ async function renderComments(){
           )
         }
       )
-
     })
 
   $("comment-list")
@@ -3149,7 +2979,6 @@ async function renderComments(){
           )
         }
       )
-
     })
 
   $("comment-list")
@@ -3166,7 +2995,6 @@ async function renderComments(){
           )
         }
       )
-
     })
 }
 
@@ -3216,8 +3044,7 @@ async function toggleCommentLike(id){
     commentLikes=
       commentLikes.filter(
         item=>
-          item.id!==
-          existing.id
+          item.id!==existing.id
       )
 
   }else{
@@ -3274,6 +3101,7 @@ function startReply(commentId){
 
   $("replying-text").innerHTML=`
     პასუხობ:
+
     <strong>
       ${escapeHtml(author)}
     </strong>
@@ -3322,8 +3150,7 @@ async function submitComment(event){
 
   event.preventDefault()
 
-  const user=
-    await getCurrentUser()
+  const user=await getCurrentUser()
 
   if(!user){
 
@@ -3334,10 +3161,9 @@ async function submitComment(event){
     return
   }
 
-  const text=
-    $("comment-text")
-      .value
-      .trim()
+  const text=$("comment-text")
+    .value
+    .trim()
 
   if(!text){
     return
@@ -3352,15 +3178,14 @@ async function submitComment(event){
     return
   }
 
-  const button=
-    $("comment-submit")
+  const button=$("comment-submit")
 
   button.disabled=true
 
   const authorName=
     isAdminUserId(user.id)
-      ?"ზაზა მჭედლიძე"
-      :getUserDisplayName(user)
+    ?"ზაზა მჭედლიძე"
+    :getUserDisplayName(user)
 
   const payload={
     user_id:user.id,
@@ -3383,7 +3208,6 @@ async function submitComment(event){
   }
 
   if(replyParentId){
-
     payload.parent_comment_id=
       replyParentId
   }
@@ -3442,7 +3266,6 @@ async function refreshSocialAfterComment(){
   await renderAlbums()
 
   if(currentAlbum){
-
     await openAlbum(
       currentAlbum.id
     )
@@ -3468,8 +3291,7 @@ async function deleteComment(id){
     return
   }
 
-  const user=
-    await getCurrentUser()
+  const user=await getCurrentUser()
 
   if(
     !user||
@@ -3527,10 +3349,7 @@ function showLightbox(index){
   }
 
   lightIndex=
-    (
-      index+
-      currentPhotos.length
-    )%
+    (index+currentPhotos.length)%
     currentPhotos.length
 
   renderLightboxMedia()
@@ -3587,75 +3406,6 @@ function renderLightboxMedia(){
     currentAlbum?.title||
     ""
 
-  const likes=
-    getLikesForPhoto(
-      media.id
-    )
-
-  const comments=
-    getCommentsForPhoto(
-      media.id
-    )
-
-  const liked=
-    userLiked(likes)
-
-  const adminLike=
-    adminLiked(likes)
-
-  $("lightbox-social").innerHTML=`
-
-    <button
-      class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
-      id="light-like"
-    >
-      <i data-lucide="heart"></i>
-      <span>${likes.length}</span>
-    </button>
-
-    <button
-      class="social-btn"
-      id="light-comments"
-    >
-      <i data-lucide="message-circle"></i>
-      <span>${comments.length}</span>
-    </button>
-
-    ${
-      adminLike
-      ?`
-        <span class="admin-like-badge">
-          <i data-lucide="shield-check"></i>
-          ADMIN LIKE
-        </span>
-      `
-      :""
-    }
-
-  `
-
-  $("light-like").addEventListener(
-    "click",
-    async()=>{
-      await toggleLike(
-        "photo",
-        media.id
-      )
-
-      renderLightboxMedia()
-    }
-  )
-
-  $("light-comments").addEventListener(
-    "click",
-    async()=>{
-      await openComments(
-        "photo",
-        media.id
-      )
-    }
-  )
-
   lucide.createIcons()
 }
 
@@ -3680,15 +3430,13 @@ async function createAlbum(event){
 
   event.preventDefault()
 
-  const title=
-    $("album-name")
-      .value
-      .trim()
+  const title=$("album-name")
+    .value
+    .trim()
 
-  const description=
-    $("album-desc")
-      .value
-      .trim()
+  const description=$("album-desc")
+    .value
+    .trim()
 
   if(!title){
     return
@@ -3738,11 +3486,10 @@ async function editAlbum(id){
     return
   }
 
-  const title=
-    prompt(
-      "შეიყვანე ალბომის ახალი სახელი:",
-      album.title
-    )
+  const title=prompt(
+    "შეიყვანე ალბომის ახალი სახელი:",
+    album.title
+  )
 
   if(title===null){
     return
@@ -3757,11 +3504,10 @@ async function editAlbum(id){
     return
   }
 
-  const description=
-    prompt(
-      "შეიყვანე აღწერა:",
-      album.description||""
-    )
+  const description=prompt(
+    "შეიყვანე აღწერა:",
+    album.description||""
+  )
 
   if(description===null){
     return
@@ -3792,7 +3538,6 @@ async function editAlbum(id){
   await loadAlbums()
 
   if(currentAlbum?.id===id){
-
     await openAlbum(id)
   }
 }
@@ -3987,16 +3732,17 @@ async function uploadPhotos(event){
       return
     }
 
-    const {error:rowError}=
+    const {
+      error:rowError
+    }=
       await supabaseClient
         .from("album_photos")
         .insert({
           album_id:albumId,
           storage_path:path,
-          caption:
-            $("photo-caption")
-              .value
-              .trim()
+          caption:$("photo-caption")
+            .value
+            .trim()
         })
 
     if(rowError){
@@ -4029,7 +3775,6 @@ async function uploadPhotos(event){
   await loadAlbums()
 
   if(currentAlbum){
-
     await openAlbum(
       currentAlbum.id
     )
@@ -4099,7 +3844,6 @@ async function deletePhoto(id){
   await loadSocialData()
 
   if(currentAlbum){
-
     await openAlbum(
       currentAlbum.id
     )
@@ -4179,7 +3923,6 @@ document
         )
       }
     )
-
   })
 
 document
@@ -4199,7 +3942,6 @@ document
         }
       }
     )
-
   })
 
 $("light-close").addEventListener(
@@ -4255,7 +3997,6 @@ document.addEventListener(
     if(event.key==="ArrowRight"){
       moveLight(1)
     }
-
   }
 )
 
