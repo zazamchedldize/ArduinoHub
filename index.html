@@ -18,7 +18,7 @@
 
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
-  <script>
+  >
     window.OneSignalDeferred = window.OneSignalDeferred || []
 
     OneSignalDeferred.push(async function(OneSignal) {
@@ -2722,7 +2722,232 @@
     })
 
   </script>
+<div id="live-admin-modal" class="live-modal">
+  <div class="live-modal-backdrop" onclick="closeLiveAdminModal()"></div>
 
+  <div class="live-modal-card live-admin-card">
+    <button class="live-close-btn" onclick="closeLiveAdminModal()">
+      <i data-lucide="x"></i>
+    </button>
+
+    <div class="live-modal-icon">
+      <i data-lucide="radio"></i>
+    </div>
+
+    <div class="live-modal-title">
+      <span class="live-status-dot"></span>
+      ლაივის დაწყება
+    </div>
+
+    <p class="live-modal-subtitle">
+      შექმენი ახალი პირდაპირი ჩართვა ArduinoHub-ზე
+    </p>
+
+    <div class="live-form-group">
+      <label for="live-title-input">ლაივის სათაური</label>
+      <input
+        id="live-title-input"
+        type="text"
+        maxlength="100"
+        placeholder="მაგ. Arduino პროექტის პრეზენტაცია"
+      >
+    </div>
+
+    <div class="live-form-group">
+      <label for="live-description-input">აღწერა</label>
+      <textarea
+        id="live-description-input"
+        maxlength="500"
+        placeholder="დაწერე მოკლე აღწერა..."
+      ></textarea>
+    </div>
+
+    <div id="live-admin-error" class="live-error"></div>
+
+    <button
+      id="live-start-btn"
+      class="live-primary-btn"
+      onclick="startLiveStream()"
+    >
+      <i data-lucide="radio"></i>
+      <span>ლაივის დაწყება</span>
+    </button>
+  </div>
+</div>
+
+<div id="live-host-modal" class="live-modal">
+  <div class="live-modal-backdrop"></div>
+
+  <div class="live-modal-card live-host-card">
+    <div class="live-host-header">
+      <div>
+        <div class="live-host-status">
+          <span class="live-status-dot"></span>
+          LIVE
+        </div>
+
+        <h2 id="live-host-title">ლაივი</h2>
+        <p id="live-host-description"></p>
+      </div>
+    </div>
+
+    <div class="live-video-wrapper">
+      <video
+        id="live-host-video"
+        class="live-video"
+        autoplay
+        muted
+        playsinline
+      ></video>
+
+      <div id="live-host-placeholder" class="live-video-placeholder">
+        <i data-lucide="video"></i>
+        <span>კამერის ჩართვა...</span>
+      </div>
+    </div>
+
+    <div class="live-host-controls">
+      <button
+        id="live-mic-btn"
+        class="live-control-btn"
+        onclick="toggleLiveMicrophone()"
+      >
+        <i data-lucide="mic"></i>
+      </button>
+
+      <button
+        id="live-camera-btn"
+        class="live-control-btn"
+        onclick="toggleLiveCamera()"
+      >
+        <i data-lucide="video"></i>
+      </button>
+
+      <button
+        class="live-end-btn"
+        onclick="endLiveStream()"
+      >
+        <i data-lucide="phone-off"></i>
+        ლაივის დასრულება
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="live-viewer-modal" class="live-modal">
+  <div class="live-modal-backdrop" onclick="closeLiveViewer()"></div>
+
+  <div class="live-modal-card live-viewer-card">
+    <button
+      class="live-close-btn"
+      onclick="closeLiveViewer()"
+    >
+      <i data-lucide="x"></i>
+    </button>
+
+    <div class="live-viewer-header">
+      <div>
+        <div class="live-host-status">
+          <span class="live-status-dot"></span>
+          LIVE
+        </div>
+
+        <h2 id="live-viewer-title">ლაივი</h2>
+        <p id="live-viewer-description"></p>
+      </div>
+    </div>
+
+    <div class="live-video-wrapper">
+      <video
+        id="live-viewer-video"
+        class="live-video"
+        autoplay
+        playsinline
+        controls
+      ></video>
+
+      <div
+        id="live-viewer-placeholder"
+        class="live-video-placeholder"
+      >
+        <i data-lucide="radio"></i>
+        <span>ლაივთან დაკავშირება...</span>
+      </div>
+    </div>
+
+    <div class="live-comments">
+      <div class="live-comments-header">
+        <span>
+          <i data-lucide="message-circle"></i>
+          კომენტარები
+        </span>
+      </div>
+
+      <div
+        id="live-comments-list"
+        class="live-comments-list"
+      ></div>
+
+      <form
+        id="live-comment-form"
+        class="live-comment-form"
+      >
+        <input
+          id="live-comment-input"
+          type="text"
+          maxlength="300"
+          placeholder="დაწერე კომენტარი..."
+          autocomplete="off"
+        >
+
+        <button type="submit">
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="live-notification-modal" class="live-modal">
+  <div
+    class="live-modal-backdrop"
+    onclick="closeLiveNotification()"
+  ></div>
+
+  <div class="live-modal-card live-notification-card">
+    <div class="live-notification-icon">
+      <span class="live-status-dot"></span>
+      <i data-lucide="radio"></i>
+    </div>
+
+    <div class="live-modal-title">
+      პირდაპირი ჩართვა დაიწყო
+    </div>
+
+    <h3 id="live-notification-title">
+      ArduinoHub Live
+    </h3>
+
+    <p id="live-notification-description"></p>
+
+    <div class="live-notification-actions">
+      <button
+        class="live-secondary-btn"
+        onclick="closeLiveNotification()"
+      >
+        მოგვიანებით
+      </button>
+
+      <button
+        class="live-primary-btn"
+        onclick="openLiveFromNotification()"
+      >
+        <i data-lucide="play"></i>
+        ლაივის ყურება
+      </button>
+    </div>
+  </div>
+</div>
 </body>
 
 </html>
