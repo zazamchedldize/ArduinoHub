@@ -1263,16 +1263,13 @@ function hideModal(id){
 }
 
 function escapeHtml(value=""){
-  return String(value).replace(
-    /[&<>"']/g,
-    char=>({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[char])
-  )
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]))
 }
 
 function notify(id,message){
@@ -1421,7 +1418,7 @@ function getCommentDisplayName(comment){
     return "მომხმარებელი"
   }
 
-  if(adminUserIds.has(comment.user_id)){
+  if(isAdminUserId(comment.user_id)){
     return "ზაზა მჭედლიძე"
   }
 
@@ -1493,27 +1490,60 @@ async function loadAdminUsers(){
     .from("admin_users")
     .select("user_id")
 
+  if(!error&&data){
+    data.forEach(item=>{
+      if(item.user_id){
+        adminUserIds.add(item.user_id)
+      }
+    })
+  }
+
   if(error){
     console.warn(
       "Admin users:",
       error.message
     )
-
-    adminUserIds=new Set()
-    return
   }
-
-  adminUserIds=new Set(
-    (data||[]).map(
-      item=>item.user_id
-    )
-  )
 
   if(currentUser){
-    isAdmin=adminUserIds.has(
-      currentUser.id
-    )
+    isAdmin=adminUserIds.has(currentUser.id)
   }
+}
+
+function isAdminUserId(userId){
+  if(!userId){
+    return false
+  }
+
+  if(adminUserIds.has(userId)){
+    return true
+  }
+
+  const adminComment=albumComments.some(comment=>{
+    if(comment.user_id!==userId){
+      return false
+    }
+
+    const authorName=String(
+      comment.author_name||""
+    ).trim().toLowerCase()
+
+    return (
+      authorName==="ზაზა მჭედლიძე"||
+      authorName==="ზაზა"||
+      authorName==="ზმ"||
+      authorName==="zaza"||
+      authorName==="mchedlidze.zaza1000"||
+      authorName==="mchedlidze.zaza1000@gmail.com"
+    )
+  })
+
+  if(adminComment){
+    adminUserIds.add(userId)
+    return true
+  }
+
+  return false
 }
 
 async function checkAdmin(){
@@ -1534,8 +1564,11 @@ async function checkAdmin(){
       "Admin check:",
       error.message
     )
-
     return false
+  }
+
+  if(data?.user_id){
+    adminUserIds.add(data.user_id)
   }
 
   return Boolean(data)
@@ -1594,6 +1627,35 @@ async function loadSocialData(){
   albumLikes=likes||[]
   albumComments=comments||[]
   commentLikes=commentLikeRows||[]
+
+  albumComments.forEach(comment=>{
+    const authorName=String(
+      comment.author_name||""
+    ).trim().toLowerCase()
+
+    if(
+      authorName==="ზაზა მჭედლიძე"||
+      authorName==="ზაზა"||
+      authorName==="ზმ"||
+      authorName==="zaza"||
+      authorName==="mchedlidze.zaza1000"||
+      authorName==="mchedlidze.zaza1000@gmail.com"
+    ){
+      adminUserIds.add(comment.user_id)
+    }
+  })
+
+  commentLikes.forEach(like=>{
+    if(
+      albumComments.some(
+        comment=>
+          comment.user_id===like.user_id&&
+          isAdminUserId(comment.user_id)
+      )
+    ){
+      adminUserIds.add(like.user_id)
+    }
+  })
 }
 
 function getLikesForAlbum(id){
@@ -1638,7 +1700,7 @@ function userLiked(items){
 
 function adminLiked(items){
   return items.some(
-    item=>adminUserIds.has(item.user_id)
+    item=>isAdminUserId(item.user_id)
   )
 }
 
@@ -1677,12 +1739,16 @@ function socialButtons(type,id){
         <span>${comments.length}</span>
       </button>
 
-      ${adminLike?`
-        <span class="admin-like-badge">
-          <i data-lucide="shield-check"></i>
-          ADMIN LIKE
-        </span>
-      `:""}
+      ${
+        adminLike
+          ?`
+            <span class="admin-like-badge">
+              <i data-lucide="shield-check"></i>
+              ADMIN LIKE
+            </span>
+          `
+          :""
+      }
 
     </div>
   `
@@ -1706,7 +1772,6 @@ async function loadAlbums(){
         <span>${escapeHtml(error.message)}</span>
       </div>
     `
-
     return
   }
 
@@ -1794,7 +1859,11 @@ async function renderAlbums(){
           coverHtml=`
             <div class="cover-media">
               <video
-                src="${escapeHtml(storageUrl(cover.storage_path))}"
+                src="${escapeHtml(
+                  storageUrl(
+                    cover.storage_path
+                  )
+                )}"
                 muted
                 loop
                 autoplay
@@ -1812,7 +1881,11 @@ async function renderAlbums(){
         }else{
           coverHtml=`
             <img
-              src="${escapeHtml(storageUrl(cover.storage_path))}"
+              src="${escapeHtml(
+                storageUrl(
+                  cover.storage_path
+                )
+              )}"
               alt="${escapeHtml(album.title)}"
               loading="lazy"
             >
@@ -1826,27 +1899,29 @@ async function renderAlbums(){
         `
       }
 
-      const actions=isAdmin?`
-        <div class="album-actions">
+      const actions=isAdmin
+        ?`
+          <div class="album-actions">
 
-          <button
-            class="icon-btn"
-            data-edit="${escapeHtml(album.id)}"
-            title="რედაქტირება"
-          >
-            <i data-lucide="pencil"></i>
-          </button>
+            <button
+              class="icon-btn"
+              data-edit="${escapeHtml(album.id)}"
+              title="რედაქტირება"
+            >
+              <i data-lucide="pencil"></i>
+            </button>
 
-          <button
-            class="icon-btn"
-            data-delete="${escapeHtml(album.id)}"
-            title="წაშლა"
-          >
-            <i data-lucide="trash-2"></i>
-          </button>
+            <button
+              class="icon-btn"
+              data-delete="${escapeHtml(album.id)}"
+              title="წაშლა"
+            >
+              <i data-lucide="trash-2"></i>
+            </button>
 
-        </div>
-      `:""
+          </div>
+        `
+        :""
 
       return `
         <article class="album">
@@ -2004,7 +2079,10 @@ async function openAlbum(id){
     .select(
       "id,album_id,storage_path,caption,created_at"
     )
-    .eq("album_id",id)
+    .eq(
+      "album_id",
+      id
+    )
     .order(
       "created_at",
       {ascending:true}
@@ -2017,7 +2095,6 @@ async function openAlbum(id){
         ${escapeHtml(error.message)}
       </div>
     `
-
     return
   }
 
@@ -2032,7 +2109,6 @@ async function openAlbum(id){
         ამ ალბომში ფოტოები ან ვიდეოები ჯერ არ არის.
       </div>
     `
-
     return
   }
 
@@ -2067,7 +2143,10 @@ async function openAlbum(id){
             :`
               <img
                 src="${escapeHtml(source)}"
-                alt="${escapeHtml(media.caption||currentAlbum.title)}"
+                alt="${escapeHtml(
+                  media.caption||
+                  currentAlbum.title
+                )}"
                 data-photo="${index}"
                 loading="lazy"
               >
@@ -2095,18 +2174,26 @@ async function openAlbum(id){
 
             ${mediaHtml}
 
-            ${adminLike?`
-              <span class="media-admin-like">
-                <i data-lucide="shield-check"></i>
-                ADMIN LIKE
-              </span>
-            `:""}
+            ${
+              adminLike
+                ?`
+                  <span class="media-admin-like">
+                    <i data-lucide="shield-check"></i>
+                    ADMIN LIKE
+                  </span>
+                `
+                :""
+            }
 
-            ${media.caption?`
-              <div class="photo-caption">
-                ${escapeHtml(media.caption)}
-              </div>
-            `:""}
+            ${
+              media.caption
+                ?`
+                  <div class="photo-caption">
+                    ${escapeHtml(media.caption)}
+                  </div>
+                `
+                :""
+            }
 
             <div class="photo-social">
 
@@ -2128,15 +2215,19 @@ async function openAlbum(id){
 
             </div>
 
-            ${isAdmin?`
-              <button
-                class="icon-btn delete-photo"
-                data-photo-delete="${escapeHtml(media.id)}"
-                title="წაშლა"
-              >
-                <i data-lucide="trash-2"></i>
-              </button>
-            `:""}
+            ${
+              isAdmin
+                ?`
+                  <button
+                    class="icon-btn delete-photo"
+                    data-photo-delete="${escapeHtml(media.id)}"
+                    title="წაშლა"
+                  >
+                    <i data-lucide="trash-2"></i>
+                  </button>
+                `
+                :""
+            }
 
           </div>
         `
@@ -2176,7 +2267,9 @@ async function openAlbum(id){
           }
 
           showLightbox(
-            Number(element.dataset.photo)
+            Number(
+              element.dataset.photo
+            )
           )
         }
       )
@@ -2279,7 +2372,6 @@ async function toggleLike(type,id){
     alert(
       "Like-ის დასაწერად ანგარიშში უნდა შეხვიდე."
     )
-
     return
   }
 
@@ -2304,14 +2396,12 @@ async function toggleLike(type,id){
         "Like-ის წაშლა ვერ მოხერხდა: "+
         error.message
       )
-
       return
     }
 
-    albumLikes=
-      albumLikes.filter(
-        item=>item.id!==existing.id
-      )
+    albumLikes=albumLikes.filter(
+      item=>item.id!==existing.id
+    )
   }else{
     const payload=
       type==="album"
@@ -2338,7 +2428,6 @@ async function toggleLike(type,id){
         "Like ვერ დაემატა: "+
         error.message
       )
-
       return
     }
 
@@ -2347,6 +2436,7 @@ async function toggleLike(type,id){
     }
   }
 
+  await loadSocialData()
   await renderAlbums()
 
   if(currentAlbum){
@@ -2398,21 +2488,18 @@ async function openComments(type,id){
   const user=await getCurrentUser()
 
   if(user){
-
-    const commentAuthorName=
-      adminUserIds.has(user.id)
+    const authorName=
+      isAdminUserId(user.id)
         ?"ზაზა მჭედლიძე"
         :getUserDisplayName(user)
 
     $("comment-login-note").textContent=
       "კომენტარი გამოქვეყნდება სახელით: "+
-      commentAuthorName
+      authorName
 
     $("comment-submit").disabled=false
     $("comment-text").disabled=false
-
   }else{
-
     $("comment-login-note").textContent=
       "კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე."
 
@@ -2432,7 +2519,9 @@ async function openComments(type,id){
 function getCommentChildren(parentId){
   return albumComments
     .filter(
-      item=>item.parent_comment_id===parentId
+      item=>
+        item.parent_comment_id===
+        parentId
     )
     .sort(
       (a,b)=>
@@ -2447,8 +2536,51 @@ function getParentComment(comment){
   }
 
   return albumComments.find(
-    item=>item.id===comment.parent_comment_id
+    item=>
+      item.id===
+      comment.parent_comment_id
   )||null
+}
+
+function buildReplyTargetHtml(parent){
+  if(!parent){
+    return ""
+  }
+
+  const parentAdmin=
+    isAdminUserId(
+      parent.user_id
+    )
+
+  const parentName=
+    getCommentDisplayName(parent)
+
+  return `
+    <div class="reply-to">
+      <i data-lucide="corner-down-right"></i>
+      პასუხი:
+      <strong>
+        ${escapeHtml(parentName)}
+      </strong>
+
+      ${
+        parentAdmin
+          ?`
+            <span
+              style="
+                color:var(--gold);
+                font-size:9px;
+                font-weight:800;
+                letter-spacing:.5px
+              "
+            >
+              ADMIN
+            </span>
+          `
+          :""
+      }
+    </div>
+  `
 }
 
 function buildCommentHtml(
@@ -2456,7 +2588,9 @@ function buildCommentHtml(
   isReply=false
 ){
   const likes=
-    getCommentLikes(comment.id)
+    getCommentLikes(
+      comment.id
+    )
 
   const liked=
     userLiked(likes)
@@ -2465,68 +2599,94 @@ function buildCommentHtml(
     adminLiked(likes)
 
   const admin=
-    adminUserIds.has(
+    isAdminUserId(
       comment.user_id
     )
 
   const author=
-    getCommentDisplayName(comment)
+    getCommentDisplayName(
+      comment
+    )
 
   const parent=
-    getParentComment(comment)
+    getParentComment(
+      comment
+    )
 
   const canDelete=
     currentUser&&
-    currentUser.id===comment.user_id
+    currentUser.id===
+    comment.user_id
 
   const children=
-    getCommentChildren(comment.id)
+    getCommentChildren(
+      comment.id
+    )
 
   return `
     <article
-      class="comment-item ${admin?"admin-comment":""} ${adminLike?"admin-liked-comment":""} ${isReply?"reply":""}"
+      class="
+        comment-item
+        ${admin?"admin-comment":""}
+        ${admin&&adminLike?"admin-liked-comment":""}
+        ${isReply?"reply":""}
+      "
     >
 
-      ${isReply?`
-        <span class="reply-line"></span>
-      `:""}
+      ${
+        isReply
+          ?`
+            <span class="reply-line"></span>
+          `
+          :""
+      }
 
       <div class="comment-top">
 
         <div class="comment-author">
 
           <div class="author-avatar">
-            ${escapeHtml(
-              admin
-                ?"ზმ"
-                :getInitials(author)
-            )}
+            ${
+              escapeHtml(
+                admin
+                  ?"ზმ"
+                  :getInitials(author)
+              )
+            }
           </div>
 
           <div class="author-details">
 
-            <div style="
-              display:flex;
-              align-items:center;
-              gap:7px;
-              flex-wrap:wrap
-            ">
+            <div
+              style="
+                display:flex;
+                align-items:center;
+                gap:7px;
+                flex-wrap:wrap
+              "
+            >
 
               <span class="author-name">
                 ${escapeHtml(author)}
               </span>
 
-              ${admin?`
-                <span class="admin-badge">
-                  <i data-lucide="shield-check"></i>
-                  ADMIN
-                </span>
-              `:""}
+              ${
+                admin
+                  ?`
+                    <span class="admin-badge">
+                      <i data-lucide="shield-check"></i>
+                      ADMIN
+                    </span>
+                  `
+                  :""
+              }
 
             </div>
 
             <span class="comment-date">
-              ${formatDate(comment.created_at)}
+              ${formatDate(
+                comment.created_at
+              )}
             </span>
 
           </div>
@@ -2535,28 +2695,28 @@ function buildCommentHtml(
 
       </div>
 
-      ${parent?`
-        <div class="reply-to">
-          <i data-lucide="corner-down-right"></i>
-          პასუხი:
-          ${escapeHtml(
-            getCommentDisplayName(parent)
-          )}
-        </div>
-      `:""}
+      ${buildReplyTargetHtml(parent)}
 
       <div class="comment-text">
-        ${escapeHtml(comment.comment)}
+        ${escapeHtml(
+          comment.comment
+        )}
       </div>
 
       <div class="comment-actions">
 
         <button
-          class="comment-action ${liked?"liked":""} ${adminLike?"admin-liked":""}"
+          class="
+            comment-action
+            ${liked?"liked":""}
+            ${admin&&adminLike?"admin-liked":""}
+          "
           data-comment-like="${escapeHtml(comment.id)}"
         >
           <i data-lucide="heart"></i>
-          <span>${likes.length}</span>
+          <span>
+            ${likes.length}
+          </span>
         </button>
 
         <button
@@ -2567,46 +2727,64 @@ function buildCommentHtml(
           პასუხი
         </button>
 
-        ${adminLike&&!admin?`
-          <span class="comment-admin-like">
-            <i data-lucide="shield-check"></i>
-            დალაიქებულია ადმინის მიერ
-          </span>
-        `:""}
+        ${
+          adminLike&&!admin
+            ?`
+              <span class="comment-admin-like">
+                <i data-lucide="shield-check"></i>
+                დალაიქებულია ადმინის მიერ
+              </span>
+            `
+            :""
+        }
 
-        ${adminLike&&admin?`
-          <span class="comment-admin-like">
-            <i data-lucide="shield-check"></i>
-            ADMIN LIKE
-          </span>
-        `:""}
+        ${
+          admin&&adminLike
+            ?`
+              <span class="comment-admin-like">
+                <i data-lucide="shield-check"></i>
+                ADMIN LIKE
+              </span>
+            `
+            :""
+        }
 
-        ${canDelete?`
-          <button
-            class="comment-delete"
-            data-comment-delete="${escapeHtml(comment.id)}"
-            title="კომენტარის წაშლა"
-          >
-            <i data-lucide="trash-2"></i>
-          </button>
-        `:""}
+        ${
+          canDelete
+            ?`
+              <button
+                class="comment-delete"
+                data-comment-delete="${escapeHtml(comment.id)}"
+                title="კომენტარის წაშლა"
+              >
+                <i data-lucide="trash-2"></i>
+              </button>
+            `
+            :""
+        }
 
       </div>
 
     </article>
 
-    ${children.length?`
-      <div class="comment-thread">
-        ${children
-          .map(child=>
-            buildCommentHtml(
-              child,
-              true
-            )
-          )
-          .join("")}
-      </div>
-    `:""}
+    ${
+      children.length
+        ?`
+          <div class="comment-thread">
+            ${
+              children
+                .map(child=>
+                  buildCommentHtml(
+                    child,
+                    true
+                  )
+                )
+                .join("")
+            }
+          </div>
+        `
+        :""
+    }
   `
 }
 
@@ -2656,7 +2834,9 @@ async function renderComments(){
     comments
       .map(
         comment=>
-          buildCommentHtml(comment)
+          buildCommentHtml(
+            comment
+          )
       )
       .join("")
 
@@ -2716,41 +2896,42 @@ async function toggleCommentLike(id){
     alert(
       "კომენტარის დასალაიქებლად ანგარიშში უნდა შეხვიდე."
     )
-
     return
   }
 
   const existing=
     commentLikes.find(
       item=>
-        item.user_id===user.id&&
-        item.comment_id===id
+        item.user_id===
+        user.id&&
+        item.comment_id===
+        id
     )
 
   if(existing){
-
     const {error}=
       await supabaseClient
         .from("album_comment_likes")
         .delete()
-        .eq("id",existing.id)
+        .eq(
+          "id",
+          existing.id
+        )
 
     if(error){
       alert(
         "კომენტარის Like-ის წაშლა ვერ მოხერხდა: "+
         error.message
       )
-
       return
     }
 
     commentLikes=
       commentLikes.filter(
-        item=>item.id!==existing.id
+        item=>
+          item.id!==existing.id
       )
-
   }else{
-
     const {data,error}=
       await supabaseClient
         .from("album_comment_likes")
@@ -2768,7 +2949,6 @@ async function toggleCommentLike(id){
         "კომენტარის Like ვერ დაემატა: "+
         error.message
       )
-
       return
     }
 
@@ -2777,6 +2957,7 @@ async function toggleCommentLike(id){
     }
   }
 
+  await loadSocialData()
   await renderComments()
   await refreshSocialAfterComment()
 }
@@ -2794,11 +2975,32 @@ function startReply(commentId){
   replyParentId=commentId
 
   const author=
-    getCommentDisplayName(comment)
+    getCommentDisplayName(
+      comment
+    )
 
-  $("replying-text").textContent=
-    "პასუხობ: "+
-    author
+  $("replying-text").innerHTML=
+    `
+      პასუხობ:
+      <strong>
+        ${escapeHtml(author)}
+      </strong>
+      ${
+        isAdminUserId(comment.user_id)
+          ?`
+            <span
+              style="
+                color:var(--gold);
+                font-size:9px;
+                font-weight:800
+              "
+            >
+              ADMIN
+            </span>
+          `
+          :""
+      }
+    `
 
   $("replying").classList.add(
     "show"
@@ -2832,12 +3034,13 @@ async function submitComment(event){
     alert(
       "კომენტარის დასაწერად ანგარიშში უნდა შეხვიდე."
     )
-
     return
   }
 
   const text=
-    $("comment-text").value.trim()
+    $("comment-text")
+      .value
+      .trim()
 
   if(!text){
     return
@@ -2847,7 +3050,6 @@ async function submitComment(event){
     alert(
       "კომენტარი მაქსიმუმ 500 სიმბოლო უნდა იყოს."
     )
-
     return
   }
 
@@ -2857,7 +3059,7 @@ async function submitComment(event){
   button.disabled=true
 
   const authorName=
-    adminUserIds.has(user.id)
+    isAdminUserId(user.id)
       ?"ზაზა მჭედლიძე"
       :getUserDisplayName(user)
 
@@ -2868,7 +3070,8 @@ async function submitComment(event){
   }
 
   if(
-    commentsTargetType==="album"
+    commentsTargetType===
+    "album"
   ){
     payload.album_id=
       commentsTargetId
@@ -2903,6 +3106,14 @@ async function submitComment(event){
 
   if(data){
     albumComments.push(data)
+
+    if(
+      isAdminUserId(data.user_id)
+    ){
+      adminUserIds.add(
+        data.user_id
+      )
+    }
   }
 
   $("comment-text").value=""
@@ -2956,7 +3167,6 @@ async function deleteComment(id){
     alert(
       "ამ კომენტარის წაშლა მხოლოდ მის ავტორს შეუძლია."
     )
-
     return
   }
 
@@ -2964,14 +3174,16 @@ async function deleteComment(id){
     await supabaseClient
       .from("album_comments")
       .delete()
-      .eq("id",id)
+      .eq(
+        "id",
+        id
+      )
 
   if(error){
     alert(
       "კომენტარის წაშლა ვერ მოხერხდა: "+
       error.message
     )
-
     return
   }
 
@@ -2984,7 +3196,8 @@ async function deleteComment(id){
 
   commentLikes=
     commentLikes.filter(
-      item=>item.comment_id!==id
+      item=>
+        item.comment_id!==id
     )
 
   await loadSocialData()
@@ -2998,7 +3211,10 @@ function showLightbox(index){
   }
 
   lightIndex=
-    (index+currentPhotos.length)%
+    (
+      index+
+      currentPhotos.length
+    )%
     currentPhotos.length
 
   renderLightboxMedia()
@@ -3052,10 +3268,14 @@ function renderLightboxMedia(){
     ""
 
   const likes=
-    getLikesForPhoto(media.id)
+    getLikesForPhoto(
+      media.id
+    )
 
   const comments=
-    getCommentsForPhoto(media.id)
+    getCommentsForPhoto(
+      media.id
+    )
 
   const liked=
     userLiked(likes)
@@ -3080,12 +3300,16 @@ function renderLightboxMedia(){
       <span>${comments.length}</span>
     </button>
 
-    ${adminLike?`
-      <span class="admin-like-badge">
-        <i data-lucide="shield-check"></i>
-        ADMIN LIKE
-      </span>
-    `:""}
+    ${
+      adminLike
+        ?`
+          <span class="admin-like-badge">
+            <i data-lucide="shield-check"></i>
+            ADMIN LIKE
+          </span>
+        `
+        :""
+    }
   `
 
   $("light-like").addEventListener(
@@ -3133,10 +3357,14 @@ async function createAlbum(event){
   event.preventDefault()
 
   const title=
-    $("album-name").value.trim()
+    $("album-name")
+      .value
+      .trim()
 
   const description=
-    $("album-desc").value.trim()
+    $("album-desc")
+      .value
+      .trim()
 
   if(!title){
     return
@@ -3161,7 +3389,6 @@ async function createAlbum(event){
       "შეცდომა: "+
       error.message
     )
-
     return
   }
 
@@ -3198,7 +3425,6 @@ async function editAlbum(id){
     alert(
       "ალბომის სახელი ცარიელი არ უნდა იყოს."
     )
-
     return
   }
 
@@ -3219,14 +3445,16 @@ async function editAlbum(id){
         title:title.trim(),
         description:description.trim()
       })
-      .eq("id",id)
+      .eq(
+        "id",
+        id
+      )
 
   if(error){
     alert(
       "შეცდომა: "+
       error.message
     )
-
     return
   }
 
@@ -3263,10 +3491,12 @@ async function deleteAlbum(id){
       .select(
         "id,storage_path"
       )
-      .eq("album_id",id)
+      .eq(
+        "album_id",
+        id
+      )
 
   if(media?.length){
-
     const {
       error:storageError
     }=
@@ -3284,7 +3514,6 @@ async function deleteAlbum(id){
         "ფაილების საცავიდან წაშლა ვერ მოხერხდა: "+
         storageError.message
       )
-
       return
     }
   }
@@ -3293,14 +3522,16 @@ async function deleteAlbum(id){
     await supabaseClient
       .from("photo_albums")
       .delete()
-      .eq("id",id)
+      .eq(
+        "id",
+        id
+      )
 
   if(error){
     alert(
       "ალბომის წაშლა ვერ მოხერხდა: "+
       error.message
     )
-
     return
   }
 
@@ -3339,14 +3570,15 @@ async function uploadPhotos(event){
   let done=0
 
   for(const file of files){
-
-    if(file.size>MAX_FILE_SIZE){
+    if(
+      file.size>
+      MAX_FILE_SIZE
+    ){
       notify(
         "upload-status",
         file.name+
         " 50 MB-ზე დიდია."
       )
-
       continue
     }
 
@@ -3356,7 +3588,6 @@ async function uploadPhotos(event){
         file.name+
         " მხარდაჭერილი ფოტო ან ვიდეო არ არის."
       )
-
       continue
     }
 
@@ -3416,13 +3647,13 @@ async function uploadPhotos(event){
         .insert({
           album_id:albumId,
           storage_path:path,
-          caption:$(
-            "photo-caption"
-          ).value.trim()
+          caption:
+            $("photo-caption")
+              .value
+              .trim()
         })
 
     if(rowError){
-
       await supabaseClient
         .storage
         .from(BUCKET)
@@ -3486,7 +3717,6 @@ async function deletePhoto(id){
       "ფაილის წაშლა ვერ მოხერხდა: "+
       storageError.message
     )
-
     return
   }
 
@@ -3494,14 +3724,16 @@ async function deletePhoto(id){
     await supabaseClient
       .from("album_photos")
       .delete()
-      .eq("id",id)
+      .eq(
+        "id",
+        id
+      )
 
   if(error){
     alert(
       "მონაცემის წაშლა ვერ მოხერხდა: "+
       error.message
     )
-
     return
   }
 
@@ -3599,7 +3831,10 @@ document
     modal.addEventListener(
       "click",
       event=>{
-        if(event.target===modal){
+        if(
+          event.target===
+          modal
+        ){
           hideModal(
             modal.id
           )
@@ -3637,9 +3872,9 @@ document.addEventListener(
   "keydown",
   event=>{
     if(
-      !$("lightbox").classList.contains(
-        "show"
-      )
+      !$("lightbox")
+        .classList
+        .contains("show")
     ){
       return
     }
