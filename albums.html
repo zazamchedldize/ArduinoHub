@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ka">
 <head>
@@ -32,16 +31,16 @@ color-scheme:dark;
 
 body{
 margin:0;
-background:
-radial-gradient(ellipse at 50% -15%,rgba(34,211,149,.12),transparent 45%),
-var(--bg);
+background:radial-gradient(ellipse at 50% -15%,rgba(34,211,149,.12),transparent 45%),var(--bg);
 color:var(--white);
 font-family:FiraGO,Inter,sans-serif;
 min-height:100vh
 }
 
 a{color:inherit;text-decoration:none}
+
 button,input,textarea,select{font:inherit}
+
 button{cursor:pointer}
 
 .wrap{
@@ -197,7 +196,8 @@ display:block;
 transition:transform .4s
 }
 
-.album:hover .cover img,.album:hover .cover video{
+.album:hover .cover img,
+.album:hover .cover video{
 transform:scale(1.04)
 }
 
@@ -331,9 +331,9 @@ background:rgba(255,107,129,.08)
 
 .social-btn.admin-liked{
 color:var(--gold);
-border-color:rgba(245,196,81,.42);
-background:linear-gradient(135deg,rgba(245,196,81,.1),rgba(34,211,149,.08));
-box-shadow:0 0 18px rgba(245,196,81,.07)
+border-color:rgba(245,196,81,.52);
+background:linear-gradient(135deg,rgba(245,196,81,.13),rgba(34,211,149,.08));
+box-shadow:0 0 22px rgba(245,196,81,.1)
 }
 
 .admin-like-badge{
@@ -346,8 +346,8 @@ font-weight:800;
 letter-spacing:.6px;
 padding:6px 8px;
 border-radius:8px;
-border:1px solid rgba(245,196,81,.25);
-background:rgba(245,196,81,.06)
+border:1px solid rgba(245,196,81,.3);
+background:rgba(245,196,81,.08)
 }
 
 .empty,.loading{
@@ -492,10 +492,11 @@ gap:4px;
 padding:5px 7px;
 border-radius:7px;
 color:var(--gold);
-background:rgba(7,17,15,.82);
-border:1px solid rgba(245,196,81,.3);
+background:rgba(7,17,15,.86);
+border:1px solid rgba(245,196,81,.38);
 font-size:9px;
-font-weight:800
+font-weight:800;
+box-shadow:0 0 15px rgba(245,196,81,.08)
 }
 
 .modal{
@@ -523,7 +524,7 @@ box-shadow:0 25px 90px #0009
 }
 
 .dialog.comments-dialog{
-width:min(100%,700px)
+width:min(100%,720px)
 }
 
 .dialog h2{
@@ -543,14 +544,18 @@ display:grid;
 gap:13px;
 max-height:430px;
 overflow:auto;
-padding:4px
+padding:5px 4px 8px
+}
+
+.comment-thread{
+display:grid;
+gap:10px
 }
 
 .comment-item{
 position:relative;
 border:1px solid rgba(255,255,255,.07);
-background:
-linear-gradient(145deg,rgba(17,36,28,.95),rgba(7,20,15,.95));
+background:linear-gradient(145deg,rgba(17,36,28,.96),rgba(7,20,15,.96));
 border-radius:17px;
 padding:15px;
 box-shadow:0 8px 25px rgba(0,0,0,.12);
@@ -563,13 +568,15 @@ transform:translateY(-1px)
 }
 
 .comment-item.admin-comment{
-border-color:rgba(245,196,81,.38);
-background:
-linear-gradient(145deg,rgba(245,196,81,.09),rgba(34,211,149,.04)),
-#091712;
-box-shadow:
-0 0 25px rgba(245,196,81,.05),
-inset 0 0 0 1px rgba(245,196,81,.035)
+border-color:rgba(245,196,81,.42);
+background:linear-gradient(145deg,rgba(245,196,81,.1),rgba(34,211,149,.04)),#091712;
+box-shadow:0 0 25px rgba(245,196,81,.07),inset 0 0 0 1px rgba(245,196,81,.04)
+}
+
+.comment-item.admin-liked-comment{
+border-color:rgba(245,196,81,.58);
+background:linear-gradient(145deg,rgba(245,196,81,.13),rgba(34,211,149,.045)),#091712;
+box-shadow:0 0 28px rgba(245,196,81,.11),inset 0 0 0 1px rgba(245,196,81,.06)
 }
 
 .comment-item.reply{
@@ -578,8 +585,20 @@ border-left:2px solid rgba(34,211,149,.35);
 border-radius:14px
 }
 
-.comment-item.reply.admin-comment{
+.comment-item.reply.admin-comment,
+.comment-item.reply.admin-liked-comment{
 border-left-color:var(--gold)
+}
+
+.reply-line{
+position:absolute;
+left:-22px;
+top:-13px;
+width:20px;
+height:30px;
+border-left:1px solid rgba(34,211,149,.3);
+border-bottom:1px solid rgba(34,211,149,.3);
+border-radius:0 0 0 10px
 }
 
 .comment-top{
@@ -612,9 +631,10 @@ font-weight:800;
 flex:none
 }
 
-.admin-comment .author-avatar{
+.admin-comment .author-avatar,
+.admin-liked-comment .author-avatar{
 background:linear-gradient(145deg,#594715,#211c0c);
-border-color:rgba(245,196,81,.4);
+border-color:rgba(245,196,81,.45);
 color:var(--gold)
 }
 
@@ -629,7 +649,8 @@ color:var(--white);
 line-height:1.2
 }
 
-.admin-comment .author-name{
+.admin-comment .author-name,
+.admin-liked-comment .author-name{
 color:#ffe9a1
 }
 
@@ -661,12 +682,28 @@ word-break:break-word;
 padding-left:43px
 }
 
+.reply-to{
+display:inline-flex;
+align-items:center;
+gap:5px;
+color:#7de5ba;
+font-size:10px;
+font-weight:700;
+margin-left:43px;
+margin-bottom:7px;
+padding:5px 7px;
+border-radius:7px;
+background:rgba(34,211,149,.055);
+border:1px solid rgba(34,211,149,.12)
+}
+
 .comment-actions{
 display:flex;
 align-items:center;
 gap:7px;
 padding-left:43px;
-margin-top:12px
+margin-top:12px;
+flex-wrap:wrap
 }
 
 .comment-action{
@@ -695,9 +732,9 @@ background:rgba(255,107,129,.07)
 
 .comment-action.admin-liked{
 color:var(--gold);
-border-color:rgba(245,196,81,.42);
-background:rgba(245,196,81,.08);
-box-shadow:0 0 15px rgba(245,196,81,.06)
+border-color:rgba(245,196,81,.5);
+background:rgba(245,196,81,.09);
+box-shadow:0 0 15px rgba(245,196,81,.08)
 }
 
 .comment-delete{
@@ -720,19 +757,8 @@ font-size:9px;
 font-weight:800;
 padding:5px 7px;
 border-radius:7px;
-background:rgba(245,196,81,.07);
-border:1px solid rgba(245,196,81,.25)
-}
-
-.reply-line{
-position:absolute;
-left:16px;
-top:-13px;
-width:18px;
-height:26px;
-border-left:1px solid rgba(34,211,149,.3);
-border-bottom:1px solid rgba(34,211,149,.3);
-border-radius:0 0 0 10px
+background:rgba(245,196,81,.08);
+border:1px solid rgba(245,196,81,.28)
 }
 
 .comment-form{
@@ -809,7 +835,8 @@ color:var(--mint);
 font-weight:700
 }
 
-.field input,.field textarea{
+.field input,
+.field textarea{
 width:100%;
 border:1px solid var(--line);
 background:#06130e;
@@ -819,7 +846,8 @@ padding:12px;
 outline:none
 }
 
-.field input:focus,.field textarea:focus{
+.field input:focus,
+.field textarea:focus{
 border-color:var(--green)
 }
 
@@ -865,7 +893,8 @@ justify-content:center;
 gap:14px
 }
 
-.lightbox img,.lightbox video{
+.lightbox img,
+.lightbox video{
 max-width:100%;
 max-height:calc(100% - 70px);
 object-fit:contain;
@@ -930,9 +959,12 @@ main{padding:42px 0 65px}
 .gallery-head{align-items:start;flex-direction:column}
 .lightbox{padding:60px 48px}
 .dialog{padding:22px}
-.comment-item.reply{margin-left:12px}
-.comment-text,.comment-actions{padding-left:0}
+.comment-item.reply{margin-left:14px}
+.comment-text,
+.comment-actions,
+.reply-to{padding-left:0;margin-left:0}
 .author-avatar{width:31px;height:31px}
+.reply-line{left:-12px}
 }
 </style>
 </head>
@@ -942,6 +974,7 @@ main{padding:42px 0 65px}
 <header>
 <div class="wrap head">
 <a class="brand" href="index.html">ArduinoChemistry<span>Hub</span></a>
+
 <a class="back" href="index.html">
 <i data-lucide="arrow-left"></i>
 მთავარზე დაბრუნება
@@ -971,6 +1004,7 @@ main{padding:42px 0 65px}
 <i data-lucide="upload"></i>
 მედიის ატვირთვა
 </button>
+
 <span id="admin-label" style="align-self:center;color:var(--muted);font-size:12px"></span>
 </div>
 
@@ -1009,6 +1043,7 @@ main{padding:42px 0 65px}
 </footer>
 
 <div id="album-modal" class="modal" role="dialog" aria-modal="true">
+
 <form id="album-form" class="dialog">
 
 <h2>ახალი ალბომი</h2>
@@ -1039,12 +1074,14 @@ main{padding:42px 0 65px}
 </div>
 
 <div id="upload-modal" class="modal" role="dialog" aria-modal="true">
+
 <form id="upload-form" class="dialog">
 
 <h2>მედიის ატვირთვა</h2>
 
 <div class="field">
 <label for="upload-album">ალბომი</label>
+
 <select id="upload-album" required style="width:100%;padding:12px;border-radius:11px;background:#06130e;color:white;border:1px solid var(--line)"></select>
 </div>
 
@@ -1061,6 +1098,7 @@ main{padding:42px 0 65px}
 <div id="upload-status" class="status"></div>
 
 <div class="dialog-actions">
+
 <button type="button" class="secondary" data-close="upload-modal">
 გაუქმება
 </button>
@@ -1068,6 +1106,7 @@ main{padding:42px 0 65px}
 <button id="upload-submit" class="primary" type="submit">
 ატვირთვა
 </button>
+
 </div>
 
 </form>
@@ -1088,10 +1127,13 @@ main{padding:42px 0 65px}
 <form id="comment-form" class="comment-form">
 
 <div id="replying" class="replying">
+
 <span id="replying-text"></span>
+
 <button type="button" class="cancel-reply" id="cancel-reply">
 გაუქმება
 </button>
+
 </div>
 
 <textarea id="comment-text" maxlength="500" placeholder="დაწერე კომენტარი..."></textarea>
@@ -1110,13 +1152,14 @@ main{padding:42px 0 65px}
 </form>
 
 <div class="dialog-actions">
+
 <button type="button" class="secondary" data-close="comments-modal">
 დახურვა
 </button>
-</div>
 
 </div>
 
+</div>
 </div>
 
 <div id="lightbox" class="lightbox" aria-label="მედიის ნახვა">
@@ -1146,7 +1189,6 @@ main{padding:42px 0 65px}
 </div>
 
 <script>
-
 const supabaseClient=window.supabase.createClient(
 "https://ywxunhvrwdtlqjfshiyj.supabase.co",
 "sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4"
@@ -1155,6 +1197,11 @@ const supabaseClient=window.supabase.createClient(
 const BUCKET="album-photos"
 const MAX_FILE_SIZE=50*1024*1024
 const $=id=>document.getElementById(id)
+
+const ADMIN_DISPLAY_NAMES={
+"mchedlidze.zaza1000@gmail.com":"ზმ",
+"mchedlidze.zaza1000":"ზმ"
+}
 
 let albums=[]
 let currentAlbum=null
@@ -1274,14 +1321,44 @@ return [
 ].includes(getExtension(file.name))
 }
 
+function normalizeAdminDisplayName(value){
+const original=String(value||"").trim()
+const normalized=original.toLowerCase()
+
+if(ADMIN_DISPLAY_NAMES[normalized]){
+return ADMIN_DISPLAY_NAMES[normalized]
+}
+
+if(normalized==="zaza"||normalized==="ზაზა"||normalized==="ზაზა მჭედლიძე"||normalized==="mchedlidze.zaza1000"){
+return "ზმ"
+}
+
+return original
+}
+
 function getUserDisplayName(user){
 if(!user){
 return "მომხმარებელი"
 }
 
 const metadata=user.user_metadata||{}
+const email=String(user.email||"").trim().toLowerCase()
 
-return String(
+if(ADMIN_DISPLAY_NAMES[email]){
+return ADMIN_DISPLAY_NAMES[email]
+}
+
+const metadataEmail=String(
+metadata.email||
+metadata.email_address||
+""
+).trim().toLowerCase()
+
+if(ADMIN_DISPLAY_NAMES[metadataEmail]){
+return ADMIN_DISPLAY_NAMES[metadataEmail]
+}
+
+const name=String(
 metadata.full_name||
 metadata.name||
 metadata.username||
@@ -1289,11 +1366,44 @@ metadata.display_name||
 user.email?.split("@")[0]||
 "მომხმარებელი"
 ).trim()
+
+return normalizeAdminDisplayName(name)
+}
+
+function getCommentDisplayName(comment){
+if(!comment){
+return "მომხმარებელი"
+}
+
+let name=String(comment.author_name||"").trim()
+
+name=normalizeAdminDisplayName(name)
+
+if(
+adminUserIds.has(comment.user_id)&&
+(
+!name||
+name.includes("@")||
+name==="მომხმარებელი"
+)
+){
+if(currentUser&&currentUser.id===comment.user_id){
+return getUserDisplayName(currentUser)
+}
+
+return "ადმინისტრატორი"
+}
+
+return name||"მომხმარებელი"
 }
 
 function getInitials(name){
 const value=String(name||"მომხმარებელი").trim()
 const parts=value.split(/\s+/).filter(Boolean)
+
+if(value==="ზმ"){
+return "ზმ"
+}
 
 if(parts.length>=2){
 return (parts[0][0]+parts[1][0]).toUpperCase()
@@ -1455,14 +1565,24 @@ const adminLike=adminLiked(items)
 return `
 <div class="social-bar">
 
-<button class="social-btn ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}" data-like-type="${type}" data-like-id="${escapeHtml(id)}">
+<button
+class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
+data-like-type="${escapeHtml(type)}"
+data-like-id="${escapeHtml(id)}">
+
 <i data-lucide="heart"></i>
 <span>${items.length}</span>
+
 </button>
 
-<button class="social-btn" data-comments-type="${type}" data-comments-id="${escapeHtml(id)}">
+<button
+class="social-btn"
+data-comments-type="${escapeHtml(type)}"
+data-comments-id="${escapeHtml(id)}">
+
 <i data-lucide="message-circle"></i>
 <span>${comments.length}</span>
+
 </button>
 
 ${adminLike?`
@@ -1526,6 +1646,7 @@ grid.innerHTML=`
 `
 
 lucide.createIcons()
+
 return
 }
 
@@ -1567,13 +1688,22 @@ if(type==="video"){
 
 coverHtml=`
 <div class="cover-media">
-<video src="${escapeHtml(storageUrl(cover.storage_path))}" muted loop autoplay playsinline preload="metadata"></video>
+
+<video
+src="${escapeHtml(storageUrl(cover.storage_path))}"
+muted
+loop
+autoplay
+playsinline
+preload="metadata">
+</video>
 
 <div class="video-play">
 <span>
 <i data-lucide="play"></i>
 </span>
 </div>
+
 </div>
 `
 
@@ -1583,8 +1713,7 @@ coverHtml=`
 <img
 src="${escapeHtml(storageUrl(cover.storage_path))}"
 alt="${escapeHtml(album.title)}"
-loading="lazy"
->
+loading="lazy">
 `
 }
 
@@ -1598,17 +1727,29 @@ coverHtml=`
 }
 
 const actions=isAdmin?`
+
 <div class="album-actions">
 
-<button class="icon-btn" data-edit="${escapeHtml(album.id)}" title="რედაქტირება">
+<button
+class="icon-btn"
+data-edit="${escapeHtml(album.id)}"
+title="რედაქტირება">
+
 <i data-lucide="pencil"></i>
+
 </button>
 
-<button class="icon-btn" data-delete="${escapeHtml(album.id)}" title="წაშლა">
+<button
+class="icon-btn"
+data-delete="${escapeHtml(album.id)}"
+title="წაშლა">
+
 <i data-lucide="trash-2"></i>
+
 </button>
 
 </div>
+
 `:""
 
 return `
@@ -1669,6 +1810,7 @@ deleteAlbum(element.dataset.delete)
 grid.querySelectorAll("[data-like-type]").forEach(element=>{
 element.addEventListener("click",event=>{
 event.stopPropagation()
+
 toggleLike(
 element.dataset.likeType,
 element.dataset.likeId
@@ -1679,6 +1821,7 @@ element.dataset.likeId
 grid.querySelectorAll("[data-comments-type]").forEach(element=>{
 element.addEventListener("click",event=>{
 event.stopPropagation()
+
 openComments(
 element.dataset.commentsType,
 element.dataset.commentsId
@@ -1758,8 +1901,8 @@ loop
 autoplay
 playsinline
 preload="metadata"
-data-photo="${index}"
-></video>
+data-photo="${index}">
+</video>
 
 <span class="media-type">
 <i data-lucide="video"></i>
@@ -1771,8 +1914,7 @@ VIDEO
 src="${escapeHtml(source)}"
 alt="${escapeHtml(media.caption||currentAlbum.title)}"
 data-photo="${index}"
-loading="lazy"
->
+loading="lazy">
 
 <span class="media-type">
 <i data-lucide="image"></i>
@@ -1782,6 +1924,7 @@ PHOTO
 
 const likes=getLikesForPhoto(media.id)
 const comments=getCommentsForPhoto(media.id)
+
 const liked=userLiked(likes)
 const adminLike=adminLiked(likes)
 
@@ -1793,7 +1936,7 @@ ${mediaHtml}
 ${adminLike?`
 <span class="media-admin-like">
 <i data-lucide="shield-check"></i>
-ADMIN
+ADMIN LIKE
 </span>
 `:""}
 
@@ -1806,19 +1949,21 @@ ${escapeHtml(media.caption)}
 <div class="photo-social">
 
 <button
-class="social-btn ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}"
-data-photo-like="${escapeHtml(media.id)}"
->
+class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
+data-photo-like="${escapeHtml(media.id)}">
+
 <i data-lucide="heart"></i>
 <span>${likes.length}</span>
+
 </button>
 
 <button
 class="social-btn"
-data-photo-comments="${escapeHtml(media.id)}"
->
+data-photo-comments="${escapeHtml(media.id)}">
+
 <i data-lucide="message-circle"></i>
 <span>${comments.length}</span>
+
 </button>
 
 </div>
@@ -1827,9 +1972,10 @@ ${isAdmin?`
 <button
 class="icon-btn delete-photo"
 data-photo-delete="${escapeHtml(media.id)}"
-title="წაშლა"
->
+title="წაშლა">
+
 <i data-lucide="trash-2"></i>
+
 </button>
 `:""}
 
@@ -1843,49 +1989,68 @@ lucide.createIcons()
 $("photo-grid")
 .querySelectorAll("[data-photo]")
 .forEach(element=>{
+
 element.addEventListener("click",event=>{
 
-if(event.target.closest("[data-photo-like]"))return
-if(event.target.closest("[data-photo-comments]"))return
-if(event.target.closest("[data-photo-delete]"))return
+if(event.target.closest("[data-photo-like]")){
+return
+}
+
+if(event.target.closest("[data-photo-comments]")){
+return
+}
+
+if(event.target.closest("[data-photo-delete]")){
+return
+}
 
 showLightbox(Number(element.dataset.photo))
+
 })
 })
 
 $("photo-grid")
 .querySelectorAll("[data-photo-like]")
 .forEach(element=>{
+
 element.addEventListener("click",event=>{
+
 event.stopPropagation()
 
 toggleLike(
 "photo",
 element.dataset.photoLike
 )
+
 })
 })
 
 $("photo-grid")
 .querySelectorAll("[data-photo-comments]")
 .forEach(element=>{
+
 element.addEventListener("click",event=>{
+
 event.stopPropagation()
 
 openComments(
 "photo",
 element.dataset.photoComments
 )
+
 })
 })
 
 $("photo-grid")
 .querySelectorAll("[data-photo-delete]")
 .forEach(element=>{
+
 element.addEventListener("click",event=>{
+
 event.stopPropagation()
 
 deletePhoto(element.dataset.photoDelete)
+
 })
 })
 }
@@ -1906,23 +2071,27 @@ lucide.createIcons()
 $("gallery-social")
 .querySelectorAll("[data-like-type]")
 .forEach(element=>{
+
 element.addEventListener("click",()=>{
 toggleLike(
 element.dataset.likeType,
 element.dataset.likeId
 )
 })
+
 })
 
 $("gallery-social")
 .querySelectorAll("[data-comments-type]")
 .forEach(element=>{
+
 element.addEventListener("click",()=>{
 openComments(
 element.dataset.commentsType,
 element.dataset.commentsId
 )
 })
+
 })
 }
 
@@ -1963,8 +2132,14 @@ item=>item.id!==existing.id
 }else{
 
 const payload=type==="album"
-?{user_id:user.id,album_id:id}
-:{user_id:user.id,photo_id:id}
+?{
+user_id:user.id,
+album_id:id
+}
+:{
+user_id:user.id,
+photo_id:id
+}
 
 const {data,error}=await supabaseClient
 .from("album_likes")
@@ -2006,6 +2181,7 @@ title=album?.title||"ალბომი"
 
 const photo=currentPhotos.find(item=>item.id===id)
 title=photo?.caption||"ფოტო ან ვიდეო"
+
 }
 
 commentsTargetTitle=title
@@ -2043,9 +2219,24 @@ lucide.createIcons()
 }
 
 function getCommentChildren(parentId){
+
 return albumComments
 .filter(item=>item.parent_comment_id===parentId)
-.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at))
+.sort(
+(a,b)=>
+new Date(a.created_at)-new Date(b.created_at)
+)
+}
+
+function getParentComment(comment){
+
+if(!comment?.parent_comment_id){
+return null
+}
+
+return albumComments.find(
+item=>item.id===comment.parent_comment_id
+)||null
 }
 
 function buildCommentHtml(comment,isReply=false){
@@ -2055,11 +2246,8 @@ const liked=userLiked(likes)
 const adminLike=adminLiked(likes)
 const admin=adminUserIds.has(comment.user_id)
 
-let author=comment.author_name||"მომხმარებელი"
-
-if(!comment.author_name&&currentUser&&currentUser.id===comment.user_id){
-author=getUserDisplayName(currentUser)
-}
+const author=getCommentDisplayName(comment)
+const parent=getParentComment(comment)
 
 const canDelete=
 currentUser&&
@@ -2068,9 +2256,11 @@ currentUser.id===comment.user_id
 const children=getCommentChildren(comment.id)
 
 return `
-<article class="comment-item ${admin?"admin-comment":""} ${isReply?"reply":""}">
+<article class="comment-item ${admin?"admin-comment":""} ${adminLike?"admin-liked-comment":""} ${isReply?"reply":""}">
 
-${isReply?`<span class="reply-line"></span>`:""}
+${isReply?`
+<span class="reply-line"></span>
+`:""}
 
 <div class="comment-top">
 
@@ -2107,6 +2297,13 @@ ${formatDate(comment.created_at)}
 
 </div>
 
+${parent?`
+<div class="reply-to">
+<i data-lucide="corner-down-right"></i>
+პასუხი: ${escapeHtml(getCommentDisplayName(parent))}
+</div>
+`:""}
+
 <div class="comment-text">
 ${escapeHtml(comment.comment)}
 </div>
@@ -2114,19 +2311,23 @@ ${escapeHtml(comment.comment)}
 <div class="comment-actions">
 
 <button
-class="comment-action ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}"
-data-comment-like="${escapeHtml(comment.id)}"
->
+class="comment-action ${liked?"liked":""} ${adminLike?"admin-liked":""}"
+data-comment-like="${escapeHtml(comment.id)}">
+
 <i data-lucide="heart"></i>
+
 <span>${likes.length}</span>
+
 </button>
 
 <button
 class="comment-action"
-data-comment-reply="${escapeHtml(comment.id)}"
->
+data-comment-reply="${escapeHtml(comment.id)}">
+
 <i data-lucide="reply"></i>
+
 პასუხი
+
 </button>
 
 ${adminLike?`
@@ -2140,9 +2341,10 @@ ${canDelete?`
 <button
 class="comment-delete"
 data-comment-delete="${escapeHtml(comment.id)}"
-title="კომენტარის წაშლა"
->
+title="კომენტარის წაშლა">
+
 <i data-lucide="trash-2"></i>
+
 </button>
 `:""}
 
@@ -2150,7 +2352,11 @@ title="კომენტარის წაშლა"
 
 </article>
 
+${children.length?`
+<div class="comment-thread">
 ${children.map(child=>buildCommentHtml(child,true)).join("")}
+</div>
+`:""}
 `
 }
 
@@ -2164,20 +2370,26 @@ commentsTargetType==="album"
 comments=comments
 .filter(item=>!item.parent_comment_id)
 .sort(
-(a,b)=>new Date(a.created_at)-new Date(b.created_at)
+(a,b)=>
+new Date(a.created_at)-new Date(b.created_at)
 )
 
 if(!comments.length){
 
 $("comment-list").innerHTML=`
 <div class="empty">
+
 <i data-lucide="message-circle"></i>
+
 <strong>ჯერ კომენტარი არ არის</strong>
+
 <span>იყავი პირველი ვინც კომენტარს დაწერს.</span>
+
 </div>
 `
 
 lucide.createIcons()
+
 return
 }
 
@@ -2189,31 +2401,43 @@ lucide.createIcons()
 $("comment-list")
 .querySelectorAll("[data-comment-like]")
 .forEach(element=>{
+
 element.addEventListener("click",()=>{
+
 toggleCommentLike(
 element.dataset.commentLike
 )
+
 })
+
 })
 
 $("comment-list")
 .querySelectorAll("[data-comment-reply]")
 .forEach(element=>{
+
 element.addEventListener("click",()=>{
+
 startReply(
 element.dataset.commentReply
 )
+
 })
+
 })
 
 $("comment-list")
 .querySelectorAll("[data-comment-delete]")
 .forEach(element=>{
+
 element.addEventListener("click",()=>{
+
 deleteComment(
 element.dataset.commentDelete
 )
+
 })
+
 })
 }
 
@@ -2269,7 +2493,6 @@ commentLikes.push(data)
 }
 
 await renderComments()
-
 await refreshSocialAfterComment()
 }
 
@@ -2285,7 +2508,7 @@ return
 
 replyParentId=commentId
 
-const author=comment.author_name||"მომხმარებელი"
+const author=getCommentDisplayName(comment)
 
 $("replying-text").textContent=
 "პასუხობ: "+author
@@ -2373,6 +2596,7 @@ $("comment-text").value=""
 
 cancelReply()
 
+await loadSocialData()
 await renderComments()
 
 button.disabled=false
@@ -2422,13 +2646,16 @@ return
 }
 
 albumComments=albumComments.filter(
-item=>item.id!==id&&item.parent_comment_id!==id
+item=>
+item.id!==id&&
+item.parent_comment_id!==id
 )
 
 commentLikes=commentLikes.filter(
 item=>item.comment_id!==id
 )
 
+await loadSocialData()
 await renderComments()
 await refreshSocialAfterComment()
 }
@@ -2466,8 +2693,8 @@ $("light-media").innerHTML=`
 src="${escapeHtml(source)}"
 controls
 autoplay
-playsinline
-></video>
+playsinline>
+</video>
 `
 
 }else{
@@ -2475,8 +2702,7 @@ playsinline
 $("light-media").innerHTML=`
 <img
 src="${escapeHtml(source)}"
-alt="${escapeHtml(media.caption||currentAlbum?.title||"ფოტო")}"
->
+alt="${escapeHtml(media.caption||currentAlbum?.title||"ფოტო")}">
 `
 }
 
@@ -2487,24 +2713,33 @@ currentAlbum?.title||
 
 const likes=getLikesForPhoto(media.id)
 const comments=getCommentsForPhoto(media.id)
+
 const liked=userLiked(likes)
+const adminLike=adminLiked(likes)
 
 $("lightbox-social").innerHTML=`
 
 <button
-class="social-btn ${liked?"liked":""} ${isAdmin&&liked?"admin-liked":""}"
-id="light-like"
->
+class="social-btn ${liked?"liked":""} ${adminLike?"admin-liked":""}"
+id="light-like">
+
 <i data-lucide="heart"></i>
+
 <span>${likes.length}</span>
+
 </button>
 
-<button class="social-btn" id="light-comments">
+<button
+class="social-btn"
+id="light-comments">
+
 <i data-lucide="message-circle"></i>
+
 <span>${comments.length}</span>
+
 </button>
 
-${adminLiked(likes)?`
+${adminLike?`
 <span class="admin-like-badge">
 <i data-lucide="shield-check"></i>
 ADMIN LIKE
@@ -2514,12 +2749,23 @@ ADMIN LIKE
 `
 
 $("light-like").addEventListener("click",async()=>{
-await toggleLike("photo",media.id)
+
+await toggleLike(
+"photo",
+media.id
+)
+
 renderLightboxMedia()
+
 })
 
 $("light-comments").addEventListener("click",async()=>{
-await openComments("photo",media.id)
+
+await openComments(
+"photo",
+media.id
+)
+
 })
 
 lucide.createIcons()
@@ -2549,7 +2795,10 @@ if(!title){
 return
 }
 
-notify("album-status","იქმნება...")
+notify(
+"album-status",
+"იქმნება..."
+)
 
 const {error}=await supabaseClient
 .from("photo_albums")
@@ -2919,25 +3168,31 @@ currentAlbum=null
 document
 .querySelectorAll("[data-close]")
 .forEach(button=>{
+
 button.addEventListener(
 "click",
 ()=>{
 hideModal(button.dataset.close)
 }
 )
+
 })
 
 document
 .querySelectorAll(".modal")
 .forEach(modal=>{
+
 modal.addEventListener(
 "click",
 event=>{
+
 if(event.target===modal){
 hideModal(modal.id)
 }
+
 }
 )
+
 })
 
 $("light-close").addEventListener(
@@ -2971,8 +3226,10 @@ return
 }
 
 if(event.key==="Escape"){
+
 $("lightbox").classList.remove("show")
 $("light-media").innerHTML=""
+
 }
 
 if(event.key==="ArrowLeft"){
@@ -3013,7 +3270,6 @@ lucide.createIcons()
 }
 
 init()
-
 </script>
 
 </body>
