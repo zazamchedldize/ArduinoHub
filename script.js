@@ -6063,6 +6063,30 @@ function checkAndOpenAttendance(e) {
   return false
 }
 
+function checkAndOpenLive(e) {
+  const chatInput = document.querySelector('#ai-chat-input')
+
+  if (chatInput && chatInput.value.trim() === '/live') {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      e.stopImmediatePropagation()
+    }
+
+    chatInput.value = ''
+
+    if (typeof openLiveAdminModal === 'function') {
+      openLiveAdminModal()
+    } else {
+      console.error('openLiveAdminModal ფუნქცია ვერ მოიძებნა')
+    }
+
+    return true
+  }
+
+  return false
+}
+
 document.addEventListener('keydown', (e) => {
   const chatInput = document.querySelector('#ai-chat-input')
 
@@ -6071,31 +6095,59 @@ document.addEventListener('keydown', (e) => {
     (e.key === 'Enter' || e.keyCode === 13) &&
     !e.shiftKey
   ) {
+    if (checkAndOpenLive(e)) {
+      return
+    }
+
     checkAndOpenAttendance(e)
   }
 
   if (e.key === 'Escape') {
     closePublicAttendanceModal()
+
+    if (typeof closeLiveAdminModal === 'function') {
+      closeLiveAdminModal()
+    }
   }
 }, true)
 
 document.addEventListener('submit', (e) => {
+  if (checkAndOpenLive(e)) {
+    return
+  }
+
   checkAndOpenAttendance(e)
 }, true)
 
 document.addEventListener('click', (e) => {
   const chatInput = document.querySelector('#ai-chat-input')
 
-  if (chatInput && chatInput.value.trim() === '/დასწრება') {
-    const isSendButton = e.target.closest(
-      'button, [role="button"], svg, path'
-    )
-
-    if (isSendButton) {
-      checkAndOpenAttendance(e)
-    }
+  if (!chatInput) {
+    return
   }
+
+  const value = chatInput.value.trim()
+
+  if (value !== '/დასწრება' && value !== '/live') {
+    return
+  }
+
+  const isSendButton = e.target.closest(
+    'button, [role="button"], svg, path'
+  )
+
+  if (!isSendButton) {
+    return
+  }
+
+  if (value === '/live') {
+    checkAndOpenLive(e)
+    return
+  }
+
+  checkAndOpenAttendance(e)
 }, true)
+
 
 // ==========================================
 // ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
