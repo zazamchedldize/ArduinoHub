@@ -6827,6 +6827,12 @@ function openHbdAdminModal() {
     hbdAdminStatus.textContent = ""
   }
 
+  const normalTheme = document.querySelector('input[name="hbd-theme"][value="normal"]')
+
+  if (normalTheme) {
+    normalTheme.checked = true
+  }
+
   if (window.lucide) {
     lucide.createIcons()
   }
@@ -6852,8 +6858,7 @@ document.querySelector("[data-hbd-admin-close]")?.addEventListener(
 
 async function isHbdAdmin() {
   try {
-    const { data: userData, error: userError } =
-      await window.supabase.auth.getUser()
+    const { data: userData, error: userError } = await window.supabase.auth.getUser()
 
     if (userError || !userData?.user) {
       return false
@@ -6875,10 +6880,15 @@ async function isHbdAdmin() {
   }
 }
 
+function getSelectedHbdTheme() {
+  return document.querySelector('input[name="hbd-theme"]:checked')?.value || "normal"
+}
+
 async function saveHbd() {
   const name = hbdNameInput?.value.trim()
   const message = hbdMessageInput?.value.trim()
   const date = hbdDateInput?.value
+  const theme = getSelectedHbdTheme()
 
   if (!name || !message || !date) {
     hbdAdminStatus.textContent = "ყველა ველი შეავსე"
@@ -6892,8 +6902,7 @@ async function saveHbd() {
   const admin = await isHbdAdmin()
 
   if (!admin) {
-    hbdAdminStatus.textContent =
-      "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
+    hbdAdminStatus.textContent = "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
     hbdAdminStatus.style.color = "#f87171"
     return
   }
@@ -6907,6 +6916,7 @@ async function saveHbd() {
         name,
         message,
         birthday_date: date,
+        theme,
         created_by: userData?.user?.id || null
       })
 
@@ -6914,23 +6924,23 @@ async function saveHbd() {
       throw error
     }
 
-    hbdAdminStatus.textContent =
-      "დაბადების დღე წარმატებით დაემატა 🎉"
-
+    hbdAdminStatus.textContent = "დაბადების დღე წარმატებით დაემატა 🎉"
     hbdAdminStatus.style.color = "#4ade80"
 
     hbdAdminForm.reset()
 
+    const normalTheme = document.querySelector('input[name="hbd-theme"][value="normal"]')
+
+    if (normalTheme) {
+      normalTheme.checked = true
+    }
+
     setTimeout(() => {
       closeHbdAdminModal()
     }, 1200)
-
   } catch (error) {
     console.error(error)
-
-    hbdAdminStatus.textContent =
-      "შენახვისას შეცდომა მოხდა"
-
+    hbdAdminStatus.textContent = "შენახვისას შეცდომა მოხდა"
     hbdAdminStatus.style.color = "#f87171"
   }
 }
@@ -6969,12 +6979,9 @@ function createBirthdayConfetti() {
 
     piece.className = "birthday-confetti-piece"
     piece.style.left = `${Math.random() * 100}%`
-    piece.style.background =
-      colors[Math.floor(Math.random() * colors.length)]
-    piece.style.animationDuration =
-      `${3 + Math.random() * 4}s`
-    piece.style.animationDelay =
-      `${Math.random() * 2}s`
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)]
+    piece.style.animationDuration = `${3 + Math.random() * 4}s`
+    piece.style.animationDelay = `${Math.random() * 2}s`
 
     piece.style.setProperty(
       "--drift",
@@ -7006,22 +7013,145 @@ function createBirthdayRibbons() {
 
     ribbon.className = "birthday-ribbon"
     ribbon.style.left = `${Math.random() * 100}%`
-    ribbon.style.background =
-      colors[Math.floor(Math.random() * colors.length)]
-    ribbon.style.animationDuration =
-      `${4 + Math.random() * 5}s`
-    ribbon.style.animationDelay =
-      `${Math.random() * 3}s`
-    ribbon.style.height =
-      `${50 + Math.random() * 80}px`
-    ribbon.style.width =
-      `${5 + Math.random() * 6}px`
+    ribbon.style.background = colors[Math.floor(Math.random() * colors.length)]
+    ribbon.style.animationDuration = `${4 + Math.random() * 5}s`
+    ribbon.style.animationDelay = `${Math.random() * 3}s`
+    ribbon.style.height = `${50 + Math.random() * 80}px`
+    ribbon.style.width = `${5 + Math.random() * 6}px`
 
     container.appendChild(ribbon)
   }
 }
 
-function openBirthdayModal(name, message) {
+function createTvdEffects() {
+  const container = document.getElementById("birthday-theme-effects")
+
+  if (!container) return
+
+  container.innerHTML = ""
+
+  const moon = document.createElement("div")
+  moon.className = "tvd-moon"
+  container.appendChild(moon)
+
+  for (let i = 0; i < 35; i++) {
+    const drop = document.createElement("span")
+
+    drop.className = "tvd-blood-drop"
+    drop.style.left = `${Math.random() * 100}%`
+    drop.style.animationDuration = `${3 + Math.random() * 5}s`
+    drop.style.animationDelay = `${Math.random() * 4}s`
+    drop.style.transform = `scale(${.5 + Math.random() * .8})`
+
+    container.appendChild(drop)
+  }
+}
+
+function createMcuEffects() {
+  const container = document.getElementById("birthday-theme-effects")
+
+  if (!container) return
+
+  container.innerHTML = ""
+
+  const hud = document.createElement("div")
+  hud.className = "mcu-hud"
+  container.appendChild(hud)
+
+  for (let i = 0; i < 45; i++) {
+    const particle = document.createElement("span")
+
+    particle.className = "mcu-particle"
+    particle.style.left = `${Math.random() * 100}%`
+    particle.style.animationDuration = `${5 + Math.random() * 8}s`
+    particle.style.animationDelay = `${Math.random() * 7}s`
+
+    particle.style.setProperty(
+      "--x",
+      `${-150 + Math.random() * 300}px`
+    )
+
+    container.appendChild(particle)
+  }
+}
+
+function resetBirthdayTheme() {
+  const modal = document.getElementById("birthday-modal")
+  const effects = document.getElementById("birthday-theme-effects")
+  const badge = document.getElementById("birthday-theme-badge")
+  const icon = document.getElementById("birthday-icon")
+
+  if (!modal) return
+
+  modal.classList.remove("theme-normal", "theme-tvd", "theme-mcu")
+
+  if (effects) {
+    effects.innerHTML = ""
+  }
+
+  if (badge) {
+    badge.textContent = ""
+  }
+
+  if (icon) {
+    icon.textContent = "🎂"
+  }
+}
+
+function applyBirthdayTheme(theme) {
+  const modal = document.getElementById("birthday-modal")
+  const badge = document.getElementById("birthday-theme-badge")
+  const icon = document.getElementById("birthday-icon")
+
+  if (!modal) return
+
+  resetBirthdayTheme()
+
+  const selectedTheme = ["normal", "tvd", "mcu"].includes(theme)
+    ? theme
+    : "normal"
+
+  modal.classList.add(`theme-${selectedTheme}`)
+
+  if (selectedTheme === "tvd") {
+    if (badge) {
+      badge.textContent = "THE VAMPIRE DIARIES"
+    }
+
+    if (icon) {
+      icon.textContent = "🧛"
+    }
+
+    createTvdEffects()
+  }
+
+  if (selectedTheme === "mcu") {
+    if (badge) {
+      badge.textContent = "MCU"
+    }
+
+    if (icon) {
+      icon.textContent = "🦾"
+    }
+
+    createMcuEffects()
+  }
+
+  if (selectedTheme === "normal") {
+    if (badge) {
+      badge.textContent = "NORMAL"
+    }
+
+    if (icon) {
+      icon.textContent = "🎂"
+    }
+
+    createBirthdayConfetti()
+    createBirthdayRibbons()
+  }
+}
+
+function openBirthdayModal(name, message, theme = "normal") {
   const modal = document.getElementById("birthday-modal")
   const nameElement = document.getElementById("birthday-name")
   const messageElement = document.getElementById("birthday-message")
@@ -7036,8 +7166,7 @@ function openBirthdayModal(name, message) {
     messageElement.textContent = message
   }
 
-  createBirthdayConfetti()
-  createBirthdayRibbons()
+  applyBirthdayTheme(theme)
 
   modal.hidden = false
   modal.setAttribute("aria-hidden", "false")
@@ -7057,6 +7186,7 @@ function closeBirthdayModal() {
 
   const confetti = document.getElementById("birthday-confetti")
   const ribbons = document.getElementById("birthday-ribbons")
+  const effects = document.getElementById("birthday-theme-effects")
 
   if (confetti) {
     confetti.innerHTML = ""
@@ -7064,6 +7194,10 @@ function closeBirthdayModal() {
 
   if (ribbons) {
     ribbons.innerHTML = ""
+  }
+
+  if (effects) {
+    effects.innerHTML = ""
   }
 }
 
@@ -7088,11 +7222,9 @@ async function checkTodayBirthday() {
 
     const { data, error } = await window.supabase
       .from("birthday_messages")
-      .select("id, name, message, birthday_date")
+      .select("id, name, message, birthday_date, theme")
       .eq("birthday_date", today)
-      .order("created_at", {
-        ascending: true
-      })
+      .order("created_at", { ascending: true })
 
     if (error) {
       console.error(error)
@@ -7108,10 +7240,10 @@ async function checkTodayBirthday() {
     setTimeout(() => {
       openBirthdayModal(
         birthday.name,
-        birthday.message
+        birthday.message,
+        birthday.theme || "normal"
       )
     }, 900)
-
   } catch (error) {
     console.error(error)
   }
@@ -7236,24 +7368,20 @@ document.querySelector("[data-hbd-cancel-close]")?.addEventListener(
 async function loadHbdList() {
   if (!hbdCancelList) return
 
-  hbdCancelList.innerHTML =
-    `<div class="hbd-cancel-loading">იტვირთება...</div>`
+  hbdCancelList.innerHTML = `<div class="hbd-cancel-loading">იტვირთება...</div>`
 
   try {
     const { data, error } = await window.supabase
       .from("birthday_messages")
-      .select("id, name, message, birthday_date")
-      .order("birthday_date", {
-        ascending: true
-      })
+      .select("id, name, message, birthday_date, theme")
+      .order("birthday_date", { ascending: true })
 
     if (error) {
       throw error
     }
 
     if (!data || data.length === 0) {
-      hbdCancelList.innerHTML =
-        `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
+      hbdCancelList.innerHTML = `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
       return
     }
 
@@ -7268,18 +7396,24 @@ async function loadHbdList() {
         `${birthday.birthday_date}T00:00:00`
       )
 
-      const formattedDate =
-        date.toLocaleDateString("ka-GE", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric"
-        })
+      const formattedDate = date.toLocaleDateString("ka-GE", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      })
+
+      const themeNames = {
+        normal: "Normal",
+        tvd: "TVD",
+        mcu: "MCU"
+      }
 
       item.innerHTML = `
         <div class="hbd-cancel-info">
           <strong>${escapeHbdHtml(birthday.name)}</strong>
-          <span>${formattedDate}</span>
+          <span>${formattedDate} • ${themeNames[birthday.theme] || "Normal"}</span>
         </div>
+
         <button
           type="button"
           class="hbd-delete-button"
@@ -7299,7 +7433,6 @@ async function loadHbdList() {
           await deleteHbd(button.dataset.hbdId)
         })
       })
-
   } catch (error) {
     console.error(error)
 
@@ -7334,7 +7467,6 @@ async function deleteHbd(id) {
     }
 
     await loadHbdList()
-
   } catch (error) {
     console.error(error)
     alert("დაბადების დღის გაუქმება ვერ მოხერხდა")
