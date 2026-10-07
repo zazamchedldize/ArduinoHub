@@ -11246,51 +11246,23 @@ async function liveRespondJoinRequest(
   }
 }
 
-async function liveHostControlGuest(
-  requestId,
-  control,
-  enabled
-) {
+async function liveHostControlGuest(requestId, control) {
   try {
-    if (control === 'kick') {
-      const confirmed =
-        confirm(
-          'ნამდვილად გინდა სტუმრის ლაივიდან გათიშვა?'
-        )
-
-      if (!confirmed) {
-        return
-      }
+    if (!liveCurrentStream?.id) {
+      throw new Error('აქტიური ლაივი ვერ მოიძებნა')
     }
 
     await liveCallFunction({
-      action:
-        'host_guest_control',
+      action: 'host_guest_control',
+      streamId: liveCurrentStream.id,
       requestId,
-      control,
-      enabled
+      control
     })
 
-    if (control === 'kick') {
-      liveHostActiveGuests =
-        liveHostActiveGuests.filter(
-          guest =>
-            guest.id !==
-            requestId
-        )
-
-      liveRenderHostGuests()
-    }
+    await liveRenderHostGuests()
   } catch (error) {
-    console.error(
-      'Host guest control error:',
-      error
-    )
-
-    alert(
-      error?.message ||
-      'სტუმრის მართვა ვერ მოხერხდა'
-    )
+    console.error('Host guest control error:', error)
+    toast(error?.message || 'სტუმრის კონტროლი ვერ მოხერხდა.')
   }
 }
 
