@@ -7358,7 +7358,7 @@ function escapeHbdHtml(value) {
   return div.innerHTML
 }
 
-
+let liveNotificationDismissedStreamId = null
 let liveCurrentStream = null
 let liveHostStream = null
 let liveHostPeerConnection = null
@@ -8370,11 +8370,19 @@ async function showActiveLiveNotification() {
     await loadActiveLive()
 
   if (!stream) {
+    liveNotificationDismissedStreamId = null
     return
   }
 
   liveNotificationStream =
     stream
+
+  if (
+    liveNotificationDismissedStreamId ===
+    stream.id
+  ) {
+    return
+  }
 
   const title =
     liveGetElement(
@@ -8403,13 +8411,17 @@ async function showActiveLiveNotification() {
 }
 
 function closeLiveNotification() {
+  if (liveNotificationStream?.id) {
+    liveNotificationDismissedStreamId =
+      liveNotificationStream.id
+  }
+
   liveHideModal(
     'live-notification-modal'
   )
 
   liveNotificationStream = null
 }
-
 async function openLiveFromNotification() {
   const stream =
     liveNotificationStream
@@ -8851,7 +8863,10 @@ function liveRenderComment(comment) {
     return
   }
 
-  const author = comment.author_name || 'მომხმარებელი'
+  const author =
+  comment.user_id === liveCurrentStream?.host_id
+    ? 'ზაზა მჭედლიძე'
+    : (comment.author_name || 'მომხმარებელი')
   const message = comment.message || ''
 
   const time = comment.created_at
@@ -8902,7 +8917,7 @@ function liveRenderComment(comment) {
     authorEl.className = 'live-chat-author'
     authorEl.textContent =
       isHost
-        ? `${author} • ლაივი`
+        ? `${author} • Live Creator`
         : author
 
     const messageEl = document.createElement('div')
