@@ -8323,10 +8323,18 @@ async function cancelAllLiveStreams() {
       return
     }
 
+    if (!db) {
+      alert(
+        'Supabase კლიენტი ვერ მოიძებნა'
+      )
+      return
+    }
+
     const {
+      data,
       error
     } =
-      await window.supabase
+      await db
         .from('live_streams')
         .update({
           status: 'ended',
@@ -8337,34 +8345,26 @@ async function cancelAllLiveStreams() {
           'status',
           'live'
         )
+        .select()
 
     if (error) {
-      throw error
+      console.error(
+        'Live cancel database error:',
+        error
+      )
+
+      alert(
+        error.message ||
+        'ლაივების გაუქმება ვერ მოხერხდა'
+      )
+
+      return
     }
 
-    if (
-      liveHostSessionId &&
-      liveHostTracks.length
-    ) {
-      await liveCallFunction({
-        action: 'close_tracks',
-        sessionId:
-          liveHostSessionId,
-        tracks:
-          liveHostTracks.map(
-            track => ({
-              mid: track.mid
-            })
-          )
-      }).catch(
-        error => {
-          console.warn(
-            'Cloudflare track close error:',
-            error
-          )
-        }
-      )
-    }
+    console.log(
+      'Cancelled live streams:',
+      data
+    )
 
     closeLiveHost()
 
@@ -8376,7 +8376,9 @@ async function cancelAllLiveStreams() {
     )
 
     alert(
-      'ყველა მიმდინარე ლაივი გაუქმებულია'
+      data?.length
+        ? `${data.length} მიმდინარე ლაივი გაუქმებულია`
+        : 'მიმდინარე ლაივი არ მოიძებნა'
     )
   } catch (error) {
     console.error(
@@ -8390,14 +8392,13 @@ async function cancelAllLiveStreams() {
     )
   }
 }
-
 async function loadActiveLive() {
   try {
     const {
       data,
       error
     } =
-      await window.supabase
+      await db
         .from('live_streams')
         .select('*')
         .eq(
@@ -8432,7 +8433,6 @@ async function loadActiveLive() {
     return null
   }
 }
-
 async function showActiveLiveNotification() {
   const stream =
     await loadActiveLive()
