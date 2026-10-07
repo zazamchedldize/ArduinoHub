@@ -8894,20 +8894,30 @@ async function liveSendChatComment(event) {
   console.log('LIVE CHAT SUBMIT FIRED')
 
   if (!liveCurrentStream?.id) {
-    console.error('LIVE CHAT: stream ID არ არსებობს', liveCurrentStream)
+    console.error(
+      'LIVE CHAT: stream ID არ არსებობს',
+      liveCurrentStream
+    )
     return
   }
 
-  const form = event.currentTarget
+  const form =
+    event.currentTarget
 
-  const input = form?.querySelector('input')
+  const input =
+    form?.querySelector(
+      'input'
+    )
 
   if (!input) {
-    console.error('LIVE CHAT: input ვერ მოიძებნა')
+    console.error(
+      'LIVE CHAT: input ვერ მოიძებნა'
+    )
     return
   }
 
-  const message = input.value.trim()
+  const message =
+    input.value.trim()
 
   if (!message) {
     return
@@ -8917,19 +8927,34 @@ async function liveSendChatComment(event) {
     const {
       data: authData,
       error: authError
-    } = await window.supabase.auth.getUser()
+    } =
+      await window.supabase
+        .auth
+        .getUser()
 
-    console.log('LIVE CHAT AUTH:', {
-      user: authData?.user?.id,
-      error: authError
-    })
+    console.log(
+      'LIVE CHAT AUTH:',
+      {
+        user:
+          authData?.user?.id,
+        error:
+          authError
+      }
+    )
 
-    if (authError || !authData?.user) {
-      alert('კომენტარის დასაწერად ანგარიშში შესვლა აუცილებელია')
+    if (
+      authError ||
+      !authData?.user
+    ) {
+      alert(
+        'კომენტარის დასაწერად ანგარიშში შესვლა აუცილებელია'
+      )
+
       return
     }
 
-    const user = authData.user
+    const user =
+      authData.user
 
     const authorName =
       user.user_metadata?.full_name ||
@@ -8938,27 +8963,39 @@ async function liveSendChatComment(event) {
       'მომხმარებელი'
 
     const commentData = {
-      stream_id: liveCurrentStream.id,
-      user_id: user.id,
+      stream_id:
+        liveCurrentStream.id,
+      user_id:
+        user.id,
       message,
-      author_name: authorName
+      author_name:
+        authorName
     }
 
-    console.log('LIVE COMMENT INSERTING:', commentData)
+    console.log(
+      'LIVE COMMENT INSERTING:',
+      commentData
+    )
 
     const {
       data,
       error
-    } = await window.supabase
-      .from('live_comments')
-      .insert(commentData)
-      .select()
-      .single()
+    } =
+      await window.supabase
+        .from('live_comments')
+        .insert(
+          commentData
+        )
+        .select()
+        .single()
 
-    console.log('LIVE COMMENT INSERT RESULT:', {
-      data,
-      error
-    })
+    console.log(
+      'LIVE COMMENT INSERT RESULT:',
+      {
+        data,
+        error
+      }
+    )
 
     if (error) {
       throw error
@@ -8967,12 +9004,19 @@ async function liveSendChatComment(event) {
     input.value = ''
 
     if (data) {
-      liveRenderComment(data)
+      liveRenderComment(
+        data
+      )
     }
 
-    console.log('LIVE COMMENT SENT SUCCESSFULLY')
+    console.log(
+      'LIVE COMMENT SENT SUCCESSFULLY'
+    )
   } catch (error) {
-    console.error('Live comment error:', error)
+    console.error(
+      'Live comment error:',
+      error
+    )
 
     alert(
       error?.message ||
@@ -8981,19 +9025,93 @@ async function liveSendChatComment(event) {
   }
 }
 
+async function liveCheckStatus() {
+  const stream =
+    await loadActiveLive()
 
-**მნიშვნელოვანი:** ეს ვერსია `.insert()`-ს `.select().single()`-საც უმატებს, ამიტომ Supabase-ის მიერ შექმნილ კომენტარს პირდაპირ მივიღებთ და `liveRenderComment(data)`-ით მაშინვე გამოვაჩენთ ჩატში. Realtime-ის დუბლირებას კი შენი არსებული `liveRenderComment()` უკვე ამოწმებს `data-comment-id`-ით.
+  if (!stream) {
+    return
+  }
 
-დანარჩენი კოდი, რაც გამომიგზავნე (`liveCheckStatus`, `DOMContentLoaded`, `window...`) **არ არის საჭირო შესაცვლელად**.
+  if (
+    liveCurrentStream &&
+    liveCurrentStream.id ===
+      stream.id
+  ) {
+    return
+  }
 
-ახლა გაგზავნისას Console-ში უნდა მიიღო:
+  if (
+    liveGetElement(
+      'live-viewer-modal'
+    )?.classList.contains(
+      'active'
+    ) ||
+    liveGetElement(
+      'live-host-modal'
+    )?.classList.contains(
+      'active'
+    )
+  ) {
+    return
+  }
 
+  await showActiveLiveNotification()
+}
 
-LIVE CHAT SUBMIT FIRED
-LIVE CHAT AUTH: ...
-LIVE COMMENT INSERTING: ...
-LIVE COMMENT INSERT RESULT: ...
-LIVE COMMENT SENT SUCCESSFULLY
+document.addEventListener(
+  'DOMContentLoaded',
+  () => {
+    livePrepareViewerChat()
 
+    livePrepareHostChat()
 
-თუ `LIVE COMMENT INSERT RESULT`-ში `error` იქნება, გამომიგზავნე **ზუსტად ის error** — უკვე პირდაპირ RLS/Supabase-ის პრობლემას გავასწორებთ.
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+
+    setTimeout(
+      () => {
+        liveCheckStatus()
+      },
+      1800
+    )
+
+    setInterval(
+      () => {
+        liveCheckStatus()
+      },
+      10000
+    )
+  }
+)
+
+window.openLiveAdminModal =
+  openLiveAdminModal
+
+window.closeLiveAdminModal =
+  closeLiveAdminModal
+
+window.startLiveStream =
+  startLiveStream
+
+window.endLiveStream =
+  endLiveStream
+
+window.closeLiveViewer =
+  closeLiveViewer
+
+window.openLiveViewer =
+  openLiveViewer
+
+window.closeLiveNotification =
+  closeLiveNotification
+
+window.openLiveFromNotification =
+  openLiveFromNotification
+
+window.toggleLiveMicrophone =
+  toggleLiveMicrophone
+
+window.toggleLiveCamera =
+  toggleLiveCamera
