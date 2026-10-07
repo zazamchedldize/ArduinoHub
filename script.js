@@ -11679,3 +11679,7 @@ window.toggleGuestCamera =
 
 window.leaveLiveAsGuest =
   leaveLiveAsGuest
+
+document.addEventListener("DOMContentLoaded", () => {
+  initAIChat()
+})
