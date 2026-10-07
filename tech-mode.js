@@ -166,55 +166,61 @@ window.addEventListener("load", () => {
   }, 300)
 })
 
+window.addEventListener("click", async event => {
+  const button = event.target.closest("#ai-chat-send")
 
-const techChatForm = document.getElementById("ai-chat-form")
-const techChatInput = document.getElementById("ai-chat-input")
+  if (!button) {
+    return
+  }
 
-if (techChatForm && techChatInput) {
-  techChatForm.addEventListener("submit", async event => {
-    const text = techChatInput.value.trim().toLowerCase()
+  const input = document.getElementById("ai-chat-input")
 
-    if (text !== "/tech" && text !== "/tech off") {
-      return
-    }
+  if (!input) {
+    return
+  }
 
-    event.preventDefault()
-    event.stopImmediatePropagation()
+  const text = input.value.trim().toLowerCase()
 
-    techChatInput.value = ""
+  if (text !== "/tech" && text !== "/tech off") {
+    return
+  }
 
-    const isAdmin = await technicalIsAdmin()
+  event.preventDefault()
+  event.stopPropagation()
 
-    if (!isAdmin) {
-      alert("ეს ბრძანება მხოლოდ ადმინისტრატორისთვისაა!")
-      return
-    }
+  input.value = ""
 
-    const enabled = text === "/tech"
+  const isAdmin = await technicalIsAdmin()
 
-    const success = await setTechnicalMode(enabled)
+  if (!isAdmin) {
+    alert("ეს ბრძანება მხოლოდ ადმინისტრატორისთვისაა!")
+    return
+  }
 
-    if (!success) {
-      alert(
-        enabled
-          ? "ტექნიკური რეჟიმის ჩართვა ვერ მოხერხდა!"
-          : "ტექნიკური რეჟიმის გამორთვა ვერ მოხერხდა!"
-      )
-      return
-    }
+  const enabled = text === "/tech"
 
-    technicalModeEnabled = enabled
+  const success = await setTechnicalMode(enabled)
 
+  if (!success) {
     alert(
       enabled
-        ? "ტექნიკური რეჟიმი ჩართულია!"
-        : "ტექნიკური რეჟიმი გამორთულია!"
+        ? "ტექნიკური რეჟიმის ჩართვა ვერ მოხერხდა!"
+        : "ტექნიკური რეჟიმის გამორთვა ვერ მოხერხდა!"
     )
+    return
+  }
 
-    if (enabled) {
-      showTechnicalAdminNotice()
-    } else {
-      hideTechnicalAdminNotice()
-    }
-  }, true)
-}
+  technicalModeEnabled = enabled
+
+  alert(
+    enabled
+      ? "ტექნიკური რეჟიმი ჩართულია!"
+      : "ტექნიკური რეჟიმი გამორთულია!"
+  )
+
+  if (enabled) {
+    showTechnicalAdminNotice()
+  } else {
+    hideTechnicalAdminNotice()
+  }
+})
