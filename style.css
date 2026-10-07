@@ -9280,3 +9280,115 @@ svg{
     height: 55px;
   }
 }
+
+#technical-mode-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #050908;
+  color: #fff;
+}
+
+#technical-mode-screen[hidden],
+#technical-admin-notice[hidden] {
+  display: none !important;
+}
+
+.technical-mode-card {
+  width: min(520px, 100%);
+  padding: 42px 32px;
+  text-align: center;
+  border: 1px solid rgba(34, 211, 149, .25);
+  border-radius: 28px;
+  background: linear-gradient(145deg, #0b1713, #07100e);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .55);
+}
+
+.technical-mode-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  background: rgba(34, 211, 149, .1);
+  border: 1px solid rgba(34, 211, 149, .25);
+  font-size: 36px;
+}
+
+.technical-mode-card h1 {
+  margin: 0 0 14px;
+  font-size: clamp(26px, 5vw, 38px);
+}
+
+.technical-mode-card p {
+  margin: 0 auto 28px;
+  max-width: 430px;
+  line-height: 1.7;
+  color: #a9b8b3;
+}
+
+.technical-admin-button,
+#technical-admin-continue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 14px;
+  background: #22d395;
+  color: #04100b;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.technical-admin-button:hover,
+#technical-admin-continue:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+#technical-admin-notice {
+  position: fixed;
+  inset: 0;
+  z-index: 9999998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, .72);
+  backdrop-filter: blur(10px);
+}
+
+.technical-admin-notice-card {
+  width: min(500px, 100%);
+  padding: 34px;
+  text-align: center;
+  border-radius: 24px;
+  border: 1px solid rgba(34, 211, 149, .3);
+  background: #0b1713;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .6);
+}
+
+.technical-admin-notice-icon {
+  font-size: 42px;
+  margin-bottom: 18px;
+}
+
+.technical-admin-notice-card h2 {
+  margin: 0 0 12px;
+}
+
+.technical-admin-notice-card p {
+  margin: 0 0 24px;
+  color: #a9b8b3;
+  line-height: 1.7;
+}
