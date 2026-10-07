@@ -165,3 +165,56 @@ window.addEventListener("load", () => {
     initializeTechnicalMode()
   }, 300)
 })
+
+
+const techChatForm = document.getElementById("ai-chat-form")
+const techChatInput = document.getElementById("ai-chat-input")
+
+if (techChatForm && techChatInput) {
+  techChatForm.addEventListener("submit", async event => {
+    const text = techChatInput.value.trim().toLowerCase()
+
+    if (text !== "/tech" && text !== "/tech off") {
+      return
+    }
+
+    event.preventDefault()
+    event.stopImmediatePropagation()
+
+    techChatInput.value = ""
+
+    const isAdmin = await technicalIsAdmin()
+
+    if (!isAdmin) {
+      alert("ეს ბრძანება მხოლოდ ადმინისტრატორისთვისაა!")
+      return
+    }
+
+    const enabled = text === "/tech"
+
+    const success = await setTechnicalMode(enabled)
+
+    if (!success) {
+      alert(
+        enabled
+          ? "ტექნიკური რეჟიმის ჩართვა ვერ მოხერხდა!"
+          : "ტექნიკური რეჟიმის გამორთვა ვერ მოხერხდა!"
+      )
+      return
+    }
+
+    technicalModeEnabled = enabled
+
+    alert(
+      enabled
+        ? "ტექნიკური რეჟიმი ჩართულია!"
+        : "ტექნიკური რეჟიმი გამორთულია!"
+    )
+
+    if (enabled) {
+      showTechnicalAdminNotice()
+    } else {
+      hideTechnicalAdminNotice()
+    }
+  }, true)
+}
