@@ -1938,7 +1938,9 @@ function closeAIChat() {
   )
 }
 
+
 async function initAIChat() {
+  console.log("AI CHAT INIT START")
   const chat =
     $('#ai-chat')
 
@@ -1950,6 +1952,7 @@ async function initAIChat() {
 
   const toggle =
     $('#ai-chat-toggle')
+  console.log("AI CHAT TOGGLE:", toggle)
 
   const close =
     $('#ai-chat-close')
