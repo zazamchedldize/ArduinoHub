@@ -6217,9 +6217,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiChatWindow = document.getElementById('ai-chat-window')
 
   if (aiChatForm && aiChatInput) {
+    
     aiChatForm.addEventListener('submit', async (e) => {
       const text = aiChatInput.value.trim()
-
+if (
+  text === '/live' ||
+  text === '/livecancel'
+) {
+  if (checkAndOpenLive(e)) {
+    return
+  }
+}
       if (text !== '/global') {
         return
       }
