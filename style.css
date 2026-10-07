@@ -8400,3 +8400,369 @@ svg{
     aspect-ratio:16 / 10;
   }
 }
+
+.hbd-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.hbd-theme-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.hbd-theme-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hbd-theme-card {
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+  color: #fff;
+  text-align: center;
+  transition: .25s ease;
+}
+
+.hbd-theme-card strong {
+  font-size: 14px;
+}
+
+.hbd-theme-card small {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.hbd-theme-preview {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.hbd-theme-option input:checked + .hbd-theme-card {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+.hbd-theme-option input:checked + .hbd-theme-normal {
+  border-color: #22d395;
+  background: rgba(34,211,149,.1);
+}
+
+.hbd-theme-option input:checked + .hbd-theme-tvd {
+  border-color: #dc2626;
+  background: rgba(127,29,29,.22);
+}
+
+.hbd-theme-option input:checked + .hbd-theme-mcu {
+  border-color: #f59e0b;
+  background: rgba(180,83,9,.18);
+}
+
+#birthday-theme-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.birthday-modal.theme-tvd .birthday-backdrop {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(127,29,29,.28), transparent 35%),
+    rgba(3,0,3,.94);
+}
+
+.birthday-modal.theme-tvd .birthday-dialog {
+  border-color: rgba(220,38,38,.6);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(220,38,38,.2), transparent 45%),
+    linear-gradient(145deg, #180609, #050203 75%);
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.95),
+    0 0 80px rgba(220,38,38,.18);
+}
+
+.birthday-modal.theme-tvd .birthday-glow {
+  background: rgba(220,38,38,.2);
+}
+
+.birthday-modal.theme-tvd .birthday-icon {
+  background: rgba(127,29,29,.25);
+  border-color: rgba(248,113,113,.45);
+  box-shadow: 0 0 35px rgba(220,38,38,.18);
+}
+
+.birthday-modal.theme-tvd .birthday-eyebrow {
+  color: #f87171;
+}
+
+.birthday-modal.theme-tvd #birthday-title {
+  color: #fff1f2;
+  text-shadow: 0 0 25px rgba(220,38,38,.3);
+}
+
+.birthday-modal.theme-tvd .birthday-name {
+  color: #ef4444;
+  text-shadow: 0 0 18px rgba(220,38,38,.35);
+}
+
+.birthday-modal.theme-tvd .birthday-finish {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #991b1b, #dc2626);
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(1),
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(3),
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(5) {
+  display: none;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2)::before {
+  content: "🩸";
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2),
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(4) {
+  font-size: 30px;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2) {
+  font-size: 0;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2)::before {
+  font-size: 30px;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(4) {
+  font-size: 0;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(4)::before {
+  content: "🌙";
+  font-size: 30px;
+}
+
+.tvd-blood-drop {
+  position: absolute;
+  top: -40px;
+  width: 9px;
+  height: 28px;
+  border-radius: 50% 50% 55% 55%;
+  background: linear-gradient(#ef4444, #7f1d1d);
+  box-shadow: 0 0 12px rgba(220,38,38,.4);
+  animation: tvd-blood-fall linear forwards;
+}
+
+@keyframes tvd-blood-fall {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+.tvd-moon {
+  position: absolute;
+  top: 8%;
+  right: 8%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #fecaca 55%, #991b1b);
+  box-shadow: 0 0 45px rgba(248,113,113,.35);
+  opacity: .7;
+}
+
+.birthday-modal.theme-mcu .birthday-backdrop {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(245,158,11,.12), transparent 35%),
+    rgba(2,4,8,.94);
+}
+
+.birthday-modal.theme-mcu .birthday-dialog {
+  border-color: rgba(245,158,11,.55);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(239,68,68,.18), transparent 40%),
+    linear-gradient(145deg, #130507, #06080d 72%);
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.95),
+    0 0 80px rgba(245,158,11,.12);
+}
+
+.birthday-modal.theme-mcu .birthday-glow {
+  background: rgba(245,158,11,.14);
+}
+
+.birthday-modal.theme-mcu .birthday-icon {
+  background: radial-gradient(circle, rgba(245,158,11,.25), rgba(239,68,68,.08));
+  border-color: rgba(245,158,11,.55);
+  box-shadow:
+    0 0 30px rgba(245,158,11,.25),
+    inset 0 0 25px rgba(239,68,68,.12);
+}
+
+.birthday-modal.theme-mcu .birthday-eyebrow {
+  color: #fbbf24;
+}
+
+.birthday-modal.theme-mcu #birthday-title {
+  color: #fff;
+  text-shadow:
+    0 0 18px rgba(245,158,11,.25),
+    0 0 35px rgba(239,68,68,.15);
+}
+
+.birthday-modal.theme-mcu .birthday-name {
+  color: #fbbf24;
+}
+
+.birthday-modal.theme-mcu .birthday-finish {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #b91c1c, #ea580c);
+}
+
+.birthday-modal.theme-mcu .birthday-decoration span {
+  display: none;
+}
+
+.birthday-modal.theme-mcu .birthday-decoration::before {
+  content: "◈";
+  display: block;
+  width: 55px;
+  height: 55px;
+  line-height: 55px;
+  border: 2px solid #f59e0b;
+  border-radius: 50%;
+  color: #fde68a;
+  font-size: 24px;
+  background: radial-gradient(circle, #fef3c7 0, #f59e0b 12%, #7f1d1d 35%, #111827 70%);
+  box-shadow:
+    0 0 15px rgba(245,158,11,.7),
+    0 0 45px rgba(239,68,68,.25);
+  animation: mcu-reactor 1.5s ease-in-out infinite;
+}
+
+@keyframes mcu-reactor {
+  0%, 100% {
+    transform: scale(.95);
+    box-shadow:
+      0 0 15px rgba(245,158,11,.5),
+      0 0 35px rgba(239,68,68,.2);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 25px rgba(245,158,11,.9),
+      0 0 60px rgba(239,68,68,.35);
+  }
+}
+
+.mcu-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 10px #f59e0b;
+  animation: mcu-particle-float linear infinite;
+}
+
+@keyframes mcu-particle-float {
+  from {
+    transform: translate3d(0,110vh,0);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translate3d(var(--x),-20vh,0);
+    opacity: 0;
+  }
+}
+
+.mcu-hud {
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(245,158,11,.12);
+  border-radius: 22px;
+  background:
+    linear-gradient(90deg, transparent 49.5%, rgba(245,158,11,.08) 50%, transparent 50.5%),
+    linear-gradient(0deg, transparent 49.5%, rgba(245,158,11,.08) 50%, transparent 50.5%);
+  background-size: 80px 80px;
+  opacity: .4;
+}
+
+.birthday-theme-badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 6;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.25);
+  color: #94a3b8;
+}
+
+.theme-tvd .birthday-theme-badge {
+  border-color: rgba(220,38,38,.4);
+  color: #f87171;
+}
+
+.theme-mcu .birthday-theme-badge {
+  border-color: rgba(245,158,11,.4);
+  color: #fbbf24;
+}
+
+@media (max-width: 600px) {
+  .hbd-theme-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hbd-theme-card {
+    min-height: 85px;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .hbd-theme-preview {
+    font-size: 25px;
+    margin: 0 8px 0 0;
+  }
+
+  .hbd-theme-card strong {
+    margin-right: 4px;
+  }
+}
