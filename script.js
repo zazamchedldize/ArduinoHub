@@ -6858,7 +6858,8 @@ document.querySelector("[data-hbd-admin-close]")?.addEventListener(
 
 async function isHbdAdmin() {
   try {
-    const { data: userData, error: userError } = await window.supabase.auth.getUser()
+    const { data: userData, error: userError } =
+      await window.supabase.auth.getUser()
 
     if (userError || !userData?.user) {
       return false
@@ -6902,7 +6903,8 @@ async function saveHbd() {
   const admin = await isHbdAdmin()
 
   if (!admin) {
-    hbdAdminStatus.textContent = "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
+    hbdAdminStatus.textContent =
+      "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
     hbdAdminStatus.style.color = "#f87171"
     return
   }
@@ -6924,12 +6926,16 @@ async function saveHbd() {
       throw error
     }
 
-    hbdAdminStatus.textContent = "დაბადების დღე წარმატებით დაემატა 🎉"
+    hbdAdminStatus.textContent =
+      "დაბადების დღე წარმატებით დაემატა 🎉"
+
     hbdAdminStatus.style.color = "#4ade80"
 
     hbdAdminForm.reset()
 
-    const normalTheme = document.querySelector('input[name="hbd-theme"][value="normal"]')
+    const normalTheme = document.querySelector(
+      'input[name="hbd-theme"][value="normal"]'
+    )
 
     if (normalTheme) {
       normalTheme.checked = true
@@ -6940,7 +6946,10 @@ async function saveHbd() {
     }, 1200)
   } catch (error) {
     console.error(error)
-    hbdAdminStatus.textContent = "შენახვისას შეცდომა მოხდა"
+
+    hbdAdminStatus.textContent =
+      "შენახვისას შეცდომა მოხდა"
+
     hbdAdminStatus.style.color = "#f87171"
   }
 }
@@ -6978,10 +6987,19 @@ function createBirthdayConfetti() {
     const piece = document.createElement("span")
 
     piece.className = "birthday-confetti-piece"
+
     piece.style.left = `${Math.random() * 100}%`
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)]
-    piece.style.animationDuration = `${3 + Math.random() * 4}s`
-    piece.style.animationDelay = `${Math.random() * 2}s`
+    piece.style.background =
+      colors[Math.floor(Math.random() * colors.length)]
+
+    piece.style.animationDuration =
+      `${3 + Math.random() * 4}s`
+
+    piece.style.animationDelay =
+      `${Math.random() * 4}s`
+
+    piece.style.animationIterationCount = "infinite"
+    piece.style.animationFillMode = "both"
 
     piece.style.setProperty(
       "--drift",
@@ -7012,12 +7030,26 @@ function createBirthdayRibbons() {
     const ribbon = document.createElement("span")
 
     ribbon.className = "birthday-ribbon"
+
     ribbon.style.left = `${Math.random() * 100}%`
-    ribbon.style.background = colors[Math.floor(Math.random() * colors.length)]
-    ribbon.style.animationDuration = `${4 + Math.random() * 5}s`
-    ribbon.style.animationDelay = `${Math.random() * 3}s`
-    ribbon.style.height = `${50 + Math.random() * 80}px`
-    ribbon.style.width = `${5 + Math.random() * 6}px`
+
+    ribbon.style.background =
+      colors[Math.floor(Math.random() * colors.length)]
+
+    ribbon.style.animationDuration =
+      `${4 + Math.random() * 5}s`
+
+    ribbon.style.animationDelay =
+      `${Math.random() * 5}s`
+
+    ribbon.style.animationIterationCount = "infinite"
+    ribbon.style.animationFillMode = "both"
+
+    ribbon.style.height =
+      `${50 + Math.random() * 80}px`
+
+    ribbon.style.width =
+      `${5 + Math.random() * 6}px`
 
     container.appendChild(ribbon)
   }
@@ -7031,19 +7063,75 @@ function createTvdEffects() {
   container.innerHTML = ""
 
   const moon = document.createElement("div")
+
   moon.className = "tvd-moon"
+
   container.appendChild(moon)
 
   for (let i = 0; i < 35; i++) {
     const drop = document.createElement("span")
 
     drop.className = "tvd-blood-drop"
+
     drop.style.left = `${Math.random() * 100}%`
-    drop.style.animationDuration = `${3 + Math.random() * 5}s`
-    drop.style.animationDelay = `${Math.random() * 4}s`
-    drop.style.transform = `scale(${.5 + Math.random() * .8})`
+
+    drop.style.animationDuration =
+      `${3 + Math.random() * 5}s`
+
+    drop.style.animationDelay =
+      `${Math.random() * 5}s`
+
+    drop.style.animationIterationCount = "infinite"
+    drop.style.animationFillMode = "both"
+
+    drop.style.transform =
+      `scale(${0.5 + Math.random() * 0.8})`
 
     container.appendChild(drop)
+  }
+
+  for (let i = 0; i < 12; i++) {
+    const stream = document.createElement("span")
+
+    stream.className = "tvd-blood-stream"
+
+    stream.style.left = `${Math.random() * 100}%`
+
+    stream.style.animationDuration =
+      `${4 + Math.random() * 5}s`
+
+    stream.style.animationDelay =
+      `${Math.random() * 5}s`
+
+    stream.style.animationIterationCount = "infinite"
+    stream.style.animationFillMode = "both"
+
+    stream.style.setProperty(
+      "--stream-height",
+      `${80 + Math.random() * 220}px`
+    )
+
+    container.appendChild(stream)
+  }
+
+  for (let i = 0; i < 8; i++) {
+    const mist = document.createElement("span")
+
+    mist.className = "tvd-mist"
+
+    mist.style.left = `${Math.random() * 100}%`
+    mist.style.top = `${Math.random() * 100}%`
+
+    mist.style.animationDuration =
+      `${6 + Math.random() * 7}s`
+
+    mist.style.animationDelay =
+      `${Math.random() * 5}s`
+
+    mist.style.animationIterationCount = "infinite"
+    mist.style.animationFillMode = "both"
+
+    container.appendChild(mist)
   }
 }
 
@@ -7055,16 +7143,34 @@ function createMcuEffects() {
   container.innerHTML = ""
 
   const hud = document.createElement("div")
+
   hud.className = "mcu-hud"
+
   container.appendChild(hud)
+
+  const reactor = document.createElement("div")
+
+  reactor.className = "mcu-reactor"
+
+  container.appendChild(reactor)
 
   for (let i = 0; i < 45; i++) {
     const particle = document.createElement("span")
 
     particle.className = "mcu-particle"
+
     particle.style.left = `${Math.random() * 100}%`
-    particle.style.animationDuration = `${5 + Math.random() * 8}s`
-    particle.style.animationDelay = `${Math.random() * 7}s`
+
+    particle.style.top = `${Math.random() * 100}%`
+
+    particle.style.animationDuration =
+      `${5 + Math.random() * 8}s`
+
+    particle.style.animationDelay =
+      `${Math.random() * 7}s`
+
+    particle.style.animationIterationCount = "infinite"
+    particle.style.animationFillMode = "both"
 
     particle.style.setProperty(
       "--x",
@@ -7072,6 +7178,43 @@ function createMcuEffects() {
     )
 
     container.appendChild(particle)
+  }
+
+  for (let i = 0; i < 24; i++) {
+    const spark = document.createElement("span")
+
+    spark.className = "mcu-spark"
+
+    spark.style.left = `${Math.random() * 100}%`
+    spark.style.top = `${Math.random() * 100}%`
+
+    spark.style.animationDuration =
+      `${1 + Math.random() * 2.5}s`
+
+    spark.style.animationDelay =
+      `${Math.random() * 3}s`
+
+    spark.style.animationIterationCount = "infinite"
+
+    container.appendChild(spark)
+  }
+
+  for (let i = 0; i < 10; i++) {
+    const energy = document.createElement("span")
+
+    energy.className = "mcu-energy-line"
+
+    energy.style.left = `${Math.random() * 100}%`
+
+    energy.style.animationDuration =
+      `${2 + Math.random() * 4}s`
+
+    energy.style.animationDelay =
+      `${Math.random() * 4}s`
+
+    energy.style.animationIterationCount = "infinite"
+
+    container.appendChild(energy)
   }
 }
 
@@ -7083,7 +7226,11 @@ function resetBirthdayTheme() {
 
   if (!modal) return
 
-  modal.classList.remove("theme-normal", "theme-tvd", "theme-mcu")
+  modal.classList.remove(
+    "theme-normal",
+    "theme-tvd",
+    "theme-mcu"
+  )
 
   if (effects) {
     effects.innerHTML = ""
@@ -7107,9 +7254,10 @@ function applyBirthdayTheme(theme) {
 
   resetBirthdayTheme()
 
-  const selectedTheme = ["normal", "tvd", "mcu"].includes(theme)
-    ? theme
-    : "normal"
+  const selectedTheme =
+    ["normal", "tvd", "mcu"].includes(theme)
+      ? theme
+      : "normal"
 
   modal.classList.add(`theme-${selectedTheme}`)
 
@@ -7127,7 +7275,7 @@ function applyBirthdayTheme(theme) {
 
   if (selectedTheme === "mcu") {
     if (badge) {
-      badge.textContent = "MCU"
+      badge.textContent = "IRON MAN"
     }
 
     if (icon) {
@@ -7170,6 +7318,7 @@ function openBirthdayModal(name, message, theme = "normal") {
 
   modal.hidden = false
   modal.setAttribute("aria-hidden", "false")
+  document.body.classList.add("birthday-modal-open")
 
   if (window.lucide) {
     lucide.createIcons()
@@ -7183,6 +7332,8 @@ function closeBirthdayModal() {
 
   modal.hidden = true
   modal.setAttribute("aria-hidden", "true")
+
+  document.body.classList.remove("birthday-modal-open")
 
   const confetti = document.getElementById("birthday-confetti")
   const ribbons = document.getElementById("birthday-ribbons")
@@ -7199,6 +7350,8 @@ function closeBirthdayModal() {
   if (effects) {
     effects.innerHTML = ""
   }
+
+  resetBirthdayTheme()
 }
 
 document.getElementById("birthday-close")?.addEventListener(
@@ -7368,7 +7521,8 @@ document.querySelector("[data-hbd-cancel-close]")?.addEventListener(
 async function loadHbdList() {
   if (!hbdCancelList) return
 
-  hbdCancelList.innerHTML = `<div class="hbd-cancel-loading">იტვირთება...</div>`
+  hbdCancelList.innerHTML =
+    `<div class="hbd-cancel-loading">იტვირთება...</div>`
 
   try {
     const { data, error } = await window.supabase
@@ -7381,7 +7535,9 @@ async function loadHbdList() {
     }
 
     if (!data || data.length === 0) {
-      hbdCancelList.innerHTML = `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
+      hbdCancelList.innerHTML =
+        `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
+
       return
     }
 
@@ -7396,16 +7552,19 @@ async function loadHbdList() {
         `${birthday.birthday_date}T00:00:00`
       )
 
-      const formattedDate = date.toLocaleDateString("ka-GE", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric"
-      })
+      const formattedDate = date.toLocaleDateString(
+        "ka-GE",
+        {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        }
+      )
 
       const themeNames = {
         normal: "Normal",
         tvd: "TVD",
-        mcu: "MCU"
+        mcu: "Iron Man"
       }
 
       item.innerHTML = `
@@ -7413,7 +7572,6 @@ async function loadHbdList() {
           <strong>${escapeHbdHtml(birthday.name)}</strong>
           <span>${formattedDate} • ${themeNames[birthday.theme] || "Normal"}</span>
         </div>
-
         <button
           type="button"
           class="hbd-delete-button"
@@ -7469,13 +7627,18 @@ async function deleteHbd(id) {
     await loadHbdList()
   } catch (error) {
     console.error(error)
-    alert("დაბადების დღის გაუქმება ვერ მოხერხდა")
+
+    alert(
+      "დაბადების დღის გაუქმება ვერ მოხერხდა"
+    )
   }
 }
 
 function escapeHbdHtml(value) {
   const div = document.createElement("div")
+
   div.textContent = value
+
   return div.innerHTML
 }
 
