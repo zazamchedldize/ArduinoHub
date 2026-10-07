@@ -8835,57 +8835,160 @@ async function liveLoadExistingComments(
   }
 }
 
+
 function liveRenderComment(comment) {
+  console.log(
+  'LIVE CHAT LISTS:',
+  document.getElementById('live-stream-chat-list'),
+  document.getElementById('live-host-chat-list')
+)
+  if (!comment) {
+    return
+  }
+
   const lists = [
-    document.getElementById('live-stream-chat-list'),
-    document.getElementById('live-host-chat-list')
+    document.getElementById(
+      'live-stream-chat-list'
+    ),
+    document.getElementById(
+      'live-host-chat-list'
+    )
   ].filter(Boolean)
 
-  if (!lists.length) return
+  if (!lists.length) {
+    console.error(
+      'LIVE CHAT: კომენტარების სია ვერ მოიძებნა'
+    )
 
-  const author = comment.author_name || 'მომხმარებელი'
-  const message = comment.message || ''
-  const time = comment.created_at
-    ? new Date(comment.created_at).toLocaleTimeString('ka-GE', {
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    : ''
+    return
+  }
 
-  const currentUserId = window.currentUser?.id || window.user?.id || null
-  const isHost = currentUserId && comment.user_id === currentUserId
+  const author =
+    comment.author_name ||
+    'მომხმარებელი'
 
-  lists.forEach(list => {
-    if (comment.id && list.querySelector(`[data-comment-id="${comment.id}"]`)) {
-      return
+  const message =
+    comment.message ||
+    ''
+
+  const time =
+    comment.created_at
+      ? new Date(
+          comment.created_at
+        ).toLocaleTimeString(
+          'ka-GE',
+          {
+            hour: '2-digit',
+            minute: '2-digit'
+          }
+        )
+      : ''
+
+  const currentUserId =
+    window.currentUser?.id ||
+    window.user?.id ||
+    null
+
+  const isHost =
+    liveCurrentStream?.host_id ===
+    comment.user_id
+
+  const isOwn =
+    currentUserId &&
+    comment.user_id ===
+      currentUserId
+
+  lists.forEach(
+    list => {
+      if (
+        comment.id &&
+        list.querySelector(
+          `[data-comment-id="${comment.id}"]`
+        )
+      ) {
+        return
+      }
+
+      const item =
+        document.createElement(
+          'div'
+        )
+
+      item.className =
+        'live-chat-message'
+
+      if (isHost) {
+        item.classList.add(
+          'live-chat-host'
+        )
+      }
+
+      if (isOwn) {
+        item.classList.add(
+          'live-chat-own'
+        )
+      }
+
+      if (comment.id) {
+        item.dataset.commentId =
+          comment.id
+      }
+
+      const authorEl =
+        document.createElement(
+          'div'
+        )
+
+      authorEl.className =
+        'live-chat-author'
+
+      authorEl.textContent =
+        isHost
+          ? `${author} • ლაივი`
+          : author
+
+      const messageEl =
+        document.createElement(
+          'div'
+        )
+
+      messageEl.className =
+        'live-chat-text'
+
+      messageEl.textContent =
+        message
+
+      const timeEl =
+        document.createElement(
+          'div'
+        )
+
+      timeEl.className =
+        'live-chat-time'
+
+      timeEl.textContent =
+        time
+
+      item.appendChild(
+        authorEl
+      )
+
+      item.appendChild(
+        messageEl
+      )
+
+      item.appendChild(
+        timeEl
+      )
+
+      list.appendChild(
+        item
+      )
+
+      list.scrollTop =
+        list.scrollHeight
     }
-
-    const item = document.createElement('div')
-    item.className = `live-chat-message${isHost ? ' live-chat-host' : ''}`
-
-    if (comment.id) {
-      item.dataset.commentId = comment.id
-    }
-
-    const authorEl = document.createElement('div')
-    authorEl.className = 'live-chat-author'
-    authorEl.textContent = author
-
-    const messageEl = document.createElement('div')
-    messageEl.className = 'live-chat-text'
-    messageEl.textContent = message
-
-    const timeEl = document.createElement('div')
-    timeEl.className = 'live-chat-time'
-    timeEl.textContent = time
-
-    item.appendChild(authorEl)
-    item.appendChild(messageEl)
-    item.appendChild(timeEl)
-
-    list.appendChild(item)
-    list.scrollTop = list.scrollHeight
-  })
+  )
 }
 
 async function liveSendChatComment(event) {
