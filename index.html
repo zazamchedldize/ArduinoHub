@@ -2603,17 +2603,43 @@ body.splash-active {
         ></textarea>
       </div>
 
-      <div class="hbd-admin-field">
-        <label for="hbd-date">
-          გამოჩენის თარიღი
-        </label>
+<div class="hbd-admin-field">
+  <label for="hbd-date">გამოჩენის თარიღი</label>
+  <input id="hbd-date" type="date" required>
+</div>
 
-        <input
-          id="hbd-date"
-          type="date"
-          required
-        >
-      </div>
+<div class="hbd-admin-field">
+  <label>დაბადების დღის დიზაინი</label>
+
+  <div class="hbd-theme-grid">
+    <label class="hbd-theme-option">
+      <input type="radio" name="hbd-theme" value="normal" checked>
+      <span class="hbd-theme-card hbd-theme-normal">
+        <span class="hbd-theme-preview">🎂</span>
+        <strong>Normal</strong>
+        <small>კლასიკური დიზაინი</small>
+      </span>
+    </label>
+
+    <label class="hbd-theme-option">
+      <input type="radio" name="hbd-theme" value="tvd">
+      <span class="hbd-theme-card hbd-theme-tvd">
+        <span class="hbd-theme-preview">🩸</span>
+        <strong>TVD</strong>
+        <small>ვამპირული ატმოსფერო</small>
+      </span>
+    </label>
+
+    <label class="hbd-theme-option">
+      <input type="radio" name="hbd-theme" value="mcu">
+      <span class="hbd-theme-card hbd-theme-mcu">
+        <span class="hbd-theme-preview">⚡</span>
+        <strong>MCU</strong>
+        <small>Iron Man-ის სტილი</small>
+      </span>
+    </label>
+  </div>
+</div>
 
       <div
         id="hbd-admin-status"
@@ -2634,65 +2660,32 @@ body.splash-active {
   </section>
 </div>
 
-<div
-  id="birthday-modal"
-  class="birthday-modal"
-  hidden
-  aria-hidden="true"
->
-  <div
-    id="birthday-confetti"
-    class="birthday-confetti"
-  ></div>
-
-  <div
-    id="birthday-ribbons"
-    class="birthday-ribbons"
-  ></div>
-
+<div id="birthday-modal" class="birthday-modal" hidden aria-hidden="true">
+  <div id="birthday-confetti" class="birthday-confetti"></div>
+  <div id="birthday-ribbons" class="birthday-ribbons"></div>
+  <div id="birthday-theme-effects"></div>
   <div class="birthday-backdrop"></div>
 
-  <section
-    class="birthday-dialog"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="birthday-title"
-  >
+  <section class="birthday-dialog" role="dialog" aria-modal="true" aria-labelledby="birthday-title">
+    <div class="birthday-theme-badge" id="birthday-theme-badge"></div>
 
-    <button
-      id="birthday-close"
-      class="birthday-close"
-      type="button"
-      aria-label="დახურვა"
-    >
+    <button id="birthday-close" class="birthday-close" type="button" aria-label="დახურვა">
       <i data-lucide="x"></i>
     </button>
 
     <div class="birthday-glow"></div>
 
-    <div class="birthday-icon">
-      🎂
-    </div>
+    <div class="birthday-icon" id="birthday-icon">🎂</div>
 
-    <p class="birthday-eyebrow">
-      🎉 ARDUINOHUB 🎉
-    </p>
+    <p class="birthday-eyebrow">🎉 ARDUINOHUB 🎉</p>
 
-    <h2 id="birthday-title">
-      გილოცავთ დაბადების დღეს!
-    </h2>
+    <h2 id="birthday-title">გილოცავთ დაბადების დღეს!</h2>
 
-    <div
-      id="birthday-name"
-      class="birthday-name"
-    ></div>
+    <div id="birthday-name" class="birthday-name"></div>
 
-    <div
-      id="birthday-message"
-      class="birthday-message"
-    ></div>
+    <div id="birthday-message" class="birthday-message"></div>
 
-    <div class="birthday-decoration">
+    <div class="birthday-decoration" id="birthday-decoration">
       <span>🎈</span>
       <span>🎉</span>
       <span>🎁</span>
@@ -2700,14 +2693,9 @@ body.splash-active {
       <span>🎈</span>
     </div>
 
-    <button
-      id="birthday-finish"
-      type="button"
-      class="birthday-finish"
-    >
+    <button id="birthday-finish" type="button" class="birthday-finish">
       გმადლობ! 🎉
     </button>
-
   </section>
 </div>
 
