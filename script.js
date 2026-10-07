@@ -6064,9 +6064,23 @@ function checkAndOpenAttendance(e) {
 }
 
 function checkAndOpenLive(e) {
-  const chatInput = document.querySelector('#ai-chat-input')
+  const chatInput =
+    document.querySelector(
+      '#ai-chat-input'
+    )
 
-  if (chatInput && chatInput.value.trim() === '/live') {
+  if (
+    !chatInput
+  ) {
+    return false
+  }
+
+  const command =
+    chatInput.value.trim()
+
+  if (
+    command === '/live'
+  ) {
     if (e) {
       e.preventDefault()
       e.stopPropagation()
@@ -6075,10 +6089,40 @@ function checkAndOpenLive(e) {
 
     chatInput.value = ''
 
-    if (typeof openLiveAdminModal === 'function') {
+    if (
+      typeof openLiveAdminModal ===
+      'function'
+    ) {
       openLiveAdminModal()
     } else {
-      console.error('openLiveAdminModal ფუნქცია ვერ მოიძებნა')
+      console.error(
+        'openLiveAdminModal ფუნქცია ვერ მოიძებნა'
+      )
+    }
+
+    return true
+  }
+
+  if (
+    command === '/livecancel'
+  ) {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      e.stopImmediatePropagation()
+    }
+
+    chatInput.value = ''
+
+    if (
+      typeof cancelAllLiveStreams ===
+      'function'
+    ) {
+      cancelAllLiveStreams()
+    } else {
+      console.error(
+        'cancelAllLiveStreams ფუნქცია ვერ მოიძებნა'
+      )
     }
 
     return true
@@ -6086,69 +6130,6 @@ function checkAndOpenLive(e) {
 
   return false
 }
-
-document.addEventListener('keydown', (e) => {
-  const chatInput = document.querySelector('#ai-chat-input')
-
-  if (
-    e.target === chatInput &&
-    (e.key === 'Enter' || e.keyCode === 13) &&
-    !e.shiftKey
-  ) {
-    if (checkAndOpenLive(e)) {
-      return
-    }
-
-    checkAndOpenAttendance(e)
-  }
-
-  if (e.key === 'Escape') {
-    closePublicAttendanceModal()
-
-    if (typeof closeLiveAdminModal === 'function') {
-      closeLiveAdminModal()
-    }
-  }
-}, true)
-
-document.addEventListener('submit', (e) => {
-  if (checkAndOpenLive(e)) {
-    return
-  }
-
-  checkAndOpenAttendance(e)
-}, true)
-
-document.addEventListener('click', (e) => {
-  const chatInput = document.querySelector('#ai-chat-input')
-
-  if (!chatInput) {
-    return
-  }
-
-  const value = chatInput.value.trim()
-
-  if (value !== '/დასწრება' && value !== '/live') {
-    return
-  }
-
-  const isSendButton = e.target.closest(
-    'button, [role="button"], svg, path'
-  )
-
-  if (!isSendButton) {
-    return
-  }
-
-  if (value === '/live') {
-    checkAndOpenLive(e)
-    return
-  }
-
-  checkAndOpenAttendance(e)
-}, true)
-
-
 // ==========================================
 // ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
 // ==========================================
@@ -8320,6 +8301,85 @@ function toggleLiveCamera() {
 
   if (window.lucide) {
     lucide.createIcons()
+  }
+}
+
+async function cancelAllLiveStreams() {
+  try {
+    const confirmed =
+      confirm(
+        'ნამდვილად გინდა ყველა მიმდინარე ლაივის გაუქმება?'
+      )
+
+    if (!confirmed) {
+      return
+    }
+
+    const {
+      error
+    } =
+      await window.supabase
+        .from('live_streams')
+        .update({
+          status: 'ended',
+          ended_at:
+            new Date().toISOString()
+        })
+        .eq(
+          'status',
+          'live'
+        )
+
+    if (error) {
+      throw error
+    }
+
+    if (
+      liveHostSessionId &&
+      liveHostTracks.length
+    ) {
+      await liveCallFunction({
+        action: 'close_tracks',
+        sessionId:
+          liveHostSessionId,
+        tracks:
+          liveHostTracks.map(
+            track => ({
+              mid: track.mid
+            })
+          )
+      }).catch(
+        error => {
+          console.warn(
+            'Cloudflare track close error:',
+            error
+          )
+        }
+      )
+    }
+
+    closeLiveHost()
+
+    liveNotificationStream = null
+    liveNotificationDismissedStreamId = null
+
+    liveHideModal(
+      'live-notification-modal'
+    )
+
+    alert(
+      'ყველა მიმდინარე ლაივი გაუქმებულია'
+    )
+  } catch (error) {
+    console.error(
+      'Live cancel error:',
+      error
+    )
+
+    alert(
+      error?.message ||
+      'ლაივების გაუქმება ვერ მოხერხდა'
+    )
   }
 }
 
