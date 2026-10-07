@@ -1705,7 +1705,33 @@ body.splash-active {
 </style>
 </head>
 
-<body data-page="home">
+<div id="technical-mode-screen" hidden>
+  <div class="technical-mode-card">
+    <div class="technical-mode-icon">⚙️</div>
+    <h1>ტექნიკური სამუშაოები მიმდინარეობს</h1>
+    <p>
+      ArduinoHub-ზე ამჟამად მიმდინარეობს ტექნიკური სამუშაოები.
+      გთხოვთ, ცოტა ხანში ისევ სცადოთ.
+    </p>
+    <a href="admin.html" class="technical-admin-button">
+      ადმინისტრატორის შესვლა
+    </a>
+  </div>
+</div>
+
+<div id="technical-admin-notice" hidden>
+  <div class="technical-admin-notice-card">
+    <div class="technical-admin-notice-icon">🔧</div>
+    <h2>ტექნიკური რეჟიმი ჩართულია</h2>
+    <p>
+      საიტზე ამჟამად მიმდინარეობს ტექნიკური სამუშაოები,
+      თუმცა თქვენ, როგორც ადმინისტრატორს, საიტზე წვდომა გაქვთ.
+    </p>
+    <button id="technical-admin-continue">
+      გაგრძელება
+    </button>
+  </div>
+</div>
 
 <div id="arduino-splash" class="arduino-splash">
   <div class="splash-glow splash-glow-one"></div>
