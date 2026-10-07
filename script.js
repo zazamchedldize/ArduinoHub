@@ -8891,6 +8891,7 @@ async function liveSendChatComment(
   event
 ) {
   event.preventDefault()
+  console.log('LIVE CHAT SUBMIT FIRED')
 
   if (!liveCurrentStream) {
     return
