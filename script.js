@@ -4772,6 +4772,7 @@ function renderAttendancePanel(records) {
 }
 
 async function openAttendancePanel() {
+  console.log('OPEN ATTENDANCE CLICKED')
   const user = await getCurrentUser()
   if (!user) {
     toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
