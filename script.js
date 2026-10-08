@@ -158,18 +158,17 @@ ArduinoHub არის Arduino-სა და Chemistry-ს პროექტ�
 - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
 - საიტი შექმნილია ზაზა მჭედლიძის მიერ.
 -მოაზროვნე ქიმიკოსთა კლუბის წევრებიდან განსაკუთრებით გამოირჩევა ზაზა მჭედლიძე.
--საიტზე ატვირთულია 5 პროექტი
 
 კლუბის წევრები არიან:
 - ზაზა მჭედლიძე — აქტიური წევრია.
 - თეკლა შველიძე — აქტიური წევრია.
-- ანასტასია ხონელიძე — დასწრება-1
-- ანასტასია თევდორაძე — დასწრება-0
-- ანი მუმლაძე — დასწრება-1
-- გიორგი ბაღდავაძე — დასწრება-0
-- მარიამ მიშვიძე — დასწრება-0
-- ანი ძაგნიძე — დასწრება-0
-- ანასტასია თოდუა — დასწრება-0
+- ანასტასია ხონელიძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
+- ანასტასია თევდორაძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
+- ანი მუმლაძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს რომ დაესწროს.
+- გიორგი ბაღდავაძე — აგრეთვე,ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
+- მარიამ მიშვიძე — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
+- ანი ძაგნიძე — აქტიური წევრია.
+- ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
 
 პასუხის წესები:
 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
@@ -4772,36 +4771,165 @@ function renderAttendancePanel(records) {
 }
 
 async function openAttendancePanel() {
-  console.log('1. ფუნქცია დაიწყო')
-
   const user = await getCurrentUser()
-
-  console.log('2. user:', user)
-
   if (!user) {
     toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
     return
   }
-
-  console.log('3. user არსებობს')
-
   const manager = await isAttendanceManager(user)
-
-  console.log('4. manager:', manager)
-
   if (!manager) {
     toast('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
     return
   }
-
-  console.log('5. manager დაშვებულია')
-
   closeAttendancePanel()
+  const panel = document.createElement('div')
+  panel.id = 'attendance-panel'
+  panel.className = 'attendance-overlay'
+  panel.hidden = false
+  panel.style.position = 'fixed'
+  panel.style.inset = '0'
+  panel.style.zIndex = '999999'
+  panel.style.display = 'flex'
+  panel.style.alignItems = 'center'
+  panel.style.justifyContent = 'center'
+  panel.style.overflowY = 'auto'
+  panel.style.padding = '20px'
+  panel.style.background = 'rgba(0, 0, 0, 0.7)'
+  panel.style.boxSizing = 'border-box'
+  panel.innerHTML = `
+    <div class="attendance-panel-backdrop" data-attendance-close style="
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+    "></div>
+    <section class="attendance-panel-content" role="dialog" aria-modal="true" aria-labelledby="attendance-panel-title" style="
+        position:relative;
+        z-index:2;
+        width:min(900px,100%);
+        max-height:90vh;
+        overflow-y:auto;
+        box-sizing:border-box;
+    ">
+      <div class="attendance-panel-header">
+        <div>
+          <p class="eyebrow">CLUB ATTENDANCE</p>
+          <h2 id="attendance-panel-title">დასწრების აღრიცხვა</h2>
+          <p>მონიშნე იმ შეხვედრაზე დამსწრე კლუბის წევრები.</p>
+        </div>
+        <button type="button" class="icon-button" id="attendance-close" aria-label="დახურვა">
+          ${icon('x')}
+        </button>
+      </div>
+      <div class="attendance-panel-body">
+        <div class="attendance-date-box">
+          <label>შეხვედრის თარიღი <input id="attendance-date" type="date"></label>
+          <span id="attendance-record-status" class="attendance-record-status"></span>
+        </div>
+        <div class="attendance-select-box">
+          <div class="attendance-subheading">
+            <div>
+              <h3>დამსწრე წევრები</h3>
+              <p>მონიშნე ყველა, ვინც შეხვედრას დაესწრო.</p>
+            </div>
+            <span id="attendance-selected-count">0</span>
+          </div>
+          <div id="attendance-member-select" class="attendance-member-select"></div>
+        </div>
+        <p id="attendance-form-error" class="form-message" role="alert" aria-live="polite"></p>
+        <div class="attendance-actions">
+          <label class="attendance-count-toggle">
+            <input type="checkbox" id="attendance-counted">
+            <span class="attendance-count-toggle-box">${icon('check')}</span>
+            <span>ჩათვლა</span>
+          </label>
+          <button type="button" class="button primary" id="save-attendance">
+            ${icon('save')} დასწრების შენახვა
+          </button>
+          <button type="button" class="button ghost" id="attendance-cancel">გაუქმება</button>
+        </div>
+        <div class="attendance-history-box">
+          <div class="attendance-subheading">
+            <div>
+              <h3>შეკრებების ისტორია</h3>
+              <p>აქ გამოჩნდება მხოლოდ ჩათვლილი შეხვედრები.</p>
+            </div>
+          </div>
+          <div id="attendance-personal-history" class="attendance-personal-history"></div>
+        </div>
+      </div>
+    </section>
+  `
+  document.body.appendChild(panel)
+  document.body.style.overflow = 'hidden'
 
-  console.log('6. პანელის შექმნა დაიწყო')
+  try {
+    attendanceMembers = await getAttendanceMembers()
+    attendanceRecords = await getAttendanceRecords()
+    const dateInput = $('#attendance-date')
+    if (dateInput) {
+      const latest = attendanceRecords[0]
+      dateInput.value =
+        latest?.meeting_date || new Date().toISOString().slice(0, 10)
+    }
 
-  // აქედან შენი არსებული კოდი...
+    renderAttendancePanel(attendanceRecords)
+    updateAttendanceSelectedCount()
+
+    $('#attendance-close')?.addEventListener('click', closeAttendancePanel)
+    $('#attendance-cancel')?.addEventListener('click', closeAttendancePanel)
+    panel
+      .querySelector('[data-attendance-close]')
+      ?.addEventListener('click', closeAttendancePanel)
+
+    $('#attendance-date')?.addEventListener('change', () => {
+      renderAttendancePanel(attendanceRecords)
+      updateAttendanceSelectedCount()
+    })
+
+    $('#attendance-member-select')?.addEventListener(
+      'change',
+      updateAttendanceSelectedCount
+    )
+    $('#save-attendance')?.addEventListener('click', saveAttendanceFromPanel)
+    document.addEventListener('keydown', attendanceEscapeHandler)
+    refreshIcons()
+  } catch (error) {
+    console.error('Attendance panel error:', error)
+    const errorTarget = $('#attendance-form-error')
+    if (errorTarget) {
+      errorTarget.textContent =
+        error?.message || 'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
+    }
+  }
 }
+
+// გლობალურად გახსნა - ფუნქციის გარეთ!
+window.openAttendancePanel = openAttendancePanel;
+function attendanceEscapeHandler(event) {
+  if (
+    event.key === 'Escape' &&
+    $('#attendance-panel')
+  ) {
+    closeAttendancePanel()
+  }
+}
+
+function updateAttendanceSelectedCount() {
+  const checked =
+    document.querySelectorAll(
+      '#attendance-member-select input[type="checkbox"]:checked'
+    )
+
+  const counter =
+    $('#attendance-selected-count')
+
+  if (counter) {
+    counter.textContent =
+      String(checked.length)
+  }
+}
+
 async function saveAttendanceFromPanel() {
   const date =
     $('#attendance-date')
