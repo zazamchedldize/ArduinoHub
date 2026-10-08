@@ -1,9063 +1,9063 @@
-// import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
-// import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-// const db = supabaseIsConfigured
-//   ? createClient(
-//       SUPABASE_URL,
-//       SUPABASE_ANON_KEY,
-//       {
-//         auth: {
-//           persistSession: true,
-//           autoRefreshToken: true
-//         }
-//       }
-//     )
-//   : null
-
-// const page = document.body.dataset.page
-
-// const $ = (s, root = document) => root.querySelector(s)
-
-// const esc = (value = '') =>
-//   String(value).replace(
-//     /[&<>'"]/g,
-//     c =>
-//       ({
-//         '&': '&amp;',
-//         '<': '&lt;',
-//         '>': '&gt;',
-//         "'": '&#39;',
-//         '"': '&quot;'
-//       }[c])
-//   )
-
-// const icon = name =>
-//   `<i data-lucide="${name}"></i>`
-
-// function refreshIcons() {
-//   window.lucide?.createIcons()
-// }
-
-// function toast(message, type = '') {
-//   const el = $('#toast')
-
-//   if (!el) {
-//     return
-//   }
-
-//   el.textContent = message
-//   el.className = `toast show ${type}`
-
-//   clearTimeout(toast.timer)
-
-//   toast.timer = setTimeout(
-//     () => {
-//       el.className = 'toast'
-//     },
-//     3200
-//   )
-// }
-
-// function dateText(value) {
-//   return new Intl.DateTimeFormat(
-//     'ka-GE',
-//     {
-//       dateStyle: 'medium'
-//     }
-//   ).format(
-//     new Date(value)
-//   )
-// }
-
-// function neutralError(
-//   error,
-//   fallback = 'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
-// ) {
-//   console.error(error)
-//   return fallback
-// }
-
-// function configuredMessage(target) {
-//   if (!target) {
-//     return
-//   }
-
-//   target.innerHTML = `
-//     <div class="empty-state">
-//       ${icon('settings')}
-
-//       <h2>
-//         Supabase ჯერ არ არის კონფიგურირებული
-//       </h2>
-
-//       <p>
-//         დაამატეთ პროექტის URL და anon key
-//         <code>supabase-config.js</code>-ში, შემდეგ გაუშვით schema SQL.
-//       </p>
-//     </div>
-//   `
-
-//   refreshIcons()
-// }
-
-// function initChrome() {
-//   document
-//     .querySelectorAll('[data-year]')
-//     .forEach(
-//       el => {
-//         el.textContent =
-//           new Date().getFullYear()
-//       }
-//     )
-
-//   const button = $('.menu-toggle')
-
-//   if (button) {
-//     button.addEventListener(
-//       'click',
-//       () => {
-//         const nav = $('nav')
-
-//         if (!nav) {
-//           return
-//         }
-
-//         const open =
-//           nav.classList.toggle('open')
-
-//         button.setAttribute(
-//           'aria-expanded',
-//           String(open)
-//         )
-//       }
-//     )
-//   }
-
-//   refreshIcons()
-// }
-
-// const AI_FUNCTION_URL =
-//   supabaseIsConfigured && SUPABASE_URL
-//     ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
-//     : null
-
-// let aiHistory = []
-// let aiAdminGreeting = ''
-
-// const AI_SYSTEM_CONTEXT = `
-// შენ ხარ ArduinoHub AI — ArduinoHub-ის ოფიციალური AI ასისტენტი.
-
-// ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
-
-// საიტის ძირითადი ინფორმაცია:
-// - ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
-// - პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
-// - ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
-// - პროექტების მიმართულებები მოიცავს Arduino-ს, ელექტრონიკას, სენსორებს, ავტომატიზაციას, LED-ს, LCD-ს, IoT-ს და ქიმიის ექსპერიმენტებს.
-// - ArduinoHub შექმნილია „მოაზროვნე ქიმიკოსთა კლუბის“ მიერ.
-// - კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
-// - საიტი შექმნილია ზაზა მჭედლიძის მიერ.
-// -მოაზროვნე ქიმიკოსთა კლუბის წევრებიდან განსაკუთრებით გამოირჩევა ზაზა მჭედლიძე.
-
-// კლუბის წევრები არიან:
-// - ზაზა მჭედლიძე — აქტიური წევრია.
-// - თეკლა შველიძე — აქტიური წევრია.
-// - ანასტასია ხონელიძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
-// - ანასტასია თევდორაძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
-// - ანი მუმლაძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს რომ დაესწროს.
-// - გიორგი ბაღდავაძე — აგრეთვე,ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
-// - მარიამ მიშვიძე — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
-// - ანი ძაგნიძე — აქტიური წევრია.
-// - ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
-
-// პასუხის წესები:
-// 1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
-// 2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
-// 3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
-// 4. თუ მომხმარებელი დამწყებია, ახსენი მარტივად.
-// 5. თუ კითხვა ArduinoHub-ის შესახებ არის და ზუსტი ინფორმაცია არ გაქვს, არ მოიგონო ინფორმაცია.
-// 6. თუ რაიმე ინფორმაცია არ იცი, პირდაპირ თქვი, რომ ზუსტი ინფორმაცია არ გაქვს.
-// 7. არ თქვა, რომ შენ ხარ Google Gemini. მომხმარებლისთვის შენ ხარ ArduinoHub AI.
-// 8. არ მოიგონო ისეთი პროექტები, ადამიანები ან ფუნქციები, რომლებიც მოცემულ ინფორმაციაში არ არის.
-// 9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
-// 10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
-// 11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის.
-// 12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად: H2O, CO2, NaCl, KMnO4, Mn2O7.
-// 13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
-// 14. პასუხი არ შეწყვიტო შუა წინადადებაში.
-// 15. თუ პასუხს რამდენიმე ნაწილი აქვს, დაალაგე ლოგიკურად.
-// 16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული შეცდომა. თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე.
-// 17. თუ კითხვა გასაგებია მიუხედავად მცირე typo-სა, მომხმარებელს ნუ სთხოვ თავიდან დაწერას.
-// 18. თუ მომხმარებელი წერს უხეშ, შეურაცხმყოფელ, სექსუალურ, 18+ ან აშკარად შეუსაბამო შინაარსს, არ გააგრძელო ასეთი საუბარი. უპასუხე მოკლე, მშვიდი გაფრთხილებით და გადაიყვანე სასწავლო თემაზე.
-// 19. ArduinoHub AI განკუთვნილია სასწავლო, ტექნიკური და უსაფრთხო კომუნიკაციისთვის.
-// 20. არასდროს შეურაცხყო მომხმარებელი.
-// 21. კლუბის წევრების აქტიურობაზე პასუხისას გამოიყენე მხოლოდ ზემოთ მოცემული ინფორმაცია.
-// `
-
-// async function getCurrentUser() {
-//   if (!db) {
-//     return null
-//   }
-
-//   try {
-//     const {
-//       data: { user }
-//     } = await db.auth.getUser()
-
-//     return user || null
-//   } catch (error) {
-//     console.warn(
-//       'Could not get current user:',
-//       error
-//     )
-
-//     return null
-//   }
-// }
-
-// function getUserDisplayName(user) {
-//   if (!user) {
-//     return 'მომხმარებელი'
-//   }
-
-//   const metadata =
-//     user.user_metadata || {}
-
-//   return String(
-//     metadata.username ||
-//     metadata.name ||
-//     metadata.full_name ||
-//     user.email ||
-//     'მომხმარებელი'
-//   ).trim()
-// }
-
-// async function getCurrentUserContext() {
-//   const user =
-//     await getCurrentUser()
-
-//   if (!user) {
-//     return {
-//       id: null,
-//       email: null,
-//       name: null,
-//       isAuthenticated: false
-//     }
-//   }
-
-//   return {
-//     id: user.id,
-//     email: user.email || null,
-//     name: getUserDisplayName(user),
-//     isAuthenticated: true
-//   }
-// }
-
-// async function detectAIAdmin() {
-//   if (!db) {
-//     aiAdminGreeting = ''
-//     return
-//   }
-
-//   try {
-//     const {
-//       data: { session }
-//     } = await db.auth.getSession()
-
-//     if (!session?.user) {
-//       aiAdminGreeting = ''
-//       return
-//     }
-
-//     const admin =
-//       await isAdmin(session.user)
-
-//     if (!admin?.username) {
-//       aiAdminGreeting = ''
-//       return
-//     }
-
-//     const username =
-//       String(admin.username)
-//         .trim()
-//         .toLowerCase()
-
-//     if (
-//       username === 'zaza' ||
-//       username === 'ზაზა' ||
-//       username.includes('ზაზა') ||
-//       username.includes('zaza')
-//     ) {
-//       aiAdminGreeting =
-//         'ბატონო ზაზა'
-//     } else if (
-//       username === 'tekla' ||
-//       username === 'თეკლა' ||
-//       username.includes('თეკლა') ||
-//       username.includes('tekla')
-//     ) {
-//       aiAdminGreeting =
-//         'ქალბატონო თეკლა'
-//     } else {
-//       aiAdminGreeting = ''
-//     }
-//   } catch (error) {
-//     console.warn(
-//       'AI admin detection failed:',
-//       error
-//     )
-
-//     aiAdminGreeting = ''
-//   }
-// }
-
-// function applyAIGreeting(reply) {
-//   const clean =
-//     String(reply || '').trim()
-
-//   if (
-//     !aiAdminGreeting ||
-//     !clean
-//   ) {
-//     return clean
-//   }
-
-//   const greetingPattern =
-//     /^(ბატონო\s+ზაზა|ქალბატონო\s+თეკლა)\s*[,!:—-]?\s*/i
-
-//   if (
-//     greetingPattern.test(clean)
-//   ) {
-//     return clean
-//   }
-
-//   return `${aiAdminGreeting}, ${clean}`
-// }
-
-// function addAIMessage(
-//   type,
-//   content
-// ) {
-//   const messages =
-//     $('#ai-chat-messages')
-
-//   if (!messages) {
-//     return null
-//   }
-
-//   const message =
-//     document.createElement('div')
-
-//   message.className =
-//     `ai-message ${type}`
-
-//   if (type === 'assistant') {
-//     message.innerHTML = `
-//       <div class="ai-message-avatar">
-//         ${icon('bot')}
-//       </div>
-
-//       <div class="ai-message-bubble">
-//         ${content}
-//       </div>
-//     `
-//   } else if (
-//     type === 'error'
-//   ) {
-//     message.innerHTML = `
-//       <div class="ai-message-avatar">
-//         ${icon('triangle-alert')}
-//       </div>
-
-//       <div class="ai-message-bubble">
-//         ${content}
-//       </div>
-//     `
-//   } else {
-//     message.innerHTML = `
-//       <div class="ai-message-bubble">
-//         ${esc(content)}
-//       </div>
-//     `
-//   }
-
-//   messages.appendChild(message)
-
-//   refreshIcons()
-
-//   messages.scrollTo({
-//     top: messages.scrollHeight,
-//     behavior: 'smooth'
-//   })
-
-//   return message
-// }
-
-// function formatAIResponse(text) {
-//   if (!text) {
-//     return '<p>პასუხი ვერ მივიღე.</p>'
-//   }
-
-//   let source =
-//     String(text)
-//       .replace(
-//         /^\s*svg\s*$/gim,
-//         ''
-//       )
-//       .trim()
-
-//   const codeBlocks = []
-
-//   source = source.replace(
-//     /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
-//     (_, code) => {
-//       const index =
-//         codeBlocks.length
-
-//       codeBlocks.push(
-//         esc(code.trim())
-//       )
-
-//       return `@@CODEBLOCK_${index}@@`
-//     }
-//   )
-
-//   let safe = esc(source)
-
-//   safe = safe.replace(
-//     /\*\*\*(.+?)\*\*\*/g,
-//     '<strong><em>$1</em></strong>'
-//   )
-
-//   safe = safe.replace(
-//     /\*\*(.+?)\*\*/g,
-//     '<strong>$1</strong>'
-//   )
-
-//   safe = safe.replace(
-//     /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
-//     '<em>$1</em>'
-//   )
-
-//   safe = safe.replace(
-//     /`([^`\n]+)`/g,
-//     '<code class="ai-inline-code">$1</code>'
-//   )
-
-//   const lines =
-//     safe.split(/\r?\n/)
-
-//   let html = ''
-//   let paragraph = []
-//   let listType = null
-
-//   const closeList = () => {
-//     if (listType === 'ul') {
-//       html += '</ul>'
-//     }
-
-//     if (listType === 'ol') {
-//       html += '</ol>'
-//     }
-
-//     listType = null
-//   }
-
-//   const flushParagraph = () => {
-//     if (!paragraph.length) {
-//       return
-//     }
-
-//     const content =
-//       paragraph
-//         .join(' ')
-//         .trim()
-
-//     if (content) {
-//       html += `
-//         <p>
-//           ${content}
-//         </p>
-//       `
-//     }
-
-//     paragraph = []
-//   }
-
-//   for (
-//     const rawLine of lines
-//   ) {
-//     const line =
-//       rawLine.trim()
-
-//     if (!line) {
-//       flushParagraph()
-//       closeList()
-//       continue
-//     }
-
-//     const codeMatch =
-//       line.match(
-//         /^@@CODEBLOCK_(\d+)@@$/
-//       )
-
-//     if (codeMatch) {
-//       flushParagraph()
-//       closeList()
-
-//       const code =
-//         codeBlocks[
-//           Number(codeMatch[1])
-//         ] || ''
-
-//       html += `
-//         <pre class="ai-code-block">
-//           <code>${code}</code>
-//         </pre>
-//       `
-
-//       continue
-//     }
-
-//     const heading3 =
-//       line.match(
-//         /^###\s+(.+)$/
-//       )
-
-//     if (heading3) {
-//       flushParagraph()
-//       closeList()
-
-//       html += `
-//         <h4 class="ai-response-small-title">
-//           ${heading3[1]}
-//         </h4>
-//       `
-
-//       continue
-//     }
-
-//     const heading2 =
-//       line.match(
-//         /^##\s+(.+)$/
-//       )
-
-//     if (heading2) {
-//       flushParagraph()
-//       closeList()
-
-//       html += `
-//         <h3 class="ai-response-subtitle">
-//           ${heading2[1]}
-//         </h3>
-//       `
-
-//       continue
-//     }
-
-//     const heading1 =
-//       line.match(
-//         /^#\s+(.+)$/
-//       )
-
-//     if (heading1) {
-//       flushParagraph()
-//       closeList()
-
-//       html += `
-//         <h2 class="ai-response-title">
-//           ${heading1[1]}
-//         </h2>
-//       `
-
-//       continue
-//     }
-
-//     const quote =
-//       line.match(
-//         /^>\s*(.+)$/
-//       )
-
-//     if (quote) {
-//       flushParagraph()
-//       closeList()
-
-//       html += `
-//         <blockquote class="ai-blockquote">
-//           ${quote[1]}
-//         </blockquote>
-//       `
-
-//       continue
-//     }
-
-//     const unordered =
-//       line.match(
-//         /^(?:[-*•])\s+(.+)$/
-//       )
-
-//     if (unordered) {
-//       flushParagraph()
-
-//       if (listType !== 'ul') {
-//         closeList()
-//         html +=
-//           '<ul class="ai-list">'
-//         listType = 'ul'
-//       }
-
-//       html += `
-//         <li>
-//           ${unordered[1]}
-//         </li>
-//       `
-
-//       continue
-//     }
-
-//     const ordered =
-//       line.match(
-//         /^\d+[.)]\s+(.+)$/
-//       )
-
-//     if (ordered) {
-//       flushParagraph()
-
-//       if (listType !== 'ol') {
-//         closeList()
-//         html +=
-//           '<ol class="ai-ordered-list">'
-//         listType = 'ol'
-//       }
-
-//       html += `
-//         <li>
-//           ${ordered[1]}
-//         </li>
-//       `
-
-//       continue
-//     }
-
-//     closeList()
-//     paragraph.push(line)
-//   }
-
-//   flushParagraph()
-//   closeList()
-
-//   return (
-//     html ||
-//     '<p>პასუხი ვერ მივიღე.</p>'
-//   )
-// }
-
-// function addAITyping() {
-//   const messages =
-//     $('#ai-chat-messages')
-
-//   if (!messages) {
-//     return null
-//   }
-
-//   const typing =
-//     document.createElement('div')
-
-//   typing.className =
-//     'ai-message assistant ai-typing-message'
-
-//   typing.innerHTML = `
-//     <div class="ai-message-avatar">
-//       ${icon('bot')}
-//     </div>
-
-//     <div class="ai-message-bubble ai-typing">
-//       <span></span>
-//       <span></span>
-//       <span></span>
-//     </div>
-//   `
-
-//   messages.appendChild(typing)
-
-//   refreshIcons()
-
-//   messages.scrollTo({
-//     top: messages.scrollHeight,
-//     behavior: 'smooth'
-//   })
-
-//   return typing
-// }
-
-// function getAIErrorStatus(error) {
-//   if (
-//     Number.isFinite(
-//       Number(error?.status)
-//     )
-//   ) {
-//     return Number(error.status)
-//   }
-
-//   const message =
-//     String(
-//       error?.message || ''
-//     )
-
-//   const match =
-//     message.match(
-//       /\b(400|401|403|404|408|409|429|500|502|503|504)\b/
-//     )
-
-//   return match
-//     ? Number(match[1])
-//     : null
-// }
-
-// function isAIQuotaError(error) {
-//   const message =
-//     String(
-//       error?.message || ''
-//     ).toLowerCase()
-
-//   const quotaPatterns = [
-//     'quota exceeded',
-//     'quotaexceeded',
-//     'quota',
-//     'resource_exhausted',
-//     'resource exhausted',
-//     'free_tier',
-//     'free tier',
-//     'generate_content_free_tier_requests',
-//     'rate limit',
-//     'ratelimit',
-//     'too many requests',
-//     'requests per day',
-//     'requests per minute'
-//   ]
-
-//   return quotaPatterns.some(
-//     pattern =>
-//       message.includes(pattern)
-//   )
-// }
-
-// function isAIModelError(error) {
-//   const message =
-//     String(
-//       error?.message || ''
-//     ).toLowerCase()
-
-//   const modelPatterns = [
-//     'model not found',
-//     'model is not found',
-//     'not available',
-//     'is no longer available',
-//     'unsupported model',
-//     'unknown model',
-//     'models/',
-//     'gemini model'
-//   ]
-
-//   return modelPatterns.some(
-//     pattern =>
-//       message.includes(pattern)
-//   )
-// }
-
-// function getAIUserErrorMessage(error) {
-//   const status =
-//     getAIErrorStatus(error)
-
-//   if (
-//     status === 429 ||
-//     isAIQuotaError(error)
-//   ) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('zap')}
-//           AI დროებით მიუწვდომელია
-//         </strong>
-
-//         <p>
-//           ArduinoHub AI-ის უფასო გამოყენების ლიმიტი ამ დროისთვის ამოიწურა.
-//         </p>
-
-//         <small>
-//           პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას. ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   if (isAIModelError(error)) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('cpu')}
-//           AI მოდელის პრობლემა
-//         </strong>
-
-//         <p>
-//           ArduinoHub AI-ის გამოყენებული Gemini მოდელი ამჟამად ვერ მუშაობს ან მიუწვდომელია.
-//         </p>
-
-//         <small>
-//           საჭიროა Supabase Edge Function-ში გამოყენებული მოდელის შემოწმება.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   if (status === 401) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('lock-keyhole')}
-//           AI ავტორიზაციის პრობლემა
-//         </strong>
-
-//         <p>
-//           AI სერვერთან ავტორიზაცია ვერ მოხერხდა.
-//         </p>
-
-//         <small>
-//           გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   if (status === 403) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('shield-alert')}
-//           AI სერვერთან წვდომა შეზღუდულია
-//         </strong>
-
-//         <p>
-//           AI სერვერმა მოთხოვნა ვერ მიიღო.
-//         </p>
-
-//         <small>
-//           საჭიროა AI სერვერის კონფიგურაციის შემოწმება.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   if (status === 404) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('search-x')}
-//           AI სერვისი ვერ მოიძებნა
-//         </strong>
-
-//         <p>
-//           AI ფუნქცია ან მოთხოვნილი რესურსი ამჟამად ვერ მოიძებნა.
-//         </p>
-
-//         <small>
-//           გთხოვთ, მოგვიანებით სცადოთ ხელახლა.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   if (status === 400) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('triangle-alert')}
-//           მოთხოვნის დამუშავება ვერ მოხერხდა
-//         </strong>
-
-//         <p>
-//           AI-მ მიღებული მოთხოვნა ვერ დაამუშავა.
-//         </p>
-
-//         <small>
-//           სცადეთ კითხვის ოდნავ სხვანაირად დაწერა.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   if (
-//     status === 500 ||
-//     status === 502 ||
-//     status === 503 ||
-//     status === 504
-//   ) {
-//     return `
-//       <div class="ai-error-content">
-//         <strong>
-//           ${icon('server-crash')}
-//           AI სერვერის დროებითი პრობლემა
-//         </strong>
-
-//         <p>
-//           AI სერვერმა პასუხის დაბრუნება ამჯერად ვერ შეძლო.
-//         </p>
-
-//         <small>
-//           გთხოვთ, რამდენიმე წამში სცადოთ ხელახლა.
-//         </small>
-//       </div>
-//     `
-//   }
-
-//   return `
-//     <div class="ai-error-content">
-//       <strong>
-//         ${icon('wifi-off')}
-//         AI-სთან დაკავშირება ვერ მოხერხდა
-//       </strong>
-
-//       <p>
-//         ამ მომენტში AI სერვისთან დაკავშირება ვერ მოხერხდა.
-//       </p>
-
-//       <small>
-//         გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
-//       </small>
-//     </div>
-//   `
-// }
-
-// async function askAI(question) {
-//   if (!AI_FUNCTION_URL) {
-//     throw new Error(
-//       'AI ფუნქციის მისამართი ვერ მოიძებნა.'
-//     )
-//   }
-
-//   const cleanQuestion =
-//     String(question)
-//       .trim()
-//       .slice(0, 1000)
-
-//   if (!cleanQuestion) {
-//     return null
-//   }
-
-//   const history =
-//     aiHistory
-//       .slice(-8)
-//       .map(
-//         message => ({
-//           role:
-//             message.role === 'assistant'
-//               ? 'assistant'
-//               : 'user',
-//           text:
-//             String(
-//               message.content || ''
-//             ).slice(0, 1800)
-//         })
-//       )
-
-//   const currentUser =
-//     await getCurrentUserContext()
-
-//   let authorizationToken =
-//     SUPABASE_ANON_KEY
-
-//   if (db) {
-//     try {
-//       const {
-//         data: { session }
-//       } = await db.auth.getSession()
-
-//       if (session?.access_token) {
-//         authorizationToken =
-//           session.access_token
-//       }
-//     } catch (sessionError) {
-//       console.warn(
-//         'Could not read Supabase session:',
-//         sessionError
-//       )
-//     }
-//   }
-
-//   const userIdentityContext =
-//     currentUser.isAuthenticated
-//       ? `
-//         ამჟამად ArduinoHub AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
-
-//         მომხმარებლის სახელი და გვარი:
-//         ${currentUser.name}
-
-//         მომხმარებლის email:
-//         ${currentUser.email || 'უცნობია'}
-
-//         მომხმარებლის Supabase ID:
-//         ${currentUser.id}
-
-//         მნიშვნელოვანი წესები:
-//         - ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
-//         - თუ მომხმარებელი გეკითხება „ვინ ვარ?“, „რა მქვია?“ ან მსგავს რამეს, გამოიყენე ზემოთ მოცემული სახელი.
-//         - არ აურიო ეს მომხმარებელი ArduinoHub-ის კლუბის სხვა წევრებში.
-//         - მომხმარებლის სახელი არ მოიგონო.
-//         - მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო, თუ ამის შესახებ პირდაპირ არ გკითხავს.
-//       `
-//       : `
-//         ამჟამად ArduinoHub AI-ს ესაუბრება არაავტორიზებული მომხმარებელი.
-//         მომხმარებლის სახელი უცნობია.
-//       `
-
-//   const finalContext = `
-//     ${AI_SYSTEM_CONTEXT}
-//     ${userIdentityContext}
-//   `
-
-//   let response
-
-//   try {
-//     response =
-//       await fetch(
-//         AI_FUNCTION_URL,
-//         {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type':
-//               'application/json',
-//             'Authorization':
-//               `Bearer ${authorizationToken}`,
-//             'apikey':
-//               SUPABASE_ANON_KEY
-//           },
-//           body:
-//             JSON.stringify({
-//               message:
-//                 cleanQuestion,
-//               history,
-//               context:
-//                 finalContext,
-//               adminGreeting:
-//                 aiAdminGreeting,
-//               currentUser
-//             })
-//         }
-//       )
-//   } catch (networkError) {
-//     const error =
-//       new Error(
-//         networkError?.message ||
-//         'Network error'
-//       )
-
-//     error.status = 0
-
-//     throw error
-//   }
-
-//   let data = null
-
-//   try {
-//     data =
-//       await response.json()
-//   } catch {
-//     data = null
-//   }
-
-//   if (!response.ok) {
-//     const backendMessage =
-//       data?.error ||
-//       data?.message ||
-//       data?.details ||
-//       `AI request failed with status ${response.status}`
-
-//     const error =
-//       new Error(
-//         String(backendMessage)
-//       )
-
-//     error.status =
-//       response.status
-
-//     error.backendData = data
-//     error.backendStatus =
-//       response.status
-
-//     throw error
-//   }
-
-//   if (
-//     data?.error &&
-//     !data?.reply &&
-//     !data?.text
-//   ) {
-//     const error =
-//       new Error(
-//         String(data.error)
-//       )
-
-//     error.status =
-//       response.status
-
-//     error.backendData = data
-
-//     throw error
-//   }
-
-//   const reply =
-//     String(
-//       data?.reply ||
-//       data?.text ||
-//       ''
-//     ).trim()
-
-//   if (!reply) {
-//     const error =
-//       new Error(
-//         'AI-მ ცარიელი პასუხი დააბრუნა.'
-//       )
-
-//     error.status =
-//       response.status
-
-//     error.backendData = data
-
-//     throw error
-//   }
-
-//   return reply
-// }
-
-// function containsUnsafeContent(text) {
-//   const value =
-//     String(text || '')
-//       .toLowerCase()
-//       .trim()
-
-//   if (!value) {
-//     return false
-//   }
-
-//   const unsafePatterns = [
-//     /\b(porn|porno|pornography)\b/i,
-//     /\b(sexcam|onlyfans)\b/i,
-//     /\b(nude|nudes)\b/i,
-//     /\b(hentai)\b/i,
-//     /სექსუალური\s+შინაარსი/i,
-//     /პორნო/i,
-//     /პორნოგრაფ/i
-//   ]
-
-//   return unsafePatterns.some(
-//     pattern =>
-//       pattern.test(value)
-//   )
-// }
-
-// function addAISafetyWarning() {
-//   const message = `
-//     <div class="ai-safety-warning">
-//       <strong>
-//         ${icon('shield-alert')}
-//         უსაფრთხოების გაფრთხილება
-//       </strong>
-
-//       <p>
-//         გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის. პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
-//       </p>
-//     </div>
-//   `
-
-//   addAIMessage(
-//     'error',
-//     message
-//   )
-// }
-
-// async function saveAIChatMessage(message) {
-//   if (!db) {
-//     return
-//   }
-
-//   try {
-//     const {
-//       data: { user }
-//     } = await db.auth.getUser()
-
-//     if (!user) {
-//       return
-//     }
-
-//     const username =
-//       getUserDisplayName(user)
-
-//     const { error } =
-//       await db
-//         .from('ai_chat_history')
-//         .insert({
-//           user_id: user.id,
-//           username:
-//             String(username).trim(),
-//           message:
-//             String(message).trim()
-//         })
-
-//     if (error) {
-//       console.warn(
-//         'AI chat history save failed:',
-//         error
-//       )
-//     }
-//   } catch (error) {
-//     console.warn(
-//       'AI chat history error:',
-//       error
-//     )
-//   }
-// }
-
-// async function getZazaHistory() {
-//   if (!db) {
-//     throw new Error(
-//       'Supabase არ არის კონფიგურირებული.'
-//     )
-//   }
-
-//   const { data, error } =
-//     await db.rpc(
-//       'get_zaza_history'
-//     )
-
-//   if (error) {
-//     throw error
-//   }
-
-//   return data || []
-// }
-
-// async function deleteZazaHistoryItem(id) {
-//   if (!db) {
-//     throw new Error(
-//       'Supabase არ არის კონფიგურირებული.'
-//     )
-//   }
-
-//   const numericId =
-//     Number(id)
-
-//   if (
-//     !Number.isSafeInteger(
-//       numericId
-//     )
-//   ) {
-//     throw new Error(
-//       'შეტყობინების ID არასწორია.'
-//     )
-//   }
-
-//   const { error } =
-//     await db.rpc(
-//       'delete_zaza_history_item',
-//       {
-//         p_id: numericId
-//       }
-//     )
-
-//   if (error) {
-//     console.error(
-//       'Supabase delete RPC error:',
-//       error
-//     )
-
-//     throw error
-//   }
-
-//   const {
-//     data: remainingData,
-//     error: verifyError
-//   } =
-//     await db.rpc(
-//       'get_zaza_history'
-//     )
-
-//   if (verifyError) {
-//     throw verifyError
-//   }
-
-//   const stillExists =
-//     (remainingData || [])
-//       .some(
-//         item =>
-//           Number(item.id) ===
-//           numericId
-//       )
-
-//   if (stillExists) {
-//     throw new Error(
-//       'Supabase-მ შეტყობინება ვერ წაშალა.'
-//     )
-//   }
-
-//   return true
-// }
-
-// function formatZazaHistory(items) {
-//   if (!items.length) {
-//     return `
-//       <p>
-//         „ზაზა“-ს შესახებ სხვა მომხმარებლების შეტყობინებები ვერ მოიძებნა.
-//       </p>
-//     `
-//   }
-
-//   let html = `
-//     <h3 class="ai-response-subtitle">
-//       „ზაზა“-ს შესახებ ნაპოვნი შეტყობინებები
-//     </h3>
-
-//     <p class="ai-history-count">
-//       ნაპოვნია
-//       <strong>${items.length}</strong>
-//       შეტყობინება:
-//     </p>
-
-//     <div class="ai-history-list">
-//   `
-
-//   items.forEach(
-//     (item, index) => {
-//       const username =
-//         esc(
-//           item.username ||
-//           'უცნობი მომხმარებელი'
-//         )
-
-//       const message =
-//         esc(
-//           item.message || ''
-//         )
-
-//       const date =
-//         item.created_at
-//           ? new Intl.DateTimeFormat(
-//               'ka-GE',
-//               {
-//                 dateStyle: 'medium',
-//                 timeStyle: 'short'
-//               }
-//             ).format(
-//               new Date(
-//                 item.created_at
-//               )
-//             )
-//           : ''
-
-//       html += `
-//         <div
-//           class="ai-history-item"
-//           data-history-id="${Number(item.id)}"
-//         >
-//           <strong>
-//             ${index + 1}. ${username}
-//           </strong>
-
-//           <p>
-//             ${message}
-//           </p>
-
-//           ${
-//             date
-//               ? `<small>${esc(date)}</small>`
-//               : ''
-//           }
-
-//           <button
-//             type="button"
-//             class="ai-history-delete"
-//             data-history-id="${Number(item.id)}"
-//           >
-//             ${icon('trash-2')}
-//             სამუდამოდ წაშლა
-//           </button>
-//         </div>
-//       `
-//     }
-//   )
-
-//   html += `
-//     </div>
-//   `
-
-//   return html
-// }
-
-// function setupZazaHistoryDelete() {
-//   const buttons =
-//     document.querySelectorAll(
-//       '.ai-history-delete'
-//     )
-
-//   buttons.forEach(
-//     button => {
-//       if (
-//         button.dataset.deleteBound ===
-//         'true'
-//       ) {
-//         return
-//       }
-
-//       button.dataset.deleteBound =
-//         'true'
-
-//       button.addEventListener(
-//         'click',
-//         async event => {
-//           event.preventDefault()
-//           event.stopPropagation()
-
-//           if (button.disabled) {
-//             return
-//           }
-
-//           const id =
-//             Number(
-//               button.dataset.historyId
-//             )
-
-//           if (
-//             !Number.isSafeInteger(id)
-//           ) {
-//             toast(
-//               'შეტყობინების ID არასწორია.'
-//             )
-
-//             return
-//           }
-
-//           const confirmed =
-//             button.dataset.deleteConfirm ===
-//             'true'
-
-//           if (!confirmed) {
-//             button.dataset.deleteConfirm =
-//               'true'
-
-//             button.classList.add(
-//               'delete-confirm-ready'
-//             )
-
-//             button.innerHTML = `
-//               ${icon('triangle-alert')}
-//               ნამდვილად წაშლა?
-//             `
-
-//             refreshIcons()
-
-//             clearTimeout(
-//               button.deleteConfirmTimer
-//             )
-
-//             button.deeConfirmTimer =
-//               setTimeout(
-//                 () => {
-//                   if (
-//                     document.body.contains(
-//                       button
-//                     ) &&
-//                     button.dataset.deleteConfirm ===
-//                       'true' &&
-//                     !button.disabled
-//                   ) {
-//                     button.dataset.deleteConfirm =
-//                       'false'
-
-//                     button.classList.remove(
-//                       'delete-confirm-ready'
-//                     )
-
-//                     button.innerHTML = `
-//                       ${icon('trash-2')}
-//                       სამუდამოდ წაშლა
-//                     `
-
-//                     refreshIcons()
-//                   }
-//                 },
-//                 5000
-//               )
-
-//             return
-//           }
-
-//           clearTimeout(
-//             button.deleteConfirmTimer
-//           )
-
-//           button.disabled = true
-
-//           button.dataset.deleteConfirm =
-//             'false'
-
-//           button.classList.remove(
-//             'delete-confirm-ready'
-//           )
-
-//           button.innerHTML = `
-//             ${icon('loader-circle')}
-//             იშლება...
-//           `
-
-//           refreshIcons()
-
-//           try {
-//             await deleteZazaHistoryItem(
-//               id
-//             )
-
-//             const item =
-//               button.closest(
-//                 '.ai-history-item'
-//               )
-
-//             if (item) {
-//               item.remove()
-//             }
-
-//             const list =
-//               document.querySelector(
-//                 '.ai-history-list'
-//               )
-
-//             const historyItems =
-//               list
-//                 ? list.querySelectorAll(
-//                     '.ai-history-item'
-//                   )
-//                 : []
-
-//             const remaining =
-//               historyItems.length
-
-//             historyItems.forEach(
-//               (
-//                 historyItem,
-//                 index
-//               ) => {
-//                 const strong =
-//                   historyItem.querySelector(
-//                     'strong'
-//                   )
-
-//                 if (!strong) {
-//                   return
-//                 }
-
-//                 const currentText =
-//                   strong.textContent
-//                     .replace(
-//                       /^\s*\d+\.\s*/,
-//                       ''
-//                     )
-//                     .trim()
-
-//                 strong.textContent =
-//                   `${index + 1}. ${currentText}`
-//               }
-//             )
-
-//             const count =
-//               document.querySelector(
-//                 '.ai-history-count'
-//               )
-
-//             if (count) {
-//               count.innerHTML =
-//                 remaining
-//                   ? `
-//                     დარჩენილია
-//                     <strong>
-//                       ${remaining}
-//                     </strong>
-//                     შეტყობინება:
-//                   `
-//                   : 'ყველა შეტყობინება წაშლილია.'
-//             }
-
-//             if (
-//               list &&
-//               remaining === 0
-//             ) {
-//               list.innerHTML = `
-//                 <div class="empty-state compact-empty">
-//                   ${icon('trash-2')}
-
-//                   <h3>
-//                     ისტორია ცარიელია
-//                   </h3>
-
-//                   <p>
-//                     ყველა ნაპოვნი შეტყობინება სამუდამოდ წაიშალა.
-//                   </p>
-//                 </div>
-//               `
-
-//               refreshIcons()
-//             }
-
-//             toast(
-//               'შეტყობინება სამუდამოდ წაიშალა.',
-//               'success'
-//             )
-//           } catch (error) {
-//             console.error(
-//               'History delete error:',
-//               error
-//             )
-
-//             console.error(
-//               'History delete message:',
-//               error?.message
-//             )
-
-//             console.error(
-//               'History delete details:',
-//               error?.details
-//             )
-
-//             console.error(
-//               'History delete hint:',
-//               error?.hint
-//             )
-
-//             button.disabled =
-//               false
-
-//             button.dataset.deleteConfirm =
-//               'false'
-
-//             button.innerHTML = `
-//               ${icon('trash-2')}
-//               სამუდამოდ წაშლა
-//             `
-
-//             refreshIcons()
-
-//             const errorMessage =
-//               error?.message ||
-//               error?.details ||
-//               error?.hint ||
-//               'შეტყობინების წაშლა ვერ მოხერხდა.'
-
-//             toast(
-//               errorMessage
-//             )
-//           }
-//         }
-//       )
-//     }
-//   )
-
-//   refreshIcons()
-// }
-
-// async function handleAIQuestion(
-//   question
-// ) {
-//   const input =
-//     $('#ai-chat-input')
-
-//   const send =
-//     $('#ai-send-btn')
-
-//   const cleanQuestion =
-//     String(question || '').trim()
-
-//   if (!cleanQuestion) {
-//     return
-//   }
-
-//   await detectAIAdmin()
-
-//   if (
-//     containsUnsafeContent(
-//       cleanQuestion
-//     )
-//   ) {
-//     addAIMessage(
-//       'user',
-//       cleanQuestion
-//     )
-
-//     if (input) {
-//       input.value = ''
-//     }
-
-//     addAISafetyWarning()
-
-//     return
-//   }
-
-//   addAIMessage(
-//     'user',
-//     cleanQuestion
-//   )
-
-//   if (input) {
-//     input.value = ''
-//   }
-
-//   if (
-//     cleanQuestion.toLowerCase() ===
-//     '/history'
-//   ) {
-//     const isZaza =
-//       aiAdminGreeting ===
-//       'ბატონო ზაზა'
-
-//     if (!isZaza) {
-//       addAIMessage(
-//         'error',
-//         `
-//           <div class="ai-error-content">
-//             <strong>
-//               წვდომა უარყოფილია
-//             </strong>
-
-//             <p>
-//               /history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.
-//             </p>
-//           </div>
-//         `
-//       )
-
-//       return
-//     }
-
-//     if (send) {
-//       send.disabled = true
-//     }
-
-//     const typing =
-//       addAITyping()
-
-//     try {
-//       const history =
-//         await getZazaHistory()
-
-//       typing?.remove()
-
-//       addAIMessage(
-//         'assistant',
-//         formatZazaHistory(
-//           history
-//         )
-//       )
-
-//       setupZazaHistoryDelete()
-//     } catch (error) {
-//       console.error(
-//         'History error:',
-//         error
-//       )
-
-//       typing?.remove()
-
-//       addAIMessage(
-//         'error',
-//         `
-//           <div class="ai-error-content">
-//             <strong>
-//               ისტორიის ჩატვირთვა ვერ მოხერხდა
-//             </strong>
-
-//             <p>
-//               მონაცემების მიღებისას შეცდომა მოხდა.
-//             </p>
-//           </div>
-//         `
-//       )
-//     } finally {
-//       if (send) {
-//         send.disabled = false
-//       }
-
-//       input?.focus()
-//     }
-
-//     return
-//   }
-
-//   await saveAIChatMessage(
-//     cleanQuestion
-//   )
-
-//   aiHistory.push({
-//     role: 'user',
-//     content: cleanQuestion
-//   })
-
-//   if (send) {
-//     send.disabled = true
-//   }
-
-//   const typing =
-//     addAITyping()
-
-//   try {
-//     const reply =
-//       await askAI(
-//         cleanQuestion
-//       )
-
-//     typing?.remove()
-
-//     const finalReply =
-//       applyAIGreeting(reply)
-
-//     addAIMessage(
-//       'assistant',
-//       formatAIResponse(
-//         finalReply
-//       )
-//     )
-
-//     aiHistory.push({
-//       role: 'assistant',
-//       content: finalReply
-//     })
-
-//     if (
-//       aiHistory.length > 10
-//     ) {
-//       aiHistory =
-//         aiHistory.slice(-10)
-//     }
-//   } catch (error) {
-//     console.error(
-//       'ArduinoHub AI error:',
-//       error
-//     )
-
-//     console.error(
-//       'AI error status:',
-//       error?.status
-//     )
-
-//     console.error(
-//       'AI backend data:',
-//       error?.backendData
-//     )
-
-//     typing?.remove()
-
-//     addAIMessage(
-//       'error',
-//       getAIUserErrorMessage(
-//         error
-//       )
-//     )
-//   } finally {
-//     if (send) {
-//       send.disabled = false
-//     }
-
-//     input?.focus()
-//   }
-// }
-
-// function openAIChat() {
-//   const chat =
-//     $('#ai-chat')
-
-//   const toggle =
-//     $('#ai-chat-toggle')
-
-//   const windowEl =
-//     $('#ai-chat-window')
-
-//   if (
-//     !chat ||
-//     !toggle
-//   ) {
-//     return
-//   }
-
-//   chat.classList.add(
-//     'open'
-//   )
-
-//   toggle.setAttribute(
-//     'aria-expanded',
-//     'true'
-//   )
-
-//   windowEl?.setAttribute(
-//     'aria-hidden',
-//     'false'
-//   )
-
-//   setTimeout(
-//     () => {
-//       $('#ai-chat-input')
-//         ?.focus()
-//     },
-//     220
-//   )
-// }
-
-// function closeAIChat() {
-//   const chat =
-//     $('#ai-chat')
-
-//   const toggle =
-//     $('#ai-chat-toggle')
-
-//   const windowEl =
-//     $('#ai-chat-window')
-
-//   if (
-//     !chat ||
-//     !toggle
-//   ) {
-//     return
-//   }
-
-//   chat.classList.remove(
-//     'open'
-//   )
-
-//   toggle.setAttribute(
-//     'aria-expanded',
-//     'false'
-//   )
-
-//   windowEl?.setAttribute(
-//     'aria-hidden',
-//     'true'
-//   )
-// }
-
-// async function initAIChat() {
-//   const chat =
-//     $('#ai-chat')
-
-//   if (!chat) {
-//     return
-//   }
-
-//   await detectAIAdmin()
-
-//   const toggle =
-//     $('#ai-chat-toggle')
-
-//   const close =
-//     $('#ai-chat-close')
-
-//   const form =
-//     $('#ai-chat-form')
-
-//   const input =
-//     $('#ai-chat-input')
-
-//   if (toggle) {
-//     toggle.addEventListener(
-//       'click',
-//       () => {
-//         if (
-//           chat.classList.contains(
-//             'open'
-//           )
-//         ) {
-//           closeAIChat()
-//         } else {
-//           openAIChat()
-//         }
-//       }
-//     )
-//   }
-
-//   close?.addEventListener(
-//     'click',
-//     closeAIChat
-//   )
-
-//   chat
-//     .querySelectorAll(
-//       '.ai-suggestion'
-//     )
-//     .forEach(
-//       button => {
-//         button.addEventListener(
-//           'click',
-//           async () => {
-//             const question =
-//               button.dataset
-//                 .aiQuestion
-
-//             if (!question) {
-//               return
-//             }
-
-//             chat
-//               .querySelectorAll(
-//                 '.ai-suggestion'
-//               )
-//               .forEach(
-//                 b => {
-//                   b.disabled = true
-//                 }
-//               )
-
-//             await handleAIQuestion(
-//               question
-//             )
-
-//             chat
-//               .querySelectorAll(
-//                 '.ai-suggestion'
-//               )
-//               .forEach(
-//                 b => {
-//                   b.disabled = false
-//                 }
-//               )
-//           }
-//         )
-//       }
-//     )
-
-//   form?.addEventListener(
-//     'submit',
-//     async event => {
-//       event.preventDefault()
-
-//       const question =
-//         input?.value?.trim()
-
-//       if (!question) {
-//         return
-//       }
-
-//       await handleAIQuestion(
-//         question
-//       )
-//     }
-//   )
-
-//   input?.addEventListener(
-//     'keydown',
-//     event => {
-//       if (
-//         event.key === 'Enter' &&
-//         !event.shiftKey
-//       ) {
-//         event.preventDefault()
-
-//         form?.requestSubmit()
-//       }
-//     }
-//   )
-
-//   document.addEventListener(
-//     'keydown',
-//     event => {
-//       if (
-//         event.key === 'Escape' &&
-//         chat.classList.contains(
-//           'open'
-//         )
-//       ) {
-//         closeAIChat()
-//       }
-//     }
-//   )
-
-//   refreshIcons()
-// }
-
-// function card(project) {
-//   const image =
-//     project.image_url
-//       ? `
-//         <img
-//           src="${esc(project.image_url)}"
-//           alt="${esc(project.title)}"
-//           loading="lazy"
-//         >
-//       `
-//       : `
-//         <div class="card-image fallback">
-//           ${icon('circuit-board')}
-//         </div>
-//       `
-
-//   return `
-//     <article class="project-card">
-//       <div class="card-image">
-//         ${image}
-//       </div>
-
-//       <div class="card-body">
-//         <div class="card-meta">
-//           <span>
-//             ${esc(project.category)}
-//           </span>
-
-//           <time datetime="${esc(project.created_at)}">
-//             ${dateText(project.created_at)}
-//           </time>
-//         </div>
-
-//         <h2>
-//           ${esc(project.title)}
-//         </h2>
-
-//         <p>
-//           ${esc(project.description)}
-//         </p>
-
-//         <div class="card-footer">
-//           <span>
-//             ${icon('user-round')}
-//             ${esc(project.author)}
-//           </span>
-
-//           <a
-//             class="text-link"
-//             href="project.html?id=${encodeURIComponent(project.id)}"
-//           >
-//             ნახვა
-//             ${icon('arrow-up-right')}
-//           </a>
-//         </div>
-//       </div>
-//     </article>
-//   `
-// }
-
-// async function initProjects() {
-//   const status =
-//     $('#projects-status')
-
-//   const grid =
-//     $('#projects-grid')
-
-//   if (!db) {
-//     return configuredMessage(
-//       status
-//     )
-//   }
-
-//   const { data, error } =
-//     await db
-//       .from('projects')
-//       .select(
-//         'id,title,description,category,author,image_url,created_at'
-//       )
-//       .eq(
-//         'published',
-//         true
-//       )
-//       .order(
-//         'created_at',
-//         {
-//           ascending: false
-//         }
-//       )
-//       .limit(60)
-
-//   if (error) {
-//     status.textContent =
-//       neutralError(
-//         error,
-//         'პროექტების ჩატვირთვა ვერ მოხერხდა.'
-//       )
-
-//     return
-//   }
-
-//   status.remove()
-
-//   const render = () => {
-//     const q =
-//       $('#project-search')
-//         .value
-//         .trim()
-//         .toLocaleLowerCase(
-//           'ka'
-//         )
-
-//     const category =
-//       $('#category-filter')
-//         .value
-
-//     const result =
-//       data.filter(
-//         p =>
-//           (
-//             !category ||
-//             p.category ===
-//               category
-//           ) &&
-//           (
-//             !q ||
-//             `${p.title} ${p.description} ${p.author}`
-//               .toLocaleLowerCase(
-//                 'ka'
-//               )
-//               .includes(q)
-//           )
-//       )
-
-//     grid.innerHTML =
-//       result.length
-//         ? result
-//             .map(card)
-//             .join('')
-//         : `
-//           <div class="empty-state full">
-//             ${icon('search-x')}
-
-//             <h2>
-//               ${
-//                 data.length
-//                   ? 'პროექტი ვერ მოიძებნა'
-//                   : 'ჯერ პროექტები არ დამატებულა'
-//               }
-//             </h2>
-
-//             <p>
-//               ${
-//                 data.length
-//                   ? 'შეცვალეთ ძიება ან ფილტრი.'
-//                   : 'როგორც კი ადმინისტრატორი პირველ პროექტს გამოაქვეყნებს, ის აქ გამოჩნდება.'
-//               }
-//             </p>
-//           </div>
-//         `
-
-//     refreshIcons()
-//   }
-
-//   $('#project-search')
-//     .addEventListener(
-//       'input',
-//       render
-//     )
-
-//   $('#category-filter')
-//     .addEventListener(
-//       'change',
-//       render
-//     )
-
-//   render()
-// }
-
-// async function initDetail() {
-//   const target =
-//     $('#project-detail')
-
-//   if (!db) {
-//     return configuredMessage(
-//       target
-//     )
-//   }
-
-//   const id =
-//     new URLSearchParams(
-//       location.search
-//     ).get('id')
-
-//   if (
-//     !id ||
-//     !/^[0-9a-f-]{36}$/i.test(id)
-//   ) {
-//     return notFound(target)
-//   }
-
-//   const {
-//     data: p,
-//     error
-//   } =
-//     await db
-//       .from('projects')
-//       .select('*')
-//       .eq(
-//         'id',
-//         id
-//       )
-//       .eq(
-//         'published',
-//         true
-//       )
-//       .maybeSingle()
-
-//   if (
-//     error ||
-//     !p
-//   ) {
-//     return notFound(target)
-//   }
-
-//   const image =
-//     p.image_url
-//       ? `
-//         <img
-//           class="detail-image"
-//           src="${esc(p.image_url)}"
-//           alt="${esc(p.title)}"
-//         >
-//       `
-//       : ''
-
-//   const video =
-//     p.video_url
-//       ? `
-//         <section class="detail-section media-section">
-//           <h2>
-//             ${icon('video')}
-//             ვიდეო
-//           </h2>
-
-//           <video
-//             controls
-//             preload="metadata"
-//             src="${esc(p.video_url)}"
-//           >
-//             თქვენი ბრაუზერი ვიდეოს არ უჭერს მხარს.
-//           </video>
-//         </section>
-//       `
-//       : ''
-
-//   const components =
-//     p.components
-//       ? `
-//         <section class="detail-section">
-//           <h2>
-//             ${icon('package')}
-//             საჭირო კომპონენტები
-//           </h2>
-
-//           <div class="prose lines">
-//             ${esc(p.components)}
-//           </div>
-//         </section>
-//       `
-//       : ''
-
-//   const how =
-//     p.how_it_was_made
-//       ? `
-//         <section class="detail-section">
-//           <h2>
-//             ${icon('wrench')}
-//             როგორ გაკეთდა
-//           </h2>
-
-//           <div class="prose lines">
-//             ${esc(p.how_it_was_made)}
-//           </div>
-//         </section>
-//       `
-//       : ''
-
-//   let code = ''
-
-//   if (
-//     p.code &&
-//     p.code.trim()
-//   ) {
-//     const isChemistry =
-//       String(p.category)
-//         .toLowerCase() ===
-//       'chemistry'
-
-//     const sectionTitle =
-//       isChemistry
-//         ? 'ქიმიური რეაქცია'
-//         : 'Arduino Code'
-
-//     const copyText =
-//       isChemistry
-//         ? 'ტექსტის დაკოპირება'
-//         : 'კოდის დაკოპირება'
-
-//     const sectionIcon =
-//       isChemistry
-//         ? 'flask-conical'
-//         : 'braces'
-
-//     code = `
-//       <section class="detail-section">
-//         <div class="code-heading">
-//           <h2>
-//             ${icon(sectionIcon)}
-//             ${sectionTitle}
-//           </h2>
-
-//           <button
-//             id="copy-code"
-//             class="button secondary compact"
-//             type="button"
-//           >
-//             ${icon('copy')}
-//             ${copyText}
-//           </button>
-//         </div>
-
-//         <pre>
-//           <code id="arduino-code">
-//             ${esc(p.code)}
-//           </code>
-//         </pre>
-//       </section>
-//     `
-//   }
-
-//   target.className = ''
-
-//   target.innerHTML = `
-//     <article class="detail">
-//       <div class="detail-hero">
-//         <div>
-//           <div class="card-meta">
-//             <span>
-//               ${esc(p.category)}
-//             </span>
-
-//             <time>
-//               ${dateText(p.created_at)}
-//             </time>
-//           </div>
-
-//           <h1>
-//             ${esc(p.title)}
-//           </h1>
-
-//           <p>
-//             ${esc(p.description)}
-//           </p>
-
-//           <div class="author-line">
-//             ${icon('user-round')}
-//             ${esc(p.author)}
-//           </div>
-//         </div>
-
-//         ${image}
-//       </div>
-
-//       <div class="detail-content">
-//         ${components}
-//         ${how}
-//         ${video}
-//         ${code}
-//       </div>
-//     </article>
-//   `
-
-//   $('#copy-code')
-//     ?.addEventListener(
-//       'click',
-//       async () => {
-//         try {
-//           await navigator.clipboard
-//             .writeText(p.code)
-
-//           const isChemistry =
-//             String(p.category)
-//               .toLowerCase() ===
-//             'chemistry'
-
-//           toast(
-//             isChemistry
-//               ? 'ქიმიური რეაქცია დაკოპირდა'
-//               : 'კოდი დაკოპირდა',
-//             'success'
-//           )
-//         } catch {
-//           toast(
-//             'დაკოპირება ვერ მოხერხდა.'
-//           )
-//         }
-//       }
-//     )
-
-//   refreshIcons()
-// }
-
-// function notFound(target) {
-//   if (!target) {
-//     return
-//   }
-
-//   target.className = ''
-
-//   target.innerHTML = `
-//     <div class="empty-state">
-//       ${icon('search-x')}
-
-//       <h2>
-//         პროექტი ვერ მოიძებნა
-//       </h2>
-
-//       <p>
-//         ბმული არასწორია ან პროექტი აღარ არის გამოქვეყნებული.
-//       </p>
-
-//       <a
-//         href="projects.html"
-//         class="button primary"
-//       >
-//         პროექტებზე დაბრუნება
-//       </a>
-//     </div>
-//   `
-
-//   refreshIcons()
-// }
-
-// const IMAGE_TYPES = [
-//   'image/jpeg',
-//   'image/png',
-//   'image/webp',
-//   'image/gif'
-// ]
-
-// const VIDEO_TYPES = [
-//   'video/mp4',
-//   'video/webm',
-//   'video/ogg'
-// ]
-
-// function fileOkay(
-//   file,
-//   types,
-//   max,
-//   label
-// ) {
-//   if (!file) {
-//     return true
-//   }
-
-//   if (
-//     !types.includes(
-//       file.type
-//     )
-//   ) {
-//     toast(
-//       `${label}: ფაილის ტიპი მიუღებელია.`
-//     )
-
-//     return false
-//   }
-
-//   if (
-//     file.size > max
-//   ) {
-//     toast(
-//       `${label}: ფაილი ზედმეტად დიდია.`
-//     )
-
-//     return false
-//   }
-
-//   return true
-// }
-
-// async function upload(
-//   file,
-//   bucket,
-//   folder,
-//   types,
-//   max,
-//   label
-// ) {
-//   if (!file) {
-//     return null
-//   }
-
-//   if (
-//     !fileOkay(
-//       file,
-//       types,
-//       max,
-//       label
-//     )
-//   ) {
-//     throw new Error(
-//       'invalid-file'
-//     )
-//   }
-
-//   const clean =
-//     file.name.replace(
-//       /[^a-zA-Z0-9._-]/g,
-//       '_'
-//     )
-
-//   const path =
-//     `${folder}/${crypto.randomUUID()}-${clean}`
-
-//   const { error } =
-//     await db.storage
-//       .from(bucket)
-//       .upload(
-//         path,
-//         file,
-//         {
-//           cacheControl: '3600',
-//           upsert: false,
-//           contentType:
-//             file.type
-//         }
-//       )
-
-//   if (error) {
-//     throw error
-//   }
-
-//   const { data } =
-//     db.storage
-//       .from(bucket)
-//       .getPublicUrl(path)
-
-//   return {
-//     url: data.publicUrl,
-//     path
-//   }
-// }
-
-// function storagePath(
-//   url,
-//   bucket
-// ) {
-//   try {
-//     const marker =
-//       `/storage/v1/object/public/${bucket}/`
-
-//     const index =
-//       url?.indexOf(marker)
-
-//     return index >= 0
-//       ? decodeURIComponent(
-//           url.slice(
-//             index +
-//               marker.length
-//           )
-//         )
-//       : null
-//   } catch {
-//     return null
-//   }
-// }
-
-// async function removeStored(
-//   url,
-//   bucket
-// ) {
-//   const path =
-//     storagePath(
-//       url,
-//       bucket
-//     )
-
-//   if (path) {
-//     const { error } =
-//       await db.storage
-//         .from(bucket)
-//         .remove([path])
-
-//     if (error) {
-//       console.warn(
-//         'Storage cleanup failed',
-//         error
-//       )
-//     }
-//   }
-// }
-
-// async function isAdmin(user) {
-//   if (
-//     !user ||
-//     !db
-//   ) {
-//     return null
-//   }
-
-//   const {
-//     data,
-//     error
-//   } =
-//     await db
-//       .from('admin_users')
-//       .select('username')
-//       .eq(
-//         'user_id',
-//         user.id
-//       )
-//       .maybeSingle()
-
-//   if (
-//     error ||
-//     !data
-//   ) {
-//     return null
-//   }
-
-//   return data
-// }
-
-// async function initAdmin() {
-//   if (!db) {
-//     $('#auth-panel')
-//       .querySelector('form')
-//       .hidden = true
-
-//     $('#login-error')
-//       .textContent =
-//       'Supabase ჯერ არ არის კონფიგურირებული.'
-
-//     return
-//   }
-
-//   const {
-//     data: { session }
-//   } =
-//     await db.auth.getSession()
-
-//   if (session) {
-//     const admin =
-//       await isAdmin(
-//         session.user
-//       )
-
-//     if (admin) {
-//       await showDashboard(
-//         session.user,
-//         admin
-//       )
-//     } else {
-//       location.href =
-//         'index.html'
-
-//       return
-//     }
-//   }
-
-//   $('#login-form')
-//     ?.addEventListener(
-//       'submit',
-//       login
-//     )
-
-//   $('#logout-button')
-//     ?.addEventListener(
-//       'click',
-//       logout
-//     )
-
-//   $('#new-project-button')
-//     ?.addEventListener(
-//       'click',
-//       () =>
-//         openEditor()
-//     )
-
-//   $('#cancel-edit')
-//     ?.addEventListener(
-//       'click',
-//       closeEditor
-//     )
-
-//   $('#project-form')
-//     ?.addEventListener(
-//       'submit',
-//       saveProject
-//     )
-
-//   $('#image-file')
-//     ?.addEventListener(
-//       'change',
-//       imagePreview
-//     )
-
-//   $('#video-file')
-//     ?.addEventListener(
-//       'change',
-//       () => {
-//         $('#video-name')
-//           .textContent =
-//           $('#video-file')
-//             .files[0]
-//             ?.name ||
-//           'ფაილი არჩეული არ არის'
-//       }
-//     )
-
-//   const categorySelect =
-//     $('#category')
-
-//   if (categorySelect) {
-//     categorySelect
-//       .addEventListener(
-//         'change',
-//         updateCodeFieldLabel
-//       )
-
-//     updateCodeFieldLabel()
-//   }
-
-//   bindMeetingForm()
-
-//   db.auth.onAuthStateChange(
-//     (
-//       _event,
-//       session
-//     ) => {
-//       if (!session) {
-//         showLogin()
-//       }
-//     }
-//   )
-// }
-
-// function updateCodeFieldLabel() {
-//   const category =
-//     $('#category')
-
-//   const codeInput =
-//     $('#code')
-
-//   if (
-//     !category ||
-//     !codeInput
-//   ) {
-//     return
-//   }
-
-//   const label =
-//     codeInput.closest(
-//       'label'
-//     )
-
-//   if (!label) {
-//     return
-//   }
-
-//   const isChemistry =
-//     String(category.value)
-//       .toLowerCase() ===
-//     'chemistry'
-
-//   const textNodes =
-//     Array.from(
-//       label.childNodes
-//     ).filter(
-//       node =>
-//         node.nodeType ===
-//         Node.TEXT_NODE
-//     )
-
-//   const titleNode =
-//     textNodes.find(
-//       node =>
-//         node.textContent.trim()
-//     )
-
-//   if (titleNode) {
-//     titleNode.textContent =
-//       isChemistry
-//         ? ' ქიმიური რეაქცია '
-//         : ' Arduino Code '
-//   }
-
-//   if (isChemistry) {
-//     codeInput.placeholder =
-//       'მაგ.: რეაქციის ფორმულა, ქიმიური განტოლება ან რეაქციის აღწერა...'
-//   } else {
-//     codeInput.placeholder =
-//       'ჩასვით Arduino კოდი აქ...'
-//   }
-// }
-
-// async function login(event) {
-//   event.preventDefault()
-
-//   const form =
-//     event.currentTarget
-
-//   const button =
-//     form.querySelector(
-//       'button'
-//     )
-
-//   const email =
-//     $('#login-email')
-//       ?.value
-//       .trim()
-
-//   const password =
-//     $('#login-password')
-//       ?.value || ''
-
-//   const errorElement =
-//     $('#login-error')
-
-//   if (errorElement) {
-//     errorElement.textContent =
-//       ''
-//   }
-
-//   if (
-//     !email ||
-//     !password
-//   ) {
-//     if (errorElement) {
-//       errorElement.textContent =
-//         'შეავსეთ ორივე ველი.'
-//     }
-
-//     return
-//   }
-
-//   setBusy(
-//     button,
-//     true,
-//     'იტვირთება...'
-//   )
-
-//   try {
-//     const {
-//       data,
-//       error
-//     } =
-//       await db.auth
-//         .signInWithPassword({
-//           email,
-//           password
-//         })
-
-//     if (
-//       error ||
-//       !data?.user
-//     ) {
-//       if (errorElement) {
-//         errorElement.textContent =
-//           'მონაცემები არასწორია'
-//       }
-
-//       return
-//     }
-
-//     const user =
-//       data.user
-
-//     const admin =
-//       await isAdmin(user)
-
-//     if (admin) {
-//       await showDashboard(
-//         user,
-//         admin
-//       )
-
-//       return
-//     }
-
-//     await updateAuthUI()
-
-//     toast(
-//       `კეთილი იყოს შენი დაბრუნება, ${getUserDisplayName(user)}!`,
-//       'success'
-//     )
-
-//     setTimeout(
-//       () => {
-//         location.href =
-//           'index.html'
-//       },
-//       500
-//     )
-//   } catch (error) {
-//     console.error(
-//       'Login error:',
-//       error
-//     )
-
-//     if (errorElement) {
-//       errorElement.textContent =
-//         'შესვლა ვერ მოხერხდა. სცადეთ ხელახლა.'
-//     }
-//   } finally {
-//     setBusy(
-//       button,
-//       false
-//     )
-//   }
-// }
-
-// async function showDashboard(
-//   user,
-//   knownAdmin
-// ) {
-//   const admin =
-//     knownAdmin ||
-//     await isAdmin(user)
-
-//   if (!admin) {
-//     location.href =
-//       'index.html'
-
-//     return
-//   }
-
-//   $('#auth-panel')
-//     .hidden = true
-
-//   $('#dashboard')
-//     .hidden = false
-
-//   $('#admin-name')
-//     .textContent =
-//     admin.username
-
-//   refreshIcons()
-
-//   await Promise.all([
-//     loadAdminProjects(),
-//     loadAdminMeeting(),
-//     loadAdminAttendance()
-//   ])
-// }
-
-// function showLogin() {
-//   const dashboard =
-//     $('#dashboard')
-
-//   const authPanel =
-//     $('#auth-panel')
-
-//   if (dashboard) {
-//     dashboard.hidden = true
-//   }
-
-//   if (authPanel) {
-//     authPanel.hidden = false
-//   }
-
-//   closeEditor()
-// }
-
-// async function logout() {
-//   if (!db) {
-//     return
-//   }
-
-//   try {
-//     const { error } =
-//       await db.auth.signOut()
-
-//     if (error) {
-//       throw error
-//     }
-
-//     aiAdminGreeting = ''
-
-//     document
-//       .querySelectorAll(
-//         '.account-menu'
-//       )
-//       .forEach(
-//         menu =>
-//           menu.remove()
-//       )
-
-//     const loginElement =
-//       findLoginElement()
-
-//     if (loginElement) {
-//       loginElement.hidden =
-//         false
-//     }
-
-//     toast(
-//       'თქვენ გამოხვედით ანგარიშიდან.',
-//       'success'
-//     )
-
-//     if (
-//       page === 'admin'
-//     ) {
-//       setTimeout(
-//         () => {
-//           location.href =
-//             'index.html'
-//         },
-//         500
-//       )
-//     }
-//   } catch (error) {
-//     console.error(
-//       'Logout error:',
-//       error
-//     )
-
-//     toast(
-//       'ანგარიშიდან გამოსვლა ვერ მოხერხდა.'
-//     )
-//   }
-// }
-
-// function setBusy(
-//   button,
-//   busy,
-//   text
-// ) {
-//   if (!button) {
-//     return
-//   }
-
-//   button.disabled =
-//     busy
-
-//   if (busy) {
-//     button.dataset.label =
-//       button.innerHTML
-
-//     button.textContent =
-//       text
-//   } else if (
-//     button.dataset.label
-//   ) {
-//     button.innerHTML =
-//       button.dataset.label
-//   }
-
-//   refreshIcons()
-// }
-
-// let adminProjects = []
-
-// async function loadAdminProjects() {
-//   const status =
-//     $('#admin-status')
-
-//   const list =
-//     $('#admin-project-list')
-
-//   if (
-//     !status ||
-//     !list
-//   ) {
-//     return
-//   }
-
-//   status.hidden = false
-//   list.innerHTML = ''
-
-//   const {
-//     data,
-//     error
-//   } =
-//     await db
-//       .from('projects')
-//       .select(
-//         'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
-//       )
-//       .order(
-//         'created_at',
-//         {
-//           ascending: false
-//         }
-//       )
-
-//   if (error) {
-//     status.textContent =
-//       neutralError(
-//         error,
-//         'პროექტების ჩატვირთვა ვერ მოხერხდა.'
-//       )
-
-//     return
-//   }
-
-//   adminProjects =
-//     data || []
-
-//   status.hidden = true
-
-//   $('#admin-count')
-//     .textContent =
-//     `${adminProjects.length} პროექტი`
-
-//   list.innerHTML =
-//     adminProjects.length
-//       ? adminProjects
-//           .map(
-//             p => `
-//               <article class="admin-row">
-//                 <div>
-//                   <h3>
-//                     ${esc(p.title)}
-//                   </h3>
-
-//                   <p>
-//                     ${esc(p.category)}
-//                     ·
-//                     ${dateText(p.created_at)}
-//                   </p>
-//                 </div>
-
-//                 <span
-//                   class="status ${
-//                     p.published
-//                       ? 'published'
-//                       : 'hidden-status'
-//                   }"
-//                 >
-//                   ${
-//                     p.published
-//                       ? 'გამოქვეყნებული'
-//                       : 'დამალული'
-//                   }
-//                 </span>
-
-//                 <div class="row-actions">
-//                   <a
-//                     class="icon-button"
-//                     title="ნახვა"
-//                     href="project.html?id=${p.id}"
-//                   >
-//                     ${icon('eye')}
-//                   </a>
-
-//                   <button
-//                     class="icon-button edit"
-//                     data-id="${p.id}"
-//                     title="რედაქტირება"
-//                   >
-//                     ${icon('pencil')}
-//                   </button>
-
-//                   <button
-//                     class="icon-button toggle"
-//                     data-id="${p.id}"
-//                     title="${
-//                       p.published
-//                         ? 'დამალვა'
-//                         : 'გამოქვეყნება'
-//                     }"
-//                   >
-//                     ${
-//                       icon(
-//                         p.published
-//                           ? 'eye-off'
-//                           : 'send'
-//                       )
-//                     }
-//                   </button>
-
-//                   <button
-//                     class="icon-button danger delete"
-//                     data-id="${p.id}"
-//                     title="წაშლა"
-//                   >
-//                     ${icon('trash-2')}
-//                   </button>
-//                 </div>
-//               </article>
-//             `
-//           )
-//           .join('')
-//       : `
-//         <div class="empty-state compact-empty">
-//           ${icon('folder-plus')}
-
-//           <h2>
-//             ჯერ პროექტები არ დამატებულა
-//           </h2>
-
-//           <p>
-//             დაიწყეთ პირველი რეალური პროექტის დამატებით.
-//           </p>
-//         </div>
-//       `
-
-//   list
-//     .querySelectorAll(
-//       '.edit'
-//     )
-//     .forEach(
-//       b =>
-//         b.addEventListener(
-//           'click',
-//           () =>
-//             openEditor(
-//               adminProjects.find(
-//                 p =>
-//                   p.id ===
-//                   b.dataset.id
-//               )
-//             )
-//         )
-//     )
-
-//   list
-//     .querySelectorAll(
-//       '.toggle'
-//     )
-//     .forEach(
-//       b =>
-//         b.addEventListener(
-//           'click',
-//           () =>
-//             togglePublished(
-//               b.dataset.id
-//             )
-//         )
-//     )
-
-//   list
-//     .querySelectorAll(
-//       '.delete'
-//     )
-//     .forEach(
-//       b =>
-//         b.addEventListener(
-//           'click',
-//           () =>
-//             deleteProject(
-//               b.dataset.id
-//             )
-//         )
-//     )
-
-//   refreshIcons()
-// }
-
-// function openEditor(p) {
-//   const form =
-//     $('#project-form')
-
-//   form.reset()
-
-//   $('#image-preview')
-//     .hidden = true
-
-//   $('#image-name')
-//     .textContent =
-//     'ფაილი არჩეული არ არის'
-
-//   $('#video-name')
-//     .textContent =
-//     'ფაილი არჩეული არ არის'
-
-//   $('#form-error')
-//     .textContent = ''
-
-//   $('#editor-title')
-//     .textContent =
-//     p
-//       ? 'პროექტის რედაქტირება'
-//       : 'ახალი პროექტი'
-
-//   $('#save-project')
-//     .innerHTML =
-//     p
-//       ? `ცვლილებების შენახვა ${icon('save')}`
-//       : `პროექტის დამატება ${icon('save')}`
-
-//   if (p) {
-//     $('#edit-id')
-//       .value = p.id
-
-//     $('#title')
-//       .value = p.title
-
-//     $('#category')
-//       .value = p.category
-
-//     $('#author')
-//       .value = p.author
-
-//     $('#published')
-//       .checked = p.published
-
-//     $('#description')
-//       .value = p.description
-
-//     $('#components')
-//       .value =
-//       p.components || ''
-
-//     $('#how-made')
-//       .value =
-//       p.how_it_was_made || ''
-
-//     $('#code')
-//       .value =
-//       p.code || ''
-//   }
-
-//   updateCodeFieldLabel()
-
-//   $('#project-editor')
-//     .hidden = false
-
-//   $('#project-editor')
-//     .scrollIntoView({
-//       behavior: 'smooth',
-//       block: 'start'
-//     })
-
-//   refreshIcons()
-// }
-
-// function closeEditor() {
-//   const editor =
-//     $('#project-editor')
-
-//   if (editor) {
-//     editor.hidden = true
-//   }
-// }
-
-// function imagePreview() {
-//   const file =
-//     $('#image-file')
-//       .files[0]
-
-//   $('#image-name')
-//     .textContent =
-//     file?.name ||
-//     'ფაილი არჩეული არ არის'
-
-//   if (
-//     file &&
-//     fileOkay(
-//       file,
-//       IMAGE_TYPES,
-//       5 * 1024 * 1024,
-//       'სურათი'
-//     )
-//   ) {
-//     const preview =
-//       $('#image-preview')
-
-//     preview.src =
-//       URL.createObjectURL(
-//         file
-//       )
-
-//     preview.hidden = false
-//   }
-// }
-
-// async function saveProject(
-//   event
-// ) {
-//   event.preventDefault()
-
-//   const button =
-//     $('#save-project')
-
-//   const id =
-//     $('#edit-id')
-//       .value
-
-//   const old =
-//     adminProjects.find(
-//       p =>
-//         p.id === id
-//     )
-
-//   const image =
-//     $('#image-file')
-//       .files[0]
-
-//   const video =
-//     $('#video-file')
-//       .files[0]
-
-//   $('#form-error')
-//     .textContent = ''
-
-//   if (
-//     !fileOkay(
-//       image,
-//       IMAGE_TYPES,
-//       5 * 1024 * 1024,
-//       'სურათი'
-//     ) ||
-//     !fileOkay(
-//       video,
-//       VIDEO_TYPES,
-//       50 * 1024 * 1024,
-//       'ვიდეო'
-//     )
-//   ) {
-//     return
-//   }
-
-//   setBusy(
-//     button,
-//     true,
-//     'ინახება...'
-//   )
-
-//   let uploads = []
-
-//   try {
-//     const folder =
-//       id ||
-//       crypto.randomUUID()
-
-//     if (image) {
-//       uploads.push([
-//         'image',
-//         await upload(
-//           image,
-//           'project-images',
-//           folder,
-//           IMAGE_TYPES,
-//           5 * 1024 * 1024,
-//           'სურათი'
-//         )
-//       ])
-//     }
-
-//     if (video) {
-//       uploads.push([
-//         'video',
-//         await upload(
-//           video,
-//           'project-videos',
-//           folder,
-//           VIDEO_TYPES,
-//           50 * 1024 * 1024,
-//           'ვიდეო'
-//         )
-//       ])
-//     }
-
-//     const value = {
-//       title:
-//         $('#title')
-//           .value
-//           .trim(),
-
-//       category:
-//         $('#category')
-//           .value,
-
-//       author:
-//         $('#author')
-//           .value
-//           .trim(),
-
-//       description:
-//         $('#description')
-//           .value
-//           .trim(),
-
-//       components:
-//         $('#components')
-//           .value
-//           .trim() ||
-//         null,
-
-//       how_it_was_made:
-//         $('#how-made')
-//           .value
-//           .trim() ||
-//         null,
-
-//       code:
-//         $('#code')
-//           .value
-//           .trim() ||
-//         null,
-
-//       published:
-//         $('#published')
-//           .checked
-//     }
-
-//     const img =
-//       uploads.find(
-//         x =>
-//           x[0] ===
-//           'image'
-//       )?.[1]
-
-//     const vid =
-//       uploads.find(
-//         x =>
-//           x[0] ===
-//           'video'
-//       )?.[1]
-
-//     if (img) {
-//       value.image_url =
-//         img.url
-//     }
-
-//     if (vid) {
-//       value.video_url =
-//         vid.url
-//     }
-
-//     let error
-
-//     if (id) {
-//       ({
-//         error
-//       } =
-//         await db
-//           .from('projects')
-//           .update(value)
-//           .eq(
-//             'id',
-//             id
-//           ))
-//     } else {
-//       ({
-//         error
-//       } =
-//         await db
-//           .from('projects')
-//           .insert(
-//             value
-//           ))
-//     }
-
-//     if (error) {
-//       throw error
-//     }
-
-//     if (
-//       img &&
-//       old?.image_url
-//     ) {
-//       await removeStored(
-//         old.image_url,
-//         'project-images'
-//       )
-//     }
-
-//     if (
-//       vid &&
-//       old?.video_url
-//     ) {
-//       await removeStored(
-//         old.video_url,
-//         'project-videos'
-//       )
-//     }
-
-//     toast(
-//       id
-//         ? 'ცვლილებები შენახულია.'
-//         : 'პროექტი დაემატა.',
-//       'success'
-//     )
-
-//     closeEditor()
-
-//     await loadAdminProjects()
-//   } catch (error) {
-//     console.error(error)
-
-//     for (
-//       const [kind, file]
-//       of uploads
-//     ) {
-//       if (!file?.url) {
-//         continue
-//       }
-
-//       await removeStored(
-//         file.url,
-//         kind === 'image'
-//           ? 'project-images'
-//           : 'project-videos'
-//       )
-//     }
-
-//     $('#form-error')
-//       .textContent =
-//       neutralError(
-//         error,
-//         'პროექტის შენახვა ვერ მოხერხდა.'
-//       )
-//   } finally {
-//     setBusy(
-//       button,
-//       false
-//     )
-//   }
-// }
-
-// async function togglePublished(
-//   id
-// ) {
-//   const p =
-//     adminProjects.find(
-//       x =>
-//         x.id === id
-//     )
-
-//   if (!p) {
-//     return
-//   }
-
-//   const { error } =
-//     await db
-//       .from('projects')
-//       .update({
-//         published:
-//           !p.published
-//       })
-//       .eq(
-//         'id',
-//         id
-//       )
-
-//   if (error) {
-//     return toast(
-//       'სტატუსის შეცვლა ვერ მოხერხდა.'
-//     )
-//   }
-
-//   toast(
-//     p.published
-//       ? 'პროექტი დამალულია.'
-//       : 'პროექტი გამოქვეყნდა.',
-//     'success'
-//   )
-
-//   loadAdminProjects()
-// }
-
-// async function deleteProject(
-//   id
-// ) {
-//   const p =
-//     adminProjects.find(
-//       x =>
-//         x.id === id
-//     )
-
-//   if (
-//     !p ||
-//     !confirm(
-//       'ნამდვილად გსურთ ამ პროექტის წაშლა?'
-//     )
-//   ) {
-//     return
-//   }
-
-//   const { error } =
-//     await db
-//       .from('projects')
-//       .delete()
-//       .eq(
-//         'id',
-//         id
-//       )
-
-//   if (error) {
-//     return toast(
-//       'პროექტის წაშლა ვერ მოხერხდა.'
-//     )
-//   }
-
-//   await Promise.all([
-//     removeStored(
-//       p.image_url,
-//       'project-images'
-//     ),
-
-//     removeStored(
-//       p.video_url,
-//       'project-videos'
-//     )
-//   ])
-
-//   toast(
-//     'პროექტი წაიშალა.',
-//     'success'
-//   )
-
-//   loadAdminProjects()
-// }
-
-// const GEORGIAN_WEEKDAYS = [
-//   'კვირა',
-//   'ორშაბათი',
-//   'სამშაბათი',
-//   'ოთხშაბათი',
-//   'ხუთშაბათი',
-//   'პარასკევი',
-//   'შაბათი'
-// ]
-
-// function meetingDay(
-//   dateValue
-// ) {
-//   if (!dateValue) {
-//     return '—'
-//   }
-
-//   const d =
-//     new Date(
-//       `${dateValue}T12:00:00`
-//     )
-
-//   if (
-//     Number.isNaN(
-//       d.getTime()
-//     )
-//   ) {
-//     return '—'
-//   }
-
-//   return GEORGIAN_WEEKDAYS[
-//     d.getDay()
-//   ]
-// }
-
-// function meetingDateText(
-//   dateValue
-// ) {
-//   if (!dateValue) {
-//     return '—'
-//   }
-
-//   const d =
-//     new Date(
-//       `${dateValue}T12:00:00`
-//     )
-
-//   if (
-//     Number.isNaN(
-//       d.getTime()
-//     )
-//   ) {
-//     return dateValue
-//   }
-
-//   return new Intl.DateTimeFormat(
-//     'ka-GE',
-//     {
-//       day: 'numeric',
-//       month: 'long',
-//       year: 'numeric'
-//     }
-//   ).format(d)
-// }
-
-// function meetingTimeText(
-//   timeValue
-// ) {
-//   if (!timeValue) {
-//     return '—'
-//   }
-
-//   const m =
-//     String(timeValue)
-//       .match(
-//         /^(\d{2}):(\d{2})/
-//       )
-
-//   return m
-//     ? `${m[1]}:${m[2]}`
-//     : timeValue
-// }
-
-// async function getMeeting() {
-//   if (!db) {
-//     return {
-//       data: null,
-//       error:
-//         new Error(
-//           'Supabase not configured'
-//         )
-//     }
-//   }
-
-//   return await db
-//     .from('club_meeting')
-//     .select(
-//       'id,meeting_date,meeting_time,updated_at'
-//     )
-//     .eq(
-//       'id',
-//       1
-//     )
-//     .maybeSingle()
-// }
-
-// function renderMeetingContent(
-//   meeting
-// ) {
-//   const target =
-//     $('#meeting-content')
-
-//   if (!target) {
-//     return
-//   }
-
-//   if (!meeting) {
-//     target.innerHTML = `
-//       <div class="meeting-empty">
-//         ${icon('calendar-off')}
-
-//         <h3>
-//           თარიღი ჯერ არ არის გამოქვეყნებული
-//         </h3>
-
-//         <p>
-//           როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
-//         </p>
-//       </div>
-//     `
-//   } else {
-//     target.innerHTML = `
-//       <div class="meeting-date-main">
-//         ${esc(
-//           meetingDateText(
-//             meeting.meeting_date
-//           )
-//         )}
-//       </div>
-
-//       <div class="meeting-detail-row">
-//         <div>
-//           <span>
-//             დღე
-//           </span>
-
-//           <strong>
-//             ${esc(
-//               meetingDay(
-//                 meeting.meeting_date
-//               )
-//             )}
-//           </strong>
-//         </div>
-
-//         <div>
-//           <span>
-//             დრო
-//           </span>
-
-//           <strong>
-//             ${esc(
-//               meetingTimeText(
-//                 meeting.meeting_time
-//               )
-//             )}
-//           </strong>
-//         </div>
-//       </div>
-//     `
-//   }
-
-//   refreshIcons()
-// }
-
-// async function loadPublicMeeting() {
-//   const {
-//     data,
-//     error
-//   } =
-//     await getMeeting()
-
-//   if (error) {
-//     console.error(error)
-
-//     const target =
-//       $('#meeting-content')
-
-//     if (target) {
-//       target.innerHTML = `
-//         <div class="meeting-empty">
-//           ${icon('triangle-alert')}
-
-//           <h3>
-//             ინფორმაციის ჩატვირთვა ვერ მოხერხდა
-//           </h3>
-
-//           <p>
-//             სცადეთ რამდენიმე წამში ხელახლა.
-//           </p>
-//         </div>
-//       `
-
-//       refreshIcons()
-//     }
-
-//     return
-//   }
-
-//   renderMeetingContent(
-//     data
-//   )
-// }
-
-// function openMeetingModal() {
-//   const modal =
-//     $('#meeting-modal')
-
-//   if (!modal) {
-//     return
-//   }
-
-//   modal.hidden = false
-
-//   modal.setAttribute(
-//     'aria-hidden',
-//     'false'
-//   )
-
-//   document.body.classList.add(
-//     'modal-open'
-//   )
-
-//   loadPublicMeeting()
-
-//   setTimeout(
-//     () => {
-//       $('#meeting-close')
-//         ?.focus()
-//     },
-//     0
-//   )
-// }
-
-// function closeMeetingModal() {
-//   const modal =
-//     $('#meeting-modal')
-
-//   if (!modal) {
-//     return
-//   }
-
-//   modal.hidden = true
-
-//   modal.setAttribute(
-//     'aria-hidden',
-//     'true'
-//   )
-
-//   document.body.classList.remove(
-//     'modal-open'
-//   )
-// }
-
-// function initMeetingPublic() {
-//   const button =
-//     $('#meeting-button')
-
-//   if (!button) {
-//     return
-//   }
-
-//   button.addEventListener(
-//     'click',
-//     openMeetingModal
-//   )
-
-//   $('#meeting-close')
-//     ?.addEventListener(
-//       'click',
-//       closeMeetingModal
-//     )
-
-//   document
-//     .querySelectorAll(
-//       '[data-meeting-close]'
-//     )
-//     .forEach(
-//       el =>
-//         el.addEventListener(
-//           'click',
-//           closeMeetingModal
-//         )
-//     )
-
-//   document.addEventListener(
-//     'keydown',
-//     e => {
-//       if (
-//         e.key === 'Escape' &&
-//         $('#meeting-modal') &&
-//         !$('#meeting-modal')
-//           .hidden
-//       ) {
-//         closeMeetingModal()
-//       }
-//     }
-//   )
-// }
-
-// async function loadAdminMeeting() {
-//   const status =
-//     $('#meeting-admin-status')
-
-//   if (!status) {
-//     return
-//   }
-
-//   const {
-//     data,
-//     error
-//   } =
-//     await getMeeting()
-
-//   if (error) {
-//     status.textContent =
-//       'ჩატვირთვა ვერ მოხერხდა'
-
-//     console.error(error)
-
-//     return
-//   }
-
-//   if (data) {
-//     $('#meeting-date')
-//       .value =
-//       data.meeting_date ||
-//       ''
-
-//     $('#meeting-time')
-//       .value =
-//       String(
-//         data.meeting_time ||
-//         ''
-//       ).slice(
-//         0,
-//         5
-//       )
-
-//     $('#meeting-day-preview')
-//       .textContent =
-//       meetingDay(
-//         data.meeting_date
-//       )
-
-//     status.textContent =
-//       'გამოქვეყნებულია'
-
-//     status.className =
-//       'meeting-admin-status published'
-//   } else {
-//     status.textContent =
-//       'არ არის გამოქვეყნებული'
-
-//     status.className =
-//       'meeting-admin-status'
-
-//     $('#meeting-day-preview')
-//       .textContent =
-//       '—'
-//   }
-// }
-
-// function bindMeetingForm() {
-//   const form =
-//     $('#meeting-form')
-
-//   if (!form) {
-//     return
-//   }
-
-//   $('#meeting-date')
-//     ?.addEventListener(
-//       'input',
-//       e => {
-//         $('#meeting-day-preview')
-//           .textContent =
-//           meetingDay(
-//             e.target.value
-//           )
-//       }
-//     )
-
-//   form.addEventListener(
-//     'submit',
-//     saveMeeting
-//   )
-
-//   $('#clear-meeting')
-//     ?.addEventListener(
-//       'click',
-//       clearMeeting
-//     )
-// }
-
-// async function saveMeeting( event ) {
-//   event.preventDefault()
-//   if (!db) { return }
-//   const button = $('#save-meeting')
-//   const errorTarget = $('#meeting-form-error')
-//   const date = $('#meeting-date') .value
-//   const time = $('#meeting-time') .value
-//   errorTarget.textContent = ''
-//   if ( !date || !time ) {
-//     errorTarget.textContent = 'აირჩიეთ თარიღი და დრო.'
-//     return
-//   }
-//   setBusy( button, true, 'ქვეყნდება...' )
-//   try {
-//     const { data: { user } } = await db.auth.getUser()
-//     if (!user) {
-//       throw new Error( 'not-authenticated' )
-//     }
-//     const { error } = await db
-//       .from('club_meeting')
-//       .upsert(
-//         { id: 1, meeting_date: date, meeting_time: time, updated_by: user.id },
-//         { onConflict: 'id' }
-//       )
-//     if (error) {
-//       throw error
-//     }
-//     toast( 'კლუბის შეკრება გამოქვეყნდა.', 'success' )
+import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const db = supabaseIsConfigured
+  ? createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true
+        }
+      }
+    )
+  : null
+
+const page = document.body.dataset.page
+
+const $ = (s, root = document) => root.querySelector(s)
+
+const esc = (value = '') =>
+  String(value).replace(
+    /[&<>'"]/g,
+    c =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[c])
+  )
+
+const icon = name =>
+  `<i data-lucide="${name}"></i>`
+
+function refreshIcons() {
+  window.lucide?.createIcons()
+}
+
+function toast(message, type = '') {
+  const el = $('#toast')
+
+  if (!el) {
+    return
+  }
+
+  el.textContent = message
+  el.className = `toast show ${type}`
+
+  clearTimeout(toast.timer)
+
+  toast.timer = setTimeout(
+    () => {
+      el.className = 'toast'
+    },
+    3200
+  )
+}
+
+function dateText(value) {
+  return new Intl.DateTimeFormat(
+    'ka-GE',
+    {
+      dateStyle: 'medium'
+    }
+  ).format(
+    new Date(value)
+  )
+}
+
+function neutralError(
+  error,
+  fallback = 'მოქმედება ვერ შესრულდა. სცადეთ ხელახლა.'
+) {
+  console.error(error)
+  return fallback
+}
+
+function configuredMessage(target) {
+  if (!target) {
+    return
+  }
+
+  target.innerHTML = `
+    <div class="empty-state">
+      ${icon('settings')}
+
+      <h2>
+        Supabase ჯერ არ არის კონფიგურირებული
+      </h2>
+
+      <p>
+        დაამატეთ პროექტის URL და anon key
+        <code>supabase-config.js</code>-ში, შემდეგ გაუშვით schema SQL.
+      </p>
+    </div>
+  `
+
+  refreshIcons()
+}
+
+function initChrome() {
+  document
+    .querySelectorAll('[data-year]')
+    .forEach(
+      el => {
+        el.textContent =
+          new Date().getFullYear()
+      }
+    )
+
+  const button = $('.menu-toggle')
+
+  if (button) {
+    button.addEventListener(
+      'click',
+      () => {
+        const nav = $('nav')
+
+        if (!nav) {
+          return
+        }
+
+        const open =
+          nav.classList.toggle('open')
+
+        button.setAttribute(
+          'aria-expanded',
+          String(open)
+        )
+      }
+    )
+  }
+
+  refreshIcons()
+}
+
+const AI_FUNCTION_URL =
+  supabaseIsConfigured && SUPABASE_URL
+    ? `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/ai-chat`
+    : null
+
+let aiHistory = []
+let aiAdminGreeting = ''
+
+const AI_SYSTEM_CONTEXT = `
+შენ ხარ ArduinoHub AI — ArduinoHub-ის ოფიციალური AI ასისტენტი.
+
+ArduinoHub არის Arduino-სა და Chemistry-ს პროექტების პლატფორმა.
+
+საიტის ძირითადი ინფორმაცია:
+- ArduinoHub შეიქმნა 2026 წლის 3 სექტემბერს.
+- პლატფორმის მიზანია Arduino-ს, ელექტრონიკისა და ქიმიის პროექტების ერთ სივრცეში თავმოყრა და ცოდნის გაზიარება.
+- ArduinoHub დაკავშირებულია 29-ე საჯარო სკოლასთან.
+- პროექტების მიმართულებები მოიცავს Arduino-ს, ელექტრონიკას, სენსორებს, ავტომატიზაციას, LED-ს, LCD-ს, IoT-ს და ქიმიის ექსპერიმენტებს.
+- ArduinoHub შექმნილია „მოაზროვნე ქიმიკოსთა კლუბის“ მიერ.
+- კლუბის ხელმძღვანელია ქალბატონი მაია მელაძე.
+- საიტი შექმნილია ზაზა მჭედლიძის მიერ.
+-მოაზროვნე ქიმიკოსთა კლუბის წევრებიდან განსაკუთრებით გამოირჩევა ზაზა მჭედლიძე.
+
+კლუბის წევრები არიან:
+- ზაზა მჭედლიძე — აქტიური წევრია.
+- თეკლა შველიძე — აქტიური წევრია.
+- ანასტასია ხონელიძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
+- ანასტასია თევდორაძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
+- ანი მუმლაძე — ხშირად აცდენს შეკრებებს, თუმცა ცდილობს რომ დაესწროს.
+- გიორგი ბაღდავაძე — აგრეთვე,ხშირად აცდენს შეკრებებს, თუმცა ცდილობს დასწრებას.
+- მარიამ მიშვიძე — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
+- ანი ძაგნიძე — აქტიური წევრია.
+- ანასტასია თოდუა — ძალიან იშვიათად ესწრება კლუბის შეკრებებს.
+
+პასუხის წესები:
+1. მომხმარებელს ყოველთვის უპასუხე ქართულად, თუ სხვა ენაზე არ მოგმართავს.
+2. იყავი მეგობრული, ბუნებრივი, თავაზიანი და გასაგები.
+3. Arduino-სა და ქიმიის საკითხებზე შეგიძლია დეტალურად ახსნა.
+4. თუ მომხმარებელი დამწყებია, ახსენი მარტივად.
+5. თუ კითხვა ArduinoHub-ის შესახებ არის და ზუსტი ინფორმაცია არ გაქვს, არ მოიგონო ინფორმაცია.
+6. თუ რაიმე ინფორმაცია არ იცი, პირდაპირ თქვი, რომ ზუსტი ინფორმაცია არ გაქვს.
+7. არ თქვა, რომ შენ ხარ Google Gemini. მომხმარებლისთვის შენ ხარ ArduinoHub AI.
+8. არ მოიგონო ისეთი პროექტები, ადამიანები ან ფუნქციები, რომლებიც მოცემულ ინფორმაციაში არ არის.
+9. პასუხები ზედმეტად გრძელი არ იყოს, თუ მომხმარებელი დეტალურ ახსნას არ ითხოვს.
+10. ტექნიკურ საკითხებზე გამოიყენე ნაბიჯ-ნაბიჯ ახსნა.
+11. გამოიყენე Markdown ფორმატირება, როდესაც პასუხს უფრო წაკითხვადს გახდის.
+12. ქიმიური ფორმულები დაწერე ჩვეულებრივი ტექსტით, მაგალითად: H2O, CO2, NaCl, KMnO4, Mn2O7.
+13. არასდროს დაწერო ცალკე სიტყვა "svg", თუ ის პასუხისთვის საჭირო არ არის.
+14. პასუხი არ შეწყვიტო შუა წინადადებაში.
+15. თუ პასუხს რამდენიმე ნაწილი აქვს, დაალაგე ლოგიკურად.
+16. მომხმარებლის ტექსტში შეიძლება იყოს მცირე ორთოგრაფიული ან კლავიატურული შეცდომა. თუ მნიშვნელობა კონტექსტიდან გასაგებია, შეცდომა გონებაში გამოასწორე.
+17. თუ კითხვა გასაგებია მიუხედავად მცირე typo-სა, მომხმარებელს ნუ სთხოვ თავიდან დაწერას.
+18. თუ მომხმარებელი წერს უხეშ, შეურაცხმყოფელ, სექსუალურ, 18+ ან აშკარად შეუსაბამო შინაარსს, არ გააგრძელო ასეთი საუბარი. უპასუხე მოკლე, მშვიდი გაფრთხილებით და გადაიყვანე სასწავლო თემაზე.
+19. ArduinoHub AI განკუთვნილია სასწავლო, ტექნიკური და უსაფრთხო კომუნიკაციისთვის.
+20. არასდროს შეურაცხყო მომხმარებელი.
+21. კლუბის წევრების აქტიურობაზე პასუხისას გამოიყენე მხოლოდ ზემოთ მოცემული ინფორმაცია.
+`
+
+async function getCurrentUser() {
+  if (!db) {
+    return null
+  }
+
+  try {
+    const {
+      data: { user }
+    } = await db.auth.getUser()
+
+    return user || null
+  } catch (error) {
+    console.warn(
+      'Could not get current user:',
+      error
+    )
+
+    return null
+  }
+}
+
+function getUserDisplayName(user) {
+  if (!user) {
+    return 'მომხმარებელი'
+  }
+
+  const metadata =
+    user.user_metadata || {}
+
+  return String(
+    metadata.username ||
+    metadata.name ||
+    metadata.full_name ||
+    user.email ||
+    'მომხმარებელი'
+  ).trim()
+}
+
+async function getCurrentUserContext() {
+  const user =
+    await getCurrentUser()
+
+  if (!user) {
+    return {
+      id: null,
+      email: null,
+      name: null,
+      isAuthenticated: false
+    }
+  }
+
+  return {
+    id: user.id,
+    email: user.email || null,
+    name: getUserDisplayName(user),
+    isAuthenticated: true
+  }
+}
+
+async function detectAIAdmin() {
+  if (!db) {
+    aiAdminGreeting = ''
+    return
+  }
+
+  try {
+    const {
+      data: { session }
+    } = await db.auth.getSession()
+
+    if (!session?.user) {
+      aiAdminGreeting = ''
+      return
+    }
+
+    const admin =
+      await isAdmin(session.user)
+
+    if (!admin?.username) {
+      aiAdminGreeting = ''
+      return
+    }
+
+    const username =
+      String(admin.username)
+        .trim()
+        .toLowerCase()
+
+    if (
+      username === 'zaza' ||
+      username === 'ზაზა' ||
+      username.includes('ზაზა') ||
+      username.includes('zaza')
+    ) {
+      aiAdminGreeting =
+        'ბატონო ზაზა'
+    } else if (
+      username === 'tekla' ||
+      username === 'თეკლა' ||
+      username.includes('თეკლა') ||
+      username.includes('tekla')
+    ) {
+      aiAdminGreeting =
+        'ქალბატონო თეკლა'
+    } else {
+      aiAdminGreeting = ''
+    }
+  } catch (error) {
+    console.warn(
+      'AI admin detection failed:',
+      error
+    )
+
+    aiAdminGreeting = ''
+  }
+}
+
+function applyAIGreeting(reply) {
+  const clean =
+    String(reply || '').trim()
+
+  if (
+    !aiAdminGreeting ||
+    !clean
+  ) {
+    return clean
+  }
+
+  const greetingPattern =
+    /^(ბატონო\s+ზაზა|ქალბატონო\s+თეკლა)\s*[,!:—-]?\s*/i
+
+  if (
+    greetingPattern.test(clean)
+  ) {
+    return clean
+  }
+
+  return `${aiAdminGreeting}, ${clean}`
+}
+
+function addAIMessage(
+  type,
+  content
+) {
+  const messages =
+    $('#ai-chat-messages')
+
+  if (!messages) {
+    return null
+  }
+
+  const message =
+    document.createElement('div')
+
+  message.className =
+    `ai-message ${type}`
+
+  if (type === 'assistant') {
+    message.innerHTML = `
+      <div class="ai-message-avatar">
+        ${icon('bot')}
+      </div>
+
+      <div class="ai-message-bubble">
+        ${content}
+      </div>
+    `
+  } else if (
+    type === 'error'
+  ) {
+    message.innerHTML = `
+      <div class="ai-message-avatar">
+        ${icon('triangle-alert')}
+      </div>
+
+      <div class="ai-message-bubble">
+        ${content}
+      </div>
+    `
+  } else {
+    message.innerHTML = `
+      <div class="ai-message-bubble">
+        ${esc(content)}
+      </div>
+    `
+  }
+
+  messages.appendChild(message)
+
+  refreshIcons()
+
+  messages.scrollTo({
+    top: messages.scrollHeight,
+    behavior: 'smooth'
+  })
+
+  return message
+}
+
+function formatAIResponse(text) {
+  if (!text) {
+    return '<p>პასუხი ვერ მივიღე.</p>'
+  }
+
+  let source =
+    String(text)
+      .replace(
+        /^\s*svg\s*$/gim,
+        ''
+      )
+      .trim()
+
+  const codeBlocks = []
+
+  source = source.replace(
+    /```(?:[a-zA-Z0-9_+-]+)?\s*\n?([\s\S]*?)```/g,
+    (_, code) => {
+      const index =
+        codeBlocks.length
+
+      codeBlocks.push(
+        esc(code.trim())
+      )
+
+      return `@@CODEBLOCK_${index}@@`
+    }
+  )
+
+  let safe = esc(source)
+
+  safe = safe.replace(
+    /\*\*\*(.+?)\*\*\*/g,
+    '<strong><em>$1</em></strong>'
+  )
+
+  safe = safe.replace(
+    /\*\*(.+?)\*\*/g,
+    '<strong>$1</strong>'
+  )
+
+  safe = safe.replace(
+    /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+    '<em>$1</em>'
+  )
+
+  safe = safe.replace(
+    /`([^`\n]+)`/g,
+    '<code class="ai-inline-code">$1</code>'
+  )
+
+  const lines =
+    safe.split(/\r?\n/)
+
+  let html = ''
+  let paragraph = []
+  let listType = null
+
+  const closeList = () => {
+    if (listType === 'ul') {
+      html += '</ul>'
+    }
+
+    if (listType === 'ol') {
+      html += '</ol>'
+    }
+
+    listType = null
+  }
+
+  const flushParagraph = () => {
+    if (!paragraph.length) {
+      return
+    }
+
+    const content =
+      paragraph
+        .join(' ')
+        .trim()
+
+    if (content) {
+      html += `
+        <p>
+          ${content}
+        </p>
+      `
+    }
+
+    paragraph = []
+  }
+
+  for (
+    const rawLine of lines
+  ) {
+    const line =
+      rawLine.trim()
+
+    if (!line) {
+      flushParagraph()
+      closeList()
+      continue
+    }
+
+    const codeMatch =
+      line.match(
+        /^@@CODEBLOCK_(\d+)@@$/
+      )
+
+    if (codeMatch) {
+      flushParagraph()
+      closeList()
+
+      const code =
+        codeBlocks[
+          Number(codeMatch[1])
+        ] || ''
+
+      html += `
+        <pre class="ai-code-block">
+          <code>${code}</code>
+        </pre>
+      `
+
+      continue
+    }
+
+    const heading3 =
+      line.match(
+        /^###\s+(.+)$/
+      )
+
+    if (heading3) {
+      flushParagraph()
+      closeList()
+
+      html += `
+        <h4 class="ai-response-small-title">
+          ${heading3[1]}
+        </h4>
+      `
+
+      continue
+    }
+
+    const heading2 =
+      line.match(
+        /^##\s+(.+)$/
+      )
+
+    if (heading2) {
+      flushParagraph()
+      closeList()
+
+      html += `
+        <h3 class="ai-response-subtitle">
+          ${heading2[1]}
+        </h3>
+      `
+
+      continue
+    }
+
+    const heading1 =
+      line.match(
+        /^#\s+(.+)$/
+      )
+
+    if (heading1) {
+      flushParagraph()
+      closeList()
+
+      html += `
+        <h2 class="ai-response-title">
+          ${heading1[1]}
+        </h2>
+      `
+
+      continue
+    }
+
+    const quote =
+      line.match(
+        /^>\s*(.+)$/
+      )
+
+    if (quote) {
+      flushParagraph()
+      closeList()
+
+      html += `
+        <blockquote class="ai-blockquote">
+          ${quote[1]}
+        </blockquote>
+      `
+
+      continue
+    }
+
+    const unordered =
+      line.match(
+        /^(?:[-*•])\s+(.+)$/
+      )
+
+    if (unordered) {
+      flushParagraph()
+
+      if (listType !== 'ul') {
+        closeList()
+        html +=
+          '<ul class="ai-list">'
+        listType = 'ul'
+      }
+
+      html += `
+        <li>
+          ${unordered[1]}
+        </li>
+      `
+
+      continue
+    }
+
+    const ordered =
+      line.match(
+        /^\d+[.)]\s+(.+)$/
+      )
+
+    if (ordered) {
+      flushParagraph()
+
+      if (listType !== 'ol') {
+        closeList()
+        html +=
+          '<ol class="ai-ordered-list">'
+        listType = 'ol'
+      }
+
+      html += `
+        <li>
+          ${ordered[1]}
+        </li>
+      `
+
+      continue
+    }
+
+    closeList()
+    paragraph.push(line)
+  }
+
+  flushParagraph()
+  closeList()
+
+  return (
+    html ||
+    '<p>პასუხი ვერ მივიღე.</p>'
+  )
+}
+
+function addAITyping() {
+  const messages =
+    $('#ai-chat-messages')
+
+  if (!messages) {
+    return null
+  }
+
+  const typing =
+    document.createElement('div')
+
+  typing.className =
+    'ai-message assistant ai-typing-message'
+
+  typing.innerHTML = `
+    <div class="ai-message-avatar">
+      ${icon('bot')}
+    </div>
+
+    <div class="ai-message-bubble ai-typing">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  `
+
+  messages.appendChild(typing)
+
+  refreshIcons()
+
+  messages.scrollTo({
+    top: messages.scrollHeight,
+    behavior: 'smooth'
+  })
+
+  return typing
+}
+
+function getAIErrorStatus(error) {
+  if (
+    Number.isFinite(
+      Number(error?.status)
+    )
+  ) {
+    return Number(error.status)
+  }
+
+  const message =
+    String(
+      error?.message || ''
+    )
+
+  const match =
+    message.match(
+      /\b(400|401|403|404|408|409|429|500|502|503|504)\b/
+    )
+
+  return match
+    ? Number(match[1])
+    : null
+}
+
+function isAIQuotaError(error) {
+  const message =
+    String(
+      error?.message || ''
+    ).toLowerCase()
+
+  const quotaPatterns = [
+    'quota exceeded',
+    'quotaexceeded',
+    'quota',
+    'resource_exhausted',
+    'resource exhausted',
+    'free_tier',
+    'free tier',
+    'generate_content_free_tier_requests',
+    'rate limit',
+    'ratelimit',
+    'too many requests',
+    'requests per day',
+    'requests per minute'
+  ]
+
+  return quotaPatterns.some(
+    pattern =>
+      message.includes(pattern)
+  )
+}
+
+function isAIModelError(error) {
+  const message =
+    String(
+      error?.message || ''
+    ).toLowerCase()
+
+  const modelPatterns = [
+    'model not found',
+    'model is not found',
+    'not available',
+    'is no longer available',
+    'unsupported model',
+    'unknown model',
+    'models/',
+    'gemini model'
+  ]
+
+  return modelPatterns.some(
+    pattern =>
+      message.includes(pattern)
+  )
+}
+
+function getAIUserErrorMessage(error) {
+  const status =
+    getAIErrorStatus(error)
+
+  if (
+    status === 429 ||
+    isAIQuotaError(error)
+  ) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('zap')}
+          AI დროებით მიუწვდომელია
+        </strong>
+
+        <p>
+          ArduinoHub AI-ის უფასო გამოყენების ლიმიტი ამ დროისთვის ამოიწურა.
+        </p>
+
+        <small>
+          პრობლემა Gemini-ის გამოყენების ლიმიტს უკავშირდება და არა შენს კითხვას. ლიმიტის განახლების შემდეგ ჩატი კვლავ ავტომატურად იმუშავებს.
+        </small>
+      </div>
+    `
+  }
+
+  if (isAIModelError(error)) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('cpu')}
+          AI მოდელის პრობლემა
+        </strong>
+
+        <p>
+          ArduinoHub AI-ის გამოყენებული Gemini მოდელი ამჟამად ვერ მუშაობს ან მიუწვდომელია.
+        </p>
+
+        <small>
+          საჭიროა Supabase Edge Function-ში გამოყენებული მოდელის შემოწმება.
+        </small>
+      </div>
+    `
+  }
+
+  if (status === 401) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('lock-keyhole')}
+          AI ავტორიზაციის პრობლემა
+        </strong>
+
+        <p>
+          AI სერვერთან ავტორიზაცია ვერ მოხერხდა.
+        </p>
+
+        <small>
+          გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
+        </small>
+      </div>
+    `
+  }
+
+  if (status === 403) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('shield-alert')}
+          AI სერვერთან წვდომა შეზღუდულია
+        </strong>
+
+        <p>
+          AI სერვერმა მოთხოვნა ვერ მიიღო.
+        </p>
+
+        <small>
+          საჭიროა AI სერვერის კონფიგურაციის შემოწმება.
+        </small>
+      </div>
+    `
+  }
+
+  if (status === 404) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('search-x')}
+          AI სერვისი ვერ მოიძებნა
+        </strong>
+
+        <p>
+          AI ფუნქცია ან მოთხოვნილი რესურსი ამჟამად ვერ მოიძებნა.
+        </p>
+
+        <small>
+          გთხოვთ, მოგვიანებით სცადოთ ხელახლა.
+        </small>
+      </div>
+    `
+  }
+
+  if (status === 400) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('triangle-alert')}
+          მოთხოვნის დამუშავება ვერ მოხერხდა
+        </strong>
+
+        <p>
+          AI-მ მიღებული მოთხოვნა ვერ დაამუშავა.
+        </p>
+
+        <small>
+          სცადეთ კითხვის ოდნავ სხვანაირად დაწერა.
+        </small>
+      </div>
+    `
+  }
+
+  if (
+    status === 500 ||
+    status === 502 ||
+    status === 503 ||
+    status === 504
+  ) {
+    return `
+      <div class="ai-error-content">
+        <strong>
+          ${icon('server-crash')}
+          AI სერვერის დროებითი პრობლემა
+        </strong>
+
+        <p>
+          AI სერვერმა პასუხის დაბრუნება ამჯერად ვერ შეძლო.
+        </p>
+
+        <small>
+          გთხოვთ, რამდენიმე წამში სცადოთ ხელახლა.
+        </small>
+      </div>
+    `
+  }
+
+  return `
+    <div class="ai-error-content">
+      <strong>
+        ${icon('wifi-off')}
+        AI-სთან დაკავშირება ვერ მოხერხდა
+      </strong>
+
+      <p>
+        ამ მომენტში AI სერვისთან დაკავშირება ვერ მოხერხდა.
+      </p>
+
+      <small>
+        გთხოვთ, ცოტა ხანში სცადოთ ხელახლა.
+      </small>
+    </div>
+  `
+}
+
+async function askAI(question) {
+  if (!AI_FUNCTION_URL) {
+    throw new Error(
+      'AI ფუნქციის მისამართი ვერ მოიძებნა.'
+    )
+  }
+
+  const cleanQuestion =
+    String(question)
+      .trim()
+      .slice(0, 1000)
+
+  if (!cleanQuestion) {
+    return null
+  }
+
+  const history =
+    aiHistory
+      .slice(-8)
+      .map(
+        message => ({
+          role:
+            message.role === 'assistant'
+              ? 'assistant'
+              : 'user',
+          text:
+            String(
+              message.content || ''
+            ).slice(0, 1800)
+        })
+      )
+
+  const currentUser =
+    await getCurrentUserContext()
+
+  let authorizationToken =
+    SUPABASE_ANON_KEY
+
+  if (db) {
+    try {
+      const {
+        data: { session }
+      } = await db.auth.getSession()
+
+      if (session?.access_token) {
+        authorizationToken =
+          session.access_token
+      }
+    } catch (sessionError) {
+      console.warn(
+        'Could not read Supabase session:',
+        sessionError
+      )
+    }
+  }
+
+  const userIdentityContext =
+    currentUser.isAuthenticated
+      ? `
+        ამჟამად ArduinoHub AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
+
+        მომხმარებლის სახელი და გვარი:
+        ${currentUser.name}
+
+        მომხმარებლის email:
+        ${currentUser.email || 'უცნობია'}
+
+        მომხმარებლის Supabase ID:
+        ${currentUser.id}
+
+        მნიშვნელოვანი წესები:
+        - ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
+        - თუ მომხმარებელი გეკითხება „ვინ ვარ?“, „რა მქვია?“ ან მსგავს რამეს, გამოიყენე ზემოთ მოცემული სახელი.
+        - არ აურიო ეს მომხმარებელი ArduinoHub-ის კლუბის სხვა წევრებში.
+        - მომხმარებლის სახელი არ მოიგონო.
+        - მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო, თუ ამის შესახებ პირდაპირ არ გკითხავს.
+      `
+      : `
+        ამჟამად ArduinoHub AI-ს ესაუბრება არაავტორიზებული მომხმარებელი.
+        მომხმარებლის სახელი უცნობია.
+      `
+
+  const finalContext = `
+    ${AI_SYSTEM_CONTEXT}
+    ${userIdentityContext}
+  `
+
+  let response
+
+  try {
+    response =
+      await fetch(
+        AI_FUNCTION_URL,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json',
+            'Authorization':
+              `Bearer ${authorizationToken}`,
+            'apikey':
+              SUPABASE_ANON_KEY
+          },
+          body:
+            JSON.stringify({
+              message:
+                cleanQuestion,
+              history,
+              context:
+                finalContext,
+              adminGreeting:
+                aiAdminGreeting,
+              currentUser
+            })
+        }
+      )
+  } catch (networkError) {
+    const error =
+      new Error(
+        networkError?.message ||
+        'Network error'
+      )
+
+    error.status = 0
+
+    throw error
+  }
+
+  let data = null
+
+  try {
+    data =
+      await response.json()
+  } catch {
+    data = null
+  }
+
+  if (!response.ok) {
+    const backendMessage =
+      data?.error ||
+      data?.message ||
+      data?.details ||
+      `AI request failed with status ${response.status}`
+
+    const error =
+      new Error(
+        String(backendMessage)
+      )
+
+    error.status =
+      response.status
+
+    error.backendData = data
+    error.backendStatus =
+      response.status
+
+    throw error
+  }
+
+  if (
+    data?.error &&
+    !data?.reply &&
+    !data?.text
+  ) {
+    const error =
+      new Error(
+        String(data.error)
+      )
+
+    error.status =
+      response.status
+
+    error.backendData = data
+
+    throw error
+  }
+
+  const reply =
+    String(
+      data?.reply ||
+      data?.text ||
+      ''
+    ).trim()
+
+  if (!reply) {
+    const error =
+      new Error(
+        'AI-მ ცარიელი პასუხი დააბრუნა.'
+      )
+
+    error.status =
+      response.status
+
+    error.backendData = data
+
+    throw error
+  }
+
+  return reply
+}
+
+function containsUnsafeContent(text) {
+  const value =
+    String(text || '')
+      .toLowerCase()
+      .trim()
+
+  if (!value) {
+    return false
+  }
+
+  const unsafePatterns = [
+    /\b(porn|porno|pornography)\b/i,
+    /\b(sexcam|onlyfans)\b/i,
+    /\b(nude|nudes)\b/i,
+    /\b(hentai)\b/i,
+    /სექსუალური\s+შინაარსი/i,
+    /პორნო/i,
+    /პორნოგრაფ/i
+  ]
+
+  return unsafePatterns.some(
+    pattern =>
+      pattern.test(value)
+  )
+}
+
+function addAISafetyWarning() {
+  const message = `
+    <div class="ai-safety-warning">
+      <strong>
+        ${icon('shield-alert')}
+        უსაფრთხოების გაფრთხილება
+      </strong>
+
+      <p>
+        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის. პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
+      </p>
+    </div>
+  `
+
+  addAIMessage(
+    'error',
+    message
+  )
+}
+
+async function saveAIChatMessage(message) {
+  if (!db) {
+    return
+  }
+
+  try {
+    const {
+      data: { user }
+    } = await db.auth.getUser()
+
+    if (!user) {
+      return
+    }
+
+    const username =
+      getUserDisplayName(user)
+
+    const { error } =
+      await db
+        .from('ai_chat_history')
+        .insert({
+          user_id: user.id,
+          username:
+            String(username).trim(),
+          message:
+            String(message).trim()
+        })
+
+    if (error) {
+      console.warn(
+        'AI chat history save failed:',
+        error
+      )
+    }
+  } catch (error) {
+    console.warn(
+      'AI chat history error:',
+      error
+    )
+  }
+}
+
+async function getZazaHistory() {
+  if (!db) {
+    throw new Error(
+      'Supabase არ არის კონფიგურირებული.'
+    )
+  }
+
+  const { data, error } =
+    await db.rpc(
+      'get_zaza_history'
+    )
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+async function deleteZazaHistoryItem(id) {
+  if (!db) {
+    throw new Error(
+      'Supabase არ არის კონფიგურირებული.'
+    )
+  }
+
+  const numericId =
+    Number(id)
+
+  if (
+    !Number.isSafeInteger(
+      numericId
+    )
+  ) {
+    throw new Error(
+      'შეტყობინების ID არასწორია.'
+    )
+  }
+
+  const { error } =
+    await db.rpc(
+      'delete_zaza_history_item',
+      {
+        p_id: numericId
+      }
+    )
+
+  if (error) {
+    console.error(
+      'Supabase delete RPC error:',
+      error
+    )
+
+    throw error
+  }
+
+  const {
+    data: remainingData,
+    error: verifyError
+  } =
+    await db.rpc(
+      'get_zaza_history'
+    )
+
+  if (verifyError) {
+    throw verifyError
+  }
+
+  const stillExists =
+    (remainingData || [])
+      .some(
+        item =>
+          Number(item.id) ===
+          numericId
+      )
+
+  if (stillExists) {
+    throw new Error(
+      'Supabase-მ შეტყობინება ვერ წაშალა.'
+    )
+  }
+
+  return true
+}
+
+function formatZazaHistory(items) {
+  if (!items.length) {
+    return `
+      <p>
+        „ზაზა“-ს შესახებ სხვა მომხმარებლების შეტყობინებები ვერ მოიძებნა.
+      </p>
+    `
+  }
+
+  let html = `
+    <h3 class="ai-response-subtitle">
+      „ზაზა“-ს შესახებ ნაპოვნი შეტყობინებები
+    </h3>
+
+    <p class="ai-history-count">
+      ნაპოვნია
+      <strong>${items.length}</strong>
+      შეტყობინება:
+    </p>
+
+    <div class="ai-history-list">
+  `
+
+  items.forEach(
+    (item, index) => {
+      const username =
+        esc(
+          item.username ||
+          'უცნობი მომხმარებელი'
+        )
+
+      const message =
+        esc(
+          item.message || ''
+        )
+
+      const date =
+        item.created_at
+          ? new Intl.DateTimeFormat(
+              'ka-GE',
+              {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+              }
+            ).format(
+              new Date(
+                item.created_at
+              )
+            )
+          : ''
+
+      html += `
+        <div
+          class="ai-history-item"
+          data-history-id="${Number(item.id)}"
+        >
+          <strong>
+            ${index + 1}. ${username}
+          </strong>
+
+          <p>
+            ${message}
+          </p>
+
+          ${
+            date
+              ? `<small>${esc(date)}</small>`
+              : ''
+          }
+
+          <button
+            type="button"
+            class="ai-history-delete"
+            data-history-id="${Number(item.id)}"
+          >
+            ${icon('trash-2')}
+            სამუდამოდ წაშლა
+          </button>
+        </div>
+      `
+    }
+  )
+
+  html += `
+    </div>
+  `
+
+  return html
+}
+
+function setupZazaHistoryDelete() {
+  const buttons =
+    document.querySelectorAll(
+      '.ai-history-delete'
+    )
+
+  buttons.forEach(
+    button => {
+      if (
+        button.dataset.deleteBound ===
+        'true'
+      ) {
+        return
+      }
+
+      button.dataset.deleteBound =
+        'true'
+
+      button.addEventListener(
+        'click',
+        async event => {
+          event.preventDefault()
+          event.stopPropagation()
+
+          if (button.disabled) {
+            return
+          }
+
+          const id =
+            Number(
+              button.dataset.historyId
+            )
+
+          if (
+            !Number.isSafeInteger(id)
+          ) {
+            toast(
+              'შეტყობინების ID არასწორია.'
+            )
+
+            return
+          }
+
+          const confirmed =
+            button.dataset.deleteConfirm ===
+            'true'
+
+          if (!confirmed) {
+            button.dataset.deleteConfirm =
+              'true'
+
+            button.classList.add(
+              'delete-confirm-ready'
+            )
+
+            button.innerHTML = `
+              ${icon('triangle-alert')}
+              ნამდვილად წაშლა?
+            `
+
+            refreshIcons()
+
+            clearTimeout(
+              button.deleteConfirmTimer
+            )
+
+            button.deeConfirmTimer =
+              setTimeout(
+                () => {
+                  if (
+                    document.body.contains(
+                      button
+                    ) &&
+                    button.dataset.deleteConfirm ===
+                      'true' &&
+                    !button.disabled
+                  ) {
+                    button.dataset.deleteConfirm =
+                      'false'
+
+                    button.classList.remove(
+                      'delete-confirm-ready'
+                    )
+
+                    button.innerHTML = `
+                      ${icon('trash-2')}
+                      სამუდამოდ წაშლა
+                    `
+
+                    refreshIcons()
+                  }
+                },
+                5000
+              )
+
+            return
+          }
+
+          clearTimeout(
+            button.deleteConfirmTimer
+          )
+
+          button.disabled = true
+
+          button.dataset.deleteConfirm =
+            'false'
+
+          button.classList.remove(
+            'delete-confirm-ready'
+          )
+
+          button.innerHTML = `
+            ${icon('loader-circle')}
+            იშლება...
+          `
+
+          refreshIcons()
+
+          try {
+            await deleteZazaHistoryItem(
+              id
+            )
+
+            const item =
+              button.closest(
+                '.ai-history-item'
+              )
+
+            if (item) {
+              item.remove()
+            }
+
+            const list =
+              document.querySelector(
+                '.ai-history-list'
+              )
+
+            const historyItems =
+              list
+                ? list.querySelectorAll(
+                    '.ai-history-item'
+                  )
+                : []
+
+            const remaining =
+              historyItems.length
+
+            historyItems.forEach(
+              (
+                historyItem,
+                index
+              ) => {
+                const strong =
+                  historyItem.querySelector(
+                    'strong'
+                  )
+
+                if (!strong) {
+                  return
+                }
+
+                const currentText =
+                  strong.textContent
+                    .replace(
+                      /^\s*\d+\.\s*/,
+                      ''
+                    )
+                    .trim()
+
+                strong.textContent =
+                  `${index + 1}. ${currentText}`
+              }
+            )
+
+            const count =
+              document.querySelector(
+                '.ai-history-count'
+              )
+
+            if (count) {
+              count.innerHTML =
+                remaining
+                  ? `
+                    დარჩენილია
+                    <strong>
+                      ${remaining}
+                    </strong>
+                    შეტყობინება:
+                  `
+                  : 'ყველა შეტყობინება წაშლილია.'
+            }
+
+            if (
+              list &&
+              remaining === 0
+            ) {
+              list.innerHTML = `
+                <div class="empty-state compact-empty">
+                  ${icon('trash-2')}
+
+                  <h3>
+                    ისტორია ცარიელია
+                  </h3>
+
+                  <p>
+                    ყველა ნაპოვნი შეტყობინება სამუდამოდ წაიშალა.
+                  </p>
+                </div>
+              `
+
+              refreshIcons()
+            }
+
+            toast(
+              'შეტყობინება სამუდამოდ წაიშალა.',
+              'success'
+            )
+          } catch (error) {
+            console.error(
+              'History delete error:',
+              error
+            )
+
+            console.error(
+              'History delete message:',
+              error?.message
+            )
+
+            console.error(
+              'History delete details:',
+              error?.details
+            )
+
+            console.error(
+              'History delete hint:',
+              error?.hint
+            )
+
+            button.disabled =
+              false
+
+            button.dataset.deleteConfirm =
+              'false'
+
+            button.innerHTML = `
+              ${icon('trash-2')}
+              სამუდამოდ წაშლა
+            `
+
+            refreshIcons()
+
+            const errorMessage =
+              error?.message ||
+              error?.details ||
+              error?.hint ||
+              'შეტყობინების წაშლა ვერ მოხერხდა.'
+
+            toast(
+              errorMessage
+            )
+          }
+        }
+      )
+    }
+  )
+
+  refreshIcons()
+}
+
+async function handleAIQuestion(
+  question
+) {
+  const input =
+    $('#ai-chat-input')
+
+  const send =
+    $('#ai-send-btn')
+
+  const cleanQuestion =
+    String(question || '').trim()
+
+  if (!cleanQuestion) {
+    return
+  }
+
+  await detectAIAdmin()
+
+  if (
+    containsUnsafeContent(
+      cleanQuestion
+    )
+  ) {
+    addAIMessage(
+      'user',
+      cleanQuestion
+    )
+
+    if (input) {
+      input.value = ''
+    }
+
+    addAISafetyWarning()
+
+    return
+  }
+
+  addAIMessage(
+    'user',
+    cleanQuestion
+  )
+
+  if (input) {
+    input.value = ''
+  }
+
+  if (
+    cleanQuestion.toLowerCase() ===
+    '/history'
+  ) {
+    const isZaza =
+      aiAdminGreeting ===
+      'ბატონო ზაზა'
+
+    if (!isZaza) {
+      addAIMessage(
+        'error',
+        `
+          <div class="ai-error-content">
+            <strong>
+              წვდომა უარყოფილია
+            </strong>
+
+            <p>
+              /history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.
+            </p>
+          </div>
+        `
+      )
+
+      return
+    }
+
+    if (send) {
+      send.disabled = true
+    }
+
+    const typing =
+      addAITyping()
+
+    try {
+      const history =
+        await getZazaHistory()
+
+      typing?.remove()
+
+      addAIMessage(
+        'assistant',
+        formatZazaHistory(
+          history
+        )
+      )
+
+      setupZazaHistoryDelete()
+    } catch (error) {
+      console.error(
+        'History error:',
+        error
+      )
+
+      typing?.remove()
+
+      addAIMessage(
+        'error',
+        `
+          <div class="ai-error-content">
+            <strong>
+              ისტორიის ჩატვირთვა ვერ მოხერხდა
+            </strong>
+
+            <p>
+              მონაცემების მიღებისას შეცდომა მოხდა.
+            </p>
+          </div>
+        `
+      )
+    } finally {
+      if (send) {
+        send.disabled = false
+      }
+
+      input?.focus()
+    }
+
+    return
+  }
+
+  await saveAIChatMessage(
+    cleanQuestion
+  )
+
+  aiHistory.push({
+    role: 'user',
+    content: cleanQuestion
+  })
+
+  if (send) {
+    send.disabled = true
+  }
+
+  const typing =
+    addAITyping()
+
+  try {
+    const reply =
+      await askAI(
+        cleanQuestion
+      )
+
+    typing?.remove()
+
+    const finalReply =
+      applyAIGreeting(reply)
+
+    addAIMessage(
+      'assistant',
+      formatAIResponse(
+        finalReply
+      )
+    )
+
+    aiHistory.push({
+      role: 'assistant',
+      content: finalReply
+    })
+
+    if (
+      aiHistory.length > 10
+    ) {
+      aiHistory =
+        aiHistory.slice(-10)
+    }
+  } catch (error) {
+    console.error(
+      'ArduinoHub AI error:',
+      error
+    )
+
+    console.error(
+      'AI error status:',
+      error?.status
+    )
+
+    console.error(
+      'AI backend data:',
+      error?.backendData
+    )
+
+    typing?.remove()
+
+    addAIMessage(
+      'error',
+      getAIUserErrorMessage(
+        error
+      )
+    )
+  } finally {
+    if (send) {
+      send.disabled = false
+    }
+
+    input?.focus()
+  }
+}
+
+function openAIChat() {
+  const chat =
+    $('#ai-chat')
+
+  const toggle =
+    $('#ai-chat-toggle')
+
+  const windowEl =
+    $('#ai-chat-window')
+
+  if (
+    !chat ||
+    !toggle
+  ) {
+    return
+  }
+
+  chat.classList.add(
+    'open'
+  )
+
+  toggle.setAttribute(
+    'aria-expanded',
+    'true'
+  )
+
+  windowEl?.setAttribute(
+    'aria-hidden',
+    'false'
+  )
+
+  setTimeout(
+    () => {
+      $('#ai-chat-input')
+        ?.focus()
+    },
+    220
+  )
+}
+
+function closeAIChat() {
+  const chat =
+    $('#ai-chat')
+
+  const toggle =
+    $('#ai-chat-toggle')
+
+  const windowEl =
+    $('#ai-chat-window')
+
+  if (
+    !chat ||
+    !toggle
+  ) {
+    return
+  }
+
+  chat.classList.remove(
+    'open'
+  )
+
+  toggle.setAttribute(
+    'aria-expanded',
+    'false'
+  )
+
+  windowEl?.setAttribute(
+    'aria-hidden',
+    'true'
+  )
+}
+
+async function initAIChat() {
+  const chat =
+    $('#ai-chat')
+
+  if (!chat) {
+    return
+  }
+
+  await detectAIAdmin()
+
+  const toggle =
+    $('#ai-chat-toggle')
+
+  const close =
+    $('#ai-chat-close')
+
+  const form =
+    $('#ai-chat-form')
+
+  const input =
+    $('#ai-chat-input')
+
+  if (toggle) {
+    toggle.addEventListener(
+      'click',
+      () => {
+        if (
+          chat.classList.contains(
+            'open'
+          )
+        ) {
+          closeAIChat()
+        } else {
+          openAIChat()
+        }
+      }
+    )
+  }
+
+  close?.addEventListener(
+    'click',
+    closeAIChat
+  )
+
+  chat
+    .querySelectorAll(
+      '.ai-suggestion'
+    )
+    .forEach(
+      button => {
+        button.addEventListener(
+          'click',
+          async () => {
+            const question =
+              button.dataset
+                .aiQuestion
+
+            if (!question) {
+              return
+            }
+
+            chat
+              .querySelectorAll(
+                '.ai-suggestion'
+              )
+              .forEach(
+                b => {
+                  b.disabled = true
+                }
+              )
+
+            await handleAIQuestion(
+              question
+            )
+
+            chat
+              .querySelectorAll(
+                '.ai-suggestion'
+              )
+              .forEach(
+                b => {
+                  b.disabled = false
+                }
+              )
+          }
+        )
+      }
+    )
+
+  form?.addEventListener(
+    'submit',
+    async event => {
+      event.preventDefault()
+
+      const question =
+        input?.value?.trim()
+
+      if (!question) {
+        return
+      }
+
+      await handleAIQuestion(
+        question
+      )
+    }
+  )
+
+  input?.addEventListener(
+    'keydown',
+    event => {
+      if (
+        event.key === 'Enter' &&
+        !event.shiftKey
+      ) {
+        event.preventDefault()
+
+        form?.requestSubmit()
+      }
+    }
+  )
+
+  document.addEventListener(
+    'keydown',
+    event => {
+      if (
+        event.key === 'Escape' &&
+        chat.classList.contains(
+          'open'
+        )
+      ) {
+        closeAIChat()
+      }
+    }
+  )
+
+  refreshIcons()
+}
+
+function card(project) {
+  const image =
+    project.image_url
+      ? `
+        <img
+          src="${esc(project.image_url)}"
+          alt="${esc(project.title)}"
+          loading="lazy"
+        >
+      `
+      : `
+        <div class="card-image fallback">
+          ${icon('circuit-board')}
+        </div>
+      `
+
+  return `
+    <article class="project-card">
+      <div class="card-image">
+        ${image}
+      </div>
+
+      <div class="card-body">
+        <div class="card-meta">
+          <span>
+            ${esc(project.category)}
+          </span>
+
+          <time datetime="${esc(project.created_at)}">
+            ${dateText(project.created_at)}
+          </time>
+        </div>
+
+        <h2>
+          ${esc(project.title)}
+        </h2>
+
+        <p>
+          ${esc(project.description)}
+        </p>
+
+        <div class="card-footer">
+          <span>
+            ${icon('user-round')}
+            ${esc(project.author)}
+          </span>
+
+          <a
+            class="text-link"
+            href="project.html?id=${encodeURIComponent(project.id)}"
+          >
+            ნახვა
+            ${icon('arrow-up-right')}
+          </a>
+        </div>
+      </div>
+    </article>
+  `
+}
+
+async function initProjects() {
+  const status =
+    $('#projects-status')
+
+  const grid =
+    $('#projects-grid')
+
+  if (!db) {
+    return configuredMessage(
+      status
+    )
+  }
+
+  const { data, error } =
+    await db
+      .from('projects')
+      .select(
+        'id,title,description,category,author,image_url,created_at'
+      )
+      .eq(
+        'published',
+        true
+      )
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
+      .limit(60)
+
+  if (error) {
+    status.textContent =
+      neutralError(
+        error,
+        'პროექტების ჩატვირთვა ვერ მოხერხდა.'
+      )
+
+    return
+  }
+
+  status.remove()
+
+  const render = () => {
+    const q =
+      $('#project-search')
+        .value
+        .trim()
+        .toLocaleLowerCase(
+          'ka'
+        )
+
+    const category =
+      $('#category-filter')
+        .value
+
+    const result =
+      data.filter(
+        p =>
+          (
+            !category ||
+            p.category ===
+              category
+          ) &&
+          (
+            !q ||
+            `${p.title} ${p.description} ${p.author}`
+              .toLocaleLowerCase(
+                'ka'
+              )
+              .includes(q)
+          )
+      )
+
+    grid.innerHTML =
+      result.length
+        ? result
+            .map(card)
+            .join('')
+        : `
+          <div class="empty-state full">
+            ${icon('search-x')}
+
+            <h2>
+              ${
+                data.length
+                  ? 'პროექტი ვერ მოიძებნა'
+                  : 'ჯერ პროექტები არ დამატებულა'
+              }
+            </h2>
+
+            <p>
+              ${
+                data.length
+                  ? 'შეცვალეთ ძიება ან ფილტრი.'
+                  : 'როგორც კი ადმინისტრატორი პირველ პროექტს გამოაქვეყნებს, ის აქ გამოჩნდება.'
+              }
+            </p>
+          </div>
+        `
+
+    refreshIcons()
+  }
+
+  $('#project-search')
+    .addEventListener(
+      'input',
+      render
+    )
+
+  $('#category-filter')
+    .addEventListener(
+      'change',
+      render
+    )
+
+  render()
+}
+
+async function initDetail() {
+  const target =
+    $('#project-detail')
+
+  if (!db) {
+    return configuredMessage(
+      target
+    )
+  }
+
+  const id =
+    new URLSearchParams(
+      location.search
+    ).get('id')
+
+  if (
+    !id ||
+    !/^[0-9a-f-]{36}$/i.test(id)
+  ) {
+    return notFound(target)
+  }
+
+  const {
+    data: p,
+    error
+  } =
+    await db
+      .from('projects')
+      .select('*')
+      .eq(
+        'id',
+        id
+      )
+      .eq(
+        'published',
+        true
+      )
+      .maybeSingle()
+
+  if (
+    error ||
+    !p
+  ) {
+    return notFound(target)
+  }
+
+  const image =
+    p.image_url
+      ? `
+        <img
+          class="detail-image"
+          src="${esc(p.image_url)}"
+          alt="${esc(p.title)}"
+        >
+      `
+      : ''
+
+  const video =
+    p.video_url
+      ? `
+        <section class="detail-section media-section">
+          <h2>
+            ${icon('video')}
+            ვიდეო
+          </h2>
+
+          <video
+            controls
+            preload="metadata"
+            src="${esc(p.video_url)}"
+          >
+            თქვენი ბრაუზერი ვიდეოს არ უჭერს მხარს.
+          </video>
+        </section>
+      `
+      : ''
+
+  const components =
+    p.components
+      ? `
+        <section class="detail-section">
+          <h2>
+            ${icon('package')}
+            საჭირო კომპონენტები
+          </h2>
+
+          <div class="prose lines">
+            ${esc(p.components)}
+          </div>
+        </section>
+      `
+      : ''
+
+  const how =
+    p.how_it_was_made
+      ? `
+        <section class="detail-section">
+          <h2>
+            ${icon('wrench')}
+            როგორ გაკეთდა
+          </h2>
+
+          <div class="prose lines">
+            ${esc(p.how_it_was_made)}
+          </div>
+        </section>
+      `
+      : ''
+
+  let code = ''
+
+  if (
+    p.code &&
+    p.code.trim()
+  ) {
+    const isChemistry =
+      String(p.category)
+        .toLowerCase() ===
+      'chemistry'
+
+    const sectionTitle =
+      isChemistry
+        ? 'ქიმიური რეაქცია'
+        : 'Arduino Code'
+
+    const copyText =
+      isChemistry
+        ? 'ტექსტის დაკოპირება'
+        : 'კოდის დაკოპირება'
+
+    const sectionIcon =
+      isChemistry
+        ? 'flask-conical'
+        : 'braces'
+
+    code = `
+      <section class="detail-section">
+        <div class="code-heading">
+          <h2>
+            ${icon(sectionIcon)}
+            ${sectionTitle}
+          </h2>
+
+          <button
+            id="copy-code"
+            class="button secondary compact"
+            type="button"
+          >
+            ${icon('copy')}
+            ${copyText}
+          </button>
+        </div>
+
+        <pre>
+          <code id="arduino-code">
+            ${esc(p.code)}
+          </code>
+        </pre>
+      </section>
+    `
+  }
+
+  target.className = ''
+
+  target.innerHTML = `
+    <article class="detail">
+      <div class="detail-hero">
+        <div>
+          <div class="card-meta">
+            <span>
+              ${esc(p.category)}
+            </span>
+
+            <time>
+              ${dateText(p.created_at)}
+            </time>
+          </div>
+
+          <h1>
+            ${esc(p.title)}
+          </h1>
+
+          <p>
+            ${esc(p.description)}
+          </p>
+
+          <div class="author-line">
+            ${icon('user-round')}
+            ${esc(p.author)}
+          </div>
+        </div>
+
+        ${image}
+      </div>
+
+      <div class="detail-content">
+        ${components}
+        ${how}
+        ${video}
+        ${code}
+      </div>
+    </article>
+  `
+
+  $('#copy-code')
+    ?.addEventListener(
+      'click',
+      async () => {
+        try {
+          await navigator.clipboard
+            .writeText(p.code)
+
+          const isChemistry =
+            String(p.category)
+              .toLowerCase() ===
+            'chemistry'
+
+          toast(
+            isChemistry
+              ? 'ქიმიური რეაქცია დაკოპირდა'
+              : 'კოდი დაკოპირდა',
+            'success'
+          )
+        } catch {
+          toast(
+            'დაკოპირება ვერ მოხერხდა.'
+          )
+        }
+      }
+    )
+
+  refreshIcons()
+}
+
+function notFound(target) {
+  if (!target) {
+    return
+  }
+
+  target.className = ''
+
+  target.innerHTML = `
+    <div class="empty-state">
+      ${icon('search-x')}
+
+      <h2>
+        პროექტი ვერ მოიძებნა
+      </h2>
+
+      <p>
+        ბმული არასწორია ან პროექტი აღარ არის გამოქვეყნებული.
+      </p>
+
+      <a
+        href="projects.html"
+        class="button primary"
+      >
+        პროექტებზე დაბრუნება
+      </a>
+    </div>
+  `
+
+  refreshIcons()
+}
+
+const IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif'
+]
+
+const VIDEO_TYPES = [
+  'video/mp4',
+  'video/webm',
+  'video/ogg'
+]
+
+function fileOkay(
+  file,
+  types,
+  max,
+  label
+) {
+  if (!file) {
+    return true
+  }
+
+  if (
+    !types.includes(
+      file.type
+    )
+  ) {
+    toast(
+      `${label}: ფაილის ტიპი მიუღებელია.`
+    )
+
+    return false
+  }
+
+  if (
+    file.size > max
+  ) {
+    toast(
+      `${label}: ფაილი ზედმეტად დიდია.`
+    )
+
+    return false
+  }
+
+  return true
+}
+
+async function upload(
+  file,
+  bucket,
+  folder,
+  types,
+  max,
+  label
+) {
+  if (!file) {
+    return null
+  }
+
+  if (
+    !fileOkay(
+      file,
+      types,
+      max,
+      label
+    )
+  ) {
+    throw new Error(
+      'invalid-file'
+    )
+  }
+
+  const clean =
+    file.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      '_'
+    )
+
+  const path =
+    `${folder}/${crypto.randomUUID()}-${clean}`
+
+  const { error } =
+    await db.storage
+      .from(bucket)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl: '3600',
+          upsert: false,
+          contentType:
+            file.type
+        }
+      )
+
+  if (error) {
+    throw error
+  }
+
+  const { data } =
+    db.storage
+      .from(bucket)
+      .getPublicUrl(path)
+
+  return {
+    url: data.publicUrl,
+    path
+  }
+}
+
+function storagePath(
+  url,
+  bucket
+) {
+  try {
+    const marker =
+      `/storage/v1/object/public/${bucket}/`
+
+    const index =
+      url?.indexOf(marker)
+
+    return index >= 0
+      ? decodeURIComponent(
+          url.slice(
+            index +
+              marker.length
+          )
+        )
+      : null
+  } catch {
+    return null
+  }
+}
+
+async function removeStored(
+  url,
+  bucket
+) {
+  const path =
+    storagePath(
+      url,
+      bucket
+    )
+
+  if (path) {
+    const { error } =
+      await db.storage
+        .from(bucket)
+        .remove([path])
+
+    if (error) {
+      console.warn(
+        'Storage cleanup failed',
+        error
+      )
+    }
+  }
+}
+
+async function isAdmin(user) {
+  if (
+    !user ||
+    !db
+  ) {
+    return null
+  }
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from('admin_users')
+      .select('username')
+      .eq(
+        'user_id',
+        user.id
+      )
+      .maybeSingle()
+
+  if (
+    error ||
+    !data
+  ) {
+    return null
+  }
+
+  return data
+}
+
+async function initAdmin() {
+  if (!db) {
+    $('#auth-panel')
+      .querySelector('form')
+      .hidden = true
+
+    $('#login-error')
+      .textContent =
+      'Supabase ჯერ არ არის კონფიგურირებული.'
+
+    return
+  }
+
+  const {
+    data: { session }
+  } =
+    await db.auth.getSession()
+
+  if (session) {
+    const admin =
+      await isAdmin(
+        session.user
+      )
+
+    if (admin) {
+      await showDashboard(
+        session.user,
+        admin
+      )
+    } else {
+      location.href =
+        'index.html'
+
+      return
+    }
+  }
+
+  $('#login-form')
+    ?.addEventListener(
+      'submit',
+      login
+    )
+
+  $('#logout-button')
+    ?.addEventListener(
+      'click',
+      logout
+    )
+
+  $('#new-project-button')
+    ?.addEventListener(
+      'click',
+      () =>
+        openEditor()
+    )
+
+  $('#cancel-edit')
+    ?.addEventListener(
+      'click',
+      closeEditor
+    )
+
+  $('#project-form')
+    ?.addEventListener(
+      'submit',
+      saveProject
+    )
+
+  $('#image-file')
+    ?.addEventListener(
+      'change',
+      imagePreview
+    )
+
+  $('#video-file')
+    ?.addEventListener(
+      'change',
+      () => {
+        $('#video-name')
+          .textContent =
+          $('#video-file')
+            .files[0]
+            ?.name ||
+          'ფაილი არჩეული არ არის'
+      }
+    )
+
+  const categorySelect =
+    $('#category')
+
+  if (categorySelect) {
+    categorySelect
+      .addEventListener(
+        'change',
+        updateCodeFieldLabel
+      )
+
+    updateCodeFieldLabel()
+  }
+
+  bindMeetingForm()
+
+  db.auth.onAuthStateChange(
+    (
+      _event,
+      session
+    ) => {
+      if (!session) {
+        showLogin()
+      }
+    }
+  )
+}
+
+function updateCodeFieldLabel() {
+  const category =
+    $('#category')
+
+  const codeInput =
+    $('#code')
+
+  if (
+    !category ||
+    !codeInput
+  ) {
+    return
+  }
+
+  const label =
+    codeInput.closest(
+      'label'
+    )
+
+  if (!label) {
+    return
+  }
+
+  const isChemistry =
+    String(category.value)
+      .toLowerCase() ===
+    'chemistry'
+
+  const textNodes =
+    Array.from(
+      label.childNodes
+    ).filter(
+      node =>
+        node.nodeType ===
+        Node.TEXT_NODE
+    )
+
+  const titleNode =
+    textNodes.find(
+      node =>
+        node.textContent.trim()
+    )
+
+  if (titleNode) {
+    titleNode.textContent =
+      isChemistry
+        ? ' ქიმიური რეაქცია '
+        : ' Arduino Code '
+  }
+
+  if (isChemistry) {
+    codeInput.placeholder =
+      'მაგ.: რეაქციის ფორმულა, ქიმიური განტოლება ან რეაქციის აღწერა...'
+  } else {
+    codeInput.placeholder =
+      'ჩასვით Arduino კოდი აქ...'
+  }
+}
+
+async function login(event) {
+  event.preventDefault()
+
+  const form =
+    event.currentTarget
+
+  const button =
+    form.querySelector(
+      'button'
+    )
+
+  const email =
+    $('#login-email')
+      ?.value
+      .trim()
+
+  const password =
+    $('#login-password')
+      ?.value || ''
+
+  const errorElement =
+    $('#login-error')
+
+  if (errorElement) {
+    errorElement.textContent =
+      ''
+  }
+
+  if (
+    !email ||
+    !password
+  ) {
+    if (errorElement) {
+      errorElement.textContent =
+        'შეავსეთ ორივე ველი.'
+    }
+
+    return
+  }
+
+  setBusy(
+    button,
+    true,
+    'იტვირთება...'
+  )
+
+  try {
+    const {
+      data,
+      error
+    } =
+      await db.auth
+        .signInWithPassword({
+          email,
+          password
+        })
+
+    if (
+      error ||
+      !data?.user
+    ) {
+      if (errorElement) {
+        errorElement.textContent =
+          'მონაცემები არასწორია'
+      }
+
+      return
+    }
+
+    const user =
+      data.user
+
+    const admin =
+      await isAdmin(user)
+
+    if (admin) {
+      await showDashboard(
+        user,
+        admin
+      )
+
+      return
+    }
+
+    await updateAuthUI()
+
+    toast(
+      `კეთილი იყოს შენი დაბრუნება, ${getUserDisplayName(user)}!`,
+      'success'
+    )
+
+    setTimeout(
+      () => {
+        location.href =
+          'index.html'
+      },
+      500
+    )
+  } catch (error) {
+    console.error(
+      'Login error:',
+      error
+    )
+
+    if (errorElement) {
+      errorElement.textContent =
+        'შესვლა ვერ მოხერხდა. სცადეთ ხელახლა.'
+    }
+  } finally {
+    setBusy(
+      button,
+      false
+    )
+  }
+}
+
+async function showDashboard(
+  user,
+  knownAdmin
+) {
+  const admin =
+    knownAdmin ||
+    await isAdmin(user)
+
+  if (!admin) {
+    location.href =
+      'index.html'
+
+    return
+  }
+
+  $('#auth-panel')
+    .hidden = true
+
+  $('#dashboard')
+    .hidden = false
+
+  $('#admin-name')
+    .textContent =
+    admin.username
+
+  refreshIcons()
+
+  await Promise.all([
+    loadAdminProjects(),
+    loadAdminMeeting(),
+    loadAdminAttendance()
+  ])
+}
+
+function showLogin() {
+  const dashboard =
+    $('#dashboard')
+
+  const authPanel =
+    $('#auth-panel')
+
+  if (dashboard) {
+    dashboard.hidden = true
+  }
+
+  if (authPanel) {
+    authPanel.hidden = false
+  }
+
+  closeEditor()
+}
+
+async function logout() {
+  if (!db) {
+    return
+  }
+
+  try {
+    const { error } =
+      await db.auth.signOut()
+
+    if (error) {
+      throw error
+    }
+
+    aiAdminGreeting = ''
+
+    document
+      .querySelectorAll(
+        '.account-menu'
+      )
+      .forEach(
+        menu =>
+          menu.remove()
+      )
+
+    const loginElement =
+      findLoginElement()
+
+    if (loginElement) {
+      loginElement.hidden =
+        false
+    }
+
+    toast(
+      'თქვენ გამოხვედით ანგარიშიდან.',
+      'success'
+    )
+
+    if (
+      page === 'admin'
+    ) {
+      setTimeout(
+        () => {
+          location.href =
+            'index.html'
+        },
+        500
+      )
+    }
+  } catch (error) {
+    console.error(
+      'Logout error:',
+      error
+    )
+
+    toast(
+      'ანგარიშიდან გამოსვლა ვერ მოხერხდა.'
+    )
+  }
+}
+
+function setBusy(
+  button,
+  busy,
+  text
+) {
+  if (!button) {
+    return
+  }
+
+  button.disabled =
+    busy
+
+  if (busy) {
+    button.dataset.label =
+      button.innerHTML
+
+    button.textContent =
+      text
+  } else if (
+    button.dataset.label
+  ) {
+    button.innerHTML =
+      button.dataset.label
+  }
+
+  refreshIcons()
+}
+
+let adminProjects = []
+
+async function loadAdminProjects() {
+  const status =
+    $('#admin-status')
+
+  const list =
+    $('#admin-project-list')
+
+  if (
+    !status ||
+    !list
+  ) {
+    return
+  }
+
+  status.hidden = false
+  list.innerHTML = ''
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from('projects')
+      .select(
+        'id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code'
+      )
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
+
+  if (error) {
+    status.textContent =
+      neutralError(
+        error,
+        'პროექტების ჩატვირთვა ვერ მოხერხდა.'
+      )
+
+    return
+  }
+
+  adminProjects =
+    data || []
+
+  status.hidden = true
+
+  $('#admin-count')
+    .textContent =
+    `${adminProjects.length} პროექტი`
+
+  list.innerHTML =
+    adminProjects.length
+      ? adminProjects
+          .map(
+            p => `
+              <article class="admin-row">
+                <div>
+                  <h3>
+                    ${esc(p.title)}
+                  </h3>
+
+                  <p>
+                    ${esc(p.category)}
+                    ·
+                    ${dateText(p.created_at)}
+                  </p>
+                </div>
+
+                <span
+                  class="status ${
+                    p.published
+                      ? 'published'
+                      : 'hidden-status'
+                  }"
+                >
+                  ${
+                    p.published
+                      ? 'გამოქვეყნებული'
+                      : 'დამალული'
+                  }
+                </span>
+
+                <div class="row-actions">
+                  <a
+                    class="icon-button"
+                    title="ნახვა"
+                    href="project.html?id=${p.id}"
+                  >
+                    ${icon('eye')}
+                  </a>
+
+                  <button
+                    class="icon-button edit"
+                    data-id="${p.id}"
+                    title="რედაქტირება"
+                  >
+                    ${icon('pencil')}
+                  </button>
+
+                  <button
+                    class="icon-button toggle"
+                    data-id="${p.id}"
+                    title="${
+                      p.published
+                        ? 'დამალვა'
+                        : 'გამოქვეყნება'
+                    }"
+                  >
+                    ${
+                      icon(
+                        p.published
+                          ? 'eye-off'
+                          : 'send'
+                      )
+                    }
+                  </button>
+
+                  <button
+                    class="icon-button danger delete"
+                    data-id="${p.id}"
+                    title="წაშლა"
+                  >
+                    ${icon('trash-2')}
+                  </button>
+                </div>
+              </article>
+            `
+          )
+          .join('')
+      : `
+        <div class="empty-state compact-empty">
+          ${icon('folder-plus')}
+
+          <h2>
+            ჯერ პროექტები არ დამატებულა
+          </h2>
+
+          <p>
+            დაიწყეთ პირველი რეალური პროექტის დამატებით.
+          </p>
+        </div>
+      `
+
+  list
+    .querySelectorAll(
+      '.edit'
+    )
+    .forEach(
+      b =>
+        b.addEventListener(
+          'click',
+          () =>
+            openEditor(
+              adminProjects.find(
+                p =>
+                  p.id ===
+                  b.dataset.id
+              )
+            )
+        )
+    )
+
+  list
+    .querySelectorAll(
+      '.toggle'
+    )
+    .forEach(
+      b =>
+        b.addEventListener(
+          'click',
+          () =>
+            togglePublished(
+              b.dataset.id
+            )
+        )
+    )
+
+  list
+    .querySelectorAll(
+      '.delete'
+    )
+    .forEach(
+      b =>
+        b.addEventListener(
+          'click',
+          () =>
+            deleteProject(
+              b.dataset.id
+            )
+        )
+    )
+
+  refreshIcons()
+}
+
+function openEditor(p) {
+  const form =
+    $('#project-form')
+
+  form.reset()
+
+  $('#image-preview')
+    .hidden = true
+
+  $('#image-name')
+    .textContent =
+    'ფაილი არჩეული არ არის'
+
+  $('#video-name')
+    .textContent =
+    'ფაილი არჩეული არ არის'
+
+  $('#form-error')
+    .textContent = ''
+
+  $('#editor-title')
+    .textContent =
+    p
+      ? 'პროექტის რედაქტირება'
+      : 'ახალი პროექტი'
+
+  $('#save-project')
+    .innerHTML =
+    p
+      ? `ცვლილებების შენახვა ${icon('save')}`
+      : `პროექტის დამატება ${icon('save')}`
+
+  if (p) {
+    $('#edit-id')
+      .value = p.id
+
+    $('#title')
+      .value = p.title
+
+    $('#category')
+      .value = p.category
+
+    $('#author')
+      .value = p.author
+
+    $('#published')
+      .checked = p.published
+
+    $('#description')
+      .value = p.description
+
+    $('#components')
+      .value =
+      p.components || ''
+
+    $('#how-made')
+      .value =
+      p.how_it_was_made || ''
+
+    $('#code')
+      .value =
+      p.code || ''
+  }
+
+  updateCodeFieldLabel()
+
+  $('#project-editor')
+    .hidden = false
+
+  $('#project-editor')
+    .scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+
+  refreshIcons()
+}
+
+function closeEditor() {
+  const editor =
+    $('#project-editor')
+
+  if (editor) {
+    editor.hidden = true
+  }
+}
+
+function imagePreview() {
+  const file =
+    $('#image-file')
+      .files[0]
+
+  $('#image-name')
+    .textContent =
+    file?.name ||
+    'ფაილი არჩეული არ არის'
+
+  if (
+    file &&
+    fileOkay(
+      file,
+      IMAGE_TYPES,
+      5 * 1024 * 1024,
+      'სურათი'
+    )
+  ) {
+    const preview =
+      $('#image-preview')
+
+    preview.src =
+      URL.createObjectURL(
+        file
+      )
+
+    preview.hidden = false
+  }
+}
+
+async function saveProject(
+  event
+) {
+  event.preventDefault()
+
+  const button =
+    $('#save-project')
+
+  const id =
+    $('#edit-id')
+      .value
+
+  const old =
+    adminProjects.find(
+      p =>
+        p.id === id
+    )
+
+  const image =
+    $('#image-file')
+      .files[0]
+
+  const video =
+    $('#video-file')
+      .files[0]
+
+  $('#form-error')
+    .textContent = ''
+
+  if (
+    !fileOkay(
+      image,
+      IMAGE_TYPES,
+      5 * 1024 * 1024,
+      'სურათი'
+    ) ||
+    !fileOkay(
+      video,
+      VIDEO_TYPES,
+      50 * 1024 * 1024,
+      'ვიდეო'
+    )
+  ) {
+    return
+  }
+
+  setBusy(
+    button,
+    true,
+    'ინახება...'
+  )
+
+  let uploads = []
+
+  try {
+    const folder =
+      id ||
+      crypto.randomUUID()
+
+    if (image) {
+      uploads.push([
+        'image',
+        await upload(
+          image,
+          'project-images',
+          folder,
+          IMAGE_TYPES,
+          5 * 1024 * 1024,
+          'სურათი'
+        )
+      ])
+    }
+
+    if (video) {
+      uploads.push([
+        'video',
+        await upload(
+          video,
+          'project-videos',
+          folder,
+          VIDEO_TYPES,
+          50 * 1024 * 1024,
+          'ვიდეო'
+        )
+      ])
+    }
+
+    const value = {
+      title:
+        $('#title')
+          .value
+          .trim(),
+
+      category:
+        $('#category')
+          .value,
+
+      author:
+        $('#author')
+          .value
+          .trim(),
+
+      description:
+        $('#description')
+          .value
+          .trim(),
+
+      components:
+        $('#components')
+          .value
+          .trim() ||
+        null,
+
+      how_it_was_made:
+        $('#how-made')
+          .value
+          .trim() ||
+        null,
+
+      code:
+        $('#code')
+          .value
+          .trim() ||
+        null,
+
+      published:
+        $('#published')
+          .checked
+    }
+
+    const img =
+      uploads.find(
+        x =>
+          x[0] ===
+          'image'
+      )?.[1]
+
+    const vid =
+      uploads.find(
+        x =>
+          x[0] ===
+          'video'
+      )?.[1]
+
+    if (img) {
+      value.image_url =
+        img.url
+    }
+
+    if (vid) {
+      value.video_url =
+        vid.url
+    }
+
+    let error
+
+    if (id) {
+      ({
+        error
+      } =
+        await db
+          .from('projects')
+          .update(value)
+          .eq(
+            'id',
+            id
+          ))
+    } else {
+      ({
+        error
+      } =
+        await db
+          .from('projects')
+          .insert(
+            value
+          ))
+    }
+
+    if (error) {
+      throw error
+    }
+
+    if (
+      img &&
+      old?.image_url
+    ) {
+      await removeStored(
+        old.image_url,
+        'project-images'
+      )
+    }
+
+    if (
+      vid &&
+      old?.video_url
+    ) {
+      await removeStored(
+        old.video_url,
+        'project-videos'
+      )
+    }
+
+    toast(
+      id
+        ? 'ცვლილებები შენახულია.'
+        : 'პროექტი დაემატა.',
+      'success'
+    )
+
+    closeEditor()
+
+    await loadAdminProjects()
+  } catch (error) {
+    console.error(error)
+
+    for (
+      const [kind, file]
+      of uploads
+    ) {
+      if (!file?.url) {
+        continue
+      }
+
+      await removeStored(
+        file.url,
+        kind === 'image'
+          ? 'project-images'
+          : 'project-videos'
+      )
+    }
+
+    $('#form-error')
+      .textContent =
+      neutralError(
+        error,
+        'პროექტის შენახვა ვერ მოხერხდა.'
+      )
+  } finally {
+    setBusy(
+      button,
+      false
+    )
+  }
+}
+
+async function togglePublished(
+  id
+) {
+  const p =
+    adminProjects.find(
+      x =>
+        x.id === id
+    )
+
+  if (!p) {
+    return
+  }
+
+  const { error } =
+    await db
+      .from('projects')
+      .update({
+        published:
+          !p.published
+      })
+      .eq(
+        'id',
+        id
+      )
+
+  if (error) {
+    return toast(
+      'სტატუსის შეცვლა ვერ მოხერხდა.'
+    )
+  }
+
+  toast(
+    p.published
+      ? 'პროექტი დამალულია.'
+      : 'პროექტი გამოქვეყნდა.',
+    'success'
+  )
+
+  loadAdminProjects()
+}
+
+async function deleteProject(
+  id
+) {
+  const p =
+    adminProjects.find(
+      x =>
+        x.id === id
+    )
+
+  if (
+    !p ||
+    !confirm(
+      'ნამდვილად გსურთ ამ პროექტის წაშლა?'
+    )
+  ) {
+    return
+  }
+
+  const { error } =
+    await db
+      .from('projects')
+      .delete()
+      .eq(
+        'id',
+        id
+      )
+
+  if (error) {
+    return toast(
+      'პროექტის წაშლა ვერ მოხერხდა.'
+    )
+  }
+
+  await Promise.all([
+    removeStored(
+      p.image_url,
+      'project-images'
+    ),
+
+    removeStored(
+      p.video_url,
+      'project-videos'
+    )
+  ])
+
+  toast(
+    'პროექტი წაიშალა.',
+    'success'
+  )
+
+  loadAdminProjects()
+}
+
+const GEORGIAN_WEEKDAYS = [
+  'კვირა',
+  'ორშაბათი',
+  'სამშაბათი',
+  'ოთხშაბათი',
+  'ხუთშაბათი',
+  'პარასკევი',
+  'შაბათი'
+]
+
+function meetingDay(
+  dateValue
+) {
+  if (!dateValue) {
+    return '—'
+  }
+
+  const d =
+    new Date(
+      `${dateValue}T12:00:00`
+    )
+
+  if (
+    Number.isNaN(
+      d.getTime()
+    )
+  ) {
+    return '—'
+  }
+
+  return GEORGIAN_WEEKDAYS[
+    d.getDay()
+  ]
+}
+
+function meetingDateText(
+  dateValue
+) {
+  if (!dateValue) {
+    return '—'
+  }
+
+  const d =
+    new Date(
+      `${dateValue}T12:00:00`
+    )
+
+  if (
+    Number.isNaN(
+      d.getTime()
+    )
+  ) {
+    return dateValue
+  }
+
+  return new Intl.DateTimeFormat(
+    'ka-GE',
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }
+  ).format(d)
+}
+
+function meetingTimeText(
+  timeValue
+) {
+  if (!timeValue) {
+    return '—'
+  }
+
+  const m =
+    String(timeValue)
+      .match(
+        /^(\d{2}):(\d{2})/
+      )
+
+  return m
+    ? `${m[1]}:${m[2]}`
+    : timeValue
+}
+
+async function getMeeting() {
+  if (!db) {
+    return {
+      data: null,
+      error:
+        new Error(
+          'Supabase not configured'
+        )
+    }
+  }
+
+  return await db
+    .from('club_meeting')
+    .select(
+      'id,meeting_date,meeting_time,updated_at'
+    )
+    .eq(
+      'id',
+      1
+    )
+    .maybeSingle()
+}
+
+function renderMeetingContent(
+  meeting
+) {
+  const target =
+    $('#meeting-content')
+
+  if (!target) {
+    return
+  }
+
+  if (!meeting) {
+    target.innerHTML = `
+      <div class="meeting-empty">
+        ${icon('calendar-off')}
+
+        <h3>
+          თარიღი ჯერ არ არის გამოქვეყნებული
+        </h3>
+
+        <p>
+          როგორც კი ადმინისტრატორი თარიღსა და დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
+        </p>
+      </div>
+    `
+  } else {
+    target.innerHTML = `
+      <div class="meeting-date-main">
+        ${esc(
+          meetingDateText(
+            meeting.meeting_date
+          )
+        )}
+      </div>
+
+      <div class="meeting-detail-row">
+        <div>
+          <span>
+            დღე
+          </span>
+
+          <strong>
+            ${esc(
+              meetingDay(
+                meeting.meeting_date
+              )
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <span>
+            დრო
+          </span>
+
+          <strong>
+            ${esc(
+              meetingTimeText(
+                meeting.meeting_time
+              )
+            )}
+          </strong>
+        </div>
+      </div>
+    `
+  }
+
+  refreshIcons()
+}
+
+async function loadPublicMeeting() {
+  const {
+    data,
+    error
+  } =
+    await getMeeting()
+
+  if (error) {
+    console.error(error)
+
+    const target =
+      $('#meeting-content')
+
+    if (target) {
+      target.innerHTML = `
+        <div class="meeting-empty">
+          ${icon('triangle-alert')}
+
+          <h3>
+            ინფორმაციის ჩატვირთვა ვერ მოხერხდა
+          </h3>
+
+          <p>
+            სცადეთ რამდენიმე წამში ხელახლა.
+          </p>
+        </div>
+      `
+
+      refreshIcons()
+    }
+
+    return
+  }
+
+  renderMeetingContent(
+    data
+  )
+}
+
+function openMeetingModal() {
+  const modal =
+    $('#meeting-modal')
+
+  if (!modal) {
+    return
+  }
+
+  modal.hidden = false
+
+  modal.setAttribute(
+    'aria-hidden',
+    'false'
+  )
+
+  document.body.classList.add(
+    'modal-open'
+  )
+
+  loadPublicMeeting()
+
+  setTimeout(
+    () => {
+      $('#meeting-close')
+        ?.focus()
+    },
+    0
+  )
+}
+
+function closeMeetingModal() {
+  const modal =
+    $('#meeting-modal')
+
+  if (!modal) {
+    return
+  }
+
+  modal.hidden = true
+
+  modal.setAttribute(
+    'aria-hidden',
+    'true'
+  )
+
+  document.body.classList.remove(
+    'modal-open'
+  )
+}
+
+function initMeetingPublic() {
+  const button =
+    $('#meeting-button')
+
+  if (!button) {
+    return
+  }
+
+  button.addEventListener(
+    'click',
+    openMeetingModal
+  )
+
+  $('#meeting-close')
+    ?.addEventListener(
+      'click',
+      closeMeetingModal
+    )
+
+  document
+    .querySelectorAll(
+      '[data-meeting-close]'
+    )
+    .forEach(
+      el =>
+        el.addEventListener(
+          'click',
+          closeMeetingModal
+        )
+    )
+
+  document.addEventListener(
+    'keydown',
+    e => {
+      if (
+        e.key === 'Escape' &&
+        $('#meeting-modal') &&
+        !$('#meeting-modal')
+          .hidden
+      ) {
+        closeMeetingModal()
+      }
+    }
+  )
+}
+
+async function loadAdminMeeting() {
+  const status =
+    $('#meeting-admin-status')
+
+  if (!status) {
+    return
+  }
+
+  const {
+    data,
+    error
+  } =
+    await getMeeting()
+
+  if (error) {
+    status.textContent =
+      'ჩატვირთვა ვერ მოხერხდა'
+
+    console.error(error)
+
+    return
+  }
+
+  if (data) {
+    $('#meeting-date')
+      .value =
+      data.meeting_date ||
+      ''
+
+    $('#meeting-time')
+      .value =
+      String(
+        data.meeting_time ||
+        ''
+      ).slice(
+        0,
+        5
+      )
+
+    $('#meeting-day-preview')
+      .textContent =
+      meetingDay(
+        data.meeting_date
+      )
+
+    status.textContent =
+      'გამოქვეყნებულია'
+
+    status.className =
+      'meeting-admin-status published'
+  } else {
+    status.textContent =
+      'არ არის გამოქვეყნებული'
+
+    status.className =
+      'meeting-admin-status'
+
+    $('#meeting-day-preview')
+      .textContent =
+      '—'
+  }
+}
+
+function bindMeetingForm() {
+  const form =
+    $('#meeting-form')
+
+  if (!form) {
+    return
+  }
+
+  $('#meeting-date')
+    ?.addEventListener(
+      'input',
+      e => {
+        $('#meeting-day-preview')
+          .textContent =
+          meetingDay(
+            e.target.value
+          )
+      }
+    )
+
+  form.addEventListener(
+    'submit',
+    saveMeeting
+  )
+
+  $('#clear-meeting')
+    ?.addEventListener(
+      'click',
+      clearMeeting
+    )
+}
+
+async function saveMeeting( event ) {
+  event.preventDefault()
+  if (!db) { return }
+  const button = $('#save-meeting')
+  const errorTarget = $('#meeting-form-error')
+  const date = $('#meeting-date') .value
+  const time = $('#meeting-time') .value
+  errorTarget.textContent = ''
+  if ( !date || !time ) {
+    errorTarget.textContent = 'აირჩიეთ თარიღი და დრო.'
+    return
+  }
+  setBusy( button, true, 'ქვეყნდება...' )
+  try {
+    const { data: { user } } = await db.auth.getUser()
+    if (!user) {
+      throw new Error( 'not-authenticated' )
+    }
+    const { error } = await db
+      .from('club_meeting')
+      .upsert(
+        { id: 1, meeting_date: date, meeting_time: time, updated_by: user.id },
+        { onConflict: 'id' }
+      )
+    if (error) {
+      throw error
+    }
+    toast( 'კლუბის შეკრება გამოქვეყნდა.', 'success' )
     
 
-//     await loadAdminMeeting()
-//   } catch (error) {
-//     errorTarget.textContent = neutralError( error, 'შეკრების გამოქვეყნება ვერ მოხერხდა.' )
-//   } finally {
-//     setBusy( button, false )
-//   }
-// }
-// async function clearMeeting() {
-//   if (!db) {
-//     return
-//   }
-
-//   if (
-//     !confirm(
-//       'ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?'
-//     )
-//   ) {
-//     return
-//   }
-
-//   const { error } =
-//     await db
-//       .from('club_meeting')
-//       .delete()
-//       .eq(
-//         'id',
-//         1
-//       )
-
-//   if (error) {
-//     return toast(
-//       'შეკრების წაშლა ვერ მოხერხდა.'
-//     )
-//   }
-
-//   // ✨ აქ ვამატებთ მესიჯის გაგზავნას ბაზაში (ან ჩატში), რომ შეკრება გაუქმდა
-//   await db.from('messages').insert({
-//     message: '⚠️ კლუბის შეკრება გაუქმდა ადმინისტრატორის მიერ.',
-//     sender: 'სისტემა' // ან შენი არჩევნით
-//   })
-
-//   $('#meeting-date')
-//     .value = ''
-
-//   $('#meeting-time')
-//     .value = ''
-
-//   $('#meeting-day-preview')
-//     .textContent =
-//     '—'
-
-//   $('#meeting-admin-status')
-//     .textContent =
-//     'არ არის გამოქვეყნებული'
-
-//   $('#meeting-admin-status')
-//     .className =
-//     'meeting-admin-status'
-
-//   toast(
-//     'შეკრება გაუქმდა.',
-//     'success'
-//   )
-// }
-// async function initPasswordReset() {
-//   const form =
-//     $('#reset-password-form')
-
-//   if (!form) {
-//     return
-//   }
-
-//   if (!db) {
-//     $('#reset-error')
-//       .textContent =
-//       'Supabase ჯერ არ არის კონფიგურირებული.'
-
-//     form
-//       .querySelector(
-//         'button'
-//       )
-//       .disabled = true
-
-//     return
-//   }
-
-//   form.addEventListener(
-//     'submit',
-//     async event => {
-//       event.preventDefault()
-
-//       const error =
-//         $('#reset-error')
-
-//       const password =
-//         $('#new-password')
-//           .value
-
-//       const confirmPassword =
-//         $('#confirm-password')
-//           .value
-
-//       const button =
-//         form.querySelector(
-//           'button'
-//         )
-
-//       error.textContent =
-//         ''
-
-//       if (
-//         password !==
-//         confirmPassword
-//       ) {
-//         error.textContent =
-//           'პაროლები ერთმანეთს არ ემთხვევა.'
-
-//         return
-//       }
-
-//       if (
-//         password.length < 10
-//       ) {
-//         error.textContent =
-//           'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.'
-
-//         return
-//       }
-
-//       const {
-//         data: { session }
-//       } =
-//         await db.auth.getSession()
-
-//       if (!session) {
-//         error.textContent =
-//           'აღდგენის ბმული არასწორია ან ვადა გაუვიდა. მოითხოვეთ ახალი ბმული.'
-
-//         return
-//       }
-
-//       setBusy(
-//         button,
-//         true,
-//         'ინახება...'
-//       )
-
-//       const {
-//         error: updateError
-//       } =
-//         await db.auth.updateUser({
-//           password
-//         })
-
-//       if (updateError) {
-//         error.textContent =
-//           'პაროლის შეცვლა ვერ მოხერხდა. მოითხოვეთ ახალი ბმული.'
-//       } else {
-//         toast(
-//           'პაროლი წარმატებით შეიცვალა.',
-//           'success'
-//         )
-
-//         setTimeout(
-//           () => {
-//             location.href =
-//               'admin.html'
-//           },
-//           900
-//         )
-//       }
-
-//       setBusy(
-//         button,
-//         false
-//       )
-//     }
-//   )
-// }
-
-// const MARIA_USER_ID = 'f5b9922a-d764-4ad7-b2e0-b73dbe98dc8b'
-
-// let attendanceMembers = []
-// let attendanceRecords = []
-
-// async function isAttendanceManager(user) {
-//   return !!user && user.id === MARIA_USER_ID
-// }
-
-// async function getAttendanceMembers() {
-//   if (!db) {
-//     return []
-//   }
-
-//   const { data, error } = await db
-//     .from('club_members')
-//     .select('id,full_name,sort_order,active')
-//     .eq('active', true)
-//     .order('sort_order', { ascending: true })
-
-//   if (error) {
-//     throw error
-//   }
-
-//   return data || []
-// }
-
-// async function getAttendanceRecords() {
-//   if (!db) {
-//     return []
-//   }
-
-//   const { data, error } = await db
-//     .from('club_attendance')
-//     .select(`
-//       id,
-//       meeting_date,
-//       recorded_by,
-//       counted,
-//       created_at,
-//       updated_at,
-//       club_attendance_members (
-//         member_id,
-//         club_members (
-//           id,
-//           full_name,
-//           sort_order
-//         )
-//       )
-//     `)
-//     .order('meeting_date', { ascending: false })
-
-//   if (error) {
-//     throw error
-//   }
-
-//   return data || []
-// }
-
-// function attendanceDateText(value) {
-//   if (!value) {
-//     return '—'
-//   }
-
-//   const date = new Date(`${value}T12:00:00`)
-
-//   if (Number.isNaN(date.getTime())) {
-//     return value
-//   }
-
-//   return new Intl.DateTimeFormat(
-//     'ka-GE',
-//     {
-//       day: 'numeric',
-//       month: 'long',
-//       year: 'numeric'
-//     }
-//   ).format(date)
-// }
-
-// async function saveAttendanceRecord(date, memberIds, counted) {
-//   if (!db) {
-//     throw new Error('Supabase არ არის კონფიგურირებული.')
-//   }
-
-//   const { data: { user } } = await db.auth.getUser()
-
-//   if (!user) {
-//     throw new Error('ანგარიშში შესვლა აუცილებელია.')
-//   }
-
-//   const manager = await isAttendanceManager(user)
-
-//   if (!manager) {
-//     throw new Error('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
-//   }
-
-//   let { data: record, error } = await db
-//     .from('club_attendance')
-//     .select('id')
-//     .eq('meeting_date', date)
-//     .maybeSingle()
-
-//   if (error) {
-//     throw error
-//   }
-
-//   if (record) {
-//     const { error: updateError } = await db
-//       .from('club_attendance')
-//       .update({
-//         recorded_by: user.id,
-//         counted,
-//         updated_at: new Date().toISOString()
-//       })
-//       .eq('id', record.id)
-
-//     if (updateError) {
-//       throw updateError
-//     }
-//   } else {
-//     const { data: created, error: insertError } = await db
-//       .from('club_attendance')
-//       .insert({
-//         meeting_date: date,
-//         recorded_by: user.id,
-//         counted
-//       })
-//       .select('id')
-//       .single()
-
-//     if (insertError) {
-//       throw insertError
-//     }
-
-//     record = created
-//   }
-
-//   const { error: deleteError } = await db
-//     .from('club_attendance_members')
-//     .delete()
-//     .eq('attendance_id', record.id)
-
-//   if (deleteError) {
-//     throw deleteError
-//   }
-
-//   if (memberIds.length) {
-//     const rows = memberIds.map(
-//       member_id => ({
-//         attendance_id: record.id,
-//         member_id
-//       })
-//     )
-
-//     const { error: insertMembersError } = await db
-//       .from('club_attendance_members')
-//       .insert(rows)
-
-//     if (insertMembersError) {
-//       throw insertMembersError
-//     }
-//   }
-
-//   return record.id
-// }
-
-// function closeAttendancePanel() {
-//   const panel = $('#attendance-panel')
-
-//   if (!panel) {
-//     document.body.style.overflow = ''
-//     document.body.classList.remove('modal-open')
-
-//     document.removeEventListener(
-//       'keydown',
-//       attendanceEscapeHandler
-//     )
-
-//     return
-//   }
-
-//   panel.remove()
-
-//   document.body.style.overflow = ''
-//   document.body.classList.remove('modal-open')
-
-//   document.removeEventListener(
-//     'keydown',
-//     attendanceEscapeHandler
-//   )
-// }
-
-// function renderAttendancePanel(records) {
-//   const panel = $('#attendance-panel')
-
-//   if (!panel) {
-//     return
-//   }
-
-//   const currentDate =
-//     $('#attendance-date')?.value || ''
-
-//   const selectedRecord =
-//     records.find(
-//       record =>
-//         record.meeting_date === currentDate
-//     )
-
-//   const selectedIds =
-//     selectedRecord
-//       ? selectedRecord
-//         .club_attendance_members
-//         .map(
-//           item => item.member_id
-//         )
-//       : []
-
-//   const countedInput =
-//     $('#attendance-counted')
-
-//   if (countedInput) {
-//     countedInput.checked =
-//       selectedRecord?.counted === true
-//   }
-
-//   const memberList =
-//     $('#attendance-member-select')
-
-//   if (!memberList) {
-//     return
-//   }
-
-//   memberList.innerHTML =
-//     attendanceMembers
-//       .map(
-//         member => `
-//           <label class="attendance-member-option">
-//             <input
-//               type="checkbox"
-//               value="${esc(member.id)}"
-//               ${
-//                 selectedIds.includes(
-//                   member.id
-//                 )
-//                   ? 'checked'
-//                   : ''
-//               }
-//             >
-
-//             <span>
-//               ${esc(member.full_name)}
-//             </span>
-//           </label>
-//         `
-//       )
-//       .join('')
-
-//   const history =
-//     $('#attendance-personal-history')
-
-//   if (history) {
-//     const countedRecords =
-//       records.filter(
-//         record =>
-//           record.counted === true
-//       )
-
-//     history.innerHTML =
-//       countedRecords.length
-//         ? countedRecords
-//           .map(
-//             record => {
-//               const names =
-//                 record
-//                   .club_attendance_members
-//                   .map(
-//                     item =>
-//                       item
-//                         .club_members
-//                         ?.full_name
-//                   )
-//                   .filter(Boolean)
-
-//               return `
-//                 <button
-//                   type="button"
-//                   class="attendance-history-item"
-//                   data-attendance-date="${esc(
-//                     record.meeting_date
-//                   )}"
-//                 >
-//                   <span>
-//                     ${esc(
-//                       attendanceDateText(
-//                         record.meeting_date
-//                       )
-//                     )}
-//                   </span>
-
-//                   <strong>
-//                     ${names.length} წევრი
-//                   </strong>
-//                 </button>
-//               `
-//             }
-//           )
-//           .join('')
-//         : `
-//           <div class="empty-state compact-empty">
-//             ${icon('calendar-x')}
-
-//             <h3>
-//               შეკრებების ისტორია ცარიელია
-//             </h3>
-
-//             <p>
-//               ჩათვლილი შეხვედრები აქ გამოჩნდება.
-//             </p>
-//           </div>
-//         `
-
-//     history
-//       .querySelectorAll(
-//         '[data-attendance-date]'
-//       )
-//       .forEach(
-//         button => {
-//           button.addEventListener(
-//             'click',
-//             () => {
-//               const date =
-//                 button.dataset
-//                   .attendanceDate
-
-//               const input =
-//                 $('#attendance-date')
-
-//               if (input) {
-//                 input.value = date
-//               }
-
-//               renderAttendancePanel(
-//                 attendanceRecords
-//               )
-
-//               updateAttendanceSelectedCount()
-//             }
-//           )
-//         }
-//       )
-//   }
-
-//   refreshIcons()
-// }
-
-// async function openAttendancePanel() {
-//   const user = await getCurrentUser()
-//   if (!user) {
-//     toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
-//     return
-//   }
-//   const manager = await isAttendanceManager(user)
-//   if (!manager) {
-//     toast('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
-//     return
-//   }
-//   closeAttendancePanel()
-//   const panel = document.createElement('div')
-//   panel.id = 'attendance-panel'
-//   panel.className = 'attendance-overlay'
-//   panel.hidden = false
-//   panel.style.position = 'fixed'
-//   panel.style.inset = '0'
-//   panel.style.zIndex = '999999'
-//   panel.style.display = 'flex'
-//   panel.style.alignItems = 'center'
-//   panel.style.justifyContent = 'center'
-//   panel.style.overflowY = 'auto'
-//   panel.style.padding = '20px'
-//   panel.style.background = 'rgba(0, 0, 0, 0.7)'
-//   panel.style.boxSizing = 'border-box'
-//   panel.innerHTML = `
-//     <div class="attendance-panel-backdrop" data-attendance-close style="
-//         position:absolute;
-//         inset:0;
-//         width:100%;
-//         height:100%;
-//     "></div>
-//     <section class="attendance-panel-content" role="dialog" aria-modal="true" aria-labelledby="attendance-panel-title" style="
-//         position:relative;
-//         z-index:2;
-//         width:min(900px,100%);
-//         max-height:90vh;
-//         overflow-y:auto;
-//         box-sizing:border-box;
-//     ">
-//       <div class="attendance-panel-header">
-//         <div>
-//           <p class="eyebrow">CLUB ATTENDANCE</p>
-//           <h2 id="attendance-panel-title">დასწრების აღრიცხვა</h2>
-//           <p>მონიშნე იმ შეხვედრაზე დამსწრე კლუბის წევრები.</p>
-//         </div>
-//         <button type="button" class="icon-button" id="attendance-close" aria-label="დახურვა">
-//           ${icon('x')}
-//         </button>
-//       </div>
-//       <div class="attendance-panel-body">
-//         <div class="attendance-date-box">
-//           <label>შეხვედრის თარიღი <input id="attendance-date" type="date"></label>
-//           <span id="attendance-record-status" class="attendance-record-status"></span>
-//         </div>
-//         <div class="attendance-select-box">
-//           <div class="attendance-subheading">
-//             <div>
-//               <h3>დამსწრე წევრები</h3>
-//               <p>მონიშნე ყველა, ვინც შეხვედრას დაესწრო.</p>
-//             </div>
-//             <span id="attendance-selected-count">0</span>
-//           </div>
-//           <div id="attendance-member-select" class="attendance-member-select"></div>
-//         </div>
-//         <p id="attendance-form-error" class="form-message" role="alert" aria-live="polite"></p>
-//         <div class="attendance-actions">
-//           <label class="attendance-count-toggle">
-//             <input type="checkbox" id="attendance-counted">
-//             <span class="attendance-count-toggle-box">${icon('check')}</span>
-//             <span>ჩათვლა</span>
-//           </label>
-//           <button type="button" class="button primary" id="save-attendance">
-//             ${icon('save')} დასწრების შენახვა
-//           </button>
-//           <button type="button" class="button ghost" id="attendance-cancel">გაუქმება</button>
-//         </div>
-//         <div class="attendance-history-box">
-//           <div class="attendance-subheading">
-//             <div>
-//               <h3>შეკრებების ისტორია</h3>
-//               <p>აქ გამოჩნდება მხოლოდ ჩათვლილი შეხვედრები.</p>
-//             </div>
-//           </div>
-//           <div id="attendance-personal-history" class="attendance-personal-history"></div>
-//         </div>
-//       </div>
-//     </section>
-//   `
-//   document.body.appendChild(panel)
-//   document.body.style.overflow = 'hidden'
-
-//   try {
-//     attendanceMembers = await getAttendanceMembers()
-//     attendanceRecords = await getAttendanceRecords()
-//     const dateInput = $('#attendance-date')
-//     if (dateInput) {
-//       const latest = attendanceRecords[0]
-//       dateInput.value =
-//         latest?.meeting_date || new Date().toISOString().slice(0, 10)
-//     }
-
-//     renderAttendancePanel(attendanceRecords)
-//     updateAttendanceSelectedCount()
-
-//     $('#attendance-close')?.addEventListener('click', closeAttendancePanel)
-//     $('#attendance-cancel')?.addEventListener('click', closeAttendancePanel)
-//     panel
-//       .querySelector('[data-attendance-close]')
-//       ?.addEventListener('click', closeAttendancePanel)
-
-//     $('#attendance-date')?.addEventListener('change', () => {
-//       renderAttendancePanel(attendanceRecords)
-//       updateAttendanceSelectedCount()
-//     })
-
-//     $('#attendance-member-select')?.addEventListener(
-//       'change',
-//       updateAttendanceSelectedCount
-//     )
-//     $('#save-attendance')?.addEventListener('click', saveAttendanceFromPanel)
-//     document.addEventListener('keydown', attendanceEscapeHandler)
-//     refreshIcons()
-//   } catch (error) {
-//     console.error('Attendance panel error:', error)
-//     const errorTarget = $('#attendance-form-error')
-//     if (errorTarget) {
-//       errorTarget.textContent =
-//         error?.message || 'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
-//     }
-//   }
-// }
-
-// // გლობალურად გახსნა - ფუნქციის გარეთ!
-// window.openAttendancePanel = openAttendancePanel;
-// function attendanceEscapeHandler(event) {
-//   if (
-//     event.key === 'Escape' &&
-//     $('#attendance-panel')
-//   ) {
-//     closeAttendancePanel()
-//   }
-// }
-
-// function updateAttendanceSelectedCount() {
-//   const checked =
-//     document.querySelectorAll(
-//       '#attendance-member-select input[type="checkbox"]:checked'
-//     )
-
-//   const counter =
-//     $('#attendance-selected-count')
-
-//   if (counter) {
-//     counter.textContent =
-//       String(checked.length)
-//   }
-// }
-
-// async function saveAttendanceFromPanel() {
-//   const date =
-//     $('#attendance-date')
-//       ?.value
-
-//   const errorTarget =
-//     $('#attendance-form-error')
-
-//   const button =
-//     $('#save-attendance')
-
-//   if (errorTarget) {
-//     errorTarget.textContent = ''
-//   }
-
-//   if (!date) {
-//     if (errorTarget) {
-//       errorTarget.textContent =
-//         'აირჩიე შეხვედრის თარიღი.'
-//     }
-
-//     return
-//   }
-
-//   const selected =
-//     Array.from(
-//       document.querySelectorAll(
-//         '#attendance-member-select input[type="checkbox"]:checked'
-//       )
-//     ).map(
-//       input => input.value
-//     )
-
-//   const counted =
-//     $('#attendance-counted')
-//       ?.checked === true
-
-//   setBusy(
-//     button,
-//     true,
-//     'ინახება...'
-//   )
-
-//   try {
-//     await saveAttendanceRecord(
-//       date,
-//       selected,
-//       counted
-//     )
-
-//     attendanceRecords =
-//       await getAttendanceRecords()
-
-//     renderAttendancePanel(
-//       attendanceRecords
-//     )
-
-//     updateAttendanceSelectedCount()
-
-//     toast(
-//       counted
-//         ? 'შეხვედრა ჩათვლილია და დასწრება შენახულია.'
-//         : 'დასწრება შენახულია.'
-//       ,
-//       'success'
-//     )
-//   } catch (error) {
-//     console.error(
-//       'Attendance save error:',
-//       error
-//     )
-
-//     if (errorTarget) {
-//       errorTarget.textContent =
-//         error?.message ||
-//         'დასწრების შენახვა ვერ მოხერხდა.'
-//     }
-//   } finally {
-//     setBusy(
-//       button,
-//       false
-//     )
-//   }
-// }
-
-// async function loadAdminAttendance() {
-//   const status =
-//     $('#attendance-admin-status')
-
-//   const memberList =
-//     $('#attendance-member-list')
-
-//   const historyList =
-//     $('#attendance-history-list')
-
-//   const totalMeetings =
-//     $('#attendance-total-meetings')
-
-//   const totalMembers =
-//     $('#attendance-total-members')
-
-//   if (
-//     !status &&
-//     !memberList &&
-//     !historyList
-//   ) {
-//     return
-//   }
-
-//   if (!db) {
-//     if (status) {
-//       status.textContent =
-//         'Supabase არ არის კონფიგურირებული'
-//     }
-
-//     return
-//   }
-
-//   try {
-//     const [members, records] =
-//       await Promise.all([
-//         getAttendanceMembers(),
-//         getAttendanceRecords()
-//       ])
-
-//     attendanceMembers =
-//       members
-
-//     attendanceRecords =
-//       records
-
-//     const countedRecords =
-//       records.filter(
-//         record =>
-//           record.counted === true
-//       )
-
-//     if (status) {
-//       status.textContent =
-//         'განახლებულია'
-//     }
-
-//     if (totalMeetings) {
-//       totalMeetings.textContent =
-//         String(
-//           countedRecords.length
-//         )
-//     }
-
-//     if (totalMembers) {
-//       totalMembers.textContent =
-//         String(
-//           members.length
-//         )
-//     }
-
-//     const counts =
-//       new Map()
-
-//     members.forEach(
-//       member => {
-//         counts.set(
-//           member.id,
-//           0
-//         )
-//       }
-//     )
-
-//     countedRecords.forEach(
-//       record => {
-//         record
-//           .club_attendance_members
-//           .forEach(
-//             item => {
-//               counts.set(
-//                 item.member_id,
-//                 (
-//                   counts.get(
-//                     item.member_id
-//                   ) || 0
-//                 ) + 1
-//               )
-//             }
-//           )
-//       }
-//     )
-
-//  if (memberList) {
-//       let maxCount = 0
-//       members.forEach(member => {
-//         const count = counts.get(member.id) || 0
-//         if (count > maxCount) maxCount = count
-//       })
-
-//       memberList.innerHTML = members.length ? members
-//         .map(
-//           member => {
-//             const count = counts.get( member.id ) || 0
-//             const percent = countedRecords.length ? Math.round( count / countedRecords.length * 100 ) : 0
-//             const isTop = count > 0 && count === maxCount
-
-//             return `
-//               <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
-//                 ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
-//                 <div>
-//                   <div class="member-name-row">
-//                     <strong class="${isTop ? 'top-name' : ''}">${esc( member.full_name )}</strong>
-//                     ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
-//                   </div>
-//                   <span> ${count} შეხვედრა </span>
-//                 </div>
-//                 <div class="attendance-admin-member-value">
-//                   <strong class="${isTop ? 'top-percent' : ''}"> ${percent}% </strong>
-//                   <small> დასწრება </small>
-//                 </div>
-//               </div>
-//             `
-//           }
-//         )
-//         .join('')
-//       : ` <div class="empty-state compact-empty"> ${icon('users-round')} <h3> წევრები ვერ მოიძებნა </h3> <p> კლუბის წევრების სია ცარიელია. </p> </div> `
-//     }
-
-//     if (historyList) {
-//       historyList.innerHTML =
-//         countedRecords.length
-//           ? countedRecords
-//             .map(
-//               record => {
-//                 const names =
-//                   record
-//                     .club_attendance_members
-//                     .map(
-//                       item =>
-//                         item
-//                           .club_members
-//                           ?.full_name
-//                     )
-//                     .filter(Boolean)
-
-//                 return `
-//                   <article class="attendance-admin-record">
-
-//                     <div class="attendance-admin-record-header">
-
-//                       <div>
-//                         <span>
-//                           შეხვედრა
-//                         </span>
-
-//                         <strong>
-//                           ${esc(
-//                             attendanceDateText(
-//                               record.meeting_date
-//                             )
-//                           )}
-//                         </strong>
-//                       </div>
-
-//                       <span class="attendance-admin-badge">
-//                         ${names.length} დამსწრე
-//                       </span>
-
-//                     </div>
-
-//                     <div class="attendance-admin-names">
-
-//                       ${
-//                         names.length
-//                           ? names
-//                             .map(
-//                               name => `
-//                                 <span>
-//                                   ${icon('check')}
-//                                   ${esc(name)}
-//                                 </span>
-//                               `
-//                             )
-//                             .join('')
-//                           : `
-//                             <span class="attendance-no-members">
-//                               არავინ იყო მონიშნული
-//                             </span>
-//                           `
-//                       }
-
-//                     </div>
-
-//                   </article>
-//                 `
-//               }
-//             )
-//             .join('')
-//           : `
-//             <div class="empty-state compact-empty">
-//               ${icon('calendar-x')}
-
-//               <h3>
-//                 დასწრების ისტორია ცარიელია
-//               </h3>
-
-//               <p>
-//                 ჩათვლილი შეხვედრები აქ გამოჩნდება.
-//               </p>
-
-//             </div>
-//           `
-//     }
-
-//     refreshIcons()
-//   } catch (error) {
-//     console.error(
-//       'Admin attendance error:',
-//       error
-//     )
-
-//     if (status) {
-//       status.textContent =
-//         'ჩატვირთვა ვერ მოხერხდა'
-//     }
-
-//     if (memberList) {
-//       memberList.innerHTML = `
-//         <div class="empty-state compact-empty">
-
-//           ${icon('triangle-alert')}
-
-//           <h3>
-//             დასწრების მონაცემები ვერ ჩაიტვირთა
-//           </h3>
-
-//           <p>
-//             ${esc(
-//               error?.message ||
-//               'სცადეთ ხელახლა.'
-//             )}
-//           </p>
-
-//         </div>
-//       `
-//     }
-
-//     refreshIcons()
-//   }
-// }
-
-// let authUIUpdating = false
-// let authUIQueued = false
-// let authUIListenerStarted = false
-
-// function findLoginElement() {
-//   const elements =
-//     Array.from(
-//       document.querySelectorAll(
-//         'a[href], button'
-//       )
-//     )
-
-//   return (
-//     elements.find(
-//       element => {
-//         if (
-//           element.closest(
-//             '.account-menu'
-//           )
-//         ) {
-//           return false
-//         }
-
-//         const href =
-//           element.getAttribute(
-//             'href'
-//           ) || ''
-
-//         const text =
-//           element.textContent
-//             .trim()
-//             .toLowerCase()
-
-//         return (
-//           href ===
-//             'admin.html' ||
-//           href.endsWith(
-//             '/admin.html'
-//           ) ||
-//           text ===
-//             'log in' ||
-//           text ===
-//             'login' ||
-//           text ===
-//             'ადმინისტრატორი'
-//         )
-//       }
-//     ) || null
-//   )
-// }
-
-// function closeAllAccountMenus(
-//   except = null
-// ) {
-//   document
-//     .querySelectorAll(
-//       '.account-menu'
-//     )
-//     .forEach(
-//       menu => {
-//         if (
-//           menu !== except
-//         ) {
-//           menu.remove()
-//         }
-//       }
-//     )
-// }
-
-// function createAccountMenu(
-//   user
-// ) {
-//   const name =
-//     getUserDisplayName(
-//       user
-//     )
-
-//   const isMaria =
-//     user?.id ===
-//     MARIA_USER_ID
-
-//   const wrapper =
-//     document.createElement(
-//       'div'
-//     )
-
-//   wrapper.className =
-//     'account-menu'
-
-//   wrapper.innerHTML = `
-//     <button
-//       type="button"
-//       class="account-button"
-//       aria-expanded="false"
-//     >
-//       ${icon('user-round')}
-
-//       <span class="account-name">
-//         ${esc(name)}
-//       </span>
-
-//       ${icon('chevron-down')}
-//     </button>
-
-//     <div
-//       class="account-dropdown"
-//       hidden
-//     >
-//       <div class="account-dropdown-name">
-//         ${icon('user-round')}
-
-//         <span>
-//           ${esc(name)}
-//         </span>
-//       </div>
-
-//       ${
-//         isMaria
-//           ? `
-//             <button
-//               type="button"
-//               class="account-attendance"
-//             >
-//               ${icon('clipboard-check')}
-//               დასწრების აღრიცხვა
-//             </button>
-//           `
-//           : ''
-//       }
-
-//       <button
-//         type="button"
-//         class="account-logout"
-//       >
-//         ${icon('log-out')}
-//         გამოსვლა
-//       </button>
-//     </div>
-//   `
-
-//   const button =
-//     wrapper.querySelector(
-//       '.account-button'
-//     )
-
-//   const dropdown =
-//     wrapper.querySelector(
-//       '.account-dropdown'
-//     )
-
-//   const attendanceButton =
-//     wrapper.querySelector(
-//       '.account-attendance'
-//     )
-
-//   const logoutButton =
-//     wrapper.querySelector(
-//       '.account-logout'
-//     )
-
-//   button?.addEventListener(
-//     'click',
-//     event => {
-//       event.stopPropagation()
-
-//       const shouldOpen =
-//         dropdown.hidden
-
-//       document
-//         .querySelectorAll(
-//           '.account-dropdown'
-//         )
-//         .forEach(
-//           item => {
-//             item.hidden = true
-//           }
-//         )
-
-//       document
-//         .querySelectorAll(
-//           '.account-button'
-//         )
-//         .forEach(
-//           item => {
-//             item.setAttribute(
-//               'aria-expanded',
-//               'false'
-//             )
-//           }
-//         )
-
-//       dropdown.hidden =
-//         !shouldOpen
-
-//       button.setAttribute(
-//         'aria-expanded',
-//         String(
-//           shouldOpen
-//         )
-//       )
-//     }
-//   )
-
-//   attendanceButton?.addEventListener(
-//     'click',
-//     async event => {
-//       event.stopPropagation()
-
-//       dropdown.hidden = true
-
-//       button.setAttribute(
-//         'aria-expanded',
-//         'false'
-//       )
-
-//       await openAttendancePanel()
-//     }
-//   )
-
-//   logoutButton?.addEventListener(
-//     'click',
-//     async event => {
-//       event.stopPropagation()
-
-//       logoutButton.disabled =
-//         true
-
-//       logoutButton.innerHTML = `
-//         ${icon('loader-circle')}
-//         გამოდის...
-//       `
-
-//       refreshIcons()
-
-//       await logout()
-//     }
-//   )
-
-//   return wrapper
-// }
-
-// async function updateAuthUI() {
-//   if (!db) {
-//     return
-//   }
-
-//   if (authUIUpdating) {
-//     authUIQueued = true
-//     return
-//   }
-
-//   authUIUpdating = true
-
-//   try {
-//     const user =
-//       await getCurrentUser()
-
-//     const existingMenus =
-//       Array.from(
-//         document.querySelectorAll(
-//           '.account-menu'
-//         )
-//       )
-
-//     const loginElement =
-//       findLoginElement()
-
-//     if (!user) {
-//       existingMenus
-//         .forEach(
-//           menu =>
-//             menu.remove()
-//         )
-
-//       if (loginElement) {
-//         loginElement.hidden =
-//           false
-//       }
-
-//       return
-//     }
-
-//     const admin =
-//       await isAdmin(user)
-
-//     if (admin) {
-//       existingMenus
-//         .forEach(
-//           menu =>
-//             menu.remove()
-//         )
-
-//       if (loginElement) {
-//         loginElement.hidden =
-//           false
-//       }
-
-//       return
-//     }
-
-//     if (!loginElement) {
-//       if (
-//         existingMenus.length >
-//         1
-//       ) {
-//         existingMenus
-//           .slice(1)
-//           .forEach(
-//             menu =>
-//               menu.remove()
-//           )
-//       }
-
-//       return
-//     }
-
-//     const currentMenu =
-//       existingMenus[0]
-
-//     if (currentMenu) {
-//       existingMenus
-//         .slice(1)
-//         .forEach(
-//           menu =>
-//             menu.remove()
-//         )
-
-//       loginElement.hidden =
-//         true
-
-//       return
-//     }
-
-//     closeAllAccountMenus()
-
-//     const menu =
-//       createAccountMenu(
-//         user
-//       )
-
-//     loginElement.hidden =
-//       true
-
-//     loginElement.parentElement
-//       ?.appendChild(
-//         menu
-//       )
-
-//     refreshIcons()
-//   } finally {
-//     authUIUpdating =
-//       false
-
-//     if (authUIQueued) {
-//       authUIQueued =
-//         false
-
-//       setTimeout(
-//         () =>
-//           updateAuthUI(),
-//         0
-//       )
-//     }
-//   }
-// }
-
-// function queueAuthUIUpdate() {
-//   if (authUIQueued) {
-//     return
-//   }
-
-//   authUIQueued = true
-
-//   setTimeout(
-//     async () => {
-//       authUIQueued =
-//         false
-
-//       await updateAuthUI()
-//     },
-//     0
-//   )
-// }
-
-// async function initAuthUI() {
-//   if (!db) {
-//     return
-//   }
-
-//   await updateAuthUI()
-
-//   if (
-//     authUIListenerStarted
-//   ) {
-//     return
-//   }
-
-//   authUIListenerStarted =
-//     true
-
-//   db.auth.onAuthStateChange(
-//     (
-//       _event,
-//       session
-//     ) => {
-//       if (session?.user) {
-//         detectAIAdmin()
-//       } else {
-//         aiAdminGreeting = ''
-//       }
-
-//       queueAuthUIUpdate()
-//     }
-//   )
-// }
-
-// initChrome()
-
-// if (
-//   page === 'home'
-// ) {
-//   initMeetingPublic()
-//   initAIChat()
-// }
-
-// if (
-//   page === 'projects'
-// ) {
-//   initProjects()
-// }
-
-// if (
-//   page === 'detail'
-// ) {
-//   initDetail()
-// }
-
-// if (
-//   page === 'admin'
-// ) {
-//   initAdmin()
-// }
-
-// if (
-//   page === 'reset'
-// ) {
-//   initPasswordReset()
-// }
-
-// initAuthUI()
-// document.addEventListener('DOMContentLoaded', () => {
-//     const meetingBtn = document.getElementById('meeting-button');
-//     if (meetingBtn) {
-//         meetingBtn.addEventListener('click', () => {
-//             openAttendancePanel();
-//         });
-//     }
-// });
-// // ერთიანი ფუნქცია შეხვედრის შენახვისა და ფუშ-შეტყობინების გასაგზავნად
-// async function saveMeetingAndNotify(meetingTitle, meetingDesc) {
-//   try {
-//     // 1. ვინახავთ შეხვედრას (თუ გაქვს ძველი ლოგიკა, აქ შეგიძლია ჩასვა)
-//     console.log("შეხვედრა ინახება:", meetingTitle);
-
-//     // 2. ვგზავნით OneSignal ფუშ-შეტყობინებას პროქსის გავლით (CORS-ის ასავლელად)
-//     const response = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://onesignal.com/api/v1/notifications"), {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json; charset=utf-8",
-//         "Authorization": "Basic os_v2_app_d4psobll6rhhpg3ec66v3ae6yqagkpebweheqwnabdw4hmhlrijhncsfbiboyqyzefj5p2itv4zaujrlxccbpsaan7cegyawzjesvva"
-//       },
-//       body: JSON.stringify({
-//         app_id: "შენი_onesignal_app_id", // აქ ჩაწერე შენი OneSignal აპის აიდი
-//         included_segments: ["All"],
-//         contents: { en: `ახალი შეხვედრა: ${meetingTitle}` },
-//         headings: { en: "Arduino Hub" }
-//       })
-//     });
-
-//     const data = await response.json();
-//     console.log("შეტყობინება გაიგზავნა:", data);
-//   } catch (error) {
-//     console.error("შეცდომა შეტყობინების გაგზავნისას:", error);
-//   }
-// }
-
-// window.addEventListener('DOMContentLoaded', () => {
-//   setTimeout(() => {
-//     const memberCards = [...document.querySelectorAll('.attendance-admin-member')]
-//     if (!memberCards.length) return
-
-//     let maxMeetings = 0
-//     const memberData = []
-
-//     memberCards.forEach(card => {
-//       const textSpan = card.querySelector('div > span')
-
-//       if (textSpan) {
-//         const match = textSpan.textContent.match(/\d+/)
-//         const count = match ? parseInt(match[0], 10) : 0
-
-//         memberData.push({ card, count })
-
-//         if (count > maxMeetings) {
-//           maxMeetings = count
-//         }
-//       }
-//     })
-
-//     memberData.forEach(item => {
-//       if (item.count === maxMeetings && maxMeetings > 0) {
-//         item.card.classList.add('top-attendance-member')
-//       }
-//     })
-//   }, 500)
-// })
-
-// function enhanceTopAttendance() {
-//   const memberCards = [...document.querySelectorAll('.attendance-admin-member')]
-
-//   if (!memberCards.length) return
-
-//   let maxMeetings = 0
-//   const memberData = []
-
-//   memberCards.forEach(card => {
-//     const countSpan = card.querySelector('div > span')
-
-//     if (countSpan) {
-//       const match = countSpan.textContent.match(/\d+/)
-//       const count = match ? parseInt(match[0], 10) : 0
-
-//       memberData.push({ card, count })
-
-//       if (count > maxMeetings) {
-//         maxMeetings = count
-//       }
-//     }
-//   })
-
-//   memberData.forEach(item => {
-//     const { card, count } = item
-//     const nameContainer = card.querySelector('div')
-
-//     if (count === maxMeetings && maxMeetings > 0) {
-//       card.classList.add('top-attendance-card')
-
-//       if (!card.querySelector('.trophy-icon')) {
-//         const trophyHTML = `
-//           <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
-//             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-//               <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-//               <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-//               <path d="M4 22h16"/>
-//               <path d="M10 18a4.5 4.5 0 0 0 9 0"/>
-//               <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
-//             </svg>
-//           </div>
-//         `
-
-//         if (nameContainer) {
-//           nameContainer.style.position = 'relative'
-//           nameContainer.insertAdjacentHTML('afterbegin', trophyHTML)
-//         }
-//       }
-//     } else {
-//       card.classList.remove('top-attendance-card')
-//     }
-//   })
-
-//   const sortedCards = [...memberData].sort((a, b) => {
-//     return b.count - a.count
-//   })
-
-//   const parent = memberCards[0]?.parentElement
-
-//   if (parent) {
-//     sortedCards.forEach(item => {
-//       parent.appendChild(item.card)
-//     })
-//   }
-// }
-
-// function closePublicAttendanceModal() {
-//   const modal = document.getElementById('public-attendance-modal')
-
-//   if (modal) {
-//     modal.remove()
-//   }
-
-//   document.body.style.overflow = ''
-// }
-
-// window.closePublicAttendanceModal = closePublicAttendanceModal
-
-// async function openPublicAttendanceModal() {
-//   closePublicAttendanceModal()
-//   document.body.style.overflow = 'hidden'
-
-//   const modal = document.createElement('div')
-//   modal.id = 'public-attendance-modal'
-
-//   modal.style.cssText = `
-//     position: fixed; inset: 0; z-index: 999999; display: flex;
-//     align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3);
-//     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;
-//   `
-
-//   modal.innerHTML = `
-//     <style>
-//       #public-attendance-modal, #public-attendance-modal * {
-//         scrollbar-width: none !important;
-//         -ms-overflow-style: none !important;
-//       }
-
-//       #public-attendance-modal::-webkit-scrollbar,
-//       #public-attendance-modal *::-webkit-scrollbar {
-//         display: none !important;
-//         width: 0 !important;
-//         height: 0 !important;
-//       }
-
-//       .close-attendance-btn {
-//         background: none;
-//         border: none;
-//         color: #9ca3af;
-//         font-size: 24px;
-//         cursor: pointer;
-//         padding: 4px 8px;
-//         line-height: 1;
-//         transition: color 0.2s;
-//         position: relative;
-//         z-index: 10;
-//       }
-
-//       .close-attendance-btn:hover {
-//         color: #ffffff;
-//       }
-//     </style>
-
-//     <div id="attendance-backdrop" style="position:absolute; inset:0; z-index:1;"></div>
-
-//     <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
-
-//       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-//         <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
-
-//         <button type="button" class="close-attendance-btn" id="close-attendance-x">✕</button>
-//       </div>
-
-//       <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
-//         <p style="color:#9ca3af; text-align:center;">მონაცემები იტვირთება...</p>
-//       </div>
-//     </div>
-//   `
-
-//   document.body.appendChild(modal)
-
-//   document.getElementById('close-attendance-x')?.addEventListener('click', closePublicAttendanceModal)
-
-//   document.getElementById('attendance-backdrop')?.addEventListener('click', closePublicAttendanceModal)
-
-//   try {
-//     const [rawMembers, rawRecords] = await Promise.all([
-//       getAttendanceMembers(),
-//       getAttendanceRecords()
-//     ])
-
-//     const members = Array.isArray(rawMembers)
-//       ? rawMembers
-//       : (rawMembers?.data || rawMembers?.members || [])
-
-//     const records = Array.isArray(rawRecords)
-//       ? rawRecords
-//       : (rawRecords?.data || rawRecords?.records || [])
-
-//     const countedRecords = records.filter(r =>
-//       r && (r.counted === true || r.counted === undefined)
-//     )
-
-//     const counts = new Map()
-
-//     members.forEach(m => {
-//       counts.set(m.id, 0)
-//     })
-
-//     countedRecords.forEach(r => {
-//       const memberList = r.club_attendance_members || r.members || []
-
-//       memberList.forEach(item => {
-//         const mId = item.member_id || item.id || item
-
-//         counts.set(
-//           mId,
-//           (counts.get(mId) || 0) + 1
-//         )
-//       })
-//     })
-
-//     let maxCount = 0
-
-//     members.forEach(m => {
-//       const count = counts.get(m.id) || 0
-
-//       if (count > maxCount) {
-//         maxCount = count
-//       }
-//     })
-
-//     const sortedMembers = [...members].sort((a, b) => {
-//       const countA = counts.get(a.id) || 0
-//       const countB = counts.get(b.id) || 0
-
-//       return countB - countA
-//     })
-
-//     const listEl = document.getElementById('public-attendance-list')
-
-//     if (listEl) {
-//       if (!members || members.length === 0) {
-//         listEl.innerHTML = '<p style="color:#9ca3af; text-align:center;">წევრები ვერ მოიძებნა.</p>'
-//         return
-//       }
-
-//       listEl.innerHTML = sortedMembers.map(member => {
-//         const count = counts.get(member.id) || 0
-
-//         const percent = countedRecords.length
-//           ? Math.round((count / countedRecords.length) * 100)
-//           : 0
-
-//         const isTop = count > 0 && count === maxCount
-
-//         return `
-//           <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
-//             ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
-
-//             <div>
-//               <div class="member-name-row">
-//                 <strong class="${isTop ? 'top-name' : ''}">
-//                   ${esc(member.full_name || member.name || '')}
-//                 </strong>
-
-//                 ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
-//               </div>
-
-//               <span>${count} შეხვედრა</span>
-//             </div>
-
-//             <div class="attendance-admin-member-value">
-//               <strong class="${isTop ? 'top-percent' : ''}">
-//                 ${percent}%
-//               </strong>
-
-//               <small>დასწრება</small>
-//             </div>
-//           </div>
-//         `
-//       }).join('')
-//     }
-//   } catch (err) {
-//     console.error('Public attendance load error:', err)
-
-//     const listEl = document.getElementById('public-attendance-list')
-
-//     if (listEl) {
-//       listEl.innerHTML = '<p style="color:#ef4444; text-align:center;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>'
-//     }
-//   }
-// }
-
-// function checkAndOpenAttendance(e) {
-//   const chatInput = document.querySelector('#ai-chat-input')
-
-//   if (chatInput && chatInput.value.trim() === '/დასწრება') {
-//     if (e) {
-//       e.preventDefault()
-//       e.stopPropagation()
-//       e.stopImmediatePropagation()
-//     }
-
-//     chatInput.value = ''
-//     openPublicAttendanceModal()
-
-//     return true
-//   }
-
-//   return false
-// }
-
-// function checkAndOpenLive(e) {
-//   const chatInput = document.querySelector('#ai-chat-input')
-
-//   if (chatInput && chatInput.value.trim() === '/live') {
-//     if (e) {
-//       e.preventDefault()
-//       e.stopPropagation()
-//       e.stopImmediatePropagation()
-//     }
-
-//     chatInput.value = ''
-
-//     if (typeof openLiveAdminModal === 'function') {
-//       openLiveAdminModal()
-//     } else {
-//       console.error('openLiveAdminModal ფუნქცია ვერ მოიძებნა')
-//     }
-
-//     return true
-//   }
-
-//   return false
-// }
-
-// document.addEventListener('keydown', (e) => {
-//   const chatInput = document.querySelector('#ai-chat-input')
-
-//   if (
-//     e.target === chatInput &&
-//     (e.key === 'Enter' || e.keyCode === 13) &&
-//     !e.shiftKey
-//   ) {
-//     if (checkAndOpenLive(e)) {
-//       return
-//     }
-
-//     checkAndOpenAttendance(e)
-//   }
-
-//   if (e.key === 'Escape') {
-//     closePublicAttendanceModal()
-
-//     if (typeof closeLiveAdminModal === 'function') {
-//       closeLiveAdminModal()
-//     }
-//   }
-// }, true)
-
-// document.addEventListener('submit', (e) => {
-//   if (checkAndOpenLive(e)) {
-//     return
-//   }
-
-//   checkAndOpenAttendance(e)
-// }, true)
-
-// document.addEventListener('click', (e) => {
-//   const chatInput = document.querySelector('#ai-chat-input')
-
-//   if (!chatInput) {
-//     return
-//   }
-
-//   const value = chatInput.value.trim()
-
-//   if (value !== '/დასწრება' && value !== '/live') {
-//     return
-//   }
-
-//   const isSendButton = e.target.closest(
-//     'button, [role="button"], svg, path'
-//   )
-
-//   if (!isSendButton) {
-//     return
-//   }
-
-//   if (value === '/live') {
-//     checkAndOpenLive(e)
-//     return
-//   }
-
-//   checkAndOpenAttendance(e)
-// }, true)
-
-
-// // ==========================================
-// // ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
-// // ==========================================
-// document.addEventListener('DOMContentLoaded', () => {
-//   const openBtn = document.getElementById('video-tutorial-btn');
-//   const modal = document.getElementById('video-modal');
-//   const closeBtn = document.getElementById('video-close');
-//   const backdrop = document.getElementById('video-backdrop');
-//   const video = document.getElementById('tutorial-video');
-//   const videoSource = document.getElementById('video-source');
-//   const deviceTabs = document.querySelectorAll('.device-tab');
-
-//   function openVideoModal() {
-//     modal?.classList.add('active');
-//     document.body.style.overflow = 'hidden';
-//   }
-
-//   function closeVideoModal() {
-//     modal?.classList.remove('active');
-//     document.body.style.overflow = '';
-//     if (video) video.pause();
-//   }
-
-//   // მოწყობილობის ტაბების გადართვის ლოგიკა
-//   deviceTabs.forEach(tab => {
-//     tab.addEventListener('click', () => {
-//       deviceTabs.forEach(t => t.classList.remove('active'));
-//       tab.classList.add('active');
-
-//       const newSrc = tab.getAttribute('data-video-src');
-//       if (video && videoSource) {
-//         video.pause();
-//         videoSource.src = newSrc || '';
-//         video.load();
-//         if (newSrc) {
-//           video.play().catch(err => console.log('Autoplay prevented:', err));
-//         }
-//       }
-//     });
-//   });
-
-//   openBtn?.addEventListener('click', openVideoModal);
-//   closeBtn?.addEventListener('click', closeVideoModal);
-//   backdrop?.addEventListener('click', closeVideoModal);
-
-//   document.addEventListener('keydown', (e) => {
-//     if (e.key === 'Escape' && modal?.classList.contains('active')) {
-//       closeVideoModal();
-//     }
-//   });
-// });
-
-
-// // ==========================================
-// // GLOBAL NOTIFICATION SYSTEM (/global)
-// // ==========================================
-
-// window.openGlobalModal = function() {
-//   const modal = document.getElementById('global-modal')
-
-//   if (modal) {
-//     modal.hidden = false
-//     modal.setAttribute('aria-hidden', 'false')
-//   }
-// }
-
-// window.closeGlobalModal = function() {
-//   const modal = document.getElementById('global-modal')
-
-//   if (modal) {
-//     modal.hidden = true
-//     modal.setAttribute('aria-hidden', 'true')
-
-//     const form = document.getElementById('global-notif-form')
-
-//     if (form) {
-//       form.reset()
-//     }
-//   }
-// }
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   const aiChatForm = document.getElementById('ai-chat-form')
-//   const aiChatInput = document.getElementById('ai-chat-input')
-//   const aiChatWindow = document.getElementById('ai-chat-window')
-
-//   if (aiChatForm && aiChatInput) {
-//     aiChatForm.addEventListener('submit', async (e) => {
-//       const text = aiChatInput.value.trim()
-
-//       if (text !== '/global') {
-//         return
-//       }
-
-//       e.preventDefault()
-//       e.stopPropagation()
-
-//       aiChatInput.value = ''
-
-//       if (!db || !db.auth) {
-//         alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
-//         return
-//       }
-
-//       let session = null
-
-//       try {
-//         const {
-//           data: { session: currentSession },
-//           error
-//         } = await db.auth.getSession()
-
-//         if (error) {
-//           console.error('Session error:', error)
-//           alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
-//           return
-//         }
-
-//         session = currentSession
-//       } catch (error) {
-//         console.error('Supabase auth check error:', error)
-//         alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
-//         return
-//       }
-
-//       if (!session) {
-//         alert('გლობალური შეტყობინების გასაგზავნად საჭიროა ადმინისტრატორით შესვლა!')
-//         return
-//       }
-
-//       if (aiChatWindow) {
-//         aiChatWindow.setAttribute('aria-hidden', 'true')
-//       }
-
-//       window.openGlobalModal()
-//     }, true)
-//   }
-
-//   const globalForm = document.getElementById('global-notif-form')
-
-//   if (globalForm) {
-//     globalForm.addEventListener('submit', async (e) => {
-//       e.preventDefault()
-
-//       const titleElement = document.getElementById('global-title')
-//       const messageElement = document.getElementById('global-message')
-
-//       if (!titleElement || !messageElement) {
-//         alert('შეცდომა: შეტყობინების ველები ვერ მოიძებნა!')
-//         return
-//       }
-
-//       const title = titleElement.value.trim()
-//       const message = messageElement.value.trim()
-
-//       if (!title) {
-//         alert('გთხოვთ შეიყვანოთ შეტყობინების სათაური!')
-//         return
-//       }
-
-//       if (!message) {
-//         alert('გთხოვთ შეიყვანოთ შეტყობინების ტექსტი!')
-//         return
-//       }
-
-//       if (!db || !db.auth) {
-//         alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
-//         return
-//       }
-
-//       const submitButton = globalForm.querySelector('button[type="submit"]')
-
-//       if (submitButton) {
-//         submitButton.disabled = true
-//       }
-
-//       try {
-//         const {
-//           data: { session },
-//           error: sessionError
-//         } = await db.auth.getSession()
-
-//         if (sessionError || !session?.access_token) {
-//           alert('სესია აღარ არის აქტიური. გთხოვთ თავიდან შეხვიდეთ ანგარიშში.')
-//           return
-//         }
-
-//         const functionUrl =
-//           `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/send-global-notification`
-
-//         const response = await fetch(functionUrl, {
-//           method: 'POST',
-//           headers: {
-//             Authorization: `Bearer ${session.access_token}`,
-//             apikey: SUPABASE_ANON_KEY,
-//             'Content-Type': 'application/json'
-//           },
-//           body: JSON.stringify({
-//             title,
-//             message
-//           })
-//         })
-
-//         let result = null
-
-//         try {
-//           result = await response.json()
-//         } catch {
-//           result = null
-//         }
-
-//         if (!response.ok) {
-//           console.error('Global notification error:', result)
-
-//           alert(
-//             result?.error ||
-//             'გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!'
-//           )
-
-//           return
-//         }
-
-//         console.log('Global notification result:', result)
-
-//         alert(
-//           result?.message ||
-//           'გლობალური შეტყობინება წარმატებით გაიგზავნა!'
-//         )
-
-//         window.closeGlobalModal()
-//       } catch (error) {
-//         console.error('Error sending global notification:', error)
-
-//         alert('შეცდომა: გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!')
-//       } finally {
-//         if (submitButton) {
-//           submitButton.disabled = false
-//         }
-//       }
-//     })
-//   }
-// })
-
-// const suggestionModal = document.getElementById("suggestion-modal")
-// const openSuggestion = document.getElementById("open-suggestion")
-// const closeSuggestion = document.getElementById("close-suggestion")
-// const suggestionBackdrop = document.getElementById("suggestion-backdrop")
-// const suggestionMessage = document.getElementById("suggestion-message")
-// const sendSuggestion = document.getElementById("send-suggestion")
-// const suggestionStatus = document.getElementById("suggestion-status")
-// const suggestionCounter = document.getElementById("suggestion-counter")
-
-// openSuggestion?.addEventListener("click", event => {
-//   event.preventDefault()
-
-//   suggestionModal.hidden = false
-//   suggestionModal.setAttribute("aria-hidden", "false")
-
-//   document.body.style.overflow = "hidden"
-
-//   suggestionMessage.removeAttribute("readonly")
-//   suggestionMessage.removeAttribute("disabled")
-
-//   suggestionMessage.focus({ preventScroll: true })
-
-//   if (document.activeElement !== suggestionMessage) {
-//     suggestionMessage.click()
-//     suggestionMessage.focus({ preventScroll: true })
-//   }
-// })
-
-// function closeSuggestionModal() {
-//   suggestionModal.hidden = true
-//   suggestionModal.setAttribute("aria-hidden", "true")
-//   suggestionStatus.textContent = ""
-//   document.body.style.overflow = ""
-// }
-
-// closeSuggestion?.addEventListener("click", closeSuggestionModal)
-// suggestionBackdrop?.addEventListener("click", closeSuggestionModal)
-
-// suggestionMessage?.addEventListener("input", () => {
-//   suggestionCounter.textContent = `${suggestionMessage.value.length} / 3000`
-// })
-
-// sendSuggestion?.addEventListener("click", async () => {
-//   const message = suggestionMessage.value.trim()
-
-//   if (!message) {
-//     suggestionStatus.textContent = "გთხოვ, დაწერე შენი შეფასება"
-//     return
-//   }
-
-//   sendSuggestion.disabled = true
-//   sendSuggestion.innerHTML = "იგზავნება..."
-
-//   suggestionStatus.textContent = ""
-
-//   try {
-//     const {
-//   data: {
-//     user
-//   }
-// } = await db.auth.getUser()
-
-// if (!user) {
-//   throw new Error("მომხმარებელი ავტორიზებული არ არის")
-// }
-
-// const metadata = user.user_metadata || {}
-
-// const senderName = String(
-//   metadata.username ||
-//   metadata.name ||
-//   metadata.full_name ||
-//   user.email ||
-//   "მომხმარებელი"
-// ).trim()
-
-// const { error } = await db.functions.invoke("send-suggestion", {
-//   body: {
-//     message,
-//     senderName
-//   }
-// })
-
-//     if (error) {
-//       throw error
-//     }
-
-//     suggestionStatus.textContent = "შეფასება წარმატებით გაიგზავნა ❤️"
-//     suggestionMessage.value = ""
-//     suggestionCounter.textContent = "0 / 3000"
-
-//     setTimeout(() => {
-//       closeSuggestionModal()
-//     }, 1800)
-//   } catch (error) {
-//     console.error(error)
-//     suggestionStatus.textContent = "გაგზავნა ვერ მოხერხდა. სცადე თავიდან."
-//   }
-
-//   sendSuggestion.disabled = false
-//   sendSuggestion.innerHTML = `გაგზავნა <i data-lucide="send"></i>`
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-// })
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   const countdownModal = document.getElementById("countdown-modal")
-//   const countdownClose = document.getElementById("countdown-close")
-//   const countdownForm = document.getElementById("countdown-form")
-//   const countdownTitle = document.getElementById("countdown-title")
-//   const countdownMessage = document.getElementById("countdown-message")
-//   const countdownDate = document.getElementById("countdown-date")
-//   const countdownStatus = document.getElementById("countdown-form-status")
-
-//   const activeCountdown = document.getElementById("active-countdown")
-//   const activeCountdownClose = document.getElementById("active-countdown-close")
-//   const activeCountdownTitle = document.getElementById("active-countdown-title")
-//   const activeCountdownMessage = document.getElementById("active-countdown-message")
-
-//   const countdownDays = document.getElementById("countdown-days")
-//   const countdownHours = document.getElementById("countdown-hours")
-//   const countdownMinutes = document.getElementById("countdown-minutes")
-//   const countdownSeconds = document.getElementById("countdown-seconds")
-
-//   let countdownInterval = null
-//   let currentCountdown = null
-
-//   function openCountdownModal() {
-//     if (!countdownModal) return
-
-//     countdownModal.hidden = false
-//     countdownModal.setAttribute("aria-hidden", "false")
-
-//     if (window.lucide) {
-//       lucide.createIcons()
-//     }
-//   }
-
-//   function closeCountdownModal() {
-//     if (!countdownModal) return
-
-//     countdownModal.hidden = true
-//     countdownModal.setAttribute("aria-hidden", "true")
-
-//     if (countdownForm) {
-//       countdownForm.reset()
-//     }
-
-//     if (countdownStatus) {
-//       countdownStatus.textContent = ""
-//     }
-//   }
-
-//   function showActiveCountdown(data) {
-//     if (!activeCountdown) return
-
-//     currentCountdown = data
-
-//     if (activeCountdownTitle) {
-//       activeCountdownTitle.textContent = data.title
-//     }
-
-//     if (activeCountdownMessage) {
-//       activeCountdownMessage.textContent = data.message
-//     }
-
-//     activeCountdown.hidden = false
-//     activeCountdown.setAttribute("aria-hidden", "false")
-
-//     updateCountdown()
-
-//     if (countdownInterval) {
-//       clearInterval(countdownInterval)
-//     }
-
-//     countdownInterval = setInterval(updateCountdown, 1000)
-
-//     if (window.lucide) {
-//       lucide.createIcons()
-//     }
-//   }
-
-//   function hideActiveCountdown() {
-//     if (!activeCountdown) return
-
-//     activeCountdown.hidden = true
-//     activeCountdown.setAttribute("aria-hidden", "true")
-
-//     currentCountdown = null
-
-//     if (countdownInterval) {
-//       clearInterval(countdownInterval)
-//       countdownInterval = null
-//     }
-//   }
-
-//   async function updateCountdown() {
-//     if (!currentCountdown) return
-
-//     const target = new Date(currentCountdown.target_at).getTime()
-//     const now = Date.now()
-//     const difference = target - now
-
-//     if (difference <= 0) {
-//       hideActiveCountdown()
-
-//       if (db) {
-//         await db
-//           .from("site_countdowns")
-//           .delete()
-//           .eq("id", 1)
-//       }
-
-//       return
-//     }
-
-//     const totalSeconds = Math.floor(difference / 1000)
-
-//     const days = Math.floor(totalSeconds / 86400)
-//     const hours = Math.floor((totalSeconds % 86400) / 3600)
-//     const minutes = Math.floor((totalSeconds % 3600) / 60)
-//     const seconds = totalSeconds % 60
-
-//     if (countdownDays) {
-//       countdownDays.textContent = String(days).padStart(2, "0")
-//     }
-
-//     if (countdownHours) {
-//       countdownHours.textContent = String(hours).padStart(2, "0")
-//     }
-
-//     if (countdownMinutes) {
-//       countdownMinutes.textContent = String(minutes).padStart(2, "0")
-//     }
-
-//     if (countdownSeconds) {
-//       countdownSeconds.textContent = String(seconds).padStart(2, "0")
-//     }
-//   }
-
-//   async function loadActiveCountdown() {
-//     if (!db) return
-
-//     try {
-//       const { data, error } = await db
-//         .from("site_countdowns")
-//         .select("id, title, message, target_at, created_at")
-//         .eq("id", 1)
-//         .maybeSingle()
-
-//       if (error) {
-//         console.error("Countdown load error:", error)
-//         return
-//       }
-
-//       if (!data) {
-//         hideActiveCountdown()
-//         return
-//       }
-
-//       if (new Date(data.target_at).getTime() <= Date.now()) {
-//         await db
-//           .from("site_countdowns")
-//           .delete()
-//           .eq("id", 1)
-
-//         hideActiveCountdown()
-//         return
-//       }
-
-//       showActiveCountdown(data)
-//     } catch (error) {
-//       console.error("Countdown error:", error)
-//     }
-//   }
-
-//   if (countdownClose) {
-//     countdownClose.addEventListener("click", closeCountdownModal)
-//   }
-
-//   if (countdownForm) {
-//     countdownForm.addEventListener("submit", async event => {
-//       event.preventDefault()
-
-//       const title = countdownTitle?.value.trim()
-//       const message = countdownMessage?.value.trim()
-//       const dateValue = countdownDate?.value
-
-//       if (!title || !message || !dateValue) {
-//         countdownStatus.textContent = "გთხოვთ ყველა ველი შეავსოთ"
-//         return
-//       }
-
-//       const targetDate = new Date(dateValue)
-
-//       if (Number.isNaN(targetDate.getTime())) {
-//         countdownStatus.textContent = "თარიღი არასწორია"
-//         return
-//       }
-
-//       if (targetDate.getTime() <= Date.now()) {
-//         countdownStatus.textContent = "აირჩიეთ მომავალი დრო"
-//         return
-//       }
-
-//       if (!db || !db.auth) {
-//         countdownStatus.textContent = "Supabase კლიენტი ვერ მოიძებნა"
-//         return
-//       }
-
-//       const submitButton = countdownForm.querySelector('button[type="submit"]')
-
-//       if (submitButton) {
-//         submitButton.disabled = true
-//       }
-
-//       countdownStatus.textContent = ""
-
-//       try {
-//         const {
-//           data: { session },
-//           error: sessionError
-//         } = await db.auth.getSession()
-
-//         if (sessionError || !session) {
-//           countdownStatus.textContent = "ადმინისტრატორით შესვლა აუცილებელია"
-//           return
-//         }
-
-//         const { error } = await db
-//           .from("site_countdowns")
-//           .upsert({
-//             id: 1,
-//             title,
-//             message,
-//             target_at: targetDate.toISOString()
-//           })
-
-//         if (error) {
-//           console.error("Countdown create error:", error)
-//           countdownStatus.textContent = "Countdown-ის შექმნა ვერ მოხერხდა"
-//           return
-//         }
-
-//         closeCountdownModal()
-//         await loadActiveCountdown()
-//       } catch (error) {
-//         console.error("Countdown create error:", error)
-//         countdownStatus.textContent = "შეცდომა მოხდა"
-//       } finally {
-//         if (submitButton) {
-//           submitButton.disabled = false
-//         }
-//       }
-//     })
-//   }
-
-//   if (activeCountdownClose) {
-//     activeCountdownClose.addEventListener("click", hideActiveCountdown)
-//   }
-
-//   const aiChatForm = document.getElementById("ai-chat-form")
-//   const aiChatInput = document.getElementById("ai-chat-input")
-
-//   if (aiChatForm && aiChatInput) {
-//     aiChatForm.addEventListener("submit", async event => {
-//       const text = aiChatInput.value.trim().toLowerCase()
-
-//       if (text !== "/countdown" && text !== "/countdown cancel") {
-//         return
-//       }
-
-//       event.preventDefault()
-//       event.stopPropagation()
-
-//       aiChatInput.value = ""
-
-//       if (!db || !db.auth) {
-//         alert("Supabase კლიენტი ვერ მოიძებნა!")
-//         return
-//       }
-
-//       try {
-//         const {
-//           data: { session },
-//           error
-//         } = await db.auth.getSession()
-
-//         if (error || !session) {
-//           alert("Countdown-ის მართვისთვის საჭიროა ადმინისტრატორით შესვლა!")
-//           return
-//         }
-
-//         if (text === "/countdown cancel") {
-//           const { error: deleteError } = await db
-//             .from("site_countdowns")
-//             .delete()
-//             .eq("id", 1)
-
-//           if (deleteError) {
-//             console.error("Countdown cancel error:", deleteError)
-//             alert("Countdown-ის გაუქმება ვერ მოხერხდა!")
-//             return
-//           }
-
-//           hideActiveCountdown()
-//           alert("Countdown გაუქმებულია")
-//           return
-//         }
-
-//         openCountdownModal()
-//       } catch (error) {
-//         console.error("Countdown auth error:", error)
-//         alert("ავტორიზაციის შემოწმება ვერ მოხერხდა!")
-//       }
-//     }, true)
-//   }
-
-//   loadActiveCountdown()
-// })
-
-// document.getElementById('attendance-home-btn')?.addEventListener('click', () => {
-//   openPublicAttendanceModal()
-// })
-
-
-// const hbdAdminModal = document.getElementById("hbd-admin-modal")
-// const hbdAdminForm = document.getElementById("hbd-admin-form")
-// const hbdAdminClose = document.getElementById("hbd-admin-close")
-// const hbdAdminStatus = document.getElementById("hbd-admin-status")
-// const hbdNameInput = document.getElementById("hbd-name")
-// const hbdMessageInput = document.getElementById("hbd-message")
-// const hbdDateInput = document.getElementById("hbd-date")
-
-// function openHbdAdminModal() {
-//   if (!hbdAdminModal) return
-
-//   hbdAdminModal.hidden = false
-//   hbdAdminModal.setAttribute("aria-hidden", "false")
-
-//   if (hbdAdminStatus) {
-//     hbdAdminStatus.textContent = ""
-//   }
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-
-//   setTimeout(() => {
-//     hbdNameInput?.focus()
-//   }, 100)
-// }
-
-// function closeHbdAdminModal() {
-//   if (!hbdAdminModal) return
-
-//   hbdAdminModal.hidden = true
-//   hbdAdminModal.setAttribute("aria-hidden", "true")
-// }
-
-// hbdAdminClose?.addEventListener("click", closeHbdAdminModal)
-
-// document.querySelector("[data-hbd-admin-close]")?.addEventListener(
-//   "click",
-//   closeHbdAdminModal
-// )
-
-// async function isHbdAdmin() {
-//   try {
-//     const { data: userData, error: userError } =
-//       await window.supabase.auth.getUser()
-
-//     if (userError || !userData?.user) {
-//       return false
-//     }
-
-//     const { data, error } = await window.supabase
-//       .from("admin_users")
-//       .select("user_id")
-//       .eq("user_id", userData.user.id)
-//       .maybeSingle()
-
-//     if (error || !data) {
-//       return false
-//     }
-
-//     return true
-//   } catch {
-//     return false
-//   }
-// }
-
-// async function saveHbd() {
-//   const name = hbdNameInput?.value.trim()
-//   const message = hbdMessageInput?.value.trim()
-//   const date = hbdDateInput?.value
-
-//   if (!name || !message || !date) {
-//     hbdAdminStatus.textContent = "ყველა ველი შეავსე"
-//     hbdAdminStatus.style.color = "#f87171"
-//     return
-//   }
-
-//   hbdAdminStatus.textContent = "ინახება..."
-//   hbdAdminStatus.style.color = "#a7f3d0"
-
-//   const admin = await isHbdAdmin()
-
-//   if (!admin) {
-//     hbdAdminStatus.textContent =
-//       "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
-//     hbdAdminStatus.style.color = "#f87171"
-//     return
-//   }
-
-//   try {
-//     const { data: userData } = await window.supabase.auth.getUser()
-
-//     const { error } = await window.supabase
-//       .from("birthday_messages")
-//       .insert({
-//         name,
-//         message,
-//         birthday_date: date,
-//         created_by: userData?.user?.id || null
-//       })
-
-//     if (error) {
-//       throw error
-//     }
-
-//     hbdAdminStatus.textContent =
-//       "დაბადების დღე წარმატებით დაემატა 🎉"
-
-//     hbdAdminStatus.style.color = "#4ade80"
-
-//     hbdAdminForm.reset()
-
-//     setTimeout(() => {
-//       closeHbdAdminModal()
-//     }, 1200)
-
-//   } catch (error) {
-//     console.error(error)
-
-//     hbdAdminStatus.textContent =
-//       "შენახვისას შეცდომა მოხდა"
-
-//     hbdAdminStatus.style.color = "#f87171"
-//   }
-// }
-
-// hbdAdminForm?.addEventListener("submit", async event => {
-//   event.preventDefault()
-//   await saveHbd()
-// })
-
-// function getGeorgiaDate() {
-//   return new Intl.DateTimeFormat("en-CA", {
-//     timeZone: "Asia/Tbilisi"
-//   }).format(new Date())
-// }
-
-// function createBirthdayConfetti() {
-//   const container = document.getElementById("birthday-confetti")
-
-//   if (!container) return
-
-//   container.innerHTML = ""
-
-//   const colors = [
-//     "#22d395",
-//     "#34d399",
-//     "#facc15",
-//     "#f472b6",
-//     "#60a5fa",
-//     "#fb7185",
-//     "#a78bfa",
-//     "#ffffff"
-//   ]
-
-//   for (let i = 0; i < 100; i++) {
-//     const piece = document.createElement("span")
-
-//     piece.className = "birthday-confetti-piece"
-//     piece.style.left = `${Math.random() * 100}%`
-//     piece.style.background =
-//       colors[Math.floor(Math.random() * colors.length)]
-//     piece.style.animationDuration =
-//       `${3 + Math.random() * 4}s`
-//     piece.style.animationDelay =
-//       `${Math.random() * 2}s`
-
-//     piece.style.setProperty(
-//       "--drift",
-//       `${-150 + Math.random() * 300}px`
-//     )
-
-//     container.appendChild(piece)
-//   }
-// }
-
-// function createBirthdayRibbons() {
-//   const container = document.getElementById("birthday-ribbons")
-
-//   if (!container) return
-
-//   container.innerHTML = ""
-
-//   const colors = [
-//     "#22d395",
-//     "#facc15",
-//     "#f472b6",
-//     "#60a5fa",
-//     "#a78bfa",
-//     "#fb7185"
-//   ]
-
-//   for (let i = 0; i < 28; i++) {
-//     const ribbon = document.createElement("span")
-
-//     ribbon.className = "birthday-ribbon"
-//     ribbon.style.left = `${Math.random() * 100}%`
-//     ribbon.style.background =
-//       colors[Math.floor(Math.random() * colors.length)]
-//     ribbon.style.animationDuration =
-//       `${4 + Math.random() * 5}s`
-//     ribbon.style.animationDelay =
-//       `${Math.random() * 3}s`
-//     ribbon.style.height =
-//       `${50 + Math.random() * 80}px`
-//     ribbon.style.width =
-//       `${5 + Math.random() * 6}px`
-
-//     container.appendChild(ribbon)
-//   }
-// }
-
-// function openBirthdayModal(name, message) {
-//   const modal = document.getElementById("birthday-modal")
-//   const nameElement = document.getElementById("birthday-name")
-//   const messageElement = document.getElementById("birthday-message")
-
-//   if (!modal) return
-
-//   if (nameElement) {
-//     nameElement.textContent = name
-//   }
-
-//   if (messageElement) {
-//     messageElement.textContent = message
-//   }
-
-//   createBirthdayConfetti()
-//   createBirthdayRibbons()
-
-//   modal.hidden = false
-//   modal.setAttribute("aria-hidden", "false")
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-// }
-
-// function closeBirthdayModal() {
-//   const modal = document.getElementById("birthday-modal")
-
-//   if (!modal) return
-
-//   modal.hidden = true
-//   modal.setAttribute("aria-hidden", "true")
-
-//   const confetti = document.getElementById("birthday-confetti")
-//   const ribbons = document.getElementById("birthday-ribbons")
-
-//   if (confetti) {
-//     confetti.innerHTML = ""
-//   }
-
-//   if (ribbons) {
-//     ribbons.innerHTML = ""
-//   }
-// }
-
-// document.getElementById("birthday-close")?.addEventListener(
-//   "click",
-//   closeBirthdayModal
-// )
-
-// document.getElementById("birthday-finish")?.addEventListener(
-//   "click",
-//   closeBirthdayModal
-// )
-
-// document.querySelector(".birthday-backdrop")?.addEventListener(
-//   "click",
-//   closeBirthdayModal
-// )
-
-// async function checkTodayBirthday() {
-//   try {
-//     const today = getGeorgiaDate()
-
-//     const { data, error } = await window.supabase
-//       .from("birthday_messages")
-//       .select("id, name, message, birthday_date")
-//       .eq("birthday_date", today)
-//       .order("created_at", {
-//         ascending: true
-//       })
-
-//     if (error) {
-//       console.error(error)
-//       return
-//     }
-
-//     if (!data || data.length === 0) {
-//       return
-//     }
-
-//     const birthday = data[0]
-
-//     setTimeout(() => {
-//       openBirthdayModal(
-//         birthday.name,
-//         birthday.message
-//       )
-//     }, 900)
-
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
-
-// window.showBirthday = openBirthdayModal
-// window.openHbdAdminModal = openHbdAdminModal
-// window.checkTodayBirthday = checkTodayBirthday
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   checkTodayBirthday()
-// })
-
-// document.addEventListener("keydown", event => {
-//   if (event.key === "Escape") {
-//     closeBirthdayModal()
-//     closeHbdAdminModal()
-//   }
-// })
-
-// let hbdCommandLocked = false
-
-// document.addEventListener(
-//   "submit",
-//   event => {
-//     const form = event.target
-
-//     if (!form) return
-
-//     const elements = Array.from(form.elements || [])
-
-//     const commandInput = elements.find(element => {
-//       if (!element) return false
-
-//       const tag = element.tagName?.toLowerCase()
-
-//       if (tag !== "input" && tag !== "textarea") {
-//         return false
-//       }
-
-//       const type = element.getAttribute("type")
-
-//       return !type || type === "text"
-//     })
-
-//     if (!commandInput) return
-
-//     const value = commandInput.value.trim().toLowerCase()
-
-//     if (value !== "/hbd" && value !== "/hbd cancel") {
-//       return
-//     }
-
-//     event.preventDefault()
-//     event.stopImmediatePropagation()
-
-//     commandInput.value = ""
-
-//     if (hbdCommandLocked) {
-//       return
-//     }
-
-//     hbdCommandLocked = true
-
-//     isHbdAdmin()
-//       .then(admin => {
-//         if (!admin) {
-//           return
-//         }
-
-//         if (value === "/hbd") {
-//           openHbdAdminModal()
-//         }
-
-//         if (value === "/hbd cancel") {
-//           openHbdCancelModal()
-//         }
-//       })
-//       .finally(() => {
-//         setTimeout(() => {
-//           hbdCommandLocked = false
-//         }, 300)
-//       })
-//   },
-//   true
-// )
-
-// const hbdCancelModal = document.getElementById("hbd-cancel-modal")
-// const hbdCancelList = document.getElementById("hbd-cancel-list")
-// const hbdCancelClose = document.getElementById("hbd-cancel-close")
-
-// function openHbdCancelModal() {
-//   if (!hbdCancelModal) return
-
-//   hbdCancelModal.hidden = false
-//   hbdCancelModal.setAttribute("aria-hidden", "false")
-
-//   loadHbdList()
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-// }
-
-// function closeHbdCancelModal() {
-//   if (!hbdCancelModal) return
-
-//   hbdCancelModal.hidden = true
-//   hbdCancelModal.setAttribute("aria-hidden", "true")
-// }
-
-// hbdCancelClose?.addEventListener(
-//   "click",
-//   closeHbdCancelModal
-// )
-
-// document.querySelector("[data-hbd-cancel-close]")?.addEventListener(
-//   "click",
-//   closeHbdCancelModal
-// )
-
-// async function loadHbdList() {
-//   if (!hbdCancelList) return
-
-//   hbdCancelList.innerHTML =
-//     `<div class="hbd-cancel-loading">იტვირთება...</div>`
-
-//   try {
-//     const { data, error } = await window.supabase
-//       .from("birthday_messages")
-//       .select("id, name, message, birthday_date")
-//       .order("birthday_date", {
-//         ascending: true
-//       })
-
-//     if (error) {
-//       throw error
-//     }
-
-//     if (!data || data.length === 0) {
-//       hbdCancelList.innerHTML =
-//         `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
-//       return
-//     }
-
-//     hbdCancelList.innerHTML = ""
-
-//     data.forEach(birthday => {
-//       const item = document.createElement("div")
-
-//       item.className = "hbd-cancel-item"
-
-//       const date = new Date(
-//         `${birthday.birthday_date}T00:00:00`
-//       )
-
-//       const formattedDate =
-//         date.toLocaleDateString("ka-GE", {
-//           day: "2-digit",
-//           month: "long",
-//           year: "numeric"
-//         })
-
-//       item.innerHTML = `
-//         <div class="hbd-cancel-info">
-//           <strong>${escapeHbdHtml(birthday.name)}</strong>
-//           <span>${formattedDate}</span>
-//         </div>
-//         <button
-//           type="button"
-//           class="hbd-delete-button"
-//           data-hbd-id="${birthday.id}"
-//         >
-//           გაუქმება
-//         </button>
-//       `
-
-//       hbdCancelList.appendChild(item)
-//     })
-
-//     hbdCancelList
-//       .querySelectorAll("[data-hbd-id]")
-//       .forEach(button => {
-//         button.addEventListener("click", async () => {
-//           await deleteHbd(button.dataset.hbdId)
-//         })
-//       })
-
-//   } catch (error) {
-//     console.error(error)
-
-//     hbdCancelList.innerHTML =
-//       `<div class="hbd-cancel-error">დაბადების დღეების ჩატვირთვა ვერ მოხერხდა</div>`
-//   }
-// }
-
-// async function deleteHbd(id) {
-//   const confirmed = confirm(
-//     "ნამდვილად გინდა ამ დაბადების დღის გაუქმება?"
-//   )
-
-//   if (!confirmed) {
-//     return
-//   }
-
-//   try {
-//     const admin = await isHbdAdmin()
-
-//     if (!admin) {
-//       return
-//     }
-
-//     const { error } = await window.supabase
-//       .from("birthday_messages")
-//       .delete()
-//       .eq("id", id)
-
-//     if (error) {
-//       throw error
-//     }
-
-//     await loadHbdList()
-
-//   } catch (error) {
-//     console.error(error)
-//     alert("დაბადების დღის გაუქმება ვერ მოხერხდა")
-//   }
-// }
-
-// function escapeHbdHtml(value) {
-//   const div = document.createElement("div")
-//   div.textContent = value
-//   return div.innerHTML
-// }
-
-
-// let liveCurrentStream = null
-// let liveHostStream = null
-// let liveHostPeerConnection = null
-// let liveViewerPeerConnection = null
-// let liveCommentChannel = null
-// let liveNotificationStream = null
-// let liveHostSessionId = null
-// let liveViewerSessionId = null
-// let liveHostTracks = []
-// let liveCameraEnabled = true
-// let liveMicrophoneEnabled = true
-// let liveCommentsLoadedStreamId = null
-
-// const LIVE_SUPABASE_FUNCTION = 'live-session'
-
-// function liveGetElement(id) {
-//   return document.getElementById(id)
-// }
-
-// function liveShowModal(id) {
-//   const modal = liveGetElement(id)
-
-//   if (!modal) {
-//     return
-//   }
-
-//   modal.classList.add('active')
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-// }
-
-// function liveHideModal(id) {
-//   const modal = liveGetElement(id)
-
-//   if (!modal) {
-//     return
-//   }
-
-//   modal.classList.remove('active')
-// }
-
-// async function openLiveAdminModal() {
-//   try {
-//     if (!window.supabase) {
-//       return
-//     }
-
-//     const {
-//       data: sessionData,
-//       error: sessionError
-//     } = await window.supabase.auth.getSession()
-
-//     if (
-//       sessionError ||
-//       !sessionData.session
-//     ) {
-//       alert('ლაივის გასაშვებად ანგარიშში შესვლა აუცილებელია')
-//       return
-//     }
-
-//     const {
-//       data: isAdmin,
-//       error: adminError
-//     } = await window.supabase.rpc(
-//       'check_is_admin'
-//     )
-
-//     if (
-//       adminError ||
-//       isAdmin !== true
-//     ) {
-//       alert('ლაივის გაშვება მხოლოდ ადმინისტრატორს შეუძლია')
-//       return
-//     }
-
-//     const titleInput = liveGetElement(
-//       'live-title-input'
-//     )
-
-//     const descriptionInput = liveGetElement(
-//       'live-description-input'
-//     )
-
-//     const error = liveGetElement(
-//       'live-admin-error'
-//     )
-
-//     if (titleInput) {
-//       titleInput.value = ''
-//     }
-
-//     if (descriptionInput) {
-//       descriptionInput.value = ''
-//     }
-
-//     if (error) {
-//       error.textContent = ''
-//       error.classList.remove('active')
-//     }
-
-//     liveShowModal(
-//       'live-admin-modal'
-//     )
-//   } catch (error) {
-//     console.error(
-//       'Live admin check error:',
-//       error
-//     )
-
-//     alert(
-//       'ადმინისტრატორის შემოწმება ვერ მოხერხდა'
-//     )
-//   }
-// }
-
-// function closeLiveAdminModal() {
-//   liveHideModal(
-//     'live-admin-modal'
-//   )
-// }
-
-// function liveSetError(message) {
-//   const error = liveGetElement(
-//     'live-admin-error'
-//   )
-
-//   if (!error) {
-//     return
-//   }
-
-//   error.textContent = message
-
-//   error.classList.toggle(
-//     'active',
-//     !!message
-//   )
-// }
-
-// async function liveGetAccessToken() {
-//   if (!window.supabase) {
-//     throw new Error(
-//       'Supabase არ არის ჩატვირთული'
-//     )
-//   }
-
-//   const {
-//     data,
-//     error
-//   } = await window.supabase.auth.getSession()
-
-//   if (
-//     error ||
-//     !data.session
-//   ) {
-//     throw new Error(
-//       'ანგარიშში შესვლა აუცილებელია'
-//     )
-//   }
-
-//   return data.session.access_token
-// }
-
-// async function liveCallFunction(body) {
-//   const token =
-//     await liveGetAccessToken()
-
-//   const response =
-//     await fetch(
-//       `${window.supabase.supabaseUrl}/functions/v1/${LIVE_SUPABASE_FUNCTION}`,
-//       {
-//         method: 'POST',
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           apikey: window.supabase.supabaseKey,
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(body)
-//       }
-//     )
-
-//   const data =
-//     await response
-//       .json()
-//       .catch(() => ({}))
-
-//   if (!response.ok) {
-//     throw new Error(
-//       data?.error ||
-//       data?.message ||
-//       'Live სერვერთან დაკავშირება ვერ მოხერხდა'
-//     )
-//   }
-
-//   return data
-// }
-
-// function liveWaitForIceGathering(pc) {
-//   return new Promise(resolve => {
-//     if (
-//       pc.iceGatheringState ===
-//       'complete'
-//     ) {
-//       resolve()
-//       return
-//     }
-
-//     const check = () => {
-//       if (
-//         pc.iceGatheringState ===
-//         'complete'
-//       ) {
-//         pc.removeEventListener(
-//           'icegatheringstatechange',
-//           check
-//         )
-
-//         resolve()
-//       }
-//     }
-
-//     pc.addEventListener(
-//       'icegatheringstatechange',
-//       check
-//     )
-
-//     setTimeout(() => {
-//       pc.removeEventListener(
-//         'icegatheringstatechange',
-//         check
-//       )
-
-//       resolve()
-//     }, 10000)
-//   })
-// }
-
-// function liveCreatePeerConnection() {
-//   return new RTCPeerConnection({
-//     iceServers: [
-//       {
-//         urls: [
-//           'stun:stun.cloudflare.com:3478',
-//           'stun:stun.l.google.com:19302'
-//         ]
-//       }
-//     ]
-//   })
-// }
-
-// function liveEnsureChatLayout(modalId, listId) {
-//   const modal =
-//     liveGetElement(modalId)
-
-//   if (!modal) {
-//     return null
-//   }
-
-//   const card =
-//     modal.querySelector(
-//       '.live-modal-card'
-//     )
-
-//   if (!card) {
-//     return null
-//   }
-
-//   let layout =
-//     card.querySelector(
-//       '.live-stream-layout'
-//     )
-
-//   if (!layout) {
-//     const videoWrapper =
-//       card.querySelector(
-//         '.live-video-wrapper'
-//       )
-
-//     if (!videoWrapper) {
-//       return null
-//     }
-
-//     layout =
-//       document.createElement('div')
-
-//     layout.className =
-//       'live-stream-layout'
-
-//     videoWrapper.parentNode.insertBefore(
-//       layout,
-//       videoWrapper
-//     )
-
-//     layout.appendChild(
-//       videoWrapper
-//     )
-//   }
-
-//   let chat =
-//     layout.querySelector(
-//       '.live-stream-chat'
-//     )
-
-//   if (!chat) {
-//     chat =
-//       document.createElement('div')
-
-//     chat.className =
-//       'live-stream-chat'
-
-//     chat.innerHTML = `
-//       <div class="live-stream-chat-header">
-//         <div class="live-stream-chat-title">
-//           <i data-lucide="message-circle"></i>
-//           <span>ლაივის ჩატი</span>
-//         </div>
-//         <span class="live-stream-chat-live">LIVE</span>
-//       </div>
-
-//       <div id="${listId}" class="live-stream-chat-list"></div>
-
-//       <form class="live-stream-chat-form">
-//         <input
-//           type="text"
-//           maxlength="300"
-//           placeholder="დაწერე კომენტარი..."
-//           autocomplete="off"
-//         >
-//         <button type="submit" aria-label="გაგზავნა">
-//           <i data-lucide="send"></i>
-//         </button>
-//       </form>
-//     `
-
-//     layout.appendChild(
-//       chat
-//     )
-
-//     const form =
-//       chat.querySelector(
-//         'form'
-//       )
-
-//     if (form) {
-//       form.addEventListener(
-//         'submit',
-//         liveSendChatComment
-//       )
-//     }
-
-//     if (window.lucide) {
-//       lucide.createIcons()
-//     }
-//   }
-
-//   return chat
-// }
-
-// function livePrepareViewerChat() {
-//   return liveEnsureChatLayout(
-//     'live-viewer-modal',
-//     'live-comments-list'
-//   )
-// }
-
-// function livePrepareHostChat() {
-//   return liveEnsureChatLayout(
-//     'live-host-modal',
-//     'live-host-comments-list'
-//   )
-// }
-
-// function liveClearCommentLists() {
-//   const viewerList =
-//     liveGetElement(
-//       'live-comments-list'
-//     )
-
-//   const hostList =
-//     liveGetElement(
-//       'live-host-comments-list'
-//     )
-
-//   if (viewerList) {
-//     viewerList.innerHTML = ''
-//   }
-
-//   if (hostList) {
-//     hostList.innerHTML = ''
-//   }
-// }
-
-// async function startLiveStream() {
-//   const titleInput =
-//     liveGetElement(
-//       'live-title-input'
-//     )
-
-//   const descriptionInput =
-//     liveGetElement(
-//       'live-description-input'
-//     )
-
-//   const button =
-//     liveGetElement(
-//       'live-start-btn'
-//     )
-
-//   const title =
-//     titleInput?.value.trim()
-
-//   const description =
-//     descriptionInput?.value.trim() || ''
-
-//   if (!title) {
-//     liveSetError(
-//       'ლაივის სათაური აუცილებელია'
-//     )
-
-//     return
-//   }
-
-//   try {
-//     liveSetError('')
-
-//     if (button) {
-//       button.disabled = true
-
-//       button.innerHTML =
-//         '<i data-lucide="loader-circle"></i><span>მზადდება...</span>'
-
-//       if (window.lucide) {
-//         lucide.createIcons()
-//       }
-//     }
-
-//     const {
-//       data: adminCheck,
-//       error: adminError
-//     } =
-//       await window.supabase.rpc(
-//         'check_is_admin'
-//       )
-
-//     if (
-//       adminError ||
-//       adminCheck !== true
-//     ) {
-//       throw new Error(
-//         'ლაივის გაშვება მხოლოდ ადმინისტრატორს შეუძლია'
-//       )
-//     }
-
-//     if (
-//       !navigator.mediaDevices?.getUserMedia
-//     ) {
-//       throw new Error(
-//         'ამ ბრაუზერს კამერისა და მიკროფონის გამოყენება არ შეუძლია'
-//       )
-//     }
-
-//     liveHostStream =
-//       await navigator.mediaDevices.getUserMedia({
-//         video: {
-//           width: {
-//             ideal: 1280
-//           },
-//           height: {
-//             ideal: 720
-//           },
-//           facingMode: 'user'
-//         },
-//         audio: true
-//       })
-
-//     const sessionResult =
-//       await liveCallFunction({
-//         action: 'create_session'
-//       })
-
-//     const session =
-//       sessionResult?.session
-
-//     if (!session?.sessionId) {
-//       throw new Error(
-//         'Cloudflare Live session ვერ შეიქმნა'
-//       )
-//     }
-
-//     liveHostSessionId =
-//       session.sessionId
-
-//     const {
-//       data: authData,
-//       error: authError
-//     } =
-//       await window.supabase.auth.getUser()
-
-//     if (
-//       authError ||
-//       !authData.user
-//     ) {
-//       throw new Error(
-//         'მომხმარებლის დადგენა ვერ მოხერხდა'
-//       )
-//     }
-
-//     const {
-//       data: stream,
-//       error: streamError
-//     } =
-//       await window.supabase
-//         .from('live_streams')
-//         .insert({
-//           title,
-//           description,
-//           host_id:
-//             authData.user.id,
-//           status: 'live',
-//           session_id:
-//             liveHostSessionId
-//         })
-//         .select()
-//         .single()
-
-//     if (streamError) {
-//       throw streamError
-//     }
-
-//     liveCurrentStream =
-//       stream
-
-//     const hostTitle =
-//       liveGetElement(
-//         'live-host-title'
-//       )
-
-//     const hostDescription =
-//       liveGetElement(
-//         'live-host-description'
-//       )
-
-//     const hostVideo =
-//       liveGetElement(
-//         'live-host-video'
-//       )
-
-//     const placeholder =
-//       liveGetElement(
-//         'live-host-placeholder'
-//       )
-
-//     if (hostTitle) {
-//       hostTitle.textContent =
-//         title
-//     }
-
-//     if (hostDescription) {
-//       hostDescription.textContent =
-//         description
-//     }
-
-//     if (hostVideo) {
-//       hostVideo.srcObject =
-//         liveHostStream
-
-//       await hostVideo
-//         .play()
-//         .catch(() => {})
-//     }
-
-//     if (placeholder) {
-//       placeholder.style.display =
-//         'none'
-//     }
-
-//     livePrepareHostChat()
-//     liveClearCommentLists()
-
-//     await livePublishHost()
-
-//     closeLiveAdminModal()
-
-//     liveShowModal(
-//       'live-host-modal'
-//     )
-
-//     await liveStartCommentRealtime(
-//       stream.id
-//     )
-
-//     if (window.lucide) {
-//       lucide.createIcons()
-//     }
-//   } catch (error) {
-//     console.error(
-//       'Live start error:',
-//       error
-//     )
-
-//     if (liveCurrentStream?.id) {
-//       await window.supabase
-//         .from('live_streams')
-//         .update({
-//           status: 'ended',
-//           ended_at:
-//             new Date().toISOString()
-//         })
-//         .eq(
-//           'id',
-//           liveCurrentStream.id
-//         )
-//     }
-
-//     if (liveHostStream) {
-//       liveHostStream
-//         .getTracks()
-//         .forEach(
-//           track =>
-//             track.stop()
-//         )
-
-//       liveHostStream = null
-//     }
-
-//     liveHostSessionId = null
-//     liveCurrentStream = null
-
-//     liveSetError(
-//       error?.message ||
-//       'ლაივის დაწყება ვერ მოხერხდა'
-//     )
-//   } finally {
-//     if (button) {
-//       button.disabled = false
-
-//       button.innerHTML =
-//         '<i data-lucide="radio"></i><span>ლაივის დაწყება</span>'
-
-//       if (window.lucide) {
-//         lucide.createIcons()
-//       }
-//     }
-//   }
-// }
-
-// async function livePublishHost() {
-//   if (
-//     !liveHostStream ||
-//     !liveHostSessionId
-//   ) {
-//     throw new Error(
-//       'Live publisher მზად არ არის'
-//     )
-//   }
-
-//   if (liveHostPeerConnection) {
-//     liveHostPeerConnection.close()
-//   }
-
-//   liveHostPeerConnection =
-//     liveCreatePeerConnection()
-
-//   const videoTrack =
-//     liveHostStream
-//       .getVideoTracks()[0]
-
-//   const audioTrack =
-//     liveHostStream
-//       .getAudioTracks()[0]
-
-//   if (!videoTrack) {
-//     throw new Error(
-//       'კამერის ვიდეო track ვერ მოიძებნა'
-//     )
-//   }
-
-//   const videoTransceiver =
-//     liveHostPeerConnection.addTransceiver(
-//       videoTrack,
-//       {
-//         direction: 'sendonly'
-//       }
-//     )
-
-//   const audioTransceiver =
-//     audioTrack
-//       ? liveHostPeerConnection.addTransceiver(
-//           audioTrack,
-//           {
-//             direction: 'sendonly'
-//           }
-//         )
-//       : null
-
-//   const offer =
-//     await liveHostPeerConnection.createOffer()
-
-//   await liveHostPeerConnection
-//     .setLocalDescription(
-//       offer
-//     )
-
-//   await liveWaitForIceGathering(
-//     liveHostPeerConnection
-//   )
-
-//   const localDescription =
-//     liveHostPeerConnection.localDescription
-
-//   if (!localDescription) {
-//     throw new Error(
-//       'Publisher SDP ვერ შეიქმნა'
-//     )
-//   }
-
-//   const tracks = [
-//     {
-//       location: 'local',
-//       mid: videoTransceiver.mid,
-//       trackName: 'camera'
-//     }
-//   ]
-
-//   if (audioTransceiver?.mid) {
-//     tracks.push({
-//       location: 'local',
-//       mid: audioTransceiver.mid,
-//       trackName: 'microphone'
-//     })
-//   }
-
-//   const result =
-//     await liveCallFunction({
-//       action: 'publish',
-//       sessionId:
-//         liveHostSessionId,
-//       sessionDescription:
-//         localDescription,
-//       tracks
-//     })
-
-//   if (
-//     !result?.result?.sessionDescription
-//   ) {
-//     throw new Error(
-//       'Cloudflare publisher answer ვერ მიიღო'
-//     )
-//   }
-
-//   await liveHostPeerConnection
-//     .setRemoteDescription(
-//       result.result.sessionDescription
-//     )
-
-//   liveHostTracks =
-//     tracks
-
-//   liveHostPeerConnection
-//     .onconnectionstatechange =
-//     () => {
-//       const state =
-//         liveHostPeerConnection
-//           ?.connectionState
-
-//       console.log(
-//         'Cloudflare host connection:',
-//         state
-//       )
-
-//       if (state === 'failed') {
-//         liveSetError(
-//           'Cloudflare Live კავშირი ვერ დამყარდა'
-//         )
-//       }
-//     }
-// }
-
-// async function endLiveStream() {
-//   if (!liveCurrentStream) {
-//     closeLiveHost()
-//     return
-//   }
-
-//   const confirmed =
-//     confirm(
-//       'ნამდვილად გინდა ლაივის დასრულება?'
-//     )
-
-//   if (!confirmed) {
-//     return
-//   }
-
-//   try {
-//     if (
-//       liveHostSessionId &&
-//       liveHostTracks.length
-//     ) {
-//       await liveCallFunction({
-//         action: 'close_tracks',
-//         sessionId:
-//           liveHostSessionId,
-//         tracks:
-//           liveHostTracks.map(
-//             track => ({
-//               mid: track.mid
-//             })
-//           )
-//       }).catch(
-//         error => {
-//           console.warn(
-//             'Cloudflare track close error:',
-//             error
-//           )
-//         }
-//       )
-//     }
-
-//     await window.supabase
-//       .from('live_streams')
-//       .update({
-//         status: 'ended',
-//         ended_at:
-//           new Date().toISOString()
-//       })
-//       .eq(
-//         'id',
-//         liveCurrentStream.id
-//       )
-//   } catch (error) {
-//     console.error(
-//       'Live end error:',
-//       error
-//     )
-//   }
-
-//   closeLiveHost()
-// }
-
-// function closeLiveHost() {
-//   if (liveHostStream) {
-//     liveHostStream
-//       .getTracks()
-//       .forEach(
-//         track =>
-//           track.stop()
-//       )
-
-//     liveHostStream = null
-//   }
-
-//   if (liveHostPeerConnection) {
-//     liveHostPeerConnection.close()
-//     liveHostPeerConnection = null
-//   }
-
-//   if (liveCommentChannel) {
-//     window.supabase
-//       .removeChannel(
-//         liveCommentChannel
-//       )
-
-//     liveCommentChannel = null
-//   }
-
-//   liveHostSessionId = null
-//   liveHostTracks = []
-//   liveCurrentStream = null
-//   liveCommentsLoadedStreamId = null
-
-//   liveHideModal(
-//     'live-host-modal'
-//   )
-// }
-
-// function toggleLiveMicrophone() {
-//   if (!liveHostStream) {
-//     return
-//   }
-
-//   const tracks =
-//     liveHostStream.getAudioTracks()
-
-//   if (!tracks.length) {
-//     return
-//   }
-
-//   liveMicrophoneEnabled =
-//     !liveMicrophoneEnabled
-
-//   tracks.forEach(
-//     track => {
-//       track.enabled =
-//         liveMicrophoneEnabled
-//     }
-//   )
-
-//   const button =
-//     liveGetElement(
-//       'live-mic-btn'
-//     )
-
-//   if (button) {
-//     button.classList.toggle(
-//       'off',
-//       !liveMicrophoneEnabled
-//     )
-
-//     button.innerHTML =
-//       liveMicrophoneEnabled
-//         ? '<i data-lucide="mic"></i>'
-//         : '<i data-lucide="mic-off"></i>'
-//   }
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-// }
-
-// function toggleLiveCamera() {
-//   if (!liveHostStream) {
-//     return
-//   }
-
-//   const tracks =
-//     liveHostStream.getVideoTracks()
-
-//   if (!tracks.length) {
-//     return
-//   }
-
-//   liveCameraEnabled =
-//     !liveCameraEnabled
-
-//   tracks.forEach(
-//     track => {
-//       track.enabled =
-//         liveCameraEnabled
-//     }
-//   )
-
-//   const button =
-//     liveGetElement(
-//       'live-camera-btn'
-//     )
-
-//   if (button) {
-//     button.classList.toggle(
-//       'off',
-//       !liveCameraEnabled
-//     )
-
-//     button.innerHTML =
-//       liveCameraEnabled
-//         ? '<i data-lucide="video"></i>'
-//         : '<i data-lucide="video-off"></i>'
-//   }
-
-//   if (window.lucide) {
-//     lucide.createIcons()
-//   }
-// }
-
-// async function loadActiveLive() {
-//   try {
-//     const {
-//       data,
-//       error
-//     } =
-//       await window.supabase
-//         .from('live_streams')
-//         .select('*')
-//         .eq(
-//           'status',
-//           'live'
-//         )
-//         .order(
-//           'started_at',
-//           {
-//             ascending: false
-//           }
-//         )
-//         .limit(1)
-//         .maybeSingle()
-
-//     if (error) {
-//       console.error(
-//         'Active live error:',
-//         error
-//       )
-
-//       return null
-//     }
-
-//     return data || null
-//   } catch (error) {
-//     console.error(
-//       'Active live error:',
-//       error
-//     )
-
-//     return null
-//   }
-// }
-
-// async function showActiveLiveNotification() {
-//   const stream =
-//     await loadActiveLive()
-
-//   if (!stream) {
-//     return
-//   }
-
-//   liveNotificationStream =
-//     stream
-
-//   const title =
-//     liveGetElement(
-//       'live-notification-title'
-//     )
-
-//   const description =
-//     liveGetElement(
-//       'live-notification-description'
-//     )
-
-//   if (title) {
-//     title.textContent =
-//       stream.title
-//   }
-
-//   if (description) {
-//     description.textContent =
-//       stream.description ||
-//       'პირდაპირი ჩართვა ArduinoHub-ზე'
-//   }
-
-//   liveShowModal(
-//     'live-notification-modal'
-//   )
-// }
-
-// function closeLiveNotification() {
-//   liveHideModal(
-//     'live-notification-modal'
-//   )
-
-//   liveNotificationStream = null
-// }
-
-// async function openLiveFromNotification() {
-//   const stream =
-//     liveNotificationStream
-
-//   closeLiveNotification()
-
-//   if (!stream) {
-//     return
-//   }
-
-//   await openLiveViewer(
-//     stream
-//   )
-// }
-
-// async function openLiveViewer(stream = null) {
-//   try {
-//     if (!stream) {
-//       stream =
-//         await loadActiveLive()
-//     }
-
-//     if (!stream) {
-//       alert(
-//         'ამ მომენტში აქტიური ლაივი არ არის'
-//       )
-
-//       return
-//     }
-
-//     liveCurrentStream =
-//       stream
-
-//     const title =
-//       liveGetElement(
-//         'live-viewer-title'
-//       )
-
-//     const description =
-//       liveGetElement(
-//         'live-viewer-description'
-//       )
-
-//     const video =
-//       liveGetElement(
-//         'live-viewer-video'
-//       )
-
-//     const placeholder =
-//       liveGetElement(
-//         'live-viewer-placeholder'
-//       )
-
-//     if (title) {
-//       title.textContent =
-//         stream.title
-//     }
-
-//     if (description) {
-//       description.textContent =
-//         stream.description || ''
-//     }
-
-//     if (video) {
-//       video.srcObject = null
-//     }
-
-//     if (placeholder) {
-//       placeholder.style.display =
-//         'flex'
-//     }
-
-//     livePrepareViewerChat()
-//     liveClearCommentLists()
-
-//     liveShowModal(
-//       'live-viewer-modal'
-//     )
-
-//     await liveCreateViewerConnection(
-//       stream
-//     )
-
-//     await liveStartCommentRealtime(
-//       stream.id
-//     )
-//   } catch (error) {
-//     console.error(
-//       'Live viewer error:',
-//       error
-//     )
-
-//     alert(
-//       error?.message ||
-//       'ლაივის ჩართვა ვერ მოხერხდა'
-//     )
-
-//     closeLiveViewer()
-//   }
-// }
-
-// async function liveCreateViewerConnection(
-//   stream
-// ) {
-//   if (!stream?.session_id) {
-//     throw new Error(
-//       'Live publisher session არ არსებობს'
-//     )
-//   }
-
-//   const sessionResult =
-//     await liveCallFunction({
-//       action: 'create_viewer_session'
-//     })
-
-//   const session =
-//     sessionResult?.session
-
-//   if (!session?.sessionId) {
-//     throw new Error(
-//       'Viewer session ვერ შეიქმნა'
-//     )
-//   }
-
-//   liveViewerSessionId =
-//     session.sessionId
-
-//   if (liveViewerPeerConnection) {
-//     liveViewerPeerConnection.close()
-//   }
-
-//   liveViewerPeerConnection =
-//     liveCreatePeerConnection()
-
-//   const video =
-//     liveGetElement(
-//       'live-viewer-video'
-//     )
-
-//   const placeholder =
-//     liveGetElement(
-//       'live-viewer-placeholder'
-//     )
-
-//   liveViewerPeerConnection.ontrack =
-//     event => {
-//       if (!video) {
-//         return
-//       }
-
-//       let remoteStream =
-//         video.srcObject
-
-//       if (
-//         !(remoteStream instanceof MediaStream)
-//       ) {
-//         remoteStream =
-//           new MediaStream()
-
-//         video.srcObject =
-//           remoteStream
-//       }
-
-//       const existing =
-//         remoteStream
-//           .getTracks()
-//           .find(
-//             track =>
-//               track.id ===
-//               event.track.id
-//           )
-
-//       if (!existing) {
-//         remoteStream.addTrack(
-//           event.track
-//         )
-//       }
-
-//       video
-//         .play()
-//         .catch(() => {})
-
-//       if (
-//         event.track.kind === 'video' &&
-//         placeholder
-//       ) {
-//         placeholder.style.display =
-//           'none'
-//       }
-//     }
-
-//   const result =
-//     await liveCallFunction({
-//       action: 'subscribe',
-//       sessionId:
-//         liveViewerSessionId,
-//       tracks: [
-//         {
-//           location: 'remote',
-//           sessionId:
-//             stream.session_id,
-//           trackName: 'camera'
-//         },
-//         {
-//           location: 'remote',
-//           sessionId:
-//             stream.session_id,
-//           trackName: 'microphone'
-//         }
-//       ]
-//     })
-
-//   const response =
-//     result?.result
-
-//   if (!response?.sessionDescription) {
-//     throw new Error(
-//       'Cloudflare viewer offer ვერ მიიღო'
-//     )
-//   }
-
-//   await liveViewerPeerConnection
-//     .setRemoteDescription(
-//       response.sessionDescription
-//     )
-
-//   const answer =
-//     await liveViewerPeerConnection
-//       .createAnswer()
-
-//   await liveViewerPeerConnection
-//     .setLocalDescription(
-//       answer
-//     )
-
-//   await liveWaitForIceGathering(
-//     liveViewerPeerConnection
-//   )
-
-//   const localDescription =
-//     liveViewerPeerConnection.localDescription
-
-//   if (!localDescription) {
-//     throw new Error(
-//       'Viewer SDP answer ვერ შეიქმნა'
-//     )
-//   }
-
-//   await liveCallFunction({
-//     action: 'renegotiate',
-//     sessionId:
-//       liveViewerSessionId,
-//     sessionDescription:
-//       localDescription
-//   })
-
-//   liveViewerPeerConnection
-//     .onconnectionstatechange =
-//     () => {
-//       const state =
-//         liveViewerPeerConnection
-//           ?.connectionState
-
-//       console.log(
-//         'Cloudflare viewer connection:',
-//         state
-//       )
-
-//       if (state === 'failed') {
-//         console.warn(
-//           'Cloudflare viewer connection failed'
-//         )
-//       }
-//     }
-// }
-
-// function closeLiveViewer() {
-//   if (liveViewerPeerConnection) {
-//     liveViewerPeerConnection.close()
-//     liveViewerPeerConnection = null
-//   }
-
-//   const video =
-//     liveGetElement(
-//       'live-viewer-video'
-//     )
-
-//   if (video) {
-//     video.pause()
-//     video.srcObject = null
-//   }
-
-//   if (liveCommentChannel) {
-//     window.supabase
-//       .removeChannel(
-//         liveCommentChannel
-//       )
-
-//     liveCommentChannel = null
-//   }
-
-//   liveViewerSessionId = null
-//   liveCurrentStream = null
-//   liveCommentsLoadedStreamId = null
-
-//   liveHideModal(
-//     'live-viewer-modal'
-//   )
-// }
-
-// async function liveStartCommentRealtime(
-//   streamId
-// ) {
-//   if (!streamId) {
-//     return
-//   }
-
-//   if (liveCommentChannel) {
-//     await window.supabase
-//       .removeChannel(
-//         liveCommentChannel
-//       )
-
-//     liveCommentChannel = null
-//   }
-
-//   livePrepareViewerChat()
-//   livePrepareHostChat()
-
-//   liveClearCommentLists()
-
-//   liveCommentsLoadedStreamId =
-//     streamId
-
-//   liveCommentChannel =
-//     window.supabase
-//       .channel(
-//         `live-comments-${streamId}-${Date.now()}`
-//       )
-//       .on(
-//         'postgres_changes',
-//         {
-//           event: 'INSERT',
-//           schema: 'public',
-//           table: 'live_comments',
-//           filter:
-//             `stream_id=eq.${streamId}`
-//         },
-//         payload => {
-//           if (
-//             payload?.new
-//               ?.stream_id !== streamId
-//           ) {
-//             return
-//           }
-
-//           liveRenderComment(
-//             payload.new
-//           )
-//         }
-//       )
-//       .subscribe(
-//         status => {
-//           console.log(
-//             'Live comments realtime:',
-//             status
-//           )
-//         }
-//       )
-
-//   await liveLoadExistingComments(
-//     streamId
-//   )
-// }
-
-// async function liveLoadExistingComments(
-//   streamId
-// ) {
-//   try {
-//     const {
-//       data,
-//       error
-//     } =
-//       await window.supabase
-//         .from('live_comments')
-//         .select('*')
-//         .eq(
-//           'stream_id',
-//           streamId
-//         )
-//         .order(
-//           'created_at',
-//           {
-//             ascending: true
-//           }
-//         )
-//         .limit(200)
-
-//     if (error) {
-//       console.error(
-//         'Live comments error:',
-//         error
-//       )
-
-//       return
-//     }
-
-//     liveClearCommentLists()
-
-//     for (
-//       const comment of
-//       data || []
-//     ) {
-//       liveRenderComment(
-//         comment
-//       )
-//     }
-//   } catch (error) {
-//     console.error(
-//       'Live comments error:',
-//       error
-//     )
-//   }
-// }
-
-// function liveRenderComment(comment) {
-//   const lists = [
-//     document.getElementById('live-stream-chat-list'),
-//     document.getElementById('live-host-chat-list')
-//   ].filter(Boolean)
-
-//   if (!lists.length) return
-
-//   const author = comment.author_name || 'მომხმარებელი'
-//   const message = comment.message || ''
-//   const time = comment.created_at
-//     ? new Date(comment.created_at).toLocaleTimeString('ka-GE', {
-//         hour: '2-digit',
-//         minute: '2-digit'
-//       })
-//     : ''
-
-//   const currentUserId = window.currentUser?.id || window.user?.id || null
-//   const isHost = currentUserId && comment.user_id === currentUserId
-
-//   lists.forEach(list => {
-//     if (comment.id && list.querySelector(`[data-comment-id="${comment.id}"]`)) {
-//       return
-//     }
-
-//     const item = document.createElement('div')
-//     item.className = `live-chat-message${isHost ? ' live-chat-host' : ''}`
-
-//     if (comment.id) {
-//       item.dataset.commentId = comment.id
-//     }
-
-//     const authorEl = document.createElement('div')
-//     authorEl.className = 'live-chat-author'
-//     authorEl.textContent = author
-
-//     const messageEl = document.createElement('div')
-//     messageEl.className = 'live-chat-text'
-//     messageEl.textContent = message
-
-//     const timeEl = document.createElement('div')
-//     timeEl.className = 'live-chat-time'
-//     timeEl.textContent = time
-
-//     item.appendChild(authorEl)
-//     item.appendChild(messageEl)
-//     item.appendChild(timeEl)
-
-//     list.appendChild(item)
-//     list.scrollTop = list.scrollHeight
-//   })
-// }
-// async function liveSendChatComment(
-//   event
-// ) {
-//   event.preventDefault()
-
-//   if (!liveCurrentStream) {
-//     return
-//   }
-
-//   const form =
-//     event.currentTarget
-
-//   const input =
-//     form.querySelector(
-//       'input'
-//     )
-
-//   if (!input) {
-//     return
-//   }
-
-//   const message =
-//     input.value.trim()
-
-//   if (!message) {
-//     return
-//   }
-
-//   try {
-//     const {
-//       data: authData,
-//       error: authError
-//     } =
-//       await window.supabase
-//         .auth
-//         .getUser()
-
-//     if (
-//       authError ||
-//       !authData.user
-//     ) {
-//       alert(
-//         'კომენტარის დასაწერად ანგარიშში შესვლა აუცილებელია'
-//       )
-
-//       return
-//     }
-
-//     const user =
-//       authData.user
-
-//     const authorName =
-//       user.user_metadata?.full_name ||
-//       user.user_metadata?.name ||
-//       user.email?.split('@')[0] ||
-//       'მომხმარებელი'
-
-//     const {
-//       error
-//     } =
-//       await window.supabase
-//         .from('live_comments')
-//         .insert({
-//           stream_id:
-//             liveCurrentStream.id,
-//           user_id:
-//             user.id,
-//           message,
-//           author_name:
-//             authorName
-//         })
-
-//     if (error) {
-//       throw error
-//     }
-
-//     input.value = ''
-//   } catch (error) {
-//     console.error(
-//       'Live comment error:',
-//       error
-//     )
-//   }
-// }
-
-// async function liveCheckStatus() {
-//   const stream =
-//     await loadActiveLive()
-
-//   if (!stream) {
-//     return
-//   }
-
-//   if (
-//     liveCurrentStream &&
-//     liveCurrentStream.id ===
-//       stream.id
-//   ) {
-//     return
-//   }
-
-//   if (
-//     liveGetElement(
-//       'live-viewer-modal'
-//     )?.classList.contains(
-//       'active'
-//     ) ||
-//     liveGetElement(
-//       'live-host-modal'
-//     )?.classList.contains(
-//       'active'
-//     )
-//   ) {
-//     return
-//   }
-
-//   await showActiveLiveNotification()
-// }
-
-// document.addEventListener(
-//   'DOMContentLoaded',
-//   () => {
-//     livePrepareViewerChat()
-//     livePrepareHostChat()
-
-//     if (window.lucide) {
-//       lucide.createIcons()
-//     }
-
-//     setTimeout(
-//       () => {
-//         liveCheckStatus()
-//       },
-//       1800
-//     )
-
-//     setInterval(
-//       () => {
-//         liveCheckStatus()
-//       },
-//       10000
-//     )
-//   }
-// )
-
-// window.openLiveAdminModal =
-//   openLiveAdminModal
-
-// window.closeLiveAdminModal =
-//   closeLiveAdminModal
-
-// window.startLiveStream =
-//   startLiveStream
-
-// window.endLiveStream =
-//   endLiveStream
-
-// window.closeLiveViewer =
-//   closeLiveViewer
-
-// window.openLiveViewer =
-//   openLiveViewer
-
-// window.closeLiveNotification =
-//   closeLiveNotification
-
-// window.openLiveFromNotification =
-//   openLiveFromNotification
-
-// window.toggleLiveMicrophone =
-//   toggleLiveMicrophone
-
-// window.toggleLiveCamera =
-//   toggleLiveCamera
+    await loadAdminMeeting()
+  } catch (error) {
+    errorTarget.textContent = neutralError( error, 'შეკრების გამოქვეყნება ვერ მოხერხდა.' )
+  } finally {
+    setBusy( button, false )
+  }
+}
+async function clearMeeting() {
+  if (!db) {
+    return
+  }
+
+  if (
+    !confirm(
+      'ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?'
+    )
+  ) {
+    return
+  }
+
+  const { error } =
+    await db
+      .from('club_meeting')
+      .delete()
+      .eq(
+        'id',
+        1
+      )
+
+  if (error) {
+    return toast(
+      'შეკრების წაშლა ვერ მოხერხდა.'
+    )
+  }
+
+  // ✨ აქ ვამატებთ მესიჯის გაგზავნას ბაზაში (ან ჩატში), რომ შეკრება გაუქმდა
+  await db.from('messages').insert({
+    message: '⚠️ კლუბის შეკრება გაუქმდა ადმინისტრატორის მიერ.',
+    sender: 'სისტემა' // ან შენი არჩევნით
+  })
+
+  $('#meeting-date')
+    .value = ''
+
+  $('#meeting-time')
+    .value = ''
+
+  $('#meeting-day-preview')
+    .textContent =
+    '—'
+
+  $('#meeting-admin-status')
+    .textContent =
+    'არ არის გამოქვეყნებული'
+
+  $('#meeting-admin-status')
+    .className =
+    'meeting-admin-status'
+
+  toast(
+    'შეკრება გაუქმდა.',
+    'success'
+  )
+}
+async function initPasswordReset() {
+  const form =
+    $('#reset-password-form')
+
+  if (!form) {
+    return
+  }
+
+  if (!db) {
+    $('#reset-error')
+      .textContent =
+      'Supabase ჯერ არ არის კონფიგურირებული.'
+
+    form
+      .querySelector(
+        'button'
+      )
+      .disabled = true
+
+    return
+  }
+
+  form.addEventListener(
+    'submit',
+    async event => {
+      event.preventDefault()
+
+      const error =
+        $('#reset-error')
+
+      const password =
+        $('#new-password')
+          .value
+
+      const confirmPassword =
+        $('#confirm-password')
+          .value
+
+      const button =
+        form.querySelector(
+          'button'
+        )
+
+      error.textContent =
+        ''
+
+      if (
+        password !==
+        confirmPassword
+      ) {
+        error.textContent =
+          'პაროლები ერთმანეთს არ ემთხვევა.'
+
+        return
+      }
+
+      if (
+        password.length < 10
+      ) {
+        error.textContent =
+          'პაროლი მინიმუმ 10 სიმბოლო უნდა იყოს.'
+
+        return
+      }
+
+      const {
+        data: { session }
+      } =
+        await db.auth.getSession()
+
+      if (!session) {
+        error.textContent =
+          'აღდგენის ბმული არასწორია ან ვადა გაუვიდა. მოითხოვეთ ახალი ბმული.'
+
+        return
+      }
+
+      setBusy(
+        button,
+        true,
+        'ინახება...'
+      )
+
+      const {
+        error: updateError
+      } =
+        await db.auth.updateUser({
+          password
+        })
+
+      if (updateError) {
+        error.textContent =
+          'პაროლის შეცვლა ვერ მოხერხდა. მოითხოვეთ ახალი ბმული.'
+      } else {
+        toast(
+          'პაროლი წარმატებით შეიცვალა.',
+          'success'
+        )
+
+        setTimeout(
+          () => {
+            location.href =
+              'admin.html'
+          },
+          900
+        )
+      }
+
+      setBusy(
+        button,
+        false
+      )
+    }
+  )
+}
+
+const MARIA_USER_ID = 'f5b9922a-d764-4ad7-b2e0-b73dbe98dc8b'
+
+let attendanceMembers = []
+let attendanceRecords = []
+
+async function isAttendanceManager(user) {
+  return !!user && user.id === MARIA_USER_ID
+}
+
+async function getAttendanceMembers() {
+  if (!db) {
+    return []
+  }
+
+  const { data, error } = await db
+    .from('club_members')
+    .select('id,full_name,sort_order,active')
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+async function getAttendanceRecords() {
+  if (!db) {
+    return []
+  }
+
+  const { data, error } = await db
+    .from('club_attendance')
+    .select(`
+      id,
+      meeting_date,
+      recorded_by,
+      counted,
+      created_at,
+      updated_at,
+      club_attendance_members (
+        member_id,
+        club_members (
+          id,
+          full_name,
+          sort_order
+        )
+      )
+    `)
+    .order('meeting_date', { ascending: false })
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+function attendanceDateText(value) {
+  if (!value) {
+    return '—'
+  }
+
+  const date = new Date(`${value}T12:00:00`)
+
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+
+  return new Intl.DateTimeFormat(
+    'ka-GE',
+    {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }
+  ).format(date)
+}
+
+async function saveAttendanceRecord(date, memberIds, counted) {
+  if (!db) {
+    throw new Error('Supabase არ არის კონფიგურირებული.')
+  }
+
+  const { data: { user } } = await db.auth.getUser()
+
+  if (!user) {
+    throw new Error('ანგარიშში შესვლა აუცილებელია.')
+  }
+
+  const manager = await isAttendanceManager(user)
+
+  if (!manager) {
+    throw new Error('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
+  }
+
+  let { data: record, error } = await db
+    .from('club_attendance')
+    .select('id')
+    .eq('meeting_date', date)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (record) {
+    const { error: updateError } = await db
+      .from('club_attendance')
+      .update({
+        recorded_by: user.id,
+        counted,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', record.id)
+
+    if (updateError) {
+      throw updateError
+    }
+  } else {
+    const { data: created, error: insertError } = await db
+      .from('club_attendance')
+      .insert({
+        meeting_date: date,
+        recorded_by: user.id,
+        counted
+      })
+      .select('id')
+      .single()
+
+    if (insertError) {
+      throw insertError
+    }
+
+    record = created
+  }
+
+  const { error: deleteError } = await db
+    .from('club_attendance_members')
+    .delete()
+    .eq('attendance_id', record.id)
+
+  if (deleteError) {
+    throw deleteError
+  }
+
+  if (memberIds.length) {
+    const rows = memberIds.map(
+      member_id => ({
+        attendance_id: record.id,
+        member_id
+      })
+    )
+
+    const { error: insertMembersError } = await db
+      .from('club_attendance_members')
+      .insert(rows)
+
+    if (insertMembersError) {
+      throw insertMembersError
+    }
+  }
+
+  return record.id
+}
+
+function closeAttendancePanel() {
+  const panel = $('#attendance-panel')
+
+  if (!panel) {
+    document.body.style.overflow = ''
+    document.body.classList.remove('modal-open')
+
+    document.removeEventListener(
+      'keydown',
+      attendanceEscapeHandler
+    )
+
+    return
+  }
+
+  panel.remove()
+
+  document.body.style.overflow = ''
+  document.body.classList.remove('modal-open')
+
+  document.removeEventListener(
+    'keydown',
+    attendanceEscapeHandler
+  )
+}
+
+function renderAttendancePanel(records) {
+  const panel = $('#attendance-panel')
+
+  if (!panel) {
+    return
+  }
+
+  const currentDate =
+    $('#attendance-date')?.value || ''
+
+  const selectedRecord =
+    records.find(
+      record =>
+        record.meeting_date === currentDate
+    )
+
+  const selectedIds =
+    selectedRecord
+      ? selectedRecord
+        .club_attendance_members
+        .map(
+          item => item.member_id
+        )
+      : []
+
+  const countedInput =
+    $('#attendance-counted')
+
+  if (countedInput) {
+    countedInput.checked =
+      selectedRecord?.counted === true
+  }
+
+  const memberList =
+    $('#attendance-member-select')
+
+  if (!memberList) {
+    return
+  }
+
+  memberList.innerHTML =
+    attendanceMembers
+      .map(
+        member => `
+          <label class="attendance-member-option">
+            <input
+              type="checkbox"
+              value="${esc(member.id)}"
+              ${
+                selectedIds.includes(
+                  member.id
+                )
+                  ? 'checked'
+                  : ''
+              }
+            >
+
+            <span>
+              ${esc(member.full_name)}
+            </span>
+          </label>
+        `
+      )
+      .join('')
+
+  const history =
+    $('#attendance-personal-history')
+
+  if (history) {
+    const countedRecords =
+      records.filter(
+        record =>
+          record.counted === true
+      )
+
+    history.innerHTML =
+      countedRecords.length
+        ? countedRecords
+          .map(
+            record => {
+              const names =
+                record
+                  .club_attendance_members
+                  .map(
+                    item =>
+                      item
+                        .club_members
+                        ?.full_name
+                  )
+                  .filter(Boolean)
+
+              return `
+                <button
+                  type="button"
+                  class="attendance-history-item"
+                  data-attendance-date="${esc(
+                    record.meeting_date
+                  )}"
+                >
+                  <span>
+                    ${esc(
+                      attendanceDateText(
+                        record.meeting_date
+                      )
+                    )}
+                  </span>
+
+                  <strong>
+                    ${names.length} წევრი
+                  </strong>
+                </button>
+              `
+            }
+          )
+          .join('')
+        : `
+          <div class="empty-state compact-empty">
+            ${icon('calendar-x')}
+
+            <h3>
+              შეკრებების ისტორია ცარიელია
+            </h3>
+
+            <p>
+              ჩათვლილი შეხვედრები აქ გამოჩნდება.
+            </p>
+          </div>
+        `
+
+    history
+      .querySelectorAll(
+        '[data-attendance-date]'
+      )
+      .forEach(
+        button => {
+          button.addEventListener(
+            'click',
+            () => {
+              const date =
+                button.dataset
+                  .attendanceDate
+
+              const input =
+                $('#attendance-date')
+
+              if (input) {
+                input.value = date
+              }
+
+              renderAttendancePanel(
+                attendanceRecords
+              )
+
+              updateAttendanceSelectedCount()
+            }
+          )
+        }
+      )
+  }
+
+  refreshIcons()
+}
+
+async function openAttendancePanel() {
+  const user = await getCurrentUser()
+  if (!user) {
+    toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
+    return
+  }
+  const manager = await isAttendanceManager(user)
+  if (!manager) {
+    toast('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
+    return
+  }
+  closeAttendancePanel()
+  const panel = document.createElement('div')
+  panel.id = 'attendance-panel'
+  panel.className = 'attendance-overlay'
+  panel.hidden = false
+  panel.style.position = 'fixed'
+  panel.style.inset = '0'
+  panel.style.zIndex = '999999'
+  panel.style.display = 'flex'
+  panel.style.alignItems = 'center'
+  panel.style.justifyContent = 'center'
+  panel.style.overflowY = 'auto'
+  panel.style.padding = '20px'
+  panel.style.background = 'rgba(0, 0, 0, 0.7)'
+  panel.style.boxSizing = 'border-box'
+  panel.innerHTML = `
+    <div class="attendance-panel-backdrop" data-attendance-close style="
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+    "></div>
+    <section class="attendance-panel-content" role="dialog" aria-modal="true" aria-labelledby="attendance-panel-title" style="
+        position:relative;
+        z-index:2;
+        width:min(900px,100%);
+        max-height:90vh;
+        overflow-y:auto;
+        box-sizing:border-box;
+    ">
+      <div class="attendance-panel-header">
+        <div>
+          <p class="eyebrow">CLUB ATTENDANCE</p>
+          <h2 id="attendance-panel-title">დასწრების აღრიცხვა</h2>
+          <p>მონიშნე იმ შეხვედრაზე დამსწრე კლუბის წევრები.</p>
+        </div>
+        <button type="button" class="icon-button" id="attendance-close" aria-label="დახურვა">
+          ${icon('x')}
+        </button>
+      </div>
+      <div class="attendance-panel-body">
+        <div class="attendance-date-box">
+          <label>შეხვედრის თარიღი <input id="attendance-date" type="date"></label>
+          <span id="attendance-record-status" class="attendance-record-status"></span>
+        </div>
+        <div class="attendance-select-box">
+          <div class="attendance-subheading">
+            <div>
+              <h3>დამსწრე წევრები</h3>
+              <p>მონიშნე ყველა, ვინც შეხვედრას დაესწრო.</p>
+            </div>
+            <span id="attendance-selected-count">0</span>
+          </div>
+          <div id="attendance-member-select" class="attendance-member-select"></div>
+        </div>
+        <p id="attendance-form-error" class="form-message" role="alert" aria-live="polite"></p>
+        <div class="attendance-actions">
+          <label class="attendance-count-toggle">
+            <input type="checkbox" id="attendance-counted">
+            <span class="attendance-count-toggle-box">${icon('check')}</span>
+            <span>ჩათვლა</span>
+          </label>
+          <button type="button" class="button primary" id="save-attendance">
+            ${icon('save')} დასწრების შენახვა
+          </button>
+          <button type="button" class="button ghost" id="attendance-cancel">გაუქმება</button>
+        </div>
+        <div class="attendance-history-box">
+          <div class="attendance-subheading">
+            <div>
+              <h3>შეკრებების ისტორია</h3>
+              <p>აქ გამოჩნდება მხოლოდ ჩათვლილი შეხვედრები.</p>
+            </div>
+          </div>
+          <div id="attendance-personal-history" class="attendance-personal-history"></div>
+        </div>
+      </div>
+    </section>
+  `
+  document.body.appendChild(panel)
+  document.body.style.overflow = 'hidden'
+
+  try {
+    attendanceMembers = await getAttendanceMembers()
+    attendanceRecords = await getAttendanceRecords()
+    const dateInput = $('#attendance-date')
+    if (dateInput) {
+      const latest = attendanceRecords[0]
+      dateInput.value =
+        latest?.meeting_date || new Date().toISOString().slice(0, 10)
+    }
+
+    renderAttendancePanel(attendanceRecords)
+    updateAttendanceSelectedCount()
+
+    $('#attendance-close')?.addEventListener('click', closeAttendancePanel)
+    $('#attendance-cancel')?.addEventListener('click', closeAttendancePanel)
+    panel
+      .querySelector('[data-attendance-close]')
+      ?.addEventListener('click', closeAttendancePanel)
+
+    $('#attendance-date')?.addEventListener('change', () => {
+      renderAttendancePanel(attendanceRecords)
+      updateAttendanceSelectedCount()
+    })
+
+    $('#attendance-member-select')?.addEventListener(
+      'change',
+      updateAttendanceSelectedCount
+    )
+    $('#save-attendance')?.addEventListener('click', saveAttendanceFromPanel)
+    document.addEventListener('keydown', attendanceEscapeHandler)
+    refreshIcons()
+  } catch (error) {
+    console.error('Attendance panel error:', error)
+    const errorTarget = $('#attendance-form-error')
+    if (errorTarget) {
+      errorTarget.textContent =
+        error?.message || 'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
+    }
+  }
+}
+
+// გლობალურად გახსნა - ფუნქციის გარეთ!
+window.openAttendancePanel = openAttendancePanel;
+function attendanceEscapeHandler(event) {
+  if (
+    event.key === 'Escape' &&
+    $('#attendance-panel')
+  ) {
+    closeAttendancePanel()
+  }
+}
+
+function updateAttendanceSelectedCount() {
+  const checked =
+    document.querySelectorAll(
+      '#attendance-member-select input[type="checkbox"]:checked'
+    )
+
+  const counter =
+    $('#attendance-selected-count')
+
+  if (counter) {
+    counter.textContent =
+      String(checked.length)
+  }
+}
+
+async function saveAttendanceFromPanel() {
+  const date =
+    $('#attendance-date')
+      ?.value
+
+  const errorTarget =
+    $('#attendance-form-error')
+
+  const button =
+    $('#save-attendance')
+
+  if (errorTarget) {
+    errorTarget.textContent = ''
+  }
+
+  if (!date) {
+    if (errorTarget) {
+      errorTarget.textContent =
+        'აირჩიე შეხვედრის თარიღი.'
+    }
+
+    return
+  }
+
+  const selected =
+    Array.from(
+      document.querySelectorAll(
+        '#attendance-member-select input[type="checkbox"]:checked'
+      )
+    ).map(
+      input => input.value
+    )
+
+  const counted =
+    $('#attendance-counted')
+      ?.checked === true
+
+  setBusy(
+    button,
+    true,
+    'ინახება...'
+  )
+
+  try {
+    await saveAttendanceRecord(
+      date,
+      selected,
+      counted
+    )
+
+    attendanceRecords =
+      await getAttendanceRecords()
+
+    renderAttendancePanel(
+      attendanceRecords
+    )
+
+    updateAttendanceSelectedCount()
+
+    toast(
+      counted
+        ? 'შეხვედრა ჩათვლილია და დასწრება შენახულია.'
+        : 'დასწრება შენახულია.'
+      ,
+      'success'
+    )
+  } catch (error) {
+    console.error(
+      'Attendance save error:',
+      error
+    )
+
+    if (errorTarget) {
+      errorTarget.textContent =
+        error?.message ||
+        'დასწრების შენახვა ვერ მოხერხდა.'
+    }
+  } finally {
+    setBusy(
+      button,
+      false
+    )
+  }
+}
+
+async function loadAdminAttendance() {
+  const status =
+    $('#attendance-admin-status')
+
+  const memberList =
+    $('#attendance-member-list')
+
+  const historyList =
+    $('#attendance-history-list')
+
+  const totalMeetings =
+    $('#attendance-total-meetings')
+
+  const totalMembers =
+    $('#attendance-total-members')
+
+  if (
+    !status &&
+    !memberList &&
+    !historyList
+  ) {
+    return
+  }
+
+  if (!db) {
+    if (status) {
+      status.textContent =
+        'Supabase არ არის კონფიგურირებული'
+    }
+
+    return
+  }
+
+  try {
+    const [members, records] =
+      await Promise.all([
+        getAttendanceMembers(),
+        getAttendanceRecords()
+      ])
+
+    attendanceMembers =
+      members
+
+    attendanceRecords =
+      records
+
+    const countedRecords =
+      records.filter(
+        record =>
+          record.counted === true
+      )
+
+    if (status) {
+      status.textContent =
+        'განახლებულია'
+    }
+
+    if (totalMeetings) {
+      totalMeetings.textContent =
+        String(
+          countedRecords.length
+        )
+    }
+
+    if (totalMembers) {
+      totalMembers.textContent =
+        String(
+          members.length
+        )
+    }
+
+    const counts =
+      new Map()
+
+    members.forEach(
+      member => {
+        counts.set(
+          member.id,
+          0
+        )
+      }
+    )
+
+    countedRecords.forEach(
+      record => {
+        record
+          .club_attendance_members
+          .forEach(
+            item => {
+              counts.set(
+                item.member_id,
+                (
+                  counts.get(
+                    item.member_id
+                  ) || 0
+                ) + 1
+              )
+            }
+          )
+      }
+    )
+
+ if (memberList) {
+      let maxCount = 0
+      members.forEach(member => {
+        const count = counts.get(member.id) || 0
+        if (count > maxCount) maxCount = count
+      })
+
+      memberList.innerHTML = members.length ? members
+        .map(
+          member => {
+            const count = counts.get( member.id ) || 0
+            const percent = countedRecords.length ? Math.round( count / countedRecords.length * 100 ) : 0
+            const isTop = count > 0 && count === maxCount
+
+            return `
+              <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
+                ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
+                <div>
+                  <div class="member-name-row">
+                    <strong class="${isTop ? 'top-name' : ''}">${esc( member.full_name )}</strong>
+                    ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
+                  </div>
+                  <span> ${count} შეხვედრა </span>
+                </div>
+                <div class="attendance-admin-member-value">
+                  <strong class="${isTop ? 'top-percent' : ''}"> ${percent}% </strong>
+                  <small> დასწრება </small>
+                </div>
+              </div>
+            `
+          }
+        )
+        .join('')
+      : ` <div class="empty-state compact-empty"> ${icon('users-round')} <h3> წევრები ვერ მოიძებნა </h3> <p> კლუბის წევრების სია ცარიელია. </p> </div> `
+    }
+
+    if (historyList) {
+      historyList.innerHTML =
+        countedRecords.length
+          ? countedRecords
+            .map(
+              record => {
+                const names =
+                  record
+                    .club_attendance_members
+                    .map(
+                      item =>
+                        item
+                          .club_members
+                          ?.full_name
+                    )
+                    .filter(Boolean)
+
+                return `
+                  <article class="attendance-admin-record">
+
+                    <div class="attendance-admin-record-header">
+
+                      <div>
+                        <span>
+                          შეხვედრა
+                        </span>
+
+                        <strong>
+                          ${esc(
+                            attendanceDateText(
+                              record.meeting_date
+                            )
+                          )}
+                        </strong>
+                      </div>
+
+                      <span class="attendance-admin-badge">
+                        ${names.length} დამსწრე
+                      </span>
+
+                    </div>
+
+                    <div class="attendance-admin-names">
+
+                      ${
+                        names.length
+                          ? names
+                            .map(
+                              name => `
+                                <span>
+                                  ${icon('check')}
+                                  ${esc(name)}
+                                </span>
+                              `
+                            )
+                            .join('')
+                          : `
+                            <span class="attendance-no-members">
+                              არავინ იყო მონიშნული
+                            </span>
+                          `
+                      }
+
+                    </div>
+
+                  </article>
+                `
+              }
+            )
+            .join('')
+          : `
+            <div class="empty-state compact-empty">
+              ${icon('calendar-x')}
+
+              <h3>
+                დასწრების ისტორია ცარიელია
+              </h3>
+
+              <p>
+                ჩათვლილი შეხვედრები აქ გამოჩნდება.
+              </p>
+
+            </div>
+          `
+    }
+
+    refreshIcons()
+  } catch (error) {
+    console.error(
+      'Admin attendance error:',
+      error
+    )
+
+    if (status) {
+      status.textContent =
+        'ჩატვირთვა ვერ მოხერხდა'
+    }
+
+    if (memberList) {
+      memberList.innerHTML = `
+        <div class="empty-state compact-empty">
+
+          ${icon('triangle-alert')}
+
+          <h3>
+            დასწრების მონაცემები ვერ ჩაიტვირთა
+          </h3>
+
+          <p>
+            ${esc(
+              error?.message ||
+              'სცადეთ ხელახლა.'
+            )}
+          </p>
+
+        </div>
+      `
+    }
+
+    refreshIcons()
+  }
+}
+
+let authUIUpdating = false
+let authUIQueued = false
+let authUIListenerStarted = false
+
+function findLoginElement() {
+  const elements =
+    Array.from(
+      document.querySelectorAll(
+        'a[href], button'
+      )
+    )
+
+  return (
+    elements.find(
+      element => {
+        if (
+          element.closest(
+            '.account-menu'
+          )
+        ) {
+          return false
+        }
+
+        const href =
+          element.getAttribute(
+            'href'
+          ) || ''
+
+        const text =
+          element.textContent
+            .trim()
+            .toLowerCase()
+
+        return (
+          href ===
+            'admin.html' ||
+          href.endsWith(
+            '/admin.html'
+          ) ||
+          text ===
+            'log in' ||
+          text ===
+            'login' ||
+          text ===
+            'ადმინისტრატორი'
+        )
+      }
+    ) || null
+  )
+}
+
+function closeAllAccountMenus(
+  except = null
+) {
+  document
+    .querySelectorAll(
+      '.account-menu'
+    )
+    .forEach(
+      menu => {
+        if (
+          menu !== except
+        ) {
+          menu.remove()
+        }
+      }
+    )
+}
+
+function createAccountMenu(
+  user
+) {
+  const name =
+    getUserDisplayName(
+      user
+    )
+
+  const isMaria =
+    user?.id ===
+    MARIA_USER_ID
+
+  const wrapper =
+    document.createElement(
+      'div'
+    )
+
+  wrapper.className =
+    'account-menu'
+
+  wrapper.innerHTML = `
+    <button
+      type="button"
+      class="account-button"
+      aria-expanded="false"
+    >
+      ${icon('user-round')}
+
+      <span class="account-name">
+        ${esc(name)}
+      </span>
+
+      ${icon('chevron-down')}
+    </button>
+
+    <div
+      class="account-dropdown"
+      hidden
+    >
+      <div class="account-dropdown-name">
+        ${icon('user-round')}
+
+        <span>
+          ${esc(name)}
+        </span>
+      </div>
+
+      ${
+        isMaria
+          ? `
+            <button
+              type="button"
+              class="account-attendance"
+            >
+              ${icon('clipboard-check')}
+              დასწრების აღრიცხვა
+            </button>
+          `
+          : ''
+      }
+
+      <button
+        type="button"
+        class="account-logout"
+      >
+        ${icon('log-out')}
+        გამოსვლა
+      </button>
+    </div>
+  `
+
+  const button =
+    wrapper.querySelector(
+      '.account-button'
+    )
+
+  const dropdown =
+    wrapper.querySelector(
+      '.account-dropdown'
+    )
+
+  const attendanceButton =
+    wrapper.querySelector(
+      '.account-attendance'
+    )
+
+  const logoutButton =
+    wrapper.querySelector(
+      '.account-logout'
+    )
+
+  button?.addEventListener(
+    'click',
+    event => {
+      event.stopPropagation()
+
+      const shouldOpen =
+        dropdown.hidden
+
+      document
+        .querySelectorAll(
+          '.account-dropdown'
+        )
+        .forEach(
+          item => {
+            item.hidden = true
+          }
+        )
+
+      document
+        .querySelectorAll(
+          '.account-button'
+        )
+        .forEach(
+          item => {
+            item.setAttribute(
+              'aria-expanded',
+              'false'
+            )
+          }
+        )
+
+      dropdown.hidden =
+        !shouldOpen
+
+      button.setAttribute(
+        'aria-expanded',
+        String(
+          shouldOpen
+        )
+      )
+    }
+  )
+
+  attendanceButton?.addEventListener(
+    'click',
+    async event => {
+      event.stopPropagation()
+
+      dropdown.hidden = true
+
+      button.setAttribute(
+        'aria-expanded',
+        'false'
+      )
+
+      await openAttendancePanel()
+    }
+  )
+
+  logoutButton?.addEventListener(
+    'click',
+    async event => {
+      event.stopPropagation()
+
+      logoutButton.disabled =
+        true
+
+      logoutButton.innerHTML = `
+        ${icon('loader-circle')}
+        გამოდის...
+      `
+
+      refreshIcons()
+
+      await logout()
+    }
+  )
+
+  return wrapper
+}
+
+async function updateAuthUI() {
+  if (!db) {
+    return
+  }
+
+  if (authUIUpdating) {
+    authUIQueued = true
+    return
+  }
+
+  authUIUpdating = true
+
+  try {
+    const user =
+      await getCurrentUser()
+
+    const existingMenus =
+      Array.from(
+        document.querySelectorAll(
+          '.account-menu'
+        )
+      )
+
+    const loginElement =
+      findLoginElement()
+
+    if (!user) {
+      existingMenus
+        .forEach(
+          menu =>
+            menu.remove()
+        )
+
+      if (loginElement) {
+        loginElement.hidden =
+          false
+      }
+
+      return
+    }
+
+    const admin =
+      await isAdmin(user)
+
+    if (admin) {
+      existingMenus
+        .forEach(
+          menu =>
+            menu.remove()
+        )
+
+      if (loginElement) {
+        loginElement.hidden =
+          false
+      }
+
+      return
+    }
+
+    if (!loginElement) {
+      if (
+        existingMenus.length >
+        1
+      ) {
+        existingMenus
+          .slice(1)
+          .forEach(
+            menu =>
+              menu.remove()
+          )
+      }
+
+      return
+    }
+
+    const currentMenu =
+      existingMenus[0]
+
+    if (currentMenu) {
+      existingMenus
+        .slice(1)
+        .forEach(
+          menu =>
+            menu.remove()
+        )
+
+      loginElement.hidden =
+        true
+
+      return
+    }
+
+    closeAllAccountMenus()
+
+    const menu =
+      createAccountMenu(
+        user
+      )
+
+    loginElement.hidden =
+      true
+
+    loginElement.parentElement
+      ?.appendChild(
+        menu
+      )
+
+    refreshIcons()
+  } finally {
+    authUIUpdating =
+      false
+
+    if (authUIQueued) {
+      authUIQueued =
+        false
+
+      setTimeout(
+        () =>
+          updateAuthUI(),
+        0
+      )
+    }
+  }
+}
+
+function queueAuthUIUpdate() {
+  if (authUIQueued) {
+    return
+  }
+
+  authUIQueued = true
+
+  setTimeout(
+    async () => {
+      authUIQueued =
+        false
+
+      await updateAuthUI()
+    },
+    0
+  )
+}
+
+async function initAuthUI() {
+  if (!db) {
+    return
+  }
+
+  await updateAuthUI()
+
+  if (
+    authUIListenerStarted
+  ) {
+    return
+  }
+
+  authUIListenerStarted =
+    true
+
+  db.auth.onAuthStateChange(
+    (
+      _event,
+      session
+    ) => {
+      if (session?.user) {
+        detectAIAdmin()
+      } else {
+        aiAdminGreeting = ''
+      }
+
+      queueAuthUIUpdate()
+    }
+  )
+}
+
+initChrome()
+
+if (
+  page === 'home'
+) {
+  initMeetingPublic()
+  initAIChat()
+}
+
+if (
+  page === 'projects'
+) {
+  initProjects()
+}
+
+if (
+  page === 'detail'
+) {
+  initDetail()
+}
+
+if (
+  page === 'admin'
+) {
+  initAdmin()
+}
+
+if (
+  page === 'reset'
+) {
+  initPasswordReset()
+}
+
+initAuthUI()
+document.addEventListener('DOMContentLoaded', () => {
+    const meetingBtn = document.getElementById('meeting-button');
+    if (meetingBtn) {
+        meetingBtn.addEventListener('click', () => {
+            openAttendancePanel();
+        });
+    }
+});
+// ერთიანი ფუნქცია შეხვედრის შენახვისა და ფუშ-შეტყობინების გასაგზავნად
+async function saveMeetingAndNotify(meetingTitle, meetingDesc) {
+  try {
+    // 1. ვინახავთ შეხვედრას (თუ გაქვს ძველი ლოგიკა, აქ შეგიძლია ჩასვა)
+    console.log("შეხვედრა ინახება:", meetingTitle);
+
+    // 2. ვგზავნით OneSignal ფუშ-შეტყობინებას პროქსის გავლით (CORS-ის ასავლელად)
+    const response = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://onesignal.com/api/v1/notifications"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": "Basic os_v2_app_d4psobll6rhhpg3ec66v3ae6yqagkpebweheqwnabdw4hmhlrijhncsfbiboyqyzefj5p2itv4zaujrlxccbpsaan7cegyawzjesvva"
+      },
+      body: JSON.stringify({
+        app_id: "შენი_onesignal_app_id", // აქ ჩაწერე შენი OneSignal აპის აიდი
+        included_segments: ["All"],
+        contents: { en: `ახალი შეხვედრა: ${meetingTitle}` },
+        headings: { en: "Arduino Hub" }
+      })
+    });
+
+    const data = await response.json();
+    console.log("შეტყობინება გაიგზავნა:", data);
+  } catch (error) {
+    console.error("შეცდომა შეტყობინების გაგზავნისას:", error);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const memberCards = [...document.querySelectorAll('.attendance-admin-member')]
+    if (!memberCards.length) return
+
+    let maxMeetings = 0
+    const memberData = []
+
+    memberCards.forEach(card => {
+      const textSpan = card.querySelector('div > span')
+
+      if (textSpan) {
+        const match = textSpan.textContent.match(/\d+/)
+        const count = match ? parseInt(match[0], 10) : 0
+
+        memberData.push({ card, count })
+
+        if (count > maxMeetings) {
+          maxMeetings = count
+        }
+      }
+    })
+
+    memberData.forEach(item => {
+      if (item.count === maxMeetings && maxMeetings > 0) {
+        item.card.classList.add('top-attendance-member')
+      }
+    })
+  }, 500)
+})
+
+function enhanceTopAttendance() {
+  const memberCards = [...document.querySelectorAll('.attendance-admin-member')]
+
+  if (!memberCards.length) return
+
+  let maxMeetings = 0
+  const memberData = []
+
+  memberCards.forEach(card => {
+    const countSpan = card.querySelector('div > span')
+
+    if (countSpan) {
+      const match = countSpan.textContent.match(/\d+/)
+      const count = match ? parseInt(match[0], 10) : 0
+
+      memberData.push({ card, count })
+
+      if (count > maxMeetings) {
+        maxMeetings = count
+      }
+    }
+  })
+
+  memberData.forEach(item => {
+    const { card, count } = item
+    const nameContainer = card.querySelector('div')
+
+    if (count === maxMeetings && maxMeetings > 0) {
+      card.classList.add('top-attendance-card')
+
+      if (!card.querySelector('.trophy-icon')) {
+        const trophyHTML = `
+          <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 18a4.5 4.5 0 0 0 9 0"/>
+              <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
+            </svg>
+          </div>
+        `
+
+        if (nameContainer) {
+          nameContainer.style.position = 'relative'
+          nameContainer.insertAdjacentHTML('afterbegin', trophyHTML)
+        }
+      }
+    } else {
+      card.classList.remove('top-attendance-card')
+    }
+  })
+
+  const sortedCards = [...memberData].sort((a, b) => {
+    return b.count - a.count
+  })
+
+  const parent = memberCards[0]?.parentElement
+
+  if (parent) {
+    sortedCards.forEach(item => {
+      parent.appendChild(item.card)
+    })
+  }
+}
+
+function closePublicAttendanceModal() {
+  const modal = document.getElementById('public-attendance-modal')
+
+  if (modal) {
+    modal.remove()
+  }
+
+  document.body.style.overflow = ''
+}
+
+window.closePublicAttendanceModal = closePublicAttendanceModal
+
+async function openPublicAttendanceModal() {
+  closePublicAttendanceModal()
+  document.body.style.overflow = 'hidden'
+
+  const modal = document.createElement('div')
+  modal.id = 'public-attendance-modal'
+
+  modal.style.cssText = `
+    position: fixed; inset: 0; z-index: 999999; display: flex;
+    align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;
+  `
+
+  modal.innerHTML = `
+    <style>
+      #public-attendance-modal, #public-attendance-modal * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+
+      #public-attendance-modal::-webkit-scrollbar,
+      #public-attendance-modal *::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+      }
+
+      .close-attendance-btn {
+        background: none;
+        border: none;
+        color: #9ca3af;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 4px 8px;
+        line-height: 1;
+        transition: color 0.2s;
+        position: relative;
+        z-index: 10;
+      }
+
+      .close-attendance-btn:hover {
+        color: #ffffff;
+      }
+    </style>
+
+    <div id="attendance-backdrop" style="position:absolute; inset:0; z-index:1;"></div>
+
+    <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+        <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
+
+        <button type="button" class="close-attendance-btn" id="close-attendance-x">✕</button>
+      </div>
+
+      <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
+        <p style="color:#9ca3af; text-align:center;">მონაცემები იტვირთება...</p>
+      </div>
+    </div>
+  `
+
+  document.body.appendChild(modal)
+
+  document.getElementById('close-attendance-x')?.addEventListener('click', closePublicAttendanceModal)
+
+  document.getElementById('attendance-backdrop')?.addEventListener('click', closePublicAttendanceModal)
+
+  try {
+    const [rawMembers, rawRecords] = await Promise.all([
+      getAttendanceMembers(),
+      getAttendanceRecords()
+    ])
+
+    const members = Array.isArray(rawMembers)
+      ? rawMembers
+      : (rawMembers?.data || rawMembers?.members || [])
+
+    const records = Array.isArray(rawRecords)
+      ? rawRecords
+      : (rawRecords?.data || rawRecords?.records || [])
+
+    const countedRecords = records.filter(r =>
+      r && (r.counted === true || r.counted === undefined)
+    )
+
+    const counts = new Map()
+
+    members.forEach(m => {
+      counts.set(m.id, 0)
+    })
+
+    countedRecords.forEach(r => {
+      const memberList = r.club_attendance_members || r.members || []
+
+      memberList.forEach(item => {
+        const mId = item.member_id || item.id || item
+
+        counts.set(
+          mId,
+          (counts.get(mId) || 0) + 1
+        )
+      })
+    })
+
+    let maxCount = 0
+
+    members.forEach(m => {
+      const count = counts.get(m.id) || 0
+
+      if (count > maxCount) {
+        maxCount = count
+      }
+    })
+
+    const sortedMembers = [...members].sort((a, b) => {
+      const countA = counts.get(a.id) || 0
+      const countB = counts.get(b.id) || 0
+
+      return countB - countA
+    })
+
+    const listEl = document.getElementById('public-attendance-list')
+
+    if (listEl) {
+      if (!members || members.length === 0) {
+        listEl.innerHTML = '<p style="color:#9ca3af; text-align:center;">წევრები ვერ მოიძებნა.</p>'
+        return
+      }
+
+      listEl.innerHTML = sortedMembers.map(member => {
+        const count = counts.get(member.id) || 0
+
+        const percent = countedRecords.length
+          ? Math.round((count / countedRecords.length) * 100)
+          : 0
+
+        const isTop = count > 0 && count === maxCount
+
+        return `
+          <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
+            ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
+
+            <div>
+              <div class="member-name-row">
+                <strong class="${isTop ? 'top-name' : ''}">
+                  ${esc(member.full_name || member.name || '')}
+                </strong>
+
+                ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
+              </div>
+
+              <span>${count} შეხვედრა</span>
+            </div>
+
+            <div class="attendance-admin-member-value">
+              <strong class="${isTop ? 'top-percent' : ''}">
+                ${percent}%
+              </strong>
+
+              <small>დასწრება</small>
+            </div>
+          </div>
+        `
+      }).join('')
+    }
+  } catch (err) {
+    console.error('Public attendance load error:', err)
+
+    const listEl = document.getElementById('public-attendance-list')
+
+    if (listEl) {
+      listEl.innerHTML = '<p style="color:#ef4444; text-align:center;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>'
+    }
+  }
+}
+
+function checkAndOpenAttendance(e) {
+  const chatInput = document.querySelector('#ai-chat-input')
+
+  if (chatInput && chatInput.value.trim() === '/დასწრება') {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      e.stopImmediatePropagation()
+    }
+
+    chatInput.value = ''
+    openPublicAttendanceModal()
+
+    return true
+  }
+
+  return false
+}
+
+function checkAndOpenLive(e) {
+  const chatInput = document.querySelector('#ai-chat-input')
+
+  if (chatInput && chatInput.value.trim() === '/live') {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      e.stopImmediatePropagation()
+    }
+
+    chatInput.value = ''
+
+    if (typeof openLiveAdminModal === 'function') {
+      openLiveAdminModal()
+    } else {
+      console.error('openLiveAdminModal ფუნქცია ვერ მოიძებნა')
+    }
+
+    return true
+  }
+
+  return false
+}
+
+document.addEventListener('keydown', (e) => {
+  const chatInput = document.querySelector('#ai-chat-input')
+
+  if (
+    e.target === chatInput &&
+    (e.key === 'Enter' || e.keyCode === 13) &&
+    !e.shiftKey
+  ) {
+    if (checkAndOpenLive(e)) {
+      return
+    }
+
+    checkAndOpenAttendance(e)
+  }
+
+  if (e.key === 'Escape') {
+    closePublicAttendanceModal()
+
+    if (typeof closeLiveAdminModal === 'function') {
+      closeLiveAdminModal()
+    }
+  }
+}, true)
+
+document.addEventListener('submit', (e) => {
+  if (checkAndOpenLive(e)) {
+    return
+  }
+
+  checkAndOpenAttendance(e)
+}, true)
+
+document.addEventListener('click', (e) => {
+  const chatInput = document.querySelector('#ai-chat-input')
+
+  if (!chatInput) {
+    return
+  }
+
+  const value = chatInput.value.trim()
+
+  if (value !== '/დასწრება' && value !== '/live') {
+    return
+  }
+
+  const isSendButton = e.target.closest(
+    'button, [role="button"], svg, path'
+  )
+
+  if (!isSendButton) {
+    return
+  }
+
+  if (value === '/live') {
+    checkAndOpenLive(e)
+    return
+  }
+
+  checkAndOpenAttendance(e)
+}, true)
+
+
+// ==========================================
+// ვიდეო ინსტრუქციის მოდალი & მოწყობილობები
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const openBtn = document.getElementById('video-tutorial-btn');
+  const modal = document.getElementById('video-modal');
+  const closeBtn = document.getElementById('video-close');
+  const backdrop = document.getElementById('video-backdrop');
+  const video = document.getElementById('tutorial-video');
+  const videoSource = document.getElementById('video-source');
+  const deviceTabs = document.querySelectorAll('.device-tab');
+
+  function openVideoModal() {
+    modal?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    modal?.classList.remove('active');
+    document.body.style.overflow = '';
+    if (video) video.pause();
+  }
+
+  // მოწყობილობის ტაბების გადართვის ლოგიკა
+  deviceTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      deviceTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const newSrc = tab.getAttribute('data-video-src');
+      if (video && videoSource) {
+        video.pause();
+        videoSource.src = newSrc || '';
+        video.load();
+        if (newSrc) {
+          video.play().catch(err => console.log('Autoplay prevented:', err));
+        }
+      }
+    });
+  });
+
+  openBtn?.addEventListener('click', openVideoModal);
+  closeBtn?.addEventListener('click', closeVideoModal);
+  backdrop?.addEventListener('click', closeVideoModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+      closeVideoModal();
+    }
+  });
+});
+
+
+// ==========================================
+// GLOBAL NOTIFICATION SYSTEM (/global)
+// ==========================================
+
+window.openGlobalModal = function() {
+  const modal = document.getElementById('global-modal')
+
+  if (modal) {
+    modal.hidden = false
+    modal.setAttribute('aria-hidden', 'false')
+  }
+}
+
+window.closeGlobalModal = function() {
+  const modal = document.getElementById('global-modal')
+
+  if (modal) {
+    modal.hidden = true
+    modal.setAttribute('aria-hidden', 'true')
+
+    const form = document.getElementById('global-notif-form')
+
+    if (form) {
+      form.reset()
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const aiChatForm = document.getElementById('ai-chat-form')
+  const aiChatInput = document.getElementById('ai-chat-input')
+  const aiChatWindow = document.getElementById('ai-chat-window')
+
+  if (aiChatForm && aiChatInput) {
+    aiChatForm.addEventListener('submit', async (e) => {
+      const text = aiChatInput.value.trim()
+
+      if (text !== '/global') {
+        return
+      }
+
+      e.preventDefault()
+      e.stopPropagation()
+
+      aiChatInput.value = ''
+
+      if (!db || !db.auth) {
+        alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
+        return
+      }
+
+      let session = null
+
+      try {
+        const {
+          data: { session: currentSession },
+          error
+        } = await db.auth.getSession()
+
+        if (error) {
+          console.error('Session error:', error)
+          alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
+          return
+        }
+
+        session = currentSession
+      } catch (error) {
+        console.error('Supabase auth check error:', error)
+        alert('ავტორიზაციის შემოწმება ვერ მოხერხდა!')
+        return
+      }
+
+      if (!session) {
+        alert('გლობალური შეტყობინების გასაგზავნად საჭიროა ადმინისტრატორით შესვლა!')
+        return
+      }
+
+      if (aiChatWindow) {
+        aiChatWindow.setAttribute('aria-hidden', 'true')
+      }
+
+      window.openGlobalModal()
+    }, true)
+  }
+
+  const globalForm = document.getElementById('global-notif-form')
+
+  if (globalForm) {
+    globalForm.addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const titleElement = document.getElementById('global-title')
+      const messageElement = document.getElementById('global-message')
+
+      if (!titleElement || !messageElement) {
+        alert('შეცდომა: შეტყობინების ველები ვერ მოიძებნა!')
+        return
+      }
+
+      const title = titleElement.value.trim()
+      const message = messageElement.value.trim()
+
+      if (!title) {
+        alert('გთხოვთ შეიყვანოთ შეტყობინების სათაური!')
+        return
+      }
+
+      if (!message) {
+        alert('გთხოვთ შეიყვანოთ შეტყობინების ტექსტი!')
+        return
+      }
+
+      if (!db || !db.auth) {
+        alert('შეცდომა: Supabase კლიენტი ვერ მოიძებნა!')
+        return
+      }
+
+      const submitButton = globalForm.querySelector('button[type="submit"]')
+
+      if (submitButton) {
+        submitButton.disabled = true
+      }
+
+      try {
+        const {
+          data: { session },
+          error: sessionError
+        } = await db.auth.getSession()
+
+        if (sessionError || !session?.access_token) {
+          alert('სესია აღარ არის აქტიური. გთხოვთ თავიდან შეხვიდეთ ანგარიშში.')
+          return
+        }
+
+        const functionUrl =
+          `${SUPABASE_URL.replace(/\/+$/, '')}/functions/v1/send-global-notification`
+
+        const response = await fetch(functionUrl, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            apikey: SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title,
+            message
+          })
+        })
+
+        let result = null
+
+        try {
+          result = await response.json()
+        } catch {
+          result = null
+        }
+
+        if (!response.ok) {
+          console.error('Global notification error:', result)
+
+          alert(
+            result?.error ||
+            'გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!'
+          )
+
+          return
+        }
+
+        console.log('Global notification result:', result)
+
+        alert(
+          result?.message ||
+          'გლობალური შეტყობინება წარმატებით გაიგზავნა!'
+        )
+
+        window.closeGlobalModal()
+      } catch (error) {
+        console.error('Error sending global notification:', error)
+
+        alert('შეცდომა: გლობალური შეტყობინების გაგზავნა ვერ მოხერხდა!')
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false
+        }
+      }
+    })
+  }
+})
+
+const suggestionModal = document.getElementById("suggestion-modal")
+const openSuggestion = document.getElementById("open-suggestion")
+const closeSuggestion = document.getElementById("close-suggestion")
+const suggestionBackdrop = document.getElementById("suggestion-backdrop")
+const suggestionMessage = document.getElementById("suggestion-message")
+const sendSuggestion = document.getElementById("send-suggestion")
+const suggestionStatus = document.getElementById("suggestion-status")
+const suggestionCounter = document.getElementById("suggestion-counter")
+
+openSuggestion?.addEventListener("click", event => {
+  event.preventDefault()
+
+  suggestionModal.hidden = false
+  suggestionModal.setAttribute("aria-hidden", "false")
+
+  document.body.style.overflow = "hidden"
+
+  suggestionMessage.removeAttribute("readonly")
+  suggestionMessage.removeAttribute("disabled")
+
+  suggestionMessage.focus({ preventScroll: true })
+
+  if (document.activeElement !== suggestionMessage) {
+    suggestionMessage.click()
+    suggestionMessage.focus({ preventScroll: true })
+  }
+})
+
+function closeSuggestionModal() {
+  suggestionModal.hidden = true
+  suggestionModal.setAttribute("aria-hidden", "true")
+  suggestionStatus.textContent = ""
+  document.body.style.overflow = ""
+}
+
+closeSuggestion?.addEventListener("click", closeSuggestionModal)
+suggestionBackdrop?.addEventListener("click", closeSuggestionModal)
+
+suggestionMessage?.addEventListener("input", () => {
+  suggestionCounter.textContent = `${suggestionMessage.value.length} / 3000`
+})
+
+sendSuggestion?.addEventListener("click", async () => {
+  const message = suggestionMessage.value.trim()
+
+  if (!message) {
+    suggestionStatus.textContent = "გთხოვ, დაწერე შენი შეფასება"
+    return
+  }
+
+  sendSuggestion.disabled = true
+  sendSuggestion.innerHTML = "იგზავნება..."
+
+  suggestionStatus.textContent = ""
+
+  try {
+    const {
+  data: {
+    user
+  }
+} = await db.auth.getUser()
+
+if (!user) {
+  throw new Error("მომხმარებელი ავტორიზებული არ არის")
+}
+
+const metadata = user.user_metadata || {}
+
+const senderName = String(
+  metadata.username ||
+  metadata.name ||
+  metadata.full_name ||
+  user.email ||
+  "მომხმარებელი"
+).trim()
+
+const { error } = await db.functions.invoke("send-suggestion", {
+  body: {
+    message,
+    senderName
+  }
+})
+
+    if (error) {
+      throw error
+    }
+
+    suggestionStatus.textContent = "შეფასება წარმატებით გაიგზავნა ❤️"
+    suggestionMessage.value = ""
+    suggestionCounter.textContent = "0 / 3000"
+
+    setTimeout(() => {
+      closeSuggestionModal()
+    }, 1800)
+  } catch (error) {
+    console.error(error)
+    suggestionStatus.textContent = "გაგზავნა ვერ მოხერხდა. სცადე თავიდან."
+  }
+
+  sendSuggestion.disabled = false
+  sendSuggestion.innerHTML = `გაგზავნა <i data-lucide="send"></i>`
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+  const countdownModal = document.getElementById("countdown-modal")
+  const countdownClose = document.getElementById("countdown-close")
+  const countdownForm = document.getElementById("countdown-form")
+  const countdownTitle = document.getElementById("countdown-title")
+  const countdownMessage = document.getElementById("countdown-message")
+  const countdownDate = document.getElementById("countdown-date")
+  const countdownStatus = document.getElementById("countdown-form-status")
+
+  const activeCountdown = document.getElementById("active-countdown")
+  const activeCountdownClose = document.getElementById("active-countdown-close")
+  const activeCountdownTitle = document.getElementById("active-countdown-title")
+  const activeCountdownMessage = document.getElementById("active-countdown-message")
+
+  const countdownDays = document.getElementById("countdown-days")
+  const countdownHours = document.getElementById("countdown-hours")
+  const countdownMinutes = document.getElementById("countdown-minutes")
+  const countdownSeconds = document.getElementById("countdown-seconds")
+
+  let countdownInterval = null
+  let currentCountdown = null
+
+  function openCountdownModal() {
+    if (!countdownModal) return
+
+    countdownModal.hidden = false
+    countdownModal.setAttribute("aria-hidden", "false")
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  }
+
+  function closeCountdownModal() {
+    if (!countdownModal) return
+
+    countdownModal.hidden = true
+    countdownModal.setAttribute("aria-hidden", "true")
+
+    if (countdownForm) {
+      countdownForm.reset()
+    }
+
+    if (countdownStatus) {
+      countdownStatus.textContent = ""
+    }
+  }
+
+  function showActiveCountdown(data) {
+    if (!activeCountdown) return
+
+    currentCountdown = data
+
+    if (activeCountdownTitle) {
+      activeCountdownTitle.textContent = data.title
+    }
+
+    if (activeCountdownMessage) {
+      activeCountdownMessage.textContent = data.message
+    }
+
+    activeCountdown.hidden = false
+    activeCountdown.setAttribute("aria-hidden", "false")
+
+    updateCountdown()
+
+    if (countdownInterval) {
+      clearInterval(countdownInterval)
+    }
+
+    countdownInterval = setInterval(updateCountdown, 1000)
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  }
+
+  function hideActiveCountdown() {
+    if (!activeCountdown) return
+
+    activeCountdown.hidden = true
+    activeCountdown.setAttribute("aria-hidden", "true")
+
+    currentCountdown = null
+
+    if (countdownInterval) {
+      clearInterval(countdownInterval)
+      countdownInterval = null
+    }
+  }
+
+  async function updateCountdown() {
+    if (!currentCountdown) return
+
+    const target = new Date(currentCountdown.target_at).getTime()
+    const now = Date.now()
+    const difference = target - now
+
+    if (difference <= 0) {
+      hideActiveCountdown()
+
+      if (db) {
+        await db
+          .from("site_countdowns")
+          .delete()
+          .eq("id", 1)
+      }
+
+      return
+    }
+
+    const totalSeconds = Math.floor(difference / 1000)
+
+    const days = Math.floor(totalSeconds / 86400)
+    const hours = Math.floor((totalSeconds % 86400) / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+
+    if (countdownDays) {
+      countdownDays.textContent = String(days).padStart(2, "0")
+    }
+
+    if (countdownHours) {
+      countdownHours.textContent = String(hours).padStart(2, "0")
+    }
+
+    if (countdownMinutes) {
+      countdownMinutes.textContent = String(minutes).padStart(2, "0")
+    }
+
+    if (countdownSeconds) {
+      countdownSeconds.textContent = String(seconds).padStart(2, "0")
+    }
+  }
+
+  async function loadActiveCountdown() {
+    if (!db) return
+
+    try {
+      const { data, error } = await db
+        .from("site_countdowns")
+        .select("id, title, message, target_at, created_at")
+        .eq("id", 1)
+        .maybeSingle()
+
+      if (error) {
+        console.error("Countdown load error:", error)
+        return
+      }
+
+      if (!data) {
+        hideActiveCountdown()
+        return
+      }
+
+      if (new Date(data.target_at).getTime() <= Date.now()) {
+        await db
+          .from("site_countdowns")
+          .delete()
+          .eq("id", 1)
+
+        hideActiveCountdown()
+        return
+      }
+
+      showActiveCountdown(data)
+    } catch (error) {
+      console.error("Countdown error:", error)
+    }
+  }
+
+  if (countdownClose) {
+    countdownClose.addEventListener("click", closeCountdownModal)
+  }
+
+  if (countdownForm) {
+    countdownForm.addEventListener("submit", async event => {
+      event.preventDefault()
+
+      const title = countdownTitle?.value.trim()
+      const message = countdownMessage?.value.trim()
+      const dateValue = countdownDate?.value
+
+      if (!title || !message || !dateValue) {
+        countdownStatus.textContent = "გთხოვთ ყველა ველი შეავსოთ"
+        return
+      }
+
+      const targetDate = new Date(dateValue)
+
+      if (Number.isNaN(targetDate.getTime())) {
+        countdownStatus.textContent = "თარიღი არასწორია"
+        return
+      }
+
+      if (targetDate.getTime() <= Date.now()) {
+        countdownStatus.textContent = "აირჩიეთ მომავალი დრო"
+        return
+      }
+
+      if (!db || !db.auth) {
+        countdownStatus.textContent = "Supabase კლიენტი ვერ მოიძებნა"
+        return
+      }
+
+      const submitButton = countdownForm.querySelector('button[type="submit"]')
+
+      if (submitButton) {
+        submitButton.disabled = true
+      }
+
+      countdownStatus.textContent = ""
+
+      try {
+        const {
+          data: { session },
+          error: sessionError
+        } = await db.auth.getSession()
+
+        if (sessionError || !session) {
+          countdownStatus.textContent = "ადმინისტრატორით შესვლა აუცილებელია"
+          return
+        }
+
+        const { error } = await db
+          .from("site_countdowns")
+          .upsert({
+            id: 1,
+            title,
+            message,
+            target_at: targetDate.toISOString()
+          })
+
+        if (error) {
+          console.error("Countdown create error:", error)
+          countdownStatus.textContent = "Countdown-ის შექმნა ვერ მოხერხდა"
+          return
+        }
+
+        closeCountdownModal()
+        await loadActiveCountdown()
+      } catch (error) {
+        console.error("Countdown create error:", error)
+        countdownStatus.textContent = "შეცდომა მოხდა"
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false
+        }
+      }
+    })
+  }
+
+  if (activeCountdownClose) {
+    activeCountdownClose.addEventListener("click", hideActiveCountdown)
+  }
+
+  const aiChatForm = document.getElementById("ai-chat-form")
+  const aiChatInput = document.getElementById("ai-chat-input")
+
+  if (aiChatForm && aiChatInput) {
+    aiChatForm.addEventListener("submit", async event => {
+      const text = aiChatInput.value.trim().toLowerCase()
+
+      if (text !== "/countdown" && text !== "/countdown cancel") {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+
+      aiChatInput.value = ""
+
+      if (!db || !db.auth) {
+        alert("Supabase კლიენტი ვერ მოიძებნა!")
+        return
+      }
+
+      try {
+        const {
+          data: { session },
+          error
+        } = await db.auth.getSession()
+
+        if (error || !session) {
+          alert("Countdown-ის მართვისთვის საჭიროა ადმინისტრატორით შესვლა!")
+          return
+        }
+
+        if (text === "/countdown cancel") {
+          const { error: deleteError } = await db
+            .from("site_countdowns")
+            .delete()
+            .eq("id", 1)
+
+          if (deleteError) {
+            console.error("Countdown cancel error:", deleteError)
+            alert("Countdown-ის გაუქმება ვერ მოხერხდა!")
+            return
+          }
+
+          hideActiveCountdown()
+          alert("Countdown გაუქმებულია")
+          return
+        }
+
+        openCountdownModal()
+      } catch (error) {
+        console.error("Countdown auth error:", error)
+        alert("ავტორიზაციის შემოწმება ვერ მოხერხდა!")
+      }
+    }, true)
+  }
+
+  loadActiveCountdown()
+})
+
+document.getElementById('attendance-home-btn')?.addEventListener('click', () => {
+  openPublicAttendanceModal()
+})
+
+
+const hbdAdminModal = document.getElementById("hbd-admin-modal")
+const hbdAdminForm = document.getElementById("hbd-admin-form")
+const hbdAdminClose = document.getElementById("hbd-admin-close")
+const hbdAdminStatus = document.getElementById("hbd-admin-status")
+const hbdNameInput = document.getElementById("hbd-name")
+const hbdMessageInput = document.getElementById("hbd-message")
+const hbdDateInput = document.getElementById("hbd-date")
+
+function openHbdAdminModal() {
+  if (!hbdAdminModal) return
+
+  hbdAdminModal.hidden = false
+  hbdAdminModal.setAttribute("aria-hidden", "false")
+
+  if (hbdAdminStatus) {
+    hbdAdminStatus.textContent = ""
+  }
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+
+  setTimeout(() => {
+    hbdNameInput?.focus()
+  }, 100)
+}
+
+function closeHbdAdminModal() {
+  if (!hbdAdminModal) return
+
+  hbdAdminModal.hidden = true
+  hbdAdminModal.setAttribute("aria-hidden", "true")
+}
+
+hbdAdminClose?.addEventListener("click", closeHbdAdminModal)
+
+document.querySelector("[data-hbd-admin-close]")?.addEventListener(
+  "click",
+  closeHbdAdminModal
+)
+
+async function isHbdAdmin() {
+  try {
+    const { data: userData, error: userError } =
+      await window.supabase.auth.getUser()
+
+    if (userError || !userData?.user) {
+      return false
+    }
+
+    const { data, error } = await window.supabase
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", userData.user.id)
+      .maybeSingle()
+
+    if (error || !data) {
+      return false
+    }
+
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function saveHbd() {
+  const name = hbdNameInput?.value.trim()
+  const message = hbdMessageInput?.value.trim()
+  const date = hbdDateInput?.value
+
+  if (!name || !message || !date) {
+    hbdAdminStatus.textContent = "ყველა ველი შეავსე"
+    hbdAdminStatus.style.color = "#f87171"
+    return
+  }
+
+  hbdAdminStatus.textContent = "ინახება..."
+  hbdAdminStatus.style.color = "#a7f3d0"
+
+  const admin = await isHbdAdmin()
+
+  if (!admin) {
+    hbdAdminStatus.textContent =
+      "ამ ფუნქციის გამოყენება მხოლოდ ადმინისტრატორს შეუძლია"
+    hbdAdminStatus.style.color = "#f87171"
+    return
+  }
+
+  try {
+    const { data: userData } = await window.supabase.auth.getUser()
+
+    const { error } = await window.supabase
+      .from("birthday_messages")
+      .insert({
+        name,
+        message,
+        birthday_date: date,
+        created_by: userData?.user?.id || null
+      })
+
+    if (error) {
+      throw error
+    }
+
+    hbdAdminStatus.textContent =
+      "დაბადების დღე წარმატებით დაემატა 🎉"
+
+    hbdAdminStatus.style.color = "#4ade80"
+
+    hbdAdminForm.reset()
+
+    setTimeout(() => {
+      closeHbdAdminModal()
+    }, 1200)
+
+  } catch (error) {
+    console.error(error)
+
+    hbdAdminStatus.textContent =
+      "შენახვისას შეცდომა მოხდა"
+
+    hbdAdminStatus.style.color = "#f87171"
+  }
+}
+
+hbdAdminForm?.addEventListener("submit", async event => {
+  event.preventDefault()
+  await saveHbd()
+})
+
+function getGeorgiaDate() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tbilisi"
+  }).format(new Date())
+}
+
+function createBirthdayConfetti() {
+  const container = document.getElementById("birthday-confetti")
+
+  if (!container) return
+
+  container.innerHTML = ""
+
+  const colors = [
+    "#22d395",
+    "#34d399",
+    "#facc15",
+    "#f472b6",
+    "#60a5fa",
+    "#fb7185",
+    "#a78bfa",
+    "#ffffff"
+  ]
+
+  for (let i = 0; i < 100; i++) {
+    const piece = document.createElement("span")
+
+    piece.className = "birthday-confetti-piece"
+    piece.style.left = `${Math.random() * 100}%`
+    piece.style.background =
+      colors[Math.floor(Math.random() * colors.length)]
+    piece.style.animationDuration =
+      `${3 + Math.random() * 4}s`
+    piece.style.animationDelay =
+      `${Math.random() * 2}s`
+
+    piece.style.setProperty(
+      "--drift",
+      `${-150 + Math.random() * 300}px`
+    )
+
+    container.appendChild(piece)
+  }
+}
+
+function createBirthdayRibbons() {
+  const container = document.getElementById("birthday-ribbons")
+
+  if (!container) return
+
+  container.innerHTML = ""
+
+  const colors = [
+    "#22d395",
+    "#facc15",
+    "#f472b6",
+    "#60a5fa",
+    "#a78bfa",
+    "#fb7185"
+  ]
+
+  for (let i = 0; i < 28; i++) {
+    const ribbon = document.createElement("span")
+
+    ribbon.className = "birthday-ribbon"
+    ribbon.style.left = `${Math.random() * 100}%`
+    ribbon.style.background =
+      colors[Math.floor(Math.random() * colors.length)]
+    ribbon.style.animationDuration =
+      `${4 + Math.random() * 5}s`
+    ribbon.style.animationDelay =
+      `${Math.random() * 3}s`
+    ribbon.style.height =
+      `${50 + Math.random() * 80}px`
+    ribbon.style.width =
+      `${5 + Math.random() * 6}px`
+
+    container.appendChild(ribbon)
+  }
+}
+
+function openBirthdayModal(name, message) {
+  const modal = document.getElementById("birthday-modal")
+  const nameElement = document.getElementById("birthday-name")
+  const messageElement = document.getElementById("birthday-message")
+
+  if (!modal) return
+
+  if (nameElement) {
+    nameElement.textContent = name
+  }
+
+  if (messageElement) {
+    messageElement.textContent = message
+  }
+
+  createBirthdayConfetti()
+  createBirthdayRibbons()
+
+  modal.hidden = false
+  modal.setAttribute("aria-hidden", "false")
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function closeBirthdayModal() {
+  const modal = document.getElementById("birthday-modal")
+
+  if (!modal) return
+
+  modal.hidden = true
+  modal.setAttribute("aria-hidden", "true")
+
+  const confetti = document.getElementById("birthday-confetti")
+  const ribbons = document.getElementById("birthday-ribbons")
+
+  if (confetti) {
+    confetti.innerHTML = ""
+  }
+
+  if (ribbons) {
+    ribbons.innerHTML = ""
+  }
+}
+
+document.getElementById("birthday-close")?.addEventListener(
+  "click",
+  closeBirthdayModal
+)
+
+document.getElementById("birthday-finish")?.addEventListener(
+  "click",
+  closeBirthdayModal
+)
+
+document.querySelector(".birthday-backdrop")?.addEventListener(
+  "click",
+  closeBirthdayModal
+)
+
+async function checkTodayBirthday() {
+  try {
+    const today = getGeorgiaDate()
+
+    const { data, error } = await window.supabase
+      .from("birthday_messages")
+      .select("id, name, message, birthday_date")
+      .eq("birthday_date", today)
+      .order("created_at", {
+        ascending: true
+      })
+
+    if (error) {
+      console.error(error)
+      return
+    }
+
+    if (!data || data.length === 0) {
+      return
+    }
+
+    const birthday = data[0]
+
+    setTimeout(() => {
+      openBirthdayModal(
+        birthday.name,
+        birthday.message
+      )
+    }, 900)
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+window.showBirthday = openBirthdayModal
+window.openHbdAdminModal = openHbdAdminModal
+window.checkTodayBirthday = checkTodayBirthday
+
+document.addEventListener("DOMContentLoaded", () => {
+  checkTodayBirthday()
+})
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeBirthdayModal()
+    closeHbdAdminModal()
+  }
+})
+
+let hbdCommandLocked = false
+
+document.addEventListener(
+  "submit",
+  event => {
+    const form = event.target
+
+    if (!form) return
+
+    const elements = Array.from(form.elements || [])
+
+    const commandInput = elements.find(element => {
+      if (!element) return false
+
+      const tag = element.tagName?.toLowerCase()
+
+      if (tag !== "input" && tag !== "textarea") {
+        return false
+      }
+
+      const type = element.getAttribute("type")
+
+      return !type || type === "text"
+    })
+
+    if (!commandInput) return
+
+    const value = commandInput.value.trim().toLowerCase()
+
+    if (value !== "/hbd" && value !== "/hbd cancel") {
+      return
+    }
+
+    event.preventDefault()
+    event.stopImmediatePropagation()
+
+    commandInput.value = ""
+
+    if (hbdCommandLocked) {
+      return
+    }
+
+    hbdCommandLocked = true
+
+    isHbdAdmin()
+      .then(admin => {
+        if (!admin) {
+          return
+        }
+
+        if (value === "/hbd") {
+          openHbdAdminModal()
+        }
+
+        if (value === "/hbd cancel") {
+          openHbdCancelModal()
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          hbdCommandLocked = false
+        }, 300)
+      })
+  },
+  true
+)
+
+const hbdCancelModal = document.getElementById("hbd-cancel-modal")
+const hbdCancelList = document.getElementById("hbd-cancel-list")
+const hbdCancelClose = document.getElementById("hbd-cancel-close")
+
+function openHbdCancelModal() {
+  if (!hbdCancelModal) return
+
+  hbdCancelModal.hidden = false
+  hbdCancelModal.setAttribute("aria-hidden", "false")
+
+  loadHbdList()
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function closeHbdCancelModal() {
+  if (!hbdCancelModal) return
+
+  hbdCancelModal.hidden = true
+  hbdCancelModal.setAttribute("aria-hidden", "true")
+}
+
+hbdCancelClose?.addEventListener(
+  "click",
+  closeHbdCancelModal
+)
+
+document.querySelector("[data-hbd-cancel-close]")?.addEventListener(
+  "click",
+  closeHbdCancelModal
+)
+
+async function loadHbdList() {
+  if (!hbdCancelList) return
+
+  hbdCancelList.innerHTML =
+    `<div class="hbd-cancel-loading">იტვირთება...</div>`
+
+  try {
+    const { data, error } = await window.supabase
+      .from("birthday_messages")
+      .select("id, name, message, birthday_date")
+      .order("birthday_date", {
+        ascending: true
+      })
+
+    if (error) {
+      throw error
+    }
+
+    if (!data || data.length === 0) {
+      hbdCancelList.innerHTML =
+        `<div class="hbd-cancel-empty">დაბადების დღეები არ არის დამატებული</div>`
+      return
+    }
+
+    hbdCancelList.innerHTML = ""
+
+    data.forEach(birthday => {
+      const item = document.createElement("div")
+
+      item.className = "hbd-cancel-item"
+
+      const date = new Date(
+        `${birthday.birthday_date}T00:00:00`
+      )
+
+      const formattedDate =
+        date.toLocaleDateString("ka-GE", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        })
+
+      item.innerHTML = `
+        <div class="hbd-cancel-info">
+          <strong>${escapeHbdHtml(birthday.name)}</strong>
+          <span>${formattedDate}</span>
+        </div>
+        <button
+          type="button"
+          class="hbd-delete-button"
+          data-hbd-id="${birthday.id}"
+        >
+          გაუქმება
+        </button>
+      `
+
+      hbdCancelList.appendChild(item)
+    })
+
+    hbdCancelList
+      .querySelectorAll("[data-hbd-id]")
+      .forEach(button => {
+        button.addEventListener("click", async () => {
+          await deleteHbd(button.dataset.hbdId)
+        })
+      })
+
+  } catch (error) {
+    console.error(error)
+
+    hbdCancelList.innerHTML =
+      `<div class="hbd-cancel-error">დაბადების დღეების ჩატვირთვა ვერ მოხერხდა</div>`
+  }
+}
+
+async function deleteHbd(id) {
+  const confirmed = confirm(
+    "ნამდვილად გინდა ამ დაბადების დღის გაუქმება?"
+  )
+
+  if (!confirmed) {
+    return
+  }
+
+  try {
+    const admin = await isHbdAdmin()
+
+    if (!admin) {
+      return
+    }
+
+    const { error } = await window.supabase
+      .from("birthday_messages")
+      .delete()
+      .eq("id", id)
+
+    if (error) {
+      throw error
+    }
+
+    await loadHbdList()
+
+  } catch (error) {
+    console.error(error)
+    alert("დაბადების დღის გაუქმება ვერ მოხერხდა")
+  }
+}
+
+function escapeHbdHtml(value) {
+  const div = document.createElement("div")
+  div.textContent = value
+  return div.innerHTML
+}
+
+
+let liveCurrentStream = null
+let liveHostStream = null
+let liveHostPeerConnection = null
+let liveViewerPeerConnection = null
+let liveCommentChannel = null
+let liveNotificationStream = null
+let liveHostSessionId = null
+let liveViewerSessionId = null
+let liveHostTracks = []
+let liveCameraEnabled = true
+let liveMicrophoneEnabled = true
+let liveCommentsLoadedStreamId = null
+
+const LIVE_SUPABASE_FUNCTION = 'live-session'
+
+function liveGetElement(id) {
+  return document.getElementById(id)
+}
+
+function liveShowModal(id) {
+  const modal = liveGetElement(id)
+
+  if (!modal) {
+    return
+  }
+
+  modal.classList.add('active')
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function liveHideModal(id) {
+  const modal = liveGetElement(id)
+
+  if (!modal) {
+    return
+  }
+
+  modal.classList.remove('active')
+}
+
+async function openLiveAdminModal() {
+  try {
+    if (!window.supabase) {
+      return
+    }
+
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await window.supabase.auth.getSession()
+
+    if (
+      sessionError ||
+      !sessionData.session
+    ) {
+      alert('ლაივის გასაშვებად ანგარიშში შესვლა აუცილებელია')
+      return
+    }
+
+    const {
+      data: isAdmin,
+      error: adminError
+    } = await window.supabase.rpc(
+      'check_is_admin'
+    )
+
+    if (
+      adminError ||
+      isAdmin !== true
+    ) {
+      alert('ლაივის გაშვება მხოლოდ ადმინისტრატორს შეუძლია')
+      return
+    }
+
+    const titleInput = liveGetElement(
+      'live-title-input'
+    )
+
+    const descriptionInput = liveGetElement(
+      'live-description-input'
+    )
+
+    const error = liveGetElement(
+      'live-admin-error'
+    )
+
+    if (titleInput) {
+      titleInput.value = ''
+    }
+
+    if (descriptionInput) {
+      descriptionInput.value = ''
+    }
+
+    if (error) {
+      error.textContent = ''
+      error.classList.remove('active')
+    }
+
+    liveShowModal(
+      'live-admin-modal'
+    )
+  } catch (error) {
+    console.error(
+      'Live admin check error:',
+      error
+    )
+
+    alert(
+      'ადმინისტრატორის შემოწმება ვერ მოხერხდა'
+    )
+  }
+}
+
+function closeLiveAdminModal() {
+  liveHideModal(
+    'live-admin-modal'
+  )
+}
+
+function liveSetError(message) {
+  const error = liveGetElement(
+    'live-admin-error'
+  )
+
+  if (!error) {
+    return
+  }
+
+  error.textContent = message
+
+  error.classList.toggle(
+    'active',
+    !!message
+  )
+}
+
+async function liveGetAccessToken() {
+  if (!window.supabase) {
+    throw new Error(
+      'Supabase არ არის ჩატვირთული'
+    )
+  }
+
+  const {
+    data,
+    error
+  } = await window.supabase.auth.getSession()
+
+  if (
+    error ||
+    !data.session
+  ) {
+    throw new Error(
+      'ანგარიშში შესვლა აუცილებელია'
+    )
+  }
+
+  return data.session.access_token
+}
+
+async function liveCallFunction(body) {
+  const token =
+    await liveGetAccessToken()
+
+  const response =
+    await fetch(
+      `${window.supabase.supabaseUrl}/functions/v1/${LIVE_SUPABASE_FUNCTION}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apikey: window.supabase.supabaseKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    )
+
+  const data =
+    await response
+      .json()
+      .catch(() => ({}))
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      'Live სერვერთან დაკავშირება ვერ მოხერხდა'
+    )
+  }
+
+  return data
+}
+
+function liveWaitForIceGathering(pc) {
+  return new Promise(resolve => {
+    if (
+      pc.iceGatheringState ===
+      'complete'
+    ) {
+      resolve()
+      return
+    }
+
+    const check = () => {
+      if (
+        pc.iceGatheringState ===
+        'complete'
+      ) {
+        pc.removeEventListener(
+          'icegatheringstatechange',
+          check
+        )
+
+        resolve()
+      }
+    }
+
+    pc.addEventListener(
+      'icegatheringstatechange',
+      check
+    )
+
+    setTimeout(() => {
+      pc.removeEventListener(
+        'icegatheringstatechange',
+        check
+      )
+
+      resolve()
+    }, 10000)
+  })
+}
+
+function liveCreatePeerConnection() {
+  return new RTCPeerConnection({
+    iceServers: [
+      {
+        urls: [
+          'stun:stun.cloudflare.com:3478',
+          'stun:stun.l.google.com:19302'
+        ]
+      }
+    ]
+  })
+}
+
+function liveEnsureChatLayout(modalId, listId) {
+  const modal =
+    liveGetElement(modalId)
+
+  if (!modal) {
+    return null
+  }
+
+  const card =
+    modal.querySelector(
+      '.live-modal-card'
+    )
+
+  if (!card) {
+    return null
+  }
+
+  let layout =
+    card.querySelector(
+      '.live-stream-layout'
+    )
+
+  if (!layout) {
+    const videoWrapper =
+      card.querySelector(
+        '.live-video-wrapper'
+      )
+
+    if (!videoWrapper) {
+      return null
+    }
+
+    layout =
+      document.createElement('div')
+
+    layout.className =
+      'live-stream-layout'
+
+    videoWrapper.parentNode.insertBefore(
+      layout,
+      videoWrapper
+    )
+
+    layout.appendChild(
+      videoWrapper
+    )
+  }
+
+  let chat =
+    layout.querySelector(
+      '.live-stream-chat'
+    )
+
+  if (!chat) {
+    chat =
+      document.createElement('div')
+
+    chat.className =
+      'live-stream-chat'
+
+    chat.innerHTML = `
+      <div class="live-stream-chat-header">
+        <div class="live-stream-chat-title">
+          <i data-lucide="message-circle"></i>
+          <span>ლაივის ჩატი</span>
+        </div>
+        <span class="live-stream-chat-live">LIVE</span>
+      </div>
+
+      <div id="${listId}" class="live-stream-chat-list"></div>
+
+      <form class="live-stream-chat-form">
+        <input
+          type="text"
+          maxlength="300"
+          placeholder="დაწერე კომენტარი..."
+          autocomplete="off"
+        >
+        <button type="submit" aria-label="გაგზავნა">
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    `
+
+    layout.appendChild(
+      chat
+    )
+
+    const form =
+      chat.querySelector(
+        'form'
+      )
+
+    if (form) {
+      form.addEventListener(
+        'submit',
+        liveSendChatComment
+      )
+    }
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  }
+
+  return chat
+}
+
+function livePrepareViewerChat() {
+  return liveEnsureChatLayout(
+    'live-viewer-modal',
+    'live-comments-list'
+  )
+}
+
+function livePrepareHostChat() {
+  return liveEnsureChatLayout(
+    'live-host-modal',
+    'live-host-comments-list'
+  )
+}
+
+function liveClearCommentLists() {
+  const viewerList =
+    liveGetElement(
+      'live-comments-list'
+    )
+
+  const hostList =
+    liveGetElement(
+      'live-host-comments-list'
+    )
+
+  if (viewerList) {
+    viewerList.innerHTML = ''
+  }
+
+  if (hostList) {
+    hostList.innerHTML = ''
+  }
+}
+
+async function startLiveStream() {
+  const titleInput =
+    liveGetElement(
+      'live-title-input'
+    )
+
+  const descriptionInput =
+    liveGetElement(
+      'live-description-input'
+    )
+
+  const button =
+    liveGetElement(
+      'live-start-btn'
+    )
+
+  const title =
+    titleInput?.value.trim()
+
+  const description =
+    descriptionInput?.value.trim() || ''
+
+  if (!title) {
+    liveSetError(
+      'ლაივის სათაური აუცილებელია'
+    )
+
+    return
+  }
+
+  try {
+    liveSetError('')
+
+    if (button) {
+      button.disabled = true
+
+      button.innerHTML =
+        '<i data-lucide="loader-circle"></i><span>მზადდება...</span>'
+
+      if (window.lucide) {
+        lucide.createIcons()
+      }
+    }
+
+    const {
+      data: adminCheck,
+      error: adminError
+    } =
+      await window.supabase.rpc(
+        'check_is_admin'
+      )
+
+    if (
+      adminError ||
+      adminCheck !== true
+    ) {
+      throw new Error(
+        'ლაივის გაშვება მხოლოდ ადმინისტრატორს შეუძლია'
+      )
+    }
+
+    if (
+      !navigator.mediaDevices?.getUserMedia
+    ) {
+      throw new Error(
+        'ამ ბრაუზერს კამერისა და მიკროფონის გამოყენება არ შეუძლია'
+      )
+    }
+
+    liveHostStream =
+      await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: {
+            ideal: 1280
+          },
+          height: {
+            ideal: 720
+          },
+          facingMode: 'user'
+        },
+        audio: true
+      })
+
+    const sessionResult =
+      await liveCallFunction({
+        action: 'create_session'
+      })
+
+    const session =
+      sessionResult?.session
+
+    if (!session?.sessionId) {
+      throw new Error(
+        'Cloudflare Live session ვერ შეიქმნა'
+      )
+    }
+
+    liveHostSessionId =
+      session.sessionId
+
+    const {
+      data: authData,
+      error: authError
+    } =
+      await window.supabase.auth.getUser()
+
+    if (
+      authError ||
+      !authData.user
+    ) {
+      throw new Error(
+        'მომხმარებლის დადგენა ვერ მოხერხდა'
+      )
+    }
+
+    const {
+      data: stream,
+      error: streamError
+    } =
+      await window.supabase
+        .from('live_streams')
+        .insert({
+          title,
+          description,
+          host_id:
+            authData.user.id,
+          status: 'live',
+          session_id:
+            liveHostSessionId
+        })
+        .select()
+        .single()
+
+    if (streamError) {
+      throw streamError
+    }
+
+    liveCurrentStream =
+      stream
+
+    const hostTitle =
+      liveGetElement(
+        'live-host-title'
+      )
+
+    const hostDescription =
+      liveGetElement(
+        'live-host-description'
+      )
+
+    const hostVideo =
+      liveGetElement(
+        'live-host-video'
+      )
+
+    const placeholder =
+      liveGetElement(
+        'live-host-placeholder'
+      )
+
+    if (hostTitle) {
+      hostTitle.textContent =
+        title
+    }
+
+    if (hostDescription) {
+      hostDescription.textContent =
+        description
+    }
+
+    if (hostVideo) {
+      hostVideo.srcObject =
+        liveHostStream
+
+      await hostVideo
+        .play()
+        .catch(() => {})
+    }
+
+    if (placeholder) {
+      placeholder.style.display =
+        'none'
+    }
+
+    livePrepareHostChat()
+    liveClearCommentLists()
+
+    await livePublishHost()
+
+    closeLiveAdminModal()
+
+    liveShowModal(
+      'live-host-modal'
+    )
+
+    await liveStartCommentRealtime(
+      stream.id
+    )
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+  } catch (error) {
+    console.error(
+      'Live start error:',
+      error
+    )
+
+    if (liveCurrentStream?.id) {
+      await window.supabase
+        .from('live_streams')
+        .update({
+          status: 'ended',
+          ended_at:
+            new Date().toISOString()
+        })
+        .eq(
+          'id',
+          liveCurrentStream.id
+        )
+    }
+
+    if (liveHostStream) {
+      liveHostStream
+        .getTracks()
+        .forEach(
+          track =>
+            track.stop()
+        )
+
+      liveHostStream = null
+    }
+
+    liveHostSessionId = null
+    liveCurrentStream = null
+
+    liveSetError(
+      error?.message ||
+      'ლაივის დაწყება ვერ მოხერხდა'
+    )
+  } finally {
+    if (button) {
+      button.disabled = false
+
+      button.innerHTML =
+        '<i data-lucide="radio"></i><span>ლაივის დაწყება</span>'
+
+      if (window.lucide) {
+        lucide.createIcons()
+      }
+    }
+  }
+}
+
+async function livePublishHost() {
+  if (
+    !liveHostStream ||
+    !liveHostSessionId
+  ) {
+    throw new Error(
+      'Live publisher მზად არ არის'
+    )
+  }
+
+  if (liveHostPeerConnection) {
+    liveHostPeerConnection.close()
+  }
+
+  liveHostPeerConnection =
+    liveCreatePeerConnection()
+
+  const videoTrack =
+    liveHostStream
+      .getVideoTracks()[0]
+
+  const audioTrack =
+    liveHostStream
+      .getAudioTracks()[0]
+
+  if (!videoTrack) {
+    throw new Error(
+      'კამერის ვიდეო track ვერ მოიძებნა'
+    )
+  }
+
+  const videoTransceiver =
+    liveHostPeerConnection.addTransceiver(
+      videoTrack,
+      {
+        direction: 'sendonly'
+      }
+    )
+
+  const audioTransceiver =
+    audioTrack
+      ? liveHostPeerConnection.addTransceiver(
+          audioTrack,
+          {
+            direction: 'sendonly'
+          }
+        )
+      : null
+
+  const offer =
+    await liveHostPeerConnection.createOffer()
+
+  await liveHostPeerConnection
+    .setLocalDescription(
+      offer
+    )
+
+  await liveWaitForIceGathering(
+    liveHostPeerConnection
+  )
+
+  const localDescription =
+    liveHostPeerConnection.localDescription
+
+  if (!localDescription) {
+    throw new Error(
+      'Publisher SDP ვერ შეიქმნა'
+    )
+  }
+
+  const tracks = [
+    {
+      location: 'local',
+      mid: videoTransceiver.mid,
+      trackName: 'camera'
+    }
+  ]
+
+  if (audioTransceiver?.mid) {
+    tracks.push({
+      location: 'local',
+      mid: audioTransceiver.mid,
+      trackName: 'microphone'
+    })
+  }
+
+  const result =
+    await liveCallFunction({
+      action: 'publish',
+      sessionId:
+        liveHostSessionId,
+      sessionDescription:
+        localDescription,
+      tracks
+    })
+
+  if (
+    !result?.result?.sessionDescription
+  ) {
+    throw new Error(
+      'Cloudflare publisher answer ვერ მიიღო'
+    )
+  }
+
+  await liveHostPeerConnection
+    .setRemoteDescription(
+      result.result.sessionDescription
+    )
+
+  liveHostTracks =
+    tracks
+
+  liveHostPeerConnection
+    .onconnectionstatechange =
+    () => {
+      const state =
+        liveHostPeerConnection
+          ?.connectionState
+
+      console.log(
+        'Cloudflare host connection:',
+        state
+      )
+
+      if (state === 'failed') {
+        liveSetError(
+          'Cloudflare Live კავშირი ვერ დამყარდა'
+        )
+      }
+    }
+}
+
+async function endLiveStream() {
+  if (!liveCurrentStream) {
+    closeLiveHost()
+    return
+  }
+
+  const confirmed =
+    confirm(
+      'ნამდვილად გინდა ლაივის დასრულება?'
+    )
+
+  if (!confirmed) {
+    return
+  }
+
+  try {
+    if (
+      liveHostSessionId &&
+      liveHostTracks.length
+    ) {
+      await liveCallFunction({
+        action: 'close_tracks',
+        sessionId:
+          liveHostSessionId,
+        tracks:
+          liveHostTracks.map(
+            track => ({
+              mid: track.mid
+            })
+          )
+      }).catch(
+        error => {
+          console.warn(
+            'Cloudflare track close error:',
+            error
+          )
+        }
+      )
+    }
+
+    await window.supabase
+      .from('live_streams')
+      .update({
+        status: 'ended',
+        ended_at:
+          new Date().toISOString()
+      })
+      .eq(
+        'id',
+        liveCurrentStream.id
+      )
+  } catch (error) {
+    console.error(
+      'Live end error:',
+      error
+    )
+  }
+
+  closeLiveHost()
+}
+
+function closeLiveHost() {
+  if (liveHostStream) {
+    liveHostStream
+      .getTracks()
+      .forEach(
+        track =>
+          track.stop()
+      )
+
+    liveHostStream = null
+  }
+
+  if (liveHostPeerConnection) {
+    liveHostPeerConnection.close()
+    liveHostPeerConnection = null
+  }
+
+  if (liveCommentChannel) {
+    window.supabase
+      .removeChannel(
+        liveCommentChannel
+      )
+
+    liveCommentChannel = null
+  }
+
+  liveHostSessionId = null
+  liveHostTracks = []
+  liveCurrentStream = null
+  liveCommentsLoadedStreamId = null
+
+  liveHideModal(
+    'live-host-modal'
+  )
+}
+
+function toggleLiveMicrophone() {
+  if (!liveHostStream) {
+    return
+  }
+
+  const tracks =
+    liveHostStream.getAudioTracks()
+
+  if (!tracks.length) {
+    return
+  }
+
+  liveMicrophoneEnabled =
+    !liveMicrophoneEnabled
+
+  tracks.forEach(
+    track => {
+      track.enabled =
+        liveMicrophoneEnabled
+    }
+  )
+
+  const button =
+    liveGetElement(
+      'live-mic-btn'
+    )
+
+  if (button) {
+    button.classList.toggle(
+      'off',
+      !liveMicrophoneEnabled
+    )
+
+    button.innerHTML =
+      liveMicrophoneEnabled
+        ? '<i data-lucide="mic"></i>'
+        : '<i data-lucide="mic-off"></i>'
+  }
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+function toggleLiveCamera() {
+  if (!liveHostStream) {
+    return
+  }
+
+  const tracks =
+    liveHostStream.getVideoTracks()
+
+  if (!tracks.length) {
+    return
+  }
+
+  liveCameraEnabled =
+    !liveCameraEnabled
+
+  tracks.forEach(
+    track => {
+      track.enabled =
+        liveCameraEnabled
+    }
+  )
+
+  const button =
+    liveGetElement(
+      'live-camera-btn'
+    )
+
+  if (button) {
+    button.classList.toggle(
+      'off',
+      !liveCameraEnabled
+    )
+
+    button.innerHTML =
+      liveCameraEnabled
+        ? '<i data-lucide="video"></i>'
+        : '<i data-lucide="video-off"></i>'
+  }
+
+  if (window.lucide) {
+    lucide.createIcons()
+  }
+}
+
+async function loadActiveLive() {
+  try {
+    const {
+      data,
+      error
+    } =
+      await window.supabase
+        .from('live_streams')
+        .select('*')
+        .eq(
+          'status',
+          'live'
+        )
+        .order(
+          'started_at',
+          {
+            ascending: false
+          }
+        )
+        .limit(1)
+        .maybeSingle()
+
+    if (error) {
+      console.error(
+        'Active live error:',
+        error
+      )
+
+      return null
+    }
+
+    return data || null
+  } catch (error) {
+    console.error(
+      'Active live error:',
+      error
+    )
+
+    return null
+  }
+}
+
+async function showActiveLiveNotification() {
+  const stream =
+    await loadActiveLive()
+
+  if (!stream) {
+    return
+  }
+
+  liveNotificationStream =
+    stream
+
+  const title =
+    liveGetElement(
+      'live-notification-title'
+    )
+
+  const description =
+    liveGetElement(
+      'live-notification-description'
+    )
+
+  if (title) {
+    title.textContent =
+      stream.title
+  }
+
+  if (description) {
+    description.textContent =
+      stream.description ||
+      'პირდაპირი ჩართვა ArduinoHub-ზე'
+  }
+
+  liveShowModal(
+    'live-notification-modal'
+  )
+}
+
+function closeLiveNotification() {
+  liveHideModal(
+    'live-notification-modal'
+  )
+
+  liveNotificationStream = null
+}
+
+async function openLiveFromNotification() {
+  const stream =
+    liveNotificationStream
+
+  closeLiveNotification()
+
+  if (!stream) {
+    return
+  }
+
+  await openLiveViewer(
+    stream
+  )
+}
+
+async function openLiveViewer(stream = null) {
+  try {
+    if (!stream) {
+      stream =
+        await loadActiveLive()
+    }
+
+    if (!stream) {
+      alert(
+        'ამ მომენტში აქტიური ლაივი არ არის'
+      )
+
+      return
+    }
+
+    liveCurrentStream =
+      stream
+
+    const title =
+      liveGetElement(
+        'live-viewer-title'
+      )
+
+    const description =
+      liveGetElement(
+        'live-viewer-description'
+      )
+
+    const video =
+      liveGetElement(
+        'live-viewer-video'
+      )
+
+    const placeholder =
+      liveGetElement(
+        'live-viewer-placeholder'
+      )
+
+    if (title) {
+      title.textContent =
+        stream.title
+    }
+
+    if (description) {
+      description.textContent =
+        stream.description || ''
+    }
+
+    if (video) {
+      video.srcObject = null
+    }
+
+    if (placeholder) {
+      placeholder.style.display =
+        'flex'
+    }
+
+    livePrepareViewerChat()
+    liveClearCommentLists()
+
+    liveShowModal(
+      'live-viewer-modal'
+    )
+
+    await liveCreateViewerConnection(
+      stream
+    )
+
+    await liveStartCommentRealtime(
+      stream.id
+    )
+  } catch (error) {
+    console.error(
+      'Live viewer error:',
+      error
+    )
+
+    alert(
+      error?.message ||
+      'ლაივის ჩართვა ვერ მოხერხდა'
+    )
+
+    closeLiveViewer()
+  }
+}
+
+async function liveCreateViewerConnection(
+  stream
+) {
+  if (!stream?.session_id) {
+    throw new Error(
+      'Live publisher session არ არსებობს'
+    )
+  }
+
+  const sessionResult =
+    await liveCallFunction({
+      action: 'create_viewer_session'
+    })
+
+  const session =
+    sessionResult?.session
+
+  if (!session?.sessionId) {
+    throw new Error(
+      'Viewer session ვერ შეიქმნა'
+    )
+  }
+
+  liveViewerSessionId =
+    session.sessionId
+
+  if (liveViewerPeerConnection) {
+    liveViewerPeerConnection.close()
+  }
+
+  liveViewerPeerConnection =
+    liveCreatePeerConnection()
+
+  const video =
+    liveGetElement(
+      'live-viewer-video'
+    )
+
+  const placeholder =
+    liveGetElement(
+      'live-viewer-placeholder'
+    )
+
+  liveViewerPeerConnection.ontrack =
+    event => {
+      if (!video) {
+        return
+      }
+
+      let remoteStream =
+        video.srcObject
+
+      if (
+        !(remoteStream instanceof MediaStream)
+      ) {
+        remoteStream =
+          new MediaStream()
+
+        video.srcObject =
+          remoteStream
+      }
+
+      const existing =
+        remoteStream
+          .getTracks()
+          .find(
+            track =>
+              track.id ===
+              event.track.id
+          )
+
+      if (!existing) {
+        remoteStream.addTrack(
+          event.track
+        )
+      }
+
+      video
+        .play()
+        .catch(() => {})
+
+      if (
+        event.track.kind === 'video' &&
+        placeholder
+      ) {
+        placeholder.style.display =
+          'none'
+      }
+    }
+
+  const result =
+    await liveCallFunction({
+      action: 'subscribe',
+      sessionId:
+        liveViewerSessionId,
+      tracks: [
+        {
+          location: 'remote',
+          sessionId:
+            stream.session_id,
+          trackName: 'camera'
+        },
+        {
+          location: 'remote',
+          sessionId:
+            stream.session_id,
+          trackName: 'microphone'
+        }
+      ]
+    })
+
+  const response =
+    result?.result
+
+  if (!response?.sessionDescription) {
+    throw new Error(
+      'Cloudflare viewer offer ვერ მიიღო'
+    )
+  }
+
+  await liveViewerPeerConnection
+    .setRemoteDescription(
+      response.sessionDescription
+    )
+
+  const answer =
+    await liveViewerPeerConnection
+      .createAnswer()
+
+  await liveViewerPeerConnection
+    .setLocalDescription(
+      answer
+    )
+
+  await liveWaitForIceGathering(
+    liveViewerPeerConnection
+  )
+
+  const localDescription =
+    liveViewerPeerConnection.localDescription
+
+  if (!localDescription) {
+    throw new Error(
+      'Viewer SDP answer ვერ შეიქმნა'
+    )
+  }
+
+  await liveCallFunction({
+    action: 'renegotiate',
+    sessionId:
+      liveViewerSessionId,
+    sessionDescription:
+      localDescription
+  })
+
+  liveViewerPeerConnection
+    .onconnectionstatechange =
+    () => {
+      const state =
+        liveViewerPeerConnection
+          ?.connectionState
+
+      console.log(
+        'Cloudflare viewer connection:',
+        state
+      )
+
+      if (state === 'failed') {
+        console.warn(
+          'Cloudflare viewer connection failed'
+        )
+      }
+    }
+}
+
+function closeLiveViewer() {
+  if (liveViewerPeerConnection) {
+    liveViewerPeerConnection.close()
+    liveViewerPeerConnection = null
+  }
+
+  const video =
+    liveGetElement(
+      'live-viewer-video'
+    )
+
+  if (video) {
+    video.pause()
+    video.srcObject = null
+  }
+
+  if (liveCommentChannel) {
+    window.supabase
+      .removeChannel(
+        liveCommentChannel
+      )
+
+    liveCommentChannel = null
+  }
+
+  liveViewerSessionId = null
+  liveCurrentStream = null
+  liveCommentsLoadedStreamId = null
+
+  liveHideModal(
+    'live-viewer-modal'
+  )
+}
+
+async function liveStartCommentRealtime(
+  streamId
+) {
+  if (!streamId) {
+    return
+  }
+
+  if (liveCommentChannel) {
+    await window.supabase
+      .removeChannel(
+        liveCommentChannel
+      )
+
+    liveCommentChannel = null
+  }
+
+  livePrepareViewerChat()
+  livePrepareHostChat()
+
+  liveClearCommentLists()
+
+  liveCommentsLoadedStreamId =
+    streamId
+
+  liveCommentChannel =
+    window.supabase
+      .channel(
+        `live-comments-${streamId}-${Date.now()}`
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'live_comments',
+          filter:
+            `stream_id=eq.${streamId}`
+        },
+        payload => {
+          if (
+            payload?.new
+              ?.stream_id !== streamId
+          ) {
+            return
+          }
+
+          liveRenderComment(
+            payload.new
+          )
+        }
+      )
+      .subscribe(
+        status => {
+          console.log(
+            'Live comments realtime:',
+            status
+          )
+        }
+      )
+
+  await liveLoadExistingComments(
+    streamId
+  )
+}
+
+async function liveLoadExistingComments(
+  streamId
+) {
+  try {
+    const {
+      data,
+      error
+    } =
+      await window.supabase
+        .from('live_comments')
+        .select('*')
+        .eq(
+          'stream_id',
+          streamId
+        )
+        .order(
+          'created_at',
+          {
+            ascending: true
+          }
+        )
+        .limit(200)
+
+    if (error) {
+      console.error(
+        'Live comments error:',
+        error
+      )
+
+      return
+    }
+
+    liveClearCommentLists()
+
+    for (
+      const comment of
+      data || []
+    ) {
+      liveRenderComment(
+        comment
+      )
+    }
+  } catch (error) {
+    console.error(
+      'Live comments error:',
+      error
+    )
+  }
+}
+
+function liveRenderComment(comment) {
+  const lists = [
+    document.getElementById('live-stream-chat-list'),
+    document.getElementById('live-host-chat-list')
+  ].filter(Boolean)
+
+  if (!lists.length) return
+
+  const author = comment.author_name || 'მომხმარებელი'
+  const message = comment.message || ''
+  const time = comment.created_at
+    ? new Date(comment.created_at).toLocaleTimeString('ka-GE', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    : ''
+
+  const currentUserId = window.currentUser?.id || window.user?.id || null
+  const isHost = currentUserId && comment.user_id === currentUserId
+
+  lists.forEach(list => {
+    if (comment.id && list.querySelector(`[data-comment-id="${comment.id}"]`)) {
+      return
+    }
+
+    const item = document.createElement('div')
+    item.className = `live-chat-message${isHost ? ' live-chat-host' : ''}`
+
+    if (comment.id) {
+      item.dataset.commentId = comment.id
+    }
+
+    const authorEl = document.createElement('div')
+    authorEl.className = 'live-chat-author'
+    authorEl.textContent = author
+
+    const messageEl = document.createElement('div')
+    messageEl.className = 'live-chat-text'
+    messageEl.textContent = message
+
+    const timeEl = document.createElement('div')
+    timeEl.className = 'live-chat-time'
+    timeEl.textContent = time
+
+    item.appendChild(authorEl)
+    item.appendChild(messageEl)
+    item.appendChild(timeEl)
+
+    list.appendChild(item)
+    list.scrollTop = list.scrollHeight
+  })
+}
+async function liveSendChatComment(
+  event
+) {
+  event.preventDefault()
+
+  if (!liveCurrentStream) {
+    return
+  }
+
+  const form =
+    event.currentTarget
+
+  const input =
+    form.querySelector(
+      'input'
+    )
+
+  if (!input) {
+    return
+  }
+
+  const message =
+    input.value.trim()
+
+  if (!message) {
+    return
+  }
+
+  try {
+    const {
+      data: authData,
+      error: authError
+    } =
+      await window.supabase
+        .auth
+        .getUser()
+
+    if (
+      authError ||
+      !authData.user
+    ) {
+      alert(
+        'კომენტარის დასაწერად ანგარიშში შესვლა აუცილებელია'
+      )
+
+      return
+    }
+
+    const user =
+      authData.user
+
+    const authorName =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      user.email?.split('@')[0] ||
+      'მომხმარებელი'
+
+    const {
+      error
+    } =
+      await window.supabase
+        .from('live_comments')
+        .insert({
+          stream_id:
+            liveCurrentStream.id,
+          user_id:
+            user.id,
+          message,
+          author_name:
+            authorName
+        })
+
+    if (error) {
+      throw error
+    }
+
+    input.value = ''
+  } catch (error) {
+    console.error(
+      'Live comment error:',
+      error
+    )
+  }
+}
+
+async function liveCheckStatus() {
+  const stream =
+    await loadActiveLive()
+
+  if (!stream) {
+    return
+  }
+
+  if (
+    liveCurrentStream &&
+    liveCurrentStream.id ===
+      stream.id
+  ) {
+    return
+  }
+
+  if (
+    liveGetElement(
+      'live-viewer-modal'
+    )?.classList.contains(
+      'active'
+    ) ||
+    liveGetElement(
+      'live-host-modal'
+    )?.classList.contains(
+      'active'
+    )
+  ) {
+    return
+  }
+
+  await showActiveLiveNotification()
+}
+
+document.addEventListener(
+  'DOMContentLoaded',
+  () => {
+    livePrepareViewerChat()
+    livePrepareHostChat()
+
+    if (window.lucide) {
+      lucide.createIcons()
+    }
+
+    setTimeout(
+      () => {
+        liveCheckStatus()
+      },
+      1800
+    )
+
+    setInterval(
+      () => {
+        liveCheckStatus()
+      },
+      10000
+    )
+  }
+)
+
+window.openLiveAdminModal =
+  openLiveAdminModal
+
+window.closeLiveAdminModal =
+  closeLiveAdminModal
+
+window.startLiveStream =
+  startLiveStream
+
+window.endLiveStream =
+  endLiveStream
+
+window.closeLiveViewer =
+  closeLiveViewer
+
+window.openLiveViewer =
+  openLiveViewer
+
+window.closeLiveNotification =
+  closeLiveNotification
+
+window.openLiveFromNotification =
+  openLiveFromNotification
+
+window.toggleLiveMicrophone =
+  toggleLiveMicrophone
+
+window.toggleLiveCamera =
+  toggleLiveCamera
