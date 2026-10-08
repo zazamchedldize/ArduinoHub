@@ -8334,3 +8334,949 @@ svg{
   letter-spacing: 0.7px;
   text-transform: uppercase;
 }
+
+.live-guest-video-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+
+.live-person-video{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 9;
+  min-height:0;
+  overflow:hidden;
+  border-radius:18px;
+  background:#020806;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.live-person-video .live-video{
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:0;
+  aspect-ratio:16 / 9;
+  object-fit:cover;
+  background:#020806;
+}
+
+.live-guest-card{
+  width:min(980px,calc(100vw - 32px));
+  max-width:980px;
+}
+
+.live-guest-video-grid{
+  max-width:900px;
+  margin:0 auto;
+}
+
+.live-person-video:nth-child(2) .live-video{
+  transform:scaleX(-1);
+}
+
+@media(max-width:900px){
+  .live-guest-card{
+    width:min(760px,calc(100vw - 24px));
+  }
+
+  .live-guest-video-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:680px){
+  .live-guest-video-grid{
+    grid-template-columns:1fr;
+  }
+
+  .live-person-video{
+    aspect-ratio:16 / 10;
+  }
+
+  .live-person-video .live-video{
+    aspect-ratio:16 / 10;
+  }
+}
+
+.hbd-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.hbd-theme-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.hbd-theme-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hbd-theme-card {
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+  color: #fff;
+  text-align: center;
+  transition: .25s ease;
+}
+
+.hbd-theme-card strong {
+  font-size: 14px;
+}
+
+.hbd-theme-card small {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.hbd-theme-preview {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.hbd-theme-option input:checked + .hbd-theme-card {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+.hbd-theme-option input:checked + .hbd-theme-normal {
+  border-color: #22d395;
+  background: rgba(34,211,149,.1);
+}
+
+.hbd-theme-option input:checked + .hbd-theme-tvd {
+  border-color: #dc2626;
+  background: rgba(127,29,29,.22);
+}
+
+.hbd-theme-option input:checked + .hbd-theme-mcu {
+  border-color: #f59e0b;
+  background: rgba(180,83,9,.18);
+}
+
+#birthday-theme-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.birthday-modal.theme-tvd .birthday-backdrop {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(127,29,29,.28), transparent 35%),
+    rgba(3,0,3,.94);
+}
+
+.birthday-modal.theme-tvd .birthday-dialog {
+  border-color: rgba(220,38,38,.6);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(220,38,38,.2), transparent 45%),
+    linear-gradient(145deg, #180609, #050203 75%);
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.95),
+    0 0 80px rgba(220,38,38,.18);
+}
+
+.birthday-modal.theme-tvd .birthday-glow {
+  background: rgba(220,38,38,.2);
+}
+
+.birthday-modal.theme-tvd .birthday-icon {
+  background: rgba(127,29,29,.25);
+  border-color: rgba(248,113,113,.45);
+  box-shadow: 0 0 35px rgba(220,38,38,.18);
+}
+
+.birthday-modal.theme-tvd .birthday-eyebrow {
+  color: #f87171;
+}
+
+.birthday-modal.theme-tvd #birthday-title {
+  color: #fff1f2;
+  text-shadow: 0 0 25px rgba(220,38,38,.3);
+}
+
+.birthday-modal.theme-tvd .birthday-name {
+  color: #ef4444;
+  text-shadow: 0 0 18px rgba(220,38,38,.35);
+}
+
+.birthday-modal.theme-tvd .birthday-finish {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #991b1b, #dc2626);
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(1),
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(3),
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(5) {
+  display: none;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2)::before {
+  content: "🩸";
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2),
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(4) {
+  font-size: 30px;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2) {
+  font-size: 0;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(2)::before {
+  font-size: 30px;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(4) {
+  font-size: 0;
+}
+
+.birthday-modal.theme-tvd .birthday-decoration span:nth-child(4)::before {
+  content: "🌙";
+  font-size: 30px;
+}
+
+.tvd-blood-drop {
+  position: absolute;
+  top: -40px;
+  width: 9px;
+  height: 28px;
+  border-radius: 50% 50% 55% 55%;
+  background: linear-gradient(#ef4444, #7f1d1d);
+  box-shadow: 0 0 12px rgba(220,38,38,.4);
+  animation: tvd-blood-fall linear forwards;
+}
+
+@keyframes tvd-blood-fall {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+.tvd-moon {
+  position: absolute;
+  top: 8%;
+  right: 8%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #fecaca 55%, #991b1b);
+  box-shadow: 0 0 45px rgba(248,113,113,.35);
+  opacity: .7;
+}
+
+.birthday-modal.theme-mcu .birthday-backdrop {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(245,158,11,.12), transparent 35%),
+    rgba(2,4,8,.94);
+}
+
+.birthday-modal.theme-mcu .birthday-dialog {
+  border-color: rgba(245,158,11,.55);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(239,68,68,.18), transparent 40%),
+    linear-gradient(145deg, #130507, #06080d 72%);
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.95),
+    0 0 80px rgba(245,158,11,.12);
+}
+
+.birthday-modal.theme-mcu .birthday-glow {
+  background: rgba(245,158,11,.14);
+}
+
+.birthday-modal.theme-mcu .birthday-icon {
+  background: radial-gradient(circle, rgba(245,158,11,.25), rgba(239,68,68,.08));
+  border-color: rgba(245,158,11,.55);
+  box-shadow:
+    0 0 30px rgba(245,158,11,.25),
+    inset 0 0 25px rgba(239,68,68,.12);
+}
+
+.birthday-modal.theme-mcu .birthday-eyebrow {
+  color: #fbbf24;
+}
+
+.birthday-modal.theme-mcu #birthday-title {
+  color: #fff;
+  text-shadow:
+    0 0 18px rgba(245,158,11,.25),
+    0 0 35px rgba(239,68,68,.15);
+}
+
+.birthday-modal.theme-mcu .birthday-name {
+  color: #fbbf24;
+}
+
+.birthday-modal.theme-mcu .birthday-finish {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #b91c1c, #ea580c);
+}
+
+.birthday-modal.theme-mcu .birthday-decoration span {
+  display: none;
+}
+
+.birthday-modal.theme-mcu .birthday-decoration::before {
+  content: "◈";
+  display: block;
+  width: 55px;
+  height: 55px;
+  line-height: 55px;
+  border: 2px solid #f59e0b;
+  border-radius: 50%;
+  color: #fde68a;
+  font-size: 24px;
+  background: radial-gradient(circle, #fef3c7 0, #f59e0b 12%, #7f1d1d 35%, #111827 70%);
+  box-shadow:
+    0 0 15px rgba(245,158,11,.7),
+    0 0 45px rgba(239,68,68,.25);
+  animation: mcu-reactor 1.5s ease-in-out infinite;
+}
+
+@keyframes mcu-reactor {
+  0%, 100% {
+    transform: scale(.95);
+    box-shadow:
+      0 0 15px rgba(245,158,11,.5),
+      0 0 35px rgba(239,68,68,.2);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 25px rgba(245,158,11,.9),
+      0 0 60px rgba(239,68,68,.35);
+  }
+}
+
+.mcu-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 10px #f59e0b;
+  animation: mcu-particle-float linear infinite;
+}
+
+@keyframes mcu-particle-float {
+  from {
+    transform: translate3d(0,110vh,0);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translate3d(var(--x),-20vh,0);
+    opacity: 0;
+  }
+}
+
+.mcu-hud {
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(245,158,11,.12);
+  border-radius: 22px;
+  background:
+    linear-gradient(90deg, transparent 49.5%, rgba(245,158,11,.08) 50%, transparent 50.5%),
+    linear-gradient(0deg, transparent 49.5%, rgba(245,158,11,.08) 50%, transparent 50.5%);
+  background-size: 80px 80px;
+  opacity: .4;
+}
+
+.birthday-theme-badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 6;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.25);
+  color: #94a3b8;
+}
+
+.theme-tvd .birthday-theme-badge {
+  border-color: rgba(220,38,38,.4);
+  color: #f87171;
+}
+
+.theme-mcu .birthday-theme-badge {
+  border-color: rgba(245,158,11,.4);
+  color: #fbbf24;
+}
+
+@media (max-width: 600px) {
+  .hbd-theme-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hbd-theme-card {
+    min-height: 85px;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .hbd-theme-preview {
+    font-size: 25px;
+    margin: 0 8px 0 0;
+  }
+
+  .hbd-theme-card strong {
+    margin-right: 4px;
+  }
+}
+
+.birthday-modal.theme-tvd #birthday-theme-effects {
+  background:
+    radial-gradient(circle at 20% 80%, rgba(127,29,29,.12), transparent 25%),
+    radial-gradient(circle at 80% 20%, rgba(220,38,38,.08), transparent 25%)
+}
+
+.birthday-modal.theme-tvd .birthday-dialog {
+  position: relative;
+  overflow: hidden;
+}
+
+.birthday-modal.theme-tvd .birthday-dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(115deg, transparent 0%, rgba(220,38,38,.08) 45%, transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(127,29,29,.14), transparent 55%);
+  animation: tvd-dialog-pulse 3s ease-in-out infinite;
+}
+
+@keyframes tvd-dialog-pulse {
+  0%, 100% {
+    opacity: .4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.tvd-blood-drop {
+  position: absolute;
+  top: -50px;
+  width: 8px;
+  height: 26px;
+  border-radius: 55% 55% 60% 60%;
+  background: linear-gradient(180deg, #ff5252, #dc2626 45%, #450a0a);
+  box-shadow:
+    0 0 8px rgba(220,38,38,.8),
+    0 0 18px rgba(127,29,29,.45);
+  animation: tvd-blood-fall linear infinite;
+}
+
+.tvd-blood-drop::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 2px;
+  width: 4px;
+  height: 9px;
+  border-radius: 50%;
+  background: #991b1b;
+}
+
+@keyframes tvd-blood-fall {
+  0% {
+    transform: translate3d(0,-50px,0) scale(.7);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  70% {
+    opacity: .95;
+  }
+  100% {
+    transform: translate3d(var(--blood-drift, 0px),110vh,0) scale(1);
+    opacity: 0;
+  }
+}
+
+.tvd-blood-stream {
+  position: absolute;
+  top: -20px;
+  width: 3px;
+  height: var(--stream-height);
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(239,68,68,.05),
+    #ef4444 25%,
+    #991b1b 75%,
+    rgba(69,10,10,.2)
+  );
+  box-shadow: 0 0 12px rgba(220,38,38,.45);
+  animation: tvd-blood-stream-fall linear infinite;
+}
+
+.tvd-blood-stream::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: -3px;
+  width: 9px;
+  height: 12px;
+  border-radius: 50%;
+  background: #991b1b;
+  box-shadow: 0 0 10px rgba(220,38,38,.6);
+}
+
+@keyframes tvd-blood-stream-fall {
+  0% {
+    transform: translateY(-30px) scaleY(.2);
+    opacity: 0;
+  }
+  15% {
+    opacity: .85;
+  }
+  55% {
+    transform: translateY(40vh) scaleY(1);
+    opacity: .8;
+  }
+  100% {
+    transform: translateY(115vh) scaleY(.8);
+    opacity: 0;
+  }
+}
+
+.tvd-mist {
+  position: absolute;
+  width: 180px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(248,113,113,.08),
+    rgba(127,29,29,.025) 50%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  animation: tvd-mist-move ease-in-out infinite;
+}
+
+@keyframes tvd-mist-move {
+  0%, 100% {
+    transform: translate3d(-30px,0,0) scale(.8);
+    opacity: .15;
+  }
+  50% {
+    transform: translate3d(60px,-25px,0) scale(1.25);
+    opacity: .55;
+  }
+}
+
+.birthday-modal.theme-tvd .birthday-icon {
+  animation:
+    birthday-icon-float 3s ease-in-out infinite,
+    tvd-icon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tvd-icon-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(220,38,38,.15),
+      inset 0 0 10px rgba(220,38,38,.05);
+  }
+  50% {
+    box-shadow:
+      0 0 35px rgba(220,38,38,.45),
+      0 0 70px rgba(127,29,29,.2),
+      inset 0 0 20px rgba(220,38,38,.15);
+  }
+}
+
+.birthday-modal.theme-tvd .birthday-finish {
+  position: relative;
+  overflow: hidden;
+}
+
+.birthday-modal.theme-tvd .birthday-finish::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.2),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: tvd-button-shine 3s linear infinite;
+}
+
+@keyframes tvd-button-shine {
+  0% {
+    left: -120%;
+  }
+  45%, 100% {
+    left: 140%;
+  }
+}
+
+.birthday-modal.theme-mcu #birthday-theme-effects {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(245,158,11,.035), transparent 35%);
+}
+
+.mcu-reactor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 280px;
+  height: 280px;
+  transform: translate(-50%,-50%);
+  border: 1px solid rgba(245,158,11,.08);
+  border-radius: 50%;
+  box-shadow:
+    0 0 40px rgba(245,158,11,.06),
+    inset 0 0 40px rgba(239,68,68,.04);
+  animation: mcu-reactor-rotate 12s linear infinite;
+}
+
+.mcu-reactor::before {
+  content: "";
+  position: absolute;
+  inset: 25px;
+  border: 1px dashed rgba(245,158,11,.13);
+  border-radius: 50%;
+}
+
+.mcu-reactor::after {
+  content: "";
+  position: absolute;
+  inset: 55px;
+  border: 1px solid rgba(239,68,68,.1);
+  border-radius: 50%;
+  box-shadow:
+    0 0 25px rgba(245,158,11,.08),
+    inset 0 0 25px rgba(239,68,68,.05);
+}
+
+@keyframes mcu-reactor-rotate {
+  from {
+    transform: translate(-50%,-50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%,-50%) rotate(360deg);
+  }
+}
+
+.mcu-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow:
+    0 0 6px #f59e0b,
+    0 0 14px rgba(245,158,11,.7);
+  animation: mcu-particle-float linear infinite;
+}
+
+.mcu-particle:nth-of-type(3n) {
+  width: 2px;
+  height: 2px;
+}
+
+.mcu-particle:nth-of-type(4n) {
+  width: 5px;
+  height: 5px;
+}
+
+@keyframes mcu-particle-float {
+  0% {
+    transform: translate3d(0,110vh,0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .8;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--x),-20vh,0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.mcu-spark {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff7ed;
+  box-shadow:
+    0 0 5px #fff,
+    0 0 12px #f59e0b,
+    0 0 24px rgba(239,68,68,.6);
+  animation: mcu-spark-flash ease-in-out infinite;
+}
+
+.mcu-spark::before,
+.mcu-spark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #fbbf24,
+    transparent
+  );
+  transform: translate(-50%,-50%);
+}
+
+.mcu-spark::after {
+  transform: translate(-50%,-50%) rotate(90deg);
+}
+
+@keyframes mcu-spark-flash {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(.4);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  55% {
+    opacity: .3;
+    transform: scale(.7);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.mcu-energy-line {
+  position: absolute;
+  top: -30%;
+  width: 1px;
+  height: 35%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(245,158,11,.9),
+    rgba(239,68,68,.7),
+    transparent
+  );
+  box-shadow:
+    0 0 8px rgba(245,158,11,.6),
+    0 0 18px rgba(239,68,68,.25);
+  transform: rotate(8deg);
+  animation: mcu-energy-drop linear infinite;
+}
+
+@keyframes mcu-energy-drop {
+  0% {
+    transform: translateY(-30vh) rotate(8deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: .9;
+  }
+  70% {
+    opacity: .65;
+  }
+  100% {
+    transform: translateY(140vh) rotate(8deg);
+    opacity: 0;
+  }
+}
+
+.birthday-modal.theme-mcu .birthday-dialog {
+  position: relative;
+  overflow: hidden;
+}
+
+.birthday-modal.theme-mcu .birthday-dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(245,158,11,.08) 50%,
+      transparent 80%
+    );
+  animation: mcu-dialog-scan 4s linear infinite;
+}
+
+@keyframes mcu-dialog-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.birthday-modal.theme-mcu .birthday-icon {
+  position: relative;
+  animation:
+    birthday-icon-float 3s ease-in-out infinite,
+    mcu-icon-energy 1.8s ease-in-out infinite;
+}
+
+@keyframes mcu-icon-energy {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.35);
+  }
+}
+
+.birthday-modal.theme-mcu .birthday-finish {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 15px rgba(245,158,11,.15),
+    0 0 30px rgba(239,68,68,.08);
+}
+
+.birthday-modal.theme-mcu .birthday-finish::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.3),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: mcu-button-shine 2.5s linear infinite;
+}
+
+@keyframes mcu-button-shine {
+  0% {
+    left: -100%;
+  }
+  40%, 100% {
+    left: 140%;
+  }
+}
+
+.birthday-modal.theme-normal .birthday-confetti-piece {
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.birthday-modal.theme-normal .birthday-ribbon {
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.birthday-modal.theme-normal .birthday-dialog {
+  animation:
+    birthday-dialog-in .55s cubic-bezier(.2,.8,.2,1),
+    normal-birthday-glow 3s ease-in-out infinite;
+}
+
+@keyframes normal-birthday-glow {
+  0%, 100% {
+    box-shadow:
+      0 40px 120px rgba(0,0,0,.8),
+      0 0 60px rgba(34,211,149,.08);
+  }
+  50% {
+    box-shadow:
+      0 40px 120px rgba(0,0,0,.8),
+      0 0 90px rgba(34,211,149,.18);
+  }
+}
+
+.birthday-modal.theme-normal .birthday-icon {
+  animation: birthday-icon-float 3s ease-in-out infinite;
+}
+
+.birthday-modal.theme-tvd .birthday-theme-badge,
+.birthday-modal.theme-mcu .birthday-theme-badge {
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 600px) {
+  .mcu-reactor {
+    width: 180px;
+    height: 180px;
+  }
+
+  .mcu-reactor::before {
+    inset: 18px;
+  }
+
+  .mcu-reactor::after {
+    inset: 38px;
+  }
+
+  .tvd-moon {
+    width: 55px;
+    height: 55px;
+  }
+}
