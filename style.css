@@ -8322,7 +8322,7 @@ svg{
 }
 
 .live-stream-chat .live-chat-message.live-chat-host::before {
-  content: "თქვენ";
+  content: "ADMIN";
   display: inline-flex;
   margin-bottom: 6px;
   padding: 3px 7px;
