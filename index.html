@@ -1762,15 +1762,7 @@ body.splash-active {
     <span class="brand-mark">∞</span>
     ArduinoChemistry<span>Hub</span>
   </a>
-<button
-  id="meeting-button"
-  class="nav-meeting"
-  type="button"
->
-  <i data-lucide="calendar-days"></i>
-  კლუბის შეკრება
-</button>
-</button>
+
   <button
     class="menu-toggle"
     aria-label="მენიუს გახსნა"
@@ -1796,7 +1788,15 @@ body.splash-active {
       ჩვენი გუნდი
     </a>
 
-
+    <button
+      id="meeting-button"
+      class="nav-meeting"
+      type="button"
+      onclick="openAttendancePanel()"
+    >
+      <i data-lucide="calendar-days"></i>
+      კლუბის შეკრება
+    </button>
 
     <a class="nav-admin" href="admin.html">
       შესვლა
