@@ -9524,3 +9524,175 @@ svg{
     border-radius: 12px;
   }
 }
+
+  .nav-meeting {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid rgba(34, 211, 149, 0.3);
+    border-radius: 12px;
+    background: rgba(34, 211, 149, 0.08);
+    color: #22d395;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .nav-meeting:hover {
+    background: #22d395;
+    color: #07110f;
+    transform: translateY(-1px);
+  }
+
+  .meeting-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .meeting-modal[hidden] {
+    display: none;
+  }
+
+  .meeting-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(8px);
+  }
+
+  .meeting-modal-content {
+    position: relative;
+    z-index: 2;
+    width: min(560px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    border: 1px solid rgba(34, 211, 149, 0.22);
+    border-radius: 24px;
+    background: #07110f;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+    animation: meetingModalIn 0.25s ease;
+  }
+
+  .meeting-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+
+  .meeting-modal-header h2 {
+    margin: 5px 0 0;
+    color: #fff;
+    font-size: 27px;
+  }
+
+  .meeting-date-main {
+    padding: 24px;
+    border: 1px solid rgba(34, 211, 149, 0.18);
+    border-radius: 18px;
+    background: linear-gradient(
+      135deg,
+      rgba(34, 211, 149, 0.13),
+      rgba(34, 211, 149, 0.03)
+    );
+    color: #22d395;
+    font-size: 25px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .meeting-detail-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .meeting-detail-row > div {
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .meeting-detail-row span {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(255, 255, 255, 0.48);
+    font-size: 12px;
+  }
+
+  .meeting-detail-row strong {
+    color: #fff;
+    font-size: 17px;
+  }
+
+  .meeting-empty {
+    padding: 35px 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    color: rgba(255, 255, 255, 0.65);
+    text-align: center;
+  }
+
+  .meeting-empty svg {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 12px;
+    color: #22d395;
+  }
+
+  .meeting-empty h3 {
+    margin: 0 0 8px;
+    color: #fff;
+  }
+
+  .meeting-empty p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  @keyframes meetingModalIn {
+    from {
+      opacity: 0;
+      transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .nav-meeting span {
+      display: none;
+    }
+
+    .nav-meeting {
+      padding: 10px;
+    }
+
+    .meeting-modal-content {
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    .meeting-date-main {
+      font-size: 21px;
+    }
+
+    .meeting-detail-row {
+      grid-template-columns: 1fr;
+    }
+  }
