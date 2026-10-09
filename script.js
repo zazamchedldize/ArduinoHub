@@ -7036,24 +7036,23 @@ function createBirthdayRibbons() {
   }
 }
 
+
 function createBirthdaySpecialEffects(style) {
   const container = document.getElementById("birthday-confetti")
 
   if (!container) return
 
-  container.innerHTML = ""
-
   const settings = {
     tvd: {
       colors: ["#ff1538", "#a00018", "#650010", "#e11d48"],
-      symbols: ["♥", "✦", "🩸"],
-      count: 45,
+      symbols: ["🧛‍♂️", "✦", "🩸"],
+      count: 4,
       className: "birthday-tvd-particle"
     },
     ironman: {
       colors: ["#ff3b30", "#ffb000", "#ffd166", "#48c8ff"],
       symbols: ["✦", "⚡", "✧"],
-      count: 55,
+      count: 5,
       className: "birthday-ironman-particle"
     }
   }
@@ -7073,21 +7072,43 @@ function createBirthdaySpecialEffects(style) {
     particle.style.top = `${Math.random() * 100}%`
     particle.style.color =
       config.colors[Math.floor(Math.random() * config.colors.length)]
-    particle.style.animationDuration = `${2 + Math.random() * 4}s`
-    particle.style.animationDelay = `${Math.random() * 2}s`
+
+    particle.style.animationDuration = `${4 + Math.random() * 4}s`
+    particle.style.animationDelay = `${Math.random() * 1.2}s`
+    particle.style.animationIterationCount = "1"
+    particle.style.animationFillMode = "forwards"
+
     particle.style.setProperty(
       "--particle-drift",
       `${-80 + Math.random() * 160}px`
     )
 
+    particle.addEventListener("animationend", () => {
+      particle.remove()
+    }, { once: true })
+
     container.appendChild(particle)
   }
+}
+
+
+function stopBirthdayEffects() {
+  if (birthdayEffectInterval !== null) {
+    clearInterval(birthdayEffectInterval)
+    birthdayEffectInterval = null
+  }
+
+  const confetti = document.getElementById("birthday-confetti")
+  const ribbons = document.getElementById("birthday-ribbons")
+
+  if (confetti) confetti.innerHTML = ""
+  if (ribbons) ribbons.innerHTML = ""
 }
 
 function setBirthdayDesign(style) {
   const modal = document.getElementById("birthday-modal")
 
-  if (!modal) return
+  if (!modal) return "normal"
 
   modal.classList.remove(
     "birthday-modal--normal",
@@ -7125,7 +7146,7 @@ function setBirthdayDesign(style) {
 function startBirthdayEffects(style) {
   stopBirthdayEffects()
 
-  const validStyle = setBirthdayDesign(style) || "normal"
+  const validStyle = setBirthdayDesign(style)
 
   if (validStyle === "normal") {
     createBirthdayConfetti()
@@ -7144,20 +7165,7 @@ function startBirthdayEffects(style) {
     }
 
     createBirthdaySpecialEffects(validStyle)
-  }, 3500)
-}
-
-function stopBirthdayEffects() {
-  if (birthdayEffectInterval !== null) {
-    clearInterval(birthdayEffectInterval)
-    birthdayEffectInterval = null
-  }
-
-  const confetti = document.getElementById("birthday-confetti")
-  const ribbons = document.getElementById("birthday-ribbons")
-
-  if (confetti) confetti.innerHTML = ""
-  if (ribbons) ribbons.innerHTML = ""
+  }, 450)
 }
 
 function openBirthdayModal(name, message, style = "normal") {
