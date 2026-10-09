@@ -101,6 +101,33 @@
   <style>
 
 
+.birthday-dialog {
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.birthday-dialog::-webkit-scrollbar {
+  display: none;
+}
+
+.birthday-message {
+  max-height: none;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 600px) {
+  .birthday-dialog {
+    max-height: calc(100dvh - 20px);
+  }
+}
+
 .birthday-modal {
   position: fixed;
   inset: 0;
