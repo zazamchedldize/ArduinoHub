@@ -51,3 +51,44 @@ window.ArduinoHubQuiz = {
   getQuizDifficulty,
   createQuizRoom
 }
+
+
+async function joinQuizRoom(code, username) {
+  const client = window.supabase
+
+  const { data, error } = await client.functions.invoke("quiz", {
+    body: {
+      action: "join_room",
+      code,
+      username
+    }
+  })
+
+  if (error) throw error
+  if (!data?.success) throw new Error(data?.error || "ოთახში შესვლა ვერ მოხერხდა")
+
+  return data
+}
+
+async function getQuizRoom(code) {
+  const client = window.supabase
+
+  const { data, error } = await client.functions.invoke("quiz", {
+    body: {
+      action: "get_room",
+      code
+    }
+  })
+
+  if (error) throw error
+  if (!data?.success) throw new Error(data?.error || "ოთახის ჩატვირთვა ვერ მოხერხდა")
+
+  return data
+}
+
+window.ArduinoHubQuiz = {
+  getQuizDifficulty,
+  createQuizRoom,
+  joinQuizRoom,
+  getQuizRoom
+}
