@@ -22,19 +22,26 @@ const quizState = {
 }
 
 function createQuizInterface() {
-    const button = document.getElementById("quiz-launch-button")
+    if (document.getElementById("quiz-launch-button")) return
 
-    if (!button || button.dataset.quizInitialized === "true") return
+    const nav = document.querySelector(".hero-buttons")
 
-    button.dataset.quizInitialized = "true"
-    button.addEventListener("click", openQuizModal)
-}
+    if (nav) {
+        const button = document.createElement("button")
+        button.id = "quiz-launch-button"
+        button.type = "button"
+        button.className = "quiz-nav-button"
+        button.innerHTML = "<span>✦</span> ვიქტორინა"
+        button.addEventListener("click", openQuizModal)
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", createQuizInterface)
-} else {
-    createQuizInterface()
-}
+        const adminLink = nav.querySelector(".nav-admin")
+
+        if (adminLink) {
+            nav.insertBefore(button, adminLink)
+        } else {
+            nav.appendChild(button)
+        }
+    }
 
     const modal = document.createElement("div")
     modal.id = "quiz-modal"
