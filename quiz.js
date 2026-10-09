@@ -1,3 +1,4 @@
+
 const supabaseClient = window.supabase
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -11,10 +12,12 @@ const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
 const quizState = {
   code: "",
   room: null,
+  roomData: null,
   participants: [],
   refresh: null,
   loading: false,
-  isAdmin: false
+  isAdmin: false,
+  answering: false
 }
 
 function createQuizInterface() {
@@ -46,8 +49,10 @@ function createQuizInterface() {
 
   modal.innerHTML = `
     <div class="quiz-backdrop" data-quiz-close></div>
+
     <section class="quiz-dialog" role="dialog" aria-modal="true" aria-labelledby="quiz-heading">
       <button class="quiz-close" type="button" data-quiz-close aria-label="დახურვა">×</button>
+
       <div class="quiz-heading-icon">✦</div>
       <p class="quiz-eyebrow">ARDUINOHUB CHALLENGE</p>
       <h2 id="quiz-heading">ვიქტორინის ოთახი</h2>
@@ -75,6 +80,7 @@ function createQuizInterface() {
               <label for="quiz-count">კითხვები</label>
               <input id="quiz-count" name="question_count" type="number" min="1" max="50" value="5" required>
             </div>
+
             <div>
               <label for="quiz-timer">წამები</label>
               <input id="quiz-timer" name="timer_seconds" type="number" min="5" max="300" value="20" required>
@@ -107,6 +113,7 @@ function createQuizInterface() {
             <p class="quiz-eyebrow">ვიქტორინის ოთახი</p>
             <h3 id="quiz-room-title"></h3>
           </div>
+
           <span class="quiz-room-live"><span></span> LOBBY</span>
         </div>
 
@@ -115,6 +122,7 @@ function createQuizInterface() {
             <small>ოთახის კოდი</small>
             <strong id="quiz-room-code"></strong>
           </div>
+
           <button id="quiz-copy-code" type="button" aria-label="კოდის კოპირება">კოპირება</button>
         </div>
 
@@ -146,6 +154,30 @@ function createQuizInterface() {
           </button>
         </div>
 
+        <section id="quiz-game-panel" class="quiz-game-panel" hidden>
+          <div class="quiz-game-header">
+            <span id="quiz-game-progress">კითხვა 1</span>
+            <span id="quiz-game-timer">20 წმ</span>
+          </div>
+
+          <h3 id="quiz-game-question">კითხვის ტექსტი</h3>
+
+          <div id="quiz-game-options" class="quiz-game-options"></div>
+
+          <p id="quiz-game-feedback" role="status" aria-live="polite"></p>
+
+          <div id="quiz-game-admin-controls" hidden>
+            <button id="quiz-pause-game" class="quiz-secondary-button" type="button">პაუზა</button>
+            <button id="quiz-resume-game" class="quiz-secondary-button" type="button" hidden>გაგრძელება</button>
+            <button id="quiz-next-question" class="quiz-primary-button" type="button">შემდეგი კითხვა →</button>
+          </div>
+
+          <div id="quiz-game-results" hidden>
+            <h3>🏆 შედეგები</h3>
+            <div id="quiz-game-leaderboard"></div>
+          </div>
+        </section>
+
         <p class="quiz-lobby-note">
           ოთახის მონაწილეები პერიოდულად განახლდება. თამაშის დაწყებამდე კითხვები უნდა მომზადდეს.
         </p>
@@ -170,12 +202,34 @@ function createQuizInterface() {
   document.getElementById("quiz-generate-questions").addEventListener("click", generateQuizQuestions)
   document.getElementById("quiz-start-game").addEventListener("click", startQuizGame)
 
+  document.getElementById("quiz-game-options").addEventListener("click", event => {
+    const button = event.target.closest("[data-quiz-option]")
+
+    if (!button) return
+
+    submitQuizAnswer(Number(button.dataset.quizOption))
+  })
+
+  document.getElementById("quiz-pause-game").addEventListener("click", () => {
+    controlQuizGame("pause_game")
+  })
+
+  document.getElementById("quiz-resume-game").addEventListener("click", () => {
+    controlQuizGame("resume_game")
+  })
+
+  document.getElementById("quiz-next-question").addEventListener("click", () => {
+    controlQuizGame("next_question")
+  })
+
   document.getElementById("quiz-code").addEventListener("input", event => {
     event.target.value = event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)
   })
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && !modal.hidden) closeQuizModal()
+    if (event.key === "Escape" && !modal.hidden) {
+      closeQuizModal()
+    }
   })
 }
 
@@ -186,6 +240,10 @@ function openQuizModal() {
 
   modal.hidden = false
   document.body.classList.add("quiz-modal-open")
+
+  if (quizState.code) {
+    refreshQuizRoom(false)
+  }
 }
 
 function closeQuizModal() {
@@ -229,10 +287,7 @@ async function invokeQuiz(action, payload = {}) {
   }
 
   const { data, error } = await supabaseClient.functions.invoke("quiz", {
-    body: {
-      action,
-      ...payload
-    }
+    body: { action, ...payload }
   })
 
   if (error) {
@@ -338,6 +393,7 @@ async function joinQuizRoom(event) {
 async function showQuizRoom(room) {
   quizState.room = room
   quizState.code = room.code
+  quizState.roomData = null
   quizState.isAdmin = false
 
   document.getElementById("quiz-room-panel").hidden = false
@@ -349,24 +405,27 @@ async function showQuizRoom(room) {
 
   await refreshQuizRoom(false)
 
-  if (quizState.refresh) clearInterval(quizState.refresh)
+  if (quizState.refresh) {
+    clearInterval(quizState.refresh)
+  }
 
   quizState.refresh = setInterval(() => {
     if (!document.getElementById("quiz-modal")?.hidden) {
       refreshQuizRoom(false)
     }
-  }, 5000)
+  }, 2000)
 }
 
 async function refreshQuizRoom(showStatus) {
   if (!quizState.code) return
 
   try {
-    const data = await invokeQuiz("get_room", {
-      code: quizState.code
-    })
+    const data = await invokeQuiz("get_room", { code: quizState.code })
+
+    quizState.roomData = data
 
     const room = data.room || quizState.room
+
     const participants = (data.participants || []).filter(participant =>
       participant.role !== "admin" && participant.is_admin !== true
     )
@@ -387,6 +446,7 @@ async function refreshQuizRoom(showStatus) {
     statusLabel.innerHTML = `<span></span>${escapeHtml(status.toUpperCase())}`
 
     const list = document.getElementById("quiz-participants")
+
     document.getElementById("quiz-participant-count").textContent = participants.length
 
     if (!participants.length) {
@@ -418,8 +478,12 @@ async function refreshQuizRoom(showStatus) {
     } else if (showStatus) {
       setQuizStatus("ოთახის ინფორმაცია განახლდა.", "success")
     }
+
+    renderQuizGame(data)
   } catch (error) {
-    if (showStatus) setQuizStatus(error.message, "error")
+    if (showStatus) {
+      setQuizStatus(error.message, "error")
+    }
   }
 }
 
@@ -433,6 +497,7 @@ async function generateQuizQuestions() {
   button.disabled = true
   startButton.disabled = true
   button.textContent = "AI კითხვებს ქმნის..."
+
   setQuizStatus("AI ქმნის კითხვებს. ამას შეიძლება ცოტა დრო დასჭირდეს...")
 
   try {
@@ -451,6 +516,7 @@ async function generateQuizQuestions() {
     button.disabled = false
     startButton.disabled = false
     button.textContent = "✦ AI-ით კითხვების შექმნა"
+
     await refreshQuizRoom(false)
   }
 }
@@ -464,6 +530,7 @@ async function startQuizGame() {
   quizState.loading = true
   button.disabled = true
   generateButton.disabled = true
+
   setQuizStatus("თამაში იწყება...")
 
   try {
@@ -479,6 +546,185 @@ async function startQuizGame() {
     quizState.loading = false
     button.disabled = false
     generateButton.disabled = false
+  }
+}
+
+async function submitQuizAnswer(option) {
+  if (quizState.loading || quizState.answering || !quizState.code || quizState.isAdmin) return
+
+  const data = quizState.roomData
+  const question = data?.current_question
+
+  if (!question || data.room.status !== "playing" || data.my_answer) return
+
+  if (data.remaining_seconds <= 0) {
+    setQuizStatus("პასუხის დრო ამოიწურა.", "error")
+    return
+  }
+
+  quizState.answering = true
+
+  const buttons = document.querySelectorAll("#quiz-game-options button")
+
+  buttons.forEach(button => {
+    button.disabled = true
+  })
+
+  try {
+    const result = await invokeQuiz("submit_answer", {
+      code: quizState.code,
+      selected_option: option
+    })
+
+    const feedback = document.getElementById("quiz-game-feedback")
+
+    feedback.textContent = result.correct
+      ? `სწორია! +${result.points_awarded} ქულა. ${result.explanation || ""}`
+      : `არასწორია. ${result.explanation || ""}`
+
+    feedback.className = result.correct
+      ? "quiz-answer-correct"
+      : "quiz-answer-wrong"
+
+    await refreshQuizRoom(false)
+  } catch (error) {
+    setQuizStatus(error.message, "error")
+    await refreshQuizRoom(false)
+  } finally {
+    quizState.answering = false
+  }
+}
+
+async function controlQuizGame(action) {
+  if (quizState.loading || !quizState.code || !quizState.isAdmin) return
+
+  quizState.loading = true
+
+  const controls = document.querySelectorAll("#quiz-game-admin-controls button")
+  controls.forEach(button => {
+    button.disabled = true
+  })
+
+  try {
+    const data = await invokeQuiz(action, {
+      code: quizState.code
+    })
+
+    setQuizStatus(data.message || "მოქმედება შესრულდა.", "success")
+    await refreshQuizRoom(false)
+  } catch (error) {
+    setQuizStatus(error.message, "error")
+  } finally {
+    quizState.loading = false
+    controls.forEach(button => {
+      button.disabled = false
+    })
+  }
+}
+
+function renderQuizGame(data) {
+  const panel = document.getElementById("quiz-game-panel")
+  const results = document.getElementById("quiz-game-results")
+  const adminControls = document.getElementById("quiz-game-admin-controls")
+  const room = data.room
+
+  panel.hidden = room.status === "lobby"
+
+  if (panel.hidden) return
+
+  adminControls.hidden = !quizState.isAdmin
+
+  document.getElementById("quiz-pause-game").hidden = room.status !== "playing"
+  document.getElementById("quiz-resume-game").hidden = room.status !== "paused"
+  document.getElementById("quiz-next-question").hidden = room.status !== "playing"
+
+  if (room.status === "finished") {
+    results.hidden = false
+
+    document.getElementById("quiz-game-progress").textContent = "თამაში დასრულდა"
+    document.getElementById("quiz-game-timer").textContent = "🏁"
+    document.getElementById("quiz-game-question").textContent = "ვიქტორინა დასრულებულია!"
+    document.getElementById("quiz-game-options").innerHTML = ""
+    document.getElementById("quiz-game-feedback").textContent = ""
+
+    const ranked = [...data.participants]
+      .filter(item => item.status === "active")
+      .sort((a, b) => b.score - a.score)
+
+    document.getElementById("quiz-game-leaderboard").innerHTML = ranked.length
+      ? ranked.map((item, index) => `
+          <div class="quiz-leaderboard-row">
+            <span>${index + 1}. ${escapeHtml(item.username)}</span>
+            <strong>${Number(item.score) || 0} ქულა</strong>
+          </div>
+        `).join("")
+      : "შედეგები ჯერ არ არის"
+
+    return
+  }
+
+  results.hidden = true
+
+  const question = data.current_question
+  const options = document.getElementById("quiz-game-options")
+  const feedback = document.getElementById("quiz-game-feedback")
+
+  if (!question) {
+    document.getElementById("quiz-game-question").textContent = "კითხვა იტვირთება..."
+    options.innerHTML = ""
+    return
+  }
+
+  document.getElementById("quiz-game-progress").textContent =
+    `კითხვა ${question.position + 1} / ${room.question_count}`
+
+  document.getElementById("quiz-game-timer").textContent =
+    room.status === "paused"
+      ? "⏸ პაუზა"
+      : `${data.remaining_seconds ?? room.timer_seconds} წმ`
+
+  document.getElementById("quiz-game-question").textContent = question.question
+
+  const answered = Boolean(data.my_answer)
+
+  const disabled =
+    quizState.isAdmin ||
+    answered ||
+    room.status !== "playing" ||
+    data.remaining_seconds <= 0
+
+  options.innerHTML = question.options.map((option, index) => `
+    <button type="button" data-quiz-option="${index}" ${disabled ? "disabled" : ""}>
+      <span>${String.fromCharCode(65 + index)}</span>
+      ${escapeHtml(option)}
+    </button>
+  `).join("")
+
+  if (data.my_answer) {
+    const answer = data.my_answer
+
+    feedback.textContent = answer.is_correct
+      ? `სწორია! +${answer.points_awarded} ქულა. ${answer.explanation || ""}`
+      : `არასწორია. სწორი პასუხია: ${question.options[answer.correct_option] || ""}. ${answer.explanation || ""}`
+
+    feedback.className = answer.is_correct
+      ? "quiz-answer-correct"
+      : "quiz-answer-wrong"
+  } else if (quizState.isAdmin) {
+    feedback.textContent = room.status === "paused"
+      ? "თამაში დაპაუზებულია."
+      : "მოთამაშეების პასუხებს ელოდები. დროის დასრულების შემდეგ დააჭირე შემდეგ კითხვას."
+
+    feedback.className = ""
+  } else if (data.remaining_seconds <= 0) {
+    feedback.textContent = "დრო ამოიწურა. დაელოდე წამყვანს."
+    feedback.className = ""
+  } else if (room.status === "paused") {
+    feedback.textContent = "თამაში დროებით შეჩერებულია."
+    feedback.className = ""
+  } else {
+    feedback.textContent = "აირჩიე ერთი პასუხი."
+    feedback.className = ""
   }
 }
 
