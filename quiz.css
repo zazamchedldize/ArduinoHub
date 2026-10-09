@@ -536,3 +536,122 @@ body.quiz-modal-open {
     transition: none;
   }
 }
+
+
+.quiz-game-panel {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid rgba(34, 211, 149, .3);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #0c1c17, #07110f);
+  color: #f4fff9;
+}
+
+.quiz-game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: #22d395;
+  font-weight: 700;
+}
+
+#quiz-game-timer {
+  padding: 8px 13px;
+  border-radius: 12px;
+  background: rgba(34, 211, 149, .12);
+}
+
+#quiz-game-question {
+  margin: 0 0 22px;
+  font-size: clamp(20px, 3vw, 30px);
+  line-height: 1.5;
+}
+
+.quiz-game-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.quiz-game-options button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .04);
+  color: #f4fff9;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+
+.quiz-game-options button:not(:disabled):hover {
+  border-color: #22d395;
+  background: rgba(34, 211, 149, .1);
+  transform: translateY(-2px);
+}
+
+.quiz-game-options button:disabled {
+  opacity: .75;
+  cursor: default;
+}
+
+.quiz-game-options button span {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(34, 211, 149, .12);
+  color: #22d395;
+  font-weight: 800;
+}
+
+#quiz-game-feedback {
+  margin: 18px 0;
+  line-height: 1.7;
+}
+
+.quiz-answer-correct {
+  color: #22d395;
+}
+
+.quiz-answer-wrong {
+  color: #ff8d8d;
+}
+
+#quiz-game-admin-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.quiz-leaderboard-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.quiz-leaderboard-row strong {
+  color: #22d395;
+}
+
+@media (max-width: 600px) {
+  .quiz-game-panel {
+    padding: 16px;
+  }
+
+  .quiz-game-options {
+    grid-template-columns: 1fr;
+  }
+}
+
