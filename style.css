@@ -8340,3 +8340,74 @@ svg{
 .birthday-ribbon {
   animation-iteration-count: infinite;
 }
+
+
+.hbd-admin-field select#hbd-style {
+  width: 100%;
+  padding: 15px 18px;
+  border: 1px solid rgba(34, 211, 149, 0.35);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #101b18, #080e0c);
+  color: #f0fff8;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+}
+
+.hbd-admin-field select#hbd-style:hover {
+  border-color: #22d395;
+}
+
+.hbd-admin-field select#hbd-style:focus {
+  border-color: #22d395;
+  box-shadow: 0 0 0 3px rgba(34, 211, 149, 0.13);
+}
+
+.hbd-admin-field select#hbd-style option {
+  padding: 12px;
+  background: #101714;
+  color: #f0fff8;
+  font-weight: 600;
+}
+
+.hbd-admin-field:has(select#hbd-style) {
+  position: relative;
+}
+
+.hbd-admin-field:has(select#hbd-style)::after {
+  content: "";
+  position: absolute;
+  right: 17px;
+  bottom: 20px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #22d395;
+  border-bottom: 2px solid #22d395;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.hbd-admin-field:has(select#hbd-style) label {
+  display: block;
+  margin-bottom: 10px;
+  color: #d9eee5;
+  font-weight: 600;
+}
+
+.hbd-admin-field:has(select#hbd-style) select#hbd-style option[value="normal"] {
+  color: #22d395;
+}
+
+.hbd-admin-field:has(select#hbd-style) select#hbd-style option[value="tvd"] {
+  color: #ff5b65;
+}
+
+.hbd-admin-field:has(select#hbd-style) select#hbd-style option[value="ironman"] {
+  color: #ffc857;
+}
