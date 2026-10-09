@@ -24,7 +24,7 @@ const quizState = {
 function createQuizInterface() {
     if (document.getElementById("quiz-launch-button")) return
 
-    const nav = document.querySelector(".hero-buttons")
+    const nav = document.querySelector(".site-header nav")
 
     if (nav) {
         const button = document.createElement("button")
