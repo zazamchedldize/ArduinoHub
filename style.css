@@ -8411,3 +8411,20 @@ svg{
 .hbd-admin-field:has(select#hbd-style) select#hbd-style option[value="ironman"] {
   color: #ffc857;
 }
+
+
+@keyframes softGlow {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+.birthday-glow {
+  animation: softGlow 5s ease-in-out infinite;
+}
