@@ -99,6 +99,62 @@
   </script>
 
   <style>
+
+
+.birthday-modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 14px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.birthday-dialog {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 560px;
+  max-height: none;
+  height: auto;
+  min-height: 0;
+  margin: auto;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.birthday-message {
+  max-height: none;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.birthday-modal[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  .birthday-modal {
+    padding: 16px 10px;
+  }
+
+  .birthday-dialog {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
          
 .birthday-modal {
   isolation: isolate;
