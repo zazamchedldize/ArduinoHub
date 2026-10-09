@@ -343,7 +343,7 @@ async function refreshQuizRoom(showStatus) {
     })
 
     const room = data.room || quizState.room
-    const participants = data.participants || data.room?.participants || []
+    const participants = (data.participants || data.room?.participants || []).filter(participant => participant.role !== "admin" && participant.is_admin !== true)
 
     quizState.room = room
     quizState.participants = participants
