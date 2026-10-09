@@ -655,3 +655,191 @@ body.quiz-modal-open {
   }
 }
 
+
+/* ლამაზი scrollbar */
+
+.quiz-dialog,
+.quiz-modal,
+#quiz-game-leaderboard {
+    scrollbar-width: thin;
+    scrollbar-color: #22d395 #07110f;
+}
+
+.quiz-dialog::-webkit-scrollbar,
+.quiz-modal::-webkit-scrollbar,
+#quiz-game-leaderboard::-webkit-scrollbar {
+    width: 8px;
+}
+
+.quiz-dialog::-webkit-scrollbar-track,
+.quiz-modal::-webkit-scrollbar-track,
+#quiz-game-leaderboard::-webkit-scrollbar-track {
+    background: #07110f;
+    border-radius: 20px;
+}
+
+.quiz-dialog::-webkit-scrollbar-thumb,
+.quiz-modal::-webkit-scrollbar-thumb,
+#quiz-game-leaderboard::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #34d399, #047857);
+    border: 2px solid #07110f;
+    border-radius: 20px;
+}
+
+.quiz-dialog::-webkit-scrollbar-thumb:hover,
+.quiz-modal::-webkit-scrollbar-thumb:hover,
+#quiz-game-leaderboard::-webkit-scrollbar-thumb:hover {
+    background: #6ee7b7;
+}
+
+/* კითხვების რაოდენობისა და დროის ველები */
+
+#quiz-count,
+#quiz-timer {
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid rgba(34, 211, 149, .25);
+    border-radius: 12px;
+    background:
+        linear-gradient(145deg, rgba(34, 211, 149, .08), rgba(4, 19, 12, .98));
+    color: #ecfdf5;
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+#quiz-count:hover,
+#quiz-timer:hover {
+    border-color: rgba(34, 211, 149, .55);
+}
+
+#quiz-count:focus,
+#quiz-timer:focus {
+    border-color: #22d395;
+    outline: none;
+    background: #061a11;
+    box-shadow: 0 0 0 3px rgba(34, 211, 149, .13),
+                0 0 20px rgba(34, 211, 149, .08);
+}
+
+/* რიცხვის არჩევის ისრები */
+
+#quiz-count::-webkit-inner-spin-button,
+#quiz-timer::-webkit-inner-spin-button {
+    cursor: pointer;
+    opacity: 1;
+    filter: invert(75%) sepia(45%) saturate(600%) hue-rotate(100deg);
+}
+
+/* ორი ველის განლაგება */
+
+.quiz-form-row {
+    gap: 14px;
+    margin-top: 5px;
+}
+
+.quiz-form-row > div {
+    padding: 12px;
+    border: 1px solid rgba(34, 211, 149, .12);
+    border-radius: 14px;
+    background: rgba(34, 211, 149, .035);
+}
+
+.quiz-form-row > div label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #a7f3d0;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#quiz-count,
+#quiz-timer {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* პასუხების არჩევის ღილაკები */
+
+.quiz-game-options button {
+    position: relative;
+    overflow: hidden;
+    min-height: 70px;
+    padding: 16px;
+    border: 1px solid rgba(34, 211, 149, .18);
+    border-radius: 15px;
+    background: linear-gradient(145deg, rgba(34, 211, 149, .055), rgba(255, 255, 255, .025));
+    color: #ecfdf5;
+    font-size: 14px;
+    line-height: 1.6;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.quiz-game-options button:not(:disabled):hover {
+    border-color: #22d395;
+    background: linear-gradient(145deg, rgba(34, 211, 149, .16), rgba(34, 211, 149, .045));
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .18), 0 0 18px rgba(34, 211, 149, .06);
+    transform: translateY(-2px);
+}
+
+.quiz-game-options button span {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(34, 211, 149, .22);
+    border-radius: 11px;
+    background: rgba(34, 211, 149, .1);
+    color: #6ee7b7;
+    transition: background .2s ease, color .2s ease;
+}
+
+.quiz-game-options button:not(:disabled):hover span {
+    background: #22d395;
+    color: #04130c;
+}
+
+/* დროის მაჩვენებელი */
+
+#quiz-game-timer {
+    min-width: 75px;
+    border: 1px solid rgba(34, 211, 149, .2);
+    border-radius: 12px;
+    background: rgba(34, 211, 149, .09);
+    color: #6ee7b7;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+/* მობილურისთვის */
+
+@media (max-width: 600px) {
+    .quiz-dialog::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .quiz-form-row {
+        gap: 10px;
+    }
+
+    .quiz-form-row > div {
+        padding: 10px;
+    }
+
+    .quiz-game-options button {
+        min-height: 60px;
+        padding: 12px;
+        font-size: 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #quiz-count,
+    #quiz-timer,
+    .quiz-game-options button,
+    .quiz-game-options button span {
+        transition: none;
+    }
+}
+
