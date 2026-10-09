@@ -51,43 +51,47 @@ function createQuizInterface() {
     modal.innerHTML = `
         <div class="quiz-backdrop" data-quiz-close></div>
 
-        <section class="quiz-dialog" role="dialog" aria-modal="true" aria-labelledby="quiz-heading">
+        <section class="quiz-dialog quiz-role-home" role="dialog" aria-modal="true" aria-labelledby="quiz-heading">
             <button class="quiz-close" type="button" data-quiz-close aria-label="დახურვა">×</button>
 
-            <div class="quiz-heading-icon">✦</div>
+            <div id="quiz-heading-icon" class="quiz-heading-icon">✦</div>
             <p class="quiz-eyebrow">ARDUINOHUB CHALLENGE</p>
             <h2 id="quiz-heading">ვიქტორინა</h2>
-            <p id="quiz-description" class="quiz-description">აირჩიე, როგორ გსურს ვიქტორინაში მონაწილეობა.</p>
+            <p id="quiz-description" class="quiz-description">აირჩიე შენი როლი და მოემზადე თამაშისთვის.</p>
 
-            <div id="quiz-role-choice" class="quiz-forms">
-                <div class="quiz-card">
-                    <div class="quiz-card-title">ადმინისტრატორი</div>
-                    <p class="quiz-card-description">შექმენი ოთახი, მოამზადე კითხვები და მართე თამაში.</p>
-                    <button id="quiz-select-admin" class="quiz-primary-button" type="button">
-                        ოთახის შექმნა →
-                    </button>
-                </div>
+            <div id="quiz-role-choice" class="quiz-forms quiz-role-choice">
+                <button id="quiz-select-admin" class="quiz-role-card quiz-role-admin" type="button">
+                    <span class="quiz-role-icon">♜</span>
+                    <span class="quiz-role-title">ადმინისტრატორი</span>
+                    <span class="quiz-role-description">შექმენი ოთახი, მოამზადე კითხვები და მართე თამაში.</span>
+                    <span class="quiz-role-action">ოთახის შექმნა <span>→</span></span>
+                </button>
 
-                <div class="quiz-card">
-                    <div class="quiz-card-title">მოთამაშე</div>
-                    <p class="quiz-card-description">შეუერთდი არსებულ ოთახს და შეეჯიბრე სხვა მონაწილეებს.</p>
-                    <button id="quiz-select-player" class="quiz-secondary-button" type="button">
-                        ოთახში შესვლა →
-                    </button>
-                </div>
+                <button id="quiz-select-player" class="quiz-role-card quiz-role-player" type="button">
+                    <span class="quiz-role-icon">🎮</span>
+                    <span class="quiz-role-title">მოთამაშე</span>
+                    <span class="quiz-role-description">შეუერთდი ოთახს კოდით და შეეჯიბრე სხვა მონაწილეებს.</span>
+                    <span class="quiz-role-action">თამაშში შესვლა <span>→</span></span>
+                </button>
             </div>
 
-            <div id="quiz-forms" class="quiz-forms" hidden>
+            <div id="quiz-forms" class="quiz-forms quiz-single-form" hidden>
                 <form id="quiz-create-form" class="quiz-card" hidden>
-                    <div class="quiz-card-title">ახალი ოთახი</div>
+                    <div class="quiz-screen-heading">
+                        <span class="quiz-screen-icon">♜</span>
+                        <div>
+                            <div class="quiz-card-title">ახალი ვიქტორინა</div>
+                            <p>მოარგე თამაში შენს სურვილს.</p>
+                        </div>
+                    </div>
 
                     <label for="quiz-title">ოთახის სახელი</label>
                     <input id="quiz-title" name="title" maxlength="100" placeholder="მაგ. Arduino Challenge" required>
 
-                    <label for="quiz-topic">თემა</label>
+                    <label for="quiz-topic">ვიქტორინის თემა</label>
                     <input id="quiz-topic" name="topic" maxlength="500" placeholder="მაგ. Arduino და ქიმია" required>
 
-                    <label for="quiz-difficulty">სირთულე</label>
+                    <label for="quiz-difficulty">სირთულის დონე</label>
                     <select id="quiz-difficulty" name="difficulty">
                         <option value="easy">მარტივი</option>
                         <option value="medium">საშუალო</option>
@@ -96,38 +100,43 @@ function createQuizInterface() {
 
                     <div class="quiz-form-row">
                         <div>
-                            <label for="quiz-count">კითხვები</label>
+                            <label for="quiz-count">კითხვების რაოდენობა</label>
                             <input id="quiz-count" name="question_count" type="number" min="1" max="50" value="5" required>
                         </div>
 
                         <div>
-                            <label for="quiz-timer">წამები</label>
+                            <label for="quiz-timer">დრო თითო კითხვაზე</label>
                             <input id="quiz-timer" name="timer_seconds" type="number" min="5" max="300" value="20" required>
                         </div>
                     </div>
 
                     <button class="quiz-primary-button" type="submit">
-                        ოთახის შექმნა →
+                        ოთახის შექმნა <span>→</span>
                     </button>
 
                     <button id="quiz-back-to-roles" class="quiz-secondary-button" type="button">
-                        უკან დაბრუნება
+                        ← როლის არჩევა
                     </button>
                 </form>
 
                 <form id="quiz-join-form" class="quiz-card" hidden>
-                    <div class="quiz-card-title">ოთახში შესვლა</div>
-                    <p class="quiz-card-description">შეიყვანე ადმინისტრატორის მიერ მოწოდებული კოდი.</p>
+                    <div class="quiz-screen-heading">
+                        <span class="quiz-screen-icon">🎮</span>
+                        <div>
+                            <div class="quiz-card-title">თამაშში შესვლა</div>
+                            <p>შეიყვანე ოთახის კოდი და შეუერთდი მონაწილეებს.</p>
+                        </div>
+                    </div>
 
                     <label for="quiz-code">ოთახის კოდი</label>
                     <input id="quiz-code" name="code" maxlength="6" placeholder="მაგ. 72S3AL" autocomplete="off" required>
 
                     <button class="quiz-primary-button" type="submit">
-                        შემოერთება →
+                        თამაშში შესვლა <span>→</span>
                     </button>
 
                     <button id="quiz-back-to-roles-player" class="quiz-secondary-button" type="button">
-                        უკან დაბრუნება
+                        ← როლის არჩევა
                     </button>
                 </form>
             </div>
@@ -169,7 +178,7 @@ function createQuizInterface() {
                     <div id="quiz-participants" class="quiz-participants"></div>
 
                     <div id="quiz-admin-controls" hidden>
-                        <div class="quiz-card-title">ადმინისტრატორის მართვა</div>
+                        <div class="quiz-card-title">თამაშის მართვა</div>
 
                         <p class="quiz-card-description">
                             შექმენი კითხვები ხელოვნური ინტელექტის დახმარებით და დაიწყე თამაში.
@@ -244,7 +253,6 @@ function createQuizInterface() {
     document.getElementById("quiz-join-form").addEventListener("submit", joinQuizRoom)
 
     document.getElementById("quiz-copy-code").addEventListener("click", copyQuizCode)
-
     document.getElementById("quiz-refresh-room").addEventListener("click", () => refreshQuizRoom(true))
     document.getElementById("quiz-generate-questions").addEventListener("click", generateQuizQuestions)
     document.getElementById("quiz-start-game").addEventListener("click", startQuizGame)
@@ -257,17 +265,9 @@ function createQuizInterface() {
         submitQuizAnswer(Number(button.dataset.quizOption))
     })
 
-    document.getElementById("quiz-pause-game").addEventListener("click", () => {
-        controlQuizGame("pause_game")
-    })
-
-    document.getElementById("quiz-resume-game").addEventListener("click", () => {
-        controlQuizGame("resume_game")
-    })
-
-    document.getElementById("quiz-next-question").addEventListener("click", () => {
-        controlQuizGame("next_question")
-    })
+    document.getElementById("quiz-pause-game").addEventListener("click", () => controlQuizGame("pause_game"))
+    document.getElementById("quiz-resume-game").addEventListener("click", () => controlQuizGame("resume_game"))
+    document.getElementById("quiz-next-question").addEventListener("click", () => controlQuizGame("next_question"))
 
     document.getElementById("quiz-code").addEventListener("input", event => {
         event.target.value = event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)
@@ -283,15 +283,30 @@ function createQuizInterface() {
 function selectQuizRole(role) {
     quizState.role = role
 
-    document.getElementById("quiz-role-choice").hidden = true
-    document.getElementById("quiz-forms").hidden = false
+    const dialog = document.querySelector("#quiz-modal .quiz-dialog")
+    const roleChoice = document.getElementById("quiz-role-choice")
+    const forms = document.getElementById("quiz-forms")
+
+    dialog.classList.remove("quiz-role-home", "quiz-role-admin-active", "quiz-role-player-active")
+    dialog.classList.add(role === "admin" ? "quiz-role-admin-active" : "quiz-role-player-active")
+
+    roleChoice.hidden = true
+    forms.hidden = false
+    forms.classList.add("quiz-single-form")
 
     document.getElementById("quiz-create-form").hidden = role !== "admin"
     document.getElementById("quiz-join-form").hidden = role !== "player"
 
-    document.getElementById("quiz-description").textContent = role === "admin"
-        ? "შეავსე პარამეტრები და შექმენი ახალი ვიქტორინა."
-        : "შეიყვანე ოთახის კოდი და შეუერთდი ვიქტორინას."
+    document.getElementById("quiz-heading").textContent =
+        role === "admin" ? "ადმინისტრატორის პანელი" : "მოთამაშის შესვლა"
+
+    document.getElementById("quiz-heading-icon").textContent =
+        role === "admin" ? "♜" : "🎮"
+
+    document.getElementById("quiz-description").textContent =
+        role === "admin"
+            ? "შექმენი შენი ვიქტორინა რამდენიმე მარტივი ნაბიჯით."
+            : "შეიყვანე ოთახის კოდი და შეუერთდი თამაშს."
 
     setQuizStatus("")
 }
@@ -301,13 +316,20 @@ function resetQuizRole() {
 
     quizState.role = ""
 
+    const dialog = document.querySelector("#quiz-modal .quiz-dialog")
+
+    dialog.classList.remove("quiz-role-admin-active", "quiz-role-player-active")
+    dialog.classList.add("quiz-role-home")
+
     document.getElementById("quiz-role-choice").hidden = false
     document.getElementById("quiz-forms").hidden = true
     document.getElementById("quiz-create-form").hidden = true
     document.getElementById("quiz-join-form").hidden = true
 
+    document.getElementById("quiz-heading").textContent = "ვიქტორინა"
+    document.getElementById("quiz-heading-icon").textContent = "✦"
     document.getElementById("quiz-description").textContent =
-        "აირჩიე, როგორ გსურს ვიქტორინაში მონაწილეობა."
+        "აირჩიე შენი როლი და მოემზადე თამაშისთვის."
 
     setQuizStatus("")
 }
@@ -322,6 +344,9 @@ function openQuizModal() {
 
     if (quizState.code) {
         refreshQuizRoom(false)
+        startQuizRefresh()
+    } else {
+        resetQuizRole()
     }
 }
 
@@ -338,6 +363,18 @@ function closeQuizModal() {
         clearInterval(quizState.refresh)
         quizState.refresh = null
     }
+}
+
+function startQuizRefresh() {
+    if (quizState.refresh) {
+        clearInterval(quizState.refresh)
+    }
+
+    quizState.refresh = setInterval(() => {
+        if (!document.getElementById("quiz-modal")?.hidden) {
+            refreshQuizRoom(false)
+        }
+    }, 2000)
 }
 
 function setQuizStatus(message, type = "") {
@@ -464,7 +501,6 @@ async function joinQuizRoom(event) {
         const data = await invokeQuiz("join_room", { code })
 
         await showQuizRoom(data.room)
-
         setQuizStatus(data.message || "ოთახში წარმატებით შეხვედი.", "success")
     } catch (error) {
         setQuizStatus(error.message, "error")
@@ -479,21 +515,21 @@ async function showQuizRoom(room) {
     quizState.code = room.code
     quizState.roomData = null
 
+    const dialog = document.querySelector("#quiz-modal .quiz-dialog")
+
+    dialog.classList.remove("quiz-role-home", "quiz-role-admin-active", "quiz-role-player-active")
+    dialog.classList.add("quiz-room-active")
+
     document.getElementById("quiz-role-choice").hidden = true
     document.getElementById("quiz-forms").hidden = true
     document.getElementById("quiz-room-panel").hidden = false
 
+    document.getElementById("quiz-heading").textContent = "ვიქტორინის ოთახი"
+    document.getElementById("quiz-heading-icon").textContent = "✦"
+    document.getElementById("quiz-description").textContent = "მოემზადე ვიქტორინისთვის."
+
     await refreshQuizRoom(false)
-
-    if (quizState.refresh) {
-        clearInterval(quizState.refresh)
-    }
-
-    quizState.refresh = setInterval(() => {
-        if (!document.getElementById("quiz-modal")?.hidden) {
-            refreshQuizRoom(false)
-        }
-    }, 2000)
+    startQuizRefresh()
 }
 
 async function refreshQuizRoom(showStatus) {
@@ -515,6 +551,11 @@ async function refreshQuizRoom(showStatus) {
         quizState.room = room
         quizState.participants = participants
         quizState.isAdmin = data.is_admin === true
+
+        const dialog = document.querySelector("#quiz-modal .quiz-dialog")
+
+        dialog.classList.toggle("quiz-room-admin", quizState.isAdmin)
+        dialog.classList.toggle("quiz-room-player", !quizState.isAdmin)
 
         document.getElementById("quiz-room-title").textContent = room.title || "ვიქტორინა"
         document.getElementById("quiz-room-code").textContent = room.code || ""
@@ -633,7 +674,6 @@ async function startQuizGame() {
         })
 
         setQuizStatus(data.message || "თამაში დაიწყო.", "success")
-
         await refreshQuizRoom(false)
     } catch (error) {
         setQuizStatus(error.message, "error")
@@ -708,7 +748,6 @@ async function controlQuizGame(action) {
         })
 
         setQuizStatus(data.message || "მოქმედება შესრულდა.", "success")
-
         await refreshQuizRoom(false)
     } catch (error) {
         setQuizStatus(error.message, "error")
@@ -817,7 +856,7 @@ function renderQuizGame(data) {
     } else if (quizState.isAdmin) {
         feedback.textContent = room.status === "paused"
             ? "თამაში დაპაუზებულია."
-            : "მოთამაშეების პასუხებს ელოდები. დროის დასრულების შემდეგ შეგიძლია შემდეგ კითხვაზე გადასვლა."
+            : "მოთამაშეების პასუხებს ელოდები."
 
         feedback.className = ""
     } else if (data.remaining_seconds <= 0) {
