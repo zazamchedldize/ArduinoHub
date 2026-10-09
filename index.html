@@ -99,6 +99,384 @@
   </script>
 
   <style>
+         
+.birthday-modal {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.birthday-modal .birthday-backdrop {
+  background: rgba(2, 4, 8, .88);
+  backdrop-filter: blur(18px) saturate(.8);
+}
+
+.birthday-dialog {
+  isolation: isolate;
+  width: min(100%, 590px);
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  padding: 48px 38px 34px;
+  border: 1px solid rgba(148, 163, 184, .25);
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .07), transparent 48%),
+    linear-gradient(155deg, #151c25 0%, #0a0e15 58%, #070a10 100%);
+  box-shadow: 0 35px 100px rgba(0, 0, 0, .7);
+  transition: border-color .35s ease, box-shadow .35s ease, background .35s ease;
+}
+
+.birthday-dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0 12% auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
+  opacity: .5;
+}
+
+.birthday-modal .birthday-close {
+  border-color: rgba(255, 255, 255, .15);
+  background: rgba(0, 0, 0, .35);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+.birthday-modal .birthday-icon {
+  width: 94px;
+  height: 94px;
+  border-radius: 26px;
+  font-size: 46px;
+  background: rgba(255, 255, 255, .045);
+  border-color: rgba(255, 255, 255, .13);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .08);
+}
+
+.birthday-modal .birthday-eyebrow {
+  margin-top: 22px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.birthday-modal #birthday-title {
+  margin-top: 12px;
+  font-size: clamp(27px, 5vw, 39px);
+  letter-spacing: -.8px;
+  line-height: 1.25;
+}
+
+.birthday-modal .birthday-name {
+  margin-top: 15px;
+  font-size: clamp(24px, 4vw, 34px);
+  letter-spacing: -.5px;
+}
+
+.birthday-modal .birthday-message {
+  margin-top: 20px;
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.birthday-modal .birthday-decoration {
+  margin: 24px 0;
+  gap: 19px;
+}
+
+.birthday-modal .birthday-finish {
+  min-width: 170px;
+  border-radius: 12px;
+  padding: 14px 25px;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.birthday-modal .birthday-finish:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+}
+
+.birthday-modal.style-normal,
+.birthday-modal.birthday-modal--normal {
+  --birthday-accent: #34d399;
+  --birthday-secondary: #a78bfa;
+}
+
+.birthday-modal.style-normal .birthday-dialog,
+.birthday-modal.birthday-modal--normal .birthday-dialog {
+  border-color: rgba(52, 211, 153, .45);
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(52, 211, 153, .13), transparent 45%),
+    radial-gradient(ellipse at 100% 100%, rgba(167, 139, 250, .11), transparent 45%),
+    linear-gradient(155deg, #10251f, #080f13 70%);
+  box-shadow: 0 35px 100px rgba(0, 0, 0, .7), 0 0 55px rgba(52, 211, 153, .08);
+}
+
+.birthday-modal.style-normal .birthday-icon,
+.birthday-modal.birthday-modal--normal .birthday-icon {
+  border-color: rgba(52, 211, 153, .3);
+  background: linear-gradient(145deg, rgba(52, 211, 153, .15), rgba(167, 139, 250, .12));
+}
+
+.birthday-modal.style-normal .birthday-eyebrow,
+.birthday-modal.birthday-modal--normal .birthday-eyebrow {
+  color: #6ee7b7;
+}
+
+.birthday-modal.style-normal .birthday-name,
+.birthday-modal.birthday-modal--normal .birthday-name {
+  color: #6ee7b7;
+  text-shadow: 0 0 28px rgba(52, 211, 153, .18);
+}
+
+.birthday-modal.style-normal .birthday-finish,
+.birthday-modal.birthday-modal--normal .birthday-finish {
+  border-color: #34d399;
+  background: linear-gradient(135deg, #047857, #10b981);
+}
+
+.birthday-modal.style-tvd,
+.birthday-modal.birthday-modal--tvd {
+  --birthday-accent: #e11d48;
+}
+
+.birthday-modal.style-tvd .birthday-backdrop,
+.birthday-modal.birthday-modal--tvd .birthday-backdrop {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(83, 0, 15, .35), transparent 65%),
+    rgba(3, 1, 4, .94);
+  backdrop-filter: blur(20px);
+}
+
+.birthday-modal.style-tvd .birthday-dialog,
+.birthday-modal.birthday-modal--tvd .birthday-dialog {
+  border-color: rgba(190, 24, 49, .6);
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(153, 27, 47, .24), transparent 48%),
+    linear-gradient(155deg, #1a090d 0%, #100609 48%, #070407 100%);
+  box-shadow: 0 35px 110px rgba(0, 0, 0, .85), 0 0 65px rgba(190, 24, 49, .12);
+}
+
+.birthday-modal.style-tvd .birthday-dialog::before,
+.birthday-modal.birthday-modal--tvd .birthday-dialog::before {
+  background: linear-gradient(90deg, transparent, #e11d48, transparent);
+  opacity: .8;
+}
+
+.birthday-modal.style-tvd .birthday-glow,
+.birthday-modal.birthday-modal--tvd .birthday-glow {
+  top: -130px;
+  width: 280px;
+  height: 280px;
+  background: rgba(153, 27, 47, .25);
+  filter: blur(85px);
+}
+
+.birthday-modal.style-tvd .birthday-icon,
+.birthday-modal.birthday-modal--tvd .birthday-icon {
+  border-radius: 50%;
+  border-color: rgba(225, 29, 72, .48);
+  background: radial-gradient(circle, rgba(153, 27, 47, .24), rgba(20, 4, 9, .7));
+  box-shadow: inset 0 0 30px rgba(225, 29, 72, .08), 0 0 45px rgba(225, 29, 72, .1);
+}
+
+.birthday-modal.style-tvd .birthday-eyebrow,
+.birthday-modal.birthday-modal--tvd .birthday-eyebrow {
+  color: #fb7185;
+}
+
+.birthday-modal.style-tvd #birthday-title,
+.birthday-modal.birthday-modal--tvd #birthday-title {
+  color: #fff1f2;
+  text-shadow: 0 0 35px rgba(225, 29, 72, .12);
+}
+
+.birthday-modal.style-tvd .birthday-name,
+.birthday-modal.birthday-modal--tvd .birthday-name {
+  color: #fb334f;
+  text-shadow: 0 0 30px rgba(225, 29, 72, .22);
+}
+
+.birthday-modal.style-tvd .birthday-message,
+.birthday-modal.birthday-modal--tvd .birthday-message {
+  color: #d6c3c8;
+}
+
+.birthday-modal.style-tvd .birthday-finish,
+.birthday-modal.birthday-modal--tvd .birthday-finish {
+  border-color: rgba(251, 51, 79, .8);
+  background: linear-gradient(135deg, #680b20, #b31332);
+  box-shadow: 0 8px 30px rgba(179, 19, 50, .18);
+}
+
+.birthday-modal.style-ironman,
+.birthday-modal.birthday-modal--ironman {
+  --birthday-accent: #fbbf24;
+}
+
+.birthday-modal.style-ironman .birthday-backdrop,
+.birthday-modal.birthday-modal--ironman .birthday-backdrop {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(0, 75, 145, .2), transparent 65%),
+    rgba(2, 5, 12, .94);
+  backdrop-filter: blur(20px);
+}
+
+.birthday-modal.style-ironman .birthday-dialog,
+.birthday-modal.birthday-modal--ironman .birthday-dialog {
+  border-color: rgba(245, 158, 11, .55);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 153, 255, .16), transparent 44%),
+    radial-gradient(ellipse at 100% 100%, rgba(220, 38, 38, .12), transparent 48%),
+    linear-gradient(155deg, #16151b, #0b0e16 65%, #080b12);
+  box-shadow: 0 35px 110px rgba(0, 0, 0, .8), 0 0 55px rgba(0, 153, 255, .09);
+}
+
+.birthday-modal.style-ironman .birthday-dialog::before,
+.birthday-modal.birthday-modal--ironman .birthday-dialog::before {
+  background: linear-gradient(90deg, transparent, #fbbf24, #38bdf8, transparent);
+  opacity: .8;
+}
+
+.birthday-modal.style-ironman .birthday-glow,
+.birthday-modal.birthday-modal--ironman .birthday-glow {
+  top: -130px;
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 153, 255, .23);
+  filter: blur(80px);
+}
+
+.birthday-modal.style-ironman .birthday-icon,
+.birthday-modal.birthday-modal--ironman .birthday-icon {
+  border-radius: 26px;
+  border-color: rgba(56, 189, 248, .55);
+  background: radial-gradient(circle, rgba(56, 189, 248, .2), rgba(153, 27, 27, .12));
+  box-shadow: inset 0 0 25px rgba(56, 189, 248, .12), 0 0 35px rgba(56, 189, 248, .12);
+}
+
+.birthday-modal.style-ironman .birthday-eyebrow,
+.birthday-modal.birthday-modal--ironman .birthday-eyebrow {
+  color: #67e8f9;
+}
+
+.birthday-modal.style-ironman #birthday-title,
+.birthday-modal.birthday-modal--ironman #birthday-title {
+  color: #fff7ed;
+}
+
+.birthday-modal.style-ironman .birthday-name,
+.birthday-modal.birthday-modal--ironman .birthday-name {
+  color: #fbbf24;
+  text-shadow: 0 0 28px rgba(251, 191, 36, .2);
+}
+
+.birthday-modal.style-ironman .birthday-message,
+.birthday-modal.birthday-modal--ironman .birthday-message {
+  color: #d1d9e6;
+}
+
+.birthday-modal.style-ironman .birthday-finish,
+.birthday-modal.birthday-modal--ironman .birthday-finish {
+  border-color: #fbbf24;
+  background: linear-gradient(120deg, #8f1d1d, #b45309);
+  box-shadow: 0 8px 30px rgba(245, 158, 11, .14);
+}
+
+.birthday-tvd-particle,
+.birthday-ironman-particle {
+  position: absolute;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 17px;
+  text-shadow: 0 0 15px currentColor;
+  pointer-events: none;
+  animation: birthday-special-particle var(--particle-duration, 3s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.birthday-tvd-particle {
+  color: #fb334f;
+  filter: drop-shadow(0 0 8px rgba(225, 29, 72, .45));
+}
+
+.birthday-ironman-particle {
+  color: #67e8f9;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, .5));
+}
+
+@keyframes birthday-special-particle {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(.7) rotate(-12deg);
+    opacity: .25;
+  }
+  50% {
+    transform: translate3d(var(--particle-drift, 20px), -24px, 0) scale(1.15) rotate(12deg);
+    opacity: .9;
+  }
+}
+
+.birthday-modal.style-tvd .birthday-decoration span,
+.birthday-modal.birthday-modal--tvd .birthday-decoration span {
+  filter: drop-shadow(0 0 8px rgba(225, 29, 72, .25));
+}
+
+.birthday-modal.style-ironman .birthday-decoration span,
+.birthday-modal.birthday-modal--ironman .birthday-decoration span {
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, .25));
+}
+
+@media (max-width: 600px) {
+  .birthday-modal {
+    padding: 12px;
+  }
+
+  .birthday-dialog {
+    padding: 43px 21px 25px;
+    border-radius: 23px;
+  }
+
+  .birthday-modal .birthday-icon {
+    width: 78px;
+    height: 78px;
+    border-radius: 22px;
+    font-size: 39px;
+  }
+
+  .birthday-modal .birthday-eyebrow {
+    margin-top: 18px;
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .birthday-modal #birthday-title {
+    font-size: clamp(25px, 7vw, 34px);
+  }
+
+  .birthday-modal .birthday-message {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .birthday-modal .birthday-decoration {
+    gap: 13px;
+    font-size: 21px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-modal *,
+  .birthday-modal *::before,
+  .birthday-modal *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+    
     .arduino-splash {
       position: fixed;
       inset: 0;
