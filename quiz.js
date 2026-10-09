@@ -21,24 +21,27 @@ const quizState = {
     role: ""
 }
 
-
 function createQuizInterface() {
     if (document.getElementById("quiz-launch-button")) return
 
-    const container = document.querySelector(".hero-buttons")
+    const nav = document.querySelector(".hero-buttons")
 
-    if (!container) return
+    if (nav) {
+        const button = document.createElement("button")
+        button.id = "quiz-launch-button"
+        button.type = "button"
+        button.className = "quiz-nav-button"
+        button.innerHTML = "<span>✦</span> ვიქტორინა"
+        button.addEventListener("click", openQuizModal)
 
-    const button = document.createElement("button")
-    button.id = "quiz-launch-button"
-    button.type = "button"
-    button.className = "quiz-nav-button"
-    button.innerHTML = "<span>✦</span> ვიქტორინა"
-    button.addEventListener("click", openQuizModal)
+        const adminLink = nav.querySelector(".nav-admin")
 
-    container.appendChild(button)
-}
-
+        if (adminLink) {
+            nav.insertBefore(button, adminLink)
+        } else {
+            nav.appendChild(button)
+        }
+    }
 
     const modal = document.createElement("div")
     modal.id = "quiz-modal"
