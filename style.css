@@ -8334,3 +8334,9 @@ svg{
   letter-spacing: 0.7px;
   text-transform: uppercase;
 }
+
+
+.birthday-confetti-piece,
+.birthday-ribbon {
+  animation-iteration-count: infinite;
+}
