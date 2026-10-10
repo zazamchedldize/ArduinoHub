@@ -11701,3 +11701,124 @@ heroMessage.textContent = update.message
     }
   }, 15000)
 })()
+
+
+;(() => {
+  const modal = document.getElementById("active-countdown")
+
+  if (!modal) return
+
+  let audioContext = null
+  let soundEnabled = true
+  let lastSecond = null
+  let audioUnlocked = false
+
+  function getAudioContext() {
+    if (!audioContext) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext
+
+      if (!AudioContextClass) return null
+
+      audioContext = new AudioContextClass()
+    }
+
+    return audioContext
+  }
+
+  async function unlockAudio() {
+    try {
+      const context = getAudioContext()
+
+      if (!context) return
+
+      if (context.state === "suspended") {
+        await context.resume()
+      }
+
+      audioUnlocked = context.state === "running"
+    } catch {
+      audioUnlocked = false
+    }
+  }
+
+  function playTick() {
+    if (!soundEnabled || !audioUnlocked) return
+
+    const context = getAudioContext()
+
+    if (!context || context.state !== "running") return
+
+    const now = context.currentTime
+    const oscillator = context.createOscillator()
+    const gain = context.createGain()
+
+    oscillator.type = "sine"
+    oscillator.frequency.setValueAtTime(1700, now)
+    oscillator.frequency.exponentialRampToValueAtTime(1050, now + 0.025)
+
+    gain.gain.setValueAtTime(0.0001, now)
+    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.003)
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045)
+
+    oscillator.connect(gain)
+    gain.connect(context.destination)
+
+    oscillator.start(now)
+    oscillator.stop(now + 0.05)
+  }
+
+  function isCountdownVisible() {
+    return !modal.hidden && getComputedStyle(modal).display !== "none"
+  }
+
+  function checkCountdown() {
+    if (!isCountdownVisible()) {
+      lastSecond = null
+      return
+    }
+
+    const secondsElement = document.getElementById("countdown-seconds")
+    const seconds = secondsElement?.textContent.trim()
+
+    if (!seconds || !/^\d+$/.test(seconds)) return
+
+    if (seconds !== lastSecond) {
+      lastSecond = seconds
+      playTick()
+    }
+  }
+
+  document.addEventListener("pointerdown", unlockAudio, { passive: true })
+  document.addEventListener("keydown", unlockAudio)
+
+  const observer = new MutationObserver(checkCountdown)
+
+  observer.observe(modal, {
+    subtree: true,
+    childList: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["hidden", "class", "style"]
+  })
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") {
+      lastSecond = null
+    }
+  })
+
+  const audioCheckTimer = setInterval(() => {
+    if (document.visibilityState === "visible") {
+      checkCountdown()
+    }
+  }, 200)
+
+  window.addEventListener("pagehide", () => {
+    clearInterval(audioCheckTimer)
+    observer.disconnect()
+
+    if (audioContext && audioContext.state !== "closed") {
+      audioContext.close()
+    }
+  })
+})()
