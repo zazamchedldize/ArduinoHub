@@ -11497,14 +11497,12 @@ function typeText(element, text, speed = 35) {
       update.updated_at || update.created_at
     ).toLocaleDateString("ka-GE")
 
-    if (animate) {
-      typeText(heroMessage, update.message)
-    } else {
-      if (typingTimer) clearTimeout(typingTimer)
-      typingTimer = null
-      heroMessage.classList.remove("hologram-typing")
-      heroMessage.textContent = update.message
-    }
+    
+if (typingTimer) clearTimeout(typingTimer)
+typingTimer = null
+heroMessage.classList.remove("hologram-typing")
+heroMessage.textContent = update.message
+
 
     if (window.lucide) {
       window.lucide.createIcons()
