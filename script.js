@@ -11825,59 +11825,6 @@ function playTick() {
     let noteIndex = 0
     let musicEnabled = localStorage.getItem("arduinoHubMusic") !== "off"
 
-    
-{
-  const musicButton = document.getElementById("site-music-toggle")
-  const musicIcon = document.getElementById("site-music-icon")
-  const musicText = document.getElementById("site-music-text")
-  const audio = new Audio("/sounds/music.mp3")
-
-  audio.loop = true
-  audio.volume = 0.7
-
-  let musicEnabled = localStorage.getItem("arduinoHubMusic") !== "off"
-
-  function countdownIsOpen() {
-    const modal = document.getElementById("countdown-modal")
-
-    if (!modal) return false
-
-    return modal.getClientRects().length > 0 &&
-      getComputedStyle(modal).display !== "none" &&
-      getComputedStyle(modal).visibility !== "hidden"
-  }
-
-  function updateButton() {
-    musicIcon.textContent = musicEnabled ? "🔊" : "🔇"
-    musicText.textContent = musicEnabled ? "გააჩუმე მუსიკა" : "ჩართე მუსიკა"
-    musicButton.setAttribute("aria-pressed", String(musicEnabled))
-  }
-
-  async function syncMusic() {
-    if (!musicEnabled || countdownIsOpen()) {
-      audio.pause()
-      return
-    }
-
-    try {
-      await audio.play()
-    } catch {}
-  }
-
-  musicButton.addEventListener("click", async () => {
-    musicEnabled = !musicEnabled
-    localStorage.setItem("arduinoHubMusic", musicEnabled ? "on" : "off")
-    updateButton()
-    await syncMusic()
-  })
-
-  document.addEventListener("pointerdown", () => {
-    syncMusic()
-  })
-
-  updateButton()
-  setInterval(syncMusic, 500)
-}
 
 
     
@@ -12002,3 +11949,168 @@ function countdownIsOpen() {
   }
 }
 
+
+{
+  const button = document.getElementById("site-music-toggle")
+  const modal = document.getElementById("music-modal")
+  const form = document.getElementById("music-form")
+  const input = document.getElementById("music-url")
+  const player = document.getElementById("music-youtube-player")
+  const placeholder = document.getElementById("music-player-placeholder")
+  const status = document.getElementById("music-status")
+  const stopButton = document.getElementById("music-stop")
+
+  if (button && modal && form && input && player && placeholder && status && stopButton) {
+    let currentVideoId = ""
+    let countdownPaused = false
+    let resumeAfterCountdown = false
+
+    function getVideoId(value) {
+      try {
+        const url = new URL(value)
+        const host = url.hostname.replace(/^www\./, "")
+        let id = ""
+
+        if (host === "youtu.be") {
+          id = url.pathname.split("/").filter(Boolean)[0] || ""
+        } else if (
+          host === "youtube.com" ||
+          host === "m.youtube.com" ||
+          host === "music.youtube.com" ||
+          host === "youtube-nocookie.com"
+        ) {
+          if (url.pathname === "/watch") {
+            id = url.searchParams.get("v") || ""
+          } else {
+            const match = url.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)
+            id = match ? match[1] : ""
+          }
+        }
+
+        return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : ""
+      } catch {
+        return ""
+      }
+    }
+
+    function countdownIsOpen() {
+      const countdown = document.getElementById("countdown-modal")
+
+      if (!countdown) return false
+
+      const style = getComputedStyle(countdown)
+
+      return countdown.getClientRects().length > 0 &&
+        style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        Number(style.opacity) !== 0
+    }
+
+    function sendPlayerCommand(command) {
+      if (!player.contentWindow || !currentVideoId) return
+
+      player.contentWindow.postMessage(
+        JSON.stringify({
+          event: "command",
+          func: command,
+          args: []
+        }),
+        "https://www.youtube.com"
+      )
+    }
+
+    function pauseForCountdown() {
+      if (!currentVideoId || countdownPaused) return
+
+      countdownPaused = true
+      resumeAfterCountdown = true
+      sendPlayerCommand("pauseVideo")
+    }
+
+    function syncCountdown() {
+      if (countdownIsOpen()) {
+        pauseForCountdown()
+        return
+      }
+
+      if (countdownPaused) {
+        countdownPaused = false
+
+        if (resumeAfterCountdown && currentVideoId) {
+          sendPlayerCommand("playVideo")
+        }
+
+        resumeAfterCountdown = false
+      }
+    }
+
+    function openModal() {
+      modal.classList.add("is-open")
+      modal.setAttribute("aria-hidden", "false")
+      document.body.style.overflow = "hidden"
+
+      if (window.lucide) {
+        window.lucide.createIcons()
+      }
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open")
+      modal.setAttribute("aria-hidden", "true")
+      document.body.style.overflow = ""
+    }
+
+    button.addEventListener("click", openModal)
+
+    modal.querySelectorAll("[data-music-close]").forEach(element => {
+      element.addEventListener("click", closeModal)
+    })
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && modal.classList.contains("is-open")) {
+        closeModal()
+      }
+    })
+
+    form.addEventListener("submit", event => {
+      event.preventDefault()
+
+      if (countdownIsOpen()) {
+        status.textContent = "Countdown-ის დასრულების შემდეგ შეძლებ მუსიკის ჩართვას"
+        return
+      }
+
+      const videoId = getVideoId(input.value.trim())
+
+      if (!videoId) {
+        status.textContent = "ჩასვი სწორი YouTube-ის ვიდეოს ბმული"
+        return
+      }
+
+      currentVideoId = videoId
+      countdownPaused = false
+      resumeAfterCountdown = false
+
+      player.src = "https://www.youtube.com/embed/" + videoId +
+        "?autoplay=1&enablejsapi=1&playsinline=1"
+
+      placeholder.classList.add("is-hidden")
+      status.textContent = "ვიდეო ჩაიტვირთა. დაკვრა პლეერიდანაც შეგიძლია."
+
+      if (window.lucide) {
+        window.lucide.createIcons()
+      }
+    })
+
+    stopButton.addEventListener("click", () => {
+      currentVideoId = ""
+      countdownPaused = false
+      resumeAfterCountdown = false
+      player.src = ""
+      placeholder.classList.remove("is-hidden")
+      status.textContent = "მუსიკა გაჩერებულია"
+    })
+
+    setInterval(syncCountdown, 300)
+  }
+}
