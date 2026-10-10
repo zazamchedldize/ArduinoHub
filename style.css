@@ -9159,3 +9159,50 @@ svg{
     transition: none !important;
   }
 }
+
+
+#site-music-toggle {
+  position: fixed;
+  right: 24px;
+  bottom: 100px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 17px;
+  border: 1px solid rgba(34, 211, 149, 0.55);
+  border-radius: 14px;
+  background: #07110f;
+  color: #22d395;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 5px 24px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#site-music-toggle:hover {
+  background: #10251e;
+  transform: translateY(-2px);
+}
+
+#site-music-toggle:focus-visible {
+  outline: 2px solid #22d395;
+  outline-offset: 4px;
+}
+
+#site-music-icon {
+  font-size: 17px;
+}
+
+@media (max-width: 600px) {
+  #site-music-toggle {
+    right: 14px;
+    bottom: 90px;
+    padding: 10px 13px;
+    font-size: 12px;
+  }
+}
+
