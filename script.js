@@ -1112,6 +1112,43 @@ async function askAI(question, onChunk = () => {}) {
   return fullReply.trim()
 }
 
+function containsUnsafeContent(text) {
+  const value = String(text || '').toLowerCase().trim()
+
+  if (!value) {
+    return false
+  }
+
+  const unsafePatterns = [
+    /\b(porn|porno|pornography)\b/i,
+    /\b(sexcam|onlyfans)\b/i,
+    /\b(nude|nudes)\b/i,
+    /\b(hentai)\b/i,
+    /სექსუალური\s+შინაარსი/i,
+    /პორნო/i,
+    /პორნოგრაფ/i
+  ]
+
+  return unsafePatterns.some(pattern => pattern.test(value))
+}
+
+function addAISafetyWarning() {
+  const message = `
+    <div class="ai-safety-warning">
+      <strong>
+        ${icon('shield-alert')} უსაფრთხოების გაფრთხილება
+      </strong>
+      <p>
+        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის.
+        პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
+      </p>
+    </div>
+  `
+
+  addAIMessage('error', message)
+}
+
+
 async function saveAIChatMessage(message) {
   if (!db) {
     return
