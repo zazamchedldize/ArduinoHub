@@ -8777,7 +8777,7 @@ svg{
 
 #countdown-modal .countdown-dialog::after,
 #active-countdown .active-countdown-dialog::after {
-  content: "CHRONOS SYSTEM  /  ONLINE" !important;
+  content: "ArduinoHub  /  Timer" !important;
   display: block !important;
   margin-top: 26px !important;
   padding-top: 15px !important;
