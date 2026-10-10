@@ -11810,3 +11810,146 @@ function playTick() {
     }
   })
 })()
+
+
+{
+  const musicButton = document.getElementById("site-music-toggle")
+  const musicIcon = document.getElementById("site-music-icon")
+  const musicText = document.getElementById("site-music-text")
+  const countdownModal = document.getElementById("countdown-modal")
+
+  if (musicButton && musicIcon && musicText) {
+    let audioContext
+    let masterGain
+    let melodyTimer
+    let noteIndex = 0
+    let musicEnabled = localStorage.getItem("arduinoHubMusic") !== "off"
+
+    const melody = [
+      523.25, 659.25, 783.99, 659.25,
+      523.25, 783.99, 880, 783.99,
+      659.25, 523.25, 587.33, 659.25,
+      783.99, 659.25, 587.33, 523.25,
+      392, 523.25, 659.25, 783.99,
+      659.25, 587.33, 523.25, 659.25
+    ]
+
+    function countdownIsOpen() {
+      if (!countdownModal) return false
+
+      return countdownModal.getClientRects().length > 0 &&
+        getComputedStyle(countdownModal).display !== "none" &&
+        getComputedStyle(countdownModal).visibility !== "hidden" &&
+        Number(getComputedStyle(countdownModal).opacity) !== 0
+    }
+
+    function updateMusicButton() {
+      musicIcon.textContent = musicEnabled ? "🔊" : "🔇"
+      musicText.textContent = musicEnabled ? "გააჩუმე მუსიკა" : "ჩართე მუსიკა"
+      musicButton.setAttribute("aria-pressed", String(!musicEnabled))
+    }
+
+    function playNote(frequency) {
+      if (!audioContext || !masterGain || audioContext.state !== "running") return
+
+      const oscillator = audioContext.createOscillator()
+      const noteGain = audioContext.createGain()
+      const now = audioContext.currentTime
+
+      oscillator.type = "triangle"
+      oscillator.frequency.setValueAtTime(frequency, now)
+
+      noteGain.gain.setValueAtTime(0.0001, now)
+      noteGain.gain.exponentialRampToValueAtTime(0.12, now + 0.025)
+      noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.24)
+
+      oscillator.connect(noteGain)
+      noteGain.connect(masterGain)
+
+      oscillator.start(now)
+      oscillator.stop(now + 0.26)
+    }
+
+    async function startMusic() {
+      if (!musicEnabled || countdownIsOpen()) {
+        stopMelody()
+        return
+      }
+
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)()
+          masterGain = audioContext.createGain()
+          masterGain.gain.value = 0.35
+          masterGain.connect(audioContext.destination)
+        }
+
+        if (audioContext.state === "suspended") {
+          await audioContext.resume()
+        }
+
+        if (melodyTimer || !musicEnabled || countdownIsOpen()) return
+
+        playNote(melody[noteIndex])
+        noteIndex = (noteIndex + 1) % melody.length
+
+        melodyTimer = setInterval(() => {
+          if (!musicEnabled || countdownIsOpen()) {
+            stopMelody()
+            return
+          }
+
+          playNote(melody[noteIndex])
+          noteIndex = (noteIndex + 1) % melody.length
+        }, 280)
+      } catch (error) {
+        console.log("Music could not start")
+      }
+    }
+
+    function stopMelody() {
+      if (melodyTimer) {
+        clearInterval(melodyTimer)
+        melodyTimer = null
+      }
+    }
+
+    function checkMusic() {
+      if (countdownIsOpen()) {
+        stopMelody()
+      } else if (musicEnabled && audioContext && audioContext.state === "running") {
+        startMusic()
+      }
+    }
+
+    function unlockMusic() {
+      if (musicEnabled && !countdownIsOpen()) {
+        startMusic()
+      }
+    }
+
+    musicButton.addEventListener("click", async () => {
+      musicEnabled = !musicEnabled
+      localStorage.setItem("arduinoHubMusic", musicEnabled ? "on" : "off")
+      updateMusicButton()
+
+      if (musicEnabled) {
+        await startMusic()
+      } else {
+        stopMelody()
+      }
+    })
+
+    document.addEventListener("pointerdown", event => {
+      if (event.target.closest("#site-music-toggle")) return
+      unlockMusic()
+    })
+
+    document.addEventListener("keydown", unlockMusic)
+
+    updateMusicButton()
+
+    setInterval(checkMusic, 300)
+  }
+}
+
