@@ -9512,3 +9512,126 @@ svg{
   line-height: 1.5;
 }
 
+.iphone-install-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+}
+
+.iphone-install-overlay[hidden] {
+  display: none;
+}
+
+.iphone-install-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px 22px;
+  border: 1px solid rgba(34, 211, 149, 0.25);
+  border-radius: 24px;
+  background: #07110f;
+  color: #f5fff9;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.iphone-install-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  cursor: pointer;
+}
+
+.iphone-install-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  background: rgba(34, 211, 149, 0.12);
+  color: #22d395;
+}
+
+.iphone-install-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.iphone-install-card h2 {
+  margin: 0 36px 10px 0;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.iphone-install-card > p {
+  margin: 0 0 22px;
+  color: #b8c9c1;
+  line-height: 1.6;
+}
+
+.iphone-install-step {
+  display: flex;
+  gap: 13px;
+  margin: 18px 0;
+  align-items: flex-start;
+}
+
+.iphone-install-step > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(34, 211, 149, 0.14);
+  color: #22d395;
+  font-weight: 700;
+}
+
+.iphone-install-step strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+
+.iphone-install-step p {
+  margin: 0;
+  color: #b8c9c1;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.iphone-install-done {
+  width: 100%;
+  margin-top: 12px;
+}
+
+body.iphone-install-open {
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .iphone-install-card {
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+
+  .iphone-install-card h2 {
+    font-size: 21px;
+  }
+}
