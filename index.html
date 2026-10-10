@@ -1826,42 +1826,81 @@
 
     </section>
 
-    <section id="about" class="about section">
-
-      <div>
-        <p class="eyebrow">
-          ARDUINO•CHEMISTRY•HUB-ის შესახებ
-        </p>
-
-        <h2>
-          იდეები უკეთესია, როცა გაზიარებულია.
-        </h2>
-      </div>
-
-      <p>
-        ArduinoHub აერთიანებს Arduino-სა და Chemistry-ს პროექტებს ერთ სივრცეში: აქ შეგიძლია აღმოაჩინო საინტერესო ნამუშევრები, გაეცნო მათ დეტალებს და მიიღო ახალი იდეები.
-      </p>
-
-    </section>
-
     <section class="cta">
 
       <i data-lucide="cpu"></i>
 
       <h2>
-        ArduinoHub-ის Android აპი 
+        ArduinoHub-ის აპი
         <br>
-        უკვე ხელმისაწვდომია!📲
+        უკვე ხელმისაწვდომია! 📲
       </h2>
 
-       
-<a href="/downloads/ArduinoHub.apk" class="button primary" download="ArduinoHub.apk">
-  <i data-lucide="download"></i>
-  ჩამოტვირთე აპი
-</a>
+      <a href="/downloads/ArduinoHub.apk" class="button primary" download="ArduinoHub.apk">
+        <i data-lucide="download"></i>
+        Android აპის ჩამოტვირთვა
+      </a>
 
+      <button type="button" class="button primary" id="iphone-install-button">
+        <i data-lucide="smartphone"></i>
+        დაამატე iPhone-ზე
+      </button>
 
     </section>
+
+    <div class="iphone-install-overlay" id="iphone-install-modal" hidden>
+      <div class="iphone-install-card" role="dialog" aria-modal="true" aria-labelledby="iphone-install-title">
+
+        <button type="button" class="iphone-install-close" id="iphone-install-close" aria-label="დახურვა">
+          <i data-lucide="x"></i>
+        </button>
+
+        <div class="iphone-install-icon">
+          <i data-lucide="smartphone"></i>
+        </div>
+
+        <h2 id="iphone-install-title">ArduinoHub შენს iPhone-ზე</h2>
+
+        <p>დაამატე ArduinoHub მთავარ ეკრანზე და გახსენი ის აპივით.</p>
+
+        <div class="iphone-install-step">
+          <span>1</span>
+          <div>
+            <strong>გახსენი Safari</strong>
+            <p>ეს გვერდი iPhone-ზე Safari ბრაუზერით უნდა გახსნა.</p>
+          </div>
+        </div>
+
+        <div class="iphone-install-step">
+          <span>2</span>
+          <div>
+            <strong>დააჭირე Share-ს</strong>
+            <p>Safari-ის ქვედა ან ზედა მენიუში მოძებნე გაზიარების ხატულა — კვადრატი ისრით.</p>
+          </div>
+        </div>
+
+        <div class="iphone-install-step">
+          <span>3</span>
+          <div>
+            <strong>აირჩიე Add to Home Screen</strong>
+            <p>თუ ეს ვარიანტი არ ჩანს, გადაამოწმე Safari-ის გაზიარების მენიუ.</p>
+          </div>
+        </div>
+
+        <div class="iphone-install-step">
+          <span>4</span>
+          <div>
+            <strong>დააჭირე Add-ს</strong>
+            <p>მზადაა! ArduinoHub-ის ხატულა მთავარ ეკრანზე გამოჩნდება.</p>
+          </div>
+        </div>
+
+        <button type="button" class="button primary iphone-install-done" id="iphone-install-done">
+          გასაგებია
+        </button>
+
+      </div>
+    </div>
 
     <section class="suggestion-section">
 
