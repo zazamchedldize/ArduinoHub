@@ -11743,47 +11743,18 @@ heroMessage.textContent = update.message
 
  
 function playTick() {
+  
+const tickSound = new Audio("/sounds/tick.mp3")
+tickSound.preload = "auto"
+tickSound.volume = 0.5
+
+function playTick() {
   if (!soundEnabled || !audioUnlocked) return
 
-  const context = getAudioContext()
+  tickSound.currentTime = 0
+  tickSound.play().catch(() => {})
+}
 
-  if (!context || context.state !== "running") return
-
-  const now = context.currentTime
-
-  const oscillator = context.createOscillator()
-  const echoOscillator = context.createOscillator()
-  const gain = context.createGain()
-  const echoGain = context.createGain()
-
-  oscillator.type = "triangle"
-  oscillator.frequency.setValueAtTime(180, now)
-  oscillator.frequency.exponentialRampToValueAtTime(95, now + 0.22)
-
-  gain.gain.setValueAtTime(0.0001, now)
-  gain.gain.exponentialRampToValueAtTime(0.45, now + 0.015)
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35)
-
-  echoOscillator.type = "sine"
-  echoOscillator.frequency.setValueAtTime(130, now + 0.08)
-  echoOscillator.frequency.exponentialRampToValueAtTime(75, now + 0.38)
-
-  echoGain.gain.setValueAtTime(0.0001, now)
-  echoGain.gain.setValueAtTime(0.0001, now + 0.08)
-  echoGain.gain.exponentialRampToValueAtTime(0.16, now + 0.11)
-  echoGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65)
-
-  oscillator.connect(gain)
-  gain.connect(context.destination)
-
-  echoOscillator.connect(echoGain)
-  echoGain.connect(context.destination)
-
-  oscillator.start(now)
-  oscillator.stop(now + 0.36)
-
-  echoOscillator.start(now + 0.08)
-  echoOscillator.stop(now + 0.66)
 }
 
   function isCountdownVisible() {
