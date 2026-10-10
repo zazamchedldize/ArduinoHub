@@ -11742,11 +11742,10 @@ heroMessage.textContent = update.message
   }
 
  
-function playTick() {
-  
+
 const tickSound = new Audio("/sounds/tick.mp3")
 tickSound.preload = "auto"
-tickSound.volume = 0.5
+tickSound.volume = 1
 
 function playTick() {
   if (!soundEnabled || !audioUnlocked) return
@@ -11755,7 +11754,6 @@ function playTick() {
   tickSound.play().catch(() => {})
 }
 
-}
 
   function isCountdownVisible() {
     return !modal.hidden && getComputedStyle(modal).display !== "none"
