@@ -365,6 +365,7 @@ function closeQuizModal() {
     }
 }
 
+
 function startQuizRefresh() {
     if (quizState.refresh) {
         clearInterval(quizState.refresh)
@@ -374,8 +375,9 @@ function startQuizRefresh() {
         if (!document.getElementById("quiz-modal")?.hidden) {
             refreshQuizRoom(false)
         }
-    }, 2000)
+    }, 1000)
 }
+
 
 function setQuizStatus(message, type = "") {
     const status = document.getElementById("quiz-status")
