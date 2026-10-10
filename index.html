@@ -1743,9 +1743,30 @@
 
           </div>
 
-          <div class="hero-stats"></div>
+          
+      <div class="hero-update-panel" id="hero-update-panel" hidden>
+        <div class="hologram-card">
+          <div class="hologram-topline">
+            <span class="hologram-indicator"></span>
+            ARDUINOHUB SYSTEM UPDATE
+            <span class="hologram-version">LIVE</span>
+          </div>
 
+          <div class="hologram-symbol">✦</div>
+
+          <p class="hologram-label">LATEST TRANSMISSION</p>
+
+          <h2 id="hero-update-title">ArduinoHub განახლება</h2>
+
+          <p id="hero-update-message"></p>
+
+          <div class="hologram-footer">
+            <span><i data-lucide="cpu"></i> AI SYSTEM</span>
+            <span id="hero-update-date"></span>
+          </div>
         </div>
+      </div>
+
 
       </div>
 
@@ -3195,6 +3216,31 @@
 
 
 <script type="module" src="quiz.js"></script>
+
+<div id="update-admin-modal" class="update-admin-modal" hidden>
+  <div class="update-modal-backdrop" data-update-close></div>
+
+  <section class="update-modal-card" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
+    <button type="button" class="update-modal-close" data-update-close aria-label="დახურვა">×</button>
+
+    <p class="eyebrow">ARDUINOHUB CONTROL CENTER</p>
+    <h2 id="update-modal-title">საიტის განახლება</h2>
+    <p>შექმენი შეტყობინება, რომელიც მთავარ გვერდზე გამოჩნდება.</p>
+
+    <form id="update-admin-form">
+      <label for="update-title-input">განახლების სახელი</label>
+      <input id="update-title-input" maxlength="120" required placeholder="მაგ. AI სისტემის განახლება">
+
+      <label for="update-message-input">შეტყობინების ტექსტი</label>
+      <textarea id="update-message-input" maxlength="2000" rows="6" required placeholder="დაწერე განახლების დეტალები..."></textarea>
+
+      <p id="update-admin-status" role="status"></p>
+
+      <button type="submit" class="update-publish-button">გამოქვეყნება ↗</button>
+      <button type="button" id="update-delete-button" class="update-delete-button">განახლების წაშლა</button>
+    </form>
+  </section>
+</div>
 
 
 </body>
