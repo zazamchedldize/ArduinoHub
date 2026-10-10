@@ -91,9 +91,16 @@ body.quiz-modal-open {
   border-radius: 50%;
   background: rgba(255, 255, 255, .04);
   color: #a7f3d0;
-  font-size: 27px;
+  font-size: 20px; /* ფონტის ზომა 27px-დან შევამცირეთ 20px-მდე, რომ ტექსტი იდეალურად ჩაჯდეს */
   cursor: pointer;
   transition: .2s ease;
+  
+  /* ცენტრირებისთვის */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
 }
 
 .quiz-close:hover {
