@@ -11834,14 +11834,17 @@ function playTick() {
       659.25, 587.33, 523.25, 659.25
     ]
 
-    function countdownIsOpen() {
-      if (!countdownModal) return false
+    
+function countdownIsOpen() {
+  const modal = document.getElementById("countdown-modal")
 
-      return countdownModal.getClientRects().length > 0 &&
-        getComputedStyle(countdownModal).display !== "none" &&
-        getComputedStyle(countdownModal).visibility !== "hidden" &&
-        Number(getComputedStyle(countdownModal).opacity) !== 0
-    }
+  if (!modal) return false
+
+  return modal.getClientRects().length > 0 &&
+    getComputedStyle(modal).display !== "none" &&
+    getComputedStyle(modal).visibility !== "hidden"
+}
+
 
     function updateMusicButton() {
       musicIcon.textContent = musicEnabled ? "🔊" : "🔇"
