@@ -9475,3 +9475,40 @@ svg{
   }
 }
 
+
+.music-search-results {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.music-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #263c32;
+  border-radius: 14px;
+  background: #0b1712;
+  color: #f2fff9;
+  cursor: pointer;
+  text-align: left;
+}
+
+.music-result:hover {
+  border-color: #22d395;
+  background: #11271d;
+}
+
+.music-result img {
+  width: 100px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.music-result span {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
