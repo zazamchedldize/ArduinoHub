@@ -12178,3 +12178,37 @@ form.addEventListener("submit", async event => {
   }
 }
 
+const iphoneInstallButton = document.getElementById("iphone-install-button")
+const iphoneInstallModal = document.getElementById("iphone-install-modal")
+const iphoneInstallClose = document.getElementById("iphone-install-close")
+const iphoneInstallDone = document.getElementById("iphone-install-done")
+
+function openIphoneInstallModal() {
+  iphoneInstallModal.hidden = false
+  document.body.classList.add("iphone-install-open")
+
+  if (window.lucide) {
+    window.lucide.createIcons()
+  }
+}
+
+function closeIphoneInstallModal() {
+  iphoneInstallModal.hidden = true
+  document.body.classList.remove("iphone-install-open")
+}
+
+iphoneInstallButton?.addEventListener("click", openIphoneInstallModal)
+iphoneInstallClose?.addEventListener("click", closeIphoneInstallModal)
+iphoneInstallDone?.addEventListener("click", closeIphoneInstallModal)
+
+iphoneInstallModal?.addEventListener("click", event => {
+  if (event.target === iphoneInstallModal) {
+    closeIphoneInstallModal()
+  }
+})
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && iphoneInstallModal && !iphoneInstallModal.hidden) {
+    closeIphoneInstallModal()
+  }
+})
