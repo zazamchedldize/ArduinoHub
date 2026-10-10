@@ -11393,3 +11393,304 @@ window.toggleGuestCamera =
 
 window.leaveLiveAsGuest =
   leaveLiveAsGuest
+
+
+;(() => {
+  const db = window.db || window.supabaseClient || window.supabase
+
+  const modal = document.getElementById("update-admin-modal")
+  const form = document.getElementById("update-admin-form")
+  const titleInput = document.getElementById("update-title-input")
+  const messageInput = document.getElementById("update-message-input")
+  const status = document.getElementById("update-admin-status")
+  const deleteButton = document.getElementById("update-delete-button")
+  const panel = document.getElementById("hero-update-panel")
+  const heroTitle = document.getElementById("hero-update-title")
+  const heroMessage = document.getElementById("hero-update-message")
+  const heroDate = document.getElementById("hero-update-date")
+
+  if (!db || !modal || !form || !panel) {
+    console.error("Update სისტემა ვერ ჩაიტვირთა. შეამოწმე HTML ელემენტები და Supabase კლიენტი.")
+    return
+  }
+
+  let currentUpdateId = null
+  let typingTimer = null
+  let requestInProgress = false
+
+  async function checkAdmin() {
+    const { data: { session }, error } = await db.auth.getSession()
+
+    if (error || !session) return false
+
+    const { data, error: adminError } = await db
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", session.user.id)
+      .maybeSingle()
+
+    return !adminError && Boolean(data)
+  }
+
+  async function getLatestUpdate() {
+    const { data, error } = await db
+      .from("site_updates")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (error) throw error
+
+    return data
+  }
+
+  function typeText(element, text, speed = 28) {
+    if (typingTimer) {
+      clearTimeout(typingTimer)
+      typingTimer = null
+    }
+
+    element.textContent = ""
+    element.classList.add("hologram-typing")
+
+    let index = 0
+
+    function typeNext() {
+      if (!element.isConnected) return
+
+      if (index < text.length) {
+        element.textContent += text[index]
+        index++
+        typingTimer = setTimeout(typeNext, speed)
+      } else {
+        element.classList.remove("hologram-typing")
+        typingTimer = null
+      }
+    }
+
+    typeNext()
+  }
+
+  async function renderUpdate(animate = true) {
+    const update = await getLatestUpdate()
+
+    if (!update) {
+      panel.hidden = true
+      currentUpdateId = null
+      return
+    }
+
+    currentUpdateId = update.id
+    panel.hidden = false
+    heroTitle.textContent = update.title
+    heroDate.textContent = new Date(
+      update.updated_at || update.created_at
+    ).toLocaleDateString("ka-GE")
+
+    if (animate) {
+      typeText(heroMessage, update.message)
+    } else {
+      if (typingTimer) clearTimeout(typingTimer)
+      typingTimer = null
+      heroMessage.classList.remove("hologram-typing")
+      heroMessage.textContent = update.message
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons()
+    }
+  }
+
+  async function openModal() {
+    if (requestInProgress) return
+
+    const admin = await checkAdmin()
+
+    if (!admin) {
+      if (status) status.textContent = "ეს ბრძანება მხოლოდ ადმინისტრატორს შეუძლია."
+      return
+    }
+
+    form.reset()
+    modal.hidden = false
+
+    if (status) status.textContent = "მონაცემები იტვირთება..."
+
+    if (deleteButton) deleteButton.hidden = true
+
+    try {
+      const update = await getLatestUpdate()
+
+      if (update) {
+        currentUpdateId = update.id
+        titleInput.value = update.title
+        messageInput.value = update.message
+
+        if (deleteButton) deleteButton.hidden = false
+
+        status.textContent = "შეგიძლია მიმდინარე განახლება შეცვალო."
+      } else {
+        currentUpdateId = null
+        status.textContent = "შეავსე ველები და გამოაქვეყნე ახალი განახლება."
+      }
+    } catch (error) {
+      console.error("Update load error:", error)
+      status.textContent = "მონაცემების ჩატვირთვა ვერ მოხერხდა."
+    }
+  }
+
+  document.querySelectorAll("[data-update-close]").forEach(element => {
+    element.addEventListener("click", () => {
+      modal.hidden = true
+    })
+  })
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !modal.hidden) {
+      modal.hidden = true
+    }
+  })
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault()
+
+    if (requestInProgress) return
+
+    const admin = await checkAdmin()
+
+    if (!admin) {
+      status.textContent = "გამოქვეყნების უფლება არ გაქვს."
+      return
+    }
+
+    const title = titleInput.value.trim()
+    const message = messageInput.value.trim()
+
+    if (!title || !message) {
+      status.textContent = "შეავსე ორივე ველი."
+      return
+    }
+
+    requestInProgress = true
+
+    const submitButton = form.querySelector('button[type="submit"]')
+
+    if (submitButton) submitButton.disabled = true
+
+    status.textContent = "განახლება ქვეყნდება..."
+
+    try {
+      const existing = await getLatestUpdate()
+      let result
+
+      if (existing) {
+        result = await db
+          .from("site_updates")
+          .update({
+            title,
+            message,
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", existing.id)
+      } else {
+        result = await db
+          .from("site_updates")
+          .insert({ title, message })
+      }
+
+      if (result.error) throw result.error
+
+      await renderUpdate(true)
+
+      status.textContent = "განახლება წარმატებით გამოქვეყნდა!"
+    } catch (error) {
+      console.error("Update publish error:", error)
+      status.textContent = "გამოქვეყნება ვერ მოხერხდა. შეამოწმე Supabase-ის უფლებები."
+    } finally {
+      requestInProgress = false
+      if (submitButton) submitButton.disabled = false
+    }
+  })
+
+  deleteButton?.addEventListener("click", async () => {
+    if (requestInProgress) return
+
+    if (!confirm("ნამდვილად გსურს მიმდინარე განახლების წაშლა?")) return
+
+    const admin = await checkAdmin()
+
+    if (!admin) {
+      status.textContent = "წაშლის უფლება არ გაქვს."
+      return
+    }
+
+    requestInProgress = true
+    deleteButton.disabled = true
+
+    try {
+      const update = await getLatestUpdate()
+
+      if (!update) {
+        status.textContent = "წასაშლელი განახლება ვერ მოიძებნა."
+        return
+      }
+
+      const { error } = await db
+        .from("site_updates")
+        .delete()
+        .eq("id", update.id)
+
+      if (error) throw error
+
+      if (typingTimer) clearTimeout(typingTimer)
+
+      panel.hidden = true
+      modal.hidden = true
+      currentUpdateId = null
+
+      alert("განახლება წაიშალა.")
+    } catch (error) {
+      console.error("Update delete error:", error)
+      status.textContent = "წაშლა ვერ მოხერხდა. შეამოწმე Supabase-ის უფლებები."
+    } finally {
+      requestInProgress = false
+      deleteButton.disabled = false
+    }
+  })
+
+  const chatForm = document.getElementById("ai-chat-form")
+  const chatInput = document.getElementById("ai-chat-input")
+
+  if (chatForm && chatInput) {
+    chatForm.addEventListener("submit", async event => {
+      if (chatInput.value.trim().toLowerCase() !== "/update") return
+
+      event.preventDefault()
+      event.stopImmediatePropagation()
+
+      const admin = await checkAdmin()
+
+      if (!admin) {
+        chatInput.value = ""
+        alert("განახლების მართვა მხოლოდ ადმინისტრატორს შეუძლია.")
+        return
+      }
+
+      chatInput.value = ""
+      await openModal()
+    }, true)
+  }
+
+  renderUpdate(true).catch(error => {
+    console.error("Update initial load error:", error)
+  })
+
+  setInterval(() => {
+    if (document.visibilityState === "visible") {
+      renderUpdate(false).catch(error => {
+        console.error("Update refresh error:", error)
+      })
+    }
+  }, 15000)
+})()
