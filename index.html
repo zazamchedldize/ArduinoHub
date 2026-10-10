@@ -3250,6 +3250,62 @@
   </section>
 </div>
 
+<div id="music-modal" class="music-modal" aria-hidden="true">
+  <div class="music-backdrop" data-music-close></div>
+
+  <section class="music-panel" role="dialog" aria-modal="true" aria-labelledby="music-title">
+    <div class="music-panel-header">
+      <div class="music-heading">
+        <div class="music-logo">
+          <i data-lucide="audio-lines"></i>
+        </div>
+        <div>
+          <h2 id="music-title">ArduinoHub Music</h2>
+          <p>შენი მუსიკა, შენი არჩევანი</p>
+        </div>
+      </div>
+
+      <button type="button" class="music-close" data-music-close aria-label="დახურვა">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <form id="music-form" class="music-form">
+      <label for="music-url">YouTube-ის ბმული</label>
+      <div class="music-input-row">
+        <input id="music-url" type="url" placeholder="ჩასვი სიმღერის ბმული..." required>
+        <button type="submit" aria-label="მუსიკის ჩართვა">
+          <i data-lucide="play"></i>
+        </button>
+      </div>
+      <p id="music-status" role="status">ჩასვი YouTube-ის ვიდეოს ან მუსიკის ბმული</p>
+    </form>
+
+    <div class="music-player-wrap">
+      <div id="music-player-placeholder" class="music-placeholder">
+        <i data-lucide="headphones"></i>
+        <span>შენი მუსიკა აქ დაიკვრება</span>
+      </div>
+
+      <iframe
+        id="music-youtube-player"
+        title="YouTube მუსიკის პლეერი"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="music-footer">
+      <span><i data-lucide="radio"></i> YouTube Player</span>
+      <button type="button" id="music-stop">
+        <i data-lucide="square"></i>
+        გაჩერება
+      </button>
+    </div>
+  </section>
+</div>
+
 
 </body>
 
