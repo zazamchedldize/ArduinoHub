@@ -6,6 +6,7 @@ let aiRequestInProgress = false
 const db = supabaseIsConfigured
   ? createClient(
       SUPABASE_URL,
+
       SUPABASE_ANON_KEY,
       {
         auth: {
@@ -12162,3 +12163,18 @@ form.addEventListener("submit", async event => {
     status.textContent = "ძიების შეცდომა: " + error.message
   }
 })
+
+    
+    stopButton.addEventListener("click", () => {
+      currentVideoId = ""
+      countdownPaused = false
+      resumeAfterCountdown = false
+      player.src = ""
+      placeholder.classList.remove("is-hidden")
+      status.textContent = "მუსიკა გაჩერებულია"
+    })
+
+    setInterval(syncCountdown, 300)
+  }
+}
+
