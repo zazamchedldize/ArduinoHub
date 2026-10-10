@@ -1,6 +1,8 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+
+let aiRequestInProgress = false
 const db = supabaseIsConfigured
   ? createClient(
       SUPABASE_URL,
@@ -1661,203 +1663,120 @@ function setupZazaHistoryDelete() {
   refreshIcons()
 }
 
-async function handleAIQuestion(
-  question
-) {
-  const input =
-    $('#ai-chat-input')
 
-  const send =
-    $('#ai-send-btn')
 
-  const cleanQuestion =
-    String(question || '').trim()
+async function handleAIQuestion(question) {
+  const input = $('#ai-chat-input')
+  const send = $('#ai-send-btn')
+  const cleanQuestion = String(question || '').trim()
 
-  if (!cleanQuestion) {
+  if (!cleanQuestion || aiRequestInProgress) {
     return
   }
 
   await detectAIAdmin()
 
-  if (
-    containsUnsafeContent(
-      cleanQuestion
-    )
-  ) {
-    addAIMessage(
-      'user',
-      cleanQuestion
-    )
+  if (containsUnsafeContent(cleanQuestion)) {
+    addAIMessage('user', cleanQuestion)
 
     if (input) {
       input.value = ''
     }
 
     addAISafetyWarning()
-
     return
   }
 
-  addAIMessage(
-    'user',
-    cleanQuestion
-  )
-
-  if (input) {
-    input.value = ''
-  }
-
-  if (
-    cleanQuestion.toLowerCase() ===
-    '/history'
-  ) {
-    const isZaza =
-      aiAdminGreeting ===
-      'ბატონო ზაზა'
-
-    if (!isZaza) {
-      addAIMessage(
-        'error',
-        `
-          <div class="ai-error-content">
-            <strong>
-              წვდომა უარყოფილია
-            </strong>
-
-            <p>
-              /history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.
-            </p>
-          </div>
-        `
-      )
-
-      return
-    }
-
-    if (send) {
-      send.disabled = true
-    }
-
-    const typing =
-      addAITyping()
-
-    try {
-      const history =
-        await getZazaHistory()
-
-      typing?.remove()
-
-      addAIMessage(
-        'assistant',
-        formatZazaHistory(
-          history
-        )
-      )
-
-      setupZazaHistoryDelete()
-    } catch (error) {
-      console.error(
-        'History error:',
-        error
-      )
-
-      typing?.remove()
-
-      addAIMessage(
-        'error',
-        `
-          <div class="ai-error-content">
-            <strong>
-              ისტორიის ჩატვირთვა ვერ მოხერხდა
-            </strong>
-
-            <p>
-              მონაცემების მიღებისას შეცდომა მოხდა.
-            </p>
-          </div>
-        `
-      )
-    } finally {
-      if (send) {
-        send.disabled = false
-      }
-
-      input?.focus()
-    }
-
-    return
-  }
-
-  await saveAIChatMessage(
-    cleanQuestion
-  )
-
-  aiHistory.push({
-    role: 'user',
-    content: cleanQuestion
-  })
+  aiRequestInProgress = true
 
   if (send) {
     send.disabled = true
   }
 
-  const typing =
-    addAITyping()
+  addAIMessage('user', cleanQuestion)
+
+  if (input) {
+    input.value = ''
+  }
 
   try {
-    const reply =
-      await askAI(
-        cleanQuestion
-      )
+    if (cleanQuestion.toLowerCase() === '/history') {
+      const isZaza = aiAdminGreeting === 'ბატონო ზაზა'
 
-    typing?.remove()
+      if (!isZaza) {
+        addAIMessage(
+          'error',
+          `
+            <div class="ai-error-content">
+              <strong>წვდომა უარყოფილია</strong>
+              <p>/history ბრძანების გამოყენება მხოლოდ ბატონ ზაზას შეუძლია.</p>
+            </div>
+          `
+        )
+        return
+      }
 
-    const finalReply =
-      applyAIGreeting(reply)
+      const typing = addAITyping()
 
-    addAIMessage(
-      'assistant',
-      formatAIResponse(
-        finalReply
-      )
-    )
+      try {
+        const history = await getZazaHistory()
+        typing?.remove()
+        addAIMessage('assistant', formatZazaHistory(history))
+        setupZazaHistoryDelete()
+      } catch (error) {
+        console.error('History error:', error)
+        typing?.remove()
+
+        addAIMessage(
+          'error',
+          `
+            <div class="ai-error-content">
+              <strong>ისტორიის ჩატვირთვა ვერ მოხერხდა</strong>
+              <p>მონაცემების მიღებისას შეცდომა მოხდა.</p>
+            </div>
+          `
+        )
+      }
+
+      return
+    }
+
+    await saveAIChatMessage(cleanQuestion)
 
     aiHistory.push({
-      role: 'assistant',
-      content: finalReply
+      role: 'user',
+      content: cleanQuestion
     })
 
-    if (
-      aiHistory.length > 10
-    ) {
-      aiHistory =
-        aiHistory.slice(-10)
+    const typing = addAITyping()
+
+    try {
+      const reply = await askAI(cleanQuestion)
+      typing?.remove()
+
+      const finalReply = applyAIGreeting(reply)
+
+      addAIMessage('assistant', formatAIResponse(finalReply))
+
+      aiHistory.push({
+        role: 'assistant',
+        content: finalReply
+      })
+
+      if (aiHistory.length > 10) {
+        aiHistory = aiHistory.slice(-10)
+      }
+    } catch (error) {
+      console.error('ArduinoHub AI error:', error)
+      console.error('AI error status:', error?.status)
+      console.error('AI backend data:', error?.backendData)
+
+      typing?.remove()
+      addAIMessage('error', getAIUserErrorMessage(error))
     }
-  } catch (error) {
-    console.error(
-      'ArduinoHub AI error:',
-      error
-    )
-
-    console.error(
-      'AI error status:',
-      error?.status
-    )
-
-    console.error(
-      'AI backend data:',
-      error?.backendData
-    )
-
-    typing?.remove()
-
-    addAIMessage(
-      'error',
-      getAIUserErrorMessage(
-        error
-      )
-    )
   } finally {
+    aiRequestInProgress = false
+
     if (send) {
       send.disabled = false
     }
