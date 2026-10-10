@@ -930,251 +930,186 @@ function getAIUserErrorMessage(error) {
   `
 }
 
-async function askAI(question) {
+
+async function askAI(question, onChunk = () => {}) {
   if (!AI_FUNCTION_URL) {
-    throw new Error(
-      'AI ფუნქციის მისამართი ვერ მოიძებნა.'
-    )
+    throw new Error('AI ფუნქციის მისამართი ვერ მოიძებნა.')
   }
 
-  const cleanQuestion =
-    String(question)
-      .trim()
-      .slice(0, 1000)
+  const cleanQuestion = String(question).trim().slice(0, 1000)
 
   if (!cleanQuestion) {
     return null
   }
 
-  const history =
-    aiHistory
-      .slice(-8)
-      .map(
-        message => ({
-          role:
-            message.role === 'assistant'
-              ? 'assistant'
-              : 'user',
-          text:
-            String(
-              message.content || ''
-            ).slice(0, 1800)
-        })
-      )
+  const history = aiHistory
+    .slice(-8)
+    .map(message => ({
+      role: message.role === 'assistant' ? 'assistant' : 'user',
+      text: String(message.content || '').slice(0, 1800)
+    }))
 
-  const currentUser =
-    await getCurrentUserContext()
+  const currentUser = await getCurrentUserContext()
 
-  let authorizationToken =
-    SUPABASE_ANON_KEY
+  let authorizationToken = SUPABASE_ANON_KEY
 
   if (db) {
     try {
-      const {
-        data: { session }
-      } = await db.auth.getSession()
+      const { data: { session } } = await db.auth.getSession()
 
       if (session?.access_token) {
-        authorizationToken =
-          session.access_token
+        authorizationToken = session.access_token
       }
     } catch (sessionError) {
-      console.warn(
-        'Could not read Supabase session:',
-        sessionError
-      )
+      console.warn('Could not read Supabase session:', sessionError)
     }
   }
 
-  const userIdentityContext =
-    currentUser.isAuthenticated
-      ? `
-        ამჟამად ArduinoHub AI-ს ესაუბრება სისტემაში შესული მომხმარებელი.
+  const userIdentityContext = currentUser.isAuthenticated
+    ? `ამჟამად ArduinoHub AI-ს ესაუბრება სისტემაში შესული მომხმარებელი. მომხმარებლის სახელი და გვარი: ${currentUser.name} მომხმარებლის email: ${currentUser.email || 'უცნობია'} მომხმარებლის Supabase ID: ${currentUser.id} მნიშვნელოვანი წესები: - ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი. - თუ მომხმარებელი გეკითხება „ვინ ვარ?“, „რა მქვია?“ ან მსგავს რამეს, გამოიყენე ზემოთ მოცემული სახელი. - არ აურიო ეს მომხმარებელი ArduinoHub-ის კლუბის სხვა წევრებში. - მომხმარებლის სახელი არ მოიგონო. - მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო, თუ ამის შესახებ პირდაპირ არ გკითხავს.`
+    : 'ამჟამად ArduinoHub AI-ს ესაუბრება არაავტორიზებული მომხმარებელი. მომხმარებლის სახელი უცნობია.'
 
-        მომხმარებლის სახელი და გვარი:
-        ${currentUser.name}
-
-        მომხმარებლის email:
-        ${currentUser.email || 'უცნობია'}
-
-        მომხმარებლის Supabase ID:
-        ${currentUser.id}
-
-        მნიშვნელოვანი წესები:
-        - ეს არის ამ ჩატის ამჟამინდელი მომხმარებელი.
-        - თუ მომხმარებელი გეკითხება „ვინ ვარ?“, „რა მქვია?“ ან მსგავს რამეს, გამოიყენე ზემოთ მოცემული სახელი.
-        - არ აურიო ეს მომხმარებელი ArduinoHub-ის კლუბის სხვა წევრებში.
-        - მომხმარებლის სახელი არ მოიგონო.
-        - მომხმარებლის ID ჩვეულებრივ პასუხში არ გამოაჩინო, თუ ამის შესახებ პირდაპირ არ გკითხავს.
-      `
-      : `
-        ამჟამად ArduinoHub AI-ს ესაუბრება არაავტორიზებული მომხმარებელი.
-        მომხმარებლის სახელი უცნობია.
-      `
-
-  const finalContext = `
-    ${AI_SYSTEM_CONTEXT}
-    ${userIdentityContext}
-  `
+  const finalContext = `${AI_SYSTEM_CONTEXT} ${userIdentityContext}`
 
   let response
 
   try {
-    response =
-      await fetch(
-        AI_FUNCTION_URL,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type':
-              'application/json',
-            'Authorization':
-              `Bearer ${authorizationToken}`,
-            'apikey':
-              SUPABASE_ANON_KEY
-          },
-          body:
-            JSON.stringify({
-              message:
-                cleanQuestion,
-              history,
-              context:
-                finalContext,
-              adminGreeting:
-                aiAdminGreeting,
-              currentUser
-            })
-        }
-      )
+    response = await fetch(AI_FUNCTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authorizationToken}`,
+        'apikey': SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({
+        message: cleanQuestion,
+        history,
+        context: finalContext,
+        adminGreeting: aiAdminGreeting,
+        currentUser
+      })
+    })
   } catch (networkError) {
-    const error =
-      new Error(
-        networkError?.message ||
-        'Network error'
-      )
-
+    const error = new Error(networkError?.message || 'Network error')
     error.status = 0
-
     throw error
-  }
-
-  let data = null
-
-  try {
-    data =
-      await response.json()
-  } catch {
-    data = null
   }
 
   if (!response.ok) {
-    const backendMessage =
+    let data = null
+
+    try {
+      data = await response.json()
+    } catch {
+      data = null
+    }
+
+    const error = new Error(
       data?.error ||
       data?.message ||
-      data?.details ||
       `AI request failed with status ${response.status}`
+    )
 
-    const error =
-      new Error(
-        String(backendMessage)
-      )
-
-    error.status =
-      response.status
-
+    error.status = response.status
     error.backendData = data
-    error.backendStatus =
-      response.status
-
     throw error
   }
 
-  if (
-    data?.error &&
-    !data?.reply &&
-    !data?.text
-  ) {
-    const error =
-      new Error(
-        String(data.error)
-      )
-
-    error.status =
-      response.status
-
-    error.backendData = data
-
-    throw error
+  if (!response.body) {
+    throw new Error('AI სტრიმინგის პასუხი ხელმისაწვდომი არ არის.')
   }
 
-  const reply =
-    String(
-      data?.reply ||
-      data?.text ||
-      ''
-    ).trim()
+  const reader = response.body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+  let fullReply = ''
+  let completed = false
 
-  if (!reply) {
-    const error =
-      new Error(
-        'AI-მ ცარიელი პასუხი დააბრუნა.'
-      )
+  const processEvent = rawEvent => {
+    const lines = rawEvent.split(/\r?\n/)
+    const dataLines = lines
+      .filter(line => line.startsWith('data:'))
+      .map(line => line.slice(5).trim())
 
-    error.status =
-      response.status
+    if (!dataLines.length) {
+      return
+    }
 
-    error.backendData = data
+    const rawData = dataLines.join('\n')
 
-    throw error
+    if (!rawData || rawData === '[DONE]') {
+      return
+    }
+
+    let data
+
+    try {
+      data = JSON.parse(rawData)
+    } catch {
+      return
+    }
+
+    if (data.error) {
+      const error = new Error(String(data.error))
+      error.status = response.status
+      error.backendData = data
+      throw error
+    }
+
+    if (typeof data.text === 'string' && data.text) {
+      fullReply += data.text
+      onChunk(data.text)
+    }
+
+    if (data.done) {
+      completed = true
+
+      if (typeof data.reply === 'string' && data.reply.trim()) {
+        fullReply = data.reply
+      }
+    }
   }
 
-  return reply
-}
+  try {
+    while (true) {
+      const { value, done } = await reader.read()
 
-function containsUnsafeContent(text) {
-  const value =
-    String(text || '')
-      .toLowerCase()
-      .trim()
+      if (done) {
+        break
+      }
 
-  if (!value) {
-    return false
+      buffer += decoder.decode(value, { stream: true })
+
+      const events = buffer.split(/\r?\n\r?\n/)
+      buffer = events.pop() || ''
+
+      for (const event of events) {
+        processEvent(event)
+      }
+    }
+
+    buffer += decoder.decode()
+
+    if (buffer.trim()) {
+      processEvent(buffer)
+    }
+  } finally {
+    reader.releaseLock()
   }
 
-  const unsafePatterns = [
-    /\b(porn|porno|pornography)\b/i,
-    /\b(sexcam|onlyfans)\b/i,
-    /\b(nude|nudes)\b/i,
-    /\b(hentai)\b/i,
-    /სექსუალური\s+შინაარსი/i,
-    /პორნო/i,
-    /პორნოგრაფ/i
-  ]
+  if (!completed) {
+    throw new Error(
+      fullReply
+        ? 'AI პასუხის მიღება მოულოდნელად შეწყდა. გთხოვთ, თავიდან სცადოთ.'
+        : 'AI-მ პასუხი ვერ დააბრუნა. გთხოვთ, თავიდან სცადოთ.'
+    )
+  }
 
-  return unsafePatterns.some(
-    pattern =>
-      pattern.test(value)
-  )
-}
+  if (!fullReply.trim()) {
+    throw new Error('AI-მ ცარიელი პასუხი დააბრუნა.')
+  }
 
-function addAISafetyWarning() {
-  const message = `
-    <div class="ai-safety-warning">
-      <strong>
-        ${icon('shield-alert')}
-        უსაფრთხოების გაფრთხილება
-      </strong>
-
-      <p>
-        გთხოვთ, არ გამოიყენოთ ArduinoHub AI 18+ ან შეუფერებელი შინაარსისთვის. პლატფორმა განკუთვნილია სასწავლო, Arduino-სა და ქიმიის საკითხებისთვის.
-      </p>
-    </div>
-  `
-
-  addAIMessage(
-    'error',
-    message
-  )
+  return fullReply.trim()
 }
 
 async function saveAIChatMessage(message) {
@@ -1751,12 +1686,42 @@ async function handleAIQuestion(question) {
     const typing = addAITyping()
 
     try {
-      const reply = await askAI(cleanQuestion)
-      typing?.remove()
+      
+let streamedText = ''
+let streamBubble = null
 
-      const finalReply = applyAIGreeting(reply)
+const reply = await askAI(cleanQuestion, chunk => {
+  streamedText += chunk
 
-      addAIMessage('assistant', formatAIResponse(finalReply))
+  if (!streamBubble) {
+    typing?.remove()
+    streamBubble = addAIMessage(
+      'assistant',
+      formatAIResponse(streamedText)
+    )
+  } else {
+    streamBubble.innerHTML = formatAIResponse(streamedText)
+  }
+})
+
+typing?.remove()
+
+const finalReply = applyAIGreeting(reply)
+
+if (streamBubble) {
+  streamBubble.innerHTML = formatAIResponse(finalReply)
+} else {
+  addAIMessage('assistant', formatAIResponse(finalReply))
+}
+
+aiHistory.push({
+  role: 'assistant',
+  content: finalReply
+})
+
+if (aiHistory.length > 10) {
+  aiHistory = aiHistory.slice(-10)
+}
 
       aiHistory.push({
         role: 'assistant',
