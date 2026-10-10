@@ -11741,31 +11741,50 @@ heroMessage.textContent = update.message
     }
   }
 
-  function playTick() {
-    if (!soundEnabled || !audioUnlocked) return
+ 
+function playTick() {
+  if (!soundEnabled || !audioUnlocked) return
 
-    const context = getAudioContext()
+  const context = getAudioContext()
 
-    if (!context || context.state !== "running") return
+  if (!context || context.state !== "running") return
 
-    const now = context.currentTime
-    const oscillator = context.createOscillator()
-    const gain = context.createGain()
+  const now = context.currentTime
 
-    oscillator.type = "sine"
-    oscillator.frequency.setValueAtTime(1700, now)
-    oscillator.frequency.exponentialRampToValueAtTime(1050, now + 0.025)
+  const oscillator = context.createOscillator()
+  const echoOscillator = context.createOscillator()
+  const gain = context.createGain()
+  const echoGain = context.createGain()
 
-    gain.gain.setValueAtTime(0.0001, now)
-    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.003)
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045)
+  oscillator.type = "triangle"
+  oscillator.frequency.setValueAtTime(180, now)
+  oscillator.frequency.exponentialRampToValueAtTime(95, now + 0.22)
 
-    oscillator.connect(gain)
-    gain.connect(context.destination)
+  gain.gain.setValueAtTime(0.0001, now)
+  gain.gain.exponentialRampToValueAtTime(0.45, now + 0.015)
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35)
 
-    oscillator.start(now)
-    oscillator.stop(now + 0.05)
-  }
+  echoOscillator.type = "sine"
+  echoOscillator.frequency.setValueAtTime(130, now + 0.08)
+  echoOscillator.frequency.exponentialRampToValueAtTime(75, now + 0.38)
+
+  echoGain.gain.setValueAtTime(0.0001, now)
+  echoGain.gain.setValueAtTime(0.0001, now + 0.08)
+  echoGain.gain.exponentialRampToValueAtTime(0.16, now + 0.11)
+  echoGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65)
+
+  oscillator.connect(gain)
+  gain.connect(context.destination)
+
+  echoOscillator.connect(echoGain)
+  echoGain.connect(context.destination)
+
+  oscillator.start(now)
+  oscillator.stop(now + 0.36)
+
+  echoOscillator.start(now + 0.08)
+  echoOscillator.stop(now + 0.66)
+}
 
   function isCountdownVisible() {
     return !modal.hidden && getComputedStyle(modal).display !== "none"
