@@ -11952,6 +11952,8 @@ function countdownIsOpen() {
 
 {
   const button = document.getElementById("site-music-toggle")
+  const results = document.getElementById("music-search-results")
+  const apiKey = "AIzaSyCLisbrpDpdkFW3CDWTKABFmcyjvkemhgg"
   const modal = document.getElementById("music-modal")
   const form = document.getElementById("music-form")
   const input = document.getElementById("music-url")
@@ -11960,7 +11962,7 @@ function countdownIsOpen() {
   const status = document.getElementById("music-status")
   const stopButton = document.getElementById("music-stop")
 
-  if (button && modal && form && input && player && placeholder && status && stopButton) {
+  if (button && modal && form && input && player && placeholder && status && stopButton && results) {
     let currentVideoId = ""
     let countdownPaused = false
     let resumeAfterCountdown = false
@@ -12072,45 +12074,91 @@ function countdownIsOpen() {
       }
     })
 
-    form.addEventListener("submit", event => {
-      event.preventDefault()
+    
+form.addEventListener("submit", async event => {
+  event.preventDefault()
 
-      if (countdownIsOpen()) {
-        status.textContent = "Countdown-ის დასრულების შემდეგ შეძლებ მუსიკის ჩართვას"
-        return
-      }
-
-      const videoId = getVideoId(input.value.trim())
-
-      if (!videoId) {
-        status.textContent = "ჩასვი სწორი YouTube-ის ვიდეოს ბმული"
-        return
-      }
-
-      currentVideoId = videoId
-      countdownPaused = false
-      resumeAfterCountdown = false
-
-      player.src = "https://www.youtube.com/embed/" + videoId +
-        "?autoplay=1&enablejsapi=1&playsinline=1"
-
-      placeholder.classList.add("is-hidden")
-      status.textContent = "ვიდეო ჩაიტვირთა. დაკვრა პლეერიდანაც შეგიძლია."
-
-      if (window.lucide) {
-        window.lucide.createIcons()
-      }
-    })
-
-    stopButton.addEventListener("click", () => {
-      currentVideoId = ""
-      countdownPaused = false
-      resumeAfterCountdown = false
-      player.src = ""
-      placeholder.classList.remove("is-hidden")
-      status.textContent = "მუსიკა გაჩერებულია"
-    })
-
-    setInterval(syncCountdown, 300)
+  if (countdownIsOpen()) {
+    status.textContent = "Countdown-ის დასრულების შემდეგ შეძლებ მუსიკის ჩართვას"
+    return
   }
-}
+
+  const query = input.value.trim()
+
+  if (!query) {
+    status.textContent = "ჩაწერე სიმღერის სახელი ან შემსრულებელი"
+    return
+  }
+
+  results.replaceChildren()
+  status.textContent = "ვეძებ სიმღერებს..."
+
+  try {
+    const response = await fetch(
+      "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=6&q=" +
+      encodeURIComponent(query) +
+      "&key=" +
+      encodeURIComponent(apiKey)
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || "ძიება ვერ შესრულდა")
+    }
+
+    if (!data.items || data.items.length === 0) {
+      status.textContent = "სიმღერები ვერ მოიძებნა. სცადე სხვა სიტყვები."
+      return
+    }
+
+    data.items.forEach(item => {
+      const videoId = item.id.videoId
+      const title = item.snippet.title
+      const thumbnail = item.snippet.thumbnails.medium?.url
+
+      if (!videoId) return
+
+      const result = document.createElement("button")
+      result.type = "button"
+      result.className = "music-result"
+
+      const image = document.createElement("img")
+      image.src = thumbnail || ""
+      image.alt = ""
+      image.loading = "lazy"
+
+      const titleElement = document.createElement("span")
+      titleElement.textContent = title
+
+      result.append(image, titleElement)
+
+      result.addEventListener("click", () => {
+        if (countdownIsOpen()) {
+          status.textContent = "Countdown-ის დასრულების შემდეგ შეძლებ მუსიკის ჩართვას"
+          return
+        }
+
+        currentVideoId = videoId
+        countdownPaused = false
+        resumeAfterCountdown = false
+
+        player.src = "https://www.youtube.com/embed/" + videoId +
+          "?autoplay=1&enablejsapi=1&playsinline=1"
+
+        placeholder.classList.add("is-hidden")
+        status.textContent = "არჩეულია: " + title
+
+        if (window.lucide) {
+          window.lucide.createIcons()
+        }
+      })
+
+      results.appendChild(result)
+    })
+
+    status.textContent = "აირჩიე სასურველი სიმღერა"
+  } catch (error) {
+    status.textContent = "ძიების შეცდომა: " + error.message
+  }
+})
