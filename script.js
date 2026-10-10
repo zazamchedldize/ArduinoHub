@@ -11825,14 +11825,60 @@ function playTick() {
     let noteIndex = 0
     let musicEnabled = localStorage.getItem("arduinoHubMusic") !== "off"
 
-    const melody = [
-      523.25, 659.25, 783.99, 659.25,
-      523.25, 783.99, 880, 783.99,
-      659.25, 523.25, 587.33, 659.25,
-      783.99, 659.25, 587.33, 523.25,
-      392, 523.25, 659.25, 783.99,
-      659.25, 587.33, 523.25, 659.25
-    ]
+    
+{
+  const musicButton = document.getElementById("site-music-toggle")
+  const musicIcon = document.getElementById("site-music-icon")
+  const musicText = document.getElementById("site-music-text")
+  const audio = new Audio("/sounds/music.mp3")
+
+  audio.loop = true
+  audio.volume = 0.7
+
+  let musicEnabled = localStorage.getItem("arduinoHubMusic") !== "off"
+
+  function countdownIsOpen() {
+    const modal = document.getElementById("countdown-modal")
+
+    if (!modal) return false
+
+    return modal.getClientRects().length > 0 &&
+      getComputedStyle(modal).display !== "none" &&
+      getComputedStyle(modal).visibility !== "hidden"
+  }
+
+  function updateButton() {
+    musicIcon.textContent = musicEnabled ? "🔊" : "🔇"
+    musicText.textContent = musicEnabled ? "გააჩუმე მუსიკა" : "ჩართე მუსიკა"
+    musicButton.setAttribute("aria-pressed", String(musicEnabled))
+  }
+
+  async function syncMusic() {
+    if (!musicEnabled || countdownIsOpen()) {
+      audio.pause()
+      return
+    }
+
+    try {
+      await audio.play()
+    } catch {}
+  }
+
+  musicButton.addEventListener("click", async () => {
+    musicEnabled = !musicEnabled
+    localStorage.setItem("arduinoHubMusic", musicEnabled ? "on" : "off")
+    updateButton()
+    await syncMusic()
+  })
+
+  document.addEventListener("pointerdown", () => {
+    syncMusic()
+  })
+
+  updateButton()
+  setInterval(syncMusic, 500)
+}
+
 
     
 function countdownIsOpen() {
