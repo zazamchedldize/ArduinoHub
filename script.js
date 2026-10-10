@@ -11445,32 +11445,46 @@ window.leaveLiveAsGuest =
     return data
   }
 
-  function typeText(element, text, speed = 28) {
-    if (typingTimer) {
-      clearTimeout(typingTimer)
-      typingTimer = null
-    }
+  
+function typeText(element, text, speed = 28) {
+  if (typingTimer) {
+    clearTimeout(typingTimer)
+    typingTimer = null
+  }
 
-    element.textContent = ""
-    element.classList.add("hologram-typing")
+  let index = 0
+  let deleting = false
 
-    let index = 0
+  element.classList.add("hologram-typing")
 
-    function typeNext() {
-      if (!element.isConnected) return
+  function typeNext() {
+    if (!element.isConnected) return
 
-      if (index < text.length) {
-        element.textContent += text[index]
-        index++
-        typingTimer = setTimeout(typeNext, speed)
-      } else {
-        element.classList.remove("hologram-typing")
-        typingTimer = null
+    if (!deleting) {
+      element.textContent = text.slice(0, index + 1)
+      index++
+
+      if (index >= text.length) {
+        deleting = true
+        typingTimer = setTimeout(typeNext, 1800)
+        return
+      }
+    } else {
+      element.textContent = text.slice(0, index - 1)
+      index--
+
+      if (index <= 0) {
+        deleting = false
+        typingTimer = setTimeout(typeNext, 500)
+        return
       }
     }
 
-    typeNext()
+    typingTimer = setTimeout(typeNext, deleting ? 12 : speed)
   }
+
+  typeNext()
+}
 
   async function renderUpdate(animate = true) {
     const update = await getLatestUpdate()
