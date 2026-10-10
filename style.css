@@ -9683,3 +9683,27 @@ body.iphone-install-open {
 * {
   scrollbar-gutter: auto;
 }
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.cta .button.primary {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .cta {
+    gap: 22px;
+  }
+
+  .cta .button.primary {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}
