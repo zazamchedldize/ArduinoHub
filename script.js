@@ -1637,6 +1637,7 @@ function setupZazaHistoryDelete() {
 
 
 
+
 async function handleAIQuestion(question) {
   const input = $('#ai-chat-input')
   const send = $('#ai-send-btn')
@@ -1692,11 +1693,14 @@ async function handleAIQuestion(question) {
 
       try {
         const history = await getZazaHistory()
+
         typing?.remove()
+
         addAIMessage('assistant', formatZazaHistory(history))
         setupZazaHistoryDelete()
       } catch (error) {
         console.error('History error:', error)
+
         typing?.remove()
 
         addAIMessage(
@@ -1723,42 +1727,41 @@ async function handleAIQuestion(question) {
     const typing = addAITyping()
 
     try {
-      
-let streamedText = ''
-let streamBubble = null
+      let streamedText = ''
+      let streamMessage = null
+      let streamBubble = null
 
-const reply = await askAI(cleanQuestion, chunk => {
-  streamedText += chunk
+      const reply = await askAI(cleanQuestion, chunk => {
+        streamedText += chunk
 
-  if (!streamBubble) {
-    typing?.remove()
-    streamBubble = addAIMessage(
-      'assistant',
-      formatAIResponse(streamedText)
-    )
-  } else {
-    streamBubble.innerHTML = formatAIResponse(streamedText)
-  }
-})
+        if (!streamMessage) {
+          typing?.remove()
 
-typing?.remove()
+          streamMessage = addAIMessage(
+            'assistant',
+            formatAIResponse(streamedText)
+          )
 
-const finalReply = applyAIGreeting(reply)
+          streamBubble = streamMessage?.querySelector(
+            '.ai-message-bubble'
+          )
+        } else if (streamBubble) {
+          streamBubble.innerHTML = formatAIResponse(streamedText)
+        }
+      })
 
-if (streamBubble) {
-  streamBubble.innerHTML = formatAIResponse(finalReply)
-} else {
-  addAIMessage('assistant', formatAIResponse(finalReply))
-}
+      typing?.remove()
 
-aiHistory.push({
-  role: 'assistant',
-  content: finalReply
-})
+      const finalReply = applyAIGreeting(reply)
 
-if (aiHistory.length > 10) {
-  aiHistory = aiHistory.slice(-10)
-}
+      if (streamBubble) {
+        streamBubble.innerHTML = formatAIResponse(finalReply)
+      } else {
+        addAIMessage(
+          'assistant',
+          formatAIResponse(finalReply)
+        )
+      }
 
       aiHistory.push({
         role: 'assistant',
@@ -1774,6 +1777,7 @@ if (aiHistory.length > 10) {
       console.error('AI backend data:', error?.backendData)
 
       typing?.remove()
+
       addAIMessage('error', getAIUserErrorMessage(error))
     }
   } finally {
@@ -1788,44 +1792,25 @@ if (aiHistory.length > 10) {
 }
 
 function openAIChat() {
-  const chat =
-    $('#ai-chat')
+  const chat = $('#ai-chat')
+  const toggle = $('#ai-chat-toggle')
+  const windowEl = $('#ai-chat-window')
 
-  const toggle =
-    $('#ai-chat-toggle')
-
-  const windowEl =
-    $('#ai-chat-window')
-
-  if (
-    !chat ||
-    !toggle
-  ) {
+  if (!chat || !toggle) {
     return
   }
 
-  chat.classList.add(
-    'open'
-  )
+  chat.classList.add('open')
 
-  toggle.setAttribute(
-    'aria-expanded',
-    'true'
-  )
+  toggle.setAttribute('aria-expanded', 'true')
 
-  windowEl?.setAttribute(
-    'aria-hidden',
-    'false'
-  )
+  windowEl?.setAttribute('aria-hidden', 'false')
 
-  setTimeout(
-    () => {
-      $('#ai-chat-input')
-        ?.focus()
-    },
-    220
-  )
+  setTimeout(() => {
+    $('#ai-chat-input')?.focus()
+  }, 220)
 }
+
 
 function closeAIChat() {
   const chat =
