@@ -11446,41 +11446,36 @@ window.leaveLiveAsGuest =
   }
 
   
-function typeText(element, text, speed = 28) {
+
+function typeText(element, text, speed = 35) {
   if (typingTimer) {
     clearTimeout(typingTimer)
     typingTimer = null
   }
 
   let index = 0
-  let deleting = false
 
+  element.textContent = ""
   element.classList.add("hologram-typing")
 
   function typeNext() {
-    if (!element.isConnected) return
-
-    if (!deleting) {
-      element.textContent = text.slice(0, index + 1)
-      index++
-
-      if (index >= text.length) {
-        deleting = true
-        typingTimer = setTimeout(typeNext, 1800)
-        return
-      }
-    } else {
-      element.textContent = text.slice(0, index - 1)
-      index--
-
-      if (index <= 0) {
-        deleting = false
-        typingTimer = setTimeout(typeNext, 500)
-        return
-      }
+    if (!element.isConnected) {
+      typingTimer = null
+      return
     }
 
-    typingTimer = setTimeout(typeNext, deleting ? 12 : speed)
+    if (index < text.length) {
+      element.textContent = text.slice(0, index + 1)
+      index++
+      typingTimer = setTimeout(typeNext, speed)
+      return
+    }
+
+    typingTimer = setTimeout(() => {
+      index = 0
+      element.textContent = ""
+      typeNext()
+    }, 1800)
   }
 
   typeNext()
