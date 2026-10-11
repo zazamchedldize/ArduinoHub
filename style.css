@@ -9707,3 +9707,107 @@ body.iphone-install-open {
     box-sizing: border-box;
   }
 }
+
+
+.arduinohub-film-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(64px, 8vw, 110px) 20px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(34, 211, 149, 0.13), transparent 60%),
+    #050907;
+}
+
+.arduinohub-film-inner {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.arduinohub-film-eyebrow {
+  margin: 0 0 16px;
+  color: #22d395;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.arduinohub-film-title {
+  margin: 0;
+  color: #f4fff9;
+  font-size: clamp(30px, 5vw, 54px);
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.arduinohub-film-title span {
+  color: #22d395;
+  text-shadow: 0 0 32px rgba(34, 211, 149, 0.2);
+}
+
+.arduinohub-film-description {
+  max-width: 650px;
+  margin: 20px auto 34px;
+  color: #a8b8b0;
+  font-size: clamp(14px, 2vw, 17px);
+  line-height: 1.8;
+}
+
+.arduinohub-film-frame {
+  width: min(100%, 1000px);
+  margin: 0 auto;
+  padding: 2px;
+  overflow: hidden;
+  border: 1px solid rgba(34, 211, 149, 0.35);
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 211, 149, 0.45),
+    rgba(34, 211, 149, 0.04)
+  );
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.45),
+    0 0 45px rgba(34, 211, 149, 0.08);
+}
+
+.arduinohub-film-frame video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #020403;
+  border-radius: 17px;
+}
+
+.arduinohub-film-caption {
+  margin: 24px 0 0;
+  color: #22d395;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+@media (max-width: 600px) {
+  .arduinohub-film-section {
+    padding: 55px 14px;
+  }
+
+  .arduinohub-film-frame {
+    border-radius: 13px;
+  }
+
+  .arduinohub-film-frame video {
+    border-radius: 10px;
+  }
+
+  .arduinohub-film-eyebrow {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+  }
+
+  .arduinohub-film-caption {
+    letter-spacing: 2px;
+  }
+}
