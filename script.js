@@ -5601,15 +5601,19 @@ if (
   initPasswordReset()
 }
 
+
 initAuthUI()
+
 document.addEventListener('DOMContentLoaded', () => {
-    const meetingBtn = document.getElementById('meeting-button');
+    const meetingBtn = document.getElementById('meeting-button')
+
     if (meetingBtn) {
         meetingBtn.addEventListener('click', () => {
-            openAttendancePanel();
-        });
+            openMeetingModal()
+        })
     }
-});
+})
+
 // ერთიანი ფუნქცია შეხვედრის შენახვისა და ფუშ-შეტყობინების გასაგზავნად
 async function saveMeetingAndNotify(meetingTitle, meetingDesc) {
   try {
