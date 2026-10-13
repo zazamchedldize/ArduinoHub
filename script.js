@@ -12214,6 +12214,7 @@ document.addEventListener("keydown", event => {
 })
 
 
+
 async function updateLoginButton() {
   const button = document.getElementById('nav-login-button')
 
@@ -12223,12 +12224,23 @@ async function updateLoginButton() {
 
   button.href = 'login.html'
 
-  if (!session) return
+  const icon = button.querySelector('[data-lucide]')
 
-  const admin = await isAdmin(session.user)
+  if (!session) {
+    button.innerHTML = 'შესვლა <i data-lucide="shield"></i>'
+  } else {
+    const admin = await isAdmin(session.user)
 
-  if (admin) {
-    button.href = 'admin.html'
+    if (admin) {
+      button.innerHTML = 'ადმინისტრაცია <i data-lucide="shield-check"></i>'
+      button.href = 'admin.html'
+    } else {
+      button.innerHTML = 'შესვლა <i data-lucide="shield"></i>'
+    }
+  }
+
+  if (window.lucide) {
+    window.lucide.createIcons()
   }
 }
 
