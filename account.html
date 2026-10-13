@@ -1927,7 +1927,6 @@ async function openAccountAttendancePanel() {
   panel.innerHTML = `
 <style>
 
-
 #account-attendance-panel {
   position: fixed !important;
   inset: 0 !important;
@@ -1935,109 +1934,148 @@ async function openAccountAttendancePanel() {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 16px !important;
+  padding: 28px !important;
   box-sizing: border-box !important;
-  background: rgba(2, 10, 8, 0.78) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(2, 10, 8, 0.76) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 #account-attendance-panel .account-attendance-box {
-  width: min(760px, 100%) !important;
-  max-height: 90vh !important;
+  width: min(720px, 100%) !important;
+  max-height: min(86vh, 820px) !important;
   overflow-y: auto !important;
   box-sizing: border-box !important;
-  padding: 0 !important;
-  border: 1px solid rgba(34, 211, 149, 0.22) !important;
-  border-radius: 24px !important;
+  padding: 30px !important;
+  margin: auto !important;
+  border: 1px solid rgba(34, 211, 149, 0.2) !important;
+  border-radius: 26px !important;
   background:
-    radial-gradient(circle at 100% 0%, rgba(34, 211, 149, 0.13), transparent 34%),
-    linear-gradient(145deg, #0d1b18, #07110f) !important;
+    radial-gradient(ellipse at top right, rgba(34, 211, 149, 0.12), transparent 42%),
+    radial-gradient(ellipse at bottom left, rgba(34, 211, 149, 0.045), transparent 45%),
+    linear-gradient(145deg, #0e1d19, #091310 65%, #07110f) !important;
   color: #f0fdf7 !important;
-  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.65), 0 0 40px rgba(34, 211, 149, 0.06) !important;
-  scrollbar-width: none;
+  box-shadow:
+    0 35px 100px rgba(0, 0, 0, 0.48),
+    0 12px 35px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.015),
+    0 0 45px rgba(34, 211, 149, 0.045) !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 149, 0.25) transparent;
 }
 
 #account-attendance-panel .account-attendance-box::-webkit-scrollbar {
-  display: none;
+  width: 5px;
+}
+
+#account-attendance-panel .account-attendance-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#account-attendance-panel .account-attendance-box::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(34, 211, 149, 0.25);
 }
 
 #account-attendance-panel .account-attendance-box h2 {
+  margin-top: 0;
+  margin-bottom: 22px;
   color: #f0fdf7;
-  font-size: 23px;
+  font-size: clamp(21px, 3vw, 25px);
   font-weight: 800;
-  letter-spacing: -0.5px;
+  line-height: 1.35;
+  letter-spacing: -0.6px;
 }
 
 #account-attendance-panel .account-attendance-box h3 {
+  margin-top: 24px;
+  margin-bottom: 13px;
   color: #e8f5ee;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 750;
+  line-height: 1.5;
 }
 
-#account-attendance-panel .account-attendance-box p,
-#account-attendance-panel .account-attendance-box label {
+#account-attendance-panel .account-attendance-box p {
+  margin-top: 8px;
+  margin-bottom: 16px;
   color: #a5b8ad;
+  line-height: 1.7;
+}
+
+#account-attendance-panel .account-attendance-box label {
+  color: #c1d2c8;
 }
 
 #account-attendance-panel .account-attendance-box input[type="date"] {
+  display: block;
   width: 100%;
-  min-height: 46px;
-  padding: 0 13px;
+  min-height: 48px;
+  margin-top: 9px;
+  padding: 0 15px;
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 12px;
+  border-radius: 14px;
   outline: none;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(3, 12, 9, 0.62);
   color: #f0fdf7;
   color-scheme: dark;
   font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 #account-attendance-panel .account-attendance-box input:focus {
-  border-color: rgba(34, 211, 149, 0.55);
-  box-shadow: 0 0 0 4px rgba(34, 211, 149, 0.08);
+  border-color: rgba(34, 211, 149, 0.6);
+  box-shadow: 0 0 0 4px rgba(34, 211, 149, 0.09);
 }
 
 #account-attendance-panel .account-attendance-member-list {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px !important;
+  gap: 12px !important;
+  margin-top: 16px;
 }
 
 #account-attendance-panel .account-attendance-member-list label {
   display: flex;
   align-items: center;
-  gap: 11px;
-  min-height: 50px;
-  padding: 12px;
+  gap: 12px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 14px 15px;
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.065);
-  border-radius: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
   background: rgba(255, 255, 255, 0.025);
   color: #e8f5ee;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 #account-attendance-panel .account-attendance-member-list label:hover {
-  border-color: rgba(34, 211, 149, 0.3);
-  background: rgba(34, 211, 149, 0.055);
+  border-color: rgba(34, 211, 149, 0.32);
+  background: rgba(34, 211, 149, 0.065);
+  transform: translateY(-1px);
 }
 
 #account-attendance-panel .account-attendance-member-list input[type="checkbox"],
 #account-attendance-panel .account-attendance-box input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  flex-shrink: 0;
+  flex: 0 0 18px;
   accent-color: #22d395;
+  cursor: pointer;
 }
 
 #account-attendance-panel .account-attendance-box button {
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  min-height: 44px;
+  border-radius: 12px;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-#account-attendance-panel .account-attendance-box button:hover {
+#account-attendance-panel .account-attendance-box button:hover:not(:disabled) {
   transform: translateY(-1px);
 }
 
@@ -2052,26 +2090,69 @@ async function openAccountAttendancePanel() {
 
 @media (max-width: 600px) {
   #account-attendance-panel {
-    padding: 10px !important;
+    padding: 16px !important;
+    align-items: center !important;
   }
 
   #account-attendance-panel .account-attendance-box {
-    max-height: 93vh !important;
-    border-radius: 20px !important;
+    width: 100% !important;
+    max-height: 88vh !important;
+    padding: 22px 18px !important;
+    border-radius: 22px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box h2 {
+    margin-bottom: 18px;
+    font-size: 21px;
+  }
+
+  #account-attendance-panel .account-attendance-box h3 {
+    margin-top: 21px;
   }
 
   #account-attendance-panel .account-attendance-member-list {
     grid-template-columns: 1fr;
+    gap: 10px !important;
+  }
+
+  #account-attendance-panel .account-attendance-member-list label {
+    min-height: 52px;
+    padding: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  #account-attendance-panel {
+    padding: 12px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    padding: 19px 15px !important;
+    border-radius: 19px !important;
+  }
+}
+
+@media (max-height: 600px) and (min-width: 601px) {
+  #account-attendance-panel {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    max-height: 92vh !important;
+    padding: 22px !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #account-attendance-panel * {
+  #account-attendance-panel *,
+  #account-attendance-panel *::before,
+  #account-attendance-panel *::after {
     transition: none !important;
     animation: none !important;
+    scroll-behavior: auto !important;
   }
 }
-
       #account-attendance-panel {
         position: fixed;
         inset: 0;
