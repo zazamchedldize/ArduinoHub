@@ -804,11 +804,12 @@ body.account-page {
         </button>
 
         <button type="button" class="account-action" id="account-attendance-button" hidden>
-          <a href="index.html?attendance=manage" id="account-attendance-button" hidden>
-  დასწრების მართვა
-</a>
-          <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
-        </button>
+  <span class="account-action-label">
+    <i data-lucide="calendar-check"></i>
+    დასწრების მართვა
+  </span>
+  <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+</button>
 
         <button type="button" class="account-action danger" id="account-logout-button">
           <span class="account-action-label">
@@ -1771,7 +1772,11 @@ $('#account-attendance-button').addEventListener('click', () => {
     return
   }
 
-  window.location.href = 'index.html?attendance=manage'
+  if (typeof window.openAttendancePanel === 'function') {
+    window.openAttendancePanel()
+  } else {
+    showMessage('დასწრების აღრიცხვის მოდული ამ გვერდზე ჯერ არ არის ჩართული.')
+  }
 })
 
 $('#meeting-form').addEventListener('submit', saveMeeting)
