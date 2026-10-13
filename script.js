@@ -4642,25 +4642,20 @@ function renderAttendancePanel(records) {
 }
 
 async function openAttendancePanel() {
-  if (new URLSearchParams(window.location.search).get('attendance') === 'manage') {
-  window.addEventListener('load', async () => {
-    const user = await getCurrentUser()
-
-    if (user && await isAttendanceManager(user)) {
-      await openAttendancePanel()
-    }
-  }, { once: true })
-}
   const user = await getCurrentUser()
+
   if (!user) {
     toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
     return
   }
+
   const manager = await isAttendanceManager(user)
+
   if (!manager) {
     toast('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
     return
   }
+
   closeAttendancePanel()
   const panel = document.createElement('div')
   panel.id = 'attendance-panel'
@@ -4765,6 +4760,7 @@ async function openAttendancePanel() {
     $('#attendance-date')?.addEventListener('change', () => {
       renderAttendancePanel(attendanceRecords)
       updateAttendanceSelectedCount()
+    
     })
 
     $('#attendance-member-select')?.addEventListener(
