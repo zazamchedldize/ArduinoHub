@@ -12253,14 +12253,7 @@ if (db) {
       updateLoginButton()
     }, 0)
   })
+  
 }
 
-if (new URLSearchParams(window.location.search).get('attendance') === 'manage') {
-  window.addEventListener('load', async () => {
-    const user = await getCurrentUser()
 
-    if (user && await isAttendanceManager(user)) {
-      await openAttendancePanel()
-    }
-  }, { once: true })
-}
