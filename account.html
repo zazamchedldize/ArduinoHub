@@ -803,7 +803,8 @@ body.account-page {
           <i data-lucide="chevron-down" class="account-action-arrow" id="admin-toggle-icon"></i>
         </button>
 
-        <button type="button" class="account-action" id="account-attendance-button" hidden>
+        
+<button type="button" class="account-action" id="account-attendance-button" hidden>
   <span class="account-action-label">
     <i data-lucide="calendar-check"></i>
     დასწრების მართვა
@@ -1659,6 +1660,589 @@ async function deleteProject(id) {
   await loadAdminProjects()
 }
 
+let accountAttendanceMembers = []
+let accountAttendanceRecords = []
+
+function accountAttendanceDateText(dateValue) {
+  if (!dateValue) {
+    return ''
+  }
+
+  const date = new Date(`${dateValue}T12:00:00`)
+
+  return new Intl.DateTimeFormat('ka-GE', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date)
+}
+
+async function getAccountAttendanceMembers() {
+  const { data, error } = await db
+    .from('club_members')
+    .select('id,full_name,sort_order,active')
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+async function getAccountAttendanceRecords() {
+  const { data, error } = await db
+    .from('club_attendance')
+    .select(`
+      id,
+      meeting_date,
+      recorded_by,
+      counted,
+      created_at,
+      updated_at,
+      club_attendance_members (
+        member_id,
+        club_members (
+          id,
+          full_name,
+          sort_order
+        )
+      )
+    `)
+    .order('meeting_date', { ascending: false })
+
+  if (error) {
+    throw error
+  }
+
+  return data || []
+}
+
+async function saveAccountAttendanceRecord(date, memberIds, counted) {
+  if (!db || !currentUser || currentUser.id !== MARIA_USER_ID) {
+    throw new Error('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
+  }
+
+  const { data: authData, error: authError } = await db.auth.getUser()
+
+  if (authError) {
+    throw authError
+  }
+
+  const user = authData.user
+
+  if (!user || user.id !== MARIA_USER_ID) {
+    throw new Error('დასწრების აღრიცხვაზე წვდომა არ გაქვთ.')
+  }
+
+  const { data: existing, error: findError } = await db
+    .from('club_attendance')
+    .select('id')
+    .eq('meeting_date', date)
+    .maybeSingle()
+
+  if (findError) {
+    throw findError
+  }
+
+  let record = existing
+
+  if (record) {
+    const { error } = await db
+      .from('club_attendance')
+      .update({
+        recorded_by: user.id,
+        counted,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', record.id)
+
+    if (error) {
+      throw error
+    }
+  } else {
+    const { data, error } = await db
+      .from('club_attendance')
+      .insert({
+        meeting_date: date,
+        recorded_by: user.id,
+        counted
+      })
+      .select('id')
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    record = data
+  }
+
+  const { error: deleteError } = await db
+    .from('club_attendance_members')
+    .delete()
+    .eq('attendance_id', record.id)
+
+  if (deleteError) {
+    throw deleteError
+  }
+
+  if (memberIds.length) {
+    const rows = memberIds.map(member_id => ({
+      attendance_id: record.id,
+      member_id
+    }))
+
+    const { error } = await db
+      .from('club_attendance_members')
+      .insert(rows)
+
+    if (error) {
+      throw error
+    }
+  }
+
+  return record.id
+}
+
+function closeAccountAttendancePanel() {
+  const panel = document.getElementById('account-attendance-panel')
+
+  if (panel) {
+    panel.remove()
+  }
+
+  document.body.style.overflow = ''
+  document.removeEventListener(
+    'keydown',
+    accountAttendanceEscapeHandler
+  )
+}
+
+function accountAttendanceEscapeHandler(event) {
+  if (
+    event.key === 'Escape' &&
+    document.getElementById('account-attendance-panel')
+  ) {
+    closeAccountAttendancePanel()
+  }
+}
+
+function updateAccountAttendanceCount() {
+  const panel = document.getElementById('account-attendance-panel')
+
+  if (!panel) {
+    return
+  }
+
+  const selected = panel.querySelectorAll(
+    '.account-attendance-member-check:checked'
+  ).length
+
+  const counter = panel.querySelector('#account-attendance-selected-count')
+
+  if (counter) {
+    counter.textContent = String(selected)
+  }
+}
+
+function renderAccountAttendancePanel() {
+  const panel = document.getElementById('account-attendance-panel')
+
+  if (!panel) {
+    return
+  }
+
+  const date = panel.querySelector('#account-attendance-date').value
+
+  const record = accountAttendanceRecords.find(
+    item => item.meeting_date === date
+  )
+
+  const selectedIds = record
+    ? (record.club_attendance_members || []).map(item => item.member_id)
+    : []
+
+  const memberList = panel.querySelector('#account-attendance-members')
+
+  memberList.innerHTML = accountAttendanceMembers.map(member => `
+    <label class="account-attendance-member">
+      <input
+        class="account-attendance-member-check"
+        type="checkbox"
+        value="${esc(member.id)}"
+        ${selectedIds.includes(member.id) ? 'checked' : ''}
+      >
+      <span>${esc(member.full_name)}</span>
+    </label>
+  `).join('')
+
+  panel.querySelector('#account-attendance-counted').checked =
+    record?.counted === true
+
+  const history = panel.querySelector('#account-attendance-history')
+  const countedRecords = accountAttendanceRecords.filter(
+    item => item.counted === true
+  )
+
+  history.innerHTML = countedRecords.length
+    ? countedRecords.map(item => {
+        const names = (item.club_attendance_members || [])
+          .map(member => member.club_members?.full_name)
+          .filter(Boolean)
+
+        return `
+          <button
+            type="button"
+            class="account-attendance-history-item"
+            data-attendance-date="${esc(item.meeting_date)}"
+          >
+            <span>${esc(accountAttendanceDateText(item.meeting_date))}</span>
+            <strong>${names.length} წევრი</strong>
+          </button>
+        `
+      }).join('')
+    : '<p class="account-attendance-muted">ჩათვლილი შეხვედრები ჯერ არ არის.</p>'
+
+  updateAccountAttendanceCount()
+  refreshIcons()
+}
+
+async function openAccountAttendancePanel() {
+  if (
+    !currentUser ||
+    !attendanceManager ||
+    currentUser.id !== MARIA_USER_ID
+  ) {
+    showMessage('დასწრების მართვის უფლება არ გაქვს.')
+    return
+  }
+
+  closeAccountAttendancePanel()
+
+  const panel = document.createElement('div')
+  panel.id = 'account-attendance-panel'
+
+  panel.innerHTML = `
+    <style>
+      #account-attendance-panel {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        overflow-y: auto;
+        background: rgba(0, 0, 0, .78);
+        font-family: "FiraGO", "Inter", sans-serif;
+      }
+
+      #account-attendance-panel .account-attendance-box {
+        position: relative;
+        width: min(760px, 100%);
+        max-height: 92vh;
+        overflow-y: auto;
+        padding: 24px;
+        color: #f1faf6;
+        background: #0d1c18;
+        border: 1px solid rgba(135, 180, 158, .22);
+        border-radius: 20px;
+        box-shadow: 0 25px 90px rgba(0, 0, 0, .45);
+      }
+
+      #account-attendance-panel .account-attendance-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      #account-attendance-panel h2 {
+        margin: 0 0 8px;
+        font-size: 23px;
+      }
+
+      #account-attendance-panel h3 {
+        margin: 22px 0 12px;
+        font-size: 15px;
+      }
+
+      #account-attendance-panel p {
+        color: #91a69d;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      #account-attendance-panel label {
+        font-size: 12px;
+      }
+
+      #account-attendance-panel input[type="date"] {
+        display: block;
+        width: 100%;
+        margin-top: 8px;
+        padding: 12px;
+        color: #f1faf6;
+        color-scheme: dark;
+        background: #07110f;
+        border: 1px solid rgba(135, 180, 158, .25);
+        border-radius: 10px;
+        font: inherit;
+      }
+
+      #account-attendance-panel .account-attendance-member-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+      }
+
+      #account-attendance-panel .account-attendance-member {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        padding: 12px;
+        background: rgba(255, 255, 255, .035);
+        border: 1px solid rgba(135, 180, 158, .16);
+        border-radius: 10px;
+        overflow-wrap: anywhere;
+      }
+
+      #account-attendance-panel input[type="checkbox"] {
+        flex-shrink: 0;
+        accent-color: #22d395;
+      }
+
+      #account-attendance-panel .account-attendance-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      #account-attendance-panel .account-attendance-button {
+        min-height: 40px;
+        padding: 10px 14px;
+        color: #032016;
+        background: #22d395;
+        border: 0;
+        border-radius: 9px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      #account-attendance-panel .account-attendance-button.secondary {
+        color: #f1faf6;
+        background: rgba(255, 255, 255, .07);
+        border: 1px solid rgba(135, 180, 158, .2);
+      }
+
+      #account-attendance-panel .account-attendance-button:disabled {
+        opacity: .6;
+        cursor: wait;
+      }
+
+      #account-attendance-panel .account-attendance-close {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        color: #f1faf6;
+        background: rgba(255, 255, 255, .06);
+        border: 1px solid rgba(135, 180, 158, .2);
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      #account-attendance-panel .account-attendance-history {
+        display: grid;
+        gap: 8px;
+      }
+
+      #account-attendance-panel .account-attendance-history-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px;
+        color: #f1faf6;
+        background: rgba(255, 255, 255, .035);
+        border: 1px solid rgba(135, 180, 158, .16);
+        border-radius: 10px;
+        font: inherit;
+        font-size: 12px;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      #account-attendance-panel .account-attendance-history-item strong {
+        color: #69f0bc;
+        white-space: nowrap;
+      }
+
+      #account-attendance-panel .account-attendance-muted {
+        color: #91a69d;
+      }
+
+      #account-attendance-panel .account-attendance-error {
+        color: #ffb6b6;
+      }
+
+      @media (max-width: 520px) {
+        #account-attendance-panel {
+          padding: 10px;
+        }
+
+        #account-attendance-panel .account-attendance-box {
+          padding: 18px;
+        }
+
+        #account-attendance-panel .account-attendance-member-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <section class="account-attendance-box" role="dialog" aria-modal="true" aria-labelledby="account-attendance-title">
+      <div class="account-attendance-heading">
+        <div>
+          <p style="margin-top:0;color:#22d395;letter-spacing:1.5px">CLUB ATTENDANCE</p>
+          <h2 id="account-attendance-title">დასწრების აღრიცხვა</h2>
+          <p>მონიშნე შეხვედრაზე დამსწრე კლუბის წევრები.</p>
+        </div>
+        <button type="button" class="account-attendance-close" id="account-attendance-close" aria-label="დახურვა">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <label>
+        შეხვედრის თარიღი
+        <input id="account-attendance-date" type="date">
+      </label>
+
+      <h3>დამსწრე წევრები · <span id="account-attendance-selected-count">0</span></h3>
+      <div class="account-attendance-member-list" id="account-attendance-members"></div>
+
+      <label class="account-attendance-actions">
+        <input type="checkbox" id="account-attendance-counted">
+        შეხვედრის ჩათვლა
+      </label>
+
+      <p id="account-attendance-error" class="account-attendance-error" role="alert"></p>
+
+      <div class="account-attendance-actions">
+        <button type="button" class="account-attendance-button" id="account-attendance-save">
+          <i data-lucide="save"></i> დასწრების შენახვა
+        </button>
+        <button type="button" class="account-attendance-button secondary" id="account-attendance-cancel">
+          გაუქმება
+        </button>
+      </div>
+
+      <h3>ჩათვლილი შეხვედრების ისტორია</h3>
+      <div class="account-attendance-history" id="account-attendance-history"></div>
+    </section>
+  `
+
+  document.body.appendChild(panel)
+  document.body.style.overflow = 'hidden'
+
+  panel.querySelector('#account-attendance-close')
+    .addEventListener('click', closeAccountAttendancePanel)
+
+  panel.querySelector('#account-attendance-cancel')
+    .addEventListener('click', closeAccountAttendancePanel)
+
+  panel.querySelector('#account-attendance-date')
+    .addEventListener('change', renderAccountAttendancePanel)
+
+  panel.querySelector('#account-attendance-members')
+    .addEventListener('change', updateAccountAttendanceCount)
+
+  panel.querySelector('#account-attendance-history')
+    .addEventListener('click', event => {
+      const button = event.target.closest('[data-attendance-date]')
+
+      if (!button) {
+        return
+      }
+
+      panel.querySelector('#account-attendance-date').value =
+        button.dataset.attendanceDate
+
+      renderAccountAttendancePanel()
+    })
+
+  panel.querySelector('#account-attendance-save')
+    .addEventListener('click', async () => {
+      const date = panel.querySelector('#account-attendance-date').value
+      const errorBox = panel.querySelector('#account-attendance-error')
+      const saveButton = panel.querySelector('#account-attendance-save')
+
+      errorBox.textContent = ''
+
+      if (!date) {
+        errorBox.textContent = 'აირჩიე შეხვედრის თარიღი.'
+        return
+      }
+
+      const memberIds = Array.from(
+        panel.querySelectorAll('.account-attendance-member-check:checked')
+      ).map(input => input.value)
+
+      const counted = panel.querySelector('#account-attendance-counted').checked
+
+      saveButton.disabled = true
+      saveButton.textContent = 'ინახება...'
+
+      try {
+        await saveAccountAttendanceRecord(date, memberIds, counted)
+
+        accountAttendanceRecords = await getAccountAttendanceRecords()
+
+        renderAccountAttendancePanel()
+
+        toast(
+          counted
+            ? 'შეხვედრა ჩათვლილია და დასწრება შენახულია.'
+            : 'დასწრება შენახულია.'
+        )
+      } catch (error) {
+        console.error('Account attendance save error:', error)
+        errorBox.textContent = error.message || 'დასწრების შენახვა ვერ მოხერხდა.'
+      } finally {
+        saveButton.disabled = false
+        saveButton.innerHTML = '<i data-lucide="save"></i> დასწრების შენახვა'
+        refreshIcons()
+      }
+    })
+
+  document.addEventListener('keydown', accountAttendanceEscapeHandler)
+
+  try {
+    accountAttendanceMembers = await getAccountAttendanceMembers()
+    accountAttendanceRecords = await getAccountAttendanceRecords()
+
+    const dateInput = panel.querySelector('#account-attendance-date')
+    dateInput.value =
+      accountAttendanceRecords[0]?.meeting_date ||
+      new Date().toISOString().slice(0, 10)
+
+    renderAccountAttendancePanel()
+    refreshIcons()
+  } catch (error) {
+    console.error('Account attendance load error:', error)
+    panel.querySelector('#account-attendance-error').textContent =
+      error.message || 'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
+  }
+}
+
 async function loadAccount() {
   if (!db) {
     window.location.replace('login.html')
@@ -1766,18 +2350,11 @@ $('#account-logout-button').addEventListener('click', async () => {
   }
 })
 
-$('#account-attendance-button').addEventListener('click', () => {
-  if (!currentUser || !attendanceManager || currentUser.id !== MARIA_USER_ID) {
-    showMessage('დასწრების მართვის უფლება არ გაქვს.')
-    return
-  }
 
-  if (typeof window.openAttendancePanel === 'function') {
-    window.openAttendancePanel()
-  } else {
-    showMessage('დასწრების აღრიცხვის მოდული ამ გვერდზე ჯერ არ არის ჩართული.')
-  }
+$('#account-attendance-button').addEventListener('click', () => {
+  openAccountAttendancePanel()
 })
+
 
 $('#meeting-form').addEventListener('submit', saveMeeting)
 $('#clear-meeting').addEventListener('click', clearMeeting)
