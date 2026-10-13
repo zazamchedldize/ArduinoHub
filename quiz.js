@@ -280,6 +280,140 @@ function createQuizInterface() {
     })
 }
 
+function celebrateQuizCorrectAnswer() {
+  if (!document.getElementById("quiz-celebration-styles")) {
+    const style = document.createElement("style")
+    style.id = "quiz-celebration-styles"
+    style.textContent = `
+      .quiz-celebration {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 999999;
+      }
+
+      .quiz-confetti {
+        position: absolute;
+        top: -20px;
+        left: var(--x);
+        width: var(--w);
+        height: var(--h);
+        background: var(--color);
+        border-radius: 2px;
+        opacity: 0;
+        animation: quiz-confetti-fall var(--duration) ease-out forwards;
+        animation-delay: var(--delay);
+      }
+
+      .quiz-firework {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow:
+          0 -45px 0 var(--color),
+          32px -32px 0 var(--color),
+          45px 0 0 var(--color),
+          32px 32px 0 var(--color),
+          0 45px 0 var(--color),
+          -32px 32px 0 var(--color),
+          -45px 0 0 var(--color),
+          -32px -32px 0 var(--color),
+          0 -25px 0 var(--color),
+          18px -18px 0 var(--color),
+          25px 0 0 var(--color),
+          18px 18px 0 var(--color),
+          0 25px 0 var(--color),
+          -18px 18px 0 var(--color),
+          -25px 0 0 var(--color),
+          -18px -18px 0 var(--color);
+        animation: quiz-firework-burst 1s ease-out forwards;
+      }
+
+      @keyframes quiz-confetti-fall {
+        0% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) rotate(0deg);
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(var(--drift), 110vh, 0) rotate(var(--rotation));
+        }
+      }
+
+      @keyframes quiz-firework-burst {
+        0% {
+          opacity: 1;
+          transform: scale(0.1) rotate(0deg);
+        }
+        70% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.5) rotate(35deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .quiz-confetti,
+        .quiz-firework {
+          animation-duration: 0.5s;
+        }
+      }
+    `
+    document.head.appendChild(style)
+  }
+
+  const celebration = document.createElement("div")
+  celebration.className = "quiz-celebration"
+  celebration.setAttribute("aria-hidden", "true")
+  document.body.appendChild(celebration)
+
+  const colors = [
+    "#22d395",
+    "#ffd166",
+    "#ff4d6d",
+    "#5e9bff",
+    "#c77dff",
+    "#ffffff",
+    "#ff914d"
+  ]
+
+  for (let i = 0; i < 110; i++) {
+    const piece = document.createElement("span")
+    piece.className = "quiz-confetti"
+    piece.style.setProperty("--x", `${Math.random() * 100}%`)
+    piece.style.setProperty("--w", `${5 + Math.random() * 7}px`)
+    piece.style.setProperty("--h", `${8 + Math.random() * 10}px`)
+    piece.style.setProperty("--color", colors[Math.floor(Math.random() * colors.length)])
+    piece.style.setProperty("--duration", `${2 + Math.random() * 2}s`)
+    piece.style.setProperty("--delay", `${Math.random() * 0.7}s`)
+    piece.style.setProperty("--drift", `${-180 + Math.random() * 360}px`)
+    piece.style.setProperty("--rotation", `${360 + Math.random() * 1080}deg`)
+    celebration.appendChild(piece)
+  }
+
+  for (let i = 0; i < 5; i++) {
+    const firework = document.createElement("span")
+    firework.className = "quiz-firework"
+    firework.style.setProperty("--x", `${15 + Math.random() * 70}%`)
+    firework.style.setProperty("--y", `${15 + Math.random() * 50}%`)
+    firework.style.setProperty("--color", colors[Math.floor(Math.random() * colors.length)])
+    firework.style.animationDelay = `${i * 0.22}s`
+    celebration.appendChild(firework)
+  }
+
+  setTimeout(() => celebration.remove(), 5000)
+}
+
 function selectQuizRole(role) {
     quizState.role = role
 
@@ -687,34 +821,6 @@ async function startQuizGame() {
     }
 }
 
-
-function launchQuizConfetti() {
-  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return
-
-  const colors = ["#22d395", "#ffcf5a", "#ff6b8a", "#70a7ff", "#b58cff"]
-  const layer = document.createElement("div")
-
-  layer.style.cssText = "position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:2147483000"
-
-  for (let i = 0; i < 100; i++) {
-    const piece = document.createElement("span")
-
-    piece.style.cssText = `position:absolute;top:-20px;left:${Math.random() * 100}%;width:8px;height:14px;background:${colors[Math.floor(Math.random() * colors.length)]};animation:quizConfettiFall ${2 + Math.random() * 2}s ${Math.random() * 0.5}s linear forwards`
-
-    layer.appendChild(piece)
-  }
-
-  if (!document.getElementById("quiz-confetti-style")) {
-    const style = document.createElement("style")
-    style.id = "quiz-confetti-style"
-    style.textContent = "@keyframes quizConfettiFall{to{transform:translate3d(100px,110vh,0) rotate(720deg);opacity:0}}"
-    document.head.appendChild(style)
-  }
-
-  document.body.appendChild(layer)
-  setTimeout(() => layer.remove(), 5000)
-}
-
 async function submitQuizAnswer(option) {
     if (quizState.loading || quizState.answering || !quizState.code || quizState.isAdmin) return
 
@@ -748,7 +854,7 @@ async function submitQuizAnswer(option) {
 if (result.correct) {
   feedback.textContent = `სწორია! +${Number(result.points_awarded) || 0} ქულა`
   feedback.className = "quiz-answer-correct"
-  launchQuizConfetti()
+  celebrateQuizCorrectAnswer()
 } else {
   feedback.textContent = "არასწორია. დაელოდე შემდეგ კითხვას."
   feedback.className = "quiz-answer-wrong"
