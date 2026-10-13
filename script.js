@@ -12212,3 +12212,32 @@ document.addEventListener("keydown", event => {
     closeIphoneInstallModal()
   }
 })
+
+
+async function updateLoginButton() {
+  const button = document.getElementById('nav-login-button')
+
+  if (!button || !db) return
+
+  const { data: { session } } = await db.auth.getSession()
+
+  button.href = 'login.html'
+
+  if (!session) return
+
+  const admin = await isAdmin(session.user)
+
+  if (admin) {
+    button.href = 'admin.html'
+  }
+}
+
+updateLoginButton()
+
+if (db) {
+  db.auth.onAuthStateChange(() => {
+    setTimeout(() => {
+      updateLoginButton()
+    }, 0)
+  })
+}
