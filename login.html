@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07110f">
+  <meta name="description" content="ArduinoHub — შედი შენს ანგარიშში და შეუერთდი Arduino-სა და ქიმიის სამყაროს">
+  <title>შესვლა — ArduinoHub</title>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --login-bg: #07110f;
+      --login-card: rgba(13, 28, 24, 0.94);
+      --login-green: #22d395;
+      --login-green-light: #69f0bc;
+      --login-text: #f1faf6;
+      --login-muted: #91a69d;
+      --login-border: rgba(135, 180, 158, 0.16);
+      --login-input: #0a1713;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.login-page {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: var(--login-text);
+      background:
+        radial-gradient(ellipse at 15% 10%, rgba(34, 211, 149, 0.12), transparent 36%),
+        radial-gradient(ellipse at 90% 90%, rgba(34, 211, 149, 0.08), transparent 34%),
+        var(--login-bg);
+      font-family: "FiraGO", "Inter", sans-serif;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .login-background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(34, 211, 149, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 149, 0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+    }
+
+    .login-topbar {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 26px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .login-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--login-text);
+      text-decoration: none;
+      font-family: "Inter", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .login-brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: var(--login-green);
+      background: rgba(34, 211, 149, 0.1);
+      border: 1px solid rgba(34, 211, 149, 0.25);
+      box-shadow: 0 0 25px rgba(34, 211, 149, 0.08);
+    }
+
+    .login-brand-icon svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .login-back {
+      color: var(--login-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s ease;
+    }
+
+    .login-back:hover {
+      color: var(--login-green);
+    }
+
+    .login-main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      padding: 25px 20px 55px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 36px;
+      background: var(--login-card);
+      border: 1px solid var(--login-border);
+      border-radius: 25px;
+      box-shadow:
+        0 25px 90px rgba(0, 0, 0, 0.3),
+        inset 0 1px rgba(255, 255, 255, 0.025);
+      backdrop-filter: blur(18px);
+      animation: login-appear 0.55s ease both;
+    }
+
+    @keyframes login-appear {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-heading {
+      margin: 0;
+      text-align: center;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.7px;
+    }
+
+    .login-subtitle {
+      margin: 12px 0 27px;
+      color: var(--login-muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .login-methods {
+      display: grid;
+      gap: 12px;
+    }
+
+    .login-oauth,
+    .login-member-toggle {
+      width: 100%;
+      min-height: 49px;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .login-oauth:hover,
+    .login-member-toggle:hover {
+      transform: translateY(-2px);
+    }
+
+    .login-oauth:disabled,
+    .login-member-toggle:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .login-oauth svg,
+    .login-member-toggle svg {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+    }
+
+    .login-google {
+      color: #202124;
+      background: #fff;
+      border: 1px solid #e2e5e9;
+    }
+
+    .login-google:hover {
+      background: #f4f6f8;
+      box-shadow: 0 5px 18px rgba(255, 255, 255, 0.06);
+    }
+
+    .login-facebook {
+      color: #fff;
+      background: #1877f2;
+      border: 1px solid #1877f2;
+    }
+
+    .login-facebook:hover {
+      background: #1468d8;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin: 23px 0;
+      color: #6f857a;
+      font-size: 11px;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--login-border);
+    }
+
+    .login-member-toggle {
+      color: var(--login-green-light);
+      background: rgba(34, 211, 149, 0.055);
+      border: 1px solid rgba(34, 211, 149, 0.28);
+    }
+
+    .login-member-toggle:hover {
+      background: rgba(34, 211, 149, 0.11);
+      border-color: rgba(34, 211, 149, 0.5);
+    }
+
+    .login-member-form {
+      display: none;
+      margin-top: 24px;
+      padding-top: 23px;
+      border-top: 1px solid var(--login-border);
+      animation: login-appear 0.25s ease both;
+    }
+
+    .login-member-form.is-visible {
+      display: block;
+    }
+
+    .login-form-title {
+      margin: 0 0 18px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .login-field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .login-field label {
+      color: #c6d7cf;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .login-field input {
+      width: 100%;
+      min-height: 47px;
+      padding: 12px 14px;
+      color: var(--login-text);
+      background: var(--login-input);
+      border: 1px solid var(--login-border);
+      border-radius: 10px;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-field input::placeholder {
+      color: #60766b;
+    }
+
+    .login-field input:focus {
+      border-color: var(--login-green);
+      box-shadow: 0 0 0 3px rgba(34, 211, 149, 0.1);
+    }
+
+    .login-submit {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 11px;
+      color: #032016;
+      background: linear-gradient(135deg, var(--login-green-light), var(--login-green));
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 25px rgba(34, 211, 149, 0.17);
+    }
+
+    .login-submit:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    .login-error,
+    .login-status {
+      display: none;
+      margin: 14px 0 0;
+      padding: 11px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .login-error.is-visible {
+      display: block;
+      color: #ffb6b6;
+      background: rgba(255, 75, 75, 0.08);
+      border: 1px solid rgba(255, 75, 75, 0.18);
+    }
+
+    .login-status.is-visible {
+      display: block;
+      color: var(--login-green-light);
+      background: rgba(34, 211, 149, 0.08);
+      border: 1px solid rgba(34, 211, 149, 0.17);
+    }
+
+    .login-privacy {
+      margin: 23px 0 0;
+      color: #70877c;
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .login-footer {
+      position: relative;
+      z-index: 1;
+      padding: 0 20px 24px;
+      color: #65796f;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .login-footer span {
+      color: var(--login-green);
+    }
+
+    @media (max-width: 480px) {
+      .login-topbar {
+        width: calc(100% - 32px);
+        padding: 19px 0;
+      }
+
+      .login-brand {
+        font-size: 19px;
+      }
+
+      .login-brand-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .login-back {
+        font-size: 11px;
+      }
+
+      .login-main {
+        padding: 17px 16px 35px;
+      }
+
+      .login-card {
+        padding: 27px 21px;
+        border-radius: 21px;
+      }
+
+      .login-heading {
+        font-size: 24px;
+      }
+
+      .login-subtitle {
+        font-size: 12px;
+        margin-bottom: 23px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="login-page">
+  <div class="login-background"></div>
+
+  <header class="login-topbar">
+    <a class="login-brand" href="index.html" aria-label="ArduinoHub მთავარი გვერდი">
+      <span class="login-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="5" width="14" height="14" rx="3"></rect>
+          <path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path>
+          <path d="M9 10h6M9 14h6"></path>
+        </svg>
+      </span>
+      <span>ArduinoHub</span>
+    </a>
+
+    <a class="login-back" href="index.html">← მთავარ გვერდზე დაბრუნება</a>
+  </header>
+
+  <main class="login-main">
+    <section class="login-card">
+      <h1 class="login-heading">კეთილი იყოს დაბრუნება</h1>
+      <p class="login-subtitle">შედი ArduinoHub-ის სამყაროში და განაგრძე შენი თავგადასავალი.</p>
+
+      <div class="login-methods">
+        <button class="login-oauth login-google" id="google-login" type="button">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" transform="translate(0 4) scale(1)"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.76 7.18l7.73 6C44.42 38.08 46.98 31.95 46.98 24.55z"/>
+            <path fill="#FBBC05" d="M10.53 28.41a14.4 14.4 0 0 1 0-8.82l-7.98-6.19a23.94 23.94 0 0 0 0 21.2l7.98-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.14 1.45-4.89 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Google-ით გაგრძელება</span>
+        </button>
+
+        <button class="login-oauth login-facebook" id="facebook-login" type="button">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.49 0-1.956.93-1.956 1.884v2.27h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg>
+          <span>Facebook-ით გაგრძელება</span>
+        </button>
+      </div>
+
+      <div class="login-divider">ან</div>
+
+      <button class="login-member-toggle" id="member-toggle" type="button" aria-expanded="false" aria-controls="member-form">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="10" cy="7" r="4"></circle>
+          <path d="M20 8v6M23 11h-6"></path>
+        </svg>
+        <span>კლუბის წევრი</span>
+      </button>
+
+      <form class="login-member-form" id="member-form">
+        <h2 class="login-form-title">შესვლა ანგარიშით</h2>
+
+        <div class="login-field">
+          <label for="member-email">ელფოსტა</label>
+          <input id="member-email" name="email" type="email" placeholder="შენი ელფოსტა" autocomplete="username" required>
+        </div>
+
+        <div class="login-field">
+          <label for="member-password">პაროლი</label>
+          <input id="member-password" name="password" type="password" placeholder="შენი პაროლი" autocomplete="current-password" required>
+        </div>
+
+        <button class="login-submit" id="member-submit" type="submit">შესვლა</button>
+      </form>
+
+      <p class="login-error" id="login-error" role="alert"></p>
+      <p class="login-status" id="login-status" role="status"></p>
+
+      <p class="login-privacy">შესვლით აგრძელებ ArduinoHub-ის საგანმანათლებლო სივრცეში.</p>
+    </section>
+  </main>
+
+  <footer class="login-footer">
+    Arduino & Chemistry <span>•</span> შექმენი, ააწყვე, შთააგონე.
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://ywxunhvrwdtlqjfshiyj.supabase.co'
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    )
+
+    const memberForm = document.getElementById('member-form')
+    const memberToggle = document.getElementById('member-toggle')
+    const memberSubmit = document.getElementById('member-submit')
+    const errorBox = document.getElementById('login-error')
+    const statusBox = document.getElementById('login-status')
+    const googleButton = document.getElementById('google-login')
+    const facebookButton = document.getElementById('facebook-login')
+
+    function showError(message) {
+      errorBox.textContent = message
+      errorBox.classList.add('is-visible')
+      statusBox.classList.remove('is-visible')
+      statusBox.textContent = ''
+    }
+
+    function showStatus(message) {
+      statusBox.textContent = message
+      statusBox.classList.add('is-visible')
+      errorBox.classList.remove('is-visible')
+      errorBox.textContent = ''
+    }
+
+    function clearMessages() {
+      errorBox.textContent = ''
+      statusBox.textContent = ''
+      errorBox.classList.remove('is-visible')
+      statusBox.classList.remove('is-visible')
+    }
+
+    function setBusy(button, busy, text) {
+      if (busy) {
+        button.dataset.originalText = button.innerHTML
+        button.disabled = true
+
+        if (text) {
+          button.textContent = text
+        }
+      } else {
+        button.disabled = false
+
+        if (button.dataset.originalText) {
+          button.innerHTML = button.dataset.originalText
+          delete button.dataset.originalText
+        }
+      }
+    }
+
+    memberToggle.addEventListener('click', () => {
+      const isVisible = memberForm.classList.toggle('is-visible')
+
+      memberToggle.setAttribute('aria-expanded', String(isVisible))
+      clearMessages()
+
+      if (isVisible) {
+        document.getElementById('member-email').focus()
+      }
+    })
+
+    memberForm.addEventListener('submit', async event => {
+      event.preventDefault()
+      clearMessages()
+
+      const email = document.getElementById('member-email').value.trim()
+      const password = document.getElementById('member-password').value
+
+      if (!email || !password) {
+        showError('შეავსე ელფოსტისა და პაროლის ველები.')
+        return
+      }
+
+      setBusy(memberSubmit, true, 'მიმდინარეობს შესვლა...')
+
+      try {
+        const { data, error } = await db.auth.signInWithPassword({
+          email,
+          password
+        })
+
+        if (error || !data.user) {
+          showError('ელფოსტა ან პაროლი არასწორია.')
+          return
+        }
+
+        showStatus('შესვლა წარმატებულია. მიმდინარეობს გადამისამართება...')
+
+        window.location.replace('index.html')
+      } catch (error) {
+        showError('შესვლა ვერ მოხერხდა. სცადე ხელახლა.')
+      } finally {
+        setBusy(memberSubmit, false)
+      }
+    })
+
+    async function signInWithProvider(provider, button) {
+      clearMessages()
+
+      setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
+
+      try {
+        const { error } = await db.auth.signInWithOAuth({
+          provider,
+          options: {
+            redirectTo: window.location.origin + '/index.html'
+          }
+        })
+
+        if (error) {
+          showError(
+            provider === 'google'
+              ? 'Google-ით შესვლა ვერ მოხერხდა. გადაამოწმე Supabase-ის Google კონფიგურაცია.'
+              : 'Facebook-ით შესვლა ვერ მოხერხდა. გადაამოწმე Supabase-ის Facebook კონფიგურაცია.'
+          )
+
+          setBusy(button, false)
+        }
+      } catch (error) {
+        showError('ავტორიზაცია ვერ მოხერხდა. სცადე ხელახლა.')
+        setBusy(button, false)
+      }
+    }
+
+    googleButton.addEventListener('click', () => {
+      signInWithProvider('google', googleButton)
+    })
+
+    facebookButton.addEventListener('click', () => {
+      signInWithProvider('facebook', facebookButton)
+    })
+
+    async function checkExistingSession() {
+      try {
+        const { data, error } = await db.auth.getSession()
+
+        if (!error && data.session) {
+          window.location.replace('index.html')
+        }
+      } catch (error) {
+        showError('სესიის შემოწმება ვერ მოხერხდა.')
+      }
+    }
+
+    checkExistingSession()
+  </script>
+</body>
+</html>
