@@ -1,5 +1,5 @@
 const supabaseClient = window.supabase
-const QUIZ_MUSIC_URL = "/sound/quiz.mp3"
+const QUIZ_MUSIC_URL = "/sounds/quiz.mp3"
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char])
 
