@@ -9811,3 +9811,44 @@ body.iphone-install-open {
     letter-spacing: 2px;
   }
 }
+
+
+.quiz-celebration {
+  position: fixed !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 2147483647 !important;
+}
+
+.quiz-confetti {
+  display: block !important;
+  opacity: 1;
+  will-change: transform, opacity;
+}
+
+.quiz-firework {
+  display: block !important;
+  will-change: transform, opacity;
+}
+
+#quiz-game-options button.quiz-correct-answer {
+  background: linear-gradient(135deg, #0b5c40, #123d32) !important;
+  border-color: #22d395 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 24px rgba(34, 211, 149, 0.4) !important;
+}
+
+#quiz-game-options button.quiz-wrong-answer {
+  background: linear-gradient(135deg, #581f2a, #35151d) !important;
+  border-color: #ff4d6d !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(255, 77, 109, 0.25) !important;
+}
+
+#quiz-game-options button.quiz-correct-answer,
+#quiz-game-options button.quiz-wrong-answer {
+  animation: none !important;
+  transform: none !important;
+}
+
