@@ -1,0 +1,686 @@
+
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07110f">
+  <meta name="description" content="ArduinoHub — ჩემი ანგარიში">
+  <title>ჩემი ანგარიში — ArduinoHub</title>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --account-bg: #07110f;
+      --account-card: rgba(13, 28, 24, 0.94);
+      --account-green: #22d395;
+      --account-light: #69f0bc;
+      --account-text: #f1faf6;
+      --account-muted: #91a69d;
+      --account-border: rgba(135, 180, 158, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.account-page {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: var(--account-text);
+      background:
+        radial-gradient(ellipse at 15% 10%, rgba(34, 211, 149, 0.12), transparent 36%),
+        radial-gradient(ellipse at 90% 90%, rgba(34, 211, 149, 0.08), transparent 34%),
+        var(--account-bg);
+      font-family: "FiraGO", "Inter", sans-serif;
+    }
+
+    .account-background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(34, 211, 149, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 149, 0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+    }
+
+    .account-topbar {
+      position: relative;
+      z-index: 1;
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 25px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .account-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--account-text);
+      text-decoration: none;
+      font-family: "Inter", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .account-brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: var(--account-green);
+      background: rgba(34, 211, 149, 0.1);
+      border: 1px solid rgba(34, 211, 149, 0.25);
+    }
+
+    .account-brand-icon svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .account-back {
+      color: var(--account-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s ease;
+    }
+
+    .account-back:hover {
+      color: var(--account-green);
+    }
+
+    .account-main {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: 45px 20px 70px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .account-card {
+      width: 100%;
+      max-width: 560px;
+      padding: 35px;
+      background: var(--account-card);
+      border: 1px solid var(--account-border);
+      border-radius: 25px;
+      box-shadow: 0 25px 90px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(18px);
+      animation: account-appear 0.45s ease both;
+    }
+
+    @keyframes account-appear {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .account-eyebrow {
+      margin: 0 0 10px;
+      color: var(--account-green);
+      font-family: "Inter", sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .account-heading {
+      margin: 0;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -0.7px;
+    }
+
+    .account-subtitle {
+      margin: 12px 0 28px;
+      color: var(--account-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .account-profile {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      padding: 22px;
+      margin-bottom: 24px;
+      background: rgba(34, 211, 149, 0.055);
+      border: 1px solid rgba(34, 211, 149, 0.16);
+      border-radius: 17px;
+    }
+
+    .account-avatar {
+      width: 62px;
+      height: 62px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 19px;
+      color: #032016;
+      background: linear-gradient(135deg, var(--account-light), var(--account-green));
+      font-family: "Inter", sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .account-profile-info {
+      min-width: 0;
+    }
+
+    .account-profile-info h2 {
+      margin: 0 0 7px;
+      font-size: 17px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .account-profile-info p {
+      margin: 0;
+      color: var(--account-muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .account-role {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 5px 9px;
+      border-radius: 20px;
+      color: var(--account-light);
+      background: rgba(34, 211, 149, 0.1);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .account-role svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .account-section-title {
+      margin: 0 0 13px;
+      color: #c6d7cf;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .account-actions {
+      display: grid;
+      gap: 11px;
+    }
+
+    .account-action {
+      width: 100%;
+      min-height: 51px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: var(--account-text);
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--account-border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .account-action:hover {
+      transform: translateY(-1px);
+      background: rgba(34, 211, 149, 0.06);
+      border-color: rgba(34, 211, 149, 0.35);
+    }
+
+    .account-action-label {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .account-action svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .account-action .account-action-arrow {
+      color: var(--account-muted);
+      width: 16px;
+      height: 16px;
+    }
+
+    .account-action.primary {
+      color: #032016;
+      background: linear-gradient(135deg, var(--account-light), var(--account-green));
+      border-color: transparent;
+    }
+
+    .account-action.primary:hover {
+      background: var(--account-light);
+    }
+
+    .account-action.danger {
+      color: #ffb6b6;
+      border-color: rgba(255, 75, 75, 0.18);
+      background: rgba(255, 75, 75, 0.045);
+    }
+
+    .account-action.danger:hover {
+      background: rgba(255, 75, 75, 0.1);
+      border-color: rgba(255, 75, 75, 0.3);
+    }
+
+    .account-message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .account-message.visible {
+      display: block;
+    }
+
+    .account-message.error {
+      color: #ffb6b6;
+      background: rgba(255, 75, 75, 0.08);
+    }
+
+    .account-message.success {
+      color: var(--account-light);
+      background: rgba(34, 211, 149, 0.08);
+    }
+
+    .account-footer {
+      position: relative;
+      z-index: 1;
+      padding: 0 20px 25px;
+      color: #65796f;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .account-footer span {
+      color: var(--account-green);
+    }
+
+    .account-loading {
+      padding: 35px 10px;
+      text-align: center;
+      color: var(--account-muted);
+      font-size: 13px;
+    }
+
+    .account-loading svg {
+      width: 27px;
+      height: 27px;
+      margin-bottom: 13px;
+      color: var(--account-green);
+      animation: account-spin 1s linear infinite;
+    }
+
+    @keyframes account-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .account-topbar {
+        width: calc(100% - 32px);
+        padding: 19px 0;
+      }
+
+      .account-brand {
+        font-size: 19px;
+      }
+
+      .account-brand-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .account-back {
+        font-size: 11px;
+      }
+
+      .account-main {
+        padding: 25px 16px 40px;
+      }
+
+      .account-card {
+        padding: 25px 20px;
+        border-radius: 21px;
+      }
+
+      .account-heading {
+        font-size: 25px;
+      }
+
+      .account-profile {
+        padding: 16px;
+        gap: 13px;
+      }
+
+      .account-avatar {
+        width: 53px;
+        height: 53px;
+        border-radius: 16px;
+        font-size: 21px;
+      }
+
+      .account-profile-info h2 {
+        font-size: 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="account-page" data-page="account">
+  <div class="account-background"></div>
+
+  <header class="account-topbar">
+    <a class="account-brand" href="index.html" aria-label="ArduinoHub მთავარი გვერდი">
+      <span class="account-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="5" width="14" height="14" rx="3"></rect>
+          <path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path>
+          <path d="M9 10h6M9 14h6"></path>
+        </svg>
+      </span>
+      <span>ArduinoHub</span>
+    </a>
+
+    <a class="account-back" href="index.html">← მთავარ გვერდზე</a>
+  </header>
+
+  <main class="account-main">
+    <section class="account-card">
+      <div id="account-loading" class="account-loading">
+        <i data-lucide="loader-circle"></i>
+        <p>ანგარიშის მონაცემები იტვირთება...</p>
+      </div>
+
+      <div id="account-content" hidden>
+        <p class="account-eyebrow">ARDUINOHUB ACCOUNT</p>
+
+        <h1 class="account-heading">ჩემი ანგარიში</h1>
+
+        <p class="account-subtitle">
+          მართე შენი ანგარიში და განაგრძე ArduinoHub-ის სამყაროში მოგზაურობა.
+        </p>
+
+        <div class="account-profile">
+          <div class="account-avatar" id="account-avatar">A</div>
+
+          <div class="account-profile-info">
+            <h2 id="account-name">მომხმარებელი</h2>
+            <p id="account-email"></p>
+
+            <span class="account-role" id="account-role">
+              <i data-lucide="user-round"></i>
+              კლუბის წევრი
+            </span>
+          </div>
+        </div>
+
+        <h2 class="account-section-title">ანგარიშის მართვა</h2>
+
+        <div class="account-actions">
+          <a href="index.html" class="account-action">
+            <span class="account-action-label">
+              <i data-lucide="house"></i>
+              მთავარ გვერდზე დაბრუნება
+            </span>
+            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+          </a>
+
+          <a href="admin.html" class="account-action primary" id="account-admin-button" hidden>
+            <span class="account-action-label">
+              <i data-lucide="shield-check"></i>
+              ადმინისტრაციაში გადასვლა
+            </span>
+            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+          </a>
+
+          <button type="button" class="account-action" id="account-attendance-button" hidden>
+            <span class="account-action-label">
+              <i data-lucide="calendar-check"></i>
+              დასწრების მართვა
+            </span>
+            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+          </button>
+
+          <button type="button" class="account-action danger" id="account-logout-button">
+            <span class="account-action-label">
+              <i data-lucide="log-out"></i>
+              ანგარიშიდან გამოსვლა
+            </span>
+            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+          </button>
+        </div>
+
+        <div id="account-message" class="account-message" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="account-footer">
+    შექმნილია <span>ArduinoHub</span>-ის გუნდის მიერ
+  </footer>
+
+  <script type="module">
+    import {
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      supabaseIsConfigured
+    } from './supabase-config.js'
+
+    import {
+      createClient
+    } from 'https://esm.sh/@supabase/supabase-js@2'
+
+    const db = supabaseIsConfigured
+      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true
+          }
+        })
+      : null
+
+    const MARIA_USER_ID = 'f5b9922a-d764-4ad7-b2e0-b73dbe98dc8b'
+
+    const $ = selector => document.querySelector(selector)
+
+    const loading = $('#account-loading')
+    const content = $('#account-content')
+    const message = $('#account-message')
+
+    let currentUser = null
+    let attendanceManager = false
+
+    function showMessage(text, type = 'error') {
+      message.textContent = text
+      message.className = `account-message visible ${type}`
+    }
+
+    function getDisplayName(user) {
+      const metadata = user.user_metadata || {}
+
+      const fullName =
+        metadata.full_name ||
+        metadata.name ||
+        metadata.display_name ||
+        [metadata.first_name, metadata.last_name].filter(Boolean).join(' ')
+
+      return fullName || user.email?.split('@')[0] || 'მომხმარებელი'
+    }
+
+    async function isAdmin(user) {
+      if (!user || !db) return false
+
+      const { data, error } = await db
+        .from('admin_users')
+        .select('username')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (error) {
+        console.error('Admin check error:', error)
+        return false
+      }
+
+      return !!data
+    }
+
+    async function isAttendanceManager(user) {
+      return !!user && user.id === MARIA_USER_ID
+    }
+
+    async function loadAccount() {
+      if (!db) {
+        window.location.replace('login.html')
+        return
+      }
+
+      const {
+        data: { session },
+        error
+      } = await db.auth.getSession()
+
+      if (error) {
+        throw error
+      }
+
+      if (!session?.user) {
+        window.location.replace('login.html')
+        return
+      }
+
+      currentUser = session.user
+
+      const [admin, manager] = await Promise.all([
+        isAdmin(currentUser),
+        isAttendanceManager(currentUser)
+      ])
+
+      attendanceManager = manager
+
+      const name = getDisplayName(currentUser)
+
+      $('#account-name').textContent = name
+      $('#account-email').textContent = currentUser.email || 'ელფოსტა მითითებული არ არის'
+      $('#account-avatar').textContent = Array.from(name.trim())[0]?.toUpperCase() || 'A'
+
+      const role = $('#account-role')
+
+      if (admin) {
+        role.innerHTML = '<i data-lucide="shield-check"></i> ადმინისტრატორი'
+        $('#account-admin-button').hidden = false
+      } else {
+        role.innerHTML = '<i data-lucide="user-round"></i> კლუბის წევრი'
+      }
+
+      if (manager) {
+        $('#account-attendance-button').hidden = false
+
+        if (!admin) {
+          role.innerHTML = '<i data-lucide="calendar-check"></i> დასწრების მენეჯერი'
+        }
+      }
+
+      loading.hidden = true
+      content.hidden = false
+
+      if (window.lucide) {
+        window.lucide.createIcons()
+      }
+    }
+
+    $('#account-logout-button').addEventListener('click', async () => {
+      const button = $('#account-logout-button')
+
+      button.disabled = true
+      message.className = 'account-message'
+
+      try {
+        const { error } = await db.auth.signOut()
+
+        if (error) {
+          throw error
+        }
+
+        window.location.replace('login.html')
+      } catch (error) {
+        console.error('Sign out error:', error)
+        showMessage('ანგარიშიდან გამოსვლა ვერ მოხერხდა. სცადე ხელახლა.')
+        button.disabled = false
+      }
+    })
+
+    $('#account-attendance-button').addEventListener('click', () => {
+      if (!currentUser || !attendanceManager) {
+        showMessage('დასწრების მართვის უფლება არ გაქვს.')
+        return
+      }
+
+      window.location.href = 'index.html?attendance=manage'
+    })
+
+    db
+      ? loadAccount().catch(error => {
+          console.error('Account loading error:', error)
+          showMessage('ანგარიშის მონაცემების ჩატვირთვა ვერ მოხერხდა.')
+          loading.hidden = true
+        })
+      : window.location.replace('login.html')
+
+    if (window.lucide) {
+      window.lucide.createIcons()
+    }
+  </script>
+</body>
+</html>
