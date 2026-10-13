@@ -513,157 +513,162 @@
     Arduino & Chemistry <span>•</span> შექმენი, ააწყვე, შთააგონე.
   </footer>
 
-  <script>
-    const SUPABASE_URL = 'https://ywxunhvrwdtlqjfshiyj.supabase.co'
-    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
 
-    const db = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+<script>
+const SUPABASE_URL = 'https://ywxunhvrwdtlqjfshiyj.supabase.co'
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+)
+
+const memberForm = document.getElementById('member-form')
+const memberToggle = document.getElementById('member-toggle')
+const memberSubmit = document.getElementById('member-submit')
+const errorBox = document.getElementById('login-error')
+const statusBox = document.getElementById('login-status')
+const googleButton = document.getElementById('google-login')
+const facebookButton = document.getElementById('facebook-login')
+
+function showError(message) {
+  errorBox.textContent = message
+  errorBox.classList.add('is-visible')
+  statusBox.classList.remove('is-visible')
+  statusBox.textContent = ''
+}
+
+function showStatus(message) {
+  statusBox.textContent = message
+  statusBox.classList.add('is-visible')
+  errorBox.classList.remove('is-visible')
+  errorBox.textContent = ''
+}
+
+function clearMessages() {
+  errorBox.textContent = ''
+  statusBox.textContent = ''
+  errorBox.classList.remove('is-visible')
+  statusBox.classList.remove('is-visible')
+}
+
+function setBusy(button, busy, text) {
+  if (busy) {
+    if (!button.dataset.originalText) {
+      button.dataset.originalText = button.innerHTML
+    }
+    button.disabled = true
+    if (text) button.textContent = text
+  } else {
+    button.disabled = false
+    if (button.dataset.originalText) {
+      button.innerHTML = button.dataset.originalText
+      delete button.dataset.originalText
+    }
+  }
+}
+
+memberToggle.addEventListener('click', () => {
+  const isVisible = memberForm.classList.toggle('is-visible')
+  memberToggle.setAttribute('aria-expanded', String(isVisible))
+  clearMessages()
+
+  if (isVisible) {
+    document.getElementById('member-email').focus()
+  }
+})
+
+memberForm.addEventListener('submit', async event => {
+  event.preventDefault()
+  clearMessages()
+
+  const email = document.getElementById('member-email').value.trim()
+  const password = document.getElementById('member-password').value
+
+  if (!email || !password) {
+    showError('შეავსე ელფოსტისა და პაროლის ველები.')
+    return
+  }
+
+  setBusy(memberSubmit, true, 'მიმდინარეობს შესვლა...')
+
+  try {
+    const { data, error } = await db.auth.signInWithPassword({
+      email,
+      password
+    })
+
+    if (error) throw error
+    if (!data.session) throw new Error('სესია ვერ შეიქმნა')
+
+    showStatus('შესვლა წარმატებულია. მიმდინარეობს გადამისამართება...')
+    window.location.replace('/index.html')
+  } catch (error) {
+    console.error('Email login error:', error)
+    showError(
+      error.message === 'Invalid login credentials'
+        ? 'ელფოსტა ან პაროლი არასწორია.'
+        : 'შესვლა ვერ მოხერხდა. სცადე ხელახლა.'
     )
+    setBusy(memberSubmit, false)
+  }
+})
 
-    const memberForm = document.getElementById('member-form')
-    const memberToggle = document.getElementById('member-toggle')
-    const memberSubmit = document.getElementById('member-submit')
-    const errorBox = document.getElementById('login-error')
-    const statusBox = document.getElementById('login-status')
-    const googleButton = document.getElementById('google-login')
-    const facebookButton = document.getElementById('facebook-login')
+async function signInWithProvider(provider, button) {
+  clearMessages()
+  setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
 
-    function showError(message) {
-      errorBox.textContent = message
-      errorBox.classList.add('is-visible')
-      statusBox.classList.remove('is-visible')
-      statusBox.textContent = ''
-    }
-
-    function showStatus(message) {
-      statusBox.textContent = message
-      statusBox.classList.add('is-visible')
-      errorBox.classList.remove('is-visible')
-      errorBox.textContent = ''
-    }
-
-    function clearMessages() {
-      errorBox.textContent = ''
-      statusBox.textContent = ''
-      errorBox.classList.remove('is-visible')
-      statusBox.classList.remove('is-visible')
-    }
-
-    function setBusy(button, busy, text) {
-      if (busy) {
-        button.dataset.originalText = button.innerHTML
-        button.disabled = true
-
-        if (text) {
-          button.textContent = text
-        }
-      } else {
-        button.disabled = false
-
-        if (button.dataset.originalText) {
-          button.innerHTML = button.dataset.originalText
-          delete button.dataset.originalText
-        }
-      }
-    }
-
-    memberToggle.addEventListener('click', () => {
-      const isVisible = memberForm.classList.toggle('is-visible')
-
-      memberToggle.setAttribute('aria-expanded', String(isVisible))
-      clearMessages()
-
-      if (isVisible) {
-        document.getElementById('member-email').focus()
+  try {
+    const { error } = await db.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: window.location.origin + '/login.html'
       }
     })
 
-    memberForm.addEventListener('submit', async event => {
-      event.preventDefault()
-      clearMessages()
+    if (error) throw error
+  } catch (error) {
+    console.error(provider + ' OAuth error:', error)
+    showError(
+      provider === 'google'
+        ? 'Google-ით შესვლა ვერ მოხერხდა: ' + error.message
+        : 'Facebook-ით შესვლა ვერ მოხერხდა: ' + error.message
+    )
+    setBusy(button, false)
+  }
+}
 
-      const email = document.getElementById('member-email').value.trim()
-      const password = document.getElementById('member-password').value
+googleButton.addEventListener('click', () => {
+  signInWithProvider('google', googleButton)
+})
 
-      if (!email || !password) {
-        showError('შეავსე ელფოსტისა და პაროლის ველები.')
-        return
-      }
+facebookButton.addEventListener('click', () => {
+  signInWithProvider('facebook', facebookButton)
+})
 
-      setBusy(memberSubmit, true, 'მიმდინარეობს შესვლა...')
+async function checkExistingSession() {
+  try {
+    const { data, error } = await db.auth.getSession()
 
-      try {
-        const { data, error } = await db.auth.signInWithPassword({
-          email,
-          password
-        })
+    if (error) throw error
 
-        if (error || !data.user) {
-          showError('ელფოსტა ან პაროლი არასწორია.')
-          return
-        }
-
-        showStatus('შესვლა წარმატებულია. მიმდინარეობს გადამისამართება...')
-
-        window.location.replace('index.html')
-      } catch (error) {
-        showError('შესვლა ვერ მოხერხდა. სცადე ხელახლა.')
-      } finally {
-        setBusy(memberSubmit, false)
-      }
-    })
-
-    async function signInWithProvider(provider, button) {
-      clearMessages()
-
-      setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
-
-      try {
-        const { error } = await db.auth.signInWithOAuth({
-          provider,
-          options: {
-            redirectTo: window.location.origin + '/index.html'
-          }
-        })
-
-        if (error) {
-          showError(
-            provider === 'google'
-              ? 'Google-ით შესვლა ვერ მოხერხდა. გადაამოწმე Supabase-ის Google კონფიგურაცია.'
-              : 'Facebook-ით შესვლა ვერ მოხერხდა. გადაამოწმე Supabase-ის Facebook კონფიგურაცია.'
-          )
-
-          setBusy(button, false)
-        }
-      } catch (error) {
-        showError('ავტორიზაცია ვერ მოხერხდა. სცადე ხელახლა.')
-        setBusy(button, false)
-      }
+    if (data.session) {
+      window.location.replace('/index.html')
     }
+  } catch (error) {
+    console.error('Session check error:', error)
+  }
+}
 
-    googleButton.addEventListener('click', () => {
-      signInWithProvider('google', googleButton)
-    })
+checkExistingSession()
+</script>
 
-    facebookButton.addEventListener('click', () => {
-      signInWithProvider('facebook', facebookButton)
-    })
-
-    async function checkExistingSession() {
-      try {
-        const { data, error } = await db.auth.getSession()
-
-        if (!error && data.session) {
-          window.location.replace('index.html')
-        }
-      } catch (error) {
-        showError('სესიის შემოწმება ვერ მოხერხდა.')
-      }
-    }
-
-    checkExistingSession()
-  </script>
 </body>
 </html>
