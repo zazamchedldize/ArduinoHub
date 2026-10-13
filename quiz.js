@@ -687,6 +687,34 @@ async function startQuizGame() {
     }
 }
 
+
+function launchQuizConfetti() {
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return
+
+  const colors = ["#22d395", "#ffcf5a", "#ff6b8a", "#70a7ff", "#b58cff"]
+  const layer = document.createElement("div")
+
+  layer.style.cssText = "position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:2147483000"
+
+  for (let i = 0; i < 100; i++) {
+    const piece = document.createElement("span")
+
+    piece.style.cssText = `position:absolute;top:-20px;left:${Math.random() * 100}%;width:8px;height:14px;background:${colors[Math.floor(Math.random() * colors.length)]};animation:quizConfettiFall ${2 + Math.random() * 2}s ${Math.random() * 0.5}s linear forwards`
+
+    layer.appendChild(piece)
+  }
+
+  if (!document.getElementById("quiz-confetti-style")) {
+    const style = document.createElement("style")
+    style.id = "quiz-confetti-style"
+    style.textContent = "@keyframes quizConfettiFall{to{transform:translate3d(100px,110vh,0) rotate(720deg);opacity:0}}"
+    document.head.appendChild(style)
+  }
+
+  document.body.appendChild(layer)
+  setTimeout(() => layer.remove(), 5000)
+}
+
 async function submitQuizAnswer(option) {
     if (quizState.loading || quizState.answering || !quizState.code || quizState.isAdmin) return
 
@@ -716,13 +744,16 @@ async function submitQuizAnswer(option) {
 
         const feedback = document.getElementById("quiz-game-feedback")
 
-        if (result.correct) {
-            feedback.textContent = `სწორია! +${Number(result.points_awarded) || 0} ქულა`
-            feedback.className = "quiz-answer-correct"
-        } else {
-            feedback.textContent = "არასწორია. დაელოდე შემდეგ კითხვას."
-            feedback.className = "quiz-answer-wrong"
-        }
+        
+if (result.correct) {
+  feedback.textContent = `სწორია! +${Number(result.points_awarded) || 0} ქულა`
+  feedback.className = "quiz-answer-correct"
+  launchQuizConfetti()
+} else {
+  feedback.textContent = "არასწორია. დაელოდე შემდეგ კითხვას."
+  feedback.className = "quiz-answer-wrong"
+}
+
 
         await refreshQuizRoom(false)
     } catch (error) {
