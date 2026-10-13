@@ -4642,6 +4642,15 @@ function renderAttendancePanel(records) {
 }
 
 async function openAttendancePanel() {
+  if (new URLSearchParams(window.location.search).get('attendance') === 'manage') {
+  window.addEventListener('load', async () => {
+    const user = await getCurrentUser()
+
+    if (user && await isAttendanceManager(user)) {
+      await openAttendancePanel()
+    }
+  }, { once: true })
+}
   const user = await getCurrentUser()
   if (!user) {
     toast('დასწრების აღრიცხვისთვის ანგარიშში შესვლა აუცილებელია.')
