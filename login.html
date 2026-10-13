@@ -616,28 +616,40 @@
     })
 
     async function signInWithProvider(provider, button) {
-  clearMessages()
-  setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
+      clearMessages()
 
-  try {
-    const { data, error } = await db.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: window.location.origin + '/login.html'
+      setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
+
+      try {
+        const { error } = await db.auth.signInWithOAuth({
+          provider,
+          options: {
+            redirectTo: window.location.origin + '/index.html'
+          }
+        })
+
+        if (error) {
+          showError(
+            provider === 'google'
+              ? 'Google-ით შესვლა ვერ მოხერხდა. გადაამოწმე Supabase-ის Google კონფიგურაცია.'
+              : 'Facebook-ით შესვლა ვერ მოხერხდა. გადაამოწმე Supabase-ის Facebook კონფიგურაცია.'
+          )
+
+          setBusy(button, false)
+        }
+      } catch (error) {
+        showError('ავტორიზაცია ვერ მოხერხდა. სცადე ხელახლა.')
+        setBusy(button, false)
       }
+    }
+
+    googleButton.addEventListener('click', () => {
+      signInWithProvider('google', googleButton)
     })
 
-    if (error) {
-      console.error('OAuth error:', error)
-      showError(error.message)
-      setBusy(button, false)
-    }
-  } catch (error) {
-    console.error('OAuth error:', error)
-    showError(error.message || 'ავტორიზაცია ვერ მოხერხდა. სცადე ხელახლა.')
-    setBusy(button, false)
-  }
-}
+    facebookButton.addEventListener('click', () => {
+      signInWithProvider('facebook', facebookButton)
+    })
 
     async function checkExistingSession() {
       try {
