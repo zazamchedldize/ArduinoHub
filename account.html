@@ -1924,8 +1924,8 @@ async function openAccountAttendancePanel() {
   const panel = document.createElement('div')
   panel.id = 'account-attendance-panel'
 
-  panel.innerHTML = 
-    <style>
+  panel.innerHTML = `
+<style>
       #account-attendance-panel {
         position: fixed;
         inset: 0;
@@ -2148,7 +2148,7 @@ async function openAccountAttendancePanel() {
       <h3>ჩათვლილი შეხვედრების ისტორია</h3>
       <div class="account-attendance-history" id="account-attendance-history"></div>
     </section>
-  
+  `
 
   document.body.appendChild(panel)
   document.body.style.overflow = 'hidden'
