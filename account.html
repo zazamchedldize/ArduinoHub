@@ -1926,6 +1926,152 @@ async function openAccountAttendancePanel() {
 
   panel.innerHTML = `
 <style>
+
+
+#account-attendance-panel {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  background: rgba(2, 10, 8, 0.78) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+#account-attendance-panel .account-attendance-box {
+  width: min(760px, 100%) !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  border: 1px solid rgba(34, 211, 149, 0.22) !important;
+  border-radius: 24px !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(34, 211, 149, 0.13), transparent 34%),
+    linear-gradient(145deg, #0d1b18, #07110f) !important;
+  color: #f0fdf7 !important;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.65), 0 0 40px rgba(34, 211, 149, 0.06) !important;
+  scrollbar-width: none;
+}
+
+#account-attendance-panel .account-attendance-box::-webkit-scrollbar {
+  display: none;
+}
+
+#account-attendance-panel .account-attendance-box h2 {
+  color: #f0fdf7;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+#account-attendance-panel .account-attendance-box h3 {
+  color: #e8f5ee;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+#account-attendance-panel .account-attendance-box p,
+#account-attendance-panel .account-attendance-box label {
+  color: #a5b8ad;
+}
+
+#account-attendance-panel .account-attendance-box input[type="date"] {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  outline: none;
+  background: rgba(0, 0, 0, 0.2);
+  color: #f0fdf7;
+  color-scheme: dark;
+  font: inherit;
+}
+
+#account-attendance-panel .account-attendance-box input:focus {
+  border-color: rgba(34, 211, 149, 0.55);
+  box-shadow: 0 0 0 4px rgba(34, 211, 149, 0.08);
+}
+
+#account-attendance-panel .account-attendance-member-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px !important;
+}
+
+#account-attendance-panel .account-attendance-member-list label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 50px;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #e8f5ee;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#account-attendance-panel .account-attendance-member-list label:hover {
+  border-color: rgba(34, 211, 149, 0.3);
+  background: rgba(34, 211, 149, 0.055);
+}
+
+#account-attendance-panel .account-attendance-member-list input[type="checkbox"],
+#account-attendance-panel .account-attendance-box input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: #22d395;
+}
+
+#account-attendance-panel .account-attendance-box button {
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+#account-attendance-panel .account-attendance-box button:hover {
+  transform: translateY(-1px);
+}
+
+#account-attendance-panel .account-attendance-box button:focus-visible {
+  outline: 2px solid #22d395;
+  outline-offset: 3px;
+}
+
+#account-attendance-panel .account-attendance-box button:not(:disabled) {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  #account-attendance-panel {
+    padding: 10px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    max-height: 93vh !important;
+    border-radius: 20px !important;
+  }
+
+  #account-attendance-panel .account-attendance-member-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #account-attendance-panel * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
       #account-attendance-panel {
         position: fixed;
         inset: 0;
