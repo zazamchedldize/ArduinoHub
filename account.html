@@ -2,685 +2,1837 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07110f">
-  <meta name="description" content="ArduinoHub — ჩემი ანგარიში">
-  <title>ჩემი ანგარიში — ArduinoHub</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07110f">
+<meta name="description" content="ArduinoHub — ჩემი ანგარიში">
+<title>ჩემი ანგარიში — ArduinoHub</title>
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
-  <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="style.css">
+<style>
+:root {
+  --account-bg: #07110f;
+  --account-card: rgba(13, 28, 24, .94);
+  --account-green: #22d395;
+  --account-light: #69f0bc;
+  --account-text: #f1faf6;
+  --account-muted: #91a69d;
+  --account-border: rgba(135, 180, 158, .16);
+}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+* {
+  box-sizing: border-box;
+}
 
-  <style>
-    :root {
-      --account-bg: #07110f;
-      --account-card: rgba(13, 28, 24, 0.94);
-      --account-green: #22d395;
-      --account-light: #69f0bc;
-      --account-text: #f1faf6;
-      --account-muted: #91a69d;
-      --account-border: rgba(135, 180, 158, 0.16);
-    }
+body.account-page {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--account-text);
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(34, 211, 149, .12), transparent 36%),
+    radial-gradient(ellipse at 90% 90%, rgba(34, 211, 149, .08), transparent 34%),
+    var(--account-bg);
+  font-family: "FiraGO", "Inter", sans-serif;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+.account-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .2;
+  background-image:
+    linear-gradient(rgba(34, 211, 149, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 149, .035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
 
-    body.account-page {
-      margin: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      color: var(--account-text);
-      background:
-        radial-gradient(ellipse at 15% 10%, rgba(34, 211, 149, 0.12), transparent 36%),
-        radial-gradient(ellipse at 90% 90%, rgba(34, 211, 149, 0.08), transparent 34%),
-        var(--account-bg);
-      font-family: "FiraGO", "Inter", sans-serif;
-    }
+.account-topbar {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 25px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
 
-    .account-background {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.2;
-      background-image:
-        linear-gradient(rgba(34, 211, 149, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34, 211, 149, 0.035) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: linear-gradient(to bottom, black, transparent 90%);
-    }
+.account-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--account-text);
+  text-decoration: none;
+  font-family: "Inter", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.8px;
+}
 
-    .account-topbar {
-      position: relative;
-      z-index: 1;
-      width: min(1100px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 25px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
+.account-brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  color: var(--account-green);
+  background: rgba(34, 211, 149, .1);
+  border: 1px solid rgba(34, 211, 149, .25);
+}
 
-    .account-brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 11px;
-      color: var(--account-text);
-      text-decoration: none;
-      font-family: "Inter", sans-serif;
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.8px;
-    }
+.account-brand-icon svg {
+  width: 23px;
+  height: 23px;
+}
 
-    .account-brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 13px;
-      display: grid;
-      place-items: center;
-      color: var(--account-green);
-      background: rgba(34, 211, 149, 0.1);
-      border: 1px solid rgba(34, 211, 149, 0.25);
-    }
+.account-back {
+  color: var(--account-muted);
+  text-decoration: none;
+  font-size: 13px;
+}
 
-    .account-brand-icon svg {
-      width: 23px;
-      height: 23px;
-    }
+.account-back:hover {
+  color: var(--account-green);
+}
 
-    .account-back {
-      color: var(--account-muted);
-      text-decoration: none;
-      font-size: 13px;
-      transition: color 0.2s ease;
-    }
+.account-main {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 35px 20px 70px;
+}
 
-    .account-back:hover {
-      color: var(--account-green);
-    }
+.account-card {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 35px;
+  background: var(--account-card);
+  border: 1px solid var(--account-border);
+  border-radius: 25px;
+  box-shadow: 0 25px 90px rgba(0, 0, 0, .3);
+  backdrop-filter: blur(18px);
+  animation: account-appear .45s ease both;
+}
 
-    .account-main {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      padding: 45px 20px 70px;
-      display: flex;
-      justify-content: center;
-    }
+@keyframes account-appear {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 
-    .account-card {
-      width: 100%;
-      max-width: 560px;
-      padding: 35px;
-      background: var(--account-card);
-      border: 1px solid var(--account-border);
-      border-radius: 25px;
-      box-shadow: 0 25px 90px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(18px);
-      animation: account-appear 0.45s ease both;
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    @keyframes account-appear {
-      from {
-        opacity: 0;
-        transform: translateY(14px);
-      }
+.account-eyebrow {
+  margin: 0 0 10px;
+  color: var(--account-green);
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+.account-heading {
+  margin: 0;
+  font-size: 29px;
+  font-weight: 800;
+  letter-spacing: -.7px;
+}
 
-    .account-eyebrow {
-      margin: 0 0 10px;
-      color: var(--account-green);
-      font-family: "Inter", sans-serif;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
+.account-subtitle {
+  margin: 12px 0 28px;
+  color: var(--account-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
 
-    .account-heading {
-      margin: 0;
-      font-size: 29px;
-      font-weight: 800;
-      letter-spacing: -0.7px;
-    }
+.account-profile {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 22px;
+  margin-bottom: 24px;
+  background: rgba(34, 211, 149, .055);
+  border: 1px solid rgba(34, 211, 149, .16);
+  border-radius: 17px;
+}
 
-    .account-subtitle {
-      margin: 12px 0 28px;
-      color: var(--account-muted);
-      font-size: 13px;
-      line-height: 1.8;
-    }
+.account-avatar {
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 19px;
+  color: #032016;
+  background: linear-gradient(135deg, var(--account-light), var(--account-green));
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+}
 
-    .account-profile {
-      display: flex;
-      align-items: center;
-      gap: 17px;
-      padding: 22px;
-      margin-bottom: 24px;
-      background: rgba(34, 211, 149, 0.055);
-      border: 1px solid rgba(34, 211, 149, 0.16);
-      border-radius: 17px;
-    }
+.account-profile-info {
+  min-width: 0;
+}
 
-    .account-avatar {
-      width: 62px;
-      height: 62px;
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      border-radius: 19px;
-      color: #032016;
-      background: linear-gradient(135deg, var(--account-light), var(--account-green));
-      font-family: "Inter", sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-    }
+.account-profile-info h2 {
+  margin: 0 0 7px;
+  font-size: 17px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
 
-    .account-profile-info {
-      min-width: 0;
-    }
+.account-profile-info p {
+  margin: 0;
+  color: var(--account-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
 
-    .account-profile-info h2 {
-      margin: 0 0 7px;
-      font-size: 17px;
-      font-weight: 800;
-      overflow-wrap: anywhere;
-    }
+.account-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 5px 9px;
+  border-radius: 20px;
+  color: var(--account-light);
+  background: rgba(34, 211, 149, .1);
+  font-size: 10px;
+  font-weight: 700;
+}
 
-    .account-profile-info p {
-      margin: 0;
-      color: var(--account-muted);
-      font-size: 12px;
-      overflow-wrap: anywhere;
-    }
+.account-role svg {
+  width: 13px;
+  height: 13px;
+}
 
-    .account-role {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 10px;
-      padding: 5px 9px;
-      border-radius: 20px;
-      color: var(--account-light);
-      background: rgba(34, 211, 149, 0.1);
-      font-size: 10px;
-      font-weight: 700;
-    }
+.account-section-title {
+  margin: 0 0 13px;
+  color: #c6d7cf;
+  font-size: 12px;
+  font-weight: 700;
+}
 
-    .account-role svg {
-      width: 13px;
-      height: 13px;
-    }
+.account-actions {
+  display: grid;
+  gap: 11px;
+}
 
-    .account-section-title {
-      margin: 0 0 13px;
-      color: #c6d7cf;
-      font-size: 12px;
-      font-weight: 700;
-    }
+.account-action {
+  width: 100%;
+  min-height: 51px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  color: var(--account-text);
+  background: rgba(255, 255, 255, .025);
+  border: 1px solid var(--account-border);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
 
-    .account-actions {
-      display: grid;
-      gap: 11px;
-    }
+.account-action:hover {
+  transform: translateY(-1px);
+  background: rgba(34, 211, 149, .06);
+  border-color: rgba(34, 211, 149, .35);
+}
 
-    .account-action {
-      width: 100%;
-      min-height: 51px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 16px;
-      color: var(--account-text);
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid var(--account-border);
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      text-align: left;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-    }
+.account-action-label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
 
-    .account-action:hover {
-      transform: translateY(-1px);
-      background: rgba(34, 211, 149, 0.06);
-      border-color: rgba(34, 211, 149, 0.35);
-    }
+.account-action svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
 
-    .account-action-label {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
+.account-action .account-action-arrow {
+  color: var(--account-muted);
+  width: 16px;
+  height: 16px;
+}
 
-    .account-action svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
+.account-action.primary {
+  color: #032016;
+  background: linear-gradient(135deg, var(--account-light), var(--account-green));
+  border-color: transparent;
+}
 
-    .account-action .account-action-arrow {
-      color: var(--account-muted);
-      width: 16px;
-      height: 16px;
-    }
+.account-action.primary:hover {
+  background: var(--account-light);
+}
 
-    .account-action.primary {
-      color: #032016;
-      background: linear-gradient(135deg, var(--account-light), var(--account-green));
-      border-color: transparent;
-    }
+.account-action.danger {
+  color: #ffb6b6;
+  border-color: rgba(255, 75, 75, .18);
+  background: rgba(255, 75, 75, .045);
+}
 
-    .account-action.primary:hover {
-      background: var(--account-light);
-    }
+.account-action.danger:hover {
+  background: rgba(255, 75, 75, .1);
+  border-color: rgba(255, 75, 75, .3);
+}
 
-    .account-action.danger {
-      color: #ffb6b6;
-      border-color: rgba(255, 75, 75, 0.18);
-      background: rgba(255, 75, 75, 0.045);
-    }
+.account-message {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
 
-    .account-action.danger:hover {
-      background: rgba(255, 75, 75, 0.1);
-      border-color: rgba(255, 75, 75, 0.3);
-    }
+.account-message.visible {
+  display: block;
+}
 
-    .account-message {
-      display: none;
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 12px;
-      line-height: 1.7;
-      overflow-wrap: anywhere;
-    }
+.account-message.error {
+  color: #ffb6b6;
+  background: rgba(255, 75, 75, .08);
+}
 
-    .account-message.visible {
-      display: block;
-    }
+.account-message.success {
+  color: var(--account-light);
+  background: rgba(34, 211, 149, .08);
+}
 
-    .account-message.error {
-      color: #ffb6b6;
-      background: rgba(255, 75, 75, 0.08);
-    }
+.account-loading {
+  padding: 35px 10px;
+  text-align: center;
+  color: var(--account-muted);
+  font-size: 13px;
+}
 
-    .account-message.success {
-      color: var(--account-light);
-      background: rgba(34, 211, 149, 0.08);
-    }
+.account-loading svg {
+  width: 27px;
+  height: 27px;
+  margin-bottom: 13px;
+  color: var(--account-green);
+  animation: account-spin 1s linear infinite;
+}
 
-    .account-footer {
-      position: relative;
-      z-index: 1;
-      padding: 0 20px 25px;
-      color: #65796f;
-      text-align: center;
-      font-size: 11px;
-    }
+@keyframes account-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-    .account-footer span {
-      color: var(--account-green);
-    }
+.account-footer {
+  position: relative;
+  z-index: 1;
+  padding: 0 20px 25px;
+  color: #65796f;
+  text-align: center;
+  font-size: 11px;
+}
 
-    .account-loading {
-      padding: 35px 10px;
-      text-align: center;
-      color: var(--account-muted);
-      font-size: 13px;
-    }
+.account-footer span {
+  color: var(--account-green);
+}
 
-    .account-loading svg {
-      width: 27px;
-      height: 27px;
-      margin-bottom: 13px;
-      color: var(--account-green);
-      animation: account-spin 1s linear infinite;
-    }
+[hidden] {
+  display: none !important;
+}
 
-    @keyframes account-spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
+.admin-panel {
+  width: 100%;
+  margin: 30px auto 0;
+}
 
-    @media (max-width: 480px) {
-      .account-topbar {
-        width: calc(100% - 32px);
-        padding: 19px 0;
-      }
+.admin-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
 
-      .account-brand {
-        font-size: 19px;
-      }
+.admin-title {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 800;
+}
 
-      .account-brand-icon {
-        width: 38px;
-        height: 38px;
-      }
+.admin-intro {
+  color: var(--account-muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
 
-      .account-back {
-        font-size: 11px;
-      }
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
 
-      .account-main {
-        padding: 25px 16px 40px;
-      }
+.admin-box {
+  min-width: 0;
+  padding: 23px;
+  background: rgba(13, 28, 24, .94);
+  border: 1px solid var(--account-border);
+  border-radius: 18px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, .16);
+}
 
-      .account-card {
-        padding: 25px 20px;
-        border-radius: 21px;
-      }
+.admin-box.full {
+  grid-column: 1 / -1;
+}
 
-      .account-heading {
-        font-size: 25px;
-      }
+.admin-box h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 17px;
+  font-size: 16px;
+}
 
-      .account-profile {
-        padding: 16px;
-        gap: 13px;
-      }
+.admin-box h3 svg {
+  width: 19px;
+  height: 19px;
+  color: var(--account-green);
+}
 
-      .account-avatar {
-        width: 53px;
-        height: 53px;
-        border-radius: 16px;
-        font-size: 21px;
-      }
+.admin-form {
+  display: grid;
+  gap: 13px;
+}
 
-      .account-profile-info h2 {
-        font-size: 15px;
-      }
-    }
+.admin-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+.admin-field label {
+  color: #c6d7cf;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-field input,
+.admin-field select,
+.admin-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 13px;
+  color: var(--account-text);
+  background: rgba(0, 0, 0, .22);
+  border: 1px solid rgba(135, 180, 158, .23);
+  border-radius: 10px;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+}
+
+.admin-field select option {
+  color: #f1faf6;
+  background: #0d1c18;
+}
+
+.admin-field textarea {
+  min-height: 105px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.admin-field input:focus,
+.admin-field select:focus,
+.admin-field textarea:focus {
+  border-color: var(--account-green);
+}
+
+.admin-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #c6d7cf;
+  font-size: 12px;
+}
+
+.admin-check input {
+  accent-color: var(--account-green);
+}
+
+.admin-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 11px 15px;
+  color: #032016;
+  background: linear-gradient(135deg, var(--account-light), var(--account-green));
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.admin-button.secondary {
+  color: var(--account-text);
+  background: rgba(255, 255, 255, .04);
+  border-color: var(--account-border);
+}
+
+.admin-button.danger {
+  color: #ffb6b6;
+  background: rgba(255, 75, 75, .08);
+  border-color: rgba(255, 75, 75, .2);
+}
+
+.admin-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.admin-button-row {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.admin-status {
+  color: var(--account-muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
+
+.admin-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-project {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px;
+  background: rgba(255, 255, 255, .025);
+  border: 1px solid var(--account-border);
+  border-radius: 12px;
+}
+
+.admin-project-info {
+  min-width: 0;
+}
+
+.admin-project-title {
+  margin: 0 0 7px;
+  font-size: 13px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.admin-project-meta {
+  color: var(--account-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.admin-project-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.admin-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  color: var(--account-text);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid var(--account-border);
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.admin-icon-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.admin-icon-button.danger {
+  color: #ffb6b6;
+}
+
+.admin-preview {
+  width: 100%;
+  max-height: 230px;
+  object-fit: contain;
+  display: block;
+  border-radius: 10px;
+  margin-top: 8px;
+  background: rgba(0, 0, 0, .2);
+}
+
+.admin-toast {
+  position: fixed;
+  z-index: 20;
+  right: 20px;
+  bottom: 20px;
+  max-width: min(420px, calc(100% - 40px));
+  padding: 14px 17px;
+  color: var(--account-text);
+  background: #122720;
+  border: 1px solid rgba(34, 211, 149, .3);
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.admin-toast.error {
+  border-color: rgba(255, 75, 75, .35);
+}
+
+.admin-empty {
+  padding: 22px;
+  color: var(--account-muted);
+  text-align: center;
+  font-size: 12px;
+  border: 1px dashed var(--account-border);
+  border-radius: 12px;
+}
+
+.admin-form-error {
+  color: #ffb6b6;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.admin-editor {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 760px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-box.full {
+    grid-column: auto;
+  }
+
+  .admin-box {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-topbar {
+    width: calc(100% - 32px);
+    padding: 19px 0;
+  }
+
+  .account-brand {
+    font-size: 19px;
+  }
+
+  .account-brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .account-back {
+    font-size: 11px;
+  }
+
+  .account-main {
+    padding: 25px 16px 40px;
+  }
+
+  .account-card {
+    padding: 25px 20px;
+    border-radius: 21px;
+  }
+
+  .account-heading {
+    font-size: 25px;
+  }
+
+  .account-profile {
+    padding: 16px;
+    gap: 13px;
+  }
+
+  .account-avatar {
+    width: 53px;
+    height: 53px;
+    border-radius: 16px;
+    font-size: 21px;
+  }
+
+  .account-profile-info h2 {
+    font-size: 15px;
+  }
+
+  .admin-two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-project {
+    flex-direction: column;
+  }
+
+  .admin-project-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
 
 <body class="account-page" data-page="account">
-  <div class="account-background"></div>
+<div class="account-background"></div>
 
-  <header class="account-topbar">
-    <a class="account-brand" href="index.html" aria-label="ArduinoHub მთავარი გვერდი">
-      <span class="account-brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="5" y="5" width="14" height="14" rx="3"></rect>
-          <path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path>
-          <path d="M9 10h6M9 14h6"></path>
-        </svg>
-      </span>
-      <span>ArduinoHub</span>
-    </a>
+<header class="account-topbar">
+  <a class="account-brand" href="index.html" aria-label="ArduinoHub მთავარი გვერდი">
+    <span class="account-brand-icon">
+      <i data-lucide="cpu"></i>
+    </span>
+    <span>ArduinoHub</span>
+  </a>
+  <a class="account-back" href="index.html">← მთავარ გვერდზე</a>
+</header>
 
-    <a class="account-back" href="index.html">← მთავარ გვერდზე</a>
-  </header>
+<main class="account-main">
+  <section class="account-card">
+    <div id="account-loading" class="account-loading">
+      <i data-lucide="loader-circle"></i>
+      <p>ანგარიშის მონაცემები იტვირთება...</p>
+    </div>
 
-  <main class="account-main">
-    <section class="account-card">
-      <div id="account-loading" class="account-loading">
-        <i data-lucide="loader-circle"></i>
-        <p>ანგარიშის მონაცემები იტვირთება...</p>
+    <div id="account-content" hidden>
+      <p class="account-eyebrow">ARDUINOHUB ACCOUNT</p>
+      <h1 class="account-heading">ჩემი ანგარიში</h1>
+      <p class="account-subtitle">მართე შენი ანგარიში და განაგრძე ArduinoHub-ის სამყაროში მოგზაურობა.</p>
+
+      <div class="account-profile">
+        <div class="account-avatar" id="account-avatar">A</div>
+        <div class="account-profile-info">
+          <h2 id="account-name">მომხმარებელი</h2>
+          <p id="account-email"></p>
+          <span class="account-role" id="account-role">
+            <i data-lucide="user-round"></i>
+            მომხმარებელი
+          </span>
+        </div>
       </div>
 
-      <div id="account-content" hidden>
-        <p class="account-eyebrow">ARDUINOHUB ACCOUNT</p>
+      <h2 class="account-section-title">ანგარიშის მართვა</h2>
 
-        <h1 class="account-heading">ჩემი ანგარიში</h1>
+      <div class="account-actions">
+        <a href="index.html" class="account-action">
+          <span class="account-action-label">
+            <i data-lucide="house"></i>
+            მთავარ გვერდზე დაბრუნება
+          </span>
+          <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+        </a>
 
-        <p class="account-subtitle">
-          მართე შენი ანგარიში და განაგრძე ArduinoHub-ის სამყაროში მოგზაურობა.
-        </p>
+        <button type="button" class="account-action primary" id="account-admin-toggle" hidden aria-expanded="false">
+          <span class="account-action-label">
+            <i data-lucide="shield-check"></i>
+            ადმინისტრაციის პანელი
+          </span>
+          <i data-lucide="chevron-down" class="account-action-arrow" id="admin-toggle-icon"></i>
+        </button>
 
-        <div class="account-profile">
-          <div class="account-avatar" id="account-avatar">A</div>
+        <button type="button" class="account-action" id="account-attendance-button" hidden>
+          <span class="account-action-label">
+            <i data-lucide="calendar-check"></i>
+            დასწრების მართვა
+          </span>
+          <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+        </button>
 
-          <div class="account-profile-info">
-            <h2 id="account-name">მომხმარებელი</h2>
-            <p id="account-email"></p>
+        <button type="button" class="account-action danger" id="account-logout-button">
+          <span class="account-action-label">
+            <i data-lucide="log-out"></i>
+            ანგარიშიდან გამოსვლა
+          </span>
+          <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+        </button>
+      </div>
 
-            <span class="account-role" id="account-role">
-              <i data-lucide="user-round"></i>
-              კლუბის წევრი
-            </span>
+      <div id="account-message" class="account-message" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="admin-panel" id="admin-panel" hidden>
+    <div class="admin-topline">
+      <div>
+        <p class="account-eyebrow">ADMINISTRATION</p>
+        <h2 class="admin-title">ადმინისტრაციის პანელი</h2>
+        <p class="admin-intro">პროექტებისა და კლუბის შეკრების მართვა ანგარიშის გვერდიდან.</p>
+      </div>
+
+      <button type="button" class="admin-button secondary" id="admin-refresh">
+        <i data-lucide="refresh-cw"></i>
+        განახლება
+      </button>
+    </div>
+
+    <div class="admin-grid">
+      <section class="admin-box">
+        <h3><i data-lucide="calendar-clock"></i> კლუბის შეკრება</h3>
+
+        <form class="admin-form" id="meeting-form">
+          <div class="admin-field">
+            <label for="meeting-date">შეკრების თარიღი</label>
+            <input type="date" id="meeting-date" required>
+          </div>
+
+          <div class="admin-field">
+            <label for="meeting-time">შეკრების დრო</label>
+            <input type="time" id="meeting-time" required>
+          </div>
+
+          <p class="admin-status" id="meeting-day-preview">აირჩიე თარიღი და დრო.</p>
+          <p class="admin-status" id="meeting-admin-status">შეკრების მონაცემები იტვირთება...</p>
+          <p class="admin-form-error" id="meeting-form-error"></p>
+
+          <div class="admin-button-row">
+            <button class="admin-button" type="submit" id="save-meeting">
+              <i data-lucide="save"></i>
+              შეკრების ჩანიშნვა
+            </button>
+
+            <button class="admin-button danger" type="button" id="clear-meeting">
+              <i data-lucide="calendar-x"></i>
+              შეკრების გაუქმება
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="admin-box">
+        <h3><i data-lucide="folder-plus"></i> პროექტების მართვა</h3>
+        <p class="admin-status">დაამატე ახალი პროექტი ან შეცვალე უკვე არსებული. გამოქვეყნების სტატუსის შეცვლაც შეგიძლია.</p>
+
+        <div class="admin-button-row" style="margin-top:16px">
+          <button class="admin-button" type="button" id="new-project-button">
+            <i data-lucide="plus"></i>
+            ახალი პროექტი
+          </button>
+        </div>
+
+        <p class="admin-status" id="admin-status">პროექტები იტვირთება...</p>
+        <p class="admin-status">პროექტების რაოდენობა: <strong id="admin-count">0</strong></p>
+      </section>
+
+      <section class="admin-box full admin-editor" id="project-editor" hidden>
+        <h3 id="editor-title">ახალი პროექტი</h3>
+
+        <form class="admin-form" id="project-form">
+          <input type="hidden" id="edit-id">
+
+          <div class="admin-two-col">
+            <div class="admin-field">
+              <label for="title">პროექტის სათაური</label>
+              <input id="title" name="title" required maxlength="180">
+            </div>
+
+            <div class="admin-field">
+              <label for="category">კატეგორია</label>
+              <select id="category" name="category" required>
+                <option value="Arduino">Arduino</option>
+                <option value="Chemistry">ქიმია</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-field">
+            <label for="author">ავტორი</label>
+            <input id="author" name="author" required maxlength="120">
+          </div>
+
+          <div class="admin-field">
+            <label for="description">აღწერა</label>
+            <textarea id="description" name="description" required></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="components">საჭირო მასალები / კომპონენტები</label>
+            <textarea id="components" name="components"></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="how-made">როგორ შეიქმნა</label>
+            <textarea id="how-made" name="how-made"></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="code" id="code-field-label">კოდი</label>
+            <textarea id="code" name="code"></textarea>
+          </div>
+
+          <div class="admin-two-col">
+            <div class="admin-field">
+              <label for="image-file">პროექტის სურათი</label>
+              <input type="file" id="image-file" accept="image/jpeg,image/png,image/webp,image/gif">
+              <span class="admin-status" id="image-name">ფაილი არჩეული არ არის</span>
+              <img id="image-preview" class="admin-preview" alt="სურათის წინასწარი ნახვა" hidden>
+            </div>
+
+            <div class="admin-field">
+              <label for="video-file">პროექტის ვიდეო</label>
+              <input type="file" id="video-file" accept="video/mp4,video/webm,video/ogg">
+              <span class="admin-status" id="video-name">ფაილი არჩეული არ არის</span>
+            </div>
+          </div>
+
+          <label class="admin-check">
+            <input type="checkbox" id="published" checked>
+            პროექტი გამოქვეყნებულია
+          </label>
+
+          <p class="admin-form-error" id="form-error"></p>
+
+          <div class="admin-button-row">
+            <button class="admin-button" type="submit" id="save-project">
+              <i data-lucide="save"></i>
+              შენახვა
+            </button>
+
+            <button class="admin-button secondary" type="button" id="cancel-edit">გაუქმება</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="admin-box full">
+        <h3><i data-lucide="layers"></i> არსებული პროექტები</h3>
+        <div class="admin-list" id="admin-project-list">
+          <div class="admin-empty">პროექტები იტვირთება...</div>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<footer class="account-footer">
+  შექმნილია <span>ArduinoHub</span>-ის გუნდის მიერ
+</footer>
+
+<div id="admin-toast" class="admin-toast" role="status" aria-live="polite" hidden></div>
+
+<script type="module">
+import { SUPABASE_URL, SUPABASE_ANON_KEY, supabaseIsConfigured } from './supabase-config.js'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const db = supabaseIsConfigured
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true
+      }
+    })
+  : null
+
+const MARIA_USER_ID = 'f5b9922a-d764-4ad7-b2e0-b73dbe98dc8b'
+
+const IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif'
+]
+
+const VIDEO_TYPES = [
+  'video/mp4',
+  'video/webm',
+  'video/ogg'
+]
+
+const $ = selector => document.querySelector(selector)
+
+const loading = $('#account-loading')
+const content = $('#account-content')
+const message = $('#account-message')
+
+let currentUser = null
+let attendanceManager = false
+let adminProjects = []
+let toastTimeout = null
+
+function showMessage(text, type = 'error') {
+  message.textContent = text
+  message.className = `account-message visible ${type}`
+}
+
+function toast(text, type = 'success') {
+  const element = $('#admin-toast')
+
+  element.textContent = text
+  element.className = `admin-toast${type === 'error' ? ' error' : ''}`
+  element.hidden = false
+
+  clearTimeout(toastTimeout)
+
+  toastTimeout = setTimeout(() => {
+    element.hidden = true
+  }, 4200)
+}
+
+function refreshIcons() {
+  if (window.lucide) {
+    window.lucide.createIcons()
+  }
+}
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char])
+}
+
+function getDisplayName(user) {
+  const metadata = user.user_metadata || {}
+
+  const fullName =
+    metadata.full_name ||
+    metadata.name ||
+    metadata.display_name ||
+    [metadata.first_name, metadata.last_name].filter(Boolean).join(' ')
+
+  return fullName || user.email?.split('@')[0] || 'მომხმარებელი'
+}
+
+async function isAdmin(user) {
+  if (!user || !db) {
+    return null
+  }
+
+  const { data, error } = await db
+    .from('admin_users')
+    .select('username')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Admin check error:', error)
+    return null
+  }
+
+  return data || null
+}
+
+async function isAttendanceManager(user) {
+  return !!user && user.id === MARIA_USER_ID
+}
+
+function meetingDay(dateValue) {
+  if (!dateValue) {
+    return 'აირჩიე თარიღი და დრო.'
+  }
+
+  const weekdays = [
+    'კვირა',
+    'ორშაბათი',
+    'სამშაბათი',
+    'ოთხშაბათი',
+    'ხუთშაბათი',
+    'პარასკევი',
+    'შაბათი'
+  ]
+
+  const date = new Date(`${dateValue}T12:00:00`)
+
+  return `${weekdays[date.getDay()]}, ${dateValue}`
+}
+
+async function getMeeting() {
+  if (!db) {
+    return null
+  }
+
+  const { data, error } = await db
+    .from('club_meeting')
+    .select('id,meeting_date,meeting_time,updated_at')
+    .eq('id', 1)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return data || null
+}
+
+async function loadAdminMeeting() {
+  const status = $('#meeting-admin-status')
+
+  try {
+    const meeting = await getMeeting()
+
+    if (meeting) {
+      $('#meeting-date').value = meeting.meeting_date || ''
+      $('#meeting-time').value = meeting.meeting_time || ''
+
+      $('#meeting-day-preview').textContent =
+        `${meetingDay(meeting.meeting_date)}${meeting.meeting_time ? ` · ${meeting.meeting_time}` : ''}`
+
+      status.textContent = 'შეკრება გამოქვეყნებულია.'
+    } else {
+      $('#meeting-date').value = ''
+      $('#meeting-time').value = ''
+      $('#meeting-day-preview').textContent = 'აირჩიე თარიღი და დრო.'
+      status.textContent = 'შეკრება არ არის გამოქვეყნებული.'
+    }
+  } catch (error) {
+    console.error('Meeting load error:', error)
+    status.textContent = 'შეკრების მონაცემები ვერ ჩაიტვირთა.'
+  }
+}
+
+async function saveMeeting(event) {
+  event.preventDefault()
+
+  const date = $('#meeting-date').value
+  const time = $('#meeting-time').value
+  const errorBox = $('#meeting-form-error')
+
+  errorBox.textContent = ''
+
+  if (!date || !time) {
+    errorBox.textContent = 'აირჩიე შეკრების თარიღი და დრო.'
+    return
+  }
+
+  const button = $('#save-meeting')
+  button.disabled = true
+
+  try {
+    const { data: { user } } = await db.auth.getUser()
+
+    const { error } = await db
+      .from('club_meeting')
+      .upsert({
+        id: 1,
+        meeting_date: date,
+        meeting_time: time,
+        updated_by: user?.id
+      }, {
+        onConflict: 'id'
+      })
+
+    if (error) {
+      throw error
+    }
+
+    toast('კლუბის შეკრება ჩაინიშნა.')
+    await loadAdminMeeting()
+  } catch (error) {
+    console.error('Meeting save error:', error)
+    errorBox.textContent = error.message || 'შეკრების შენახვა ვერ მოხერხდა.'
+  } finally {
+    button.disabled = false
+  }
+}
+
+async function clearMeeting() {
+  if (!db) {
+    return
+  }
+
+  if (!confirm('ნამდვილად გსურთ გამოქვეყნებული შეკრების წაშლა?')) {
+    return
+  }
+
+  const button = $('#clear-meeting')
+  button.disabled = true
+
+  try {
+    const { error } = await db
+      .from('club_meeting')
+      .delete()
+      .eq('id', 1)
+
+    if (error) {
+      throw error
+    }
+
+    const { error: messageError } = await db
+      .from('messages')
+      .insert({
+        message: '⚠️ კლუბის შეკრება გაუქმდა ადმინისტრატორის მიერ.',
+        sender: 'სისტემა'
+      })
+
+    if (messageError) {
+      console.warn('Cancellation message error:', messageError)
+    }
+
+    $('#meeting-date').value = ''
+    $('#meeting-time').value = ''
+    $('#meeting-day-preview').textContent = 'აირჩიე თარიღი და დრო.'
+    $('#meeting-admin-status').textContent = 'შეკრება არ არის გამოქვეყნებული.'
+    $('#meeting-form-error').textContent = ''
+
+    toast('შეკრება გაუქმდა.')
+  } catch (error) {
+    console.error('Meeting clear error:', error)
+    toast('შეკრების წაშლა ვერ მოხერხდა.', 'error')
+  } finally {
+    button.disabled = false
+  }
+}
+
+function fileOkay(file, types, max, label) {
+  if (!file) {
+    return true
+  }
+
+  if (!types.includes(file.type)) {
+    toast(`${label}: ფაილის ფორმატი არასწორია.`, 'error')
+    return false
+  }
+
+  if (file.size > max) {
+    toast(`${label}: ფაილი ძალიან დიდია.`, 'error')
+    return false
+  }
+
+  return true
+}
+
+async function upload(file, bucket, folder, types, max, label) {
+  if (!fileOkay(file, types, max, label)) {
+    throw new Error(`${label}: ფაილის ატვირთვა ვერ მოხერხდა.`)
+  }
+
+  const safeName = file.name
+    .normalize('NFKD')
+    .replace(/[^\w.-]+/g, '-')
+    .replace(/-+/g, '-')
+
+  const path = `${folder}/${Date.now()}-${safeName || 'file'}`
+
+  const { error } = await db.storage
+    .from(bucket)
+    .upload(path, file, {
+      upsert: false,
+      contentType: file.type
+    })
+
+  if (error) {
+    throw error
+  }
+
+  const { data } = db.storage
+    .from(bucket)
+    .getPublicUrl(path)
+
+  return {
+    url: data.publicUrl,
+    path
+  }
+}
+
+function storagePath(url, bucket) {
+  if (!url) {
+    return null
+  }
+
+  try {
+    const marker = `/storage/v1/object/public/${bucket}/`
+    const index = url.indexOf(marker)
+
+    if (index === -1) {
+      return null
+    }
+
+    return decodeURIComponent(
+      url.slice(index + marker.length).split('?')[0]
+    )
+  } catch {
+    return null
+  }
+}
+
+async function removeStored(url, bucket) {
+  const path = storagePath(url, bucket)
+
+  if (!path) {
+    return
+  }
+
+  const { error } = await db.storage
+    .from(bucket)
+    .remove([path])
+
+  if (error) {
+    console.warn('Storage cleanup error:', error)
+  }
+}
+
+function imagePreview() {
+  const file = $('#image-file').files[0]
+  const preview = $('#image-preview')
+
+  $('#image-name').textContent = file?.name || 'ფაილი არჩეული არ არის'
+
+  if (!file) {
+    preview.hidden = true
+    preview.removeAttribute('src')
+    return
+  }
+
+  if (!fileOkay(file, IMAGE_TYPES, 5 * 1024 * 1024, 'სურათი')) {
+    $('#image-file').value = ''
+    $('#image-name').textContent = 'ფაილი არჩეული არ არის'
+    preview.hidden = true
+    return
+  }
+
+  preview.src = URL.createObjectURL(file)
+  preview.hidden = false
+}
+
+function updateCodeFieldLabel() {
+  const chemistry = $('#category').value === 'Chemistry'
+
+  $('#code-field-label').textContent = chemistry
+    ? 'ექსპერიმენტის ინსტრუქცია / ფორმულა'
+    : 'კოდი'
+
+  $('#code').placeholder = chemistry
+    ? 'ჩაწერე ფორმულა ან ექსპერიმენტის ინსტრუქცია'
+    : 'ჩაწერე პროექტის კოდი'
+}
+
+function openEditor(project = null) {
+  $('#project-form').reset()
+
+  $('#edit-id').value = project?.id || ''
+  $('#editor-title').textContent = project
+    ? 'პროექტის რედაქტირება'
+    : 'ახალი პროექტი'
+
+  $('#form-error').textContent = ''
+  $('#image-name').textContent = 'ფაილი არჩეული არ არის'
+  $('#video-name').textContent = 'ფაილი არჩეული არ არის'
+
+  $('#image-preview').hidden = true
+  $('#image-preview').removeAttribute('src')
+
+  $('#published').checked = project
+    ? !!project.published
+    : true
+
+  if (project) {
+    $('#title').value = project.title || ''
+    $('#category').value = project.category || 'Arduino'
+    $('#author').value = project.author || ''
+    $('#description').value = project.description || ''
+    $('#components').value = project.components || ''
+    $('#how-made').value = project.how_it_was_made || ''
+    $('#code').value = project.code || ''
+
+    if (project.image_url) {
+      $('#image-preview').src = project.image_url
+      $('#image-preview').hidden = false
+      $('#image-name').textContent = 'არსებული სურათი შენარჩუნდება, თუ ახალს არ აირჩევ'
+    }
+
+    if (project.video_url) {
+      $('#video-name').textContent = 'არსებული ვიდეო შენარჩუნდება, თუ ახალს არ აირჩევ'
+    }
+  }
+
+  updateCodeFieldLabel()
+
+  $('#project-editor').hidden = false
+  $('#project-editor').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  })
+
+  refreshIcons()
+}
+
+function closeEditor() {
+  $('#project-editor').hidden = true
+  $('#project-form').reset()
+  $('#form-error').textContent = ''
+}
+
+async function loadAdminProjects() {
+  const list = $('#admin-project-list')
+
+  $('#admin-status').textContent = 'პროექტები იტვირთება...'
+  list.innerHTML = '<div class="admin-empty">პროექტები იტვირთება...</div>'
+
+  try {
+    const { data, error } = await db
+      .from('projects')
+      .select('id,title,category,published,created_at,author,image_url,video_url,description,components,how_it_was_made,code')
+      .order('created_at', {
+        ascending: false
+      })
+
+    if (error) {
+      throw error
+    }
+
+    adminProjects = data || []
+
+    $('#admin-count').textContent = String(adminProjects.length)
+
+    $('#admin-status').textContent = adminProjects.length
+      ? 'პროექტების სია განახლებულია.'
+      : 'პროექტები ჯერ არ არის დამატებული.'
+
+    if (!adminProjects.length) {
+      list.innerHTML = '<div class="admin-empty">პროექტები ჯერ არ არის დამატებული.</div>'
+      return
+    }
+
+    list.innerHTML = adminProjects.map(project => `
+      <article class="admin-project">
+        <div class="admin-project-info">
+          <h4 class="admin-project-title">${esc(project.title)}</h4>
+          <div class="admin-project-meta">
+            ${esc(project.category || 'კატეგორია არ არის')} · ${project.published ? 'გამოქვეყნებულია' : 'დამალულია'}
+            <br>
+            ავტორი: ${esc(project.author || 'მითითებული არ არის')}
           </div>
         </div>
 
-        <h2 class="account-section-title">ანგარიშის მართვა</h2>
-
-        <div class="account-actions">
-          <a href="index.html" class="account-action">
-            <span class="account-action-label">
-              <i data-lucide="house"></i>
-              მთავარ გვერდზე დაბრუნება
-            </span>
-            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+        <div class="admin-project-actions">
+          <a class="admin-icon-button" href="project.html?id=${encodeURIComponent(project.id)}" title="ნახვა" aria-label="პროექტის ნახვა">
+            <i data-lucide="external-link"></i>
           </a>
 
-          <a href="admin.html" class="account-action primary" id="account-admin-button" hidden>
-            <span class="account-action-label">
-              <i data-lucide="shield-check"></i>
-              ადმინისტრაციაში გადასვლა
-            </span>
-            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
-          </a>
-
-          <button type="button" class="account-action" id="account-attendance-button" hidden>
-            <span class="account-action-label">
-              <i data-lucide="calendar-check"></i>
-              დასწრების მართვა
-            </span>
-            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+          <button class="admin-icon-button" type="button" data-edit="${esc(project.id)}" title="რედაქტირება" aria-label="რედაქტირება">
+            <i data-lucide="pencil"></i>
           </button>
 
-          <button type="button" class="account-action danger" id="account-logout-button">
-            <span class="account-action-label">
-              <i data-lucide="log-out"></i>
-              ანგარიშიდან გამოსვლა
-            </span>
-            <i data-lucide="arrow-up-right" class="account-action-arrow"></i>
+          <button class="admin-icon-button" type="button" data-publish="${esc(project.id)}" title="${project.published ? 'დამალვა' : 'გამოქვეყნება'}" aria-label="${project.published ? 'დამალვა' : 'გამოქვეყნება'}">
+            <i data-lucide="${project.published ? 'eye-off' : 'eye'}"></i>
+          </button>
+
+          <button class="admin-icon-button danger" type="button" data-delete="${esc(project.id)}" title="წაშლა" aria-label="წაშლა">
+            <i data-lucide="trash-2"></i>
           </button>
         </div>
+      </article>
+    `).join('')
 
-        <div id="account-message" class="account-message" role="status" aria-live="polite"></div>
-      </div>
-    </section>
-  </main>
+    refreshIcons()
+  } catch (error) {
+    console.error('Project load error:', error)
 
-  <footer class="account-footer">
-    შექმნილია <span>ArduinoHub</span>-ის გუნდის მიერ
-  </footer>
+    $('#admin-status').textContent = 'პროექტების ჩატვირთვა ვერ მოხერხდა.'
 
-  <script type="module">
-    import {
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY,
-      supabaseIsConfigured
-    } from './supabase-config.js'
+    list.innerHTML = '<div class="admin-empty">პროექტების ჩატვირთვა ვერ მოხერხდა. შეამოწმე Supabase-ის უფლებები და კავშირი.</div>'
+  }
+}
 
-    import {
-      createClient
-    } from 'https://esm.sh/@supabase/supabase-js@2'
+async function saveProject(event) {
+  event.preventDefault()
 
-    const db = supabaseIsConfigured
-      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: {
-            persistSession: true,
-            autoRefreshToken: true
-          }
-        })
-      : null
+  const errorBox = $('#form-error')
+  errorBox.textContent = ''
 
-    const MARIA_USER_ID = 'f5b9922a-d764-4ad7-b2e0-b73dbe98dc8b'
+  const saveButton = $('#save-project')
+  const id = $('#edit-id').value || null
 
-    const $ = selector => document.querySelector(selector)
+  const oldProject = adminProjects.find(project => String(project.id) === String(id))
 
-    const loading = $('#account-loading')
-    const content = $('#account-content')
-    const message = $('#account-message')
+  const imageFile = $('#image-file').files[0]
+  const videoFile = $('#video-file').files[0]
 
-    let currentUser = null
-    let attendanceManager = false
+  if (!fileOkay(imageFile, IMAGE_TYPES, 5 * 1024 * 1024, 'სურათი')) {
+    return
+  }
 
-    function showMessage(text, type = 'error') {
-      message.textContent = text
-      message.className = `account-message visible ${type}`
+  if (!fileOkay(videoFile, VIDEO_TYPES, 50 * 1024 * 1024, 'ვიდეო')) {
+    return
+  }
+
+  saveButton.disabled = true
+
+  let uploadedImage = null
+  let uploadedVideo = null
+
+  try {
+    const folder = id || crypto.randomUUID()
+
+    if (imageFile) {
+      uploadedImage = await upload(
+        imageFile,
+        'project-images',
+        folder,
+        IMAGE_TYPES,
+        5 * 1024 * 1024,
+        'სურათი'
+      )
     }
 
-    function getDisplayName(user) {
-      const metadata = user.user_metadata || {}
-
-      const fullName =
-        metadata.full_name ||
-        metadata.name ||
-        metadata.display_name ||
-        [metadata.first_name, metadata.last_name].filter(Boolean).join(' ')
-
-      return fullName || user.email?.split('@')[0] || 'მომხმარებელი'
+    if (videoFile) {
+      uploadedVideo = await upload(
+        videoFile,
+        'project-videos',
+        folder,
+        VIDEO_TYPES,
+        50 * 1024 * 1024,
+        'ვიდეო'
+      )
     }
 
-    async function isAdmin(user) {
-      if (!user || !db) return false
-
-      const { data, error } = await db
-        .from('admin_users')
-        .select('username')
-        .eq('user_id', user.id)
-        .maybeSingle()
-
-      if (error) {
-        console.error('Admin check error:', error)
-        return false
-      }
-
-      return !!data
+    const value = {
+      title: $('#title').value.trim(),
+      category: $('#category').value,
+      author: $('#author').value.trim(),
+      description: $('#description').value.trim(),
+      components: $('#components').value.trim(),
+      how_it_was_made: $('#how-made').value.trim(),
+      code: $('#code').value.trim(),
+      published: $('#published').checked
     }
 
-    async function isAttendanceManager(user) {
-      return !!user && user.id === MARIA_USER_ID
+    if (uploadedImage) {
+      value.image_url = uploadedImage.url
     }
 
-    async function loadAccount() {
-      if (!db) {
-        window.location.replace('login.html')
-        return
-      }
-
-      const {
-        data: { session },
-        error
-      } = await db.auth.getSession()
-
-      if (error) {
-        throw error
-      }
-
-      if (!session?.user) {
-        window.location.replace('login.html')
-        return
-      }
-
-      currentUser = session.user
-
-      const [admin, manager] = await Promise.all([
-        isAdmin(currentUser),
-        isAttendanceManager(currentUser)
-      ])
-
-      attendanceManager = manager
-
-      const name = getDisplayName(currentUser)
-
-      $('#account-name').textContent = name
-      $('#account-email').textContent = currentUser.email || 'ელფოსტა მითითებული არ არის'
-      $('#account-avatar').textContent = Array.from(name.trim())[0]?.toUpperCase() || 'A'
-
-      const role = $('#account-role')
-
-      if (admin) {
-        role.innerHTML = '<i data-lucide="shield-check"></i> ადმინისტრატორი'
-        $('#account-admin-button').hidden = false
-      } else {
-        role.innerHTML = '<i data-lucide="user-round"></i> კლუბის წევრი'
-      }
-
-      if (manager) {
-        $('#account-attendance-button').hidden = false
-
-        if (!admin) {
-          role.innerHTML = '<i data-lucide="calendar-check"></i> დასწრების მენეჯერი'
-        }
-      }
-
-      loading.hidden = true
-      content.hidden = false
-
-      if (window.lucide) {
-        window.lucide.createIcons()
-      }
+    if (uploadedVideo) {
+      value.video_url = uploadedVideo.url
     }
 
-    $('#account-logout-button').addEventListener('click', async () => {
-      const button = $('#account-logout-button')
+    const result = id
+      ? await db.from('projects').update(value).eq('id', id)
+      : await db.from('projects').insert(value)
 
-      button.disabled = true
-      message.className = 'account-message'
+    if (result.error) {
+      throw result.error
+    }
 
-      try {
-        const { error } = await db.auth.signOut()
+    if (uploadedImage && oldProject?.image_url) {
+      await removeStored(oldProject.image_url, 'project-images')
+    }
 
-        if (error) {
-          throw error
-        }
+    if (uploadedVideo && oldProject?.video_url) {
+      await removeStored(oldProject.video_url, 'project-videos')
+    }
 
-        window.location.replace('login.html')
-      } catch (error) {
-        console.error('Sign out error:', error)
-        showMessage('ანგარიშიდან გამოსვლა ვერ მოხერხდა. სცადე ხელახლა.')
-        button.disabled = false
-      }
+    toast(id ? 'პროექტი განახლდა.' : 'პროექტი დაემატა.')
+
+    closeEditor()
+    await loadAdminProjects()
+  } catch (error) {
+    console.error('Project save error:', error)
+
+    if (uploadedImage?.path) {
+      await db.storage.from('project-images').remove([uploadedImage.path])
+    }
+
+    if (uploadedVideo?.path) {
+      await db.storage.from('project-videos').remove([uploadedVideo.path])
+    }
+
+    errorBox.textContent = error.message || 'პროექტის შენახვა ვერ მოხერხდა.'
+  } finally {
+    saveButton.disabled = false
+    refreshIcons()
+  }
+}
+
+async function togglePublished(id) {
+  const project = adminProjects.find(item => String(item.id) === String(id))
+
+  if (!project) {
+    return
+  }
+
+  const { error } = await db
+    .from('projects')
+    .update({
+      published: !project.published
     })
+    .eq('id', id)
 
-    $('#account-attendance-button').addEventListener('click', () => {
-      if (!currentUser || !attendanceManager) {
-        showMessage('დასწრების მართვის უფლება არ გაქვს.')
-        return
-      }
+  if (error) {
+    console.error('Publish toggle error:', error)
+    toast('პროექტის სტატუსის შეცვლა ვერ მოხერხდა.', 'error')
+    return
+  }
 
-      window.location.href = 'index.html?attendance=manage'
+  toast(project.published ? 'პროექტი დაიმალა.' : 'პროექტი გამოქვეყნდა.')
+  await loadAdminProjects()
+}
+
+async function deleteProject(id) {
+  const project = adminProjects.find(item => String(item.id) === String(id))
+
+  if (!project || !confirm(`ნამდვილად გსურს პროექტის „${project.title}“ წაშლა?`)) {
+    return
+  }
+
+  const { error } = await db
+    .from('projects')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('Project delete error:', error)
+    toast('პროექტის წაშლა ვერ მოხერხდა.', 'error')
+    return
+  }
+
+  if (project.image_url) {
+    await removeStored(project.image_url, 'project-images')
+  }
+
+  if (project.video_url) {
+    await removeStored(project.video_url, 'project-videos')
+  }
+
+  toast('პროექტი წაიშალა.')
+  await loadAdminProjects()
+}
+
+async function loadAccount() {
+  if (!db) {
+    window.location.replace('login.html')
+    return
+  }
+
+  const {
+    data: { session },
+    error
+  } = await db.auth.getSession()
+
+  if (error) {
+    throw error
+  }
+
+  if (!session?.user) {
+    window.location.replace('login.html')
+    return
+  }
+
+  currentUser = session.user
+
+  const [admin, manager] = await Promise.all([
+    isAdmin(currentUser),
+    isAttendanceManager(currentUser)
+  ])
+
+  attendanceManager = manager
+
+  const name = getDisplayName(currentUser)
+
+  $('#account-name').textContent = name
+  $('#account-email').textContent = currentUser.email || 'ელფოსტა მითითებული არ არის'
+  $('#account-avatar').textContent = Array.from(name.trim())[0]?.toUpperCase() || 'A'
+
+  const role = $('#account-role')
+
+  if (admin) {
+    role.innerHTML = '<i data-lucide="shield-check"></i> ადმინისტრატორი'
+    $('#account-admin-toggle').hidden = false
+
+    await Promise.all([
+      loadAdminProjects(),
+      loadAdminMeeting()
+    ])
+  } else if (manager) {
+    role.innerHTML = '<i data-lucide="calendar-check"></i> დასწრების მენეჯერი'
+  } else {
+    role.innerHTML = '<i data-lucide="user-round"></i> მომხმარებელი'
+  }
+
+  if (manager) {
+    $('#account-attendance-button').hidden = false
+  }
+
+  loading.hidden = true
+  content.hidden = false
+
+  refreshIcons()
+}
+
+$('#account-admin-toggle').addEventListener('click', () => {
+  const panel = $('#admin-panel')
+
+  panel.hidden = !panel.hidden
+
+  $('#account-admin-toggle').setAttribute(
+    'aria-expanded',
+    String(!panel.hidden)
+  )
+
+  $('#admin-toggle-icon').setAttribute(
+    'data-lucide',
+    panel.hidden ? 'chevron-down' : 'chevron-up'
+  )
+
+  refreshIcons()
+
+  if (!panel.hidden) {
+    panel.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     })
+  }
+})
 
-    db
-      ? loadAccount().catch(error => {
-          console.error('Account loading error:', error)
-          showMessage('ანგარიშის მონაცემების ჩატვირთვა ვერ მოხერხდა.')
-          loading.hidden = true
-        })
-      : window.location.replace('login.html')
+$('#account-logout-button').addEventListener('click', async () => {
+  const button = $('#account-logout-button')
 
-    if (window.lucide) {
-      window.lucide.createIcons()
+  button.disabled = true
+  message.className = 'account-message'
+
+  try {
+    const { error } = await db.auth.signOut()
+
+    if (error) {
+      throw error
     }
-  </script>
+
+    window.location.replace('login.html')
+  } catch (error) {
+    console.error('Sign out error:', error)
+    showMessage('ანგარიშიდან გამოსვლა ვერ მოხერხდა. სცადე ხელახლა.')
+    button.disabled = false
+  }
+})
+
+$('#account-attendance-button').addEventListener('click', () => {
+  if (!currentUser || !attendanceManager || currentUser.id !== MARIA_USER_ID) {
+    showMessage('დასწრების მართვის უფლება არ გაქვს.')
+    return
+  }
+
+  window.location.href = 'index.html?attendance=manage'
+})
+
+$('#meeting-form').addEventListener('submit', saveMeeting)
+$('#clear-meeting').addEventListener('click', clearMeeting)
+
+function updateMeetingPreview() {
+  const date = $('#meeting-date').value
+  const time = $('#meeting-time').value
+
+  $('#meeting-day-preview').textContent =
+    `${meetingDay(date)}${time ? ` · ${time}` : ''}`
+}
+
+$('#meeting-date').addEventListener('input', updateMeetingPreview)
+$('#meeting-time').addEventListener('input', updateMeetingPreview)
+
+$('#new-project-button').addEventListener('click', () => openEditor())
+$('#cancel-edit').addEventListener('click', closeEditor)
+$('#project-form').addEventListener('submit', saveProject)
+$('#image-file').addEventListener('change', imagePreview)
+
+$('#video-file').addEventListener('change', () => {
+  $('#video-name').textContent =
+    $('#video-file').files[0]?.name || 'ფაილი არჩეული არ არის'
+})
+
+$('#category').addEventListener('change', updateCodeFieldLabel)
+
+$('#admin-refresh').addEventListener('click', async () => {
+  await Promise.all([
+    loadAdminProjects(),
+    loadAdminMeeting()
+  ])
+
+  toast('მონაცემები განახლდა.')
+})
+
+$('#admin-project-list').addEventListener('click', async event => {
+  const edit = event.target.closest('[data-edit]')
+  const publish = event.target.closest('[data-publish]')
+  const remove = event.target.closest('[data-delete]')
+
+  if (edit) {
+    const project = adminProjects.find(
+      item => String(item.id) === String(edit.dataset.edit)
+    )
+
+    if (project) {
+      openEditor(project)
+    }
+  } else if (publish) {
+    await togglePublished(publish.dataset.publish)
+  } else if (remove) {
+    await deleteProject(remove.dataset.delete)
+  }
+})
+
+if (db) {
+  loadAccount().catch(error => {
+    console.error('Account loading error:', error)
+    showMessage('ანგარიშის მონაცემების ჩატვირთვა ვერ მოხერხდა.')
+    loading.hidden = true
+  })
+} else {
+  window.location.replace('login.html')
+}
+
+refreshIcons()
+</script>
 </body>
 </html>
