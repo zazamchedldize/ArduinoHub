@@ -644,15 +644,19 @@ async function startQuizGame() {
 
 async function submitQuizAnswer(option) {
   if (quizState.loading || quizState.answering || !quizState.code || quizState.isAdmin) return
+
   const data = quizState.roomData
   const question = data?.current_question
+
   if (!question || data.room.status !== "playing" || data.my_answer) return
+
   if (data.remaining_seconds <= 0) {
     setQuizStatus("პასუხის დრო ამოიწურა.", "error")
     return
   }
 
   quizState.answering = true
+
   const buttons = document.querySelectorAll("#quiz-game-options button")
   buttons.forEach(button => {
     button.disabled = true
@@ -663,16 +667,32 @@ async function submitQuizAnswer(option) {
       code: quizState.code,
       selected_option: option
     })
-    const feedback = document.getElementById("quiz-game-feedback")
-    if (result.correct) {
-      feedback.textContent = `სწორია! +${Number(result.points_awarded) || 0} ქულა`
-      feedback.className = "quiz-answer-correct"
-      celebrateQuizCorrectAnswer()
-    } else {
-      feedback.textContent = "არასწორია. დაელოდე შემდეგ კითხვას."
-      feedback.className = "quiz-answer-wrong"
-    }
+
+    const isCorrect = result.correct === true || result.is_correct === true
+
     await refreshQuizRoom(false)
+
+    const answerButtons = document.querySelectorAll("#quiz-game-options button")
+    const answerData = quizState.roomData?.my_answer
+    const correctOption = answerData?.correct_option
+
+    answerButtons.forEach((button, index) => {
+      button.classList.remove("quiz-correct-answer", "quiz-wrong-answer")
+
+      if (correctOption !== null && correctOption !== undefined && index === Number(correctOption)) {
+        button.classList.add("quiz-correct-answer")
+      }
+    })
+
+    const selectedButton = document.querySelector(`#quiz-game-options button[data-quiz-option="${option}"]`)
+
+    if (selectedButton && !isCorrect) {
+      selectedButton.classList.add("quiz-wrong-answer")
+    }
+
+    if (isCorrect) {
+      celebrateQuizCorrectAnswer()
+    }
   } catch (error) {
     setQuizStatus(error.message, "error")
     await refreshQuizRoom(false)
@@ -703,6 +723,7 @@ async function controlQuizGame(action) {
   }
 }
 
+
 function renderQuizGame(data) {
   const panel = document.getElementById("quiz-game-panel")
   const lobby = document.getElementById("quiz-lobby-view")
@@ -710,11 +731,15 @@ function renderQuizGame(data) {
   const adminControls = document.getElementById("quiz-game-admin-controls")
   const room = data.room
   const isGameScreen = room.status !== "lobby"
+
   lobby.hidden = isGameScreen
   panel.hidden = !isGameScreen
   adminControls.hidden = !quizState.isAdmin
 
-  if (!isGameScreen) return
+  if (!isGameScreen) {
+    quizState.renderedQuestionKey = ""
+    return
+  }
 
   document.getElementById("quiz-pause-game").hidden = room.status !== "playing"
   document.getElementById("quiz-resume-game").hidden = room.status !== "paused"
@@ -728,9 +753,12 @@ function renderQuizGame(data) {
     document.getElementById("quiz-game-options").innerHTML = ""
     document.getElementById("quiz-game-feedback").textContent = ""
     adminControls.hidden = true
+    quizState.renderedQuestionKey = ""
+
     const ranked = [...(data.participants || [])]
       .filter(item => item.status === "active")
       .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0))
+
     document.getElementById("quiz-game-leaderboard").innerHTML = ranked.length
       ? ranked.map((item, index) => `
           <div class="quiz-leaderboard-row">
@@ -739,41 +767,84 @@ function renderQuizGame(data) {
           </div>
         `).join("")
       : "შედეგები ჯერ არ არის"
+
     return
   }
 
   results.hidden = true
+
   const question = data.current_question
   const options = document.getElementById("quiz-game-options")
   const feedback = document.getElementById("quiz-game-feedback")
+
   if (!question) {
     document.getElementById("quiz-game-question").textContent = "კითხვა იტვირთება..."
     options.innerHTML = ""
+    quizState.renderedQuestionKey = ""
     return
   }
 
-  document.getElementById("quiz-game-progress").textContent = `კითხვა ${question.position + 1} / ${room.question_count}`
-  document.getElementById("quiz-game-timer").textContent = room.status === "paused" ? "⏸ პაუზა" : `${data.remaining_seconds ?? room.timer_seconds} წმ`
+  document.getElementById("quiz-game-progress").textContent =
+    `კითხვა ${question.position + 1} / ${room.question_count}`
+
+  document.getElementById("quiz-game-timer").textContent =
+    room.status === "paused"
+      ? "⏸ პაუზა"
+      : `${data.remaining_seconds ?? room.timer_seconds} წმ`
+
   document.getElementById("quiz-game-question").textContent = question.question
+
+  const questionKey = `${question.id || question.position}:${question.question}:${JSON.stringify(question.options || [])}`
+
+  if (quizState.renderedQuestionKey !== questionKey) {
+    options.innerHTML = (question.options || []).map((option, index) => `
+      <button type="button" data-quiz-option="${index}">
+        <span>${String.fromCharCode(65 + index)}</span> ${escapeHtml(option)}
+      </button>
+    `).join("")
+
+    quizState.renderedQuestionKey = questionKey
+  }
+
   const answered = Boolean(data.my_answer)
   const disabled = quizState.isAdmin || answered || room.status !== "playing" || data.remaining_seconds <= 0
-  options.innerHTML = (question.options || []).map((option, index) => `
-    <button type="button" data-quiz-option="${index}" ${disabled ? "disabled" : ""}>
-      <span>${String.fromCharCode(65 + index)}</span> ${escapeHtml(option)}
-    </button>
-  `).join("")
+
+  options.querySelectorAll("button").forEach(button => {
+    button.disabled = disabled
+  })
 
   if (data.my_answer) {
     const answer = data.my_answer
+    const correctOption = answer.correct_option
+    const selectedOption = answer.selected_option
+
+    if (correctOption !== null && correctOption !== undefined) {
+      const correctButton = options.querySelector(`[data-quiz-option="${Number(correctOption)}"]`)
+      if (correctButton) correctButton.classList.add("quiz-correct-answer")
+    }
+
+    if (!answer.is_correct && selectedOption !== null && selectedOption !== undefined) {
+      const wrongButton = options.querySelector(`[data-quiz-option="${Number(selectedOption)}"]`)
+      if (wrongButton) wrongButton.classList.add("quiz-wrong-answer")
+    }
+
     if (answer.is_correct) {
       feedback.textContent = `სწორია! +${Number(answer.points_awarded) || 0} ქულა`
       feedback.className = "quiz-answer-correct"
     } else {
-      feedback.textContent = "არასწორია. დაელოდე შემდეგ კითხვას."
+      const correctText = Array.isArray(question.options) &&
+        correctOption !== null &&
+        correctOption !== undefined
+          ? ` სწორი პასუხია: ${question.options[Number(correctOption)]}.`
+          : ""
+
+      feedback.textContent = `არასწორია.${correctText}`
       feedback.className = "quiz-answer-wrong"
     }
   } else if (quizState.isAdmin) {
-    feedback.textContent = room.status === "paused" ? "თამაში დაპაუზებულია." : "მოთამაშეების პასუხებს ელოდები."
+    feedback.textContent = room.status === "paused"
+      ? "თამაში დაპაუზებულია."
+      : "მოთამაშეების პასუხებს ელოდები."
     feedback.className = ""
   } else if (data.remaining_seconds <= 0) {
     feedback.textContent = "დრო ამოიწურა. დაელოდე შემდეგ კითხვას."
