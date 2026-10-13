@@ -873,3 +873,51 @@ if (document.readyState === "loading") {
 } else {
   createQuizInterface()
 }
+
+
+
+function updateQuizMusic(topic) {
+    const music = document.getElementById("quiz-music")
+
+    if (!music) return
+
+    const normalizedTopic = topic.toLowerCase()
+
+    const tvdKeywords = [
+        "the vampire diaries",
+        "vampire diaries",
+        "ვამპირის დღიურები",
+        "ვამპირის დღიური",
+        "tvd",
+        "დემონ სალვატორე",
+        "სტეფან სალვატორე",
+        "ელენა გილბერტი",
+        "მისტიკ ფოლსი"
+    ]
+
+    const mcuKeywords = [
+        "mcu",
+        "marvel cinematic universe",
+        "marvel",
+        "მარველი",
+        "შურისმაძიებლები",
+        "რკინის კაცი",
+        "კაპიტანი ამერიკა",
+        "თორი",
+        "სპაიდერმენი"
+    ]
+
+    let newSource = "sound/quiz.mp3"
+
+    if (tvdKeywords.some(keyword => normalizedTopic.includes(keyword))) {
+        newSource = "sound/tvd.mp3"
+    } else if (mcuKeywords.some(keyword => normalizedTopic.includes(keyword))) {
+        newSource = "sounds/mcu.mp3"
+    }
+
+    if (music.getAttribute("src") !== newSource) {
+        music.src = newSource
+        music.load()
+        music.play().catch(() => {})
+    }
+}
