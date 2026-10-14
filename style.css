@@ -10805,7 +10805,7 @@ body.iphone-install-open {
       rgba(8, 13, 23, 0.86),
       rgba(24, 35, 52, 0.65)
     ),
-    url("images/taso.jpg") center 65% / cover no-repeat;
+    url("images/taso.jpg") center 25% / cover no-repeat;
   border-color: #40536e;
 }
 
