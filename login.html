@@ -502,7 +502,7 @@
         <h2 class="login-form-title">ელფოსტის დადასტურება</h2>
 
         <p class="login-subtitle">
-          შეიყვანე ელფოსტაზე მიღებული 6-ნიშნა კოდი.
+          შეიყვანე ელფოსტაზე მიღებული 8-ნიშნა კოდი.
         </p>
 
         <div class="login-field">
@@ -760,10 +760,10 @@
 
       const token = document.getElementById('verify-code').value.trim()
 
-      if (!/^\d{6}$/.test(token)) {
-        showError('შეიყვანე ელფოსტაზე მიღებული 6-ნიშნა კოდი.')
-        return
-      }
+      if (!/^\d{8}$/.test(token)) {
+  showError('შეიყვანე ელფოსტაზე მიღებული 8-ნიშნა კოდი.')
+  return
+}
 
       setBusy(verifySubmit, true, 'მოწმდება კოდი...')
 
