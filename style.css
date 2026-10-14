@@ -10336,3 +10336,11 @@ body.iphone-install-open {
     transition: none !important;
   }
 }
+
+.team-card.team-tvd {
+  order: 10 !important;
+}
+
+.team-card.team-tvd:has(h2) {
+  order: 10 !important;
+}
