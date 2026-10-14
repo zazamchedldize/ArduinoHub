@@ -10392,3 +10392,30 @@ body.iphone-install-open {
   border-color: rgba(150, 170, 195, 0.25);
   color: #d8e0eb;
 }
+
+
+.bon-avatar {
+  border-color:#d4af37;
+  background:
+    radial-gradient(
+      circle at 35% 25%,
+      #4a3a12,
+      #171308 48%,
+      #050505 75%
+    );
+  box-shadow:
+    0 0 25px #d4af3730,
+    0 0 50px #d4af3715,
+    inset 0 0 20px #d4af3718;
+}
+
+.team-card.bon-card .bon-avatar {
+  background: linear-gradient(135deg, #252f3d, #111720) !important;
+  border: 1px solid #566579 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+}
+
+.team-card.bon-card .bon-avatar span {
+  color: #ffffff !important;
+}
