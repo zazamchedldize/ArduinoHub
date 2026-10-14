@@ -538,6 +538,7 @@ async function refreshQuizRoom(showStatus) {
     const room = data.room || quizState.room
     const participants = (data.participants || []).filter(participant => participant.role !== "admin" && participant.is_admin !== true)
     quizState.room = room
+    updateQuizMusic(room.topic)
     quizState.participants = participants
     quizState.isAdmin = data.is_admin === true
     syncQuizMusic(room)
@@ -877,47 +878,47 @@ if (document.readyState === "loading") {
 
 
 function updateQuizMusic(topic) {
-    const music = document.getElementById("quiz-music")
+  const music = getQuizMusic()
+  const normalizedTopic = String(topic || "").toLowerCase()
 
-    if (!music) return
+  const tvdKeywords = [
+    "the vampire diaries",
+    "vampire diaries",
+    "ვამპირის დღიურები",
+    "ვამპირის დღიური",
+    "tvd",
+    "დემონ სალვატორე",
+    "სტეფან სალვატორე",
+    "ელენა გილბერტი",
+    "მისტიკ ფოლსი"
+  ]
 
-    const normalizedTopic = topic.toLowerCase()
+  const mcuKeywords = [
+    "mcu",
+    "marvel cinematic universe",
+    "marvel",
+    "მარველი",
+    "შურისმაძიებლები",
+    "რკინის კაცი",
+    "კაპიტანი ამერიკა",
+    "თორი",
+    "სპაიდერმენი"
+  ]
 
-    const tvdKeywords = [
-        "the vampire diaries",
-        "vampire diaries",
-        "ვამპირის დღიურები",
-        "ვამპირის დღიური",
-        "tvd",
-        "დემონ სალვატორე",
-        "სტეფან სალვატორე",
-        "ელენა გილბერტი",
-        "მისტიკ ფოლსი"
-    ]
+  let newSource = "/sounds/quiz.mp3"
 
-    const mcuKeywords = [
-        "mcu",
-        "marvel cinematic universe",
-        "marvel",
-        "მარველი",
-        "შურისმაძიებლები",
-        "რკინის კაცი",
-        "კაპიტანი ამერიკა",
-        "თორი",
-        "სპაიდერმენი"
-    ]
+  if (tvdKeywords.some(keyword => normalizedTopic.includes(keyword))) {
+    newSource = "/sounds/tvd.mp3"
+  } else if (mcuKeywords.some(keyword => normalizedTopic.includes(keyword))) {
+    newSource = "/sounds/mcu.mp3"
+  }
 
-    let newSource = "sound/quiz.mp3"
+  if (!music.src.endsWith(newSource)) {
+    music.src = newSource
+    music.load()
+  }
 
-    if (tvdKeywords.some(keyword => normalizedTopic.includes(keyword))) {
-        newSource = "sound/tvd.mp3"
-    } else if (mcuKeywords.some(keyword => normalizedTopic.includes(keyword))) {
-        newSource = "sounds/mcu.mp3"
-    }
-
-    if (music.getAttribute("src") !== newSource) {
-        music.src = newSource
-        music.load()
-        music.play().catch(() => {})
-    }
+  if (quizState.room?.status === "playing") {
+    playQuizMusic()
+  }
 }
