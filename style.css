@@ -10688,3 +10688,57 @@ body.iphone-install-open {
 .team-card.damon3-card .damon3-avatar span {
   color: #ffffff !important;
 }
+
+
+.team-card.damon4-card {
+  background:
+    linear-gradient(
+      110deg,
+      rgba(7, 12, 17, 0.86),
+      rgba(25, 34, 39, 0.65)
+    ),
+    url("images/damon4.jpg") center 65% / cover no-repeat;
+  border-color: #46595c;
+}
+
+.team-card.damon4-card::before {
+  background: radial-gradient(
+    circle,
+    rgba(110, 165, 160, 0.15),
+    transparent 70%
+  );
+}
+
+.team-card.damon4-card:hover {
+  border-color: #7b9b9c;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.team-card.damon4-card .team-role {
+  color: #a9c7c6;
+}
+
+.team-card.damon4-card h2 {
+  color: #f2f8f7;
+}
+
+.team-card.damon4-card .team-description {
+  color: #c7d4d3;
+}
+
+.team-card.damon4-card .team-tags span {
+  background: rgba(110, 165, 160, 0.1);
+  border-color: rgba(110, 165, 160, 0.25);
+  color: #d9e8e7;
+}
+
+.team-card.damon4-card .damon4-avatar {
+  background: linear-gradient(135deg, #2d4547, #10191b) !important;
+  border: 1px solid #688687 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+.team-card.damon4-card .damon4-avatar span {
+  color: #ffffff !important;
+}
