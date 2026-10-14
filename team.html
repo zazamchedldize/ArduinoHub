@@ -947,6 +947,35 @@
     src="script.js"
   ></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = [...document.querySelectorAll(".team-card")]
+  const container = cards[0]?.parentElement
+
+  if (!container) return
+
+  const sameContainer = cards.filter(card => card.parentElement === container)
+
+  const leader = sameContainer.find(card =>
+    card.classList.contains("team-card-teacher") ||
+    card.classList.contains("team-card-teachers")
+  )
+
+  const vampireCards = sameContainer.filter(card =>
+    card !== leader && card.classList.contains("team-tvd")
+  )
+
+  const otherCards = sameContainer.filter(card =>
+    card !== leader && !card.classList.contains("team-tvd")
+  )
+
+  ;[leader, ...vampireCards, ...otherCards]
+    .filter(Boolean)
+    .forEach((card, index) => {
+      card.style.order = index
+    })
+})
+</script>
 </body>
 
 </html>
