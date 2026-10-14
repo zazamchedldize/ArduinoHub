@@ -2,19 +2,17 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-   <link rel="icon" type="image/png" href="arduinohub-icon.png">
+  <link rel="icon" type="image/png" href="arduinohub-icon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#07110f">
   <meta name="description" content="ArduinoHub — შედი შენს ანგარიშში და შეუერთდი Arduino-სა და ქიმიის სამყაროს">
-  <title>შესვლა — ArduinoHub</title>
-
+  <title>შესვლა და რეგისტრაცია — ArduinoHub</title>
   <link rel="icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -221,14 +219,15 @@
       box-shadow: 0 5px 18px rgba(255, 255, 255, 0.06);
     }
 
-    .login-facebook {
-      color: #fff;
-      background: #1877f2;
-      border: 1px solid #1877f2;
+    .login-member-toggle {
+      color: var(--login-green-light);
+      background: rgba(34, 211, 149, 0.055);
+      border: 1px solid rgba(34, 211, 149, 0.28);
     }
 
-    .login-facebook:hover {
-      background: #1468d8;
+    .login-member-toggle:hover {
+      background: rgba(34, 211, 149, 0.11);
+      border-color: rgba(34, 211, 149, 0.5);
     }
 
     .login-divider {
@@ -248,18 +247,9 @@
       background: var(--login-border);
     }
 
-    .login-member-toggle {
-      color: var(--login-green-light);
-      background: rgba(34, 211, 149, 0.055);
-      border: 1px solid rgba(34, 211, 149, 0.28);
-    }
-
-    .login-member-toggle:hover {
-      background: rgba(34, 211, 149, 0.11);
-      border-color: rgba(34, 211, 149, 0.5);
-    }
-
-    .login-member-form {
+    .login-register-form,
+    .login-member-form,
+    .login-verify-form {
       display: none;
       margin-top: 24px;
       padding-top: 23px;
@@ -267,7 +257,9 @@
       animation: login-appear 0.25s ease both;
     }
 
-    .login-member-form.is-visible {
+    .login-register-form.is-visible,
+    .login-member-form.is-visible,
+    .login-verify-form.is-visible {
       display: block;
     }
 
@@ -453,10 +445,17 @@
 
   <main class="login-main">
     <section class="login-card">
-      <h1 class="login-heading">კეთილი იყოს დაბრუნება</h1>
-      <p class="login-subtitle">შედი ArduinoHub-ის სამყაროში და განაგრძე შენი თავგადასავალი.</p>
+      <h1 class="login-heading" id="login-heading">კეთილი იყოს დაბრუნება</h1>
+
+      <p class="login-subtitle" id="login-subtitle">
+        შედი ArduinoHub-ის სამყაროში და განაგრძე შენი თავგადასავალი.
+      </p>
 
       <div class="login-methods">
+        <button class="login-member-toggle" id="register-toggle" type="button" aria-expanded="false">
+          <span>რეგისტრაცია</span>
+        </button>
+
         <button class="login-oauth login-google" id="google-login" type="button">
           <svg viewBox="0 0 48 48" aria-hidden="true">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" transform="translate(0 4) scale(1)"/>
@@ -466,9 +465,57 @@
           </svg>
           <span>Google-ით გაგრძელება</span>
         </button>
-
-       
       </div>
+
+      <form class="login-register-form" id="register-form">
+        <h2 class="login-form-title">შექმენი ანგარიში</h2>
+
+        <div class="login-field">
+          <label for="register-first-name">სახელი</label>
+          <input id="register-first-name" type="text" autocomplete="given-name" maxlength="60" required>
+        </div>
+
+        <div class="login-field">
+          <label for="register-last-name">გვარი</label>
+          <input id="register-last-name" type="text" autocomplete="family-name" maxlength="60" required>
+        </div>
+
+        <div class="login-field">
+          <label for="register-email">ელფოსტა</label>
+          <input id="register-email" type="email" autocomplete="email" maxlength="254" required>
+        </div>
+
+        <div class="login-field">
+          <label for="register-password">პაროლი</label>
+          <input id="register-password" type="password" minlength="8" autocomplete="new-password" required>
+        </div>
+
+        <div class="login-field">
+          <label for="register-password-confirm">გაიმეორე პაროლი</label>
+          <input id="register-password-confirm" type="password" minlength="8" autocomplete="new-password" required>
+        </div>
+
+        <button class="login-submit" id="register-submit" type="submit">რეგისტრაცია</button>
+      </form>
+
+      <form class="login-verify-form" id="verify-form">
+        <h2 class="login-form-title">ელფოსტის დადასტურება</h2>
+
+        <p class="login-subtitle">
+          შეიყვანე ელფოსტაზე მიღებული 6-ნიშნა კოდი.
+        </p>
+
+        <div class="login-field">
+          <label for="verify-code">დადასტურების კოდი</label>
+          <input id="verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+        </div>
+
+        <button class="login-submit" id="verify-submit" type="submit">კოდის დადასტურება</button>
+
+        <button class="login-member-toggle" id="resend-code" type="button" style="margin-top: 12px">
+          კოდის ხელახლა გაგზავნა
+        </button>
+      </form>
 
       <div class="login-divider">ან</div>
 
@@ -500,7 +547,9 @@
       <p class="login-error" id="login-error" role="alert"></p>
       <p class="login-status" id="login-status" role="status"></p>
 
-      <p class="login-privacy">შესვლით აგრძელებ ArduinoHub-ის საგანმანათლებლო სივრცეში.</p>
+      <p class="login-privacy">
+        შესვლით აგრძელებ ArduinoHub-ის საგანმანათლებლო სივრცეში.
+      </p>
     </section>
   </main>
 
@@ -508,160 +557,388 @@
     Arduino & Chemistry <span>•</span> შექმენი, ააწყვე, შთააგონე.
   </footer>
 
+  <script>
+    const SUPABASE_URL = 'https://ywxunhvrwdtlqjfshiyj.supabase.co'
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
 
-<script>
-const SUPABASE_URL = 'https://ywxunhvrwdtlqjfshiyj.supabase.co'
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_TwyYKMijLxN4X1J2MybYlQ_x78YSIa4'
-
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  }
-)
-
-const memberForm = document.getElementById('member-form')
-const memberToggle = document.getElementById('member-toggle')
-const memberSubmit = document.getElementById('member-submit')
-const errorBox = document.getElementById('login-error')
-const statusBox = document.getElementById('login-status')
-const googleButton = document.getElementById('google-login')
-
-
-function showError(message) {
-  errorBox.textContent = message
-  errorBox.classList.add('is-visible')
-  statusBox.classList.remove('is-visible')
-  statusBox.textContent = ''
-}
-
-function showStatus(message) {
-  statusBox.textContent = message
-  statusBox.classList.add('is-visible')
-  errorBox.classList.remove('is-visible')
-  errorBox.textContent = ''
-}
-
-function clearMessages() {
-  errorBox.textContent = ''
-  statusBox.textContent = ''
-  errorBox.classList.remove('is-visible')
-  statusBox.classList.remove('is-visible')
-}
-
-function setBusy(button, busy, text) {
-  if (busy) {
-    if (!button.dataset.originalText) {
-      button.dataset.originalText = button.innerHTML
-    }
-    button.disabled = true
-    if (text) button.textContent = text
-  } else {
-    button.disabled = false
-    if (button.dataset.originalText) {
-      button.innerHTML = button.dataset.originalText
-      delete button.dataset.originalText
-    }
-  }
-}
-
-memberToggle.addEventListener('click', () => {
-  const isVisible = memberForm.classList.toggle('is-visible')
-  memberToggle.setAttribute('aria-expanded', String(isVisible))
-  clearMessages()
-
-  if (isVisible) {
-    document.getElementById('member-email').focus()
-  }
-})
-
-memberForm.addEventListener('submit', async event => {
-  event.preventDefault()
-  clearMessages()
-
-  const email = document.getElementById('member-email').value.trim()
-  const password = document.getElementById('member-password').value
-
-  if (!email || !password) {
-    showError('შეავსე ელფოსტისა და პაროლის ველები.')
-    return
-  }
-
-  setBusy(memberSubmit, true, 'მიმდინარეობს შესვლა...')
-
-  try {
-    const { data, error } = await db.auth.signInWithPassword({
-      email,
-      password
-    })
-
-    if (error) throw error
-    if (!data.session) throw new Error('სესია ვერ შეიქმნა')
-
-    showStatus('შესვლა წარმატებულია. მიმდინარეობს გადამისამართება...')
-    window.location.replace('/index.html')
-  } catch (error) {
-    console.error('Email login error:', error)
-    showError(
-      error.message === 'Invalid login credentials'
-        ? 'ელფოსტა ან პაროლი არასწორია.'
-        : 'შესვლა ვერ მოხერხდა. სცადე ხელახლა.'
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
     )
-    setBusy(memberSubmit, false)
-  }
-})
 
-async function signInWithProvider(provider, button) {
-  clearMessages()
-  setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
+    const memberForm = document.getElementById('member-form')
+    const memberToggle = document.getElementById('member-toggle')
+    const memberSubmit = document.getElementById('member-submit')
+    const errorBox = document.getElementById('login-error')
+    const statusBox = document.getElementById('login-status')
+    const googleButton = document.getElementById('google-login')
 
-  try {
-    const { error } = await db.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: window.location.origin + '/login.html'
+    const registerToggle = document.getElementById('register-toggle')
+    const registerForm = document.getElementById('register-form')
+    const registerSubmit = document.getElementById('register-submit')
+    const verifyForm = document.getElementById('verify-form')
+    const verifySubmit = document.getElementById('verify-submit')
+    const resendButton = document.getElementById('resend-code')
+
+    let pendingRegistration = null
+
+    function showError(message) {
+      errorBox.textContent = message
+      errorBox.classList.add('is-visible')
+      statusBox.classList.remove('is-visible')
+      statusBox.textContent = ''
+    }
+
+    function showStatus(message) {
+      statusBox.textContent = message
+      statusBox.classList.add('is-visible')
+      errorBox.classList.remove('is-visible')
+      errorBox.textContent = ''
+    }
+
+    function clearMessages() {
+      errorBox.textContent = ''
+      statusBox.textContent = ''
+      errorBox.classList.remove('is-visible')
+      statusBox.classList.remove('is-visible')
+    }
+
+    function setBusy(button, busy, text) {
+      if (busy) {
+        if (!button.dataset.originalText) {
+          button.dataset.originalText = button.textContent
+        }
+
+        button.disabled = true
+
+        if (text) {
+          button.textContent = text
+        }
+      } else {
+        button.disabled = false
+
+        if (button.dataset.originalText) {
+          button.textContent = button.dataset.originalText
+          delete button.dataset.originalText
+        }
+      }
+    }
+
+    function closeAllForms() {
+      registerForm.classList.remove('is-visible')
+      verifyForm.classList.remove('is-visible')
+      memberForm.classList.remove('is-visible')
+
+      registerToggle.setAttribute('aria-expanded', 'false')
+      memberToggle.setAttribute('aria-expanded', 'false')
+    }
+
+    registerToggle.addEventListener('click', () => {
+      const isVisible = !registerForm.classList.contains('is-visible')
+
+      closeAllForms()
+      clearMessages()
+
+      if (isVisible) {
+        registerForm.classList.add('is-visible')
+        registerToggle.setAttribute('aria-expanded', 'true')
+        document.getElementById('register-first-name').focus()
       }
     })
 
-    if (error) throw error
-  } catch (error) {
-    console.error(provider + ' OAuth error:', error)
-    showError(
-      provider === 'google'
-        ? 'Google-ით შესვლა ვერ მოხერხდა: ' + error.message
-        : 'Facebook-ით შესვლა ვერ მოხერხდა: ' + error.message
-    )
-    setBusy(button, false)
-  }
-}
+    memberToggle.addEventListener('click', () => {
+      const isVisible = !memberForm.classList.contains('is-visible')
 
-googleButton.addEventListener('click', () => {
-  signInWithProvider('google', googleButton)
-})
+      closeAllForms()
+      clearMessages()
 
+      if (isVisible) {
+        memberForm.classList.add('is-visible')
+        memberToggle.setAttribute('aria-expanded', 'true')
+        document.getElementById('member-email').focus()
+      }
+    })
 
+    registerForm.addEventListener('submit', async event => {
+      event.preventDefault()
+      clearMessages()
 
-async function checkExistingSession() {
-  try {
-    const { data, error } = await db.auth.getSession()
+      const firstName = document.getElementById('register-first-name').value.trim()
+      const lastName = document.getElementById('register-last-name').value.trim()
+      const email = document.getElementById('register-email').value.trim().toLowerCase()
+      const password = document.getElementById('register-password').value
+      const confirmPassword = document.getElementById('register-password-confirm').value
 
-    if (error) throw error
+      if (!firstName || !lastName || !email || !password || !confirmPassword) {
+        showError('შეავსე ყველა ველი.')
+        return
+      }
 
-    if (data.session) {
-      window.location.replace('/index.html')
+      if (password.length < 8) {
+        showError('პაროლი მინიმუმ 8 სიმბოლოს უნდა შეიცავდეს.')
+        return
+      }
+
+      if (password !== confirmPassword) {
+        showError('პაროლები ერთმანეთს არ ემთხვევა.')
+        return
+      }
+
+      setBusy(registerSubmit, true, 'მიმდინარეობს რეგისტრაცია...')
+
+      try {
+        const { data, error } = await db.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`
+            }
+          }
+        })
+
+        if (error) {
+          if (/already registered|already exists|user already/i.test(error.message)) {
+            throw new Error('ამ ელფოსტით ანგარიში უკვე არსებობს. სცადე შესვლა.')
+          }
+
+          throw error
+        }
+
+        if (data.user?.identities?.length === 0) {
+          showError('ამ ელფოსტით ანგარიში შესაძლოა უკვე არსებობდეს. სცადე შესვლა.')
+          return
+        }
+
+        pendingRegistration = {
+          email,
+          firstName,
+          lastName
+        }
+
+        closeAllForms()
+        verifyForm.classList.add('is-visible')
+
+        showStatus('რეგისტრაციის მოთხოვნა მიღებულია. შეამოწმე ელფოსტა და სპამის საქაღალდეც.')
+        document.getElementById('verify-code').focus()
+      } catch (error) {
+        console.error('Registration error:', error)
+
+        const message = error.message || ''
+
+        if (/rate limit|email rate limit|too many requests/i.test(message)) {
+          showError('ძალიან ბევრი მოთხოვნა გაიგზავნა. ცოტა ხანში სცადე ხელახლა.')
+        } else if (/invalid email/i.test(message)) {
+          showError('ელფოსტის მისამართი არასწორია.')
+        } else if (/already registered|already exists|user already/i.test(message)) {
+          showError('ამ ელფოსტით ანგარიში უკვე არსებობს. სცადე შესვლა.')
+        } else {
+          showError('რეგისტრაცია ვერ მოხერხდა. გადაამოწმე მონაცემები და სცადე ხელახლა.')
+        }
+      } finally {
+        setBusy(registerSubmit, false)
+      }
+    })
+
+    verifyForm.addEventListener('submit', async event => {
+      event.preventDefault()
+      clearMessages()
+
+      if (!pendingRegistration) {
+        showError('ჯერ შეავსე რეგისტრაციის ფორმა.')
+        return
+      }
+
+      const token = document.getElementById('verify-code').value.trim()
+
+      if (!/^\d{6}$/.test(token)) {
+        showError('შეიყვანე ელფოსტაზე მიღებული 6-ნიშნა კოდი.')
+        return
+      }
+
+      setBusy(verifySubmit, true, 'მოწმდება კოდი...')
+
+      try {
+        const { data, error } = await db.auth.verifyOtp({
+          email: pendingRegistration.email,
+          token,
+          type: 'signup'
+        })
+
+        if (error) {
+          throw error
+        }
+
+        if (!data.session) {
+          showStatus('ელფოსტა დადასტურდა. ახლა შედი შენი ელფოსტითა და პაროლით.')
+          verifyForm.classList.remove('is-visible')
+          memberForm.classList.add('is-visible')
+          closeAllForms()
+          memberForm.classList.add('is-visible')
+          pendingRegistration = null
+          return
+        }
+
+        const { error: updateError } = await db.auth.updateUser({
+          data: {
+            first_name: pendingRegistration.firstName,
+            last_name: pendingRegistration.lastName,
+            full_name: `${pendingRegistration.firstName} ${pendingRegistration.lastName}`
+          }
+        })
+
+        if (updateError) {
+          console.error('Profile metadata update error:', updateError)
+        }
+
+        pendingRegistration = null
+
+        showStatus('ელფოსტა წარმატებით დადასტურდა! ანგარიშში შესვლა მიმდინარეობს...')
+
+        window.setTimeout(() => {
+          window.location.replace('/index.html')
+        }, 1000)
+      } catch (error) {
+        console.error('Email verification error:', error)
+        showError('კოდი არასწორია ან ვადა გაუვიდა. გადაამოწმე და სცადე ხელახლა.')
+      } finally {
+        setBusy(verifySubmit, false)
+      }
+    })
+
+    resendButton.addEventListener('click', async () => {
+      clearMessages()
+
+      if (!pendingRegistration) {
+        showError('რეგისტრაციის მონაცემები აღარ არის ხელმისაწვდომი. თავიდან შეავსე ფორმა.')
+        return
+      }
+
+      setBusy(resendButton, true, 'იგზავნება...')
+
+      try {
+        const { error } = await db.auth.resend({
+          type: 'signup',
+          email: pendingRegistration.email,
+          options: {
+            emailRedirectTo: window.location.origin + '/login.html'
+          }
+        })
+
+        if (error) {
+          throw error
+        }
+
+        showStatus('თუ ელფოსტა ჯერ კიდევ დასადასტურებელია, ახალი კოდი გამოგზავნილია.')
+      } catch (error) {
+        console.error('Resend verification error:', error)
+        showError('კოდის ხელახლა გაგზავნა ვერ მოხერხდა. ცოტა ხანში სცადე.')
+      } finally {
+        setBusy(resendButton, false)
+      }
+    })
+
+    memberForm.addEventListener('submit', async event => {
+      event.preventDefault()
+      clearMessages()
+
+      const email = document.getElementById('member-email').value.trim()
+      const password = document.getElementById('member-password').value
+
+      if (!email || !password) {
+        showError('შეავსე ელფოსტისა და პაროლის ველები.')
+        return
+      }
+
+      setBusy(memberSubmit, true, 'მიმდინარეობს შესვლა...')
+
+      try {
+        const { data, error } = await db.auth.signInWithPassword({
+          email,
+          password
+        })
+
+        if (error) {
+          if (/email not confirmed/i.test(error.message)) {
+            throw new Error('ელფოსტა ჯერ არ დაგიდასტურებია. შეამოწმე წერილები.')
+          }
+
+          throw error
+        }
+
+        if (!data.session) {
+          throw new Error('სესია ვერ შეიქმნა.')
+        }
+
+        showStatus('შესვლა წარმატებულია. მიმდინარეობს გადამისამართება...')
+        window.location.replace('/index.html')
+      } catch (error) {
+        console.error('Email login error:', error)
+
+        if (/ელფოსტა ჯერ არ დაგიდასტურებია/i.test(error.message)) {
+          showError(error.message)
+        } else if (/Invalid login credentials/i.test(error.message)) {
+          showError('ელფოსტა ან პაროლი არასწორია.')
+        } else {
+          showError('შესვლა ვერ მოხერხდა. სცადე ხელახლა.')
+        }
+      } finally {
+        setBusy(memberSubmit, false)
+      }
+    })
+
+    async function signInWithProvider(provider, button) {
+      clearMessages()
+      setBusy(button, true, 'მიმდინარეობს გადამისამართება...')
+
+      try {
+        const { error } = await db.auth.signInWithOAuth({
+          provider,
+          options: {
+            redirectTo: window.location.origin + '/login.html'
+          }
+        })
+
+        if (error) {
+          throw error
+        }
+      } catch (error) {
+        console.error(provider + ' OAuth error:', error)
+        showError('Google-ით შესვლა ვერ მოხერხდა. სცადე ხელახლა.')
+        setBusy(button, false)
+      }
     }
-  } catch (error) {
-    console.error('Session check error:', error)
-  }
-}
 
-checkExistingSession()
-</script>
+    googleButton.addEventListener('click', () => {
+      signInWithProvider('google', googleButton)
+    })
 
+    async function checkExistingSession() {
+      try {
+        const { data, error } = await db.auth.getSession()
+
+        if (error) {
+          throw error
+        }
+
+        if (data.session) {
+          window.location.replace('/index.html')
+        }
+      } catch (error) {
+        console.error('Session check error:', error)
+      }
+    }
+
+    checkExistingSession()
+  </script>
 </body>
 </html>
