@@ -10350,57 +10350,45 @@ body.iphone-install-open {
   order: 1 !important;
 }
 
-.team-card.bon-card {
-  background-image: url("images/bon.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.team-card.bon-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(5, 10, 8, 0.82),
-    rgba(5, 10, 8, 0.55)
-  );
-  z-index: -1;
-}
 
 .team-card.bon-card {
   background:
     linear-gradient(
-      135deg,
-      rgba(13, 15, 28, 0.82),
-      rgba(35, 25, 48, 0.72)
+      110deg,
+      rgba(15, 19, 27, 0.88),
+      rgba(24, 31, 42, 0.72)
     ),
     url("images/bon.jpg") center / cover no-repeat;
-  border: 1px solid rgba(180, 150, 220, 0.3);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
+  border-color: #465363;
+}
+
+.team-card.bon-card::before {
+  background: radial-gradient(
+    circle,
+    rgba(135, 160, 190, 0.16),
+    transparent 70%
+  );
+}
+
+.team-card.bon-card:hover {
+  border-color: #8295aa;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .team-card.bon-card .team-role {
-  color: #c5a6f5;
+  color: #aabbd0;
 }
 
 .team-card.bon-card h2 {
-  color: #f5efff;
+  color: #f0f3f8;
 }
 
 .team-card.bon-card .team-description {
-  color: #d0cadb;
+  color: #c3cbd6;
 }
 
 .team-card.bon-card .team-tags span {
-  background: rgba(170, 135, 220, 0.13);
-  border: 1px solid rgba(180, 150, 220, 0.25);
-  color: #e5d5ff;
+  background: rgba(150, 170, 195, 0.1);
+  border-color: rgba(150, 170, 195, 0.25);
+  color: #d8e0eb;
 }
