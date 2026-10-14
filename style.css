@@ -10905,3 +10905,51 @@ body.iphone-install-open {
   color: #ffffff !important;
 }
 
+
+@media (hover: none) and (pointer: coarse) {
+  .team-card {
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      filter 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .team-card:active {
+    transform: scale(0.97);
+    border-color: #36c596;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.08);
+  }
+
+  .team-grid:has(.team-card:active) .team-card {
+    opacity: 0.65;
+    filter: saturate(0.8);
+  }
+
+  .team-grid:has(.team-card:active) .team-card:active {
+    opacity: 1;
+    filter: saturate(1) brightness(1.08);
+    transform: scale(0.98);
+    z-index: 3;
+  }
+
+  .team-card.bon-card:active,
+  .team-card.iron-card:active,
+  .team-card.eshref-card:active,
+  .team-card.damon1-team:active,
+  .team-card.damon2-card:active,
+  .team-card.damon3-card:active,
+  .team-card.damon4-card:active,
+  .team-card.caroline-card:active,
+  .team-card.taso-card:active,
+  .team-card.maia-card:active {
+    border-color: #aabbd0;
+  }
+}
+
+.team-card:focus-visible {
+  outline: 2px solid #aabbd0;
+  outline-offset: 3px;
+}
