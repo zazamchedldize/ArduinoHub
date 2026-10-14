@@ -10114,80 +10114,248 @@ body.iphone-install-open {
 }
 
 
-.team-tvd {
+/* THE VAMPIRE DIARIES — TEAM CARD */
+
+.team-card.team-tvd {
+  --tvd-red: #b20d2c;
+  --tvd-bright: #f02b4d;
+  --tvd-wine: #480817;
+  --tvd-text: #f6e8eb;
+  --tvd-muted: #c4a6ae;
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
-  background: radial-gradient(ellipse at 50% 0%, rgba(139, 0, 25, 0.3), transparent 65%), linear-gradient(155deg, #1a090d 0%, #10080b 48%, #080709 100%) !important;
-  border: 1px solid rgba(176, 35, 58, 0.6) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4) !important;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  display: flex;
+  gap: 22px;
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(145, 0, 32, 0.3), transparent 48%),
+    radial-gradient(ellipse at 100% 100%, rgba(78, 0, 18, 0.35), transparent 48%),
+    linear-gradient(135deg, #19090e 0%, #0d080b 55%, #17070c 100%) !important;
+  border: 1px solid rgba(188, 28, 57, 0.55) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.38), inset 0 0 30px rgba(112, 0, 25, 0.08) !important;
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
 }
 
-.team-tvd::before {
+.team-card.team-tvd::before {
   content: "" !important;
   position: absolute !important;
-  inset: 0 0 auto !important;
-  height: 2px !important;
-  background: linear-gradient(90deg, transparent, #6f071c, #e32648, #6f071c, transparent) !important;
-  opacity: 1 !important;
-  pointer-events: none !important;
-}
-
-.team-tvd::after {
-  content: "" !important;
-  position: absolute !important;
-  width: 170px !important;
-  height: 170px !important;
-  top: -95px !important;
-  right: -75px !important;
-  background: radial-gradient(circle, rgba(153, 0, 32, 0.25), transparent 70%) !important;
-  pointer-events: none !important;
+  inset: 0 !important;
   z-index: -1 !important;
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+  background:
+    radial-gradient(ellipse at 15% 100%, rgba(177, 0, 39, 0.19), transparent 38%),
+    radial-gradient(ellipse at 90% 0%, rgba(218, 22, 58, 0.14), transparent 40%) !important;
+  animation: tvdCrimsonMist 7s ease-in-out infinite alternate;
 }
 
-.team-tvd:hover {
-  transform: translateY(-5px) !important;
-  border-color: #d52b4c !important;
-  box-shadow: 0 12px 32px rgba(105, 0, 24, 0.35), 0 0 22px rgba(157, 0, 35, 0.18) !important;
+.team-card.team-tvd::after {
+  content: "✦  🩸  ✦" !important;
+  position: absolute !important;
+  top: 13px !important;
+  right: 16px !important;
+  color: rgba(230, 47, 76, 0.45) !important;
+  font-size: 13px !important;
+  letter-spacing: 5px !important;
+  pointer-events: none !important;
 }
 
-.team-tvd img {
-  transition: filter 0.35s ease, transform 0.4s ease !important;
+.team-card.team-tvd:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgba(240, 43, 77, 0.9) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45), 0 0 25px rgba(178, 13, 44, 0.2), inset 0 0 30px rgba(112, 0, 25, 0.13) !important;
 }
 
-.team-tvd:hover img {
-  filter: contrast(1.08) saturate(1.15) !important;
+.team-card.team-tvd .team-avatar {
+  position: relative !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 86px !important;
+  height: 86px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 35% 25%, #6e172b 0%, #300914 48%, #10070a 100%) !important;
+  border: 2px solid rgba(221, 37, 68, 0.72) !important;
+  box-shadow: 0 0 0 5px rgba(157, 12, 39, 0.1), 0 0 24px rgba(189, 12, 44, 0.23), inset 0 0 16px rgba(0, 0, 0, 0.55) !important;
+  transition: transform 0.35s ease, box-shadow 0.35s ease !important;
 }
 
-.team-tvd h2,
-.team-tvd h3,
-.team-tvd .member-name {
-  color: #f3dce1 !important;
-  text-shadow: 0 0 14px rgba(190, 20, 50, 0.25) !important;
+.team-card.team-tvd .team-avatar::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -7px !important;
+  border: 1px solid rgba(210, 34, 66, 0.35) !important;
+  border-radius: 50% !important;
+  animation: tvdAvatarPulse 4s ease-in-out infinite;
 }
 
-.team-tvd p {
-  color: #c4aeb4 !important;
+.team-card.team-tvd:hover .team-avatar {
+  transform: scale(1.06) !important;
+  box-shadow: 0 0 0 5px rgba(157, 12, 39, 0.16), 0 0 32px rgba(240, 43, 77, 0.38), inset 0 0 16px rgba(0, 0, 0, 0.55) !important;
 }
 
-.team-tvd button {
-  border-color: rgba(181, 34, 59, 0.65) !important;
+.team-card.team-tvd .team-avatar span {
+  color: #fff0f3 !important;
+  font-size: 25px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+  text-shadow: 0 0 10px rgba(255, 34, 76, 0.7), 0 0 24px rgba(185, 0, 40, 0.4) !important;
 }
 
-.team-tvd button:hover {
-  border-color: #e32648 !important;
-  box-shadow: 0 0 15px rgba(174, 0, 37, 0.3) !important;
+.team-card.team-tvd .team-info {
+  position: relative !important;
+  z-index: 1 !important;
+  min-width: 0 !important;
+}
+
+.team-card.team-tvd .team-role {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  color: #f0526d !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 12px rgba(214, 20, 57, 0.25) !important;
+}
+
+.team-card.team-tvd .team-role::before {
+  content: "☠" !important;
+  color: #e52b4d !important;
+  font-size: 15px !important;
+}
+
+.team-card.team-tvd .team-info h2 {
+  color: var(--tvd-text, #f6e8eb) !important;
+  font-size: clamp(21px, 2.2vw, 29px) !important;
+  font-weight: 850 !important;
+  letter-spacing: -0.5px !important;
+  text-shadow: 0 0 18px rgba(183, 13, 45, 0.2) !important;
+  transition: color 0.25s ease, text-shadow 0.25s ease !important;
+}
+
+.team-card.team-tvd:hover .team-info h2 {
+  color: #ffffff !important;
+  text-shadow: 0 0 18px rgba(240, 43, 77, 0.32) !important;
+}
+
+.team-card.team-tvd .team-description {
+  color: #cdb8be !important;
+  font-size: 14px !important;
+  line-height: 1.85 !important;
+}
+
+.team-card.team-tvd .team-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+  margin-top: 17px !important;
+}
+
+.team-card.team-tvd .team-tags span {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 7px 11px !important;
+  color: #e6c3cc !important;
+  background: linear-gradient(135deg, rgba(111, 10, 33, 0.35), rgba(31, 9, 16, 0.88)) !important;
+  border: 1px solid rgba(184, 37, 65, 0.34) !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
+  line-height: 1.5 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
+  transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.team-card.team-tvd .team-tags span::before {
+  content: "✦" !important;
+  color: #d52b4c !important;
+  font-size: 10px !important;
+}
+
+.team-card.team-tvd .team-tags span:hover {
+  color: #fff0f3 !important;
+  background: linear-gradient(135deg, rgba(147, 12, 42, 0.65), rgba(53, 7, 20, 0.95)) !important;
+  border-color: rgba(240, 43, 77, 0.7) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(157, 0, 35, 0.18) !important;
+}
+
+@keyframes tvdCrimsonMist {
+  0% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.65;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes tvdAvatarPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.035);
+  }
+}
+
+@media (max-width: 600px) {
+  .team-card.team-tvd {
+    gap: 15px !important;
+    border-radius: 16px !important;
+  }
+
+  .team-card.team-tvd .team-avatar {
+    width: 66px !important;
+    height: 66px !important;
+  }
+
+  .team-card.team-tvd .team-avatar span {
+    font-size: 21px !important;
+  }
+
+  .team-card.team-tvd .team-description {
+    font-size: 13px !important;
+    line-height: 1.75 !important;
+  }
+
+  .team-card.team-tvd .team-tags {
+    gap: 7px !important;
+  }
+
+  .team-card.team-tvd .team-tags span {
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+
+  .team-card.team-tvd::after {
+    top: 8px !important;
+    right: 9px !important;
+    font-size: 10px !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .team-tvd,
-  .team-tvd img {
+  .team-card.team-tvd,
+  .team-card.team-tvd *,
+  .team-card.team-tvd::before,
+  .team-card.team-tvd .team-avatar::before {
+    animation: none !important;
     transition: none !important;
   }
 
-  .team-tvd:hover {
+  .team-card.team-tvd:hover,
+  .team-card.team-tvd .team-tags span:hover {
     transform: none !important;
   }
 }
