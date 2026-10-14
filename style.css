@@ -10530,14 +10530,13 @@ body.iphone-install-open {
 
 
 .team-card.damon1-team {
-  background:
-    linear-gradient(
-      110deg,
-      rgba(8, 12, 19, 0.88),
-      rgba(20, 30, 45, 0.74)
-    ),
-    url("images/damon1.jpg") center / cover no-repeat;
-  border-color: #394b63;
+ background:
+  linear-gradient(
+    110deg,
+    rgba(5, 9, 15, 0.78),
+    rgba(15, 25, 39, 0.58)
+  ),
+  url("images/damon1.jpg") center 60% / cover no-repeat;
 }
 
 .team-card.damon1-team::before {
