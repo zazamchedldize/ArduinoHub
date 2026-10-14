@@ -947,23 +947,6 @@
     src="script.js"
   ></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const cards = [...document.querySelectorAll(".team-card")]
-  const zazaCard = cards.find(card => card.textContent.includes("ზაზა მჭედლიძე"))
-
-  if (!zazaCard) return
-
-  const container = zazaCard.parentElement
-  const siblings = cards.filter(card => card.parentElement === container)
-  const vampireCards = siblings.filter(card => card !== zazaCard && card.classList.contains("team-tvd"))
-  const otherCards = siblings.filter(card => card !== zazaCard && !card.classList.contains("team-tvd"))
-
-  ;[zazaCard, ...vampireCards, ...otherCards].forEach((card, index) => {
-    card.style.order = index
-  })
-})
-</script>
 </body>
 
 </html>
