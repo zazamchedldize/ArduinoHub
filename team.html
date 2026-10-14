@@ -949,23 +949,21 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const cards = [...document.querySelectorAll(".team-card")]
-  const container = cards[0]?.parentElement
+  const grid = document.querySelector(".team-grid")
 
-  if (!container) return
+  if (!grid) return
 
-  const sameContainer = cards.filter(card => card.parentElement === container)
+  const cards = [...grid.querySelectorAll(":scope > .team-card")]
 
-  const leader = sameContainer.find(card =>
-    card.classList.contains("team-card-teacher") ||
-    card.classList.contains("team-card-teachers")
+  const leader = cards.find(card =>
+    card.querySelector("h2")?.textContent.trim() === "მაია მელაძე"
   )
 
-  const vampireCards = sameContainer.filter(card =>
+  const vampireCards = cards.filter(card =>
     card !== leader && card.classList.contains("team-tvd")
   )
 
-  const otherCards = sameContainer.filter(card =>
+  const otherCards = cards.filter(card =>
     card !== leader && !card.classList.contains("team-tvd")
   )
 
@@ -976,6 +974,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 })
 </script>
+
 </body>
 
 </html>
