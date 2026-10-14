@@ -187,71 +187,50 @@
 
   <header class="site-header">
 
-
-    <a
-      class="brand"
-      href="index.html"
-      aria-label="ArduinoHub — მთავარი გვერდი"
-    >
-
-      <span class="brand-mark">
-        ∞
-      </span>
-
+    <a class="brand" href="index.html" aria-label="ArduinoHub მთავარი">
+      <span class="brand-mark">∞</span>
       ArduinoChemistry<span>Hub</span>
-
     </a>
-
-
 
     <button
       class="menu-toggle"
       aria-label="მენიუს გახსნა"
       aria-expanded="false"
-      type="button"
     >
       ☰
     </button>
 
-
-
     <nav>
 
-      <a href="index.html">
+      <a class="active" href="index.html">
         მთავარი
       </a>
 
-
-      <a
-        class="active"
-        href="projects.html"
-      >
+      <a href="projects.html">
         პროექტები
       </a>
 
-
-      <a class="button albums-home-btn"
-                href="albums.html"
-              >
-                ფოტოალბომები
-                <i data-lucide="images"></i>
-              </a>
-
-
-      <a href="index.html#about">
-        ჩვენ შესახებ
+      <a href="albums.html">
+        ფოტოალბომები
       </a>
 
-      <a
-        class="nav-admin"
-        href="admin.html"
+      <a href="team.html">
+        ჩვენი გუნდი
+      </a>
+
+      <button
+        id="meeting-button"
+        class="nav-meeting"
+        type="button"
+        onclick="openAttendancePanel()"
       >
+        <i data-lucide="calendar-days"></i>
+        კლუბის შეკრება
+      </button>
 
-        შესვლა
-
-        <i data-lucide="shield"></i>
-
-      </a>
+      <a class="nav-admin" href="login.html" id="nav-login-button">
+  შესვლა <i data-lucide="shield"></i>
+</a>
 
     </nav>
 
