@@ -947,33 +947,7 @@
     src="script.js"
   ></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.querySelector(".team-grid")
 
-  if (!grid) return
-
-  const cards = [...grid.querySelectorAll(":scope > .team-card")]
-
-  const leader = cards.find(card =>
-    card.querySelector("h2")?.textContent.trim() === "მაია მელაძე"
-  )
-
-  const vampireCards = cards.filter(card =>
-    card !== leader && card.classList.contains("team-tvd")
-  )
-
-  const otherCards = cards.filter(card =>
-    card !== leader && !card.classList.contains("team-tvd")
-  )
-
-  ;[leader, ...vampireCards, ...otherCards]
-    .filter(Boolean)
-    .forEach((card, index) => {
-      card.style.order = index
-    })
-})
-</script>
 
 </body>
 
