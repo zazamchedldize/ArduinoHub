@@ -10371,3 +10371,36 @@ body.iphone-install-open {
   );
   z-index: -1;
 }
+
+.team-card.bon-card {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(13, 15, 28, 0.82),
+      rgba(35, 25, 48, 0.72)
+    ),
+    url("images/bon.jpg") center / cover no-repeat;
+  border: 1px solid rgba(180, 150, 220, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.team-card.bon-card .team-role {
+  color: #c5a6f5;
+}
+
+.team-card.bon-card h2 {
+  color: #f5efff;
+}
+
+.team-card.bon-card .team-description {
+  color: #d0cadb;
+}
+
+.team-card.bon-card .team-tags span {
+  background: rgba(170, 135, 220, 0.13);
+  border: 1px solid rgba(180, 150, 220, 0.25);
+  color: #e5d5ff;
+}
