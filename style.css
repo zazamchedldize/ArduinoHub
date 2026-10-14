@@ -10853,7 +10853,7 @@ body.iphone-install-open {
 
 
 .team-card.maia-card {
-  order:0;
+  order:-1;
   background:
     linear-gradient(
       110deg,
