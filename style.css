@@ -10581,3 +10581,56 @@ body.iphone-install-open {
   color: #ffffff !important;
 }
 
+
+.team-card.damon2-card {
+  background:
+    linear-gradient(
+      110deg,
+      rgba(5, 9, 15, 0.82),
+      rgba(18, 25, 36, 0.62)
+    ),
+    url("images/damon2.jpg") center 65% / cover no-repeat;
+  border-color: #394b63;
+}
+
+.team-card.damon2-card::before {
+  background: radial-gradient(
+    circle,
+    rgba(100, 145, 200, 0.18),
+    transparent 70%
+  );
+}
+
+.team-card.damon2-card:hover {
+  border-color: #718eaf;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.team-card.damon2-card .team-role {
+  color: #a8c1df;
+}
+
+.team-card.damon2-card h2 {
+  color: #f4f7fb;
+}
+
+.team-card.damon2-card .team-description {
+  color: #c5ceda;
+}
+
+.team-card.damon2-card .team-tags span {
+  background: rgba(100, 145, 200, 0.1);
+  border-color: rgba(130, 165, 205, 0.25);
+  color: #d9e6f5;
+}
+
+.team-card.damon2-card .damon2-avatar {
+  background: linear-gradient(135deg, #26374c, #0b111a) !important;
+  border: 1px solid #58718f !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+.team-card.damon2-card .damon2-avatar span {
+  color: #ffffff !important;
+}
