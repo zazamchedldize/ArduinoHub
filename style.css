@@ -10350,3 +10350,123 @@ body.iphone-install-open {
   order: 1 !important;
 }
 
+
+.team-grid > .team-card.team-tvd {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(150, 0, 25, 0.22), transparent 65%),
+    linear-gradient(145deg, #19090e, #0b080c 65%, #16070c);
+  border: 1px solid rgba(190, 25, 50, 0.65);
+  box-shadow:
+    0 0 0 1px rgba(100, 0, 20, 0.2),
+    0 12px 35px rgba(0, 0, 0, 0.45),
+    0 0 22px rgba(180, 0, 35, 0.12);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.team-grid > .team-card.team-tvd::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 8% 0%, #a80d2b 0 3px, transparent 4px),
+    radial-gradient(ellipse at 24% 0%, #e21d3e 0 2px, transparent 3px),
+    radial-gradient(ellipse at 46% 0%, #8c0924 0 4px, transparent 5px),
+    radial-gradient(ellipse at 69% 0%, #c51432 0 2px, transparent 3px),
+    radial-gradient(ellipse at 91% 0%, #a80d2b 0 3px, transparent 4px);
+  background-size: 100% 100%;
+  filter: drop-shadow(0 2px 5px rgba(210, 0, 40, 0.5));
+  animation: tvdBloodGlow 3s ease-in-out infinite alternate;
+}
+
+.team-grid > .team-card.team-tvd::after {
+  content: "🩸";
+  position: absolute;
+  z-index: 4;
+  top: -28px;
+  left: 18%;
+  font-size: 19px;
+  pointer-events: none;
+  opacity: 0;
+  animation: tvdBloodDrop 4.5s ease-in infinite;
+}
+
+.team-grid > .team-card.team-tvd:nth-child(3n)::after {
+  left: 76%;
+  animation-delay: 1.4s;
+}
+
+.team-grid > .team-card.team-tvd:nth-child(2n)::after {
+  left: 48%;
+  animation-delay: 2.7s;
+}
+
+.team-grid > .team-card.team-tvd:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 40, 70, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(220, 20, 50, 0.2),
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(210, 0, 45, 0.25);
+}
+
+.team-grid > .team-card.team-tvd .team-avatar {
+  border-color: rgba(220, 35, 65, 0.65);
+  box-shadow: 0 0 18px rgba(190, 0, 40, 0.2);
+}
+
+.team-grid > .team-card.team-tvd .team-role {
+  color: #ff667f;
+}
+
+.team-grid > .team-card.team-tvd .team-info h2 {
+  color: #fff0f2;
+  text-shadow: 0 0 14px rgba(220, 15, 50, 0.25);
+}
+
+.team-grid > .team-card.team-tvd .team-tags span {
+  border-color: rgba(180, 30, 55, 0.4);
+  background: rgba(100, 10, 25, 0.25);
+}
+
+@keyframes tvdBloodDrop {
+  0% {
+    top: -28px;
+    opacity: 0;
+    transform: translateY(0) scale(0.7);
+  }
+  12% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+    transform: translateY(0) scale(1.1);
+  }
+}
+
+@keyframes tvdBloodGlow {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-grid > .team-card.team-tvd::before,
+  .team-grid > .team-card.team-tvd::after {
+    animation: none;
+  }
+}
