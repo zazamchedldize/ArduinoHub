@@ -10112,3 +10112,82 @@ body.iphone-install-open {
     animation: none !important;
   }
 }
+
+
+.team-tvd {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background: radial-gradient(ellipse at 50% 0%, rgba(139, 0, 25, 0.3), transparent 65%), linear-gradient(155deg, #1a090d 0%, #10080b 48%, #080709 100%) !important;
+  border: 1px solid rgba(176, 35, 58, 0.6) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.team-tvd::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 0 auto !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #6f071c, #e32648, #6f071c, transparent) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+.team-tvd::after {
+  content: "" !important;
+  position: absolute !important;
+  width: 170px !important;
+  height: 170px !important;
+  top: -95px !important;
+  right: -75px !important;
+  background: radial-gradient(circle, rgba(153, 0, 32, 0.25), transparent 70%) !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+.team-tvd:hover {
+  transform: translateY(-5px) !important;
+  border-color: #d52b4c !important;
+  box-shadow: 0 12px 32px rgba(105, 0, 24, 0.35), 0 0 22px rgba(157, 0, 35, 0.18) !important;
+}
+
+.team-tvd img {
+  transition: filter 0.35s ease, transform 0.4s ease !important;
+}
+
+.team-tvd:hover img {
+  filter: contrast(1.08) saturate(1.15) !important;
+}
+
+.team-tvd h2,
+.team-tvd h3,
+.team-tvd .member-name {
+  color: #f3dce1 !important;
+  text-shadow: 0 0 14px rgba(190, 20, 50, 0.25) !important;
+}
+
+.team-tvd p {
+  color: #c4aeb4 !important;
+}
+
+.team-tvd button {
+  border-color: rgba(181, 34, 59, 0.65) !important;
+}
+
+.team-tvd button:hover {
+  border-color: #e32648 !important;
+  box-shadow: 0 0 15px rgba(174, 0, 37, 0.3) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-tvd,
+  .team-tvd img {
+    transition: none !important;
+  }
+
+  .team-tvd:hover {
+    transform: none !important;
+  }
+}
