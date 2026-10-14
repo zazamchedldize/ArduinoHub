@@ -10349,3 +10349,25 @@ body.iphone-install-open {
 .team-grid > .team-card.team-tvd:not(.team-card-teacher) {
   order: 1 !important;
 }
+
+.team-card.bon-card {
+  background-image: url("images/bon.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.team-card.bon-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(5, 10, 8, 0.82),
+    rgba(5, 10, 8, 0.55)
+  );
+  z-index: -1;
+}
