@@ -10337,10 +10337,16 @@ body.iphone-install-open {
   }
 }
 
-.team-card.team-tvd {
-  order: 10 !important;
+
+.team-grid > .team-card {
+  order: 100 !important;
 }
 
-.team-card.team-tvd:has(h2) {
-  order: 10 !important;
+.team-grid > .team-card.team-card-teacher {
+  order: 0 !important;
 }
+
+.team-grid > .team-card.team-tvd:not(.team-card-teacher) {
+  order: 1 !important;
+}
+
