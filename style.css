@@ -10527,3 +10527,58 @@ body.iphone-install-open {
 .team-card.eshref-card .eshref-avatar span {
   color: #ffffff !important;
 }
+
+```css
+.team-card.damon1-team {
+  background:
+    linear-gradient(
+      110deg,
+      rgba(8, 12, 19, 0.88),
+      rgba(20, 30, 45, 0.74)
+    ),
+    url("images/damon1.jpg") center / cover no-repeat;
+  border-color: #394b63;
+}
+
+.team-card.damon1-team::before {
+  background: radial-gradient(
+    circle,
+    rgba(100, 145, 200, 0.18),
+    transparent 70%
+  );
+}
+
+.team-card.damon1-team:hover {
+  border-color: #718eaf;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.team-card.damon1-team .team-role {
+  color: #a8c1df;
+}
+
+.team-card.damon1-team h2 {
+  color: #f4f7fb;
+}
+
+.team-card.damon1-team .team-description {
+  color: #c5ceda;
+}
+
+.team-card.damon1-team .team-tags span {
+  background: rgba(100, 145, 200, 0.1);
+  border-color: rgba(130, 165, 205, 0.25);
+  color: #d9e6f5;
+}
+
+.team-card.damon1-team .damon1-avatar {
+  background: linear-gradient(135deg, #26374c, #0b111a) !important;
+  border: 1px solid #58718f !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+.team-card.damon1-team .damon1-avatar span {
+  color: #ffffff !important;
+}
+```
