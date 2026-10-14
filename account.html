@@ -1806,7 +1806,6 @@ async function saveAccountAttendanceRecord(date, memberIds, counted) {
   return record.id
 }
 
-
 function closeAccountAttendancePanel() {
   const panel = document.getElementById('account-attendance-panel')
 
@@ -1815,11 +1814,17 @@ function closeAccountAttendancePanel() {
   }
 
   document.body.style.overflow = ''
-  document.removeEventListener('keydown', accountAttendanceEscapeHandler)
+  document.removeEventListener(
+    'keydown',
+    accountAttendanceEscapeHandler
+  )
 }
 
 function accountAttendanceEscapeHandler(event) {
-  if (event.key === 'Escape') {
+  if (
+    event.key === 'Escape' &&
+    document.getElementById('account-attendance-panel')
+  ) {
     closeAccountAttendancePanel()
   }
 }
@@ -1831,22 +1836,15 @@ function updateAccountAttendanceCount() {
     return
   }
 
-  const selected = panel.querySelectorAll('.account-attendance-member-check:checked').length
+  const selected = panel.querySelectorAll(
+    '.account-attendance-member-check:checked'
+  ).length
+
   const counter = panel.querySelector('#account-attendance-selected-count')
 
   if (counter) {
     counter.textContent = String(selected)
   }
-  const copyCounter = panel.querySelector('#account-attendance-selected-count-copy')
-
-if (copyCounter) {
-  copyCounter.textContent = String(selected)
-}
-
-  panel.querySelectorAll('.attendance-member-card').forEach(card => {
-    const checkbox = card.querySelector('input[type="checkbox"]')
-    card.classList.toggle('is-selected', checkbox.checked)
-  })
 }
 
 function renderAccountAttendancePanel() {
@@ -1857,48 +1855,36 @@ function renderAccountAttendancePanel() {
   }
 
   const date = panel.querySelector('#account-attendance-date').value
-  const record = accountAttendanceRecords.find(item => item.meeting_date === date)
+
+  const record = accountAttendanceRecords.find(
+    item => item.meeting_date === date
+  )
+
   const selectedIds = record
-    ? (record.club_attendance_members || []).map(item => String(item.member_id))
+    ? (record.club_attendance_members || []).map(item => item.member_id)
     : []
 
-  const countedRecords = accountAttendanceRecords.filter(item => item.counted === true)
   const memberList = panel.querySelector('#account-attendance-members')
 
-  memberList.innerHTML = accountAttendanceMembers.map((member, index) => {
-    const present = selectedIds.includes(String(member.id))
-    const initial = Array.from(member.full_name || '?')[0] || '?'
+  memberList.innerHTML = accountAttendanceMembers.map(member => `
+    <label class="account-attendance-member">
+      <input
+        class="account-attendance-member-check"
+        type="checkbox"
+        value="${esc(member.id)}"
+        ${selectedIds.includes(member.id) ? 'checked' : ''}
+      >
+      <span>${esc(member.full_name)}</span>
+    </label>
+  `).join('')
 
-    return `
-      <label class="attendance-member-card ${present ? 'is-selected' : ''}">
-        <span class="attendance-member-number">${String(index + 1).padStart(2, '0')}</span>
-        <span class="attendance-member-avatar">${esc(initial)}</span>
-        <span class="attendance-member-details">
-          <strong>${esc(member.full_name)}</strong>
-          <small>${present ? 'შეხვედრას ესწრება' : 'არ არის მონიშნული'}</small>
-        </span>
-        <input
-          class="account-attendance-member-check"
-          type="checkbox"
-          value="${esc(member.id)}"
-          ${present ? 'checked' : ''}
-          aria-label="${esc(member.full_name)}"
-        >
-        <span class="attendance-member-checkmark">
-          <i data-lucide="check"></i>
-        </span>
-      </label>
-    `
-  }).join('')
-
-  panel.querySelector('#account-attendance-counted').checked = record?.counted === true
-  panel.querySelector('#attendance-total-meetings').textContent = String(countedRecords.length)
-  panel.querySelector('#attendance-total-members').textContent = String(accountAttendanceMembers.length)
-  panel.querySelector('#attendance-date-label').textContent = date
-    ? accountAttendanceDateText(date)
-    : 'თარიღი არჩეული არ არის'
+  panel.querySelector('#account-attendance-counted').checked =
+    record?.counted === true
 
   const history = panel.querySelector('#account-attendance-history')
+  const countedRecords = accountAttendanceRecords.filter(
+    item => item.counted === true
+  )
 
   history.innerHTML = countedRecords.length
     ? countedRecords.map(item => {
@@ -1909,28 +1895,26 @@ function renderAccountAttendancePanel() {
         return `
           <button
             type="button"
-            class="attendance-history-card ${item.meeting_date === date ? 'is-current' : ''}"
+            class="account-attendance-history-item"
             data-attendance-date="${esc(item.meeting_date)}"
           >
-            <span class="attendance-history-icon">
-              <i data-lucide="calendar-check"></i>
-            </span>
-            <span class="attendance-history-info">
-              <strong>${esc(accountAttendanceDateText(item.meeting_date))}</strong>
-              <small>${names.length} დამსწრე წევრი</small>
-            </span>
-            <i data-lucide="arrow-up-right" class="attendance-history-arrow"></i>
+            <span>${esc(accountAttendanceDateText(item.meeting_date))}</span>
+            <strong>${names.length} წევრი</strong>
           </button>
         `
       }).join('')
-    : '<div class="attendance-empty"><i data-lucide="calendar-days"></i><strong>ისტორია ჯერ ცარიელია</strong><span>ჩათვლილი შეხვედრები აქ გამოჩნდება.</span></div>'
+    : '<p class="account-attendance-muted">ჩათვლილი შეხვედრები ჯერ არ არის.</p>'
 
   updateAccountAttendanceCount()
   refreshIcons()
 }
 
 async function openAccountAttendancePanel() {
-  if (!currentUser || !attendanceManager || currentUser.id !== MARIA_USER_ID) {
+  if (
+    !currentUser ||
+    !attendanceManager ||
+    currentUser.id !== MARIA_USER_ID
+  ) {
     showMessage('დასწრების მართვის უფლება არ გაქვს.')
     return
   }
@@ -1941,884 +1925,681 @@ async function openAccountAttendancePanel() {
   panel.id = 'account-attendance-panel'
 
   panel.innerHTML = `
-    <style>
+<style>
+#account-attendance-panel {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background: rgba(2, 9, 7, 0.82) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  font-family: "FiraGO", "Inter", sans-serif !important;
+  animation: attendance-fade-in 0.25s ease both !important;
+}
+
+#account-attendance-panel .account-attendance-box {
+  width: min(760px, 100%) !important;
+  max-height: min(900px, 90dvh) !important;
+  overflow-y: auto !important;
+  padding: 30px !important;
+  color: #f1faf6 !important;
+  background: linear-gradient(145deg, #10231c, #091510 65%, #07110f) !important;
+  border: 1px solid rgba(105, 240, 188, 0.35) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 35px 110px rgba(0, 0, 0, 0.55), 0 0 35px rgba(34, 211, 149, 0.12) !important;
+  animation: attendance-panel-in 0.35s ease both !important;
+}
+
+#account-attendance-panel .account-attendance-heading {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  padding-bottom: 24px !important;
+  border-bottom: 1px solid rgba(135, 180, 158, 0.14) !important;
+}
+
+#account-attendance-panel .account-attendance-box h2 {
+  margin: 0 !important;
+  color: #f1faf6 !important;
+  font-size: clamp(23px, 4vw, 30px) !important;
+  font-weight: 800 !important;
+}
+
+#account-attendance-panel .account-attendance-member-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+#account-attendance-panel .account-attendance-member {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+  padding: 13px !important;
+  color: #dcece3 !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+  border: 1px solid rgba(135, 180, 158, 0.18) !important;
+  border-radius: 15px !important;
+  transition: all 0.2s ease !important;
+}
+
+#account-attendance-panel .account-attendance-member:hover {
+  background: rgba(34, 211, 149, 0.08) !important;
+  border-color: rgba(34, 211, 149, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
+
+#account-attendance-panel .account-attendance-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  min-height: 47px !important;
+  padding: 12px 17px !important;
+  color: #032016 !important;
+  background: linear-gradient(135deg, #69f0bc, #22d395) !important;
+  border: 1px solid transparent !important;
+  border-radius: 13px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+#account-attendance-panel .account-attendance-button.secondary {
+  color: #d8e7de !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  border-color: rgba(135, 180, 158, 0.25) !important;
+}
+
+#account-attendance-panel input[type="date"] {
+  width: 100% !important;
+  min-height: 45px !important;
+  padding: 10px 12px !important;
+  color: #f1faf6 !important;
+  color-scheme: dark !important;
+  background: #091510 !important;
+  border: 1px solid rgba(34, 211, 149, 0.3) !important;
+  border-radius: 11px !important;
+}
+
+#account-attendance-panel .account-attendance-history-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 13px 15px !important;
+  color: #e6f3eb !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+  border: 1px solid rgba(135, 180, 158, 0.18) !important;
+  border-radius: 13px !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+@keyframes attendance-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes attendance-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  #account-attendance-panel {
+    padding: 12px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    max-height: 92dvh !important;
+    padding: 21px 17px !important;
+    border-radius: 23px !important;
+  }
+
+  #account-attendance-panel .account-attendance-member-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+#account-attendance-panel {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 28px !important;
+  box-sizing: border-box !important;
+  background: rgba(2, 10, 8, 0.76) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+#account-attendance-panel .account-attendance-box {
+  width: min(720px, 100%) !important;
+  max-height: min(86vh, 820px) !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  padding: 30px !important;
+  margin: auto !important;
+  border: 1px solid rgba(34, 211, 149, 0.2) !important;
+  border-radius: 26px !important;
+  background:
+    radial-gradient(ellipse at top right, rgba(34, 211, 149, 0.12), transparent 42%),
+    radial-gradient(ellipse at bottom left, rgba(34, 211, 149, 0.045), transparent 45%),
+    linear-gradient(145deg, #0e1d19, #091310 65%, #07110f) !important;
+  color: #f0fdf7 !important;
+  box-shadow:
+    0 35px 100px rgba(0, 0, 0, 0.48),
+    0 12px 35px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.015),
+    0 0 45px rgba(34, 211, 149, 0.045) !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 149, 0.25) transparent;
+}
+
+#account-attendance-panel .account-attendance-box::-webkit-scrollbar {
+  width: 5px;
+}
+
+#account-attendance-panel .account-attendance-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#account-attendance-panel .account-attendance-box::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(34, 211, 149, 0.25);
+}
+
+#account-attendance-panel .account-attendance-box h2 {
+  margin-top: 0;
+  margin-bottom: 22px;
+  color: #f0fdf7;
+  font-size: clamp(21px, 3vw, 25px);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.6px;
+}
+
+#account-attendance-panel .account-attendance-box h3 {
+  margin-top: 24px;
+  margin-bottom: 13px;
+  color: #e8f5ee;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+#account-attendance-panel .account-attendance-box p {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #a5b8ad;
+  line-height: 1.7;
+}
+
+#account-attendance-panel .account-attendance-box label {
+  color: #c1d2c8;
+}
+
+#account-attendance-panel .account-attendance-box input[type="date"] {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 9px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  outline: none;
+  background: rgba(3, 12, 9, 0.62);
+  color: #f0fdf7;
+  color-scheme: dark;
+  font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#account-attendance-panel .account-attendance-box input:focus {
+  border-color: rgba(34, 211, 149, 0.6);
+  box-shadow: 0 0 0 4px rgba(34, 211, 149, 0.09);
+}
+
+#account-attendance-panel .account-attendance-member-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px !important;
+  margin-top: 16px;
+}
+
+#account-attendance-panel .account-attendance-member-list label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 14px 15px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.025);
+  color: #e8f5ee;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+#account-attendance-panel .account-attendance-member-list label:hover {
+  border-color: rgba(34, 211, 149, 0.32);
+  background: rgba(34, 211, 149, 0.065);
+  transform: translateY(-1px);
+}
+
+#account-attendance-panel .account-attendance-member-list input[type="checkbox"],
+#account-attendance-panel .account-attendance-box input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  accent-color: #22d395;
+  cursor: pointer;
+}
+
+#account-attendance-panel .account-attendance-box button {
+  min-height: 44px;
+  border-radius: 12px;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#account-attendance-panel .account-attendance-box button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+#account-attendance-panel .account-attendance-box button:focus-visible {
+  outline: 2px solid #22d395;
+  outline-offset: 3px;
+}
+
+#account-attendance-panel .account-attendance-box button:not(:disabled) {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  #account-attendance-panel {
+    padding: 16px !important;
+    align-items: center !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    width: 100% !important;
+    max-height: 88vh !important;
+    padding: 22px 18px !important;
+    border-radius: 22px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box h2 {
+    margin-bottom: 18px;
+    font-size: 21px;
+  }
+
+  #account-attendance-panel .account-attendance-box h3 {
+    margin-top: 21px;
+  }
+
+  #account-attendance-panel .account-attendance-member-list {
+    grid-template-columns: 1fr;
+    gap: 10px !important;
+  }
+
+  #account-attendance-panel .account-attendance-member-list label {
+    min-height: 52px;
+    padding: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  #account-attendance-panel {
+    padding: 12px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    padding: 19px 15px !important;
+    border-radius: 19px !important;
+  }
+}
+
+@media (max-height: 600px) and (min-width: 601px) {
+  #account-attendance-panel {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+
+  #account-attendance-panel .account-attendance-box {
+    max-height: 92vh !important;
+    padding: 22px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #account-attendance-panel *,
+  #account-attendance-panel *::before,
+  #account-attendance-panel *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
       #account-attendance-panel {
-        --att-green: #42f5b0;
-        --att-muted: #91a99e;
-        --att-border: rgba(151, 191, 171, .13);
         position: fixed;
         inset: 0;
         z-index: 999999;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 24px;
-        background: rgba(2, 8, 6, .82);
-        backdrop-filter: blur(22px);
-        -webkit-backdrop-filter: blur(22px);
+        padding: 18px;
+        overflow-y: auto;
+        background: rgba(0, 0, 0, .78);
         font-family: "FiraGO", "Inter", sans-serif;
-        animation: att-fade-in .25s ease both;
       }
 
-      #account-attendance-panel *,
-      #account-attendance-panel *::before,
-      #account-attendance-panel *::after {
-        box-sizing: border-box;
-      }
-
-      #account-attendance-panel .attendance-shell {
+      #account-attendance-panel .account-attendance-box {
         position: relative;
-        width: min(980px, 100%);
-        max-height: min(92vh, 960px);
-        max-height: min(92dvh, 960px);
-        overflow: auto;
-        color: #f2fff8;
-        background:
-          radial-gradient(ellipse at 95% 0%, rgba(43, 224, 155, .12), transparent 32%),
-          linear-gradient(155deg, #10251d 0%, #091610 48%, #07110d 100%);
-        border: 1px solid rgba(119, 236, 183, .19);
-        border-radius: 30px;
-        box-shadow: 0 35px 120px rgba(0, 0, 0, .55), 0 0 70px rgba(34, 211, 149, .06);
-        scrollbar-width: thin;
-        scrollbar-color: rgba(66, 245, 176, .28) transparent;
-        animation: att-rise-in .35s cubic-bezier(.2, .8, .2, 1) both;
+        width: min(760px, 100%);
+        max-height: 92vh;
+        overflow-y: auto;
+        padding: 24px;
+        color: #f1faf6;
+        background: #0d1c18;
+        border: 1px solid rgba(135, 180, 158, .22);
+        border-radius: 20px;
+        box-shadow: 0 25px 90px rgba(0, 0, 0, .45);
       }
 
-      #account-attendance-panel .attendance-hero {
-        position: relative;
-        overflow: hidden;
-        padding: 30px 32px 28px;
-        border-bottom: 1px solid var(--att-border);
-      }
-
-      #account-attendance-panel .attendance-hero::after {
-        content: "";
-        position: absolute;
-        width: 240px;
-        height: 240px;
-        right: -75px;
-        top: -145px;
-        border: 1px solid rgba(66, 245, 176, .14);
-        border-radius: 50%;
-        box-shadow: 0 0 0 24px rgba(66, 245, 176, .025), 0 0 0 50px rgba(66, 245, 176, .02);
-        pointer-events: none;
-      }
-
-      #account-attendance-panel .attendance-topline {
+      #account-attendance-panel .account-attendance-heading {
         display: flex;
-        justify-content: space-between;
         align-items: flex-start;
-        gap: 18px;
-      }
-
-      #account-attendance-panel .attendance-kicker {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 0 0 13px;
-        color: var(--att-green);
-        font-family: "Inter", sans-serif;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 2.4px;
-      }
-
-      #account-attendance-panel .attendance-live-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--att-green);
-        box-shadow: 0 0 12px rgba(66, 245, 176, .75);
-      }
-
-      #account-attendance-panel .attendance-hero h2 {
-        margin: 0;
-        color: #f2fff8;
-        font-size: clamp(25px, 4vw, 36px);
-        font-weight: 800;
-        letter-spacing: -1.1px;
-        line-height: 1.25;
-      }
-
-      #account-attendance-panel .attendance-hero-description {
-        max-width: 510px;
-        margin: 12px 0 0;
-        color: #9bb4a6;
-        font-size: 13px;
-        line-height: 1.8;
-      }
-
-      #account-attendance-panel .attendance-close {
-        display: grid;
-        place-items: center;
-        width: 44px;
-        height: 44px;
-        flex-shrink: 0;
-        color: #d6e9df;
-        background: rgba(255, 255, 255, .045);
-        border: 1px solid rgba(255, 255, 255, .09);
-        border-radius: 15px;
-        cursor: pointer;
-        transition: .2s ease;
-      }
-
-      #account-attendance-panel .attendance-close:hover {
-        color: var(--att-green);
-        background: rgba(66, 245, 176, .09);
-        border-color: rgba(66, 245, 176, .28);
-        transform: rotate(5deg);
-      }
-
-      #account-attendance-panel .attendance-close svg {
-        width: 20px;
-        height: 20px;
-      }
-
-      #account-attendance-panel .attendance-stats {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 27px;
-      }
-
-      #account-attendance-panel .attendance-stat {
-        min-width: 0;
-        padding: 17px 18px;
-        background: rgba(255, 255, 255, .027);
-        border: 1px solid var(--att-border);
-        border-radius: 17px;
-      }
-
-      #account-attendance-panel .attendance-stat-label {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #a2b8ac;
-        font-size: 11px;
-        line-height: 1.5;
-      }
-
-      #account-attendance-panel .attendance-stat-label svg {
-        width: 16px;
-        height: 16px;
-        color: var(--att-green);
-      }
-
-      #account-attendance-panel .attendance-stat-value {
-        display: block;
-        margin-top: 11px;
-        color: #f4fff9;
-        font-family: "Inter", sans-serif;
-        font-size: 29px;
-        font-weight: 800;
-        letter-spacing: -1px;
-      }
-
-      #account-attendance-panel .attendance-stat:first-child .attendance-stat-value {
-        color: var(--att-green);
-      }
-
-      #account-attendance-panel .attendance-content {
-        display: grid;
-        grid-template-columns: minmax(0, 1.55fr) minmax(245px, .8fr);
-        gap: 24px;
-        padding: 26px 32px 32px;
-      }
-
-      #account-attendance-panel .attendance-main-column,
-      #account-attendance-panel .attendance-side-column {
-        min-width: 0;
-      }
-
-      #account-attendance-panel .attendance-section-heading {
-        display: flex;
         justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
+        gap: 14px;
       }
 
-      #account-attendance-panel .attendance-section-heading h3 {
-        margin: 0;
-        color: #f0fff7;
-        font-size: 16px;
-        font-weight: 800;
+      #account-attendance-panel h2 {
+        margin: 0 0 8px;
+        font-size: 23px;
       }
 
-      #account-attendance-panel .attendance-section-heading p {
-        margin: 6px 0 0;
-        color: var(--att-muted);
-        font-size: 11px;
-        line-height: 1.6;
+      #account-attendance-panel h3 {
+        margin: 22px 0 12px;
+        font-size: 15px;
       }
 
-      #account-attendance-panel .attendance-count-pill {
-        flex-shrink: 0;
-        padding: 8px 11px;
-        color: var(--att-green);
-        background: rgba(66, 245, 176, .075);
-        border: 1px solid rgba(66, 245, 176, .17);
-        border-radius: 11px;
-        font-family: "Inter", sans-serif;
+      #account-attendance-panel p {
+        color: #91a69d;
         font-size: 12px;
-        font-weight: 800;
+        line-height: 1.7;
       }
 
-      #account-attendance-panel .attendance-date-wrap {
-        display: grid;
-        gap: 9px;
-        margin-bottom: 19px;
-        padding: 16px;
-        background: rgba(0, 0, 0, .17);
-        border: 1px solid var(--att-border);
-        border-radius: 16px;
+      #account-attendance-panel label {
+        font-size: 12px;
       }
 
-      #account-attendance-panel .attendance-date-wrap label {
-        color: #b4c9bd;
-        font-size: 11px;
-        font-weight: 700;
-      }
-
-      #account-attendance-panel #account-attendance-date {
+      #account-attendance-panel input[type="date"] {
+        display: block;
         width: 100%;
-        min-height: 46px;
-        padding: 0 13px;
-        color: #f2fff8;
+        margin-top: 8px;
+        padding: 12px;
+        color: #f1faf6;
         color-scheme: dark;
-        background: #09150f;
-        border: 1px solid rgba(151, 191, 171, .17);
-        border-radius: 11px;
-        outline: none;
+        background: #07110f;
+        border: 1px solid rgba(135, 180, 158, .25);
+        border-radius: 10px;
         font: inherit;
-        font-size: 13px;
-        transition: border-color .2s ease, box-shadow .2s ease;
       }
 
-      #account-attendance-panel #account-attendance-date:focus {
-        border-color: rgba(66, 245, 176, .55);
-        box-shadow: 0 0 0 4px rgba(66, 245, 176, .07);
-      }
-
-      #account-attendance-panel .attendance-date-caption {
-        color: #829b8e;
-        font-size: 11px;
-      }
-
-      #account-attendance-panel .attendance-member-list {
+      #account-attendance-panel .account-attendance-member-list {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        gap: 9px;
       }
 
-      #account-attendance-panel .attendance-member-card {
-        position: relative;
+      #account-attendance-panel .account-attendance-member {
         display: flex;
         align-items: center;
         gap: 10px;
         min-width: 0;
-        min-height: 77px;
         padding: 12px;
-        background: rgba(255, 255, 255, .025);
-        border: 1px solid rgba(151, 191, 171, .12);
-        border-radius: 15px;
-        cursor: pointer;
-        transition: border-color .2s ease, background .2s ease, transform .2s ease;
-      }
-
-      #account-attendance-panel .attendance-member-card:hover {
-        background: rgba(66, 245, 176, .045);
-        border-color: rgba(66, 245, 176, .28);
-        transform: translateY(-2px);
-      }
-
-      #account-attendance-panel .attendance-member-card.is-selected {
-        background: linear-gradient(125deg, rgba(66, 245, 176, .105), rgba(66, 245, 176, .035));
-        border-color: rgba(66, 245, 176, .36);
-      }
-
-      #account-attendance-panel .attendance-member-number {
-        align-self: flex-start;
-        color: #657d70;
-        font-family: "Inter", sans-serif;
-        font-size: 9px;
-        font-weight: 700;
-      }
-
-      #account-attendance-panel .attendance-member-avatar {
-        display: grid;
-        place-items: center;
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-        color: #d8fff0;
-        background: linear-gradient(145deg, #214b38, #10271c);
-        border: 1px solid rgba(66, 245, 176, .19);
-        border-radius: 12px;
-        font-size: 15px;
-        font-weight: 800;
-      }
-
-      #account-attendance-panel .attendance-member-details {
-        display: grid;
-        flex: 1;
-        min-width: 0;
-        gap: 5px;
-      }
-
-      #account-attendance-panel .attendance-member-details strong {
-        color: #e9f7ef;
-        font-size: 11px;
-        font-weight: 700;
-        line-height: 1.5;
-        overflow-wrap: anywhere;
-      }
-
-      #account-attendance-panel .attendance-member-details small {
-        color: #81998c;
-        font-size: 9px;
-        line-height: 1.5;
-      }
-
-      #account-attendance-panel .attendance-member-card.is-selected .attendance-member-details small {
-        color: var(--att-green);
-      }
-
-      #account-attendance-panel .attendance-member-checkmark {
-        display: grid;
-        place-items: center;
-        width: 21px;
-        height: 21px;
-        flex-shrink: 0;
-        color: transparent;
         background: rgba(255, 255, 255, .035);
-        border: 1px solid rgba(151, 191, 171, .22);
-        border-radius: 7px;
-        transition: .2s ease;
-      }
-
-      #account-attendance-panel .attendance-member-checkmark svg {
-        width: 13px;
-        height: 13px;
-      }
-
-      #account-attendance-panel .attendance-member-card.is-selected .attendance-member-checkmark {
-        color: #062017;
-        background: var(--att-green);
-        border-color: var(--att-green);
-      }
-
-      #account-attendance-panel .attendance-member-check {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        opacity: 0;
-      }
-
-      #account-attendance-panel .attendance-member-card:has(input:focus-visible) {
-        outline: 2px solid var(--att-green);
-        outline-offset: 3px;
-      }
-
-      #account-attendance-panel .attendance-side-card {
-        padding: 18px;
-        background: rgba(255, 255, 255, .025);
-        border: 1px solid var(--att-border);
-        border-radius: 18px;
-      }
-
-      #account-attendance-panel .attendance-side-card + .attendance-side-card {
-        margin-top: 14px;
-      }
-
-      #account-attendance-panel .attendance-side-title {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        margin: 0 0 16px;
-        color: #edf9f2;
-        font-size: 13px;
-        font-weight: 800;
-      }
-
-      #account-attendance-panel .attendance-side-title svg {
-        width: 17px;
-        height: 17px;
-        color: var(--att-green);
-      }
-
-      #account-attendance-panel .attendance-count-toggle {
-        display: flex;
-        align-items: flex-start;
-        gap: 11px;
-        padding: 13px;
-        background: rgba(66, 245, 176, .045);
-        border: 1px solid rgba(66, 245, 176, .15);
-        border-radius: 13px;
-        cursor: pointer;
-      }
-
-      #account-attendance-panel .attendance-count-toggle input {
-        width: 17px;
-        height: 17px;
-        flex-shrink: 0;
-        margin: 2px 0 0;
-        accent-color: #42f5b0;
-      }
-
-      #account-attendance-panel .attendance-count-toggle span {
-        display: grid;
-        gap: 5px;
-      }
-
-      #account-attendance-panel .attendance-count-toggle strong {
-        color: #dcf9e9;
-        font-size: 11px;
-      }
-
-      #account-attendance-panel .attendance-count-toggle small {
-        color: #8da99a;
-        font-size: 10px;
-        line-height: 1.7;
-      }
-
-      #account-attendance-panel .attendance-history {
-        display: grid;
-        gap: 8px;
-        max-height: 330px;
-        overflow-y: auto;
-      }
-
-      #account-attendance-panel .attendance-history-card {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-        min-width: 0;
-        padding: 12px;
-        color: #edf9f2;
-        background: rgba(255, 255, 255, .025);
-        border: 1px solid rgba(151, 191, 171, .11);
-        border-radius: 12px;
-        text-align: left;
-        cursor: pointer;
-        transition: .2s ease;
-      }
-
-      #account-attendance-panel .attendance-history-card:hover,
-      #account-attendance-panel .attendance-history-card.is-current {
-        background: rgba(66, 245, 176, .065);
-        border-color: rgba(66, 245, 176, .3);
-      }
-
-      #account-attendance-panel .attendance-history-icon {
-        display: grid;
-        place-items: center;
-        width: 35px;
-        height: 35px;
-        flex-shrink: 0;
-        color: var(--att-green);
-        background: rgba(66, 245, 176, .075);
-        border-radius: 11px;
-      }
-
-      #account-attendance-panel .attendance-history-icon svg {
-        width: 17px;
-        height: 17px;
-      }
-
-      #account-attendance-panel .attendance-history-info {
-        display: grid;
-        flex: 1;
-        min-width: 0;
-        gap: 5px;
-      }
-
-      #account-attendance-panel .attendance-history-info strong {
-        font-size: 10px;
-        line-height: 1.5;
-      }
-
-      #account-attendance-panel .attendance-history-info small {
-        color: #8fa89a;
-        font-size: 10px;
-      }
-
-      #account-attendance-panel .attendance-history-arrow {
-        width: 15px;
-        height: 15px;
-        flex-shrink: 0;
-        color: #809b8d;
-      }
-
-      #account-attendance-panel .attendance-empty {
-        display: grid;
-        justify-items: center;
-        gap: 8px;
-        padding: 24px 12px;
-        color: #91a99b;
-        text-align: center;
-      }
-
-      #account-attendance-panel .attendance-empty svg {
-        width: 25px;
-        height: 25px;
-        color: var(--att-green);
-      }
-
-      #account-attendance-panel .attendance-empty strong {
-        color: #e5f6ec;
-        font-size: 12px;
-      }
-
-      #account-attendance-panel .attendance-empty span {
-        font-size: 10px;
-        line-height: 1.7;
-      }
-
-      #account-attendance-panel .attendance-error {
-        margin: 14px 0 0;
-        color: #ffaaa9;
-        font-size: 12px;
-        line-height: 1.7;
+        border: 1px solid rgba(135, 180, 158, .16);
+        border-radius: 10px;
         overflow-wrap: anywhere;
       }
 
-      #account-attendance-panel .attendance-footer {
-        position: sticky;
-        bottom: 0;
+      #account-attendance-panel input[type="checkbox"] {
+        flex-shrink: 0;
+        accent-color: #22d395;
+      }
+
+      #account-attendance-panel .account-attendance-actions {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        gap: 14px;
-        padding: 18px 32px;
-        background: rgba(7, 17, 12, .94);
-        border-top: 1px solid var(--att-border);
-        backdrop-filter: blur(16px);
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
       }
 
-      #account-attendance-panel .attendance-footer-note {
-        color: #829b8d;
-        font-size: 10px;
-        line-height: 1.7;
-      }
-
-      #account-attendance-panel .attendance-footer-actions {
-        display: flex;
-        gap: 9px;
-      }
-
-      #account-attendance-panel .attendance-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-height: 45px;
-        padding: 0 16px;
-        border: 1px solid transparent;
-        border-radius: 12px;
-        font-family: inherit;
-        font-size: 11px;
+      #account-attendance-panel .account-attendance-button {
+        min-height: 40px;
+        padding: 10px 14px;
+        color: #032016;
+        background: #22d395;
+        border: 0;
+        border-radius: 9px;
+        font: inherit;
+        font-size: 12px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform .2s ease, background .2s ease;
       }
 
-      #account-attendance-panel .attendance-button:hover:not(:disabled) {
-        transform: translateY(-2px);
+      #account-attendance-panel .account-attendance-button.secondary {
+        color: #f1faf6;
+        background: rgba(255, 255, 255, .07);
+        border: 1px solid rgba(135, 180, 158, .2);
       }
 
-      #account-attendance-panel .attendance-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      #account-attendance-panel .attendance-button.primary {
-        color: #062016;
-        background: linear-gradient(120deg, #72ffca, #42f5b0);
-        box-shadow: 0 7px 22px rgba(66, 245, 176, .13);
-      }
-
-      #account-attendance-panel .attendance-button.secondary {
-        color: #d0e2d7;
-        background: rgba(255, 255, 255, .045);
-        border-color: rgba(151, 191, 171, .15);
-      }
-
-      #account-attendance-panel .attendance-button:disabled {
-        opacity: .55;
+      #account-attendance-panel .account-attendance-button:disabled {
+        opacity: .6;
         cursor: wait;
       }
 
-      @keyframes att-fade-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
+      #account-attendance-panel .account-attendance-close {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        color: #f1faf6;
+        background: rgba(255, 255, 255, .06);
+        border: 1px solid rgba(135, 180, 158, .2);
+        border-radius: 10px;
+        cursor: pointer;
       }
 
-      @keyframes att-rise-in {
-        from { opacity: 0; transform: translateY(14px) scale(.99); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
+      #account-attendance-panel .account-attendance-history {
+        display: grid;
+        gap: 8px;
       }
 
-      @media (max-width: 760px) {
+      #account-attendance-panel .account-attendance-history-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px;
+        color: #f1faf6;
+        background: rgba(255, 255, 255, .035);
+        border: 1px solid rgba(135, 180, 158, .16);
+        border-radius: 10px;
+        font: inherit;
+        font-size: 12px;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      #account-attendance-panel .account-attendance-history-item strong {
+        color: #69f0bc;
+        white-space: nowrap;
+      }
+
+      #account-attendance-panel .account-attendance-muted {
+        color: #91a69d;
+      }
+
+      #account-attendance-panel .account-attendance-error {
+        color: #ffb6b6;
+      }
+
+      @media (max-width: 520px) {
         #account-attendance-panel {
-          padding: 12px;
+          padding: 10px;
         }
 
-        #account-attendance-panel .attendance-shell {
-          max-height: 94vh;
-          max-height: 94dvh;
-          border-radius: 23px;
+        #account-attendance-panel .account-attendance-box {
+          padding: 18px;
         }
 
-        #account-attendance-panel .attendance-hero {
-          padding: 23px 21px;
-        }
-
-        #account-attendance-panel .attendance-content {
+        #account-attendance-panel .account-attendance-member-list {
           grid-template-columns: 1fr;
-          padding: 22px 21px;
-          gap: 20px;
-        }
-
-        #account-attendance-panel .attendance-stats {
-          gap: 8px;
-          margin-top: 21px;
-        }
-
-        #account-attendance-panel .attendance-stat {
-          padding: 13px 11px;
-          border-radius: 13px;
-        }
-
-        #account-attendance-panel .attendance-stat-value {
-          font-size: 24px;
-        }
-
-        #account-attendance-panel .attendance-stat-label {
-          align-items: flex-start;
-          font-size: 10px;
-        }
-
-        #account-attendance-panel .attendance-footer {
-          padding: 15px 21px;
-        }
-
-        #account-attendance-panel .attendance-footer-note {
-          display: none;
-        }
-
-        #account-attendance-panel .attendance-footer-actions {
-          width: 100%;
-        }
-
-        #account-attendance-panel .attendance-button {
-          flex: 1;
-          padding: 0 10px;
-        }
-      }
-
-      @media (max-width: 440px) {
-        #account-attendance-panel {
-          padding: 8px;
-        }
-
-        #account-attendance-panel .attendance-hero {
-          padding: 20px 16px;
-        }
-
-        #account-attendance-panel .attendance-hero h2 {
-          font-size: 25px;
-        }
-
-        #account-attendance-panel .attendance-hero-description {
-          font-size: 11px;
-        }
-
-        #account-attendance-panel .attendance-content {
-          padding: 19px 15px;
-        }
-
-        #account-attendance-panel .attendance-member-list {
-          grid-template-columns: 1fr;
-        }
-
-        #account-attendance-panel .attendance-member-card {
-          min-height: 68px;
-        }
-
-        #account-attendance-panel .attendance-stat-label {
-          display: grid;
-          gap: 5px;
-        }
-
-        #account-attendance-panel .attendance-stat-value {
-          margin-top: 8px;
-          font-size: 22px;
-        }
-
-        #account-attendance-panel .attendance-footer {
-          padding: 13px 15px;
-        }
-
-        #account-attendance-panel .attendance-button {
-          min-height: 43px;
-          font-size: 10px;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        #account-attendance-panel,
-        #account-attendance-panel * {
-          animation: none !important;
-          transition: none !important;
         }
       }
     </style>
 
-    <section class="attendance-shell" role="dialog" aria-modal="true" aria-labelledby="account-attendance-title">
-      <header class="attendance-hero">
-        <div class="attendance-topline">
-          <div>
-            <p class="attendance-kicker"><span class="attendance-live-dot"></span> ARDUINOHUB · CLUB SYSTEM</p>
-            <h2 id="account-attendance-title">დასწრების ცენტრი</h2>
-            <p class="attendance-hero-description">კლუბის შეხვედრების მართვა, წევრების მონიშვნა და დასწრების ისტორიის კონტროლი — ერთ სივრცეში.</p>
-          </div>
-          <button type="button" class="attendance-close" id="account-attendance-close" aria-label="დახურვა">
-            <i data-lucide="x"></i>
-          </button>
+    <section class="account-attendance-box" role="dialog" aria-modal="true" aria-labelledby="account-attendance-title">
+      <div class="account-attendance-heading">
+        <div>
+          <p style="margin-top:0;color:#22d395;letter-spacing:1.5px">CLUB ATTENDANCE</p>
+          <h2 id="account-attendance-title">დასწრების აღრიცხვა</h2>
+          <p>მონიშნე შეხვედრაზე დამსწრე კლუბის წევრები.</p>
         </div>
-
-        <div class="attendance-stats">
-          <div class="attendance-stat">
-            <span class="attendance-stat-label"><i data-lucide="calendar-check"></i> ჩათვლილი შეხვედრები</span>
-            <strong class="attendance-stat-value" id="attendance-total-meetings">0</strong>
-          </div>
-          <div class="attendance-stat">
-            <span class="attendance-stat-label"><i data-lucide="users-round"></i> აქტიური წევრები</span>
-            <strong class="attendance-stat-value" id="attendance-total-members">0</strong>
-          </div>
-          <div class="attendance-stat">
-            <span class="attendance-stat-label"><i data-lucide="user-check"></i> მონიშნულია</span>
-            <strong class="attendance-stat-value" id="account-attendance-selected-count">0</strong>
-          </div>
-        </div>
-      </header>
-
-      <div class="attendance-content">
-        <section class="attendance-main-column">
-          <div class="attendance-section-heading">
-            <div>
-              <h3>კლუბის წევრები</h3>
-              <p>დააჭირე წევრის ბარათს დასანიშნად.</p>
-            </div>
-            <span class="attendance-count-pill"><span id="account-attendance-selected-count-copy">0</span> წევრი</span>
-          </div>
-
-          <div class="attendance-date-wrap">
-            <label for="account-attendance-date">შეხვედრის თარიღი</label>
-            <input id="account-attendance-date" type="date">
-            <span class="attendance-date-caption" id="attendance-date-label">თარიღი არჩეული არ არის</span>
-          </div>
-
-          <div class="attendance-member-list" id="account-attendance-members"></div>
-        </section>
-
-        <aside class="attendance-side-column">
-          <section class="attendance-side-card">
-            <h3 class="attendance-side-title"><i data-lucide="badge-check"></i> შეხვედრის სტატუსი</h3>
-            <label class="attendance-count-toggle">
-              <input type="checkbox" id="account-attendance-counted">
-              <span>
-                <strong>შეხვედრის ჩათვლა</strong>
-                <small>ჩართე, თუ ეს შეხვედრა დასწრების ოფიციალურ სტატისტიკაში უნდა ჩაითვალოს.</small>
-              </span>
-            </label>
-          </section>
-
-          <section class="attendance-side-card">
-            <h3 class="attendance-side-title"><i data-lucide="history"></i> შეხვედრების ისტორია</h3>
-            <div class="attendance-history" id="account-attendance-history"></div>
-          </section>
-        </aside>
-
-        <p id="account-attendance-error" class="attendance-error" role="alert" style="grid-column:1/-1"></p>
+        <button type="button" class="account-attendance-close" id="account-attendance-close" aria-label="დახურვა">
+          <i data-lucide="x"></i>
+        </button>
       </div>
 
-      <footer class="attendance-footer">
-        <span class="attendance-footer-note">შენახვამდე გადაამოწმე თარიღი და მონიშნული წევრები.</span>
-        <div class="attendance-footer-actions">
-          <button type="button" class="attendance-button secondary" id="account-attendance-cancel">დახურვა</button>
-          <button type="button" class="attendance-button primary" id="account-attendance-save">
-            <i data-lucide="save"></i> დასწრების შენახვა
-          </button>
-        </div>
-      </footer>
+      <label>
+        შეხვედრის თარიღი
+        <input id="account-attendance-date" type="date">
+      </label>
+
+      <h3>დამსწრე წევრები · <span id="account-attendance-selected-count">0</span></h3>
+      <div class="account-attendance-member-list" id="account-attendance-members"></div>
+
+      <label class="account-attendance-actions">
+        <input type="checkbox" id="account-attendance-counted">
+        შეხვედრის ჩათვლა
+      </label>
+
+      <p id="account-attendance-error" class="account-attendance-error" role="alert"></p>
+
+      <div class="account-attendance-actions">
+        <button type="button" class="account-attendance-button" id="account-attendance-save">
+          <i data-lucide="save"></i> დასწრების შენახვა
+        </button>
+        <button type="button" class="account-attendance-button secondary" id="account-attendance-cancel">
+          გაუქმება
+        </button>
+      </div>
+
+      <h3>ჩათვლილი შეხვედრების ისტორია</h3>
+      <div class="account-attendance-history" id="account-attendance-history"></div>
     </section>
   `
 
   document.body.appendChild(panel)
   document.body.style.overflow = 'hidden'
 
-  panel.querySelector('#account-attendance-close').addEventListener('click', closeAccountAttendancePanel)
-  panel.querySelector('#account-attendance-cancel').addEventListener('click', closeAccountAttendancePanel)
-  panel.querySelector('#account-attendance-date').addEventListener('change', renderAccountAttendancePanel)
+  panel.querySelector('#account-attendance-close')
+    .addEventListener('click', closeAccountAttendancePanel)
 
-  panel.querySelector('#account-attendance-members').addEventListener('change', () => {
-    updateAccountAttendanceCount()
-    const counter = panel.querySelector('#account-attendance-selected-count-copy')
-    if (counter) {
-      counter.textContent = panel.querySelector('#account-attendance-selected-count').textContent
-    }
-  })
+  panel.querySelector('#account-attendance-cancel')
+    .addEventListener('click', closeAccountAttendancePanel)
 
-  panel.querySelector('#account-attendance-history').addEventListener('click', event => {
-    const button = event.target.closest('[data-attendance-date]')
+  panel.querySelector('#account-attendance-date')
+    .addEventListener('change', renderAccountAttendancePanel)
 
-    if (!button) {
-      return
-    }
+  panel.querySelector('#account-attendance-members')
+    .addEventListener('change', updateAccountAttendanceCount)
 
-    panel.querySelector('#account-attendance-date').value = button.dataset.attendanceDate
-    renderAccountAttendancePanel()
-  })
+  panel.querySelector('#account-attendance-history')
+    .addEventListener('click', event => {
+      const button = event.target.closest('[data-attendance-date]')
 
-  panel.querySelector('#account-attendance-save').addEventListener('click', async () => {
-    const date = panel.querySelector('#account-attendance-date').value
-    const errorBox = panel.querySelector('#account-attendance-error')
-    const saveButton = panel.querySelector('#account-attendance-save')
+      if (!button) {
+        return
+      }
 
-    errorBox.textContent = ''
+      panel.querySelector('#account-attendance-date').value =
+        button.dataset.attendanceDate
 
-    if (!date) {
-      errorBox.textContent = 'აირჩიე შეხვედრის თარიღი.'
-      return
-    }
-
-    const memberIds = Array.from(
-      panel.querySelectorAll('.account-attendance-member-check:checked')
-    ).map(input => input.value)
-
-    const counted = panel.querySelector('#account-attendance-counted').checked
-
-    saveButton.disabled = true
-    saveButton.innerHTML = '<i data-lucide="loader-circle"></i> ინახება...'
-    refreshIcons()
-
-    try {
-      await saveAccountAttendanceRecord(date, memberIds, counted)
-      accountAttendanceRecords = await getAccountAttendanceRecords()
       renderAccountAttendancePanel()
-      toast(counted ? 'შეხვედრა ჩათვლილია და დასწრება შენახულია.' : 'დასწრება შენახულია.')
-    } catch (error) {
-      console.error('Account attendance save error:', error)
-      errorBox.textContent = error.message || 'დასწრების შენახვა ვერ მოხერხდა.'
-    } finally {
-      saveButton.disabled = false
-      saveButton.innerHTML = '<i data-lucide="save"></i> დასწრების შენახვა'
-      refreshIcons()
-    }
-  })
+    })
+
+  panel.querySelector('#account-attendance-save')
+    .addEventListener('click', async () => {
+      const date = panel.querySelector('#account-attendance-date').value
+      const errorBox = panel.querySelector('#account-attendance-error')
+      const saveButton = panel.querySelector('#account-attendance-save')
+
+      errorBox.textContent = ''
+
+      if (!date) {
+        errorBox.textContent = 'აირჩიე შეხვედრის თარიღი.'
+        return
+      }
+
+      const memberIds = Array.from(
+        panel.querySelectorAll('.account-attendance-member-check:checked')
+      ).map(input => input.value)
+
+      const counted = panel.querySelector('#account-attendance-counted').checked
+
+      saveButton.disabled = true
+      saveButton.textContent = 'ინახება...'
+
+      try {
+        await saveAccountAttendanceRecord(date, memberIds, counted)
+
+        accountAttendanceRecords = await getAccountAttendanceRecords()
+
+        renderAccountAttendancePanel()
+
+        toast(
+          counted
+            ? 'შეხვედრა ჩათვლილია და დასწრება შენახულია.'
+            : 'დასწრება შენახულია.'
+        )
+      } catch (error) {
+        console.error('Account attendance save error:', error)
+        errorBox.textContent = error.message || 'დასწრების შენახვა ვერ მოხერხდა.'
+      } finally {
+        saveButton.disabled = false
+        saveButton.innerHTML = '<i data-lucide="save"></i> დასწრების შენახვა'
+        refreshIcons()
+      }
+    })
 
   document.addEventListener('keydown', accountAttendanceEscapeHandler)
 
@@ -2827,13 +2608,11 @@ async function openAccountAttendancePanel() {
     accountAttendanceRecords = await getAccountAttendanceRecords()
 
     const dateInput = panel.querySelector('#account-attendance-date')
-    dateInput.value = accountAttendanceRecords[0]?.meeting_date || new Date().toISOString().slice(0, 10)
+    dateInput.value =
+      accountAttendanceRecords[0]?.meeting_date ||
+      new Date().toISOString().slice(0, 10)
 
     renderAccountAttendancePanel()
-
-    panel.querySelector('#account-attendance-selected-count-copy').textContent =
-      panel.querySelector('#account-attendance-selected-count').textContent
-
     refreshIcons()
   } catch (error) {
     console.error('Account attendance load error:', error)
@@ -2841,3 +2620,186 @@ async function openAccountAttendancePanel() {
       error.message || 'დასწრების მონაცემების ჩატვირთვა ვერ მოხერხდა.'
   }
 }
+
+async function loadAccount() {
+  if (!db) {
+    window.location.replace('login.html')
+    return
+  }
+
+  const {
+    data: { session },
+    error
+  } = await db.auth.getSession()
+
+  if (error) {
+    throw error
+  }
+
+  if (!session?.user) {
+    window.location.replace('login.html')
+    return
+  }
+
+  currentUser = session.user
+
+  const [admin, manager] = await Promise.all([
+    isAdmin(currentUser),
+    isAttendanceManager(currentUser)
+  ])
+
+  attendanceManager = manager
+
+  const name = getDisplayName(currentUser)
+
+  $('#account-name').textContent = name
+  $('#account-email').textContent = currentUser.email || 'ელფოსტა მითითებული არ არის'
+  $('#account-avatar').textContent = Array.from(name.trim())[0]?.toUpperCase() || 'A'
+
+  const role = $('#account-role')
+
+  if (admin) {
+    role.innerHTML = '<i data-lucide="shield-check"></i> ადმინისტრატორი'
+    $('#account-admin-toggle').hidden = false
+
+    await Promise.all([
+      loadAdminProjects(),
+      loadAdminMeeting()
+    ])
+  } else if (manager) {
+    role.innerHTML = '<i data-lucide="calendar-check"></i> დასწრების მენეჯერი'
+  } else {
+    role.innerHTML = '<i data-lucide="user-round"></i> მომხმარებელი'
+  }
+
+  if (manager) {
+    $('#account-attendance-button').hidden = false
+  }
+
+  loading.hidden = true
+  content.hidden = false
+
+  refreshIcons()
+}
+
+$('#account-admin-toggle').addEventListener('click', () => {
+  const panel = $('#admin-panel')
+
+  panel.hidden = !panel.hidden
+
+  $('#account-admin-toggle').setAttribute(
+    'aria-expanded',
+    String(!panel.hidden)
+  )
+
+  $('#admin-toggle-icon').setAttribute(
+    'data-lucide',
+    panel.hidden ? 'chevron-down' : 'chevron-up'
+  )
+
+  refreshIcons()
+
+  if (!panel.hidden) {
+    panel.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
+})
+
+$('#account-logout-button').addEventListener('click', async () => {
+  const button = $('#account-logout-button')
+
+  button.disabled = true
+  message.className = 'account-message'
+
+  try {
+    const { error } = await db.auth.signOut()
+
+    if (error) {
+      throw error
+    }
+
+    window.location.replace('login.html')
+  } catch (error) {
+    console.error('Sign out error:', error)
+    showMessage('ანგარიშიდან გამოსვლა ვერ მოხერხდა. სცადე ხელახლა.')
+    button.disabled = false
+  }
+})
+
+
+$('#account-attendance-button').addEventListener('click', () => {
+  openAccountAttendancePanel()
+})
+
+
+$('#meeting-form').addEventListener('submit', saveMeeting)
+$('#clear-meeting').addEventListener('click', clearMeeting)
+
+function updateMeetingPreview() {
+  const date = $('#meeting-date').value
+  const time = $('#meeting-time').value
+
+  $('#meeting-day-preview').textContent =
+    `${meetingDay(date)}${time ? ` · ${time}` : ''}`
+}
+
+$('#meeting-date').addEventListener('input', updateMeetingPreview)
+$('#meeting-time').addEventListener('input', updateMeetingPreview)
+
+$('#new-project-button').addEventListener('click', () => openEditor())
+$('#cancel-edit').addEventListener('click', closeEditor)
+$('#project-form').addEventListener('submit', saveProject)
+$('#image-file').addEventListener('change', imagePreview)
+
+$('#video-file').addEventListener('change', () => {
+  $('#video-name').textContent =
+    $('#video-file').files[0]?.name || 'ფაილი არჩეული არ არის'
+})
+
+$('#category').addEventListener('change', updateCodeFieldLabel)
+
+$('#admin-refresh').addEventListener('click', async () => {
+  await Promise.all([
+    loadAdminProjects(),
+    loadAdminMeeting()
+  ])
+
+  toast('მონაცემები განახლდა.')
+})
+
+$('#admin-project-list').addEventListener('click', async event => {
+  const edit = event.target.closest('[data-edit]')
+  const publish = event.target.closest('[data-publish]')
+  const remove = event.target.closest('[data-delete]')
+
+  if (edit) {
+    const project = adminProjects.find(
+      item => String(item.id) === String(edit.dataset.edit)
+    )
+
+    if (project) {
+      openEditor(project)
+    }
+  } else if (publish) {
+    await togglePublished(publish.dataset.publish)
+  } else if (remove) {
+    await deleteProject(remove.dataset.delete)
+  }
+})
+
+if (db) {
+  loadAccount().catch(error => {
+    console.error('Account loading error:', error)
+    showMessage('ანგარიშის მონაცემების ჩატვირთვა ვერ მოხერხდა.')
+    loading.hidden = true
+  })
+} else {
+  window.location.replace('login.html')
+}
+
+refreshIcons()
+</script>
+</body>
+</html>
