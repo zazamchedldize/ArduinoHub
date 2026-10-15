@@ -5772,6 +5772,18 @@ async function openPublicAttendanceModal() {
   box-shadow: 0 0 0 1px rgba(255, 207, 82, 0.12), 0 0 22px rgba(255, 190, 55, 0.22), 0 12px 35px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 231, 160, 0.18) !important;
 }
 
+#public-attendance-modal .top-name,
+#public-attendance-modal .top-percent {
+  color: #ffd76a !important;
+  text-shadow: 0 0 10px rgba(255, 198, 60, 0.28) !important;
+}
+
+#public-attendance-modal .top-badge {
+  color: #ffe8a3 !important;
+  background: rgba(235, 177, 49, 0.16) !important;
+  border: 1px solid rgba(255, 207, 82, 0.45) !important;
+  box-shadow: 0 0 12px rgba(255, 190, 55, 0.12) !important;
+}
 #public-attendance-modal .attendance-admin-member.second-attendance-card {
   border: 1px solid rgba(210, 220, 235, 0.8) !important;
   background: linear-gradient(135deg, rgba(205, 215, 230, 0.18), rgba(65, 76, 95, 0.12), rgba(17, 20, 25, 0.96)) !important;
