@@ -11158,6 +11158,48 @@ body.iphone-install-open {
   overflow: visible !important;
 }
 
+#public-attendance-modal .attendance-admin-member {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+#public-attendance-modal .top-rank-badge,
+#public-attendance-modal .second-rank-badge,
+#public-attendance-modal .third-rank-badge {
+  position: absolute !important;
+  top: -10px !important;
+  left: -9px !important;
+  z-index: 20 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  flex: none !important;
+}
+
+#public-attendance-modal .top-rank-badge {
+  background: linear-gradient(135deg, #22d395, #087f5b) !important;
+  color: #07110f !important;
+  border: 1px solid #75f0c0 !important;
+  box-shadow: 0 0 16px rgba(34, 211, 149, .4) !important;
+}
+
+#public-attendance-modal .second-rank-badge {
+  background: linear-gradient(135deg, #d8dee8, #7f8a9a) !important;
+  color: #18202b !important;
+}
+
+#public-attendance-modal .third-rank-badge {
+  background: linear-gradient(135deg, #d99a6b, #8f542f) !important;
+  color: #fff !important;
+}
+
+
 #public-attendance-modal .third-rank-badge {
   color: #fff0e5 !important;
   background: linear-gradient(135deg, #8f542f, #d99a6b) !important;
