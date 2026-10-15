@@ -11129,3 +11129,43 @@ body.iphone-install-open {
 .attendance-admin-member.third-attendance-card .attendance-admin-member-value strong {
   color: #e9a66c !important;
 }
+
+
+#public-attendance-modal .attendance-admin-member.second-attendance-card {
+  position: relative !important;
+  border: 1px solid #c0c7d1 !important;
+  background: linear-gradient(135deg, rgba(192, 199, 209, 0.12) 0%, rgba(7, 17, 15, 0.96) 55%, rgba(35, 42, 53, 0.98) 100%) !important;
+  box-shadow: 0 0 0 1px rgba(192, 199, 209, 0.08), 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(192, 199, 209, 0.12), inset 0 1px 0 rgba(235, 240, 248, 0.12) !important;
+  overflow: visible !important;
+}
+
+#public-attendance-modal .second-rank-badge {
+  color: #f1f5f9 !important;
+  background: linear-gradient(135deg, #7f8a9a, #d8dee8) !important;
+  border: 1px solid #e1e6ed !important;
+  box-shadow: 0 0 18px rgba(192, 199, 209, 0.2) !important;
+}
+
+#public-attendance-modal .second-attendance-card .attendance-admin-member-value strong {
+  color: #d8dee8 !important;
+}
+
+#public-attendance-modal .attendance-admin-member.third-attendance-card {
+  position: relative !important;
+  border: 1px solid #bd8057 !important;
+  background: linear-gradient(135deg, rgba(189, 128, 87, 0.12) 0%, rgba(7, 17, 15, 0.96) 55%, rgba(48, 30, 22, 0.98) 100%) !important;
+  box-shadow: 0 0 0 1px rgba(189, 128, 87, 0.08), 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 25px rgba(189, 128, 87, 0.12), inset 0 1px 0 rgba(238, 190, 157, 0.12) !important;
+  overflow: visible !important;
+}
+
+#public-attendance-modal .third-rank-badge {
+  color: #fff0e5 !important;
+  background: linear-gradient(135deg, #8f542f, #d99a6b) !important;
+  border: 1px solid #e5b18b !important;
+  box-shadow: 0 0 18px rgba(189, 128, 87, 0.2) !important;
+}
+
+#public-attendance-modal .third-attendance-card .attendance-admin-member-value strong {
+  color: #d99a6b !important;
+}
+
