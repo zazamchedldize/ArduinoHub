@@ -11036,3 +11036,26 @@ body.iphone-install-open {
   }
 }
 
+.attendance-admin-member.second-attendance-card {
+  border: 1px solid rgba(192, 202, 214, 0.7) !important;
+  background: linear-gradient(135deg, rgba(192, 202, 214, 0.14), rgba(80, 90, 105, 0.06)) !important;
+  box-shadow: 0 0 18px rgba(192, 202, 214, 0.1) !important;
+}
+
+.second-place-icon {
+  color: #c0c0c0 !important;
+  font-size: 25px !important;
+  filter: drop-shadow(0 0 5px rgba(192, 192, 192, 0.4)) !important;
+}
+
+.attendance-admin-member.third-attendance-card {
+  border: 1px solid rgba(205, 127, 50, 0.75) !important;
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.16), rgba(100, 55, 20, 0.06)) !important;
+  box-shadow: 0 0 18px rgba(205, 127, 50, 0.12) !important;
+}
+
+.third-place-icon {
+  color: #cd7f32 !important;
+  font-size: 25px !important;
+  filter: drop-shadow(0 0 5px rgba(205, 127, 50, 0.4)) !important;
+}
