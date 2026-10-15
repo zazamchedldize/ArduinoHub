@@ -5766,7 +5766,75 @@ async function openPublicAttendanceModal() {
 
   modal.innerHTML = `
     <style>
-  
+    #public-attendance-modal .attendance-admin-member.top-attendance-card {
+  border: 1px solid #f5c451 !important;
+  background: linear-gradient(135deg, rgba(255, 207, 82, 0.22), rgba(89, 62, 18, 0.18) 48%, rgba(17, 20, 25, 0.96)) !important;
+  box-shadow: 0 0 0 1px rgba(255, 207, 82, 0.12), 0 0 22px rgba(255, 190, 55, 0.22), 0 12px 35px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 231, 160, 0.18) !important;
+}
+
+#public-attendance-modal .attendance-admin-member.second-attendance-card {
+  border: 1px solid rgba(210, 220, 235, 0.8) !important;
+  background: linear-gradient(135deg, rgba(205, 215, 230, 0.18), rgba(65, 76, 95, 0.12), rgba(17, 20, 25, 0.96)) !important;
+  box-shadow: 0 0 18px rgba(192, 205, 225, 0.16), inset 0 1px 0 rgba(235, 242, 255, 0.12) !important;
+}
+
+#public-attendance-modal .attendance-admin-member.third-attendance-card {
+  border: 1px solid rgba(213, 145, 99, 0.85) !important;
+  background: linear-gradient(135deg, rgba(205, 126, 75, 0.2), rgba(94, 54, 31, 0.12), rgba(17, 20, 25, 0.96)) !important;
+  box-shadow: 0 0 18px rgba(205, 126, 75, 0.18), inset 0 1px 0 rgba(255, 205, 165, 0.12) !important;
+}
+
+#public-attendance-modal .attendance-admin-member {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+#public-attendance-modal .attendance-admin-member:not(.top-attendance-card):not(.second-attendance-card):not(.third-attendance-card) {
+  border: 1px solid rgba(34, 211, 149, 0.22) !important;
+  background: linear-gradient(135deg, rgba(34, 211, 149, 0.07), rgba(7, 17, 15, 0.92)) !important;
+  box-shadow: 0 0 12px rgba(34, 211, 149, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+#public-attendance-modal .attendance-admin-member:hover {
+  transform: translateY(-2px) !important;
+}
+
+#public-attendance-modal .attendance-admin-member.top-attendance-card:hover {
+  box-shadow: 0 0 28px rgba(255, 190, 55, 0.32), 0 14px 35px rgba(0, 0, 0, 0.35) !important;
+}
+
+#public-attendance-modal .attendance-admin-member.second-attendance-card:hover {
+  box-shadow: 0 0 24px rgba(192, 205, 225, 0.24) !important;
+}
+
+#public-attendance-modal .attendance-admin-member.third-attendance-card:hover {
+  box-shadow: 0 0 24px rgba(205, 126, 75, 0.28) !important;
+}
+  #public-attendance-modal-content {
+  isolation: isolate !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+#public-attendance-modal .attendance-admin-member {
+  isolation: isolate !important;
+  z-index: 0 !important;
+}
+
+#public-attendance-modal .top-rank-badge,
+#public-attendance-modal .second-rank-badge,
+#public-attendance-modal .third-rank-badge {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+#public-attendance-modal .attendance-admin-member:hover {
+  z-index: 2 !important;
+}
+
+#public-attendance-modal .attendance-admin-member::before,
+#public-attendance-modal .attendance-admin-member::after {
+  pointer-events: none !important;
+}
 #public-attendance-modal .attendance-admin-member {
   display: flex !important;
   align-items: center !important;
