@@ -11059,3 +11059,73 @@ body.iphone-install-open {
   font-size: 25px !important;
   filter: drop-shadow(0 0 5px rgba(205, 127, 50, 0.4)) !important;
 }
+
+
+
+.attendance-admin-member.second-attendance-card {
+  border: 1px solid rgba(210, 220, 235, 0.65) !important;
+  background: linear-gradient(110deg, rgba(192, 205, 225, 0.16), rgba(120, 135, 155, 0.06)) !important;
+  box-shadow: 0 0 22px rgba(192, 205, 225, 0.1), inset 0 0 16px rgba(220, 230, 245, 0.035) !important;
+}
+
+.attendance-admin-member.second-attendance-card:hover {
+  border-color: rgba(220, 230, 245, 0.9) !important;
+  background: linear-gradient(110deg, rgba(192, 205, 225, 0.23), rgba(120, 135, 155, 0.1)) !important;
+}
+
+.attendance-admin-member.second-attendance-card .second-place-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(220, 230, 245, 0.4) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(135deg, rgba(220, 230, 245, 0.22), rgba(140, 155, 180, 0.12)) !important;
+  font-size: 20px !important;
+  box-shadow: 0 0 14px rgba(220, 230, 245, 0.12) !important;
+}
+
+.attendance-admin-member.third-attendance-card {
+  border: 1px solid rgba(220, 145, 80, 0.65) !important;
+  background: linear-gradient(110deg, rgba(205, 127, 50, 0.17), rgba(120, 65, 25, 0.06)) !important;
+  box-shadow: 0 0 22px rgba(205, 127, 50, 0.1), inset 0 0 16px rgba(240, 160, 80, 0.035) !important;
+}
+
+.attendance-admin-member.third-attendance-card:hover {
+  border-color: rgba(240, 170, 100, 0.9) !important;
+  background: linear-gradient(110deg, rgba(205, 127, 50, 0.24), rgba(120, 65, 25, 0.1)) !important;
+}
+
+.attendance-admin-member.third-attendance-card .third-place-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(230, 155, 90, 0.45) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(135deg, rgba(230, 155, 90, 0.24), rgba(150, 80, 35, 0.12)) !important;
+  font-size: 20px !important;
+  box-shadow: 0 0 14px rgba(230, 155, 90, 0.13) !important;
+}
+
+.attendance-admin-member.second-attendance-card .member-name-row strong,
+.attendance-admin-member.second-attendance-card > div:first-child strong {
+  color: #dce5f2 !important;
+}
+
+.attendance-admin-member.third-attendance-card .member-name-row strong,
+.attendance-admin-member.third-attendance-card > div:first-child strong {
+  color: #efbd91 !important;
+}
+
+.attendance-admin-member.second-attendance-card .attendance-admin-member-value strong {
+  color: #cbd5e1 !important;
+}
+
+.attendance-admin-member.third-attendance-card .attendance-admin-member-value strong {
+  color: #e9a66c !important;
+}
