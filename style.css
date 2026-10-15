@@ -10537,6 +10537,7 @@ body.iphone-install-open {
     rgba(15, 25, 39, 0.58)
   ),
   url("images/damon1.jpg") center 30% / cover no-repeat;
+  border-color: #53657b;
 }
 
 .team-card.damon1-team::before {
