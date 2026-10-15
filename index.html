@@ -99,6 +99,925 @@
   </script>
 
   <style>
+/* ARDUINOHUB HALLOWEEN THEME */
+
+
+:root {
+  --halloween-orange: #ff7518 !important;
+  --halloween-orange-light: #ffad42 !important;
+  --halloween-purple: #a855f7 !important;
+  --halloween-bg: #09060e !important;
+  --halloween-card: #130d1b !important;
+  --halloween-text: #fff7ed !important;
+  --halloween-muted: #b7a8c6 !important;
+  --halloween-border: rgba(255, 117, 24, .24) !important;
+}
+
+html {
+  scroll-behavior: smooth !important;
+  background: var(--halloween-bg) !important;
+}
+
+body,
+body[data-page="home"] {
+  background:
+    radial-gradient(ellipse at 12% 12%, rgba(255, 91, 0, .11), transparent 32%),
+    radial-gradient(ellipse at 88% 32%, rgba(139, 45, 226, .12), transparent 34%),
+    radial-gradient(ellipse at 50% 75%, rgba(255, 117, 24, .045), transparent 40%),
+    #09060e !important;
+  color: var(--halloween-text) !important;
+  font-family: "FiraGO", "Inter", sans-serif !important;
+}
+
+body::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  opacity: .15 !important;
+  background-image:
+    radial-gradient(circle at 20% 30%, #ff7518 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 65%, #a855f7 0 1px, transparent 2px),
+    radial-gradient(circle at 48% 85%, #ffad42 0 1px, transparent 2px) !important;
+  background-size: 137px 163px, 193px 211px, 173px 191px !important;
+  animation: halloween-atmosphere 16s linear infinite alternate !important;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+body > .arduino-splash {
+  z-index: 9999999 !important;
+}
+
+@keyframes halloween-atmosphere {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -18px, 0); }
+}
+
+::selection {
+  background: rgba(255, 117, 24, .38) !important;
+  color: #fff !important;
+}
+
+a {
+  transition: color .25s ease, border-color .25s ease, background .25s ease !important;
+}
+
+.site-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  background: rgba(9, 6, 14, .88) !important;
+  border-bottom: 1px solid var(--halloween-border) !important;
+  backdrop-filter: blur(22px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(140%) !important;
+  box-shadow: 0 8px 35px rgba(0, 0, 0, .22) !important;
+}
+
+.brand,
+.site-header .brand,
+footer .brand {
+  color: #fff7ed !important;
+  text-shadow: 0 0 22px rgba(255, 117, 24, .12) !important;
+}
+
+.brand-mark {
+  color: var(--halloween-orange) !important;
+  text-shadow: 0 0 18px rgba(255, 117, 24, .6) !important;
+}
+
+.brand span:last-child {
+  color: var(--halloween-orange) !important;
+}
+
+.site-header nav a,
+.site-header nav button {
+  color: #cbbdd9 !important;
+  transition: color .25s ease, background .25s ease, transform .25s ease !important;
+}
+
+.site-header nav a:hover,
+.site-header nav button:hover,
+.site-header nav a.active {
+  color: var(--halloween-orange-light) !important;
+  background: rgba(255, 117, 24, .09) !important;
+}
+
+.site-header nav a.active {
+  box-shadow: inset 0 -2px var(--halloween-orange) !important;
+}
+
+.menu-toggle {
+  color: var(--halloween-orange-light) !important;
+  border-color: var(--halloween-border) !important;
+  background: rgba(255, 117, 24, .08) !important;
+}
+
+.nav-meeting,
+.nav-admin {
+  border-color: var(--halloween-border) !important;
+  border-radius: 12px !important;
+}
+
+.hero {
+  position: relative !important;
+  isolation: isolate !important;
+  background:
+    radial-gradient(ellipse at 76% 35%, rgba(145, 48, 216, .14), transparent 36%),
+    radial-gradient(ellipse at 10% 80%, rgba(255, 117, 24, .10), transparent 40%) !important;
+}
+
+.hero::after {
+  content: "☾" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  top: 8% !important;
+  right: 8% !important;
+  color: rgba(255, 117, 24, .10) !important;
+  font-size: clamp(100px, 19vw, 240px) !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  animation: halloween-moon 6s ease-in-out infinite !important;
+}
+
+@keyframes halloween-moon {
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50% { transform: translateY(-12px) rotate(4deg); }
+}
+
+.eyebrow,
+.hero .eyebrow {
+  color: var(--halloween-orange-light) !important;
+  letter-spacing: 2px !important;
+}
+
+.hero h1,
+.hero h2,
+.section h2,
+.cta h2,
+.suggestion-content h2 {
+  color: #fff7ed !important;
+  text-shadow: 0 0 35px rgba(255, 117, 24, .08) !important;
+}
+
+.hero h1 em {
+  color: var(--halloween-orange) !important;
+  text-shadow: 0 0 32px rgba(255, 117, 24, .2) !important;
+}
+
+.hero-text,
+.arduinohub-film-description,
+.section > p:not(.eyebrow),
+.steps article p,
+.suggestion-content > p:not(.eyebrow) {
+  color: var(--halloween-muted) !important;
+}
+
+.button,
+button.primary,
+.hero-attendance-btn,
+.albums-home-btn {
+  border: 1px solid rgba(255, 117, 24, .65) !important;
+  border-radius: 13px !important;
+  background: linear-gradient(135deg, #ff7518, #d9480f) !important;
+  color: #fff !important;
+  box-shadow: 0 7px 24px rgba(255, 91, 0, .15) !important;
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease !important;
+}
+
+.button:hover,
+button.primary:hover,
+.hero-attendance-btn:hover,
+.albums-home-btn:hover {
+  transform: translateY(-3px) !important;
+  filter: brightness(1.12) !important;
+  box-shadow: 0 12px 32px rgba(255, 91, 0, .28) !important;
+}
+
+.button.primary,
+.hero .button.primary {
+  color: #fff !important;
+}
+
+.hero .albums-home-btn {
+  background: rgba(168, 85, 247, .10) !important;
+  color: #d8b4fe !important;
+  border-color: rgba(168, 85, 247, .5) !important;
+  box-shadow: 0 0 24px rgba(168, 85, 247, .06) !important;
+}
+
+.hero .albums-home-btn:hover {
+  background: rgba(168, 85, 247, .2) !important;
+  border-color: #c084fc !important;
+}
+
+.hero-attendance-btn {
+  background: rgba(255, 117, 24, .10) !important;
+  color: #ffad42 !important;
+}
+
+.arduinohub-film-section,
+.section,
+.cta,
+.suggestion-section {
+  position: relative !important;
+  background-color: transparent !important;
+}
+
+.arduinohub-film-eyebrow {
+  color: var(--halloween-orange) !important;
+  letter-spacing: 3px !important;
+}
+
+.arduinohub-film-title span {
+  color: var(--halloween-orange) !important;
+  text-shadow: 0 0 25px rgba(255, 117, 24, .2) !important;
+}
+
+.arduinohub-film-frame {
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 117, 24, .32) !important;
+  border-radius: 24px !important;
+  background: #0d0812 !important;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, .45), 0 0 35px rgba(255, 117, 24, .07) !important;
+}
+
+.arduinohub-film-frame video {
+  display: block !important;
+  width: 100% !important;
+  border-radius: inherit !important;
+}
+
+.arduinohub-film-caption {
+  color: #ffad42 !important;
+}
+
+.steps article,
+.suggestion-card,
+.hologram-card {
+  border: 1px solid var(--halloween-border) !important;
+  border-radius: 22px !important;
+  background: linear-gradient(145deg, rgba(30, 17, 38, .91), rgba(13, 8, 18, .96)) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .2) !important;
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease !important;
+}
+
+.steps article:hover,
+.suggestion-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(255, 117, 24, .58) !important;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, .3), 0 0 25px rgba(255, 117, 24, .06) !important;
+}
+
+.steps article b,
+.steps article i,
+.suggestion-icon {
+  color: var(--halloween-orange) !important;
+}
+
+.steps article h3 {
+  color: #fff7ed !important;
+}
+
+.cta {
+  border: 1px solid rgba(255, 117, 24, .24) !important;
+  border-radius: 26px !important;
+  background: radial-gradient(ellipse at top, rgba(255, 117, 24, .12), transparent 65%), rgba(19, 13, 27, .7) !important;
+}
+
+.cta > i {
+  color: var(--halloween-orange) !important;
+}
+
+.suggestion-card {
+  background: radial-gradient(ellipse at left, rgba(168, 85, 247, .09), transparent 60%), #130d1b !important;
+}
+
+footer {
+  border-top: 1px solid var(--halloween-border) !important;
+  background: linear-gradient(180deg, rgba(19, 13, 27, .6), #07040b) !important;
+  color: var(--halloween-muted) !important;
+}
+
+footer p,
+footer small {
+  color: #9e8cab !important;
+}
+
+.footer-credit span {
+  color: var(--halloween-orange-light) !important;
+}
+
+input,
+textarea,
+select {
+  color-scheme: dark !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  background-color: #100a17 !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 117, 24, .28) !important;
+  border-radius: 11px !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #85748f !important;
+  opacity: 1 !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #ff7518 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 117, 24, .12) !important;
+}
+
+#suggestion-modal,
+.meeting-modal,
+.iphone-install-overlay,
+.video-modal,
+.update-admin-modal,
+.music-modal,
+.countdown-modal,
+.active-countdown,
+.hbd-admin-modal,
+.birthday-modal,
+.live-modal,
+.bug-modal-overlay {
+  color: #fff7ed !important;
+}
+
+.suggestion-modal-backdrop,
+.meeting-backdrop,
+.iphone-install-overlay,
+.video-modal-backdrop,
+.update-modal-backdrop,
+.music-backdrop,
+.countdown-backdrop,
+.active-countdown-backdrop,
+.hbd-admin-backdrop,
+.birthday-backdrop,
+.live-modal-backdrop,
+.bug-modal-overlay {
+  background: rgba(5, 3, 9, .84) !important;
+  backdrop-filter: blur(16px) saturate(115%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(115%) !important;
+}
+
+.suggestion-dialog,
+.meeting-dialog,
+.iphone-install-card,
+.video-modal-card,
+.update-modal-card,
+.music-panel,
+.countdown-dialog,
+.active-countdown-dialog,
+.hbd-admin-dialog,
+.birthday-dialog,
+.live-modal-card,
+.bug-modal-card {
+  color: #fff7ed !important;
+  border: 1px solid rgba(255, 117, 24, .38) !important;
+  border-radius: 23px !important;
+  background:
+    radial-gradient(ellipse at top, rgba(255, 117, 24, .10), transparent 52%),
+    linear-gradient(145deg, #1b1023, #0c0711 76%) !important;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .65), 0 0 35px rgba(255, 117, 24, .06) !important;
+}
+
+.suggestion-dialog h2,
+.meeting-dialog h2,
+.iphone-install-card h2,
+.update-modal-card h2,
+.music-panel h2,
+.countdown-dialog h2,
+.active-countdown-dialog h2,
+.hbd-admin-dialog h2,
+.birthday-dialog h2,
+.live-modal-card h2,
+.live-modal-title {
+  color: #fff7ed !important;
+}
+
+.suggestion-description,
+.meeting-content,
+.meeting-loading,
+.iphone-install-card > p,
+.iphone-install-step p,
+.update-modal-card > p,
+.music-panel p,
+.hbd-admin-description,
+.birthday-message,
+.live-modal-subtitle {
+  color: #b7a8c6 !important;
+}
+
+.suggestion-close,
+.meeting-close,
+.iphone-install-close,
+.video-modal-close,
+.update-modal-close,
+.music-close,
+.countdown-close,
+.active-countdown-close,
+.hbd-admin-close,
+.birthday-close,
+.live-close-btn,
+.bug-close-btn {
+  color: #ffad42 !important;
+  border-color: rgba(255, 117, 24, .3) !important;
+  background: rgba(255, 117, 24, .08) !important;
+}
+
+.suggestion-close:hover,
+.meeting-close:hover,
+.iphone-install-close:hover,
+.video-modal-close:hover,
+.update-modal-close:hover,
+.music-close:hover,
+.countdown-close:hover,
+.active-countdown-close:hover,
+.hbd-admin-close:hover,
+.birthday-close:hover,
+.live-close-btn:hover {
+  color: #fff !important;
+  background: rgba(255, 117, 24, .22) !important;
+}
+
+.meeting-icon,
+.suggestion-modal-icon,
+.iphone-install-icon,
+.music-logo,
+.countdown-icon,
+.active-countdown-icon,
+.hbd-admin-icon,
+.birthday-icon,
+.live-modal-icon {
+  color: #ffad42 !important;
+  border-color: rgba(255, 117, 24, .35) !important;
+  background: rgba(255, 117, 24, .10) !important;
+}
+
+.iphone-install-step {
+  border-color: rgba(255, 117, 24, .18) !important;
+  background: rgba(255, 255, 255, .025) !important;
+}
+
+.iphone-install-step > span {
+  background: linear-gradient(135deg, #ff7518, #a855f7) !important;
+  color: #fff !important;
+}
+
+.suggestion-bottom,
+.music-footer,
+.music-panel-header,
+.live-host-header {
+  border-color: var(--halloween-border) !important;
+}
+
+#suggestion-counter,
+#suggestion-status,
+#music-status,
+#countdown-form-status,
+#hbd-admin-status,
+#update-admin-status {
+  color: #ffad42 !important;
+}
+
+.ai-chat-window {
+  border: 1px solid rgba(255, 117, 24, .4) !important;
+  background: #0d0812 !important;
+  box-shadow: 0 25px 90px rgba(0, 0, 0, .6), 0 0 30px rgba(255, 117, 24, .08) !important;
+}
+
+.ai-chat-header {
+  border-bottom: 1px solid var(--halloween-border) !important;
+  background: linear-gradient(120deg, #24122c, #120a19) !important;
+}
+
+.ai-chat-title strong,
+.ai-chat-header strong {
+  color: #fff7ed !important;
+}
+
+.ai-avatar,
+.ai-message-avatar {
+  color: #ffad42 !important;
+  background: rgba(255, 117, 24, .12) !important;
+  border-color: rgba(255, 117, 24, .25) !important;
+}
+
+.ai-chat-messages {
+  background: #0d0812 !important;
+}
+
+.ai-message-bubble {
+  border: 1px solid rgba(168, 85, 247, .18) !important;
+  background: #1b1023 !important;
+  color: #f5eafa !important;
+}
+
+.ai-message.user .ai-message-bubble {
+  border-color: rgba(255, 117, 24, .3) !important;
+  background: linear-gradient(135deg, #a83d0b, #742c18) !important;
+  color: #fff !important;
+}
+
+.ai-chat-form {
+  border-top: 1px solid var(--halloween-border) !important;
+  background: #100a17 !important;
+}
+
+#ai-chat-input {
+  background: #1a1022 !important;
+  border-color: rgba(255, 117, 24, .25) !important;
+  color: #fff !important;
+}
+
+#ai-chat-send,
+.ai-chat-toggle,
+#site-music-toggle {
+  background: linear-gradient(135deg, #ff7518, #c2410c) !important;
+  color: #fff !important;
+  border-color: rgba(255, 173, 66, .65) !important;
+  box-shadow: 0 8px 28px rgba(255, 117, 24, .22) !important;
+}
+
+.ai-chat-badge {
+  background: #a855f7 !important;
+  color: #fff !important;
+}
+
+#video-modal .device-tab {
+  border-color: rgba(255, 117, 24, .25) !important;
+  background: #170d20 !important;
+  color: #d8c7e5 !important;
+}
+
+#video-modal .device-tab.active {
+  background: linear-gradient(135deg, #ff7518, #a855f7) !important;
+  color: #fff !important;
+}
+
+#tutorial-video,
+#video-modal .video-container {
+  background: #050308 !important;
+  border-radius: 15px !important;
+}
+
+.hologram-topline,
+.hologram-footer,
+.hologram-version {
+  color: #ffad42 !important;
+}
+
+.hologram-indicator,
+.live-status-dot {
+  background: #ff7518 !important;
+  box-shadow: 0 0 12px rgba(255, 117, 24, .7) !important;
+}
+
+.hologram-symbol {
+  color: #c084fc !important;
+  text-shadow: 0 0 25px rgba(168, 85, 247, .5) !important;
+}
+
+.countdown-unit {
+  border: 1px solid rgba(255, 117, 24, .25) !important;
+  border-radius: 14px !important;
+  background: rgba(255, 117, 24, .06) !important;
+}
+
+.countdown-unit strong {
+  color: #ffad42 !important;
+  text-shadow: 0 0 20px rgba(255, 117, 24, .2) !important;
+}
+
+.countdown-unit span,
+.countdown-separator {
+  color: #b7a8c6 !important;
+}
+
+.hbd-cancel-item {
+  border-color: rgba(255, 117, 24, .2) !important;
+  background: rgba(255, 255, 255, .025) !important;
+}
+
+.hbd-cancel-item:hover {
+  border-color: rgba(255, 117, 24, .5) !important;
+  background: rgba(255, 117, 24, .06) !important;
+}
+
+.hbd-cancel-info strong {
+  color: #fff7ed !important;
+}
+
+.hbd-cancel-info span {
+  color: #b7a8c6 !important;
+}
+
+.hbd-delete-button {
+  border-color: rgba(248, 113, 113, .4) !important;
+  background: rgba(248, 113, 113, .1) !important;
+  color: #fca5a5 !important;
+}
+
+.hbd-delete-button:hover {
+  background: #dc2626 !important;
+  color: #fff !important;
+}
+
+.birthday-modal .birthday-dialog {
+  border-color: rgba(255, 117, 24, .55) !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 117, 24, .15), transparent 48%),
+    linear-gradient(155deg, #1b1023, #0b0710 72%) !important;
+  box-shadow: 0 35px 110px rgba(0, 0, 0, .8), 0 0 40px rgba(255, 117, 24, .08) !important;
+}
+
+.birthday-modal .birthday-eyebrow,
+.birthday-modal .birthday-name {
+  color: #ffad42 !important;
+}
+
+.birthday-modal .birthday-icon {
+  border-color: rgba(255, 117, 24, .45) !important;
+  background: rgba(255, 117, 24, .10) !important;
+}
+
+.birthday-modal .birthday-finish {
+  border-color: #ff7518 !important;
+  background: linear-gradient(135deg, #ff7518, #c2410c) !important;
+  color: #fff !important;
+}
+
+.birthday-modal.style-tvd .birthday-dialog,
+.birthday-modal.birthday-modal--tvd .birthday-dialog {
+  border-color: rgba(190, 24, 49, .6) !important;
+  background: linear-gradient(155deg, #1a090d, #070407) !important;
+}
+
+.birthday-modal.style-ironman .birthday-dialog,
+.birthday-modal.birthday-modal--ironman .birthday-dialog {
+  border-color: rgba(245, 158, 11, .55) !important;
+  background: linear-gradient(155deg, #16151b, #080b12) !important;
+}
+
+.live-host-status,
+.live-modal-title,
+.live-notification-icon {
+  color: #ffad42 !important;
+}
+
+.live-video-wrapper {
+  border: 1px solid rgba(255, 117, 24, .28) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  background: #050308 !important;
+}
+
+.live-video-placeholder {
+  color: #b7a8c6 !important;
+  background: #100a17 !important;
+}
+
+.live-primary-btn,
+.live-end-btn,
+.bug-submit-btn,
+.update-publish-button,
+.hbd-admin-submit {
+  background: linear-gradient(135deg, #ff7518, #c2410c) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 173, 66, .55) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 25px rgba(255, 117, 24, .12) !important;
+}
+
+.live-secondary-btn,
+.live-control-btn {
+  border: 1px solid rgba(255, 117, 24, .28) !important;
+  background: rgba(255, 117, 24, .08) !important;
+  color: #ffad42 !important;
+  border-radius: 12px !important;
+}
+
+.update-delete-button {
+  border-color: rgba(248, 113, 113, .35) !important;
+  background: rgba(248, 113, 113, .08) !important;
+  color: #fca5a5 !important;
+}
+
+.music-input-row button,
+#music-stop {
+  border-color: rgba(255, 117, 24, .3) !important;
+  background: rgba(255, 117, 24, .12) !important;
+  color: #ffad42 !important;
+}
+
+.music-placeholder {
+  background: #100a17 !important;
+  color: #b7a8c6 !important;
+}
+
+#music-youtube-player {
+  border: 0 !important;
+  background: #050308 !important;
+}
+
+.bug-float-btn {
+  background: linear-gradient(135deg, #ff7518, #a855f7) !important;
+  color: #fff !important;
+  border-color: rgba(255, 173, 66, .6) !important;
+}
+
+#global-notif-form label,
+.countdown-field label,
+.hbd-admin-field label,
+.update-modal-card label,
+.music-form label,
+.live-form-group label,
+.bug-form-group label {
+  color: #ffbd76 !important;
+}
+
+.arduino-splash {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 117, 24, .15), transparent 34%),
+    radial-gradient(circle at 50% 70%, rgba(168, 85, 247, .10), transparent 45%),
+    #07040b !important;
+}
+
+.splash-loop {
+  border-color: #ff7518 !important;
+  box-shadow: 0 0 15px rgba(255, 117, 24, .6), inset 0 0 10px rgba(255, 117, 24, .15) !important;
+}
+
+.splash-center {
+  background: #07040b !important;
+  box-shadow: 0 0 12px rgba(255, 117, 24, .25) !important;
+}
+
+.splash-brand strong span {
+  color: #ff7518 !important;
+}
+
+.splash-brand small {
+  color: #c4a3d8 !important;
+}
+
+.splash-loader {
+  background: rgba(255, 117, 24, .14) !important;
+}
+
+.splash-loader span {
+  background: #ff7518 !important;
+  box-shadow: 0 0 14px rgba(255, 117, 24, .7) !important;
+}
+
+.splash-glow-one,
+.splash-glow-two {
+  background: rgba(255, 117, 24, .08) !important;
+}
+
+#global-modal input,
+#global-modal textarea {
+  background: #100a17 !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 117, 24, .3) !important;
+}
+
+#global-modal label {
+  color: #ffbd76 !important;
+}
+
+#global-modal .meeting-dialog {
+  border-color: rgba(255, 117, 24, .4) !important;
+}
+
+#site-music-toggle {
+  border-radius: 50% !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #ffad42 !important;
+  outline-offset: 3px !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    background: rgba(9, 6, 14, .96) !important;
+  }
+
+  .site-header nav {
+    background: #100a17 !important;
+    border-color: var(--halloween-border) !important;
+  }
+
+  .hero::after {
+    top: 5% !important;
+    right: 3% !important;
+    font-size: 100px !important;
+  }
+
+  .hero-buttons-row {
+    gap: 10px !important;
+  }
+
+  .hero-buttons-row > * {
+    max-width: 100% !important;
+  }
+
+  .steps article,
+  .suggestion-card {
+    border-radius: 18px !important;
+  }
+
+  .suggestion-dialog,
+  .meeting-dialog,
+  .iphone-install-card,
+  .video-modal-card,
+  .update-modal-card,
+  .music-panel,
+  .countdown-dialog,
+  .active-countdown-dialog,
+  .hbd-admin-dialog,
+  .birthday-dialog,
+  .live-modal-card,
+  .bug-modal-card {
+    max-width: 100% !important;
+  }
+
+  .ai-chat-window {
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  .countdown-timer {
+    gap: 5px !important;
+  }
+
+  .countdown-unit {
+    min-width: 0 !important;
+    padding: 10px 5px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-buttons-row {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .hero-buttons-row > a,
+  .hero-buttons-row > button {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+  }
+
+  .hero-buttons-bottom {
+    max-width: 100% !important;
+  }
+
+  .hero-buttons-bottom > a {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .countdown-unit strong {
+    font-size: 20px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .hero::after {
+    animation: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
 
 
 .birthday-dialog {
