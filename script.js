@@ -5866,11 +5866,7 @@ async function openPublicAttendanceModal() {
       }
 
     
-#public-attendance-modal .attendance-admin-member.second-attendance-card {
-  border: 1px solid #c0c7d1 !important;
-  background: linear-gradient(135deg, rgba(192, 199, 209, 0.22), rgba(110, 122, 140, 0.08)) !important;
-  box-shadow: 0 0 14px rgba(192, 199, 209, 0.12) !important;
-}
+
 
 #public-attendance-modal .second-rank-badge {
   color: #e1e6ed !important;
@@ -5886,11 +5882,6 @@ async function openPublicAttendanceModal() {
   flex-shrink: 0 !important;
 }
 
-#public-attendance-modal .attendance-admin-member.third-attendance-card {
-  border: 1px solid #bd8057 !important;
-  background: linear-gradient(135deg, rgba(189, 128, 87, 0.2), rgba(120, 70, 42, 0.08)) !important;
-  box-shadow: 0 0 14px rgba(189, 128, 87, 0.12) !important;
-}
 
 #public-attendance-modal .third-rank-badge {
   color: #fff0e5 !important;
