@@ -5766,6 +5766,63 @@ async function openPublicAttendanceModal() {
 
   modal.innerHTML = `
     <style>
+
+
+#public-attendance-modal .attendance-admin-member.second-attendance-card {
+  border: 1px solid rgba(210, 220, 235, 0.75) !important;
+  background: linear-gradient(115deg, rgba(192, 205, 225, 0.2), rgba(100, 115, 140, 0.07)) !important;
+  box-shadow: 0 0 22px rgba(192, 205, 225, 0.13), inset 0 0 14px rgba(220, 230, 245, 0.04) !important;
+}
+
+#public-attendance-modal .attendance-admin-member.third-attendance-card {
+  border: 1px solid rgba(220, 145, 80, 0.8) !important;
+  background: linear-gradient(115deg, rgba(205, 127, 50, 0.22), rgba(120, 65, 25, 0.08)) !important;
+  box-shadow: 0 0 22px rgba(205, 127, 50, 0.14), inset 0 0 14px rgba(240, 160, 80, 0.04) !important;
+}
+
+#public-attendance-modal .second-rank-badge,
+#public-attendance-modal .third-rank-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 10px !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+}
+
+#public-attendance-modal .second-rank-badge {
+  color: #e2e8f0 !important;
+  background: linear-gradient(135deg, #64748b, #334155) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 0 12px rgba(203, 213, 225, 0.22) !important;
+}
+
+#public-attendance-modal .third-rank-badge {
+  color: #ffddb8 !important;
+  background: linear-gradient(135deg, #b87333, #704214) !important;
+  border: 1px solid #e9a66c !important;
+  box-shadow: 0 0 12px rgba(233, 166, 108, 0.22) !important;
+}
+
+#public-attendance-modal .second-attendance-card .member-name-row strong {
+  color: #e2e8f0 !important;
+}
+
+#public-attendance-modal .third-attendance-card .member-name-row strong {
+  color: #f0bd91 !important;
+}
+
+#public-attendance-modal .second-attendance-card .attendance-admin-member-value strong {
+  color: #cbd5e1 !important;
+}
+
+#public-attendance-modal .third-attendance-card .attendance-admin-member-value strong {
+  color: #e9a66c !important;
+}
+
       #public-attendance-modal, #public-attendance-modal * {
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
@@ -5872,49 +5929,57 @@ async function openPublicAttendanceModal() {
       return countB - countA
     })
 
-    const listEl = document.getElementById('public-attendance-list')
 
-    if (listEl) {
-      if (!members || members.length === 0) {
-        listEl.innerHTML = '<p style="color:#9ca3af; text-align:center;">წევრები ვერ მოიძებნა.</p>'
-        return
-      }
+listEl.innerHTML = sortedMembers.map((member, index) => {
+  const count = counts.get(member.id) || 0
+  const percent = countedRecords.length ? Math.round((count / countedRecords.length) * 100) : 0
+  const rank = index + 1
+  const isTop = count > 0 && rank === 1
+  const isSecond = count > 0 && rank === 2
+  const isThird = count > 0 && rank === 3
 
-      listEl.innerHTML = sortedMembers.map(member => {
-        const count = counts.get(member.id) || 0
+  const rankClass = isTop
+    ? 'top-attendance-card'
+    : isSecond
+      ? 'second-attendance-card'
+      : isThird
+        ? 'third-attendance-card'
+        : ''
 
-        const percent = countedRecords.length
-          ? Math.round((count / countedRecords.length) * 100)
-          : 0
+  const rankBadge = isTop
+    ? '<div class="top-rank-badge">1</div>'
+    : isSecond
+      ? '<div class="second-rank-badge">🥈</div>'
+      : isThird
+        ? '<div class="third-rank-badge">🥉</div>'
+        : ''
 
-        const isTop = count > 0 && count === maxCount
+  const topBadge = isTop
+    ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>'
+    : ''
 
-        return `
-          <div class="attendance-admin-member ${isTop ? 'top-attendance-card' : ''}">
-            ${isTop ? '<div class="top-rank-badge">1</div>' : ''}
+  return `
+    <div class="attendance-admin-member ${rankClass}">
+      ${rankBadge}
+      <div>
+        <div class="member-name-row">
+          <strong class="${isTop ? 'top-name' : ''}">
+            ${esc(member.full_name || member.name || '')}
+          </strong>
+          ${topBadge}
+        </div>
+        <span>${count} შეხვედრა</span>
+      </div>
+      <div class="attendance-admin-member-value">
+        <strong class="${isTop ? 'top-percent' : ''}">
+          ${percent}%
+        </strong>
+        <small>დასწრება</small>
+      </div>
+    </div>
+  `
+}).join('')
 
-            <div>
-              <div class="member-name-row">
-                <strong class="${isTop ? 'top-name' : ''}">
-                  ${esc(member.full_name || member.name || '')}
-                </strong>
-
-                ${isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''}
-              </div>
-
-              <span>${count} შეხვედრა</span>
-            </div>
-
-            <div class="attendance-admin-member-value">
-              <strong class="${isTop ? 'top-percent' : ''}">
-                ${percent}%
-              </strong>
-
-              <small>დასწრება</small>
-            </div>
-          </div>
-        `
-      }).join('')
     }
   } catch (err) {
     console.error('Public attendance load error:', err)
