@@ -5766,6 +5766,76 @@ async function openPublicAttendanceModal() {
 
   modal.innerHTML = `
     <style>
+  
+#public-attendance-modal .attendance-admin-member {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  padding: 14px 16px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+#public-attendance-modal .attendance-admin-member > div:nth-child(2) {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+#public-attendance-modal .member-name-row {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+
+#public-attendance-modal .member-name-row strong {
+  overflow-wrap: anywhere !important;
+}
+
+#public-attendance-modal .attendance-admin-member-value {
+  flex-shrink: 0 !important;
+  text-align: right !important;
+  margin-left: auto !important;
+}
+
+#public-attendance-modal .top-rank-badge,
+#public-attendance-modal .second-rank-badge,
+#public-attendance-modal .third-rank-badge {
+  flex: 0 0 30px !important;
+  width: 30px !important;
+  height: 30px !important;
+  box-sizing: border-box !important;
+}
+
+#public-attendance-modal #public-attendance-list {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+@media (max-width: 480px) {
+  #public-attendance-modal {
+    padding: 10px !important;
+  }
+
+  #public-attendance-modal-content {
+    padding: 16px !important;
+    width: 100% !important;
+  }
+
+  #public-attendance-modal .attendance-admin-member {
+    gap: 8px !important;
+    padding: 12px 10px !important;
+  }
+
+  #public-attendance-modal .attendance-admin-member-value strong {
+    font-size: 16px !important;
+  }
+}
+
       #public-attendance-modal, #public-attendance-modal * {
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
