@@ -5825,7 +5825,6 @@ async function openPublicAttendanceModal() {
   font-weight: 900 !important;
 }
 
-#public-attendance-modal .top-rank-badge,
 #public-attendance-modal .second-rank-badge,
 #public-attendance-modal .third-rank-badge {
   flex: 0 0 30px !important;
@@ -6010,14 +6009,18 @@ listEl.innerHTML = sortedMembers.map((member, index) => {
   const count = counts.get(member.id) || 0
   const percent = countedRecords.length ? Math.round((count / countedRecords.length) * 100) : 0
 
-  const higherPercentages = new Set(
-    sortedMembers
-      .slice(0, index)
-      .map(m => countedRecords.length ? Math.round(((counts.get(m.id) || 0) / countedRecords.length) * 100) : 0)
-      .filter(p => p > percent)
-  )
+  const rank = percent > 0
+  ? sortedMembers.filter(m => {
+      const otherPercent = countedRecords.length
+        ? Math.round(((counts.get(m.id) || 0) / countedRecords.length) * 100)
+        : 0
 
-  const rank = higherPercentages.size + 1
+      return otherPercent > percent
+    }).reduce((acc, m) => {
+      const otherPercent = Math.round(((counts.get(m.id) || 0) / countedRecords.length) * 100)
+      return acc.includes(otherPercent) ? acc : [...acc, otherPercent]
+    }, []).length + 1
+  : 0
   const isTop = percent > 0 && rank === 1
   const isSecond = percent > 0 && rank === 2
   const isThird = percent > 0 && rank === 3
