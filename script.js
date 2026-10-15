@@ -5781,6 +5781,13 @@ async function openPublicAttendanceModal() {
 }
 
 #public-attendance-modal .attendance-admin-member > div:nth-child(2) {
+  min-width: 0 !important;
+}
+
+#public-attendance-modal .attendance-admin-member.top-attendance-card > div:nth-child(2),
+#public-attendance-modal .attendance-admin-member.second-attendance-card > div:nth-child(2),
+#public-attendance-modal .attendance-admin-member.third-attendance-card > div:nth-child(2),
+#public-attendance-modal .attendance-admin-member:not(.top-attendance-card):not(.second-attendance-card):not(.third-attendance-card) > div:first-child {
   flex: 1 !important;
   min-width: 0 !important;
 }
@@ -5801,6 +5808,21 @@ async function openPublicAttendanceModal() {
   flex-shrink: 0 !important;
   text-align: right !important;
   margin-left: auto !important;
+}
+#public-attendance-modal .top-rank-badge {
+  flex: 0 0 34px !important;
+  width: 34px !important;
+  height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background: linear-gradient(145deg, #fff0a6, #e5b93f 55%, #9e701b) !important;
+  color: #172018 !important;
+  border: 2px solid #ffe9a0 !important;
+  box-shadow: 0 0 12px rgba(255, 205, 70, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
 }
 
 #public-attendance-modal .top-rank-badge,
@@ -5987,39 +6009,29 @@ async function openPublicAttendanceModal() {
 listEl.innerHTML = sortedMembers.map((member, index) => {
   const count = counts.get(member.id) || 0
   const percent = countedRecords.length ? Math.round((count / countedRecords.length) * 100) : 0
-  const rank = index + 1
-  const isTop = count > 0 && count === maxCount
-const isSecond = count > 0 && rank === 2 && count < maxCount
-const isThird = count > 0 && rank === 3 && count < maxCount
 
-  const rankClass = isTop
-    ? 'top-attendance-card'
-    : isSecond
-      ? 'second-attendance-card'
-      : isThird
-        ? 'third-attendance-card'
-        : ''
+  const higherPercentages = new Set(
+    sortedMembers
+      .slice(0, index)
+      .map(m => countedRecords.length ? Math.round(((counts.get(m.id) || 0) / countedRecords.length) * 100) : 0)
+      .filter(p => p > percent)
+  )
 
-  const rankBadge = isTop
-    ? '<div class="top-rank-badge">1</div>'
-    : isSecond
-      ? '<div class="second-rank-badge">2</div>'
-      : isThird
-        ? '<div class="third-rank-badge">3</div>'
-        : ''
+  const rank = higherPercentages.size + 1
+  const isTop = percent > 0 && rank === 1
+  const isSecond = percent > 0 && rank === 2
+  const isThird = percent > 0 && rank === 3
 
-  const topBadge = isTop
-    ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>'
-    : ''
+  const rankClass = isTop ? 'top-attendance-card' : isSecond ? 'second-attendance-card' : isThird ? 'third-attendance-card' : ''
+  const rankBadge = isTop ? '<div class="top-rank-badge">1</div>' : isSecond ? '<div class="second-rank-badge">2</div>' : isThird ? '<div class="third-rank-badge">3</div>' : ''
+  const topBadge = isTop ? '<span class="top-badge">საუკეთესო მაჩვენებელი</span>' : ''
 
   return `
     <div class="attendance-admin-member ${rankClass}">
       ${rankBadge}
       <div>
         <div class="member-name-row">
-          <strong class="${isTop ? 'top-name' : ''}">
-            ${esc(member.full_name || member.name || '')}
-          </strong>
+          <strong class="${isTop ? 'top-name' : ''}">${esc(member.full_name || member.name || '')}</strong>
           ${topBadge}
         </div>
         <span>${count} შეხვედრა</span>
