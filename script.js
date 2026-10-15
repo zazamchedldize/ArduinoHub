@@ -5776,7 +5776,8 @@ async function openPublicAttendanceModal() {
   box-sizing: border-box !important;
   padding: 14px 16px !important;
   border-radius: 14px !important;
-  overflow: hidden !important;
+  overflow: visible !important;
+  position: relative !important;
 }
 
 #public-attendance-modal .attendance-admin-member > div:nth-child(2) {
@@ -5808,12 +5809,72 @@ async function openPublicAttendanceModal() {
   flex: 0 0 30px !important;
   width: 30px !important;
   height: 30px !important;
+  min-width: 30px !important;
   box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  font-weight: 800 !important;
+}
+
+#public-attendance-modal .attendance-admin-member.second-attendance-card {
+  border: 1px solid #c0c7d1 !important;
+  background: linear-gradient(135deg, rgba(192, 199, 209, 0.22), rgba(110, 122, 140, 0.08)) !important;
+  box-shadow: 0 0 14px rgba(192, 199, 209, 0.12) !important;
+}
+
+#public-attendance-modal .second-rank-badge {
+  color: #e1e6ed !important;
+  background: linear-gradient(135deg, #7f8a9a, #d8dee8) !important;
+  border: 1px solid #e1e6ed !important;
+}
+
+#public-attendance-modal .attendance-admin-member.third-attendance-card {
+  border: 1px solid #b8794e !important;
+  background: linear-gradient(135deg, rgba(184, 121, 78, 0.22), rgba(80, 48, 30, 0.10)) !important;
+  box-shadow: 0 0 14px rgba(184, 121, 78, 0.12) !important;
+}
+
+#public-attendance-modal .third-rank-badge {
+  color: #fff0e5 !important;
+  background: linear-gradient(135deg, #8f542f, #d99a6b) !important;
+  border: 1px solid #e5b18b !important;
 }
 
 #public-attendance-modal #public-attendance-list {
   width: 100% !important;
   min-width: 0 !important;
+}
+
+#public-attendance-modal,
+#public-attendance-modal * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+#public-attendance-modal::-webkit-scrollbar,
+#public-attendance-modal *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.close-attendance-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  transition: color 0.2s;
+  position: relative;
+  z-index: 10;
+}
+
+.close-attendance-btn:hover {
+  color: #ffffff;
 }
 
 @media (max-width: 480px) {
@@ -5834,67 +5895,6 @@ async function openPublicAttendanceModal() {
   #public-attendance-modal .attendance-admin-member-value strong {
     font-size: 16px !important;
   }
-}
-
-      #public-attendance-modal, #public-attendance-modal * {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-      }
-
-      #public-attendance-modal::-webkit-scrollbar,
-      #public-attendance-modal *::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-      }
-
-      .close-attendance-btn {
-        background: none;
-        border: none;
-        color: #9ca3af;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 4px 8px;
-        line-height: 1;
-        transition: color 0.2s;
-        position: relative;
-        z-index: 10;
-      }
-
-      .close-attendance-btn:hover {
-        color: #ffffff;
-      }
-
-    
-
-
-#public-attendance-modal .second-rank-badge {
-  color: #e1e6ed !important;
-  background: linear-gradient(135deg, #7f8a9a, #d8dee8) !important;
-  border: 1px solid #e1e6ed !important;
-  border-radius: 50% !important;
-  width: 30px !important;
-  height: 30px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-weight: 800 !important;
-  flex-shrink: 0 !important;
-}
-
-
-#public-attendance-modal .third-rank-badge {
-  color: #fff0e5 !important;
-  background: linear-gradient(135deg, #8f542f, #d99a6b) !important;
-  border: 1px solid #e5b18b !important;
-  border-radius: 50% !important;
-  width: 30px !important;
-  height: 30px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-weight: 800 !important;
-  flex-shrink: 0 !important;
 }
 
     </style>
