@@ -5678,67 +5678,67 @@ function enhanceTopAttendance() {
 
   if (!memberCards.length) return
 
-  let maxMeetings = 0
   const memberData = []
 
   memberCards.forEach(card => {
     const countSpan = card.querySelector('div > span')
+    const match = countSpan?.textContent.match(/\d+/)
+    const count = match ? parseInt(match[0], 10) : 0
 
-    if (countSpan) {
-      const match = countSpan.textContent.match(/\d+/)
-      const count = match ? parseInt(match[0], 10) : 0
-
-      memberData.push({ card, count })
-
-      if (count > maxMeetings) {
-        maxMeetings = count
-      }
-    }
+    memberData.push({ card, count })
   })
 
-  memberData.forEach(item => {
-    const { card, count } = item
-    const nameContainer = card.querySelector('div')
-
-    if (count === maxMeetings && maxMeetings > 0) {
-      card.classList.add('top-attendance-card')
-
-      if (!card.querySelector('.trophy-icon')) {
-        const trophyHTML = `
-          <div class="trophy-icon" title="საუკეთესო მაჩვენებელი">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-              <path d="M4 22h16"/>
-              <path d="M10 18a4.5 4.5 0 0 0 9 0"/>
-              <path d="M14 2c0 5.23-3.43 8.08-4 8.08"/>
-            </svg>
-          </div>
-        `
-
-        if (nameContainer) {
-          nameContainer.style.position = 'relative'
-          nameContainer.insertAdjacentHTML('afterbegin', trophyHTML)
-        }
-      }
-    } else {
-      card.classList.remove('top-attendance-card')
-    }
-  })
-
-  const sortedCards = [...memberData].sort((a, b) => {
-    return b.count - a.count
-  })
-
+  const sortedCards = [...memberData].sort((a, b) => b.count - a.count)
   const parent = memberCards[0]?.parentElement
 
+  memberData.forEach(({ card }) => {
+    card.classList.remove(
+      'top-attendance-card',
+      'second-attendance-card',
+      'third-attendance-card'
+    )
+
+    card.querySelectorAll('.trophy-icon, .second-place-icon, .third-place-icon').forEach(icon => icon.remove())
+  })
+
+  const maxMeetings = sortedCards[0]?.count || 0
+
+  if (maxMeetings > 0) {
+    const firstPlace = sortedCards[0]
+    firstPlace.card.classList.add('top-attendance-card')
+
+    firstPlace.card.querySelector('div')?.insertAdjacentHTML(
+      'afterbegin',
+      `<div class="trophy-icon" title="პირველი ადგილი">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+          <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/>
+        </svg>
+      </div>`
+    )
+
+    if (sortedCards[1] && sortedCards[1].count > 0) {
+      sortedCards[1].card.classList.add('second-attendance-card')
+      sortedCards[1].card.querySelector('div')?.insertAdjacentHTML(
+        'afterbegin',
+        `<div class="second-place-icon" title="მეორე ადგილი">🥈</div>`
+      )
+    }
+
+    if (sortedCards[2] && sortedCards[2].count > 0) {
+      sortedCards[2].card.classList.add('third-attendance-card')
+      sortedCards[2].card.querySelector('div')?.insertAdjacentHTML(
+        'afterbegin',
+        `<div class="third-place-icon" title="მესამე ადგილი">🥉</div>`
+      )
+    }
+  }
+
   if (parent) {
-    sortedCards.forEach(item => {
-      parent.appendChild(item.card)
-    })
+    sortedCards.forEach(item => parent.appendChild(item.card))
   }
 }
-
 function closePublicAttendanceModal() {
   const modal = document.getElementById('public-attendance-modal')
 
