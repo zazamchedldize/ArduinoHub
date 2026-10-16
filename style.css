@@ -10428,7 +10428,7 @@ body.iphone-install-open {
       rgba(22, 25, 30, 0.88),
       rgba(39, 43, 49, 0.74)
     ),
-    url("images/iron.jpg") center / cover no-repeat;
+    url("images/iron.jpg") center 35% / cover no-repeat;
   border-color: #656b73;
 }
 
