@@ -808,7 +808,7 @@ function renderQuizGame(data) {
   }
 
   const answered = Boolean(data.my_answer)
-  const disabled = quizState.isAdmin || answered || room.status !== "playing" || data.remaining_seconds <= 0
+  const disabled = quizState.isAdmin || quizState.answering || answered || room.status !== "playing" || data.remaining_seconds <= 0
 
   options.querySelectorAll("button").forEach(button => {
     button.disabled = disabled
