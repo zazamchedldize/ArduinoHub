@@ -1,20 +1,18 @@
+
 {
-  "name": "Arduino Hub",
+  "name": "ArduinoHub — Arduino & Chemistry",
   "short_name": "ArduinoHub",
-  "start_url": "/index.html",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0d1117",
-  "theme_color": "#0d1117",
+  "background_color": "#07110f",
+  "theme_color": "#07110f",
   "icons": [
     {
-      "src": "arduinohub-icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "arduinohub-icon.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/arduinohub-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
