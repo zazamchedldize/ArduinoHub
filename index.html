@@ -4,13 +4,6 @@
 <head>
   <link rel="apple-touch-icon" sizes="180x180" href="arduinohub-icon.png">
   <link rel="icon" type="image/png" href="arduinohub-icon.png">
-  <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="vampire.css">
-<script>
-  if (localStorage.getItem('theme') === 'vampire') {
-    document.documentElement.setAttribute('data-theme', 'vampire');
-  }
-</script>
   
 <link rel="stylesheet" href="quiz.css">
 
@@ -1659,6 +1652,10 @@
         მთავარი
       </a>
 
+      <a href="projects.html">
+        პროექტები
+      </a>
+
       <a href="albums.html">
         ფოტოალბომები
       </a>
@@ -1676,7 +1673,7 @@
         <i data-lucide="calendar-days"></i>
         კლუბის შეკრება
       </button>
-<button id="theme-toggle" type="button" aria-label="Toggle vampire theme">🦇 Vampire Mode</button>
+
       <a class="nav-admin" href="login.html" id="nav-login-button">
   შესვლა <i data-lucide="shield"></i>
 </a>
@@ -3383,27 +3380,6 @@
 </div>
 
 <audio id="quiz-music" src="sound/quiz.mp3" loop></audio>
-  <script>
-  const btn = document.getElementById('theme-toggle');
-  const root = document.documentElement;
-
-  function updateLabel() {
-    btn.textContent = root.dataset.theme === 'vampire' ? '🌿 Original Mode' : '🦇 Vampire Mode';
-  }
-
-  btn.addEventListener('click', () => {
-    if (root.dataset.theme === 'vampire') {
-      root.removeAttribute('data-theme');
-      localStorage.setItem('theme', 'default');
-    } else {
-      root.setAttribute('data-theme', 'vampire');
-      localStorage.setItem('theme', 'vampire');
-    }
-    updateLabel();
-  });
-
-  updateLabel();
-</script>
 </body>
 
 </html>
