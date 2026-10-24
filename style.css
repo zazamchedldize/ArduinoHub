@@ -11265,3 +11265,335 @@ body.iphone-install-open {
     text-shadow: 0 0 9px rgba(255, 75, 95, 0.95), 0 0 18px rgba(220, 20, 60, 0.6);
   }
 }
+
+
+/* ================================
+   THEME DROPDOWN
+================================ */
+
+.theme-switcher {
+    position: relative;
+    display: inline-block;
+    font-family: inherit;
+    z-index: 9999;
+}
+
+.theme-toggle {
+    background: transparent;
+    color: inherit;
+    border: 1px solid #39ff14;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: #39ff14;
+    color: #050505;
+}
+
+.theme-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 165px;
+    background: #101010;
+    border: 1px solid #39ff14;
+    border-radius: 10px;
+    padding: 7px;
+    box-shadow: 0 8px 25px #0009;
+    z-index: 10000;
+}
+
+.theme-menu.open {
+    display: block;
+    animation: themeMenuIn 0.2s ease;
+}
+
+.theme-option {
+    display: block;
+    width: 100%;
+    padding: 11px 12px;
+    background: transparent;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.theme-option:hover {
+    background: #222;
+    color: #39ff14;
+}
+
+@keyframes themeMenuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   THE VAMPIRE DIARIES THEME
+================================ */
+
+body[data-theme="tvd"] {
+    --tvd-red: #b10f2e;
+    --tvd-dark-red: #45000d;
+    --tvd-black: #080406;
+    --tvd-text: #f5e9ec;
+
+    background:
+        radial-gradient(ellipse at 50% 0%, #4b0716 0%, transparent 55%),
+        linear-gradient(135deg, #080406, #17050b 55%, #080406) !important;
+
+    background-attachment: fixed !important;
+    color: var(--tvd-text) !important;
+}
+
+/* ტექსტები */
+
+body[data-theme="tvd"] h1,
+body[data-theme="tvd"] h2,
+body[data-theme="tvd"] h3,
+body[data-theme="tvd"] h4,
+body[data-theme="tvd"] p,
+body[data-theme="tvd"] label,
+body[data-theme="tvd"] li {
+    color: var(--tvd-text);
+}
+
+/* ბმულები */
+
+body[data-theme="tvd"] a {
+    color: #ff6b83;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+body[data-theme="tvd"] a:hover {
+    color: #fff;
+    text-shadow: 0 0 12px #ff163d;
+}
+
+/* Header */
+
+body[data-theme="tvd"] header,
+body[data-theme="tvd"] nav {
+    background: #090306ee !important;
+    border-color: #6d1024 !important;
+    box-shadow: 0 4px 25px #a0002425;
+}
+
+/* ბარათები და სექციები */
+
+body[data-theme="tvd"] .card,
+body[data-theme="tvd"] .project-card,
+body[data-theme="tvd"] .container-card,
+body[data-theme="tvd"] section,
+body[data-theme="tvd"] article {
+    border-color: #651027;
+}
+
+/* ღილაკები */
+
+body[data-theme="tvd"] button,
+body[data-theme="tvd"] .btn,
+body[data-theme="tvd"] input[type="submit"] {
+    border-color: #a30e30;
+}
+
+body[data-theme="tvd"] button:hover,
+body[data-theme="tvd"] .btn:hover,
+body[data-theme="tvd"] input[type="submit"]:hover {
+    background: #8f0926;
+    color: #fff;
+    box-shadow: 0 0 18px #c0003b55;
+}
+
+/* ფორმები */
+
+body[data-theme="tvd"] input,
+body[data-theme="tvd"] textarea,
+body[data-theme="tvd"] select {
+    background-color: #13080c;
+    color: #fff;
+    border-color: #6d1024;
+}
+
+body[data-theme="tvd"] input:focus,
+body[data-theme="tvd"] textarea:focus,
+body[data-theme="tvd"] select:focus {
+    outline: 1px solid #e21d48;
+    box-shadow: 0 0 12px #b0003544;
+}
+
+/* წითელი ნათება */
+
+body[data-theme="tvd"] h1 {
+    text-shadow: 0 0 20px #b0003540;
+}
+
+body[data-theme="tvd"] .theme-toggle {
+    border-color: #b10f2e;
+}
+
+body[data-theme="tvd"] .theme-toggle:hover {
+    background: #8f0926;
+    color: #fff;
+}
+
+/* TVD მენიუ */
+
+body[data-theme="tvd"] .theme-menu {
+    background: #100509;
+    border-color: #a30e30;
+    box-shadow: 0 8px 30px #b0003540;
+}
+
+body[data-theme="tvd"] .theme-option:hover {
+    background: #3a0715;
+    color: #ff718a;
+}
+
+/* სისხლის წვეთები */
+
+.tvd-blood-layer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 9000;
+}
+
+body[data-theme="tvd"] .tvd-blood-layer {
+    display: block;
+}
+
+.tvd-drop {
+    position: absolute;
+    top: -40px;
+    width: 5px;
+    height: 17px;
+    background: linear-gradient(to bottom, #ff3655, #740019);
+    border-radius: 50% 50% 55% 55%;
+    opacity: 0.75;
+    box-shadow: 0 0 9px #d00035;
+    animation: tvdBloodFall linear infinite;
+}
+
+.tvd-drop:nth-child(1) {
+    left: 8%;
+    animation-duration: 9s;
+    animation-delay: -3s;
+}
+
+.tvd-drop:nth-child(2) {
+    left: 23%;
+    animation-duration: 13s;
+    animation-delay: -8s;
+}
+
+.tvd-drop:nth-child(3) {
+    left: 41%;
+    animation-duration: 10s;
+    animation-delay: -5s;
+}
+
+.tvd-drop:nth-child(4) {
+    left: 63%;
+    animation-duration: 14s;
+    animation-delay: -10s;
+}
+
+.tvd-drop:nth-child(5) {
+    left: 78%;
+    animation-duration: 11s;
+    animation-delay: -2s;
+}
+
+.tvd-drop:nth-child(6) {
+    left: 94%;
+    animation-duration: 12s;
+    animation-delay: -7s;
+}
+
+@keyframes tvdBloodFall {
+    from {
+        transform: translateY(-30px) rotate(10deg);
+    }
+
+    to {
+        transform: translateY(110vh) rotate(10deg);
+    }
+}
+
+/* ღამურების დეკორაცია */
+
+.tvd-bats {
+    display: none;
+    position: fixed;
+    top: 18%;
+    right: 5%;
+    font-size: 30px;
+    letter-spacing: 14px;
+    opacity: 0.55;
+    filter: grayscale(1) brightness(0.5);
+    pointer-events: none;
+    z-index: 9001;
+    animation: tvdBatsFloat 5s ease-in-out infinite;
+}
+
+body[data-theme="tvd"] .tvd-bats {
+    display: block;
+}
+
+@keyframes tvdBatsFloat {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+    }
+
+    50% {
+        transform: translateY(-15px) translateX(-12px);
+    }
+}
+
+/* მობილური მოწყობილობები */
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        padding: 8px 11px;
+        font-size: 13px;
+    }
+
+    .theme-menu {
+        right: 0;
+        min-width: 145px;
+    }
+
+    .tvd-bats {
+        top: 14%;
+        right: 3%;
+        font-size: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tvd-drop,
+    .tvd-bats,
+    .theme-menu {
+        animation: none !important;
+    }
+}
