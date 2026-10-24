@@ -11265,3 +11265,57 @@ body.iphone-install-open {
     text-shadow: 0 0 9px rgba(255, 75, 95, 0.95), 0 0 18px rgba(220, 20, 60, 0.6);
   }
 }
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Crimson+Text&display=swap');
+
+[data-theme="vampire"] {
+  --blood: #8a0303;
+  --crimson: #b11226;
+  --night: #0b0508;
+  --wine: #1a0a0f;
+  --bone: #e8dcd0;
+}
+
+[data-theme="vampire"] body {
+  background: radial-gradient(ellipse at top, var(--wine), var(--night) 70%) fixed !important;
+  color: var(--bone) !important;
+  font-family: 'Crimson Text', Georgia, serif;
+}
+
+[data-theme="vampire"] h1,
+[data-theme="vampire"] h2,
+[data-theme="vampire"] h3 {
+  font-family: 'Cinzel Decorative', serif;
+  color: var(--crimson) !important;
+  text-shadow: 0 0 12px rgba(177, 18, 38, 0.6);
+}
+
+[data-theme="vampire"] a { color: var(--crimson) !important; }
+[data-theme="vampire"] a:hover { color: #ff3b4e !important; text-shadow: 0 0 8px var(--blood); }
+
+[data-theme="vampire"] button,
+[data-theme="vampire"] .btn {
+  background: linear-gradient(180deg, var(--crimson), var(--blood)) !important;
+  border: 1px solid #400 !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px rgba(138, 3, 3, 0.7);
+}
+
+/* Blood drip along the top of the page */
+[data-theme="vampire"] body::before {
+  content: "";
+  position: fixed; top: 0; left: 0; right: 0; height: 28px;
+  background:
+    radial-gradient(circle at 20px 0, var(--blood) 14px, transparent 15px) 0 0 / 70px 28px repeat-x;
+  z-index: 9999; pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.6));
+}
+
+/* Floating bats */
+[data-theme="vampire"] body::after {
+  content: "🦇   🦇      🦇";
+  position: fixed; top: 60px; left: -200px;
+  font-size: 28px; white-space: pre;
+  animation: bats 18s linear infinite;
+  pointer-events: none; z-index: 9998;
+}
+@keyframes bats { to { transform: translateX(calc(100vw + 400px)); } }
