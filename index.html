@@ -46,27 +46,6 @@
     content="ArduinoHub, ArduinoHub საქართველო, ArduinoHub Georgia,Arduino, Chemistry, Arduino პროექტები, Arduino საქართველო, ქიმიის პროექტები, Arduino პროექტები ქართულად"
   >
 
-<div class="theme-switcher">
-    <button
-        type="button"
-        class="theme-toggle"
-        id="themeToggle"
-        aria-expanded="false"
-        aria-controls="themeMenu"
-    >
-        ფონი ▾
-    </button>
-
-    <div class="theme-menu" id="themeMenu">
-        <button type="button" class="theme-option" data-theme-choice="original">
-            Original
-        </button>
-
-        <button type="button" class="theme-option" data-theme-choice="tvd">
-            🩸 TVD
-        </button>
-    </div>
-</div>
   <meta name="author" content="ArduinoHub — 29-ე საჯარო სკოლა">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
@@ -1625,17 +1604,6 @@
 
 <body data-page="home">
 
-<div class="tvd-blood-layer" aria-hidden="true">
-    <span class="tvd-drop"></span>
-    <span class="tvd-drop"></span>
-    <span class="tvd-drop"></span>
-    <span class="tvd-drop"></span>
-    <span class="tvd-drop"></span>
-    <span class="tvd-drop"></span>
-</div>
-
-<div class="tvd-bats" aria-hidden="true">🦇 🦇</div>
-
   <div id="arduino-splash" class="arduino-splash">
     <div class="splash-glow splash-glow-one"></div>
     <div class="splash-glow splash-glow-two"></div>
@@ -1680,32 +1648,13 @@
 
     <nav>
 
-<div class="theme-switcher">
-    <button
-        type="button"
-        class="theme-toggle"
-        id="themeToggle"
-        aria-expanded="false"
-        aria-controls="themeMenu"
-    >
-        ფონი ▾
-    </button>
-
-    <div class="theme-menu" id="themeMenu">
-        <button type="button" class="theme-option" data-theme-choice="original">
-            ორიგინალი
-        </button>
-
-        <button type="button" class="theme-option" data-theme-choice="tvd">
-            🩸 TVD
-        </button>
-    </div>
-</div>
-
       <a class="active" href="index.html">
         მთავარი
       </a>
 
+      <a href="projects.html">
+        პროექტები
+      </a>
 
       <a href="albums.html">
         ფოტოალბომები
@@ -3429,50 +3378,8 @@
     </div>
   </section>
 </div>
+
 <audio id="quiz-music" src="sound/quiz.mp3" loop></audio>
-  
-<script>
-const themeToggle = document.getElementById("themeToggle")
-const themeMenu = document.getElementById("themeMenu")
-const themeOptions = document.querySelectorAll("[data-theme-choice]")
-
-function applyTheme(theme) {
-    if (theme === "tvd") {
-        document.body.dataset.theme = "tvd"
-    } else {
-        document.body.removeAttribute("data-theme")
-    }
-
-    localStorage.setItem("siteTheme", theme)
-    themeMenu.classList.remove("open")
-    themeToggle.setAttribute("aria-expanded", "false")
-}
-
-themeToggle.addEventListener("click", function () {
-    const isOpen = themeMenu.classList.toggle("open")
-    themeToggle.setAttribute("aria-expanded", String(isOpen))
-})
-
-themeOptions.forEach(function (option) {
-    option.addEventListener("click", function () {
-        applyTheme(option.dataset.themeChoice)
-    })
-})
-
-document.addEventListener("click", function (event) {
-    if (!event.target.closest(".theme-switcher")) {
-        themeMenu.classList.remove("open")
-        themeToggle.setAttribute("aria-expanded", "false")
-    }
-})
-
-const savedTheme = localStorage.getItem("siteTheme")
-
-if (savedTheme === "tvd") {
-    applyTheme("tvd")
-}
-</script>
-
 </body>
 
 </html>
