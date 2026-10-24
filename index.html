@@ -1604,6 +1604,26 @@
 
 <body data-page="home">
 
+  <div class="tvd-atmosphere" aria-hidden="true">
+    <div class="tvd-moon-glow"></div>
+    <div class="tvd-bat-cloud tvd-bat-cloud-one">🦇</div>
+    <div class="tvd-bat-cloud tvd-bat-cloud-two">🦇　🦇</div>
+    <div class="tvd-blood-layer">
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+      <span class="tvd-drop"></span>
+    </div>
+  </div>
+
   <div id="arduino-splash" class="arduino-splash">
     <div class="splash-glow splash-glow-one"></div>
     <div class="splash-glow splash-glow-two"></div>
@@ -1677,6 +1697,32 @@
       <a class="nav-admin" href="login.html" id="nav-login-button">
   შესვლა <i data-lucide="shield"></i>
 </a>
+
+      <div class="theme-switcher">
+        <button
+          type="button"
+          class="theme-toggle"
+          id="themeToggle"
+          aria-expanded="false"
+          aria-controls="themeMenu"
+        >
+          <i data-lucide="palette"></i>
+          ფონი
+          <span aria-hidden="true">▾</span>
+        </button>
+
+        <div class="theme-menu" id="themeMenu" hidden>
+          <button type="button" class="theme-option" data-theme-choice="original">
+            <span class="theme-option-icon">∞</span>
+            Original
+          </button>
+
+          <button type="button" class="theme-option" data-theme-choice="tvd">
+            <span class="theme-option-icon">🩸</span>
+            TVD
+          </button>
+        </div>
+      </div>
 
     </nav>
 
@@ -3380,6 +3426,80 @@
 </div>
 
 <audio id="quiz-music" src="sound/quiz.mp3" loop></audio>
+
+
+<script>
+  (() => {
+    const themeToggle = document.getElementById("themeToggle")
+    const themeMenu = document.getElementById("themeMenu")
+    const themeOptions = document.querySelectorAll("[data-theme-choice]")
+
+    if (!themeToggle || !themeMenu) return
+
+    const closeThemeMenu = () => {
+      themeMenu.hidden = true
+      themeMenu.classList.remove("open")
+      themeToggle.setAttribute("aria-expanded", "false")
+    }
+
+    const applySiteTheme = theme => {
+      if (theme === "tvd") {
+        document.body.dataset.theme = "tvd"
+      } else {
+        document.body.removeAttribute("data-theme")
+        theme = "original"
+      }
+
+      try {
+        localStorage.setItem("arduinoHubTheme", theme)
+      } catch (error) {
+        // Theme switching still works if browser storage is unavailable
+      }
+
+      themeOptions.forEach(option => {
+        const selected = option.dataset.themeChoice === theme
+        option.setAttribute("aria-pressed", String(selected))
+      })
+
+      closeThemeMenu()
+    }
+
+    themeToggle.addEventListener("click", event => {
+      event.stopPropagation()
+      const opening = themeMenu.hidden
+      themeMenu.hidden = !opening
+      themeMenu.classList.toggle("open", opening)
+      themeToggle.setAttribute("aria-expanded", String(opening))
+    })
+
+    themeOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        applySiteTheme(option.dataset.themeChoice)
+      })
+    })
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".theme-switcher")) {
+        closeThemeMenu()
+      }
+    })
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeThemeMenu()
+    })
+
+    let savedTheme = "original"
+
+    try {
+      savedTheme = localStorage.getItem("arduinoHubTheme") || "original"
+    } catch (error) {
+      savedTheme = "original"
+    }
+
+    applySiteTheme(savedTheme)
+  })()
+</script>
+
 </body>
 
 </html>
