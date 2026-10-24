@@ -3383,6 +3383,27 @@
 </div>
 
 <audio id="quiz-music" src="sound/quiz.mp3" loop></audio>
+  <script>
+  const btn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  function updateLabel() {
+    btn.textContent = root.dataset.theme === 'vampire' ? '🌿 Original Mode' : '🦇 Vampire Mode';
+  }
+
+  btn.addEventListener('click', () => {
+    if (root.dataset.theme === 'vampire') {
+      root.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'default');
+    } else {
+      root.setAttribute('data-theme', 'vampire');
+      localStorage.setItem('theme', 'vampire');
+    }
+    updateLabel();
+  });
+
+  updateLabel();
+</script>
 </body>
 
 </html>
