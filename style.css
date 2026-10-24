@@ -11714,3 +11714,210 @@ body[data-theme="tvd"] .tvd-atmosphere {
     animation: none !important;
   }
 }
+
+/* ==========================================================
+   ARDUINOCHEMISTRYHUB — INDEX.HTML COVERAGE + TVD OVERRIDES
+   The original green theme is unchanged unless data-theme="tvd".
+   ========================================================== */
+
+/* Keep the theme selector visible and usable alongside the existing nav. */
+.theme-switcher {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  z-index: 10001;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 11px;
+  border: 1px solid #28dc9b55;
+  border-radius: 8px;
+  background: #22d39508;
+  color: var(--text);
+  font: 600 13px FiraGO, Inter, sans-serif;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.theme-menu[hidden] { display: none !important; }
+.theme-option { cursor: pointer; }
+
+/* Cover index.html sections whose styles are declared inline in that file. */
+body[data-theme="tvd"] .arduino-splash {
+  background: radial-gradient(circle at 50% 45%, #7c10251f, transparent 34%), linear-gradient(145deg, #080407, #16070d 55%, #050305) !important;
+}
+
+body[data-theme="tvd"] .splash-glow,
+body[data-theme="tvd"] .splash-glow-one,
+body[data-theme="tvd"] .splash-glow-two {
+  background: radial-gradient(circle, #bd153833, transparent 70%) !important;
+}
+
+body[data-theme="tvd"] .splash-logo,
+body[data-theme="tvd"] .splash-loop,
+body[data-theme="tvd"] .splash-loop-left,
+body[data-theme="tvd"] .splash-loop-right,
+body[data-theme="tvd"] .splash-center {
+  border-color: #e1254d !important;
+  background-color: #bd153812 !important;
+  box-shadow: 0 0 22px #d51b4340, inset 0 0 16px #d51b4317 !important;
+  filter: drop-shadow(0 0 12px #d51b4355) !important;
+}
+
+body[data-theme="tvd"] .splash-brand strong,
+body[data-theme="tvd"] .splash-brand strong span {
+  color: #fff0f3 !important;
+}
+
+body[data-theme="tvd"] .splash-brand strong span,
+body[data-theme="tvd"] .splash-brand small {
+  color: #ff536f !important;
+}
+
+body[data-theme="tvd"] .splash-loader,
+body[data-theme="tvd"] .splash-loader span {
+  border-color: #642039 !important;
+  background-color: #d51b43 !important;
+}
+
+body[data-theme="tvd"] .hero-buttons-row,
+body[data-theme="tvd"] .hero-buttons-bottom {
+  color: var(--text);
+}
+
+body[data-theme="tvd"] .albums-home-btn {
+  border-color: #8f1b39 !important;
+  background: #4b0b1d !important;
+  color: #ffe4e9 !important;
+}
+
+body[data-theme="tvd"] .albums-home-btn:hover {
+  border-color: #f04462 !important;
+  background: #70112b !important;
+}
+
+/* Birthday modal: these styles exist inline in index.html; force the TVD palette. */
+body[data-theme="tvd"] .birthday-modal,
+body[data-theme="tvd"] .hbd-admin-modal {
+  color: #f8edf0 !important;
+}
+
+body[data-theme="tvd"] .birthday-modal .birthday-dialog,
+body[data-theme="tvd"] .birthday-dialog,
+body[data-theme="tvd"] .hbd-admin-dialog,
+body[data-theme="tvd"] .hbd-cancel-dialog {
+  border-color: #7e1933 !important;
+  background: radial-gradient(ellipse at 50% 0%, #8e123021, transparent 48%), linear-gradient(155deg, #1a090d, #100609 55%, #070407) !important;
+  color: #f8edf0 !important;
+  box-shadow: 0 35px 110px #000d, 0 0 55px #bd15381c !important;
+}
+
+body[data-theme="tvd"] .birthday-backdrop,
+body[data-theme="tvd"] .hbd-admin-backdrop {
+  background: #030104ed !important;
+}
+
+body[data-theme="tvd"] .birthday-close,
+body[data-theme="tvd"] .hbd-admin-close,
+body[data-theme="tvd"] .hbd-cancel-list {
+  border-color: #642039 !important;
+  background: #210b13 !important;
+  color: #ffe4e9 !important;
+}
+
+body[data-theme="tvd"] .birthday-icon,
+body[data-theme="tvd"] .hbd-admin-icon {
+  border-color: #8f1b39 !important;
+  background: #4b0b1d !important;
+  color: #ff7088 !important;
+}
+
+body[data-theme="tvd"] .birthday-eyebrow,
+body[data-theme="tvd"] .birthday-name,
+body[data-theme="tvd"] .hbd-admin-status {
+  color: #ff536f !important;
+}
+
+body[data-theme="tvd"] .birthday-message,
+body[data-theme="tvd"] .hbd-admin-description {
+  color: #d6c3c8 !important;
+}
+
+body[data-theme="tvd"] .birthday-finish,
+body[data-theme="tvd"] .hbd-admin-submit,
+body[data-theme="tvd"] .hbd-cancel-dialog button {
+  border-color: #c21b40 !important;
+  background: linear-gradient(135deg, #680b20, #bd1538) !important;
+  color: #fff2f4 !important;
+}
+
+body[data-theme="tvd"] .birthday-decoration span,
+body[data-theme="tvd"] .birthday-confetti-piece,
+body[data-theme="tvd"] .birthday-ribbons span {
+  filter: drop-shadow(0 0 8px #e1254d44);
+}
+
+/* The TVD theme must also recolor cards/buttons that use fixed green values. */
+body[data-theme="tvd"] .feature-card,
+body[data-theme="tvd"] .stat-card,
+body[data-theme="tvd"] .project-card,
+body[data-theme="tvd"] .album-card,
+body[data-theme="tvd"] .team-card,
+body[data-theme="tvd"] .hologram-card,
+body[data-theme="tvd"] .hero-update-panel,
+body[data-theme="tvd"] .arduinohub-film-frame {
+  color: #f8edf0;
+}
+
+body[data-theme="tvd"] .feature-card svg,
+body[data-theme="tvd"] .stat-card svg,
+body[data-theme="tvd"] .project-card svg,
+body[data-theme="tvd"] .album-card svg,
+body[data-theme="tvd"] .team-card svg,
+body[data-theme="tvd"] .feature-card .icon,
+body[data-theme="tvd"] .stat-card .icon {
+  color: #ff536f !important;
+}
+
+body[data-theme="tvd"] .button:not(.primary),
+body[data-theme="tvd"] .button.secondary,
+body[data-theme="tvd"] .hero-secondary-btn,
+body[data-theme="tvd"] .nav-admin {
+  border-color: #712039 !important;
+  background-color: #1b0a10 !important;
+  color: #ffe4e9 !important;
+}
+
+body[data-theme="tvd"] .button:not(.primary):hover,
+body[data-theme="tvd"] .button.secondary:hover,
+body[data-theme="tvd"] .hero-secondary-btn:hover,
+body[data-theme="tvd"] .nav-admin:hover {
+  border-color: #c21b40 !important;
+  background-color: #390b18 !important;
+}
+
+body[data-theme="tvd"] .menu-toggle {
+  color: #ffe4e9 !important;
+}
+
+body[data-theme="tvd"] ::selection {
+  color: #fff;
+  background: #a7193b;
+}
+
+@media (max-width: 800px) {
+  .theme-switcher { margin-inline: 0; }
+  .theme-toggle { min-height: 40px; }
+}
+
+@media (max-width: 600px) {
+  .theme-switcher { width: auto; }
+  .theme-toggle { padding: 8px 9px; font-size: 12px; }
+}
