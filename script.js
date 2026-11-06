@@ -13057,6 +13057,47 @@ async function pollCancelActive() {
   pollNotify('აქტიური გამოკითხვები გაუქმებულია')
 }
 
+async function pollShowInfo() {
+  const {
+    data: { session }
+  } = await db.auth.getSession()
+
+  const user = session?.user
+
+  if (!user || !(await isAdmin(user))) {
+    addAIMessage('assistant', 'ეს ბრძანება მხოლოდ ადმინისთვისაა')
+    return
+  }
+
+  const polls = await pollGetData()
+  const activePolls = polls.filter(poll => poll.status === 'active')
+
+  if (!activePolls.length) {
+    addAIMessage('assistant', 'ამჟამად აქტიური გამოკითხვა არ არის')
+    return
+  }
+
+  let result = '📊 გამოკითხვის შედეგები\n'
+
+  activePolls.forEach(poll => {
+    const totalVotes = poll.options.reduce(
+      (total, option) => total + Number(option.votes || 0),
+      0
+    )
+
+    result += `\n\n📌 ${poll.question}\n`
+
+    poll.options.forEach(option => {
+      result += `\n${option.option_text} — ${option.votes} ხმა`
+    })
+
+    result += `\n\nსულ ხმები: ${totalVotes}`
+  })
+
+  addAIMessage('assistant', result)
+}
+
+
 function pollInitCommands() {
   const form = document.getElementById('ai-chat-form')
   const input = document.getElementById('ai-chat-input')
@@ -13068,7 +13109,11 @@ function pollInitCommands() {
   form.addEventListener('submit', async event => {
     const command = input.value.trim().toLowerCase()
 
-    if (command !== '/poll' && command !== '/polldel') return
+    if (
+      command !== '/poll' &&
+      command !== '/polldel' &&
+      command !== '/pollinfo'
+    ) return
 
     event.preventDefault()
     event.stopImmediatePropagation()
@@ -13082,11 +13127,15 @@ function pollInitCommands() {
 
     if (command === '/poll') {
       await pollOpenBuilder()
-    } else {
+    } else if (command === '/polldel') {
       await pollCancelActive()
+    } else {
+      await pollShowInfo()
     }
   }, true)
 }
+
+
 
 async function pollInit() {
   pollInitCommands()
