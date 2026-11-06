@@ -3153,28 +3153,57 @@
     })()
   </script>
 
-  <script>
-    document.body.classList.add("splash-active")
+ <script>
+  document.body.classList.add("splash-active")
 
-    window.addEventListener("load", () => {
-      const splash = document.getElementById("arduino-splash")
+  ;(function () {
+    const splash = document.getElementById("arduino-splash")
+    if (!splash) {
+      document.body.classList.remove("splash-active")
+      return
+    }
 
-      if (!splash) {
-        document.body.classList.remove("splash-active")
-        return
+    const lines = [
+      "> ArduinoHub OS ინიციალიზაცია",
+      "> სერვერთან კავშირი.......... OK",
+      "> Arduino მოდულები........... OK",
+      "> ქიმიის ბაზა................ OK",
+      "> წვდომა დაშვებულია ✔"
+    ]
+
+    const term = document.getElementById("hs-terminal")
+    const bar = document.getElementById("hs-bar")
+    const pct = document.getElementById("hs-percent")
+
+    let loaded = document.readyState === "complete"
+    let progress = 0
+    let shown = 0
+
+    window.addEventListener("load", () => { loaded = true })
+
+    function finish() {
+      splash.classList.add("hidden")
+      document.body.classList.remove("splash-active")
+      setTimeout(() => splash.remove(), 750)
+    }
+
+    const timer = setInterval(() => {
+      progress = Math.min(100, progress + (loaded ? 3 : progress < 90 ? 1.4 : 0))
+
+      bar.style.width = progress + "%"
+      pct.textContent = Math.floor(progress)
+
+      while (shown < lines.length && progress >= shown * 20 + 5) {
+        term.textContent += (shown ? "\n" : "") + lines[shown++]
       }
 
-      setTimeout(() => {
-        splash.classList.add("hidden")
-        document.body.classList.remove("splash-active")
-
-        setTimeout(() => {
-          splash.remove()
-        }, 750)
-      }, 1800)
-    })
-  </script>
-
+      if (progress >= 100) {
+        clearInterval(timer)
+        setTimeout(finish, 450)
+      }
+    }, 30)
+  })()
+</script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
