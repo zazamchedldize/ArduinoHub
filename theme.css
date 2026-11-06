@@ -163,11 +163,11 @@ h1 em {
 }
 
 /* ---------- ბარათები ---------- */
+/* ---------- ბარათები ---------- */
 .team-card,
 [class*="project-card"],
 [class*="album-card"],
 .card {
-  background: linear-gradient(160deg, rgba(4, 20, 10, 0.88), rgba(2, 10, 5, 0.92)) !important;
   border: 1px solid var(--h-line) !important;
   border-radius: 14px;
   position: relative;
@@ -182,7 +182,6 @@ h1 em {
   border-color: var(--h-green) !important;
   box-shadow: 0 0 0 1px var(--h-green), 0 12px 40px rgba(0, 255, 102, 0.22);
 }
-
 .team-card { transform-style: preserve-3d; will-change: transform; }
 
 .team-avatar {
