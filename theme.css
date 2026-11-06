@@ -1021,3 +1021,156 @@ body::after { display: none !important; }
   .hero-update-panel::before,
   .hero-update-panel::after { width: 18px; height: 18px; }
 }
+
+
+/* =====================================================
+   LOADING SCREEN — HACKER STYLE
+   ===================================================== */
+
+.arduino-splash {
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(0, 255, 102, 0.12), transparent 55%),
+    #010603 !important;
+  font-family: var(--h-mono);
+}
+
+/* სკანლაინები */
+.arduino-splash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* მოძრავი გრიდი */
+.hs-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 102, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.1) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+  animation: hsGrid 6s linear infinite;
+}
+
+.hs-box {
+  position: relative;
+  z-index: 3;
+  width: min(92vw, 460px);
+  text-align: center;
+}
+
+/* ლოგო */
+.hs-logo {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--h-green);
+  text-shadow: 0 0 14px var(--h-green), 0 0 40px rgba(0, 255, 102, 0.6);
+  animation: hsPulse 2s ease-in-out infinite;
+}
+
+.hs-logo::before,
+.hs-logo::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hs-logo::before {
+  inset: 0;
+  border: 2px dashed var(--h-green);
+  box-shadow: 0 0 18px rgba(0, 255, 102, 0.4), inset 0 0 18px rgba(0, 255, 102, 0.15);
+  animation: hsSpin 6s linear infinite;
+}
+
+.hs-logo::after {
+  inset: 12px;
+  border: 1px solid rgba(0, 255, 102, 0.45);
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: hsSpin 3s linear infinite reverse;
+}
+
+/* სათაური */
+.hs-title {
+  font-size: clamp(22px, 5vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #eafff2;
+  text-shadow: 0 0 16px rgba(0, 255, 102, 0.45);
+}
+
+.hs-title span { color: var(--h-green); }
+
+/* ტერმინალი */
+.hs-terminal {
+  text-align: left;
+  min-height: 130px;
+  margin: 24px 0 16px;
+  padding: 14px 16px;
+  background: rgba(0, 255, 102, 0.05);
+  border: 1px solid var(--h-line);
+  border-radius: 10px;
+  box-shadow: inset 0 0 24px rgba(0, 255, 102, 0.06);
+  font-family: var(--h-mono);
+  font-size: clamp(11.5px, 3vw, 13px);
+  line-height: 1.85;
+  color: var(--h-green-soft);
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.35);
+  white-space: pre-wrap;
+}
+
+.hs-terminal::after {
+  content: "█";
+  color: var(--h-green);
+  animation: blink 0.9s steps(1) infinite;
+}
+
+/* პროგრესი */
+.hs-progress {
+  height: 6px;
+  border-radius: 6px;
+  background: rgba(0, 255, 102, 0.12);
+  border: 1px solid var(--h-line);
+  overflow: hidden;
+}
+
+.hs-progress i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #00b84a, #00ff66, #9dffc2);
+  box-shadow: 0 0 14px var(--h-green);
+}
+
+.hs-percent {
+  margin-top: 10px;
+  color: var(--h-green);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-shadow: var(--h-glow);
+}
+
+@keyframes hsSpin { to { transform: rotate(360deg); } }
+
+@keyframes hsGrid { to { background-position: 0 44px, 44px 0; } }
+
+@keyframes hsPulse {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.35); }
+}
+
+/* ჩემი ძველი ლოუდერი აღარ გვჭირდება */
+#fx-boot { display: none !important; }
