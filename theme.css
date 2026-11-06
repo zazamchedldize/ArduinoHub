@@ -1,0 +1,202 @@
+:root {
+  --h-bg: #020a05;
+  --h-bg2: #04140a;
+  --h-green: #00ff66;
+  --h-green-soft: #5dffa0;
+  --h-green-dim: rgba(0, 255, 102, 0.14);
+  --h-line: rgba(0, 255, 102, 0.28);
+  --h-glow: 0 0 8px rgba(0, 255, 102, 0.55), 0 0 24px rgba(0, 255, 102, 0.25);
+  --h-mono: "JetBrains Mono", "FiraGO", monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--h-bg) !important;
+  background-image:
+    linear-gradient(var(--h-green-dim) 1px, transparent 1px),
+    linear-gradient(90deg, var(--h-green-dim) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: #c9ffe0;
+  animation: bootFlicker 0.9s ease-out;
+}
+
+/* Matrix rain canvas (JS ქმნის) */
+#fx-rain {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0; opacity: 0.22;
+  pointer-events: none;
+}
+
+/* კონტენტი rain-ის ზემოთ */
+.site-header, main, footer { position: relative; z-index: 2; }
+
+/* სკანლაინები + ვინიეტი */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  z-index: 9998; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.75) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* მოძრავი სკანერის ხაზი */
+body::before {
+  content: "";
+  position: fixed; left: 0; right: 0; top: -20vh;
+  height: 18vh; z-index: 9997; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(0,255,102,0.07), transparent);
+  animation: scanSweep 7s linear infinite;
+}
+
+/* HEADER */
+.site-header {
+  background: rgba(2, 10, 5, 0.72) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--h-line) !important;
+  box-shadow: 0 0 22px rgba(0,255,102,0.12);
+}
+.brand { font-family: var(--h-mono); color: var(--h-green) !important; text-shadow: var(--h-glow); }
+.brand-mark { display: inline-block; animation: spinPulse 6s linear infinite; }
+
+.site-header nav a {
+  font-family: var(--h-mono);
+  position: relative;
+  color: var(--h-green-soft) !important;
+  transition: color .2s, text-shadow .2s;
+}
+.site-header nav a::after {
+  content: "";
+  position: absolute; left: 0; bottom: -4px;
+  width: 0; height: 2px; background: var(--h-green);
+  box-shadow: var(--h-glow);
+  transition: width .3s ease;
+}
+.site-header nav a:hover,
+.site-header nav a.active { text-shadow: var(--h-glow); color: #fff !important; }
+.site-header nav a:hover::after,
+.site-header nav a.active::after { width: 100%; }
+
+/* სათაურები + GLITCH */
+h1, h2 { color: #eafff2; text-shadow: 0 0 14px rgba(0,255,102,0.35); }
+h1 em { color: var(--h-green); font-style: normal; text-shadow: var(--h-glow); }
+
+.eyebrow {
+  font-family: var(--h-mono);
+  color: var(--h-green) !important;
+  letter-spacing: 3px;
+}
+.eyebrow::before { content: "> "; }
+.eyebrow::after { content: "_"; animation: blink 1s steps(1) infinite; }
+
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute; inset: 0;
+  overflow: hidden; pointer-events: none;
+}
+.glitch::before {
+  color: #00ffd5; left: 2px;
+  clip-path: inset(0 0 60% 0);
+  animation: glitchA 3.2s infinite steps(1);
+}
+.glitch::after {
+  color: #ff2bd6; left: -2px;
+  clip-path: inset(55% 0 0 0);
+  animation: glitchB 2.7s infinite steps(1);
+}
+
+/* ბარათები */
+.team-card, [class*="project-card"], [class*="album-card"], .card {
+  background: linear-gradient(160deg, rgba(4,20,10,0.88), rgba(2,10,5,0.92)) !important;
+  border: 1px solid var(--h-line) !important;
+  border-radius: 14px;
+  position: relative;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s;
+}
+.team-card:hover, [class*="project-card"]:hover, [class*="album-card"]:hover, .card:hover {
+  transform: translateY(-6px);
+  border-color: var(--h-green) !important;
+  box-shadow: 0 0 0 1px var(--h-green), 0 12px 40px rgba(0,255,102,0.22);
+}
+
+.team-avatar { border: 1px solid var(--h-green) !important; box-shadow: var(--h-glow); }
+.team-role { font-family: var(--h-mono); color: var(--h-green) !important; }
+
+/* ტეგები */
+.team-tags span {
+  border: 1px solid var(--h-line);
+  background: rgba(0,255,102,0.06);
+  transition: background .2s, box-shadow .2s;
+}
+.team-tags span:hover { background: rgba(0,255,102,0.16); box-shadow: var(--h-glow); }
+
+/* ღილაკები */
+button, .btn, a.button {
+  font-family: var(--h-mono);
+  position: relative; overflow: hidden;
+  border: 1px solid var(--h-green) !important;
+  background: rgba(0,255,102,0.08) !important;
+  color: var(--h-green) !important;
+  transition: box-shadow .25s, background .25s, color .25s;
+}
+button:hover, .btn:hover, a.button:hover {
+  background: var(--h-green) !important;
+  color: #001a08 !important;
+  box-shadow: var(--h-glow);
+}
+
+/* footer */
+footer { border-top: 1px solid var(--h-line); background: rgba(2,10,5,0.85); }
+
+/* scroll reveal */
+.fx-reveal { opacity: 0; transform: translateY(28px) scale(.98); filter: blur(4px); }
+.fx-reveal.fx-in {
+  opacity: 1; transform: none; filter: none;
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1), filter .7s ease;
+}
+
+/* მაუსის ნათება */
+#fx-cursor {
+  position: fixed; width: 320px; height: 320px;
+  margin: -160px 0 0 -160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,102,0.12), transparent 65%);
+  pointer-events: none; z-index: 1; left: 0; top: 0;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--h-bg); }
+::-webkit-scrollbar-thumb { background: var(--h-green); box-shadow: var(--h-glow); border-radius: 6px; }
+::selection { background: var(--h-green); color: #001a08; }
+
+/* KEYFRAMES */
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes scanSweep { to { transform: translateY(140vh); } }
+@keyframes spinPulse {
+  0%,100% { text-shadow: var(--h-glow); }
+  50% { text-shadow: 0 0 16px #00ff66, 0 0 40px #00ff66; }
+}
+@keyframes bootFlicker {
+  0% { opacity: 0; } 8% { opacity: .8; } 12% { opacity: .1; }
+  20% { opacity: 1; } 28% { opacity: .5; } 100% { opacity: 1; }
+}
+@keyframes glitchA {
+  0%,92%,100% { transform: translate(0); opacity: 0; }
+  93% { transform: translate(-3px, 1px); opacity: .9; }
+  96% { transform: translate(3px, -1px); opacity: .9; }
+}
+@keyframes glitchB {
+  0%,88%,100% { transform: translate(0); opacity: 0; }
+  89% { transform: translate(3px, 2px); opacity: .9; }
+  93% { transform: translate(-3px, -2px); opacity: .9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  #fx-rain, #fx-cursor { display: none; }
+  .fx-reveal { opacity: 1; transform: none; filter: none; }
+}
