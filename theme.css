@@ -525,3 +525,282 @@ body::after { display: none !important; }
     font-size: 18px !important;
   }
 }
+
+/* =====================================================
+   AI CHAT — HACKER STYLE
+   ===================================================== */
+
+/* ===== მცურავი ღილაკი ===== */
+.ai-chat-toggle {
+  background: radial-gradient(circle at 30% 30%, #0b3a1e, #031208) !important;
+  border: 1.5px solid var(--h-green) !important;
+  color: var(--h-green) !important;
+  box-shadow: var(--h-glow), inset 0 0 14px rgba(0, 255, 102, 0.18) !important;
+  transition: transform 0.25s, box-shadow 0.25s !important;
+}
+
+.ai-chat-toggle:hover {
+  transform: scale(1.08) rotate(-4deg);
+  background: radial-gradient(circle at 30% 30%, #0f5228, #04180c) !important;
+  color: #fff !important;
+  box-shadow: 0 0 22px rgba(0, 255, 102, 0.8), 0 0 50px rgba(0, 255, 102, 0.35) !important;
+}
+
+.ai-chat-pulse {
+  border: 2px solid var(--h-green) !important;
+  background: transparent !important;
+  opacity: 0.55;
+}
+
+.ai-chat-badge {
+  background: var(--h-green) !important;
+  color: #001a08 !important;
+  font-family: var(--h-mono) !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: var(--h-glow);
+}
+
+/* ===== ჩატის ფანჯარა ===== */
+.ai-chat-window {
+  background: linear-gradient(165deg, rgba(3, 18, 8, 0.98), rgba(1, 7, 3, 0.99)) !important;
+  border: 1px solid var(--h-green) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 102, 0.12),
+    0 0 40px rgba(0, 255, 102, 0.25),
+    0 30px 80px rgba(0, 0, 0, 0.85) !important;
+  color: #c9ffe0 !important;
+  font-family: var(--h-mono);
+  overflow: hidden;
+}
+
+/* ===== ჰედერი (ტერმინალის ზოლი) ===== */
+.ai-chat-header {
+  background: rgba(0, 255, 102, 0.08) !important;
+  border-bottom: 1px solid var(--h-line) !important;
+  position: relative;
+}
+
+.ai-chat-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--h-green), transparent);
+  animation: aiLine 3s ease-in-out infinite;
+}
+
+.ai-chat-title strong {
+  color: var(--h-green) !important;
+  font-family: var(--h-mono);
+  letter-spacing: 1px;
+  text-shadow: var(--h-glow);
+}
+
+.ai-chat-title span {
+  color: var(--h-green-soft) !important;
+  opacity: 0.75;
+  font-size: 11px;
+}
+
+.ai-chat-title span::before {
+  content: "● ";
+  color: var(--h-green);
+  animation: blink 1.4s steps(1) infinite;
+}
+
+.ai-avatar,
+.ai-message-avatar {
+  background: rgba(0, 255, 102, 0.12) !important;
+  border: 1px solid var(--h-green) !important;
+  color: var(--h-green) !important;
+  box-shadow: var(--h-glow);
+}
+
+.ai-chat-close {
+  background: transparent !important;
+  border: 1px solid var(--h-line) !important;
+  color: var(--h-green) !important;
+  transition: background 0.2s, color 0.2s, transform 0.2s !important;
+}
+
+.ai-chat-close:hover {
+  background: var(--h-green) !important;
+  color: #001a08 !important;
+  transform: rotate(90deg);
+}
+
+/* ===== შეტყობინებები ===== */
+.ai-chat-messages {
+  background-image:
+    linear-gradient(rgba(0, 255, 102, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.05) 1px, transparent 1px) !important;
+  background-size: 28px 28px !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--h-green) transparent;
+}
+
+.ai-chat-messages::-webkit-scrollbar { width: 6px; }
+.ai-chat-messages::-webkit-scrollbar-thumb {
+  background: var(--h-green);
+  border-radius: 6px;
+}
+
+.ai-message {
+  animation: aiMsgIn 0.35s ease both;
+}
+
+/* ასისტენტის ბუშტი */
+.ai-message.assistant .ai-message-bubble {
+  position: relative;
+  background: rgba(0, 255, 102, 0.07) !important;
+  border: 1px solid var(--h-line) !important;
+  border-left: 3px solid var(--h-green) !important;
+  border-radius: 4px 14px 14px 14px !important;
+  color: #d8ffe8 !important;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.ai-message.assistant .ai-message-bubble::before {
+  content: "AI://";
+  display: block;
+  margin-bottom: 4px;
+  color: var(--h-green);
+  font: 700 10px var(--h-mono);
+  letter-spacing: 2px;
+  opacity: 0.8;
+}
+
+/* მომხმარებლის ბუშტი */
+.ai-message.user .ai-message-bubble,
+.ai-message.user .ai-message-bubble p {
+  color: #001a08 !important;
+}
+
+.ai-message.user .ai-message-bubble {
+  background: linear-gradient(135deg, #00e65c, #5dffa0) !important;
+  border: 1px solid #b8ffd5 !important;
+  border-radius: 14px 4px 14px 14px !important;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
+}
+
+.ai-message-bubble strong { color: var(--h-green); }
+
+.ai-message-bubble a {
+  color: var(--h-green-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* კოდის ბლოკები პასუხში */
+.ai-message-bubble pre {
+  background: #010603 !important;
+  border: 1px solid var(--h-line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+}
+
+.ai-message-bubble code {
+  font-family: var(--h-mono) !important;
+  color: var(--h-green) !important;
+  background: rgba(0, 255, 102, 0.1);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.ai-message-bubble pre code { background: transparent; padding: 0; }
+
+/* "წერს..." ინდიკატორი */
+[class*="ai-typing"] span,
+[class*="ai-message"] [class*="typing"] span,
+[class*="ai-message"] [class*="dot"] {
+  background: var(--h-green) !important;
+  box-shadow: 0 0 8px var(--h-green);
+}
+
+/* ===== ფორმა ===== */
+.ai-chat-form {
+  background: rgba(1, 7, 3, 0.95) !important;
+  border-top: 1px solid var(--h-line) !important;
+}
+
+.ai-chat-input-wrap {
+  background: #021008 !important;
+  border: 1px solid var(--h-line) !important;
+  border-radius: 10px !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ai-chat-input-wrap::before {
+  content: ">";
+  color: var(--h-green);
+  font: 800 15px var(--h-mono);
+  padding-left: 12px;
+  align-self: center;
+  text-shadow: var(--h-glow);
+}
+
+.ai-chat-input-wrap:focus-within {
+  border-color: var(--h-green) !important;
+  box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.12), var(--h-glow);
+}
+
+#ai-chat-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--h-green-soft) !important;
+  font-family: var(--h-mono) !important;
+  caret-color: var(--h-green);
+}
+
+#ai-chat-input::placeholder { color: rgba(93, 255, 160, 0.4); }
+
+#ai-chat-send {
+  background: rgba(0, 255, 102, 0.12) !important;
+  border: 1px solid var(--h-green) !important;
+  border-radius: 8px !important;
+  color: var(--h-green) !important;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s !important;
+}
+
+#ai-chat-send:hover {
+  background: var(--h-green) !important;
+  color: #001a08 !important;
+  box-shadow: var(--h-glow);
+}
+
+.ai-chat-form small {
+  color: rgba(93, 255, 160, 0.45) !important;
+  font-size: 10.5px;
+}
+
+/* ===== მუსიკის ღილაკი (ჩატის გვერდით) ===== */
+#site-music-toggle {
+  background: radial-gradient(circle at 30% 30%, #0b3a1e, #031208) !important;
+  border: 1.5px solid var(--h-green) !important;
+  color: var(--h-green) !important;
+  box-shadow: var(--h-glow) !important;
+}
+
+#site-music-toggle:hover {
+  background: var(--h-green) !important;
+  color: #001a08 !important;
+}
+
+/* ===== ანიმაციები ===== */
+@keyframes aiMsgIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); filter: blur(3px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes aiLine {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
