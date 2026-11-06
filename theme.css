@@ -478,3 +478,5 @@ footer {
   #fx-rain, #fx-cursor, #fx-boot { display: none; }
   .fx-reveal { opacity: 1; transform: none; filter: none; }
 }
+
+body::after { display: none !important; }
