@@ -13098,6 +13098,7 @@ async function pollShowInfo() {
 }
 
 
+
 function pollInitCommands() {
   const form = document.getElementById('ai-chat-form')
   const input = document.getElementById('ai-chat-input')
@@ -13106,7 +13107,9 @@ function pollInitCommands() {
 
   form.dataset.pollCommandsReady = 'true'
 
-  form.addEventListener('submit', async event => {
+  document.addEventListener('submit', async event => {
+    if (event.target !== form) return
+
     const command = input.value.trim().toLowerCase()
 
     if (
@@ -13134,7 +13137,6 @@ function pollInitCommands() {
     }
   }, true)
 }
-
 
 
 async function pollInit() {
