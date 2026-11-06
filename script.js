@@ -13057,10 +13057,7 @@ async function pollCancelActive() {
   pollNotify('აქტიური გამოკითხვები გაუქმებულია')
 }
 
-async function pollShowInfo() {
-  const polls = await pollGetData()
-  console.log('POLL DATA:', polls)
-}
+console.log('POLL DATA:', JSON.stringify(polls, null, 2))
 function pollInitCommands() {
   const form = document.getElementById('ai-chat-form')
   const input = document.getElementById('ai-chat-input')
