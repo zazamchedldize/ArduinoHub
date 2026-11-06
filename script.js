@@ -13058,45 +13058,101 @@ async function pollCancelActive() {
 }
 
 
-function pollInitCommands() {
-  const form = document.getElementById('ai-chat-form')
-  const input = document.getElementById('ai-chat-input')
+async function pollShowInfo() {
+  const polls = await pollGetData()
 
-  if (!form || !input || form.dataset.pollCommandsReady) return
+  const activePolls = polls.filter(poll => poll.status === 'active')
 
-  form.dataset.pollCommandsReady = 'true'
+  if (!activePolls.length) {
+    pollShow(`
+      <button class="poll-close">✕</button>
+      <div class="poll-heading">POLL ANALYTICS</div>
+      <div class="poll-subtitle">აქტიური გამოკითხვა არ არის</div>
+    `)
+    return
+  }
 
-  document.addEventListener('submit', async event => {
-    if (event.target !== form) return
+  const content = activePolls.map((poll, index) => {
+    const options = Array.isArray(poll.options) ? poll.options : []
 
-    const command = input.value.trim().toLowerCase()
+    const optionData = options.map(option => {
+      if (typeof option === 'string') {
+        return {
+          label: option,
+          votes: null
+        }
+      }
 
-    if (
-      command !== '/poll' &&
-      command !== '/polldel' &&
-      command !== '/pollinfo'
-    ) return
+      const label =
+        option.option_text ??
+        option.text ??
+        option.label ??
+        option.title ??
+        option.name ??
+        option.value ??
+        'პასუხის ვარიანტი'
 
-    event.preventDefault()
-    event.stopImmediatePropagation()
+      const votes =
+        option.votes ??
+        option.vote_count ??
+        option.count ??
+        option.total_votes ??
+        null
 
-    const originalCommand = input.value.trim()
-    input.value = ''
+      return {
+        label: String(label),
+        votes: Number.isFinite(Number(votes)) && votes !== null
+          ? Number(votes)
+          : null
+      }
+    })
 
-    if (typeof addAIMessage === 'function') {
-      addAIMessage('user', originalCommand)
-    }
+    const totalVotes = optionData.reduce((total, option) => {
+      return total + (option.votes ?? 0)
+    }, 0)
 
-    if (command === '/poll') {
-      await pollOpenBuilder()
-    } else if (command === '/polldel') {
-      await pollCancelActive()
-    } else {
-      await pollShowInfo()
-    }
-  }, true)
+    return `
+      <div class="poll-status">
+        ACTIVE POLL #${index + 1}
+      </div>
+
+      <div class="poll-heading">
+        ${pollEscape(poll.question || 'გამოკითხვა')}
+      </div>
+
+      <div class="poll-subtitle">
+        სულ ხმები: ${totalVotes}
+      </div>
+
+      ${optionData.map(option => {
+        const percent = totalVotes > 0 && option.votes !== null
+          ? Math.round(option.votes / totalVotes * 100)
+          : 0
+
+        return `
+          <div class="poll-label">
+            ${pollEscape(option.label)}
+          </div>
+
+          <div style="background:#14231e;height:10px;border-radius:10px;overflow:hidden;margin:8px 0 5px">
+            <div style="height:100%;width:${percent}%;background:#22d395;border-radius:10px;transition:width .5s"></div>
+          </div>
+
+          <div class="poll-subtitle">
+            ${option.votes === null ? 'ხმების მონაცემი მიუწვდომელია' : `${option.votes} ხმა · ${percent}%`}
+          </div>
+        `
+      }).join('')}
+    `
+  }).join('<hr style="border-color:#22d39533;margin:20px 0">')
+
+  pollShow(`
+    <button class="poll-close">✕</button>
+    <div class="poll-heading">POLL ANALYTICS</div>
+    <div class="poll-subtitle">გამოკითხვების სტატისტიკა</div>
+    ${content}
+  `)
 }
-
 
 async function pollInit() {
   pollInitCommands()
