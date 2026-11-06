@@ -804,3 +804,25 @@ body::after { display: none !important; }
   0%, 100% { opacity: 0.3; }
   50%      { opacity: 1; }
 }
+
+.ai-message.assistant .ai-message-bubble::before { display: none !important; content: none !important; }
+
+/* ===== ჩატი ჰედერის ზემოთ ===== */
+#ai-chat {
+  z-index: 1200 !important;
+}
+
+#site-music-toggle {
+  z-index: 1150 !important;
+}
+
+.ai-chat-window {
+  z-index: 1201 !important;
+  max-height: calc(100dvh - 100px) !important;
+}
+
+@media (max-width: 600px) {
+  .ai-chat-window {
+    max-height: calc(100dvh - 90px) !important;
+  }
+}
