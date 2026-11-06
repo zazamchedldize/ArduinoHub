@@ -12472,3 +12472,639 @@ if (db) {
   })
   
 }
+
+
+
+
+
+const pollSystemStyle = document.createElement('style')
+
+pollSystemStyle.textContent = `
+#poll-system-root {
+  position: relative;
+  z-index: 99999;
+  font-family: Inter, sans-serif;
+  color: #d9ffe6;
+}
+
+.poll-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0, 8, 4, .88);
+  backdrop-filter: blur(10px);
+}
+
+.poll-panel {
+  width: min(540px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px;
+  border: 1px solid rgba(0, 255, 102, .35);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #071b10, #020a05);
+  box-shadow: 0 0 35px rgba(0, 255, 102, .13);
+}
+
+.poll-heading {
+  color: #5dffa0;
+  font-size: 21px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.poll-subtitle {
+  color: #8eaa98;
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+
+.poll-label {
+  display: block;
+  color: #9cebb7;
+  font-size: 13px;
+  margin: 16px 0 8px;
+}
+
+.poll-input, .poll-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  color: #e5ffed;
+  background: #031109;
+  border: 1px solid #174d2b;
+  border-radius: 9px;
+  outline: none;
+}
+
+.poll-input:focus, .poll-select:focus {
+  border-color: #00ff66;
+  box-shadow: 0 0 10px rgba(0,255,102,.12);
+}
+
+.poll-option-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.poll-option-row .poll-input {
+  flex: 1;
+}
+
+.poll-button {
+  padding: 11px 16px;
+  border: 1px solid #00b94b;
+  border-radius: 9px;
+  color: #031108;
+  background: #00e65c;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.poll-button:hover {
+  background: #5dffa0;
+  box-shadow: 0 0 18px rgba(0,255,102,.3);
+}
+
+.poll-button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.poll-button-secondary {
+  color: #a8ffc2;
+  background: #092014;
+  border-color: #205d36;
+}
+
+.poll-button-danger {
+  color: #ffb4b4;
+  background: #250d0d;
+  border-color: #783333;
+}
+
+.poll-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.poll-vote-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 10px 0;
+  padding: 14px;
+  border: 1px solid #174d2b;
+  border-radius: 10px;
+  background: #06170d;
+  color: #d9ffe6;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.poll-vote-option:hover {
+  border-color: #00ff66;
+  background: #0b2816;
+}
+
+.poll-result {
+  margin: 13px 0;
+}
+
+.poll-result-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+  font-size: 13px;
+}
+
+.poll-result-track {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #102619;
+}
+
+.poll-result-fill {
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #00a83e, #5dffa0);
+  transition: width .7s ease;
+}
+
+.poll-small {
+  color: #82a88f;
+  font-size: 12px;
+}
+
+.poll-close {
+  float: right;
+  border: 0;
+  background: transparent;
+  color: #9cebb7;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.poll-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border: 1px solid #176b37;
+  border-radius: 20px;
+  color: #5dffa0;
+  font-size: 11px;
+  margin-bottom: 13px;
+}
+
+@media(max-width: 480px) {
+  .poll-panel {
+    padding: 19px;
+  }
+
+  .poll-heading {
+    font-size: 19px;
+  }
+}
+`
+
+document.head.appendChild(pollSystemStyle)
+
+const pollRoot = document.createElement('div')
+pollRoot.id = 'poll-system-root'
+document.body.appendChild(pollRoot)
+
+let pollOptionsCount = 2
+let pollCurrentList = []
+let pollQueue = []
+let pollCurrentIndex = 0
+
+function pollEscape(value) {
+  return String(value ?? '').replace(/[&<>"']/g, character => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[character])
+}
+
+function pollNotify(message) {
+  if (typeof toast === 'function') {
+    toast(message)
+  } else {
+    alert(message)
+  }
+}
+
+function pollClose() {
+  pollRoot.innerHTML = ''
+}
+
+function pollShow(content) {
+  pollRoot.innerHTML = `
+    <div class="poll-overlay">
+      <div class="poll-panel">
+        ${content}
+      </div>
+    </div>
+  `
+
+  const overlay = pollRoot.querySelector('.poll-overlay')
+
+  overlay.addEventListener('click', event => {
+    if (event.target === overlay) pollClose()
+  })
+
+  pollRoot.querySelector('.poll-close')?.addEventListener('click', pollClose)
+}
+
+async function pollGetData() {
+  if (!db) return []
+
+  const { data, error } = await db.rpc('get_polls')
+
+  if (error) {
+    console.error('Poll loading error:', error)
+    pollNotify('გამოკითხვების ჩატვირთვა ვერ მოხერხდა')
+    return []
+  }
+
+  return Array.isArray(data) ? data : []
+}
+
+function pollRenderResults(poll) {
+  const options = poll.options || []
+  const totalVotes = options.reduce((sum, option) => sum + Number(option.votes || 0), 0)
+
+  const highest = Math.max(0, ...options.map(option => Number(option.votes || 0)))
+  const winners = options.filter(option => Number(option.votes || 0) === highest && highest > 0)
+
+  const winnerText = winners.length
+    ? winners.map(option => pollEscape(option.option_text)).join(', ')
+    : 'ჯერ ხმები არ არის'
+
+  pollShow(`
+    <button class="poll-close" aria-label="დახურვა">×</button>
+    <div class="poll-status">${poll.status === 'active' ? 'აქტიური გამოკითხვა' : 'დასრულებული გამოკითხვა'}</div>
+    <div class="poll-heading">${pollEscape(poll.question)}</div>
+    <div class="poll-subtitle">გამოკითხვის შედეგები</div>
+
+    ${options.map(option => `
+      <div class="poll-result">
+        <div class="poll-result-top">
+          <span>${pollEscape(option.option_text)}</span>
+          <strong>${Number(option.percentage || 0)}%</strong>
+        </div>
+        <div class="poll-result-track">
+          <div class="poll-result-fill" style="width:${Math.max(0, Math.min(100, Number(option.percentage || 0)))}%"></div>
+        </div>
+        <div class="poll-small">${Number(option.votes || 0)} ხმა</div>
+      </div>
+    `).join('')}
+
+    <div class="poll-subtitle" style="margin-top:20px">
+      სულ ხმები: ${totalVotes}
+      <br>
+      ლიდერი: ${winnerText}
+    </div>
+
+    <div class="poll-actions">
+      <button class="poll-button poll-button-secondary" id="poll-results-close">დახურვა</button>
+    </div>
+  `)
+
+  document.getElementById('poll-results-close')?.addEventListener('click', pollClose)
+}
+
+function pollRenderQuestion(poll) {
+  pollShow(`
+    <button class="poll-close" aria-label="დახურვა">×</button>
+    <div class="poll-status">ARDUINOHUB POLL SYSTEM</div>
+    <div class="poll-heading">${pollEscape(poll.question)}</div>
+    <div class="poll-subtitle">აირჩიე ერთი პასუხი</div>
+
+    ${(poll.options || []).map(option => `
+      <button class="poll-vote-option" data-option-id="${pollEscape(option.id)}">
+        ${pollEscape(option.option_text)}
+      </button>
+    `).join('')}
+
+    <div class="poll-small">ხმის შეცვლა შეუძლებელია</div>
+  `)
+
+  pollRoot.querySelectorAll('[data-option-id]').forEach(button => {
+    button.addEventListener('click', () => {
+      pollCastVote(poll.id, button.dataset.optionId)
+    })
+  })
+}
+
+async function pollCastVote(pollId, optionId) {
+  const { data: sessionData } = await db.auth.getSession()
+  const session = sessionData?.session
+
+  if (!session) {
+    location.href = 'login.html'
+    return
+  }
+
+  pollRoot.querySelectorAll('[data-option-id]').forEach(button => {
+    button.disabled = true
+  })
+
+  const { error } = await db.rpc('cast_poll_vote', {
+    p_poll_id: pollId,
+    p_option_id: optionId
+  })
+
+  if (error) {
+    console.error('Poll vote error:', error)
+    pollNotify(error.message.includes('უკვე მიეცი ხმა')
+      ? 'ამ გამოკითხვაში უკვე მიცემული გაქვს ხმა'
+      : error.message)
+    await pollLoadAndShow()
+    return
+  }
+
+  pollNotify('შენი ხმა წარმატებით დაფიქსირდა')
+
+  const polls = await pollGetData()
+  const updatedPoll = polls.find(item => item.id === pollId)
+
+  if (updatedPoll) {
+    pollRenderResults(updatedPoll)
+  } else {
+    pollClose()
+  }
+}
+
+async function pollLoadAndShow() {
+  const polls = await pollGetData()
+  pollCurrentList = polls
+
+  const activePolls = polls.filter(poll =>
+    poll.status === 'active' && !poll.has_voted
+  )
+
+  if (activePolls.length) {
+    pollQueue = activePolls
+    pollCurrentIndex = 0
+    pollRenderQuestion(pollQueue[0])
+  }
+}
+
+function pollRenderBuilder() {
+  pollOptionsCount = 2
+
+  pollShow(`
+    <button class="poll-close" aria-label="დახურვა">×</button>
+    <div class="poll-status">ADMIN CONTROL PANEL</div>
+    <div class="poll-heading">ახალი გამოკითხვის შექმნა</div>
+    <div class="poll-subtitle">შექმენი ახალი გამოკითხვა ArduinoHub-ზე</div>
+
+    <label class="poll-label">გამოკითხვის კითხვა</label>
+    <input class="poll-input" id="poll-question-input" maxlength="300" placeholder="მაგალითად: რომელი პროექტი მოგწონთ?">
+
+    <label class="poll-label">პასუხების ვარიანტები</label>
+    <div id="poll-options-container">
+      <div class="poll-option-row">
+        <input class="poll-input" maxlength="200" placeholder="პასუხი 1">
+      </div>
+      <div class="poll-option-row">
+        <input class="poll-input" maxlength="200" placeholder="პასუხი 2">
+      </div>
+    </div>
+
+    <button class="poll-button poll-button-secondary" id="poll-add-option">+ პასუხის დამატება</button>
+
+    <label class="poll-label">გამოკითხვის ხანგრძლივობა</label>
+    <select class="poll-select" id="poll-duration">
+      <option value="1">1 დღე</option>
+      <option value="3">3 დღე</option>
+      <option value="7" selected>7 დღე</option>
+      <option value="14">14 დღე</option>
+      <option value="30">30 დღე</option>
+      <option value="custom">საკუთარი ხანგრძლივობა</option>
+    </select>
+
+    <input class="poll-input" id="poll-custom-duration" type="number" min="1" max="365" placeholder="დღეების რაოდენობა" style="display:none;margin-top:10px">
+
+    <div class="poll-actions">
+      <button class="poll-button" id="poll-publish">გამოქვეყნება</button>
+      <button class="poll-button poll-button-secondary" id="poll-preview">წინასწარი ნახვა</button>
+    </div>
+  `)
+
+  const optionsContainer = document.getElementById('poll-options-container')
+  const addButton = document.getElementById('poll-add-option')
+  const durationSelect = document.getElementById('poll-duration')
+  const customDuration = document.getElementById('poll-custom-duration')
+
+  addButton.addEventListener('click', () => {
+    if (pollOptionsCount >= 10) {
+      pollNotify('მაქსიმუმ 10 პასუხის დამატება შეგიძლია')
+      return
+    }
+
+    pollOptionsCount++
+
+    const row = document.createElement('div')
+    row.className = 'poll-option-row'
+    row.innerHTML = `
+      <input class="poll-input" maxlength="200" placeholder="პასუხი ${pollOptionsCount}">
+      <button class="poll-button poll-button-danger" type="button">×</button>
+    `
+
+    row.querySelector('button').addEventListener('click', () => {
+      row.remove()
+      pollOptionsCount--
+    })
+
+    optionsContainer.appendChild(row)
+  })
+
+  durationSelect.addEventListener('change', () => {
+    customDuration.style.display = durationSelect.value === 'custom' ? 'block' : 'none'
+  })
+
+  document.getElementById('poll-preview').addEventListener('click', () => {
+    const question = document.getElementById('poll-question-input').value.trim()
+    const options = [...optionsContainer.querySelectorAll('input')].map(input => input.value.trim()).filter(Boolean)
+
+    if (!question || options.length < 2) {
+      pollNotify('შეავსე კითხვა და მინიმუმ ორი პასუხი')
+      return
+    }
+
+    pollShow(`
+      <button class="poll-close" aria-label="დახურვა">×</button>
+      <div class="poll-status">PREVIEW</div>
+      <div class="poll-heading">${pollEscape(question)}</div>
+      <div class="poll-subtitle">ასე გამოჩნდება გამოკითხვა მომხმარებლებისთვის</div>
+      ${options.map(option => `
+        <div class="poll-vote-option">${pollEscape(option)}</div>
+      `).join('')}
+      <div class="poll-actions">
+        <button class="poll-button poll-button-secondary" id="poll-back-builder">უკან დაბრუნება</button>
+      </div>
+    `)
+
+    document.getElementById('poll-back-builder')?.addEventListener('click', pollRenderBuilder)
+  })
+
+  document.getElementById('poll-publish').addEventListener('click', async () => {
+    const question = document.getElementById('poll-question-input').value.trim()
+    const options = [...optionsContainer.querySelectorAll('input')].map(input => input.value.trim())
+    const duration = durationSelect.value === 'custom'
+      ? Number(customDuration.value)
+      : Number(durationSelect.value)
+
+    if (question.length < 3) {
+      pollNotify('კითხვა მინიმუმ 3 სიმბოლოს უნდა შეიცავდეს')
+      return
+    }
+
+    if (options.length < 2 || options.length > 10 || options.some(option => !option)) {
+      pollNotify('შეავსე ყველა პასუხი')
+      return
+    }
+
+    if (new Set(options.map(option => option.toLowerCase())).size !== options.length) {
+      pollNotify('ერთნაირი პასუხების დამატება არ შეიძლება')
+      return
+    }
+
+    if (!Number.isInteger(duration) || duration < 1 || duration > 365) {
+      pollNotify('აირჩიე ხანგრძლივობა 1-დან 365 დღემდე')
+      return
+    }
+
+    const publishButton = document.getElementById('poll-publish')
+    publishButton.disabled = true
+    publishButton.textContent = 'იქმნება...'
+
+    const { error } = await db.rpc('create_poll', {
+      p_question: question,
+      p_options: options,
+      p_duration_days: duration
+    })
+
+    if (error) {
+      console.error('Poll creation error:', error)
+      pollNotify(error.message)
+      publishButton.disabled = false
+      publishButton.textContent = 'გამოქვეყნება'
+      return
+    }
+
+    pollNotify('გამოკითხვა წარმატებით გამოქვეყნდა')
+    pollClose()
+    await pollLoadAndShow()
+  })
+}
+
+async function pollOpenBuilder() {
+  if (!db) {
+    pollNotify('Supabase კავშირი მიუწვდომელია')
+    return
+  }
+
+  const { data } = await db.auth.getSession()
+  const user = data?.session?.user
+
+  if (!user || !(await isAdmin(user))) {
+    pollNotify('ამ მოქმედებისთვის ადმინისტრატორის უფლებებია საჭირო')
+    return
+  }
+
+  pollRenderBuilder()
+}
+
+async function pollCancelActive() {
+  const { data } = await db.auth.getSession()
+  const user = data?.session?.user
+
+  if (!user || !(await isAdmin(user))) {
+    pollNotify('ამ მოქმედებისთვის ადმინისტრატორის უფლებებია საჭირო')
+    return
+  }
+
+  const confirmed = confirm('ნამდვილად გსურს ყველა აქტიური გამოკითხვის გაუქმება? დასრულებული გამოკითხვები შენარჩუნდება.')
+
+  if (!confirmed) return
+
+  const { error, count } = await db
+    .from('polls')
+    .update({ status: 'cancelled' })
+    .eq('status', 'active')
+
+  if (error) {
+    console.error('Poll cancellation error:', error)
+    pollNotify('გამოკითხვების გაუქმება ვერ მოხერხდა')
+    return
+  }
+
+  pollClose()
+  pollNotify('აქტიური გამოკითხვები გაუქმებულია')
+}
+
+function pollInitCommands() {
+  const form = document.getElementById('ai-chat-form')
+  const input = document.getElementById('ai-chat-input')
+
+  if (!form || !input || form.dataset.pollCommandsReady) return
+
+  form.dataset.pollCommandsReady = 'true'
+
+  form.addEventListener('submit', async event => {
+    const command = input.value.trim().toLowerCase()
+
+    if (command !== '/poll' && command !== '/polldel') return
+
+    event.preventDefault()
+    event.stopImmediatePropagation()
+
+    const originalCommand = input.value.trim()
+    input.value = ''
+
+    if (typeof addAIMessage === 'function') {
+      addAIMessage('user', originalCommand)
+    }
+
+    if (command === '/poll') {
+      await pollOpenBuilder()
+    } else {
+      await pollCancelActive()
+    }
+  }, true)
+}
+
+async function pollInit() {
+  pollInitCommands()
+
+  if (!db) return
+
+  const { data } = await db.auth.getSession()
+
+  if (!data?.session) {
+    await pollLoadAndShow()
+    return
+  }
+
+  await pollLoadAndShow()
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', pollInit, { once: true })
+} else {
+  pollInit()
+}
