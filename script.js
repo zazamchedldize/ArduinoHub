@@ -13174,3 +13174,35 @@ if (document.readyState === 'loading') {
 } else {
   pollInit()
 }
+
+
+function pollInitCommands() {
+  const form = document.getElementById('ai-chat-form')
+  const input = document.getElementById('ai-chat-input')
+
+  if (!form || !input || form.dataset.pollCommandsReady) return
+
+  form.dataset.pollCommandsReady = 'true'
+
+  document.addEventListener('submit', async event => {
+    if (event.target !== form) return
+
+    const command = input.value.trim().toLowerCase()
+
+    if (!['/poll', '/polldel', '/pollinfo'].includes(command)) return
+
+    event.preventDefault()
+    event.stopImmediatePropagation()
+
+    input.value = ''
+
+    if (command === '/poll') {
+      await pollOpenBuilder()
+    } else if (command === '/polldel') {
+      await pollCancelActive()
+    } else {
+      await pollShowInfo()
+    }
+  }, true)
+}
+
