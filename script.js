@@ -13059,57 +13059,56 @@ async function pollCancelActive() {
 
 
 async function pollShowInfo() {
-  const polls = await pollGetData()
+  if (!db) return
 
-  const activePolls = polls.filter(poll => poll.status === 'active')
+  const { data, error } = await db.rpc('get_poll_vote_details')
 
-  if (!activePolls.length) {
+  if (error) {
+    console.error('Poll info error:', error)
+
     pollShow(`
       <button class="poll-close">✕</button>
       <div class="poll-heading">POLL ANALYTICS</div>
-      <div class="poll-subtitle">აქტიური გამოკითხვა არ არის</div>
+      <div class="poll-subtitle">მონაცემების ჩატვირთვა ვერ მოხერხდა</div>
     `)
+
     return
   }
 
-  const content = activePolls.map((poll, index) => {
-    const options = Array.isArray(poll.options) ? poll.options : []
+  const votes = Array.isArray(data) ? data : []
 
-    const optionData = options.map(option => {
-      if (typeof option === 'string') {
-        return {
-          label: option,
-          votes: null
-        }
-      }
+  if (!votes.length) {
+    pollShow(`
+      <button class="poll-close">✕</button>
+      <div class="poll-heading">POLL ANALYTICS</div>
+      <div class="poll-subtitle">აქტიურ გამოკითხვაში ხმები ჯერ არ არის</div>
+    `)
 
-      const label =
-        option.option_text ??
-        option.text ??
-        option.label ??
-        option.title ??
-        option.name ??
-        option.value ??
-        'პასუხის ვარიანტი'
+    return
+  }
 
-      const votes =
-        option.votes ??
-        option.vote_count ??
-        option.count ??
-        option.total_votes ??
-        null
+  const polls = new Map()
 
-      return {
-        label: String(label),
-        votes: Number.isFinite(Number(votes)) && votes !== null
-          ? Number(votes)
-          : null
-      }
+  votes.forEach(vote => {
+    if (!polls.has(vote.poll_id)) {
+      polls.set(vote.poll_id, {
+        question: vote.question,
+        votes: []
+      })
+    }
+
+    polls.get(vote.poll_id).votes.push(vote)
+  })
+
+  const content = Array.from(polls.values()).map((poll, index) => {
+    const totalVotes = poll.votes.length
+
+    const optionCounts = {}
+
+    poll.votes.forEach(vote => {
+      optionCounts[vote.option_text] =
+        (optionCounts[vote.option_text] || 0) + 1
     })
-
-    const totalVotes = optionData.reduce((total, option) => {
-      return total + (option.votes ?? 0)
-    }, 0)
 
     return `
       <div class="poll-status">
@@ -13117,39 +13116,57 @@ async function pollShowInfo() {
       </div>
 
       <div class="poll-heading">
-        ${pollEscape(poll.question || 'გამოკითხვა')}
+        ${pollEscape(poll.question)}
       </div>
 
       <div class="poll-subtitle">
         სულ ხმები: ${totalVotes}
       </div>
 
-      ${optionData.map(option => {
-        const percent = totalVotes > 0 && option.votes !== null
-          ? Math.round(option.votes / totalVotes * 100)
-          : 0
+      ${Object.entries(optionCounts).map(([option, count]) => {
+        const percent = Math.round(count / totalVotes * 100)
 
         return `
           <div class="poll-label">
-            ${pollEscape(option.label)}
+            ${pollEscape(option)}
           </div>
 
-          <div style="background:#14231e;height:10px;border-radius:10px;overflow:hidden;margin:8px 0 5px">
-            <div style="height:100%;width:${percent}%;background:#22d395;border-radius:10px;transition:width .5s"></div>
+          <div style="background:#14231e;height:9px;border-radius:10px;overflow:hidden;margin:8px 0">
+            <div style="height:100%;width:${percent}%;background:#22d395;border-radius:10px"></div>
           </div>
 
           <div class="poll-subtitle">
-            ${option.votes === null ? 'ხმების მონაცემი მიუწვდომელია' : `${option.votes} ხმა · ${percent}%`}
+            ${count} ხმა · ${percent}%
           </div>
         `
       }).join('')}
+
+      <div class="poll-status" style="margin-top:20px">
+        VOTER DETAILS
+      </div>
+
+      ${poll.votes.map(vote => `
+        <div style="background:#0b1713;border:1px solid #22d39533;border-radius:10px;padding:12px;margin:9px 0">
+          <div style="color:#22d395;font-weight:700">
+            ${pollEscape(vote.voter_name)}
+          </div>
+
+          <div style="margin-top:5px">
+            ხმა მისცა: <strong>${pollEscape(vote.option_text)}</strong>
+          </div>
+
+          <div class="poll-subtitle" style="margin-top:6px">
+            ${new Date(vote.created_at).toLocaleString('ka-GE')}
+          </div>
+        </div>
+      `).join('')}
     `
   }).join('<hr style="border-color:#22d39533;margin:20px 0">')
 
   pollShow(`
     <button class="poll-close">✕</button>
     <div class="poll-heading">POLL ANALYTICS</div>
-    <div class="poll-subtitle">გამოკითხვების სტატისტიკა</div>
+    <div class="poll-subtitle">გამოკითხვების სრული სტატისტიკა</div>
     ${content}
   `)
 }
