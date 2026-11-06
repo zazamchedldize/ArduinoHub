@@ -11265,3 +11265,112 @@ body.iphone-install-open {
     text-shadow: 0 0 9px rgba(255, 75, 95, 0.95), 0 0 18px rgba(220, 20, 60, 0.6);
   }
 }
+
+/* =====================================================
+   SPECIAL TITLES
+   ===================================================== */
+
+.team-tags span.title-vaneli,
+.team-tags span.title-mcu {
+  position: relative;
+  overflow: hidden;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  isolation: isolate;
+}
+
+/* ---------- ვანელი (მწვანე) ---------- */
+.team-tags span.title-vaneli {
+  color: #eafff1;
+  background: linear-gradient(135deg, #0f8a4b 0%, #22c55e 50%, #86efac 100%);
+  border: 1px solid rgba(134, 239, 172, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 60, 25, 0.5);
+  box-shadow:
+    0 0 10px rgba(34, 197, 94, 0.55),
+    0 0 22px rgba(34, 197, 94, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  animation: vaneliGlow 2.8s ease-in-out infinite;
+}
+
+/* ---------- MCU (წითელ-ოქროსფერი) ---------- */
+.team-tags span.title-mcu {
+  color: #fff8e1;
+  background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 50%, #f59e0b 100%);
+  border: 1px solid rgba(251, 191, 36, 0.7);
+  text-shadow: 0 1px 2px rgba(60, 0, 0, 0.55);
+  box-shadow:
+    0 0 10px rgba(220, 38, 38, 0.5),
+    0 0 22px rgba(245, 158, 11, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  animation: mcuGlow 2.8s ease-in-out infinite;
+}
+
+/* ბზინვარების ეფექტი (ორივეზე) */
+.team-tags span.title-vaneli::after,
+.team-tags span.title-mcu::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: titleShine 3.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+.team-tags span.title-vaneli:hover,
+.team-tags span.title-mcu:hover {
+  transform: translateY(-2px) scale(1.05);
+  transition: transform 0.25s ease;
+}
+
+@keyframes vaneliGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(34, 197, 94, 0.45),
+      0 0 18px rgba(34, 197, 94, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 14px rgba(34, 197, 94, 0.8),
+      0 0 30px rgba(34, 197, 94, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+}
+
+@keyframes mcuGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(220, 38, 38, 0.45),
+      0 0 18px rgba(245, 158, 11, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 14px rgba(220, 38, 38, 0.8),
+      0 0 30px rgba(245, 158, 11, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes titleShine {
+  0%   { left: -75%; }
+  55%, 100% { left: 130%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-tags span.title-vaneli,
+  .team-tags span.title-mcu,
+  .team-tags span.title-vaneli::after,
+  .team-tags span.title-mcu::after {
+    animation: none;
+  }
+}
