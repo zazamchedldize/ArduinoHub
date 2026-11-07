@@ -24,8 +24,9 @@
     resize();
     addEventListener("resize", resize);
 
-    setInterval(() => {
-      ctx.fillStyle = "rgba(2, 10, 5, 0.12)";
+       setInterval(() => {
+         if (document.body.classList.contains("winter-mode")) return;
+         ctx.fillStyle = "rgba(2, 10, 5, 0.12)";
       ctx.fillRect(0, 0, c.width, c.height);
       ctx.font = size + "px monospace";
       for (let i = 0; i < cols; i++) {
