@@ -1610,29 +1610,7 @@ function setupZazaHistoryDelete() {
 
 
 
-async function getAdAdmin() {
-  if (!db) return null
 
-  const {
-    data: { session }
-  } = await db.auth.getSession()
-
-  if (!session?.user) return null
-
-  return await isAdmin(session.user)
-}
-
-const command = cleanQuestion.toLowerCase()
-
-if (command === '/ad') {
-  await openAdManager()
-  return
-}
-
-if (command === '/delad') {
-  await deleteAllAdvertisements()
-  return
-}
 async function handleAIQuestion(question) {
   const input = $('#ai-chat-input')
   const send = $('#ai-send-btn')
@@ -1668,17 +1646,6 @@ async function handleAIQuestion(question) {
   }
 
   try {
-        const command = cleanQuestion.toLowerCase()
-
-    if (command === '/ad') {
-      await openAdManager()
-      return
-    }
-
-    if (command === '/delad') {
-      await deleteAllAdvertisements()
-      return
-    }
     if (cleanQuestion.toLowerCase() === '/history') {
       const isZaza = aiAdminGreeting === 'ბატონო ზაზა'
 
