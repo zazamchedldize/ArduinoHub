@@ -13403,7 +13403,7 @@ function winterApplyMode(enabled) {
   document.body.appendChild(snow)
 
   if (!arduinoWinterAudio) {
-    arduinoWinterAudio = new Audio('/sound/winter.mp3')
+    arduinoWinterAudio = new Audio('/sounds/winter.mp3')
     arduinoWinterAudio.loop = true
     arduinoWinterAudio.volume = 0.35
   }
