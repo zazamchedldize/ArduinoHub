@@ -1646,6 +1646,17 @@ async function handleAIQuestion(question) {
   }
 
   try {
+    const command = cleanQuestion.toLowerCase()
+
+if (command === '/ad') {
+  await openAdManager()
+  return
+}
+
+if (command === '/delad') {
+  await deleteAllAdvertisements()
+  return
+}
     if (cleanQuestion.toLowerCase() === '/history') {
       const isZaza = aiAdminGreeting === 'ბატონო ზაზა'
 
