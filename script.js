@@ -1755,6 +1755,180 @@ async function openAdManager() {
   }
 }
 
+
+async function showAdvertisement() {
+  if (typeof db === 'undefined' || !db) return
+
+  try {
+    if (sessionStorage.getItem('arduinohub_ad_shown') === '1') return
+  } catch {}
+
+  const { data: ad, error } = await db
+    .from('advertisements')
+    .select('title, description, desktop_video, mobile_video')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Advertisement load error:', error)
+    return
+  }
+
+  if (!ad) return
+
+  try {
+    sessionStorage.setItem('arduinohub_ad_shown', '1')
+  } catch {}
+
+  const isMobile = window.matchMedia('(max-width: 700px)').matches
+  const videoUrl = isMobile ? ad.mobile_video : ad.desktop_video
+
+  const overlay = document.createElement('div')
+  overlay.id = 'arduinohub-ad-overlay'
+
+  const card = document.createElement('div')
+  card.className = 'arduinohub-ad-card'
+
+  const decoration = document.createElement('div')
+  decoration.className = 'arduinohub-ad-decoration'
+  decoration.textContent = '✦  ❄  ✦'
+
+  const label = document.createElement('div')
+  label.className = 'arduinohub-ad-label'
+  label.textContent = 'SPECIAL CHRISTMAS PRESENT'
+
+  const close = document.createElement('button')
+  close.className = 'arduinohub-ad-close'
+  close.type = 'button'
+  close.textContent = '×'
+  close.setAttribute('aria-label', 'დახურვა')
+
+  const heading = document.createElement('h2')
+  heading.className = 'arduinohub-ad-title'
+  heading.textContent = ad.title
+
+  const description = document.createElement('p')
+  description.className = 'arduinohub-ad-description'
+  description.textContent = ad.description || ''
+
+  const videoWrap = document.createElement('div')
+  videoWrap.className = 'arduinohub-ad-video-wrap'
+
+  const video = document.createElement('video')
+  video.className = 'arduinohub-ad-video'
+  video.src = videoUrl
+  video.preload = 'metadata'
+  video.playsInline = true
+  video.setAttribute('playsinline', '')
+  video.setAttribute('webkit-playsinline', '')
+  video.controls = false
+
+  const playButton = document.createElement('button')
+  playButton.className = 'arduinohub-ad-play'
+  playButton.type = 'button'
+  playButton.innerHTML = '<span>▶</span> ჩართვა'
+
+  const status = document.createElement('p')
+  status.className = 'arduinohub-ad-status'
+
+  const footer = document.createElement('div')
+  footer.className = 'arduinohub-ad-footer'
+  footer.textContent = 'MERRY CHRISTMAS & HAPPY NEW YEAR'
+
+  videoWrap.append(video, playButton)
+
+  card.append(
+    decoration,
+    close,
+    label,
+    heading,
+    description,
+    videoWrap,
+    status,
+    footer
+  )
+
+  overlay.appendChild(card)
+  document.body.appendChild(overlay)
+
+  document.body.style.overflow = 'hidden'
+
+  let closed = false
+
+  function closeAd() {
+    if (closed) return
+    closed = true
+    video.pause()
+    overlay.remove()
+    document.body.style.overflow = ''
+    document.removeEventListener('keydown', onKeyDown)
+  }
+
+  function onKeyDown(event) {
+    if (event.key === 'Escape') closeAd()
+  }
+
+  close.addEventListener('click', closeAd)
+
+  overlay.addEventListener('click', event => {
+    if (event.target === overlay) closeAd()
+  })
+
+  document.addEventListener('keydown', onKeyDown)
+
+  playButton.addEventListener('click', async () => {
+    video.muted = false
+    video.volume = 1
+    video.controls = true
+
+    playButton.disabled = true
+    playButton.textContent = 'იტვირთება...'
+    status.textContent = ''
+
+    try {
+      await video.play()
+      playButton.remove()
+    } catch (error) {
+      console.error('Advertisement playback error:', error)
+      status.textContent = 'ვიდეო ვერ ჩაირთო. სცადე ხელახლა.'
+      playButton.disabled = false
+      playButton.innerHTML = '<span>▶</span> ხელახლა ცდა'
+    }
+  })
+}
+
+function initializeAdvertisement() {
+  let attempts = 0
+
+  const check = async () => {
+    attempts++
+
+    if (typeof db === 'undefined' || !db) {
+      if (attempts < 20) setTimeout(check, 500)
+      return
+    }
+
+    try {
+      await showAdvertisement()
+    } catch (error) {
+      console.error('Advertisement initialization error:', error)
+    }
+  }
+
+  check()
+}
+
+if (document.readyState === 'complete') {
+  setTimeout(initializeAdvertisement, 1200)
+} else {
+  window.addEventListener('load', () => {
+    setTimeout(initializeAdvertisement, 1200)
+  }, { once: true })
+}
+
+
 async function uploadCloudinaryVideo(file, kind) {
   const { data, error } = await db.functions.invoke('ad-media', {
     body: {
