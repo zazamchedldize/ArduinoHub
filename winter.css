@@ -1,5 +1,5 @@
 /* =========================================================
-   ArduinoHub — Winter Theme v2 (winter.css)
+   ArduinoHub — Winter Theme v3 (winter.css)
    ჩაირთოს theme.css-ის შემდეგ.
    ყველაფერი scoped არის html.winter-mode / body.winter-mode-ზე.
    /winterstop-ზე კლასები იხსნება და ძველი hacker დიზაინი სრულად ბრუნდება.
@@ -378,4 +378,111 @@ body.winter-mode .arduinohub-film-frame video{ background:#050d08; }
 
 @media (prefers-reduced-motion:reduce){
   body.winter-mode .arduinohub-film-section::before{ animation:none; }
+}
+
+/* =========================================================
+   14. v3 დამატებები: ბურთულები, ლოლოები, ყინვა, უკუთვლა, shimmer
+   ========================================================= */
+
+/* --- ქანაობადი ბურთულები გირლანდაზე (JS ამატებს .winter-bauble-ებს) --- */
+.winter-bauble{
+  position:absolute; top:14px; left:var(--x,50%);
+  width:0; height:0; display:block;
+  transform-origin:50% 0;
+  animation:winterSwing var(--dur,3.4s) ease-in-out var(--delay,0s) infinite alternate;
+  pointer-events:none;
+}
+.winter-bauble::before{                      /* ძაფი */
+  content:""; position:absolute; top:0; left:-.5px;
+  width:1px; height:var(--len,12px);
+  background:rgba(242,193,78,.75);
+}
+.winter-bauble::after{                       /* ბურთულა */
+  content:""; position:absolute;
+  top:var(--len,12px); left:calc(var(--size,16px) / -2);
+  width:var(--size,16px); height:var(--size,16px);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 9%, transparent 26%),
+    radial-gradient(circle at 50% 55%, var(--c1,#ff5d6c), var(--c2,#a91d2c) 90%);
+  box-shadow:0 0 10px var(--c1,#ff5d6c), inset -2px -3px 5px rgba(0,0,0,.28);
+}
+@keyframes winterSwing{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
+
+/* --- ყინულის ლოლოები header-ის ქვემოთ --- */
+.winter-icicles{
+  position:absolute; left:0; right:0; top:100%; height:30px;
+  pointer-events:none; z-index:2;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='30' viewBox='0 0 96 30'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23eaf6ff' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%239fd3ff' stop-opacity='.2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cpath d='M2 0h14l-7 24z'/%3E%3Cpath d='M26 0h10l-5 13z'/%3E%3Cpath d='M42 0h16l-8 30z'/%3E%3Cpath d='M66 0h9l-4.5 11z'/%3E%3Cpath d='M80 0h13l-6.5 19z'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 0/96px 30px;
+  filter:drop-shadow(0 0 5px rgba(160,210,255,.45));
+  animation:winterFade 1.6s .3s ease both;
+}
+
+/* --- ყინვის ჩარჩო ეკრანის კიდეებზე --- */
+#winter-frost{
+  position:fixed; inset:0; pointer-events:none; z-index:997;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 58%, rgba(160,210,255,.07) 86%, rgba(190,228,255,.16) 100%),
+    radial-gradient(circle at 0 100%, rgba(190,228,255,.14), transparent 28%),
+    radial-gradient(circle at 100% 100%, rgba(190,228,255,.14), transparent 28%);
+  box-shadow:inset 0 0 110px rgba(150,205,255,.07);
+  animation:winterFade 1.8s ease both;
+}
+
+/* --- უკუთვლა ახალ წლამდე --- */
+.winter-countdown{
+  position:fixed; left:50%; bottom:14px; transform:translateX(-50%);
+  z-index:1100; cursor:pointer; user-select:none;
+  padding:8px 16px; border-radius:999px;
+  font:600 13px/1.2 "FiraGO","Inter",system-ui,sans-serif;
+  letter-spacing:.3px; font-variant-numeric:tabular-nums; white-space:nowrap;
+  color:#ffe6a6;
+  background:rgba(6,20,13,.82);
+  border:1px solid rgba(242,193,78,.55);
+  box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 22px rgba(214,40,57,.22);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  animation:winterRise .8s .6s ease both;
+  transition:opacity .3s,transform .3s,box-shadow .25s;
+}
+.winter-countdown:hover{ box-shadow:0 6px 28px rgba(0,0,0,.5),0 0 30px rgba(242,193,78,.4); }
+.winter-countdown.hide{ opacity:0; transform:translate(-50%,12px); pointer-events:none; }
+@keyframes winterRise{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* --- სათაურის ოქროსფერი "shimmer" --- */
+body.winter-mode h1 em,
+body.winter-mode .hero h1 em,
+body.winter-mode .arduinohub-film-title span{
+  background-size:220% 100%;
+  animation:winterShimmer 6s ease-in-out infinite alternate;
+}
+@keyframes winterShimmer{from{background-position:0% 50%}to{background-position:100% 50%}}
+
+/* --- პატარა დეტალები --- */
+body.winter-mode ::selection{ background:rgba(214,40,57,.75); color:#fff; }
+body.winter-mode .team-card,
+body.winter-mode [class*="project-card"],
+body.winter-mode [class*="album-card"],
+body.winter-mode .card,
+body.winter-mode .steps article{ transition:transform .3s ease,box-shadow .3s ease; }
+body.winter-mode .team-card:hover,
+body.winter-mode [class*="project-card"]:hover,
+body.winter-mode [class*="album-card"]:hover,
+body.winter-mode .card:hover,
+body.winter-mode .steps article:hover{ transform:translateY(-4px); }
+
+/* --- მობილური --- */
+@media (max-width:700px){
+  .winter-bauble{ top:9px; }
+  .winter-bauble:nth-child(even){ display:none; }
+  .winter-bauble::after{ width:calc(var(--size,16px) * .8); height:calc(var(--size,16px) * .8); left:calc(var(--size,16px) * -.4); }
+  .winter-icicles{ height:20px; background-size:64px 20px; }
+  .winter-countdown{ font-size:11.5px; padding:6px 12px; bottom:10px; }
+}
+
+/* --- შემცირებული მოძრაობა --- */
+@media (prefers-reduced-motion:reduce){
+  .winter-bauble,.winter-icicles,#winter-frost,.winter-countdown,
+  body.winter-mode h1 em,body.winter-mode .hero h1 em,
+  body.winter-mode .arduinohub-film-title span{ animation:none !important; }
+  .winter-countdown{ transform:translateX(-50%); }
 }
