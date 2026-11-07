@@ -1771,12 +1771,13 @@ async function showAdvertisement() {
   } catch {}
 
   const { data: ad, error } = await db
-    .from('advertisements')
-    .select('title, description, desktop_video, mobile_video')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  .from('advertisements')
+  .select('title, description, desktop_video, mobile_video')
+  .eq('is_active', true)
+  .lte('starts_at', new Date().toISOString())
+  .order('starts_at', { ascending: false })
+  .limit(1)
+  .maybeSingle()
 
   if (error) {
     console.error('Advertisement load error:', error)
