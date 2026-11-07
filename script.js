@@ -1607,7 +1607,17 @@ function setupZazaHistoryDelete() {
 
   refreshIcons()
 }
+async function getAdAdmin() {
+  if (!db) return null
 
+  const {
+    data: { session }
+  } = await db.auth.getSession()
+
+  if (!session?.user) return null
+
+  return await isAdmin(session.user)
+}
 
 async function openAdManager() {
   const admin = await getAdAdmin()
