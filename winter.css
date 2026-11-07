@@ -1,232 +1,337 @@
 /* =========================================================
-   ArduinoHub — Winter Theme (winter.css)
-   ყველაფერი scoped არის body.winter-mode-ზე.
-   /winterstop-ზე კლასი იხსნება და ძველი დიზაინი სრულად ბრუნდება.
-   ჩაირთოს style.css-ის შემდეგ.
+   ArduinoHub — Winter Theme v2 (winter.css)
+   ჩაირთოს theme.css-ის შემდეგ.
+   ყველაფერი scoped არის html.winter-mode / body.winter-mode-ზე.
+   /winterstop-ზე კლასები იხსნება და ძველი hacker დიზაინი სრულად ბრუნდება.
    ========================================================= */
 
-/* ---------- 1. ფერთა ცვლადები (ავტომატურად ეხება ყველა var()-ს) ---------- */
-body.winter-mode{
+/* ---------- 1. theme.css-ის ცვლადების ჩანაცვლება ----------
+   theme.css-ის თითქმის ყველა წესი var(--h-*)-ს იყენებს,
+   ამიტომ აქ ცვლადების გადაფარვა ფერს ერთბაშად ცვლის (scrollbar-ის ჩათვლით). */
+html.winter-mode{
+  --h-bg:#06140d;
+  --h-bg2:#0a1f14;
+  --h-green:#f2c14e;                         /* მთავარი აქცენტი: ოქროსფერი */
+  --h-green-soft:#ffe6a6;
+  --h-green-dim:rgba(255,255,255,.035);      /* ფონის ბადე თითქმის უხილავი */
+  --h-line:rgba(242,193,78,.34);
+  --h-glow:0 0 8px rgba(242,193,78,.45),0 0 26px rgba(214,40,57,.18);
+  --h-mono:"FiraGO","Inter",system-ui,sans-serif;   /* ტერმინალის შრიფტი აღარ გვჭირდება */
+  --w-red:#d62839;
+  --w-red2:#ff5d6c;
+  --w-gold:#f2c14e;
+  --w-snow:#fbf7ee;
   --bg:#06140d;
   --panel:#0b2016;
   --panel2:#0f2b1d;
   --line:#3a4a2c;
   --text:#fbf7ee;
   --muted:#bccbb8;
-  --green:#f0c24b;      /* მთავარი აქცენტი → ოქროსფერი */
+  --green:#f2c14e;
   --green2:#fff0b8;
   --danger:#ff6b6b;
-  --shadow:0 18px 50px #000a;
-  --w-red:#d62839;
-  --w-red2:#ff5d6c;
-  --w-gold:#f0c24b;
-  --w-pine:#0f3d27;
-  --w-snow:#fbf7ee;
-  background:var(--bg);
-  scrollbar-color:#d4af37 #06140d;
 }
-body.winter-mode *{ scrollbar-color:#d4af37 #06140d; }
 
-/* ---------- 2. ფონი: წითელ-ოქროსფერი ambient + თოვლისფერი ნაპერწკლები ---------- */
-body.winter-mode:before{
-  background:
-    radial-gradient(circle at 15% 20%,#d6283930 0,#d628391a 12%,transparent 30%),
-    radial-gradient(circle at 80% 15%,#f0c24b24 0,#f0c24b0f 15%,transparent 32%),
-    radial-gradient(circle at 75% 75%,#1f8a4f26 0,#1f8a4f10 16%,transparent 33%),
-    radial-gradient(circle at 20% 85%,#f0c24b18 0,transparent 28%);
-}
-body.winter-mode:after{
+/* ---------- 2. ფონი: Matrix-ის გათიშვა, თბილი ambient ---------- */
+body.winter-mode #fx-rain,
+body.winter-mode #fx-cursor{ display:none !important; }
+
+body.winter-mode{
+  color:#f3efe4;
   background-image:
-    radial-gradient(circle at 8% 18%,#fff8 0 2.5px,transparent 4.5px),
-    radial-gradient(circle at 17% 68%,#f0c24b66 0 2px,transparent 4.5px),
-    radial-gradient(circle at 29% 36%,#ffffff70 0 2.5px,transparent 5px),
-    radial-gradient(circle at 42% 82%,#ff5d6c55 0 2px,transparent 4.5px),
-    radial-gradient(circle at 54% 20%,#fff7 0 2.5px,transparent 5px),
-    radial-gradient(circle at 66% 58%,#f0c24b60 0 2px,transparent 4.5px),
-    radial-gradient(circle at 78% 30%,#ffffff66 0 2px,transparent 5px),
-    radial-gradient(circle at 91% 76%,#ff5d6c50 0 2.5px,transparent 5px),
-    radial-gradient(circle at 94% 12%,#fff6 0 2px,transparent 4.5px),
-    radial-gradient(circle at 5% 92%,#f0c24b55 0 2.5px,transparent 5px);
+    radial-gradient(ellipse at 50% -10%, rgba(214,40,57,.10), transparent 55%),
+    radial-gradient(ellipse at 50% 110%, rgba(242,193,78,.08), transparent 55%),
+    linear-gradient(180deg,#06140d,#0a1f14 55%,#06140d) !important;
+  background-size:auto !important;
+  background-attachment:fixed;
+}
+
+/* theme.css-ის მოძრავი სკანერი → სტატიკური თბილი ნათება */
+body.winter-mode::before{
+  display:block;
+  top:0; left:0; right:0; bottom:0;
+  height:auto;
+  transform:none;
+  animation:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(214,40,57,.14) 0, transparent 32%),
+    radial-gradient(circle at 88% 14%, rgba(242,193,78,.12) 0, transparent 30%),
+    radial-gradient(circle at 80% 85%, rgba(31,138,79,.16) 0, transparent 34%),
+    radial-gradient(circle at 15% 88%, rgba(242,193,78,.08) 0, transparent 30%);
+  filter:none;
 }
 
 /* ---------- 3. JS-ით შექმნილი დეკორი ---------- */
 #winter-snow{
   position:fixed; inset:0; width:100%; height:100%;
-  pointer-events:none; z-index:50;
+  pointer-events:none;
+  z-index:998;            /* header-ის (1000) ქვემოთ, კონტენტის ზემოთ */
 }
 
-/* გირლანდა: სადენი + ორი ფაზით მოციმციმე ნათურები */
+/* გირლანდა: header-ის ზემოთ, ჩატის (1200) ქვემოთ */
 #winter-garland{
-  position:fixed; top:0; left:0; right:0; height:30px;
-  pointer-events:none; z-index:120;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 1 Q60 36 120 1' fill='none' stroke='%231c3a28' stroke-width='2.2'/%3E%3C/svg%3E") repeat-x 0 0/120px 30px;
+  position:fixed; top:0; left:0; right:0; height:34px;
+  pointer-events:none; z-index:1002;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'%3E%3Cpath d='M0 1.5 Q60 40 120 1.5' fill='none' stroke='%23467a56' stroke-width='2.4'/%3E%3C/svg%3E") repeat-x 0 0/120px 34px;
   animation:winterFade 1.2s ease both;
 }
 #winter-garland:before,#winter-garland:after{
   content:""; position:absolute; inset:0;
-  background-repeat:repeat-x; background-size:120px 30px;
+  background-repeat:repeat-x; background-size:120px 34px;
   will-change:opacity;
 }
 #winter-garland:before{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Ccircle cx='20' cy='14' r='9' fill='%23ff5d6c' fill-opacity='.22'/%3E%3Crect x='18.5' y='6' width='3' height='4' fill='%23222'/%3E%3Ccircle cx='20' cy='14' r='3.6' fill='%23ff4d5e'/%3E%3Ccircle cx='100' cy='14' r='9' fill='%2355e08a' fill-opacity='.22'/%3E%3Crect x='98.5' y='6' width='3' height='4' fill='%23222'/%3E%3Ccircle cx='100' cy='14' r='3.6' fill='%2347d67c'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'%3E%3Ccircle cx='20' cy='17' r='11' fill='%23ff5d6c' fill-opacity='.30'/%3E%3Crect x='18.3' y='7' width='3.4' height='5' rx='1' fill='%23222'/%3E%3Ccircle cx='20' cy='17' r='4.6' fill='%23ff4d5e'/%3E%3Ccircle cx='100' cy='17' r='11' fill='%2355e08a' fill-opacity='.28'/%3E%3Crect x='98.3' y='7' width='3.4' height='5' rx='1' fill='%23222'/%3E%3Ccircle cx='100' cy='17' r='4.6' fill='%2347d67c'/%3E%3C/svg%3E");
   animation:winterTwinkleA 2.6s ease-in-out infinite;
 }
 #winter-garland:after{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Ccircle cx='60' cy='22' r='9' fill='%23f0c24b' fill-opacity='.28'/%3E%3Crect x='58.5' y='14' width='3' height='4' fill='%23222'/%3E%3Ccircle cx='60' cy='22' r='3.6' fill='%23ffd966'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'%3E%3Ccircle cx='60' cy='25' r='11' fill='%23f2c14e' fill-opacity='.34'/%3E%3Crect x='58.3' y='15' width='3.4' height='5' rx='1' fill='%23222'/%3E%3Ccircle cx='60' cy='25' r='4.6' fill='%23ffd966'/%3E%3C/svg%3E");
   animation:winterTwinkleB 2.6s ease-in-out infinite;
 }
-@keyframes winterTwinkleA{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes winterTwinkleB{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes winterTwinkleA{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes winterTwinkleB{0%,100%{opacity:.3}50%{opacity:1}}
 @keyframes winterFade{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 
-/* ნაძვის ტოტები ზედა კუთხეებში */
+/* ნაძვის ტოტები: hero-სა და footer-ის კუთხეებში (JS ამატებს), არ ფარავს header-ს */
 .winter-branch{
-  position:fixed; top:0; width:170px; height:110px;
-  pointer-events:none; z-index:25; opacity:.92;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='110' viewBox='0 0 170 110'%3E%3Cpath d='M0 6 Q70 18 160 62' fill='none' stroke='%232b1a0e' stroke-width='3'/%3E%3Cg stroke='%23145a36' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 9l-6 24M38 13l-7 28M56 19l-8 30M74 26l-8 32M92 35l-8 30M110 44l-7 26M128 53l-6 22'/%3E%3C/g%3E%3Cg stroke='%231f8a4f' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M20 9l9 20M38 13l9 23M56 19l10 25M74 26l11 26M92 35l10 24M110 44l9 20M128 53l8 17M146 60l7 12'/%3E%3C/g%3E%3Cg stroke='%23fbf7ee' stroke-width='2' stroke-linecap='round' opacity='.85'%3E%3Cpath d='M16 10l8-2M34 14l8-2M52 20l8-2M70 27l8-2M88 36l8-2M106 45l8-2'/%3E%3C/g%3E%3Ccircle cx='46' cy='38' r='5' fill='%23d62839'/%3E%3Ccircle cx='101' cy='53' r='5' fill='%23f0c24b'/%3E%3Ccircle cx='77' cy='46' r='3.4' fill='%23d62839'/%3E%3C/svg%3E") no-repeat 0 0/100% 100%;
+  position:absolute; width:190px; height:116px;
+  pointer-events:none; z-index:3; opacity:.96;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='110' viewBox='0 0 170 110'%3E%3Cpath d='M0 6 Q70 18 160 62' fill='none' stroke='%232b1a0e' stroke-width='3'/%3E%3Cg stroke='%23145a36' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 9l-6 24M38 13l-7 28M56 19l-8 30M74 26l-8 32M92 35l-8 30M110 44l-7 26M128 53l-6 22'/%3E%3C/g%3E%3Cg stroke='%231f8a4f' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M20 9l9 20M38 13l9 23M56 19l10 25M74 26l11 26M92 35l10 24M110 44l9 20M128 53l8 17M146 60l7 12'/%3E%3C/g%3E%3Cg stroke='%23fbf7ee' stroke-width='2' stroke-linecap='round' opacity='.85'%3E%3Cpath d='M16 10l8-2M34 14l8-2M52 20l8-2M70 27l8-2M88 36l8-2M106 45l8-2'/%3E%3C/g%3E%3Ccircle cx='46' cy='38' r='5' fill='%23d62839'/%3E%3Ccircle cx='101' cy='53' r='5' fill='%23f2c14e'/%3E%3Ccircle cx='77' cy='46' r='3.4' fill='%23d62839'/%3E%3C/svg%3E") no-repeat 0 0/100% 100%;
   animation:winterFade 1.4s .2s ease both;
 }
-.winter-branch.left{ left:0; }
-.winter-branch.right{ right:0; transform:scaleX(-1); }
+.winter-branch.tl{ top:0; left:0; }
+.winter-branch.tr{ top:0; right:0; transform:scaleX(-1); }
 
-/* ---------- 4. Header / ნავიგაცია ---------- */
+/* ---------- 4. Header ---------- */
 body.winter-mode .site-header{
-  border-bottom:1px solid transparent;
-  border-image:linear-gradient(90deg,transparent,#d4af37aa,#d62839aa,#d4af37aa,transparent) 1;
-  background:#06140dcc;
-  padding-top:14px;
+  background:rgba(6,20,13,.88) !important;
+  border-bottom:1px solid transparent !important;
+  border-image:linear-gradient(90deg,transparent,rgba(242,193,78,.7),rgba(214,40,57,.7),rgba(242,193,78,.7),transparent) 1 !important;
+  box-shadow:0 8px 30px rgba(0,0,0,.45),0 0 24px rgba(214,40,57,.10);
+  padding-top:12px;
 }
-body.winter-mode .brand>span:last-child{ color:var(--w-gold); text-shadow:0 0 18px #f0c24b55; }
+body.winter-mode .brand,
+body.winter-mode .brand>span:last-child{ color:var(--w-gold) !important; text-shadow:0 0 18px rgba(242,193,78,.45); }
 body.winter-mode .brand-mark{
-  border-color:var(--w-red2); color:var(--w-red2);
-  box-shadow:0 0 16px #ff5d6c40, inset 0 0 10px #ff5d6c18;
+  border-color:var(--w-red2) !important;
+  background:rgba(214,40,57,.14) !important;
+  color:var(--w-red2) !important;
+  text-shadow:0 0 10px rgba(255,93,108,.7);
+  box-shadow:0 0 14px rgba(255,93,108,.4),inset 0 0 8px rgba(255,93,108,.18);
+  animation:winterBrand 3s ease-in-out infinite !important;
 }
-body.winter-mode nav>a:hover,
-body.winter-mode nav>a.active{ color:var(--w-gold); text-shadow:0 0 14px #f0c24b55; }
-body.winter-mode .nav-admin,
-body.winter-mode .account-button{ border-color:#d4af3766; background:#d4af3710; }
-body.winter-mode .account-button:hover{ border-color:var(--w-gold); background:#d4af3720; }
-body.winter-mode .account-dropdown{ border-color:#d4af3755; background:#0b2016; }
+@keyframes winterBrand{
+  0%,100%{box-shadow:0 0 8px rgba(255,93,108,.3),inset 0 0 6px rgba(255,93,108,.12)}
+  50%{box-shadow:0 0 22px rgba(255,93,108,.65),0 0 34px rgba(242,193,78,.25),inset 0 0 12px rgba(255,93,108,.22)}
+}
+body.winter-mode .site-header nav a{ color:#f6efd8 !important; }
+body.winter-mode .site-header nav a:hover,
+body.winter-mode .site-header nav a.active{ color:var(--w-gold) !important; text-shadow:0 0 14px rgba(242,193,78,.5); }
+body.winter-mode .site-header nav a::after{ background:linear-gradient(90deg,var(--w-red2),var(--w-gold)); box-shadow:0 0 10px rgba(242,193,78,.5); }
 
-/* ---------- 5. Hero ---------- */
-body.winter-mode .eyebrow{ color:var(--w-gold); }
-body.winter-mode .hero h1{ color:var(--w-snow); }
-body.winter-mode .hero h1 em{
-  background:linear-gradient(100deg,#ff7a86,#f0c24b 55%,#fff0b8);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  text-shadow:none; filter:drop-shadow(0 0 18px #f0c24b44);
+/* header-ის ღილაკები (ვიქტორინა/შეკრება/ანგარიში) */
+body.winter-mode .nav-meeting,
+body.winter-mode .nav-admin,
+body.winter-mode .account-button{
+  background:rgba(242,193,78,.08) !important;
+  border:1px solid rgba(242,193,78,.55) !important;
+  color:#ffe6a6 !important;
 }
+body.winter-mode .nav-meeting:hover,
+body.winter-mode .nav-admin:hover,
+body.winter-mode .account-button:hover{
+  background:rgba(214,40,57,.22) !important;
+  border-color:var(--w-red2) !important;
+  color:#fff !important;
+  box-shadow:0 0 20px rgba(255,93,108,.35);
+}
+body.winter-mode .account-dropdown{ background:#0b2016; border-color:rgba(242,193,78,.4); }
+
+/* ---------- 5. სათაურები (glitch/ტერმინალის ეფექტების გათიშვა) ---------- */
+body.winter-mode h1,
+body.winter-mode h2{ color:var(--w-snow); text-shadow:0 0 22px rgba(242,193,78,.22); }
+body.winter-mode .glitch::before,
+body.winter-mode .glitch::after{ display:none !important; }
+body.winter-mode .eyebrow{ color:var(--w-gold) !important; letter-spacing:2.5px; }
+body.winter-mode .eyebrow::before,
+body.winter-mode .eyebrow::after{ content:none !important; }
+body.winter-mode h1 em,
+body.winter-mode .hero h1 em{
+  background:linear-gradient(100deg,#ff7a86,#f2c14e 55%,#fff0b8);
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent !important; text-shadow:none;
+  filter:drop-shadow(0 0 16px rgba(242,193,78,.4));
+}
+body.winter-mode .hero-text,
+body.winter-mode .hero p{ color:#d9d3c2; }
 body.winter-mode .hero-stats strong{ color:var(--w-gold); }
 
-body.winter-mode .primary{
-  background:linear-gradient(135deg,#e63946,#a91d2c);
-  color:#fff; border-color:#ff8a94aa;
-  box-shadow:0 7px 26px #d6283955, inset 0 1px 0 #ffffff30;
+/* ---------- 6. ღილაკები ---------- */
+body.winter-mode button,
+body.winter-mode .btn,
+body.winter-mode a.button{
+  background:rgba(242,193,78,.08) !important;
+  border:1px solid rgba(242,193,78,.6) !important;
+  color:#ffe6a6 !important;
 }
-body.winter-mode .primary:hover{
-  background:linear-gradient(135deg,#ff5d6c,#c42436);
-  box-shadow:0 10px 34px #ff5d6c66, 0 0 24px #f0c24b33;
+body.winter-mode button:hover,
+body.winter-mode .btn:hover,
+body.winter-mode a.button:hover{
+  background:rgba(242,193,78,.92) !important;
+  color:#1b0d08 !important;
+  box-shadow:0 0 22px rgba(242,193,78,.45);
 }
-body.winter-mode .secondary{ border-color:#d4af3766; color:var(--w-snow); background:#f0c24b0d; }
-body.winter-mode .secondary:hover{ border-color:var(--w-gold); box-shadow:0 0 22px #f0c24b30; }
-body.winter-mode .ghost{ border-color:#d4af3744; }
+body.winter-mode .button.primary,
+body.winter-mode a.button.primary,
+body.winter-mode button.button.primary{
+  background:linear-gradient(135deg,#e63946,#a91d2c) !important;
+  border:1px solid rgba(255,138,148,.75) !important;
+  color:#fff !important;
+  box-shadow:0 7px 26px rgba(214,40,57,.45),inset 0 1px 0 rgba(255,255,255,.22);
+}
+body.winter-mode .button.primary:hover,
+body.winter-mode a.button.primary:hover,
+body.winter-mode button.button.primary:hover{
+  background:linear-gradient(135deg,#ff5d6c,#c42436) !important;
+  color:#fff !important;
+  box-shadow:0 10px 34px rgba(255,93,108,.55),0 0 26px rgba(242,193,78,.3);
+}
 
-/* Arduino დაფის ილუსტრაცია */
-body.winter-mode .board{
-  border-color:#d4af3788;
-  background:linear-gradient(135deg,#123d27,#2a1118);
-  box-shadow:inset 0 0 50px #f0c24b14, 0 0 70px #d6283930;
-}
-body.winter-mode .chip{ border-color:#7a5c1e; color:var(--w-gold); }
-body.winter-mode .trace{ border-color:#d4af37; }
-body.winter-mode .led{ background:var(--w-red2); box-shadow:0 0 18px var(--w-red2); animation:winterLed 1.6s ease-in-out infinite; }
-body.winter-mode .circuit-visual:before{ background:radial-gradient(circle,#d628391f,transparent 65%); }
-@keyframes winterLed{
-  0%,100%{opacity:.6;box-shadow:0 0 10px #ff5d6c}
-  50%{opacity:1;box-shadow:0 0 26px #ff5d6c,0 0 46px #f0c24b55}
-}
-
-/* ---------- 6. ბარათები და პანელები ---------- */
-body.winter-mode .steps article,
-body.winter-mode .project-card,
+/* ---------- 7. ბარათები და პანელები ---------- */
 body.winter-mode .team-card,
+body.winter-mode [class*="project-card"],
+body.winter-mode [class*="album-card"],
+body.winter-mode .card,
+body.winter-mode .steps article,
 body.winter-mode .auth-card,
 body.winter-mode .editor-card,
 body.winter-mode .management,
 body.winter-mode .empty-state,
 body.winter-mode .meeting-admin-card{
   background:linear-gradient(145deg,#0d2518,#09180f);
-  border-color:#3d4b2a;
 }
-body.winter-mode .steps article:hover,
-body.winter-mode .project-card:hover,
-body.winter-mode .team-card:hover{
-  border-color:#e0b84a;
-  box-shadow:0 14px 38px #0008, 0 0 28px #f0c24b22, 0 0 40px #d6283912;
+body.winter-mode .team-card:hover,
+body.winter-mode [class*="project-card"]:hover,
+body.winter-mode [class*="album-card"]:hover,
+body.winter-mode .card:hover,
+body.winter-mode .steps article:hover{
+  box-shadow:0 0 0 1px var(--w-gold),0 14px 40px rgba(0,0,0,.55),0 0 34px rgba(214,40,57,.22);
 }
+body.winter-mode .team-tags span{ background:rgba(242,193,78,.07); border-color:rgba(242,193,78,.3); }
+body.winter-mode .team-tags span:hover{ background:rgba(214,40,57,.2); box-shadow:0 0 14px rgba(255,93,108,.35); }
+body.winter-mode .card-meta span{ background:#3a1218; color:#ffd3d8; border:1px solid rgba(214,40,57,.45); }
 body.winter-mode .steps svg,
-body.winter-mode .text-link,
-body.winter-mode .detail-section h2 svg,
-body.winter-mode .empty-state svg{ color:var(--w-gold); }
-body.winter-mode .card-meta span{ background:#3a1218; color:#ffd3d8; border:1px solid #d6283955; }
-body.winter-mode .card-image{ background:#0f2b1d; }
-body.winter-mode .author-line{ color:var(--w-gold); }
+body.winter-mode .text-link{ color:var(--w-gold); }
 
-/* CTA */
 body.winter-mode .cta{
   background:linear-gradient(105deg,#14452c,#3a1018 70%,#14452c);
   border-color:#b8902f;
-  box-shadow:0 0 50px #d6283922, inset 0 0 40px #f0c24b0d;
+  box-shadow:0 0 50px rgba(214,40,57,.18),inset 0 0 40px rgba(242,193,78,.07);
 }
-body.winter-mode .cta:before{ background:radial-gradient(circle,#f0c24b26,transparent 45%); }
-body.winter-mode .cta>svg{ color:var(--w-gold); }
 
-/* ---------- 7. ფორმები ---------- */
+/* Arduino დაფის ილუსტრაცია */
+body.winter-mode .board{ border-color:rgba(242,193,78,.55); background:linear-gradient(135deg,#123d27,#2a1118); box-shadow:inset 0 0 50px rgba(242,193,78,.08),0 0 70px rgba(214,40,57,.2); }
+body.winter-mode .chip{ border-color:#7a5c1e; color:var(--w-gold); }
+body.winter-mode .trace{ border-color:#d4af37; }
+body.winter-mode .led{ background:var(--w-red2); box-shadow:0 0 18px var(--w-red2); }
+
+/* ---------- 8. განახლების (hologram) ბარათი ---------- */
+body.winter-mode .hologram-card{
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(214,40,57,.16), transparent 55%),
+    linear-gradient(165deg,rgba(10,31,20,.97),rgba(6,16,10,.98)) !important;
+  box-shadow:0 0 0 1px rgba(242,193,78,.16),0 0 40px rgba(214,40,57,.2),inset 0 0 40px rgba(242,193,78,.05) !important;
+  color:#f3efe4 !important;
+  animation:holoFloat 5s ease-in-out infinite;     /* ციმციმი (flicker) გამოვრთეთ */
+}
+body.winter-mode .hologram-card::before{ background:linear-gradient(to bottom,transparent,rgba(255,240,184,.12),transparent); }
+body.winter-mode .hologram-card::after{ background:none; }
+body.winter-mode .hologram-indicator{ background:var(--w-red2) !important; box-shadow:0 0 10px var(--w-red2),0 0 22px var(--w-red2) !important; }
+body.winter-mode .hologram-version{ background:rgba(214,40,57,.18) !important; border-color:var(--w-red2) !important; color:#ffd3d8 !important; text-shadow:none; }
+body.winter-mode .hologram-symbol{ color:var(--w-gold) !important; text-shadow:0 0 14px var(--w-gold),0 0 36px rgba(214,40,57,.55) !important; }
+body.winter-mode #hero-update-title{ color:var(--w-snow) !important; text-shadow:0 0 14px rgba(242,193,78,.4); }
+body.winter-mode #hero-update-title::before,
+body.winter-mode #hero-update-title::after{ content:none !important; }
+body.winter-mode #hero-update-message{ color:#e6dfcb !important; }
+body.winter-mode .hero-update-panel::before,
+body.winter-mode .hero-update-panel::after{ border-color:var(--w-red2); filter:drop-shadow(0 0 6px var(--w-red2)); }
+
+/* ---------- 9. AI ჩატი ---------- */
+body.winter-mode .ai-chat-toggle{
+  background:radial-gradient(circle at 35% 25%,#5a1520 0,#2a0d12 42%,#10251a 78%,#06140d 100%) !important;
+  border-color:rgba(242,193,78,.8) !important;
+  box-shadow:0 0 20px rgba(214,40,57,.4),inset 0 0 16px rgba(242,193,78,.14) !important;
+}
+body.winter-mode .ai-chat-toggle:hover{ background:radial-gradient(circle at 35% 25%,#7a1c2a,#3a1018 45%,#10251a) !important; box-shadow:0 0 26px rgba(255,93,108,.6),0 0 50px rgba(242,193,78,.25) !important; }
+body.winter-mode .ai-chat-badge{ background:var(--w-red2) !important; color:#fff !important; box-shadow:0 0 10px rgba(255,93,108,.6); }
+body.winter-mode .ai-chat-window{
+  background:linear-gradient(165deg,rgba(9,28,18,.98),rgba(5,14,9,.99)) !important;
+  border-color:rgba(242,193,78,.6) !important;
+  box-shadow:0 0 0 1px rgba(242,193,78,.12),0 0 40px rgba(214,40,57,.22),0 30px 80px rgba(0,0,0,.85) !important;
+  color:#f3efe4 !important;
+}
+body.winter-mode .ai-chat-header{ background:rgba(242,193,78,.08) !important; }
+body.winter-mode .ai-chat-title span::before{ color:var(--w-red2); }
+body.winter-mode .ai-avatar,
+body.winter-mode .ai-message-avatar{ background:rgba(214,40,57,.16) !important; border-color:var(--w-gold) !important; color:var(--w-gold) !important; }
+body.winter-mode .ai-chat-messages{
+  background-image:
+    linear-gradient(rgba(242,193,78,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(242,193,78,.04) 1px,transparent 1px) !important;
+}
+body.winter-mode .ai-message.assistant .ai-message-bubble{ background:rgba(242,193,78,.07) !important; color:#f3efe4 !important; }
+body.winter-mode .ai-message.user .ai-message-bubble{
+  background:linear-gradient(135deg,#d62839,#a91d2c) !important;
+  border:1px solid rgba(255,138,148,.7) !important;
+  box-shadow:0 0 16px rgba(214,40,57,.4);
+}
+body.winter-mode .ai-message.user .ai-message-bubble,
+body.winter-mode .ai-message.user .ai-message-bubble p{ color:#fff !important; }
+body.winter-mode .ai-message-bubble code{ background:rgba(242,193,78,.1); }
+body.winter-mode .ai-chat-form{ background:rgba(5,14,9,.95) !important; }
+body.winter-mode .ai-chat-input-wrap{ background:#07180f !important; }
+body.winter-mode #ai-chat-input{ color:#fff0b8 !important; }
+body.winter-mode #ai-chat-input::placeholder{ color:rgba(255,230,166,.45); }
+body.winter-mode #ai-chat-send{ background:rgba(214,40,57,.25) !important; border-color:var(--w-red2) !important; color:#fff !important; }
+body.winter-mode #ai-chat-send:hover{ background:var(--w-red2) !important; }
+body.winter-mode .ai-chat::before{ background:radial-gradient(circle,rgba(214,40,57,.22) 0,transparent 68%); }
+body.winter-mode .ai-chat::after{ background:#fff; box-shadow:18px -30px 0 1px #f2c14e,-23px -45px 0 0 #ff8a94,34px -72px 0 0 #fff,-32px -88px 0 1px #f2c14e,54px -18px 0 0 #ff8a94; }
+body.winter-mode #site-music-toggle{ background:radial-gradient(circle at 30% 30%,#5a1520,#10251a) !important; border-color:rgba(242,193,78,.8) !important; color:var(--w-gold) !important; }
+
+/* ---------- 10. ფორმები, toast, footer, სხვა ---------- */
 body.winter-mode input,
 body.winter-mode textarea,
-body.winter-mode select{ background:#06140d; border-color:#4a4a2c; }
+body.winter-mode select{ background:#07180f; border-color:#4a4a2c; }
 body.winter-mode input:focus,
 body.winter-mode textarea:focus,
-body.winter-mode select:focus{ border-color:var(--w-gold); box-shadow:0 0 0 3px #f0c24b1c; }
-body.winter-mode .search:focus-within{ border-color:var(--w-gold); box-shadow:0 0 0 3px #f0c24b14; }
-
-/* ---------- 8. მოდალები, Toast, ფუტერი ---------- */
-body.winter-mode .meeting-dialog,
-body.winter-mode .update-modal > *,
-body.winter-mode .suggestion-modal > *{ border-color:#d4af3770; }
-body.winter-mode .toast{ background:#17301f; border-color:#d4af3788; }
-body.winter-mode .toast.success{ border-color:var(--w-gold); color:var(--w-green2,#fff0b8); }
-body.winter-mode footer{ border-top:1px solid #d4af3733; }
+body.winter-mode select:focus{ border-color:var(--w-gold); box-shadow:0 0 0 3px rgba(242,193,78,.16); }
+body.winter-mode .toast{ background:#17301f; border-color:rgba(242,193,78,.55); }
+body.winter-mode footer{ background:rgba(6,20,13,.9); border-top:1px solid rgba(242,193,78,.3); }
 body.winter-mode .footer-credit span{ color:var(--w-gold); }
 
-/* ---------- 9. AI ჩატი (სტრუქტურა უცვლელია, მხოლოდ ფერები) ---------- */
-body.winter-mode .ai-chat::before{ background:radial-gradient(circle,#d6283933 0,transparent 68%); }
-body.winter-mode .ai-chat::after{
-  background:#fff;
-  box-shadow:18px -30px 0 1px #f0c24b,-23px -45px 0 0 #ff8a94,34px -72px 0 0 #fff,-32px -88px 0 1px #f0c24b,54px -18px 0 0 #ff8a94;
-}
-body.winter-mode .ai-chat-toggle{
-  border-color:#d4af37aa;
-  background:radial-gradient(circle at 35% 25%,#5a1520 0,#2a0d12 40%,#10251a 75%,#06140d 100%);
-  box-shadow:0 18px 45px #000c, 0 0 20px #d6283940, inset 0 0 20px #f0c24b12, inset 0 1px 0 #ffffff18;
-}
-body.winter-mode .ai-chat-toggle::before{ border-color:#d4af3770; box-shadow:0 0 14px #f0c24b30; }
-body.winter-mode .ai-chat-toggle::after{ border-color:#d4af3733; box-shadow:0 0 22px #f0c24b20; }
-body.winter-mode .ai-chat-window{ border-color:#d4af3766; box-shadow:0 25px 70px #000b, 0 0 40px #d6283922; }
+/* scroll progress + ზემოთ ღილაკი */
+body.winter-mode #fx-progress{ background:linear-gradient(90deg,#d62839,#f2c14e,#fff0b8); box-shadow:0 0 12px rgba(242,193,78,.7); }
+body.winter-mode #fx-top{ background:rgba(6,20,13,.92); border-color:var(--w-gold); }
+body.winter-mode #fx-top:hover{ background:var(--w-gold); color:#1b0d08; }
 
-/* ---------- 10. მობილური ---------- */
+/* ჩატვირთვის ეკრანი (arduino-splash) */
+body.winter-mode .arduino-splash{ background:radial-gradient(ellipse at 50% 45%,rgba(214,40,57,.16),transparent 55%),#050f09 !important; }
+body.winter-mode .hs-progress i{ background:linear-gradient(90deg,#a91d2c,#f2c14e,#fff0b8); box-shadow:0 0 14px rgba(242,193,78,.6); }
+body.winter-mode .hs-terminal{ background:rgba(242,193,78,.05); text-shadow:none; }
+
+/* ---------- 11. მობილური ---------- */
 @media (max-width:700px){
-  #winter-garland{ height:22px; background-size:84px 22px; }
-  #winter-garland:before,#winter-garland:after{ background-size:84px 22px; }
-  .winter-branch{ display:none; }                 /* ☰ და ლოგოს არ გადაეფაროს */
-  body.winter-mode .site-header{ padding-top:10px; }
-  body.winter-mode:after{ animation:none; }       /* მსუბუქი მობილურისთვის */
-  body.winter-mode:before{ filter:none; }
+  #winter-garland{ height:24px; background-size:84px 24px; }
+  #winter-garland:before,#winter-garland:after{ background-size:84px 24px; }
+  .winter-branch{ width:112px; height:68px; }
+  body.winter-mode .site-header{ padding-top:8px; }
+  body.winter-mode::before{ background:radial-gradient(circle at 15% 10%,rgba(214,40,57,.12) 0,transparent 40%),radial-gradient(circle at 85% 90%,rgba(242,193,78,.08) 0,transparent 40%); }
 }
 
-/* ---------- 11. შემცირებული მოძრაობა ---------- */
+/* ---------- 12. შემცირებული მოძრაობა ---------- */
 @media (prefers-reduced-motion:reduce){
   #winter-garland,#winter-garland:before,#winter-garland:after,
-  .winter-branch,body.winter-mode .led{ animation:none !important; }
+  .winter-branch,body.winter-mode .brand-mark{ animation:none !important; }
   #winter-snow{ display:none; }
 }
