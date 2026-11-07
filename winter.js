@@ -15,6 +15,7 @@
 
   const MODE_ID = 'winter'
   const CACHE_KEY = 'arduinohub_winter_mode'
+  const POS_KEY = 'arduinohub_winter_pos'
   const MUSIC_SRC = '/sounds/winter.mp3'
   const MUSIC_VOLUME = 0.55
   const UNLOCK_EVENTS = ['pointerdown', 'touchend', 'click', 'keydown']
@@ -28,10 +29,34 @@
 
   /* ---------- დამხმარე ---------- */
 
-  const getClient = () =>
-    window.supabase && typeof window.supabase.from === 'function'
-      ? window.supabase
-      : null
+  const BASE_URL = document.currentScript ? document.currentScript.src : location.href
+  let clientPromise = null
+
+  // ყველა გვერდზე მუშაობს: ჯერ ვცდით გვერდის უკვე შექმნილ კლიენტს,
+  // თუ არ არის — ვქმნით ახალს script.js-ის იგივე supabase-config.js-იდან.
+  function getClient() {
+    if (window.supabase && typeof window.supabase.from === 'function') {
+      return Promise.resolve(window.supabase)
+    }
+
+    if (!clientPromise) {
+      clientPromise = (async () => {
+        try {
+          const cfg = await import(new URL('./supabase-config.js', BASE_URL).href)
+          if (!cfg.supabaseIsConfigured) return null
+          const lib = await import('https://esm.sh/@supabase/supabase-js@2')
+          return lib.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
+            auth: { persistSession: true, autoRefreshToken: true }
+          })
+        } catch (err) {
+          console.warn('[Winter] Supabase კლიენტის შექმნა ვერ მოხერხდა:', err)
+          return null
+        }
+      })()
+    }
+
+    return clientPromise
+  }
 
   const readCache = () => {
     try { return localStorage.getItem(CACHE_KEY) === '1' } catch { return false }
@@ -58,6 +83,14 @@
 
   /* ---------- მუსიკა ---------- */
 
+  const readPos = () => {
+    try { return parseFloat(localStorage.getItem(POS_KEY)) || 0 } catch { return 0 }
+  }
+
+  const writePos = value => {
+    try { localStorage.setItem(POS_KEY, String(value)) } catch {}
+  }
+
   function ensureAudio() {
     if (music) return music
 
@@ -67,6 +100,22 @@
     music.volume = MUSIC_VOLUME
 
     music.addEventListener('error', diagnoseAudio)
+
+    // გვერდიდან გვერდზე გადასვლისას განაგრძოს იქიდან, სადაც შეჩერდა
+    music.addEventListener('loadedmetadata', () => {
+      const saved = readPos()
+      if (saved > 0 && Number.isFinite(music.duration) && saved < music.duration - 1) {
+        try { music.currentTime = saved } catch {}
+      }
+    }, { once: true })
+
+    let lastSave = 0
+    music.addEventListener('timeupdate', () => {
+      const now = Date.now()
+      if (now - lastSave < 1000) return
+      lastSave = now
+      writePos(music.currentTime)
+    })
 
     // დამატებითი დაზღვევა: თუ loop რომელიმე ბრაუზერში არ იმუშავა
     music.addEventListener('ended', () => {
@@ -152,6 +201,7 @@
     if (!music) return
     music.pause()
     try { music.currentTime = 0 } catch {}
+    writePos(0)
   }
 
   /* ---------- დეკორი ---------- */
@@ -323,7 +373,7 @@
   /* ---------- Supabase: მდგომარეობა და Realtime ---------- */
 
   async function fetchState() {
-    const db = getClient()
+    const db = await getClient()
     if (!db) return
 
     const { data, error } = await db
@@ -340,8 +390,8 @@
     apply(Boolean(data?.enabled))
   }
 
-  function subscribe() {
-    const db = getClient()
+  async function subscribe() {
+    const db = await getClient()
     if (!db || channel) return
 
     channel = db
@@ -363,7 +413,7 @@
   /* ---------- ბრძანებები: /winter და /winterstop ---------- */
 
   async function runCommand(turnOn) {
-    const db = getClient()
+    const db = await getClient()
 
     if (!db) {
       toast('Supabase კავშირი მიუწვდომელია')
@@ -428,6 +478,15 @@
   )
 
   /* ---------- გაშვება ---------- */
+
+  function saveOnLeave() {
+    if (enabled && music && !music.paused) writePos(music.currentTime)
+  }
+
+  window.addEventListener('pagehide', saveOnLeave)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) saveOnLeave()
+  })
 
   function init() {
     // მყისიერად აღვადგინოთ ბოლო ცნობილი მდგომარეობა (ციმციმის გარეშე)
