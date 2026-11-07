@@ -1708,6 +1708,43 @@ async function openAdManager() {
   }
 }
 
+async function uploadCloudinaryVideo(file, kind) {
+  const { data, error } = await db.functions.invoke('ad-media', {
+    body: {
+      action: 'sign-upload',
+      kind
+    }
+  })
+
+  if (error) throw error
+
+  if (!data?.success) {
+    throw new Error(data?.error || 'ატვირთვის ხელმოწერა ვერ მივიღე')
+  }
+
+  const formData = new FormData()
+
+  formData.append('file', file)
+  formData.append('api_key', data.api_key)
+  formData.append('timestamp', data.timestamp)
+  formData.append('folder', data.folder)
+  formData.append('public_id', data.public_id)
+  formData.append('signature', data.signature)
+
+  const response = await fetch(data.upload_url, {
+    method: 'POST',
+    body: formData
+  })
+
+  const result = await response.json()
+
+  if (!response.ok) {
+    throw new Error(result.error?.message || 'Cloudinary-ზე ატვირთვა ვერ მოხერხდა')
+  }
+
+  return result
+}
+
 async function handleAIQuestion(question) {
   const input = $('#ai-chat-input')
   const send = $('#ai-send-btn')
