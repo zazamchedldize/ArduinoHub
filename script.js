@@ -1656,6 +1656,7 @@ async function deleteAllAdvertisements() {
   }
 }
 
+
 async function openAdManager() {
   const admin = await getAdAdmin()
 
@@ -1671,6 +1672,11 @@ async function openAdManager() {
   const panel = document.createElement('div')
   panel.id = 'ad-manager-panel'
 
+  const now = new Date()
+  const localNow = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16)
+
   panel.innerHTML = `
     <div class="ad-manager-content">
       <h2>რეკლამის მართვა</h2>
@@ -1684,6 +1690,9 @@ async function openAdManager() {
 
       <label>ტელეფონის ვიდეო (9:16)</label>
       <input id="ad-mobile-video" type="file" accept="video/*">
+
+      <label>გამოქვეყნების თარიღი და დრო</label>
+      <input id="ad-starts-at" type="datetime-local" value="${localNow}">
 
       <button id="ad-publish-btn">რეკლამის გამოქვეყნება</button>
       <button id="ad-close-btn">დახურვა</button>
@@ -1701,11 +1710,17 @@ async function openAdManager() {
     const description = document.getElementById('ad-description').value.trim()
     const desktopFile = document.getElementById('ad-desktop-video').files[0]
     const mobileFile = document.getElementById('ad-mobile-video').files[0]
+    const startsAt = document.getElementById('ad-starts-at').value
     const status = document.getElementById('ad-status')
     const button = document.getElementById('ad-publish-btn')
 
-    if (!title || !desktopFile || !mobileFile) {
-      status.textContent = 'შეავსე სათაური და აირჩიე ორივე ვიდეო'
+    if (!title || !desktopFile || !mobileFile || !startsAt) {
+      status.textContent = 'შეავსე ყველა ველი და აირჩიე ორივე ვიდეო'
+      return
+    }
+
+    if (new Date(startsAt).getTime() < Date.now() - 60000) {
+      status.textContent = 'აირჩიე მიმდინარე ან მომავალი თარიღი'
       return
     }
 
@@ -1717,14 +1732,11 @@ async function openAdManager() {
     button.disabled = true
     status.textContent = 'ვიდეოები იტვირთება...'
 
-    let desktopResult
-    let mobileResult
-
     try {
-      desktopResult = await uploadCloudinaryVideo(desktopFile, 'desktop')
-      mobileResult = await uploadCloudinaryVideo(mobileFile, 'mobile')
+      const desktopResult = await uploadCloudinaryVideo(desktopFile, 'desktop')
+      const mobileResult = await uploadCloudinaryVideo(mobileFile, 'mobile')
 
-      const { data: newAd, error } = await db
+      const { error } = await db
         .from('advertisements')
         .insert({
           title,
@@ -1733,19 +1745,13 @@ async function openAdManager() {
           mobile_video: mobileResult.secure_url,
           desktop_public_id: desktopResult.public_id,
           mobile_public_id: mobileResult.public_id,
+          starts_at: new Date(startsAt).toISOString(),
           is_active: true
         })
-        .select('id')
-        .single()
 
       if (error) throw error
 
-      await db
-        .from('advertisements')
-        .update({ is_active: false })
-        .neq('id', newAd.id)
-
-      status.textContent = 'რეკლამა წარმატებით გამოქვეყნდა'
+      status.textContent = 'რეკლამა წარმატებით დაიგეგმა!'
       button.disabled = false
     } catch (error) {
       console.error('Ad publish error:', error)
@@ -1754,6 +1760,7 @@ async function openAdManager() {
     }
   }
 }
+
 
 
 async function showAdvertisement() {
