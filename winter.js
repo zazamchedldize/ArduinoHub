@@ -232,6 +232,7 @@
     // ტოტები hero-სა და footer-ის კუთხეებში (header-ს არ ფარავს)
     addBranches(document.querySelector('.hero'))
     addBranches(document.querySelector('footer'))
+    addBranches(document.querySelector('.arduinohub-film-section'))
   }
 
   function unmountDecor() {
