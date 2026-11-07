@@ -1793,7 +1793,16 @@ async function handleAIQuestion(question) {
     const command = cleanQuestion.toLowerCase()
 
 if (command === '/ad') {
-  await openAdManager()
+  console.log('AD COMMAND STARTED')
+
+  try {
+    await openAdManager()
+    console.log('AD MANAGER OPENED')
+  } catch (error) {
+    console.error('AD MANAGER ERROR:', error)
+    addAIMessage('error', error.message || 'რეკლამის პანელის გახსნა ვერ მოხერხდა')
+  }
+
   return
 }
 
