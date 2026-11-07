@@ -4,7 +4,10 @@
    - /winter და /winterstop (მხოლოდ ადმინისთვის, როგორც /poll)
    - სინქრონი Supabase Realtime-ით (ცხრილი site_modes)
    - მდგომარეობა რჩება refresh-ის შემდეგაც
-   - თოვლი (canvas), გირლანდა, ნაძვის ტოტები
+   - თოვლი (canvas): ფიფქების 3 ფენა, კრისტალური ფიფქები, ქარი, მაუსის ეფექტები,
+     ნაპერწკლები, ცვივა ვარსკვლავი
+   - გირლანდა + ქანაობადი ბურთულები, ყინულის ლოლოები, ნაძვის ტოტები, ყინვის ჩარჩო
+   - ახალ წლამდე უკუთვლა (დახურვადი)
    - მუსიკა: autoplay ცდა, დაბლოკვისას პირველი ინტერაქცია, loop, ღილაკის გარეშე
    ========================================================= */
 (() => {
@@ -206,6 +209,17 @@
 
   /* ---------- დეკორი ---------- */
 
+  const BAUBLE_COLORS = [
+    ['#ff5d6c', '#a91d2c'],
+    ['#ffd966', '#b8902f'],
+    ['#6fe39a', '#1f8a4f'],
+    ['#9ad7ff', '#3b78b8'],
+    ['#f6efd8', '#9aa4a0']
+  ]
+  const BAUBLE_POS = [6, 19, 33, 47, 61, 75, 89]
+  const CD_HIDE_KEY = 'arduinohub_winter_cd_hidden'
+  let cdTimer = 0
+
   function addBranches(parent) {
     if (!parent) return
     ;['tl', 'tr'].forEach(pos => {
@@ -216,32 +230,219 @@
     })
   }
 
+  // ქანაობადი ბურთულები გირლანდაზე
+  function addBaubles(garland) {
+    BAUBLE_POS.forEach((x, i) => {
+      const [c1, c2] = BAUBLE_COLORS[(i * 2 + Math.floor(Math.random() * 2)) % BAUBLE_COLORS.length]
+      const el = document.createElement('i')
+      el.className = 'winter-bauble'
+      el.setAttribute('aria-hidden', 'true')
+      el.style.setProperty('--x', `${x + (Math.random() * 4 - 2)}%`)
+      el.style.setProperty('--len', `${8 + Math.random() * 10}px`)
+      el.style.setProperty('--size', `${13 + Math.random() * 6}px`)
+      el.style.setProperty('--c1', c1)
+      el.style.setProperty('--c2', c2)
+      el.style.setProperty('--dur', `${2.8 + Math.random() * 1.8}s`)
+      el.style.setProperty('--delay', `${-Math.random() * 3}s`)
+      garland.appendChild(el)
+    })
+  }
+
+  // ყინულის ლოლოები header-ის ქვედა კიდეზე
+  function addIcicles() {
+    const header = document.querySelector('.site-header')
+    if (!header || header.querySelector('.winter-icicles')) return
+
+    // absolute ელემენტისთვის header უნდა იყოს positioned
+    if (getComputedStyle(header).position === 'static') {
+      header.style.position = 'relative'
+      header.dataset.winterPos = '1'
+    }
+
+    const ice = document.createElement('div')
+    ice.className = 'winter-icicles'
+    ice.setAttribute('aria-hidden', 'true')
+    header.appendChild(ice)
+  }
+
+  function countdownText() {
+    const now = new Date()
+    if (now.getMonth() === 0) {
+      return now.getDate() <= 10 ? '🎉 გილოცავთ ახალ წელს!' : null
+    }
+
+    const target = new Date(now.getFullYear() + 1, 0, 1)
+    let s = Math.max(0, Math.floor((target - now) / 1000))
+    const d = Math.floor(s / 86400); s -= d * 86400
+    const h = Math.floor(s / 3600); s -= h * 3600
+    const m = Math.floor(s / 60); s -= m * 60
+    const pad = n => String(n).padStart(2, '0')
+
+    return `🎆 ახალ წლამდე: ${d > 0 ? `${d} დღე ` : ''}${pad(h)}:${pad(m)}:${pad(s)}`
+  }
+
+  function mountCountdown() {
+    if (document.getElementById('winter-countdown')) return
+    try { if (sessionStorage.getItem(CD_HIDE_KEY) === '1') return } catch {}
+    if (!countdownText()) return
+
+    const el = document.createElement('div')
+    el.id = 'winter-countdown'
+    el.className = 'winter-countdown'
+    el.setAttribute('aria-hidden', 'true')
+    el.title = 'დახურვა'
+    document.body.appendChild(el)
+
+    const tick = () => {
+      const text = countdownText()
+      if (!text) return stopCountdown()
+      if (el.textContent !== text) el.textContent = text
+    }
+    tick()
+    cdTimer = setInterval(tick, 1000)
+
+    el.addEventListener('click', () => {
+      try { sessionStorage.setItem(CD_HIDE_KEY, '1') } catch {}
+      el.classList.add('hide')
+      stopCountdown()
+      setTimeout(() => el.remove(), 350)
+    })
+  }
+
+  function stopCountdown() {
+    clearInterval(cdTimer)
+    cdTimer = 0
+  }
+
   function mountDecor() {
     if (document.getElementById('winter-garland')) return
 
     const garland = document.createElement('div')
     garland.id = 'winter-garland'
     garland.setAttribute('aria-hidden', 'true')
+    addBaubles(garland)
+
+    const frost = document.createElement('div')
+    frost.id = 'winter-frost'
+    frost.setAttribute('aria-hidden', 'true')
 
     const canvas = document.createElement('canvas')
     canvas.id = 'winter-snow'
     canvas.setAttribute('aria-hidden', 'true')
 
-    document.body.append(garland, canvas)
+    document.body.append(garland, frost, canvas)
 
     // ტოტები hero-სა და footer-ის კუთხეებში (header-ს არ ფარავს)
     addBranches(document.querySelector('.hero'))
     addBranches(document.querySelector('footer'))
     addBranches(document.querySelector('.arduinohub-film-section'))
+
+    addIcicles()
+    mountCountdown()
   }
 
   function unmountDecor() {
+    stopCountdown()
     document.getElementById('winter-garland')?.remove()
+    document.getElementById('winter-frost')?.remove()
     document.getElementById('winter-snow')?.remove()
-    document.querySelectorAll('.winter-branch').forEach(node => node.remove())
+    document.getElementById('winter-countdown')?.remove()
+    document.querySelectorAll('.winter-branch, .winter-icicles').forEach(node => node.remove())
+
+    const header = document.querySelector('.site-header')
+    if (header && header.dataset.winterPos) {
+      header.style.position = ''
+      delete header.dataset.winterPos
+    }
   }
 
   /* ---------- თოვლი ---------- */
+
+  // ფიფქების "სპრაიტები" ერთხელ იხატება და მერე მხოლოდ drawImage-ით გამოიყენება → სწრაფია
+  function makeSprite(size, draw) {
+    const c = document.createElement('canvas')
+    c.width = c.height = size
+    draw(c.getContext('2d'), size)
+    return c
+  }
+
+  function buildSprites() {
+    // რბილი ბურთულა
+    const dot = makeSprite(32, (x, s) => {
+      const g = x.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2)
+      g.addColorStop(0, 'rgba(255,255,255,1)')
+      g.addColorStop(0.4, 'rgba(255,255,255,.85)')
+      g.addColorStop(1, 'rgba(255,255,255,0)')
+      x.fillStyle = g
+      x.fillRect(0, 0, s, s)
+    })
+
+    // ექვსქიმიანი კრისტალური ფიფქი (3 ვარიანტი)
+    const variants = [
+      [[0.5, 0.26], [0.75, 0.18]],
+      [[0.38, 0.2], [0.6, 0.3]],
+      [[0.55, 0.3]]
+    ]
+    const crystals = variants.map(branches =>
+      makeSprite(64, (x, s) => {
+        const c = s / 2
+        const R = s * 0.44
+        x.translate(c, c)
+        x.strokeStyle = '#ffffff'
+        x.lineCap = 'round'
+        x.lineWidth = s * 0.05
+        x.shadowColor = 'rgba(190,225,255,.95)'
+        x.shadowBlur = s * 0.09
+
+        for (let i = 0; i < 6; i++) {
+          x.save()
+          x.rotate((i * Math.PI) / 3)
+          x.beginPath()
+          x.moveTo(0, 0)
+          x.lineTo(0, -R)
+          for (const [t, len] of branches) {
+            const y = -R * t
+            const l = R * len
+            x.moveTo(0, y)
+            x.lineTo(-l * 0.8, y - l * 0.7)
+            x.moveTo(0, y)
+            x.lineTo(l * 0.8, y - l * 0.7)
+          }
+          x.stroke()
+          x.restore()
+        }
+        x.beginPath()
+        x.arc(0, 0, s * 0.035, 0, Math.PI * 2)
+        x.fillStyle = '#fff'
+        x.fill()
+      })
+    )
+
+    // ოთხქიმიანი ვარსკვლავი ნაპერწკლებისთვის
+    const stars = ['#fff3c4', '#ffd966', '#ff8a94', '#ffffff'].map(color =>
+      makeSprite(32, (x, s) => {
+        const c = s / 2
+        const g = x.createRadialGradient(c, c, 0, c, c, c)
+        g.addColorStop(0, color)
+        g.addColorStop(0.25, color)
+        g.addColorStop(1, 'rgba(255,255,255,0)')
+        x.globalAlpha = 0.55
+        x.fillStyle = g
+        x.fillRect(0, 0, s, s)
+        x.globalAlpha = 1
+        x.fillStyle = color
+        x.beginPath()
+        x.moveTo(c, 1)
+        x.quadraticCurveTo(c, c, s - 1, c)
+        x.quadraticCurveTo(c, c, c, s - 1)
+        x.quadraticCurveTo(c, c, 1, c)
+        x.quadraticCurveTo(c, c, c, 1)
+        x.fill()
+      })
+    )
+
+    return { dot, crystals, stars }
+  }
 
   function startSnow() {
     if (snow) return
@@ -253,22 +454,53 @@
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const sprites = buildSprites()
+    const finePointer = window.matchMedia('(pointer: fine)').matches
+
     let w = 0
     let h = 0
     let raf = 0
     let last = 0
     let resizeTimer = 0
+    let nextShoot = 0
+    let mx = -9999
+    let my = -9999
+    let lastSX = -9999
+    let lastSY = -9999
     const flakes = []
+    const sparks = []
+    let shooter = null
 
-    const make = initial => ({
-      x: Math.random() * w,
-      y: initial ? Math.random() * h : -10,
-      r: Math.random() * 2.1 + 0.8,
-      speed: Math.random() * 0.9 + 0.4,
-      phase: Math.random() * Math.PI * 2,
-      sway: Math.random() * 0.5 + 0.15,
-      alpha: Math.random() * 0.5 + 0.4
-    })
+    const rnd = (a, b) => a + Math.random() * (b - a)
+
+    // 3 სიღრმის ფენა: შორეული (პატარა, ნელი) → ახლო (დიდი, სწრაფი)
+    const make = initial => {
+      const r = Math.random()
+      const layer = r < 0.5 ? 0 : r < 0.85 ? 1 : 2
+      const crystal = layer > 0 && Math.random() < (layer === 1 ? 0.14 : 0.24)
+
+      const size = crystal
+        ? (layer === 1 ? rnd(11, 17) : rnd(18, 28))
+        : [rnd(2.5, 4.5), rnd(4, 7.5), rnd(7, 13)][layer]
+
+      return {
+        layer,
+        crystal,
+        sprite: crystal
+          ? sprites.crystals[Math.floor(Math.random() * sprites.crystals.length)]
+          : sprites.dot,
+        size,
+        x: Math.random() * w,
+        y: initial ? Math.random() * h : -size - 4,
+        speed: [rnd(0.35, 0.65), rnd(0.6, 1.0), rnd(1.0, 1.7)][layer],
+        wind: [0.5, 1, 1.8][layer],
+        phase: Math.random() * Math.PI * 2,
+        sway: rnd(0.15, 0.6),
+        alpha: crystal ? rnd(0.6, 0.9) : [rnd(0.35, 0.6), rnd(0.5, 0.8), rnd(0.3, 0.6)][layer],
+        rot: Math.random() * Math.PI * 2,
+        vr: rnd(-0.02, 0.02)
+      }
+    }
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
@@ -279,9 +511,35 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
       // მობილურზე ნაკლები ნაწილაკი
-      const target = Math.round(Math.min(110, Math.max(35, w / 13)))
+      const target = Math.round(Math.min(140, Math.max(40, w / 11)))
       while (flakes.length < target) flakes.push(make(true))
       flakes.length = target
+    }
+
+    const spawnSpark = (x, y, burst) => {
+      if (sparks.length > 90) return
+      const a = Math.random() * Math.PI * 2
+      const v = burst ? rnd(0.8, 3.2) : rnd(0.1, 0.7)
+      sparks.push({
+        x, y,
+        vx: Math.cos(a) * v,
+        vy: Math.sin(a) * v - (burst ? 0.6 : 0),
+        life: rnd(28, 55),
+        max: 55,
+        size: rnd(8, burst ? 18 : 14),
+        sprite: sprites.stars[Math.floor(Math.random() * sprites.stars.length)]
+      })
+    }
+
+    const spawnShooter = () => {
+      shooter = {
+        x: rnd(w * 0.05, w * 0.75),
+        y: rnd(h * 0.04, h * 0.3),
+        vx: rnd(9, 13),
+        vy: rnd(3.5, 6),
+        life: 0,
+        max: 55
+      }
     }
 
     const frame = time => {
@@ -290,30 +548,130 @@
       const dt = Math.min((time - last) / 16.7 || 1, 3)
       last = time
 
+      // ქარის ნაკადები: ნელი ტალღა + მცირე ბორძიკი
+      const gust = Math.sin(time * 0.00028) * 0.35 + Math.sin(time * 0.0011) * 0.12
+
       ctx.clearRect(0, 0, w, h)
-      ctx.fillStyle = '#ffffff'
+      ctx.globalCompositeOperation = 'source-over'
 
       for (const f of flakes) {
         f.phase += 0.012 * dt
         f.y += f.speed * dt
-        f.x += Math.sin(f.phase) * f.sway * dt
+        f.x += (Math.sin(f.phase) * f.sway + gust * f.wind) * dt
 
-        if (f.y > h + 10) Object.assign(f, make(false), { x: Math.random() * w })
-        if (f.x > w + 10) f.x = -10
-        if (f.x < -10) f.x = w + 10
+        // მაუსი ფიფქებს ფრთხილად აცილებს
+        if (finePointer && f.layer > 0) {
+          const dx = f.x - mx
+          const dy = f.y - my
+          const d2 = dx * dx + dy * dy
+          if (d2 < 7000 && d2 > 1) {
+            const d = Math.sqrt(d2)
+            const push = (1 - d / 84) * 2.2 * dt
+            f.x += (dx / d) * push
+            f.y += (dy / d) * push * 0.6
+          }
+        }
+
+        if (f.y > h + f.size) Object.assign(f, make(false), { x: Math.random() * w })
+        if (f.x > w + 30) f.x = -30
+        if (f.x < -30) f.x = w + 30
 
         ctx.globalAlpha = f.alpha
-        ctx.beginPath()
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2)
-        ctx.fill()
+
+        if (f.crystal) {
+          f.rot += f.vr * dt
+          ctx.save()
+          ctx.translate(f.x, f.y)
+          ctx.rotate(f.rot)
+          ctx.drawImage(f.sprite, -f.size / 2, -f.size / 2, f.size, f.size)
+          ctx.restore()
+        } else {
+          ctx.drawImage(f.sprite, f.x - f.size / 2, f.y - f.size / 2, f.size, f.size)
+        }
       }
 
       ctx.globalAlpha = 1
+
+      // ნაპერწკლები (მაუსის კვალი და კლიკი)
+      if (sparks.length) {
+        ctx.globalCompositeOperation = 'lighter'
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const p = sparks[i]
+          p.life -= dt
+          if (p.life <= 0) { sparks.splice(i, 1); continue }
+          p.x += p.vx * dt
+          p.y += p.vy * dt
+          p.vy += 0.03 * dt
+          const k = p.life / p.max
+          const s = p.size * (0.4 + 0.6 * k)
+          ctx.globalAlpha = Math.min(1, k * 1.4)
+          ctx.drawImage(p.sprite, p.x - s / 2, p.y - s / 2, s, s)
+        }
+        ctx.globalAlpha = 1
+        ctx.globalCompositeOperation = 'source-over'
+      }
+
+      // ცვივა ვარსკვლავი
+      if (!shooter && time > nextShoot) {
+        if (nextShoot) spawnShooter()
+        nextShoot = time + rnd(7000, 16000)
+      }
+
+      if (shooter) {
+        const s = shooter
+        s.life += dt
+        s.x += s.vx * dt
+        s.y += s.vy * dt
+
+        const k = 1 - s.life / s.max
+        if (k <= 0 || s.x > w + 100 || s.y > h + 100) {
+          shooter = null
+        } else {
+          const tx = s.x - s.vx * 11
+          const ty = s.y - s.vy * 11
+          const g = ctx.createLinearGradient(s.x, s.y, tx, ty)
+          g.addColorStop(0, `rgba(255,246,214,${0.95 * k})`)
+          g.addColorStop(1, 'rgba(255,246,214,0)')
+          ctx.strokeStyle = g
+          ctx.lineWidth = 2
+          ctx.lineCap = 'round'
+          ctx.beginPath()
+          ctx.moveTo(s.x, s.y)
+          ctx.lineTo(tx, ty)
+          ctx.stroke()
+
+          ctx.globalAlpha = k
+          ctx.drawImage(sprites.stars[1], s.x - 9, s.y - 9, 18, 18)
+          ctx.globalAlpha = 1
+        }
+      }
     }
 
     const onResize = () => {
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(resize, 150)
+    }
+
+    const onMove = e => {
+      mx = e.clientX
+      my = e.clientY
+      if (e.pointerType === 'touch') return
+      const dx = mx - lastSX
+      const dy = my - lastSY
+      if (dx * dx + dy * dy > 340) {
+        lastSX = mx
+        lastSY = my
+        spawnSpark(mx, my, false)
+      }
+    }
+
+    const onLeave = e => {
+      if (!e.relatedTarget) { mx = -9999; my = -9999 }
+    }
+
+    const onDown = e => {
+      if (!e.isPrimary) return
+      for (let i = 0; i < 9; i++) spawnSpark(e.clientX, e.clientY, true)
     }
 
     const onVisibility = () => {
@@ -329,6 +687,9 @@
     resize()
     raf = requestAnimationFrame(frame)
     window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('pointermove', onMove, { passive: true })
+    window.addEventListener('pointerdown', onDown, { passive: true })
+    document.addEventListener('mouseout', onLeave)
     document.addEventListener('visibilitychange', onVisibility)
 
     snow = {
@@ -336,6 +697,9 @@
         cancelAnimationFrame(raf)
         clearTimeout(resizeTimer)
         window.removeEventListener('resize', onResize)
+        window.removeEventListener('pointermove', onMove)
+        window.removeEventListener('pointerdown', onDown)
+        document.removeEventListener('mouseout', onLeave)
         document.removeEventListener('visibilitychange', onVisibility)
       }
     }
