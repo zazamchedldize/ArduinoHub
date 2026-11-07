@@ -1646,6 +1646,41 @@ async function handleAIQuestion(question) {
   }
 
   try {
+        const winterCommand = cleanQuestion.toLowerCase()
+
+    if (winterCommand === '/winter' || winterCommand === '/winterstop') {
+      const { data: { session } } = await db.auth.getSession()
+
+      const admin = session?.user
+        ? await isAdmin(session.user)
+        : null
+
+      if (!admin) {
+        addAIMessage('error', 'ამ ბრძანების გამოყენება მხოლოდ ადმინისტრატორს შეუძლია')
+        return
+      }
+
+      const enabled = winterCommand === '/winter'
+
+      const { error } = await db.rpc('set_winter_mode', {
+        p_enabled: enabled
+      })
+
+      if (error) throw error
+
+      if (typeof winterApplyMode === 'function') {
+        winterApplyMode(enabled)
+      }
+
+      addAIMessage(
+        'assistant',
+        enabled
+          ? '🎄 საახალწლო რეჟიმი ჩაირთო!'
+          : '❄️ საახალწლო რეჟიმი გამოირთო!'
+      )
+
+      return
+    }
     if (cleanQuestion.toLowerCase() === '/history') {
       const isZaza = aiAdminGreeting === 'ბატონო ზაზა'
 
