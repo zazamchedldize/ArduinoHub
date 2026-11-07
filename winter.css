@@ -1,5 +1,5 @@
 /* =========================================================
-   ArduinoHub — Winter Theme v3 (winter.css)
+   ArduinoHub — Winter Theme v4 (winter.css)
    ჩაირთოს theme.css-ის შემდეგ.
    ყველაფერი scoped არის html.winter-mode / body.winter-mode-ზე.
    /winterstop-ზე კლასები იხსნება და ძველი hacker დიზაინი სრულად ბრუნდება.
@@ -381,7 +381,7 @@ body.winter-mode .arduinohub-film-frame video{ background:#050d08; }
 }
 
 /* =========================================================
-   14. v3 დამატებები: ბურთულები, ლოლოები, ყინვა, უკუთვლა, shimmer
+   14. v3 დამატებები: ბურთულები, ლოლოები, ყინვა, shimmer
    ========================================================= */
 
 /* --- ქანაობადი ბურთულები გირლანდაზე (JS ამატებს .winter-bauble-ებს) --- */
@@ -429,25 +429,6 @@ body.winter-mode .arduinohub-film-frame video{ background:#050d08; }
   animation:winterFade 1.8s ease both;
 }
 
-/* --- უკუთვლა ახალ წლამდე --- */
-.winter-countdown{
-  position:fixed; left:50%; bottom:14px; transform:translateX(-50%);
-  z-index:1100; cursor:pointer; user-select:none;
-  padding:8px 16px; border-radius:999px;
-  font:600 13px/1.2 "FiraGO","Inter",system-ui,sans-serif;
-  letter-spacing:.3px; font-variant-numeric:tabular-nums; white-space:nowrap;
-  color:#ffe6a6;
-  background:rgba(6,20,13,.82);
-  border:1px solid rgba(242,193,78,.55);
-  box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 22px rgba(214,40,57,.22);
-  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-  animation:winterRise .8s .6s ease both;
-  transition:opacity .3s,transform .3s,box-shadow .25s;
-}
-.winter-countdown:hover{ box-shadow:0 6px 28px rgba(0,0,0,.5),0 0 30px rgba(242,193,78,.4); }
-.winter-countdown.hide{ opacity:0; transform:translate(-50%,12px); pointer-events:none; }
-@keyframes winterRise{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
-
 /* --- სათაურის ოქროსფერი "shimmer" --- */
 body.winter-mode h1 em,
 body.winter-mode .hero h1 em,
@@ -476,13 +457,94 @@ body.winter-mode .steps article:hover{ transform:translateY(-4px); }
   .winter-bauble:nth-child(even){ display:none; }
   .winter-bauble::after{ width:calc(var(--size,16px) * .8); height:calc(var(--size,16px) * .8); left:calc(var(--size,16px) * -.4); }
   .winter-icicles{ height:20px; background-size:64px 20px; }
-  .winter-countdown{ font-size:11.5px; padding:6px 12px; bottom:10px; }
 }
 
 /* --- შემცირებული მოძრაობა --- */
 @media (prefers-reduced-motion:reduce){
-  .winter-bauble,.winter-icicles,#winter-frost,.winter-countdown,
+  .winter-bauble,.winter-icicles,#winter-frost,#winter-aurora,.winter-drift,
   body.winter-mode h1 em,body.winter-mode .hero h1 em,
   body.winter-mode .arduinohub-film-title span{ animation:none !important; }
-  .winter-countdown{ transform:translateX(-50%); }
+}
+
+/* =========================================================
+   15. v4 დამატებები: ორნამენტების ტიპები, ქუდი, aurora, თოვლის გროვა
+   ========================================================= */
+
+/* --- ორნამენტები: ვარსკვლავი და წვეთი (ბურთი უკვე არის) --- */
+.winter-bauble.star::after{
+  width:calc(var(--size,16px) * 1.35); height:calc(var(--size,16px) * 1.35);
+  left:calc(var(--size,16px) * -.675);
+  border-radius:0; box-shadow:none;
+  background:radial-gradient(circle at 50% 45%,#fffbe0 0,#ffd966 38%,#d9a62e 100%);
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  animation:winterStar 2.4s ease-in-out infinite alternate;
+}
+@keyframes winterStar{from{filter:brightness(.85)}to{filter:brightness(1.35)}}
+.winter-bauble.drop::after{
+  width:calc(var(--size,16px) * .8); height:calc(var(--size,16px) * 1.35);
+  left:calc(var(--size,16px) * -.4);
+  border-radius:50% 50% 50% 50% / 38% 38% 62% 62%;
+}
+
+/* --- სანტას ქუდი ლოგოზე --- */
+.winter-hat{
+  position:absolute; top:-13px; left:-10px; z-index:3;
+  width:28px; height:23px; pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='24' viewBox='0 0 28 24'%3E%3Cpath d='M4 18Q5 4 19 3Q17 10 25 18Z' fill='%23d62839'/%3E%3Cpath d='M9 16Q10 8 17 5' fill='none' stroke='%23ff7d8a' stroke-width='1.6' stroke-linecap='round' opacity='.7'/%3E%3Crect x='2' y='16' width='24' height='6.5' rx='3.2' fill='%23fbf7ee'/%3E%3Ccircle cx='20.5' cy='4' r='3.6' fill='%23fbf7ee'/%3E%3C/svg%3E") no-repeat center/contain;
+  transform:rotate(-16deg); transform-origin:60% 100%;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));
+  animation:winterHat 3.6s ease-in-out infinite alternate;
+}
+@keyframes winterHat{from{transform:rotate(-19deg)}to{transform:rotate(-12deg)}}
+
+/* --- თოვლის გროვა footer-ის ზემოთ --- */
+.winter-drift{
+  position:absolute; left:0; right:0; top:-19px; height:30px;
+  pointer-events:none; z-index:2;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='30' viewBox='0 0 260 30'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='1' stop-color='%23cfe3f5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 30V17Q22 5 48 14T98 11T150 15T204 10T260 17V30Z' fill='url(%23s)'/%3E%3C/svg%3E") repeat-x 0 100%/260px 30px;
+  filter:drop-shadow(0 -2px 6px rgba(190,228,255,.28));
+  animation:winterFade 1.6s .4s ease both;
+}
+
+/* --- ჩრდილოეთის ნათება (aurora) --- */
+#winter-aurora{
+  position:fixed; inset:-18% -12% 42% -12%;
+  pointer-events:none; z-index:0;
+  mix-blend-mode:screen; opacity:.9;
+  background:
+    radial-gradient(38% 58% at 22% 42%, rgba(46,204,113,.17), transparent 72%),
+    radial-gradient(34% 52% at 56% 30%, rgba(242,193,78,.13), transparent 72%),
+    radial-gradient(38% 60% at 84% 46%, rgba(214,40,57,.14), transparent 72%);
+  animation:winterAurora 18s ease-in-out infinite alternate;
+  will-change:transform;
+}
+@keyframes winterAurora{
+  from{ transform:translateX(-4%) scale(1) skewX(-3deg); opacity:.7 }
+  to{   transform:translateX(4%) scale(1.14) skewX(3deg); opacity:1 }
+}
+
+/* --- მთავარი ღილაკის რბილი პულსაცია (hover-ზე ჩერდება) --- */
+body.winter-mode .button.primary:not(:hover),
+body.winter-mode a.button.primary:not(:hover),
+body.winter-mode button.button.primary:not(:hover){
+  animation:winterPulse 3.2s ease-in-out infinite;
+}
+@keyframes winterPulse{
+  0%,100%{ box-shadow:0 7px 26px rgba(214,40,57,.40),inset 0 1px 0 rgba(255,255,255,.22) }
+  50%{     box-shadow:0 9px 34px rgba(214,40,57,.62),0 0 22px rgba(242,193,78,.28),inset 0 1px 0 rgba(255,255,255,.22) }
+}
+
+/* --- მობილური --- */
+@media (max-width:700px){
+  .winter-bauble.star::after{ width:calc(var(--size,16px) * 1.1); height:calc(var(--size,16px) * 1.1); left:calc(var(--size,16px) * -.55); }
+  .winter-hat{ width:22px; height:18px; top:-10px; left:-8px; }
+  .winter-drift{ height:20px; top:-12px; background-size:170px 20px; }
+  #winter-aurora{ opacity:.6; }
+}
+
+/* --- შემცირებული მოძრაობა --- */
+@media (prefers-reduced-motion:reduce){
+  .winter-hat,.winter-bauble.star::after,
+  body.winter-mode .button.primary,body.winter-mode a.button.primary,
+  body.winter-mode button.button.primary{ animation:none !important; }
 }
