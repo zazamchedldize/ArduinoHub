@@ -13389,7 +13389,7 @@ function winterApplyMode(enabled) {
   const snow = document.createElement('div')
   snow.id = 'arduino-winter-snow'
 
-  for (let i = 0; i < 45; i++) {
+  for (let i = 0; i < 15; i++) {
     const flake = document.createElement('span')
     flake.className = 'arduino-winter-flake'
     flake.textContent = '❄'
