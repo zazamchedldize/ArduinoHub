@@ -199,10 +199,7 @@ body.winter-mode button.button.primary:hover{
 }
 
 /* ---------- 7. ბარათები და პანელები ---------- */
-body.winter-mode .team-card,
-body.winter-mode [class*="project-card"],
-body.winter-mode [class*="album-card"],
-body.winter-mode .card,
+/* team/project/album ბარათებს ფონს არ ვუცვლით, რომ მათი სურათები და საკუთარი დიზაინი დარჩეს */
 body.winter-mode .steps article,
 body.winter-mode .auth-card,
 body.winter-mode .editor-card,
