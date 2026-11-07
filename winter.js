@@ -5,9 +5,9 @@
    - სინქრონი Supabase Realtime-ით (ცხრილი site_modes)
    - მდგომარეობა რჩება refresh-ის შემდეგაც
    - თოვლი (canvas): ფიფქების 3 ფენა, კრისტალური ფიფქები, ქარი, მაუსის ეფექტები,
-     ნაპერწკლები, ცვივა ვარსკვლავი
-   - გირლანდა + ქანაობადი ბურთულები, ყინულის ლოლოები, ნაძვის ტოტები, ყინვის ჩარჩო
-   - ახალ წლამდე უკუთვლა (დახურვადი)
+     ნაპერწკლები, ცვივა ვარსკვლავი, ფეიერვერკი
+   - გირლანდა + ქანაობადი ბურთულები/ვარსკვლავები, ყინულის ლოლოები, ნაძვის ტოტები,
+     ყინვის ჩარჩო, ჩრდილოეთის ნათება (aurora), სანტას ქუდი ლოგოზე, თოვლის გროვა footer-ზე
    - მუსიკა: autoplay ცდა, დაბლოკვისას პირველი ინტერაქცია, loop, ღილაკის გარეშე
    ========================================================= */
 (() => {
@@ -216,9 +216,8 @@
     ['#9ad7ff', '#3b78b8'],
     ['#f6efd8', '#9aa4a0']
   ]
-  const BAUBLE_POS = [6, 19, 33, 47, 61, 75, 89]
-  const CD_HIDE_KEY = 'arduinohub_winter_cd_hidden'
-  let cdTimer = 0
+  const BAUBLE_POS = [5, 16, 28, 40, 52, 63, 75, 87, 95]
+  const BAUBLE_KINDS = ['ball', 'star', 'ball', 'drop', 'ball', 'star', 'drop', 'ball', 'star']
 
   function addBranches(parent) {
     if (!parent) return
@@ -235,11 +234,11 @@
     BAUBLE_POS.forEach((x, i) => {
       const [c1, c2] = BAUBLE_COLORS[(i * 2 + Math.floor(Math.random() * 2)) % BAUBLE_COLORS.length]
       const el = document.createElement('i')
-      el.className = 'winter-bauble'
+      el.className = `winter-bauble ${BAUBLE_KINDS[i]}`
       el.setAttribute('aria-hidden', 'true')
       el.style.setProperty('--x', `${x + (Math.random() * 4 - 2)}%`)
       el.style.setProperty('--len', `${8 + Math.random() * 10}px`)
-      el.style.setProperty('--size', `${13 + Math.random() * 6}px`)
+      el.style.setProperty('--size', `${13 + Math.random() * 5}px`)
       el.style.setProperty('--c1', c1)
       el.style.setProperty('--c2', c2)
       el.style.setProperty('--dur', `${2.8 + Math.random() * 1.8}s`)
@@ -253,11 +252,7 @@
     const header = document.querySelector('.site-header')
     if (!header || header.querySelector('.winter-icicles')) return
 
-    // absolute ელემენტისთვის header უნდა იყოს positioned
-    if (getComputedStyle(header).position === 'static') {
-      header.style.position = 'relative'
-      header.dataset.winterPos = '1'
-    }
+    ensurePositioned(header)
 
     const ice = document.createElement('div')
     ice.className = 'winter-icicles'
@@ -265,53 +260,35 @@
     header.appendChild(ice)
   }
 
-  function countdownText() {
-    const now = new Date()
-    if (now.getMonth() === 0) {
-      return now.getDate() <= 10 ? '🎉 გილოცავთ ახალ წელს!' : null
+
+  // position:static ელემენტს ვხდით relative-ად (და მერე უკან ვაბრუნებთ)
+  function ensurePositioned(el) {
+    if (el && getComputedStyle(el).position === 'static') {
+      el.style.position = 'relative'
+      el.dataset.winterPos = '1'
     }
-
-    const target = new Date(now.getFullYear() + 1, 0, 1)
-    let s = Math.max(0, Math.floor((target - now) / 1000))
-    const d = Math.floor(s / 86400); s -= d * 86400
-    const h = Math.floor(s / 3600); s -= h * 3600
-    const m = Math.floor(s / 60); s -= m * 60
-    const pad = n => String(n).padStart(2, '0')
-
-    return `🎆 ახალ წლამდე: ${d > 0 ? `${d} დღე ` : ''}${pad(h)}:${pad(m)}:${pad(s)}`
   }
 
-  function mountCountdown() {
-    if (document.getElementById('winter-countdown')) return
-    try { if (sessionStorage.getItem(CD_HIDE_KEY) === '1') return } catch {}
-    if (!countdownText()) return
-
-    const el = document.createElement('div')
-    el.id = 'winter-countdown'
-    el.className = 'winter-countdown'
-    el.setAttribute('aria-hidden', 'true')
-    el.title = 'დახურვა'
-    document.body.appendChild(el)
-
-    const tick = () => {
-      const text = countdownText()
-      if (!text) return stopCountdown()
-      if (el.textContent !== text) el.textContent = text
-    }
-    tick()
-    cdTimer = setInterval(tick, 1000)
-
-    el.addEventListener('click', () => {
-      try { sessionStorage.setItem(CD_HIDE_KEY, '1') } catch {}
-      el.classList.add('hide')
-      stopCountdown()
-      setTimeout(() => el.remove(), 350)
-    })
+  // სანტას ქუდი ლოგოზე
+  function addHat() {
+    const mark = document.querySelector('.brand-mark')
+    if (!mark || mark.querySelector('.winter-hat')) return
+    ensurePositioned(mark)
+    const hat = document.createElement('i')
+    hat.className = 'winter-hat'
+    hat.setAttribute('aria-hidden', 'true')
+    mark.appendChild(hat)
   }
 
-  function stopCountdown() {
-    clearInterval(cdTimer)
-    cdTimer = 0
+  // თოვლის გროვა footer-ის ზედა კიდეზე
+  function addDrift() {
+    const footer = document.querySelector('footer')
+    if (!footer || footer.querySelector('.winter-drift')) return
+    ensurePositioned(footer)
+    const drift = document.createElement('div')
+    drift.className = 'winter-drift'
+    drift.setAttribute('aria-hidden', 'true')
+    footer.appendChild(drift)
   }
 
   function mountDecor() {
@@ -326,11 +303,15 @@
     frost.id = 'winter-frost'
     frost.setAttribute('aria-hidden', 'true')
 
+    const aurora = document.createElement('div')
+    aurora.id = 'winter-aurora'
+    aurora.setAttribute('aria-hidden', 'true')
+
     const canvas = document.createElement('canvas')
     canvas.id = 'winter-snow'
     canvas.setAttribute('aria-hidden', 'true')
 
-    document.body.append(garland, frost, canvas)
+    document.body.append(aurora, garland, frost, canvas)
 
     // ტოტები hero-სა და footer-ის კუთხეებში (header-ს არ ფარავს)
     addBranches(document.querySelector('.hero'))
@@ -338,22 +319,21 @@
     addBranches(document.querySelector('.arduinohub-film-section'))
 
     addIcicles()
-    mountCountdown()
+    addHat()
+    addDrift()
   }
 
   function unmountDecor() {
-    stopCountdown()
     document.getElementById('winter-garland')?.remove()
     document.getElementById('winter-frost')?.remove()
+    document.getElementById('winter-aurora')?.remove()
     document.getElementById('winter-snow')?.remove()
-    document.getElementById('winter-countdown')?.remove()
-    document.querySelectorAll('.winter-branch, .winter-icicles').forEach(node => node.remove())
+    document.querySelectorAll('.winter-branch, .winter-icicles, .winter-hat, .winter-drift').forEach(node => node.remove())
 
-    const header = document.querySelector('.site-header')
-    if (header && header.dataset.winterPos) {
-      header.style.position = ''
-      delete header.dataset.winterPos
-    }
+    document.querySelectorAll('[data-winter-pos]').forEach(el => {
+      el.style.position = ''
+      delete el.dataset.winterPos
+    })
   }
 
   /* ---------- თოვლი ---------- */
@@ -470,6 +450,8 @@
     const flakes = []
     const sparks = []
     let shooter = null
+    let rocket = null
+    let nextFire = performance.now() + 9000 + Math.random() * 6000
 
     const rnd = (a, b) => a + Math.random() * (b - a)
 
@@ -529,6 +511,35 @@
         size: rnd(8, burst ? 18 : 14),
         sprite: sprites.stars[Math.floor(Math.random() * sprites.stars.length)]
       })
+    }
+
+    const launchRocket = () => {
+      rocket = {
+        x: rnd(w * 0.15, w * 0.85),
+        y: h + 10,
+        ty: rnd(h * 0.14, h * 0.4),
+        vy: -rnd(7, 9.5)
+      }
+    }
+
+    const burstFirework = (x, y) => {
+      if (sparks.length > 170) return
+      const main = Math.floor(Math.random() * sprites.stars.length)
+      const n = 36
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2 + rnd(-0.08, 0.08)
+        const v = rnd(1.4, 3.4)
+        sparks.push({
+          x, y,
+          vx: Math.cos(a) * v,
+          vy: Math.sin(a) * v,
+          life: rnd(48, 78),
+          max: 78,
+          size: rnd(9, 15),
+          drag: 0.985,
+          sprite: Math.random() < 0.72 ? sprites.stars[main] : sprites.stars[Math.floor(Math.random() * sprites.stars.length)]
+        })
+      }
     }
 
     const spawnShooter = () => {
@@ -599,6 +610,7 @@
           const p = sparks[i]
           p.life -= dt
           if (p.life <= 0) { sparks.splice(i, 1); continue }
+          if (p.drag) { p.vx *= p.drag; p.vy *= p.drag }
           p.x += p.vx * dt
           p.y += p.vy * dt
           p.vy += 0.03 * dt
@@ -609,6 +621,27 @@
         }
         ctx.globalAlpha = 1
         ctx.globalCompositeOperation = 'source-over'
+      }
+
+      // ფეიერვერკი: იშვიათად, ზევით ადის და იფანტება
+      if (!rocket && time > nextFire) {
+        launchRocket()
+        nextFire = time + rnd(20000, 38000)
+      }
+
+      if (rocket) {
+        rocket.y += rocket.vy * dt
+        if (sparks.length < 150) {
+          sparks.push({
+            x: rocket.x + rnd(-1, 1), y: rocket.y,
+            vx: rnd(-0.15, 0.15), vy: rnd(0.2, 0.6),
+            life: 16, max: 16, size: 7, sprite: sprites.stars[1]
+          })
+        }
+        if (rocket.y <= rocket.ty) {
+          burstFirework(rocket.x, rocket.y)
+          rocket = null
+        }
       }
 
       // ცვივა ვარსკვლავი
