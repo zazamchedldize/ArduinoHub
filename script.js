@@ -1619,6 +1619,43 @@ async function getAdAdmin() {
   return await isAdmin(session.user)
 }
 
+async function deleteAllAdvertisements() {
+  const admin = await getAdAdmin()
+
+  if (!admin) {
+    alert('ამ მოქმედების შესრულების უფლება არ გაქვს')
+    return
+  }
+
+  const confirmed = confirm(
+    'ნამდვილად გსურს ყველა რეკლამისა და ვიდეოს წაშლა? ეს მოქმედება შეუქცევადია.'
+  )
+
+  if (!confirmed) return
+
+  try {
+    const { data, error } = await db.functions.invoke('ad-media', {
+      body: {
+        action: 'delete-all'
+      }
+    })
+
+    if (error) throw error
+
+    if (!data?.success) {
+      throw new Error(data?.error || 'რეკლამების წაშლა ვერ მოხერხდა')
+    }
+
+    alert(
+      `წაიშალა ${data.deleted_ads} რეკლამა და ${data.deleted_videos} ვიდეო`
+    )
+
+  } catch (error) {
+    console.error('Delete advertisements error:', error)
+    alert(error.message || 'რეკლამების წაშლისას შეცდომა მოხდა')
+  }
+}
+
 async function openAdManager() {
   const admin = await getAdAdmin()
 
@@ -1806,7 +1843,7 @@ if (command === '/ad') {
   return
 }
 
-if (command === '/delad') {
+if (command === '/dellad' || command === '/delad') {
   await deleteAllAdvertisements()
   return
 }
