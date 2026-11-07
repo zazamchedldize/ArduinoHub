@@ -156,6 +156,16 @@
 
   /* ---------- დეკორი ---------- */
 
+  function addBranches(parent) {
+    if (!parent) return
+    ;['tl', 'tr'].forEach(pos => {
+      const branch = document.createElement('div')
+      branch.className = `winter-branch ${pos}`
+      branch.setAttribute('aria-hidden', 'true')
+      parent.appendChild(branch)
+    })
+  }
+
   function mountDecor() {
     if (document.getElementById('winter-garland')) return
 
@@ -163,19 +173,15 @@
     garland.id = 'winter-garland'
     garland.setAttribute('aria-hidden', 'true')
 
-    const left = document.createElement('div')
-    left.className = 'winter-branch left'
-    left.setAttribute('aria-hidden', 'true')
-
-    const right = document.createElement('div')
-    right.className = 'winter-branch right'
-    right.setAttribute('aria-hidden', 'true')
-
     const canvas = document.createElement('canvas')
     canvas.id = 'winter-snow'
     canvas.setAttribute('aria-hidden', 'true')
 
-    document.body.append(left, right, garland, canvas)
+    document.body.append(garland, canvas)
+
+    // ტოტები hero-სა და footer-ის კუთხეებში (header-ს არ ფარავს)
+    addBranches(document.querySelector('.hero'))
+    addBranches(document.querySelector('footer'))
   }
 
   function unmountDecor() {
@@ -300,11 +306,13 @@
     writeCache(on)
 
     if (on) {
+      document.documentElement.classList.add('winter-mode')
       document.body.classList.add('winter-mode')
       mountDecor()
       startSnow()
       tryPlay()
     } else {
+      document.documentElement.classList.remove('winter-mode')
       document.body.classList.remove('winter-mode')
       stopSnow()
       stopMusic()
