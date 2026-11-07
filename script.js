@@ -1609,7 +1609,104 @@ function setupZazaHistoryDelete() {
 }
 
 
+async function openAdManager() {
+  const admin = await getAdAdmin()
 
+  if (!admin) {
+    addAIMessage('error', 'რეკლამის მართვის უფლება არ გაქვს')
+    return
+  }
+
+  const oldPanel = document.getElementById('ad-manager-panel')
+
+  if (oldPanel) oldPanel.remove()
+
+  const panel = document.createElement('div')
+  panel.id = 'ad-manager-panel'
+
+  panel.innerHTML = `
+    <div class="ad-manager-content">
+      <h2>რეკლამის მართვა</h2>
+
+      <input id="ad-title" type="text" placeholder="რეკლამის სათაური">
+
+      <textarea id="ad-description" placeholder="რეკლამის აღწერა"></textarea>
+
+      <label>კომპიუტერის ვიდეო (16:9)</label>
+      <input id="ad-desktop-video" type="file" accept="video/*">
+
+      <label>ტელეფონის ვიდეო (9:16)</label>
+      <input id="ad-mobile-video" type="file" accept="video/*">
+
+      <button id="ad-publish-btn">რეკლამის გამოქვეყნება</button>
+      <button id="ad-close-btn">დახურვა</button>
+
+      <p id="ad-status"></p>
+    </div>
+  `
+
+  document.body.appendChild(panel)
+
+  document.getElementById('ad-close-btn').onclick = () => panel.remove()
+
+  document.getElementById('ad-publish-btn').onclick = async () => {
+    const title = document.getElementById('ad-title').value.trim()
+    const description = document.getElementById('ad-description').value.trim()
+    const desktopFile = document.getElementById('ad-desktop-video').files[0]
+    const mobileFile = document.getElementById('ad-mobile-video').files[0]
+    const status = document.getElementById('ad-status')
+    const button = document.getElementById('ad-publish-btn')
+
+    if (!title || !desktopFile || !mobileFile) {
+      status.textContent = 'შეავსე სათაური და აირჩიე ორივე ვიდეო'
+      return
+    }
+
+    if (desktopFile.size > 100 * 1024 * 1024 || mobileFile.size > 100 * 1024 * 1024) {
+      status.textContent = 'ვიდეოების ზომა 100MB-ს არ უნდა აღემატებოდეს'
+      return
+    }
+
+    button.disabled = true
+    status.textContent = 'ვიდეოები იტვირთება...'
+
+    let desktopResult
+    let mobileResult
+
+    try {
+      desktopResult = await uploadCloudinaryVideo(desktopFile, 'desktop')
+      mobileResult = await uploadCloudinaryVideo(mobileFile, 'mobile')
+
+      const { data: newAd, error } = await db
+        .from('advertisements')
+        .insert({
+          title,
+          description,
+          desktop_video: desktopResult.secure_url,
+          mobile_video: mobileResult.secure_url,
+          desktop_public_id: desktopResult.public_id,
+          mobile_public_id: mobileResult.public_id,
+          is_active: true
+        })
+        .select('id')
+        .single()
+
+      if (error) throw error
+
+      await db
+        .from('advertisements')
+        .update({ is_active: false })
+        .neq('id', newAd.id)
+
+      status.textContent = 'რეკლამა წარმატებით გამოქვეყნდა'
+      button.disabled = false
+    } catch (error) {
+      console.error('Ad publish error:', error)
+      status.textContent = error.message || 'რეკლამის გამოქვეყნება ვერ მოხერხდა'
+      button.disabled = false
+    }
+  }
+}
 
 async function handleAIQuestion(question) {
   const input = $('#ai-chat-input')
