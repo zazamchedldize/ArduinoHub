@@ -95,41 +95,48 @@
   }
 
   function ensureAudio() {
-    if (music) return music
+  if (music) return music
 
-    music = new Audio(MUSIC_SRC)
-    music.loop = true
-    music.preload = 'auto'
-    music.volume = MUSIC_VOLUME
+  music = new Audio(MUSIC_SRC)
+  music.loop = true
+  music.preload = 'auto'
+  music.volume = MUSIC_VOLUME
 
-    music.addEventListener('error', diagnoseAudio)
+  music.addEventListener('error', diagnoseAudio)
 
-    // გვერდიდან გვერდზე გადასვლისას განაგრძოს იქიდან, სადაც შეჩერდა
-    music.addEventListener('loadedmetadata', () => {
-      const saved = readPos()
-      if (saved > 0 && Number.isFinite(music.duration) && saved < music.duration - 1) {
-        try { music.currentTime = saved } catch {}
-      }
-    }, { once: true })
+  music.addEventListener('loadedmetadata', () => {
+    const saved = readPos()
 
-    let lastSave = 0
-    music.addEventListener('timeupdate', () => {
-      const now = Date.now()
-      if (now - lastSave < 1000) return
-      lastSave = now
-      writePos(music.currentTime)
-    })
+    if (
+      saved > 0 &&
+      Number.isFinite(music.duration) &&
+      saved < music.duration - 1
+    ) {
+      music.currentTime = saved
+    }
+  }, { once: true })
 
-    // დამატებითი დაზღვევა: თუ loop რომელიმე ბრაუზერში არ იმუშავა
-    music.addEventListener('ended', () => {
-      if (!enabled) return
-      music.currentTime = 0
-      music.play().catch(() => {})
-    })
+  let lastSave = 0
 
-    return music
-  }
+  music.addEventListener('timeupdate', () => {
+    const now = Date.now()
 
+    if (now - lastSave < 500) return
+
+    lastSave = now
+    writePos(music.currentTime)
+  })
+
+  music.addEventListener('ended', () => {
+    if (!enabled) return
+
+    music.currentTime = 0
+    writePos(0)
+    music.play().catch(() => {})
+  })
+
+  return music
+}
   async function diagnoseAudio() {
     if (diagnosed) return
     diagnosed = true
@@ -160,24 +167,34 @@
   }
 
   async function tryPlay() {
+  if (!enabled) return
+
+  const audio = ensureAudio()
+
+  try {
+    if (audio.readyState < 1) {
+      await new Promise((resolve, reject) => {
+        audio.addEventListener('loadedmetadata', resolve, { once: true })
+        audio.addEventListener('error', reject, { once: true })
+      })
+    }
+
     if (!enabled) return
 
-    const audio = ensureAudio()
-
-    try {
+    if (audio.paused) {
       await audio.play()
-      unbindUnlock()
-    } catch (err) {
-      if (err && err.name === 'NotAllowedError') {
-        bindUnlock()          // autoplay დაიბლოკა → პირველი ინტერაქცია ჩართავს
-      } else if (err && err.name === 'AbortError') {
-        // play() შეწყვიტა pause()-მა — ნორმალურია
-      } else {
-        console.warn('[Winter] მუსიკა ვერ ჩაირთო:', err)
-        diagnoseAudio()
-      }
+    }
+
+    unbindUnlock()
+  } catch (err) {
+    if (err?.name === 'NotAllowedError') {
+      bindUnlock()
+    } else if (err?.name !== 'AbortError') {
+      console.warn('[Winter] მუსიკა ვერ ჩაირთო:', err)
+      diagnoseAudio()
     }
   }
+}
 
   function onUnlock() {
     tryPlay()
