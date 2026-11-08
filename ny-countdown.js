@@ -23,22 +23,20 @@
   var last = { days:null, hours:null, minutes:null, seconds:null };
   var timer = null;
 
-  /* ტკაცუნის ხმა: ბრაუზერი ავტომატურ ხმას კრძალავს, ამიტომ ჩაირთვება მხოლოდ ღილაკზე დაჭერით */
-  var soundBtn = document.getElementById('nyc-sound');
-  var soundOn = false;
+  /* ტკაცუნის ხმა: ყოველ წამს უკრავს.
+     ბრაუზერი გვერდზე შესვლისას ხმას ბლოკავს, ამიტომ ვცდილობთ თავიდანვე,
+     ხოლო თუ დაიბლოკა, პირველივე დაჭერა/შეხება/კლავიში "ხსნის" ხმას. */
   var audio = null;
-
-  function setSound(on){
-    soundOn = on;
-    if (!soundBtn) return;
-    soundBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    var label = on ? 'ტკაცუნის ხმის გამორთვა' : 'ტკაცუნის ხმის ჩართვა';
-    soundBtn.setAttribute('aria-label', label);
-    soundBtn.title = label;
-  }
+  try {
+    audio = new Audio(section.getAttribute('data-nyc-tick') || 'sound/tick.mp3');
+    audio.preload = 'auto';
+    audio.volume = 0.5;
+    // ფაილი ვერ მოიძებნა → ხმას ვთიშავთ, საიტი მუშაობს ჩვეულებრივად
+    audio.addEventListener('error', function(){ audio = null; });
+  } catch (e) { audio = null; }
 
   function playTick(){
-    if (!soundOn || !audio || document.hidden) return;
+    if (!audio || document.hidden) return;
     try {
       audio.currentTime = 0;
       var p = audio.play();
@@ -46,19 +44,17 @@
     } catch (e) {}
   }
 
-  if (soundBtn) {
-    soundBtn.addEventListener('click', function(){
-      if (!audio) {
-        audio = new Audio(section.getAttribute('data-nyc-tick') || 'sound/tick.mp3');
-        audio.preload = 'auto';
-        audio.volume = 0.5;
-        // ფაილი ვერ მოიძებნა → ღილაკი უბრუნდება "გამორთულ" მდგომარეობას
-        audio.addEventListener('error', function(){ setSound(false); audio = null; });
-      }
-      setSound(!soundOn);
-      if (soundOn) playTick(); // დაჭერისას მაშინვე ერთხელ უკრავს
-    });
+  // პირველ მოქმედებაზე ხმას "ვხსნით" (Safari-ისთვის play() უნდა მოხდეს თავად მოქმედებისას)
+  var unlockEvents = ['pointerdown', 'touchend', 'keydown', 'click'];
+  function unlock(){
+    unlockEvents.forEach(function(ev){ document.removeEventListener(ev, unlock, true); });
+    if (!audio) return;
+    try {
+      var p = audio.play();
+      if (p && p.then) p.then(function(){ audio.pause(); audio.currentTime = 0; }).catch(function(){});
+    } catch (e) {}
   }
+  unlockEvents.forEach(function(ev){ document.addEventListener(ev, unlock, true); });
 
   function pad(n, min){
     var s = String(n);
@@ -84,7 +80,6 @@
     if (timer) { clearTimeout(timer); timer = null; }
     section.classList.add('nyc-done');
     section.setAttribute('data-nyc-state', 'done');
-    setSound(false);
     if (live) live.textContent = 'გილოცავთ ახალ წელს!';
   }
 
