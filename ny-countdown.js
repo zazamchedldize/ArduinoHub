@@ -23,6 +23,43 @@
   var last = { days:null, hours:null, minutes:null, seconds:null };
   var timer = null;
 
+  /* ტკაცუნის ხმა: ბრაუზერი ავტომატურ ხმას კრძალავს, ამიტომ ჩაირთვება მხოლოდ ღილაკზე დაჭერით */
+  var soundBtn = document.getElementById('nyc-sound');
+  var soundOn = false;
+  var audio = null;
+
+  function setSound(on){
+    soundOn = on;
+    if (!soundBtn) return;
+    soundBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    var label = on ? 'ტკაცუნის ხმის გამორთვა' : 'ტკაცუნის ხმის ჩართვა';
+    soundBtn.setAttribute('aria-label', label);
+    soundBtn.title = label;
+  }
+
+  function playTick(){
+    if (!soundOn || !audio || document.hidden) return;
+    try {
+      audio.currentTime = 0;
+      var p = audio.play();
+      if (p && p.catch) p.catch(function(){});
+    } catch (e) {}
+  }
+
+  if (soundBtn) {
+    soundBtn.addEventListener('click', function(){
+      if (!audio) {
+        audio = new Audio(section.getAttribute('data-nyc-tick') || 'sound/tick.mp3');
+        audio.preload = 'auto';
+        audio.volume = 0.5;
+        // ფაილი ვერ მოიძებნა → ღილაკი უბრუნდება "გამორთულ" მდგომარეობას
+        audio.addEventListener('error', function(){ setSound(false); audio = null; });
+      }
+      setSound(!soundOn);
+      if (soundOn) playTick(); // დაჭერისას მაშინვე ერთხელ უკრავს
+    });
+  }
+
   function pad(n, min){
     var s = String(n);
     while (s.length < min) s = '0' + s;
@@ -31,7 +68,7 @@
 
   function setValue(key, value, min){
     var text = pad(value, min);
-    if (last[key] === text) return;
+    if (last[key] === text) return false;
     last[key] = text;
     var el = els[key];
     if (!el) return;
@@ -40,12 +77,14 @@
     el.classList.remove('nyc-tick');
     void el.offsetWidth;
     el.classList.add('nyc-tick');
+    return true;
   }
 
   function finish(){
     if (timer) { clearTimeout(timer); timer = null; }
     section.classList.add('nyc-done');
     section.setAttribute('data-nyc-state', 'done');
+    setSound(false);
     if (live) live.textContent = 'გილოცავთ ახალ წელს!';
   }
 
@@ -62,7 +101,7 @@
     setValue('days', days, 2);
     setValue('hours', hours, 2);
     setValue('minutes', minutes, 2);
-    setValue('seconds', seconds, 2);
+    if (setValue('seconds', seconds, 2)) playTick();
 
     // ვუსინქრონებთ მომდევნო წამის საზღვარს, რომ ციფრები არ "ახტებოდეს"
     var delay = 1000 - (Date.now() % 1000) + 5;
