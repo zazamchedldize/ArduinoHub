@@ -550,84 +550,32 @@ body.winter-mode button.button.primary:not(:hover){
 }
 
 /* =========================================================
-   16. დასწრების სია (#public-attendance-list)
-   მხოლოდ Winter Mode-ში; /winterstop-ზე ძველი დიზაინი ბრუნდება.
+   16. დასწრების ფანჯარა (#public-attendance-modal)
+   script.js-ის ბარათები ამ ცვლადებით იღებენ ფერებს, ამიტომ აქ მხოლოდ
+   ცვლადები იცვლება. /winterstop-ზე ჰაკერული სტილი ბრუნდება.
    ========================================================= */
-body.winter-mode #public-attendance-list{
-  gap:12px !important;
+body.winter-mode #public-attendance-modal{
+  --att-font:"FiraGO","Inter",system-ui,sans-serif;
+  --att-accent:#f2c14e;
+  --att-accent-soft:#fff0b8;
+  --att-accent-glow:rgba(242,193,78,.42);
+  --att-text:#fbf7ee;
+  --att-muted:#bccbb8;
+  --att-overlay:rgba(3,10,6,.72);
+  --att-panel-bg:radial-gradient(ellipse at 50% 0%,rgba(214,40,57,.18),transparent 55%),linear-gradient(165deg,#0d2518,#07170e);
+  --att-panel-border:rgba(242,193,78,.55);
+  --att-panel-shadow:0 0 0 1px rgba(242,193,78,.12),0 0 44px rgba(214,40,57,.2),0 24px 60px rgba(0,0,0,.65);
+  --att-card-bg:linear-gradient(145deg,#0d2518,#09180f);
+  --att-card-border:rgba(242,193,78,.3);
+  --att-card-hover:rgba(242,193,78,.75);
+  --att-bar:linear-gradient(90deg,#d62839,#f2c14e,#fff0b8);
+  --att-bar-track:rgba(242,193,78,.14);
+  --att-radius:16px;
+  --att-prefix:"✦ ";
+  --att-cursor:"";
+  --att-scan:none;
 }
-
-body.winter-mode #public-attendance-list .attendance-admin-member{
-  position:relative !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:14px !important;
-  padding:14px 18px !important;
-  border-radius:16px !important;
-  border:1px solid rgba(242,193,78,.28) !important;
-  background:linear-gradient(145deg,#0d2518,#09180f) !important;
-  box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06) !important;
-  color:var(--w-snow) !important;
-  font-family:"FiraGO","Inter",system-ui,-apple-system,"Segoe UI",sans-serif !important;
-  text-shadow:none !important;
-  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease !important;
-}
-body.winter-mode #public-attendance-list .attendance-admin-member:hover{
-  transform:translateY(-2px) !important;
-  border-color:rgba(242,193,78,.7) !important;
-  box-shadow:0 12px 30px rgba(0,0,0,.45),0 0 22px rgba(242,193,78,.18),inset 0 1px 0 rgba(255,255,255,.08) !important;
-}
-body.winter-mode #public-attendance-list .attendance-admin-member *{
-  font-family:inherit !important;
-  text-shadow:none !important;
-  letter-spacing:normal !important;
-}
-body.winter-mode #public-attendance-list .attendance-admin-member img{
-  border-radius:50% !important;
-  border:2px solid rgba(242,193,78,.6) !important;
-  object-fit:cover !important;
-}
-body.winter-mode #public-attendance-list .attendance-admin-member strong,
-body.winter-mode #public-attendance-list .attendance-admin-member b,
-body.winter-mode #public-attendance-list .attendance-admin-member h3,
-body.winter-mode #public-attendance-list .attendance-admin-member h4{
-  color:#fff0b8 !important;
-  font-weight:700 !important;
-}
-body.winter-mode #public-attendance-list .attendance-admin-member span,
-body.winter-mode #public-attendance-list .attendance-admin-member p,
-body.winter-mode #public-attendance-list .attendance-admin-member small{
-  color:#e6dfcb !important;
-}
-
-/* პირველი ადგილი: ოქრო */
-body.winter-mode #public-attendance-list .top-attendance-card{
-  border-color:rgba(242,193,78,.95) !important;
-  background:radial-gradient(ellipse at 0% 0%,rgba(242,193,78,.22),transparent 60%),linear-gradient(145deg,#1a3a22,#0b1f12) !important;
-  box-shadow:0 12px 34px rgba(0,0,0,.45),0 0 30px rgba(242,193,78,.35),inset 0 0 26px rgba(242,193,78,.1) !important;
-}
-/* მეორე ადგილი: ვერცხლი */
-body.winter-mode #public-attendance-list .second-attendance-card{
-  border-color:rgba(207,216,220,.85) !important;
-  background:radial-gradient(ellipse at 0% 0%,rgba(207,216,220,.16),transparent 60%),linear-gradient(145deg,#12281c,#0a1a11) !important;
-  box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 22px rgba(207,216,220,.22) !important;
-}
-/* მესამე ადგილი: ბრინჯაო */
-body.winter-mode #public-attendance-list .third-attendance-card{
-  border-color:rgba(208,138,78,.85) !important;
-  background:radial-gradient(ellipse at 0% 0%,rgba(208,138,78,.16),transparent 60%),linear-gradient(145deg,#12281c,#0a1a11) !important;
-  box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 22px rgba(208,138,78,.22) !important;
-}
-
-@media (max-width:600px){
-  body.winter-mode #public-attendance-list{ gap:10px !important; }
-  body.winter-mode #public-attendance-list .attendance-admin-member{
-    padding:12px 14px !important;
-    gap:10px !important;
-    border-radius:14px !important;
-  }
-}
-@media (prefers-reduced-motion:reduce){
-  body.winter-mode #public-attendance-list .attendance-admin-member{ transition:none !important; }
-  body.winter-mode #public-attendance-list .attendance-admin-member:hover{ transform:none !important; }
+body.winter-mode #public-attendance-modal .att-title{
+  color:var(--w-snow);
+  text-shadow:0 0 22px rgba(242,193,78,.25);
 }
