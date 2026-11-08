@@ -6148,258 +6148,387 @@ async function openPublicAttendanceModal() {
 
   modal.style.cssText = `
     position: fixed; inset: 0; z-index: 999999; display: flex;
-    align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3);
+    align-items: center; justify-content: center; background: var(--att-overlay, rgba(0, 0, 0, 0.62));
     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 20px; box-sizing: border-box;
   `
 
   modal.innerHTML = `
     <style>
+    #public-attendance-modal {
+      --att-font: var(--h-mono, "JetBrains Mono", "FiraGO", ui-monospace, Consolas, monospace);
+      --att-accent: var(--h-green, #22d395);
+      --att-accent-soft: var(--h-green-soft, #89f4c9);
+      --att-accent-glow: rgba(34, 211, 149, 0.45);
+      --att-text: #e9fff6;
+      --att-muted: #7fb8a3;
+      --att-overlay: rgba(0, 0, 0, 0.62);
+      --att-panel-bg: linear-gradient(160deg, #06150f, #030d09);
+      --att-panel-border: rgba(34, 211, 149, 0.4);
+      --att-panel-shadow: 0 0 0 1px rgba(34, 211, 149, 0.08), 0 0 44px rgba(34, 211, 149, 0.16), 0 24px 60px rgba(0, 0, 0, 0.6);
+      --att-card-bg: rgba(34, 211, 149, 0.05);
+      --att-card-border: rgba(34, 211, 149, 0.26);
+      --att-card-hover: rgba(34, 211, 149, 0.7);
+      --att-bar: linear-gradient(90deg, #0f8f5f, #22d395);
+      --att-bar-track: rgba(34, 211, 149, 0.12);
+      --att-radius: 10px;
+      --att-prefix: "> ";
+      --att-cursor: "_";
+      --att-scan: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px);
+    }
+
+    #public-attendance-modal-content {
+      position: relative;
+      z-index: 2;
+      width: min(900px, 100%);
+      max-height: 85vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 24px;
+      box-sizing: border-box;
+      isolation: isolate;
+      color: var(--att-text);
+      font-family: var(--att-font);
+      background: var(--att-panel-bg);
+      border: 1px solid var(--att-panel-border);
+      border-radius: calc(var(--att-radius) + 4px);
+      box-shadow: var(--att-panel-shadow);
+    }
+
+    #public-attendance-modal-content::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: var(--att-scan);
+    }
+
+    #public-attendance-modal-content > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    #public-attendance-modal .att-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--att-card-border);
+    }
+
+    #public-attendance-modal .att-title {
+      margin: 0;
+      font-family: var(--att-font);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--att-accent-soft);
+      text-shadow: 0 0 14px var(--att-accent-glow);
+    }
+
+    #public-attendance-modal .att-title::before {
+      content: var(--att-prefix);
+      color: var(--att-accent);
+    }
+
+    #public-attendance-modal .att-title::after {
+      content: var(--att-cursor);
+      color: var(--att-accent);
+      animation: attBlink 1s steps(2, jump-none) infinite;
+    }
+
+    #public-attendance-modal #public-attendance-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    #public-attendance-modal .att-note {
+      margin: 0;
+      padding: 18px 0;
+      text-align: center;
+      color: var(--att-muted);
+    }
+
+    #public-attendance-modal .att-note.att-error {
+      color: #ff7180;
+    }
+
+    #public-attendance-modal .attendance-admin-member {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      padding: 14px 16px;
+      border-radius: var(--att-radius);
+      overflow: visible;
+      isolation: isolate;
+      z-index: 0;
+      background: var(--att-card-bg);
+      border: 1px solid var(--att-card-border);
+      box-shadow: inset 3px 0 0 var(--att-accent);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    #public-attendance-modal .attendance-admin-member:hover {
+      transform: translateY(-2px);
+      z-index: 2;
+      border-color: var(--att-card-hover);
+      box-shadow: inset 3px 0 0 var(--att-accent), 0 0 20px var(--att-accent-glow);
+    }
+
+    #public-attendance-modal .attendance-admin-member::before,
+    #public-attendance-modal .attendance-admin-member::after {
+      pointer-events: none;
+    }
+
+    #public-attendance-modal .att-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    #public-attendance-modal .member-name-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    #public-attendance-modal .member-name-row strong {
+      color: var(--att-text);
+      font-size: 15px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    #public-attendance-modal .att-info > span {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--att-muted);
+    }
+
+    #public-attendance-modal .att-bar {
+      height: 5px;
+      margin-top: 9px;
+      border-radius: 99px;
+      background: var(--att-bar-track);
+      overflow: hidden;
+    }
+
+    #public-attendance-modal .att-bar i {
+      display: block;
+      height: 100%;
+      width: var(--w, 0%);
+      border-radius: inherit;
+      background: var(--att-bar);
+      box-shadow: 0 0 10px var(--att-accent-glow);
+      animation: attGrow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    #public-attendance-modal .attendance-admin-member-value {
+      flex-shrink: 0;
+      text-align: right;
+      margin-left: auto;
+    }
+
+    #public-attendance-modal .attendance-admin-member-value strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 800;
+      color: var(--att-accent-soft);
+      text-shadow: 0 0 12px var(--att-accent-glow);
+    }
+
+    #public-attendance-modal .attendance-admin-member-value small {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--att-muted);
+    }
+
     #public-attendance-modal .attendance-admin-member.top-attendance-card {
-  border: 1px solid #f5c451 !important;
-  background: linear-gradient(135deg, rgba(255, 207, 82, 0.22), rgba(89, 62, 18, 0.18) 48%, rgba(17, 20, 25, 0.96)) !important;
-  box-shadow: 0 0 0 1px rgba(255, 207, 82, 0.12), 0 0 22px rgba(255, 190, 55, 0.22), 0 12px 35px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 231, 160, 0.18) !important;
-}
+      border-color: #f5c451;
+      background: linear-gradient(135deg, rgba(255, 207, 82, 0.2), rgba(89, 62, 18, 0.12) 50%, transparent), var(--att-card-bg);
+      box-shadow: inset 3px 0 0 #f5c451, 0 0 22px rgba(255, 190, 55, 0.2);
+    }
 
-#public-attendance-modal .top-name,
-#public-attendance-modal .top-percent {
-  color: #ffd76a !important;
-  text-shadow: 0 0 10px rgba(255, 198, 60, 0.28) !important;
-}
+    #public-attendance-modal .attendance-admin-member.second-attendance-card {
+      border-color: #c0c7d1;
+      background: linear-gradient(135deg, rgba(192, 199, 209, 0.18), rgba(65, 76, 95, 0.1) 50%, transparent), var(--att-card-bg);
+      box-shadow: inset 3px 0 0 #c0c7d1, 0 0 16px rgba(192, 205, 225, 0.16);
+    }
 
-#public-attendance-modal .top-badge {
-  color: #ffe8a3 !important;
-  background: rgba(235, 177, 49, 0.16) !important;
-  border: 1px solid rgba(255, 207, 82, 0.45) !important;
-  box-shadow: 0 0 12px rgba(255, 190, 55, 0.12) !important;
-}
-#public-attendance-modal .attendance-admin-member.second-attendance-card {
-  border: 1px solid rgba(210, 220, 235, 0.8) !important;
-  background: linear-gradient(135deg, rgba(205, 215, 230, 0.18), rgba(65, 76, 95, 0.12), rgba(17, 20, 25, 0.96)) !important;
-  box-shadow: 0 0 18px rgba(192, 205, 225, 0.16), inset 0 1px 0 rgba(235, 242, 255, 0.12) !important;
-}
+    #public-attendance-modal .attendance-admin-member.third-attendance-card {
+      border-color: #cd7e4b;
+      background: linear-gradient(135deg, rgba(205, 126, 75, 0.2), rgba(94, 54, 31, 0.1) 50%, transparent), var(--att-card-bg);
+      box-shadow: inset 3px 0 0 #cd7e4b, 0 0 16px rgba(205, 126, 75, 0.18);
+    }
 
-#public-attendance-modal .attendance-admin-member.third-attendance-card {
-  border: 1px solid rgba(213, 145, 99, 0.85) !important;
-  background: linear-gradient(135deg, rgba(205, 126, 75, 0.2), rgba(94, 54, 31, 0.12), rgba(17, 20, 25, 0.96)) !important;
-  box-shadow: 0 0 18px rgba(205, 126, 75, 0.18), inset 0 1px 0 rgba(255, 205, 165, 0.12) !important;
-}
+    #public-attendance-modal .attendance-admin-member.top-attendance-card:hover {
+      box-shadow: inset 3px 0 0 #f5c451, 0 0 28px rgba(255, 190, 55, 0.34);
+    }
 
-#public-attendance-modal .attendance-admin-member {
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
-}
+    #public-attendance-modal .attendance-admin-member.second-attendance-card:hover {
+      box-shadow: inset 3px 0 0 #c0c7d1, 0 0 24px rgba(192, 205, 225, 0.26);
+    }
 
-#public-attendance-modal .attendance-admin-member:not(.top-attendance-card):not(.second-attendance-card):not(.third-attendance-card) {
-  border: 1px solid rgba(34, 211, 149, 0.22) !important;
-  background: linear-gradient(135deg, rgba(34, 211, 149, 0.07), rgba(7, 17, 15, 0.92)) !important;
-  box-shadow: 0 0 12px rgba(34, 211, 149, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
-}
+    #public-attendance-modal .attendance-admin-member.third-attendance-card:hover {
+      box-shadow: inset 3px 0 0 #cd7e4b, 0 0 24px rgba(205, 126, 75, 0.3);
+    }
 
-#public-attendance-modal .attendance-admin-member:hover {
-  transform: translateY(-2px) !important;
-}
+    #public-attendance-modal .top-name,
+    #public-attendance-modal .top-percent {
+      color: #ffd76a;
+      text-shadow: 0 0 10px rgba(255, 198, 60, 0.3);
+    }
 
-#public-attendance-modal .attendance-admin-member.top-attendance-card:hover {
-  box-shadow: 0 0 28px rgba(255, 190, 55, 0.32), 0 14px 35px rgba(0, 0, 0, 0.35) !important;
-}
+    #public-attendance-modal .top-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      color: #ffe8a3;
+      background: rgba(235, 177, 49, 0.16);
+      border: 1px solid rgba(255, 207, 82, 0.45);
+    }
 
-#public-attendance-modal .attendance-admin-member.second-attendance-card:hover {
-  box-shadow: 0 0 24px rgba(192, 205, 225, 0.24) !important;
-}
+    #public-attendance-modal .top-rank-badge,
+    #public-attendance-modal .second-rank-badge,
+    #public-attendance-modal .third-rank-badge {
+      position: relative;
+      z-index: 1;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 800;
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      font-size: 15px;
+    }
 
-#public-attendance-modal .attendance-admin-member.third-attendance-card:hover {
-  box-shadow: 0 0 24px rgba(205, 126, 75, 0.28) !important;
-}
-  #public-attendance-modal-content {
-  isolation: isolate !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
+    #public-attendance-modal .top-rank-badge {
+      background: linear-gradient(145deg, #fff0a6, #e5b93f 55%, #9e701b);
+      color: #172018;
+      border: 2px solid #ffe9a0;
+      box-shadow: 0 0 12px rgba(255, 205, 70, 0.4);
+      font-weight: 900;
+    }
 
-#public-attendance-modal .attendance-admin-member {
-  isolation: isolate !important;
-  z-index: 0 !important;
-}
+    #public-attendance-modal .second-rank-badge {
+      color: #1b2430;
+      background: linear-gradient(135deg, #8a95a6, #e1e6ed);
+      border: 1px solid #e1e6ed;
+    }
 
-#public-attendance-modal .top-rank-badge,
-#public-attendance-modal .second-rank-badge,
-#public-attendance-modal .third-rank-badge {
-  position: relative !important;
-  z-index: 1 !important;
-}
+    #public-attendance-modal .third-rank-badge {
+      color: #fff0e5;
+      background: linear-gradient(135deg, #8f542f, #d99a6b);
+      border: 1px solid #e5b18b;
+    }
 
-#public-attendance-modal .attendance-admin-member:hover {
-  z-index: 2 !important;
-}
+    #public-attendance-modal .close-attendance-btn {
+      padding: 4px 10px;
+      line-height: 1;
+      font-size: 20px;
+      cursor: pointer;
+      background: none !important;
+      border: 1px solid transparent !important;
+      border-radius: 8px !important;
+      color: var(--att-muted) !important;
+      box-shadow: none !important;
+      transition: color 0.2s, border-color 0.2s;
+    }
 
-#public-attendance-modal .attendance-admin-member::before,
-#public-attendance-modal .attendance-admin-member::after {
-  pointer-events: none !important;
-}
-#public-attendance-modal .attendance-admin-member {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-  padding: 14px 16px !important;
-  border-radius: 14px !important;
-  overflow: visible !important;
-  position: relative !important;
-}
+    #public-attendance-modal .close-attendance-btn:hover {
+      color: var(--att-accent-soft) !important;
+      border-color: var(--att-card-border) !important;
+      background: none !important;
+    }
 
-#public-attendance-modal .attendance-admin-member > div:nth-child(2) {
-  min-width: 0 !important;
-}
+    #public-attendance-modal,
+    #public-attendance-modal * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
 
-#public-attendance-modal .attendance-admin-member.top-attendance-card > div:nth-child(2),
-#public-attendance-modal .attendance-admin-member.second-attendance-card > div:nth-child(2),
-#public-attendance-modal .attendance-admin-member.third-attendance-card > div:nth-child(2),
-#public-attendance-modal .attendance-admin-member:not(.top-attendance-card):not(.second-attendance-card):not(.third-attendance-card) > div:first-child {
-  flex: 1 !important;
-  min-width: 0 !important;
-}
+    #public-attendance-modal::-webkit-scrollbar,
+    #public-attendance-modal *::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
 
-#public-attendance-modal .member-name-row {
-  display: flex !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 6px !important;
-  min-width: 0 !important;
-}
+    @keyframes attBlink {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
 
-#public-attendance-modal .member-name-row strong {
-  overflow-wrap: anywhere !important;
-}
+    @keyframes attGrow {
+      from { width: 0; }
+    }
 
-#public-attendance-modal .attendance-admin-member-value {
-  flex-shrink: 0 !important;
-  text-align: right !important;
-  margin-left: auto !important;
-}
-#public-attendance-modal .top-rank-badge {
-  flex: 0 0 34px !important;
-  width: 34px !important;
-  height: 34px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 50% !important;
-  background: linear-gradient(145deg, #fff0a6, #e5b93f 55%, #9e701b) !important;
-  color: #172018 !important;
-  border: 2px solid #ffe9a0 !important;
-  box-shadow: 0 0 12px rgba(255, 205, 70, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
-  font-size: 16px !important;
-  font-weight: 900 !important;
-}
+    @media (max-width: 480px) {
+      #public-attendance-modal {
+        padding: 10px !important;
+      }
 
-#public-attendance-modal .second-rank-badge,
-#public-attendance-modal .third-rank-badge {
-  flex: 0 0 30px !important;
-  width: 30px !important;
-  height: 30px !important;
-  min-width: 30px !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 50% !important;
-  font-weight: 800 !important;
-}
+      #public-attendance-modal-content {
+        padding: 16px;
+        width: 100%;
+      }
 
-#public-attendance-modal .attendance-admin-member.second-attendance-card {
-  border: 1px solid #c0c7d1 !important;
-  background: linear-gradient(135deg, rgba(192, 199, 209, 0.22), rgba(110, 122, 140, 0.08)) !important;
-  box-shadow: 0 0 14px rgba(192, 199, 209, 0.12) !important;
-}
+      #public-attendance-modal .attendance-admin-member {
+        gap: 8px;
+        padding: 12px 10px;
+      }
 
-#public-attendance-modal .second-rank-badge {
-  color: #e1e6ed !important;
-  background: linear-gradient(135deg, #7f8a9a, #d8dee8) !important;
-  border: 1px solid #e1e6ed !important;
-}
+      #public-attendance-modal .attendance-admin-member-value strong {
+        font-size: 18px;
+      }
+    }
 
-#public-attendance-modal .attendance-admin-member.third-attendance-card {
-  border: 1px solid #b8794e !important;
-  background: linear-gradient(135deg, rgba(184, 121, 78, 0.22), rgba(80, 48, 30, 0.10)) !important;
-  box-shadow: 0 0 14px rgba(184, 121, 78, 0.12) !important;
-}
+    @media (prefers-reduced-motion: reduce) {
+      #public-attendance-modal .att-title::after,
+      #public-attendance-modal .att-bar i {
+        animation: none;
+      }
 
-#public-attendance-modal .third-rank-badge {
-  color: #fff0e5 !important;
-  background: linear-gradient(135deg, #8f542f, #d99a6b) !important;
-  border: 1px solid #e5b18b !important;
-}
+      #public-attendance-modal .attendance-admin-member {
+        transition: none;
+      }
 
-#public-attendance-modal #public-attendance-list {
-  width: 100% !important;
-  min-width: 0 !important;
-}
-
-#public-attendance-modal,
-#public-attendance-modal * {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
-}
-
-#public-attendance-modal::-webkit-scrollbar,
-#public-attendance-modal *::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-.close-attendance-btn {
-  background: none;
-  border: none;
-  color: #9ca3af;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 4px 8px;
-  line-height: 1;
-  transition: color 0.2s;
-  position: relative;
-  z-index: 10;
-}
-
-.close-attendance-btn:hover {
-  color: #ffffff;
-}
-
-@media (max-width: 480px) {
-  #public-attendance-modal {
-    padding: 10px !important;
-  }
-
-  #public-attendance-modal-content {
-    padding: 16px !important;
-    width: 100% !important;
-  }
-
-  #public-attendance-modal .attendance-admin-member {
-    gap: 8px !important;
-    padding: 12px 10px !important;
-  }
-
-  #public-attendance-modal .attendance-admin-member-value strong {
-    font-size: 16px !important;
-  }
-}
-
+      #public-attendance-modal .attendance-admin-member:hover {
+        transform: none;
+      }
+    }
     </style>
 
     <div id="attendance-backdrop" style="position:absolute; inset:0; z-index:1;"></div>
 
-    <div id="public-attendance-modal-content" style="position:relative; z-index:2; width:min(900px, 100%); max-height:85vh; overflow-y:auto; background: rgba(11, 17, 32, 0.35); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border:1px solid rgba(255, 255, 255, 0.15); border-radius:16px; padding:24px; box-sizing:border-box; color:#fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+    <div id="public-attendance-modal-content">
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-        <h2 style="margin:0; font-size:20px; font-weight:bold; color:#fff;">წევრების დასწრება</h2>
+      <div class="att-head">
+        <h2 class="att-title">წევრების დასწრება</h2>
 
-        <button type="button" class="close-attendance-btn" id="close-attendance-x">✕</button>
+        <button type="button" class="close-attendance-btn" id="close-attendance-x" aria-label="დახურვა">✕</button>
       </div>
 
-      <div id="public-attendance-list" style="display:flex; flex-direction:column; gap:12px;">
-        <p style="color:#9ca3af; text-align:center;">მონაცემები იტვირთება...</p>
+      <div id="public-attendance-list">
+        <p class="att-note">მონაცემები იტვირთება...</p>
       </div>
     </div>
   `
@@ -6468,7 +6597,7 @@ async function openPublicAttendanceModal() {
 
     if (listEl) {
       if (!members || members.length === 0) {
-        listEl.innerHTML = '<p style="color:#9ca3af; text-align:center;">წევრები ვერ მოიძებნა.</p>'
+        listEl.innerHTML = '<p class="att-note">წევრები ვერ მოიძებნა.</p>'
         return
       }
 
@@ -6500,12 +6629,13 @@ listEl.innerHTML = sortedMembers.map((member, index) => {
   return `
     <div class="attendance-admin-member ${rankClass}">
       ${rankBadge}
-      <div>
+      <div class="att-info">
         <div class="member-name-row">
           <strong class="${isTop ? 'top-name' : ''}">${esc(member.full_name || member.name || '')}</strong>
           ${topBadge}
         </div>
         <span>${count} შეხვედრა</span>
+        <div class="att-bar"><i style="--w:${percent}%"></i></div>
       </div>
       <div class="attendance-admin-member-value">
         <strong class="${isTop ? 'top-percent' : ''}">${percent}%</strong>
@@ -6522,7 +6652,7 @@ listEl.innerHTML = sortedMembers.map((member, index) => {
     const listEl = document.getElementById('public-attendance-list')
 
     if (listEl) {
-      listEl.innerHTML = '<p style="color:#ef4444; text-align:center;">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>'
+      listEl.innerHTML = '<p class="att-note att-error">დასწრების ჩატვირთვა ვერ მოხერხდა.</p>'
     }
   }
 }
