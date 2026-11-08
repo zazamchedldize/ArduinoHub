@@ -30,7 +30,7 @@
   try {
     audio = new Audio(section.getAttribute('data-nyc-tick') || 'sound/tick.mp3');
     audio.preload = 'auto';
-    audio.volume = 0.5;
+    audio.volume = 1;
     // ფაილი ვერ მოიძებნა → ხმას ვთიშავთ, საიტი მუშაობს ჩვეულებრივად
     audio.addEventListener('error', function(){ audio = null; });
   } catch (e) { audio = null; }
