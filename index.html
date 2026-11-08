@@ -1603,6 +1603,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
      <link rel="stylesheet" href="winter.css?v=1">
+  <link rel="stylesheet" href="ny-countdown.css?v=1">
 </head>
 
 <body data-page="home">
@@ -1668,6 +1669,52 @@
     </nav>
 
   </header>
+
+  <!-- ===== საახალწლო ათვლა ===== -->
+  <section id="nyc-section" aria-labelledby="nyc-title">
+    <div class="nyc-card">
+      <span class="nyc-sheen" aria-hidden="true"></span>
+
+      <p class="nyc-eyebrow" aria-hidden="true"><span>✦</span>2027<span>✦</span></p>
+
+      <h2 class="nyc-title" id="nyc-title">ახალ წლამდე <em>დარჩა</em></h2>
+
+      <ul class="nyc-timer" role="timer" aria-label="ახალ წლამდე დარჩენილი დრო">
+        <li class="nyc-unit" data-nyc="days">
+          <strong class="nyc-num" id="nyc-days">00</strong>
+          <span class="nyc-label">დღე</span>
+        </li>
+        <li class="nyc-sep" aria-hidden="true">:</li>
+        <li class="nyc-unit" data-nyc="hours">
+          <strong class="nyc-num" id="nyc-hours">00</strong>
+          <span class="nyc-label">საათი</span>
+        </li>
+        <li class="nyc-sep" aria-hidden="true">:</li>
+        <li class="nyc-unit" data-nyc="minutes">
+          <strong class="nyc-num" id="nyc-minutes">00</strong>
+          <span class="nyc-label">წუთი</span>
+        </li>
+        <li class="nyc-sep" aria-hidden="true">:</li>
+        <li class="nyc-unit" data-nyc="seconds">
+          <strong class="nyc-num" id="nyc-seconds">00</strong>
+          <span class="nyc-label">წამი</span>
+        </li>
+      </ul>
+
+      <p class="nyc-note">თბილისის დროით · 1 იანვარი, 2027 · 00:00</p>
+
+      <div class="nyc-greet">
+        <div class="nyc-greet-icon" aria-hidden="true">✦</div>
+        <h2 class="nyc-greet-title">გილოცავთ ახალ წელს!</h2>
+        <p class="nyc-greet-text">ბედნიერი, წარმატებული და იდეებით სავსე 2027 წელი გისურვებთ — ArduinoHub-ის გუნდი</p>
+      </div>
+
+      <span id="nyc-live" role="status" aria-live="polite"
+            style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></span>
+    </div>
+  </section>
+  <!-- ===== / საახალწლო ათვლა ===== -->
+
 
   <main>
 
@@ -3394,6 +3441,7 @@
 </div>
 
 <audio id="quiz-music" src="sound/quiz.mp3" loop></audio>
+     <script src="ny-countdown.js?v=1" defer></script>
      <script src="winter.js?v=1" defer></script>
   <script src="hacker-fx.js"></script>
 </body>
