@@ -1,0 +1,109 @@
+#public-attendance-list {
+    gap: 12px !important;
+}
+
+#public-attendance-list .attendance-admin-member {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 14px 18px !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(242, 193, 78, 0.28) !important;
+    background: linear-gradient(145deg, #0d2518, #09180f) !important;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    color: #fbf7ee !important;
+    font-family: "FiraGO", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+    text-shadow: none !important;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+#public-attendance-list .attendance-admin-member:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(242, 193, 78, 0.7) !important;
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.45),
+        0 0 22px rgba(242, 193, 78, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+#public-attendance-list .attendance-admin-member * {
+    font-family: inherit !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+}
+
+#public-attendance-list .attendance-admin-member img {
+    border-radius: 50% !important;
+    border: 2px solid rgba(242, 193, 78, 0.6) !important;
+    object-fit: cover !important;
+}
+
+#public-attendance-list .attendance-admin-member strong,
+#public-attendance-list .attendance-admin-member b,
+#public-attendance-list .attendance-admin-member h3,
+#public-attendance-list .attendance-admin-member h4 {
+    color: #fff0b8 !important;
+    font-weight: 700 !important;
+}
+
+#public-attendance-list .attendance-admin-member span,
+#public-attendance-list .attendance-admin-member p,
+#public-attendance-list .attendance-admin-member small {
+    color: #e6dfcb !important;
+}
+
+#public-attendance-list .top-attendance-card {
+    border-color: rgba(242, 193, 78, 0.95) !important;
+    background:
+        radial-gradient(ellipse at 0% 0%, rgba(242, 193, 78, 0.22), transparent 60%),
+        linear-gradient(145deg, #1a3a22, #0b1f12) !important;
+    box-shadow:
+        0 12px 34px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(242, 193, 78, 0.35),
+        inset 0 0 26px rgba(242, 193, 78, 0.1) !important;
+}
+
+#public-attendance-list .second-attendance-card {
+    border-color: rgba(207, 216, 220, 0.85) !important;
+    background:
+        radial-gradient(ellipse at 0% 0%, rgba(207, 216, 220, 0.16), transparent 60%),
+        linear-gradient(145deg, #12281c, #0a1a11) !important;
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.42),
+        0 0 22px rgba(207, 216, 220, 0.22) !important;
+}
+
+#public-attendance-list .third-attendance-card {
+    border-color: rgba(208, 138, 78, 0.85) !important;
+    background:
+        radial-gradient(ellipse at 0% 0%, rgba(208, 138, 78, 0.16), transparent 60%),
+        linear-gradient(145deg, #12281c, #0a1a11) !important;
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.42),
+        0 0 22px rgba(208, 138, 78, 0.22) !important;
+}
+
+@media (max-width: 600px) {
+    #public-attendance-list {
+        gap: 10px !important;
+    }
+
+    #public-attendance-list .attendance-admin-member {
+        padding: 12px 14px !important;
+        gap: 10px !important;
+        border-radius: 14px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #public-attendance-list .attendance-admin-member {
+        transition: none !important;
+    }
+
+    #public-attendance-list .attendance-admin-member:hover {
+        transform: none !important;
+    }
+}
