@@ -4155,7 +4155,7 @@ async function getMeeting() {
   return await db
     .from('club_meeting')
     .select(
-      'id,meeting_date,meeting_time,updated_at'
+      'id,title,meeting_date,meeting_time,updated_at'
     )
     .eq(
       'id',
@@ -4189,7 +4189,26 @@ function renderMeetingContent(
       </div>
     `
   } else {
+    const meetingTitle =
+      String(meeting.title || '').trim()
+
     target.innerHTML = `
+      ${
+        meetingTitle
+          ? `
+      <div class="meeting-topic">
+        <span>
+          თემა
+        </span>
+
+        <h3>
+          ${esc(meetingTitle)}
+        </h3>
+      </div>
+          `
+          : ''
+      }
+
       <div class="meeting-date-main">
         ${esc(
           meetingDateText(
@@ -4392,6 +4411,15 @@ async function loadAdminMeeting() {
   }
 
   if (data) {
+    const titleInput =
+      $('#meeting-title-input')
+
+    if (titleInput) {
+      titleInput.value =
+        data.title ||
+        ''
+    }
+
     $('#meeting-date')
       .value =
       data.meeting_date ||
@@ -4424,6 +4452,13 @@ async function loadAdminMeeting() {
 
     status.className =
       'meeting-admin-status'
+
+    const titleInput =
+      $('#meeting-title-input')
+
+    if (titleInput) {
+      titleInput.value = ''
+    }
 
     $('#meeting-day-preview')
       .textContent =
@@ -4470,6 +4505,8 @@ async function saveMeeting( event ) {
   const errorTarget = $('#meeting-form-error')
   const date = $('#meeting-date') .value
   const time = $('#meeting-time') .value
+  const titleInput = $('#meeting-title-input')
+  const title = titleInput ? titleInput.value.trim() : null
   errorTarget.textContent = ''
   if ( !date || !time ) {
     errorTarget.textContent = 'აირჩიეთ თარიღი და დრო.'
@@ -4481,10 +4518,14 @@ async function saveMeeting( event ) {
     if (!user) {
       throw new Error( 'not-authenticated' )
     }
+    const meetingRow = { id: 1, meeting_date: date, meeting_time: time, updated_by: user.id }
+    if (titleInput) {
+      meetingRow.title = title || null
+    }
     const { error } = await db
       .from('club_meeting')
       .upsert(
-        { id: 1, meeting_date: date, meeting_time: time, updated_by: user.id },
+        meetingRow,
         { onConflict: 'id' }
       )
     if (error) {
@@ -4533,6 +4574,11 @@ async function clearMeeting() {
     message: '⚠️ კლუბის შეკრება გაუქმდა ადმინისტრატორის მიერ.',
     sender: 'სისტემა' // ან შენი არჩევნით
   })
+
+  if ($('#meeting-title-input')) {
+    $('#meeting-title-input')
+      .value = ''
+  }
 
   $('#meeting-date')
     .value = ''
