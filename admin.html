@@ -90,8 +90,12 @@
         </div> 
         <span id="meeting-admin-status" class="meeting-admin-status"> იტვირთება... </span>
       </div>
-      <p class="meeting-admin-help"> აქვეყნებთ მხოლოდ შეკრების თარიღს, დღეს და დროს. ადგილმდებარეობა არ ინახება. </p>
+      <p class="meeting-admin-help"> აქვეყნებთ შეკრების სათაურს (არასავალდებულო), თარიღს, დღეს და დროს. ადგილმდებარეობა არ ინახება. </p>
       <form id="meeting-form" class="meeting-form">
+        <!-- TITLE -->
+        <label class="meeting-title-field"> შეხვედრის სათაური
+          <input id="meeting-title-input" type="text" maxlength="120" autocomplete="off" placeholder="მაგ: Arduino-ს ახალი პროექტის დაგეგმვა">
+        </label>
         <!-- DATE --> 
         <label> თარიღი <input id="meeting-date" type="date" required> </label>
         <!-- TIME --> 
