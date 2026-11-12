@@ -217,5 +217,144 @@
 <script type="module" src="script.js"></script>
   <script src="hacker-fx.js"></script>
      <script src="/winter.js?v=3" defer></script>
+     <!-- =========================================
+     ავტორების არჩევა კლუბის წევრების სიიდან
+     ჩასვი ადმინ-გვერდის (სადაც #author ველია) </body>-მდე.
+     script.js არ იცვლება: ღილაკები უბრალოდ #author ველს ავსებენ.
+========================================== -->
+
+<style>
+  .author-picker{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:2px 0 4px;
+  }
+
+  .author-picker-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    min-height:36px;
+    padding:7px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#ffffff08;
+    color:var(--muted);
+    font:600 13px FiraGO,Inter,sans-serif;
+    cursor:pointer;
+    transition:border-color .2s,color .2s,background .2s;
+  }
+
+  .author-picker-chip::before{
+    content:"+";
+    font:700 14px/1 "JetBrains Mono",monospace;
+    color:var(--green);
+  }
+
+  .author-picker-chip:hover{
+    color:var(--text);
+    border-color:#36c596;
+  }
+
+  .author-picker-chip[aria-pressed="true"]{
+    color:var(--green2);
+    border-color:var(--green);
+    background:#22d39512;
+  }
+
+  .author-picker-chip[aria-pressed="true"]::before{
+    content:"✓";
+  }
+
+  .author-picker-hint{
+    flex-basis:100%;
+    margin:0;
+    font-size:11px;
+    color:var(--muted);
+  }
+</style>
+
+<script>
+  (function () {
+    var MEMBERS = [
+      'მარიამ ბუაძე',
+      'ანასტასია ხონელიძე',
+      'გიორგი ბაღდავაძე',
+      'ანი მუმლაძე',
+      'ანასტასია თევდორაძე',
+      'ანი ძაგნიძე',
+      'თეკლა შველიძე',
+      'მარიამ მიშვიძე'
+    ];
+
+    var input = document.getElementById('author');
+    if (!input) return;
+
+    var box = document.createElement('div');
+    box.className = 'author-picker';
+
+    var hint = document.createElement('p');
+    hint.className = 'author-picker-hint';
+    hint.textContent = 'აირჩიე ერთი ან რამდენიმე წევრი (ველში ხელითაც შეგიძლია დაწერო).';
+
+    var chips = MEMBERS.map(function (name) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'author-picker-chip';
+      b.textContent = name;
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () { toggle(name); });
+      box.appendChild(b);
+      return b;
+    });
+
+    box.appendChild(hint);
+    input.insertAdjacentElement('afterend', box);
+
+    function names() {
+      return input.value
+        .split(',')
+        .map(function (n) { return n.trim(); })
+        .filter(Boolean);
+    }
+
+    function sync() {
+      var current = names();
+      chips.forEach(function (b) {
+        b.setAttribute(
+          'aria-pressed',
+          current.indexOf(b.textContent) !== -1 ? 'true' : 'false'
+        );
+      });
+    }
+
+    function toggle(name) {
+      var current = names();
+      var i = current.indexOf(name);
+      if (i === -1) current.push(name); else current.splice(i, 1);
+      input.value = current.join(', ');
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      sync();
+    }
+
+    // ხელით ჩაწერისას
+    input.addEventListener('input', sync);
+
+    // ფორმის გასუფთავებისას
+    if (input.form) {
+      input.form.addEventListener('reset', function () { setTimeout(sync, 0); });
+    }
+
+    // რედაქტირებისას script.js ველს პროგრამულად ავსებს, შემდეგ კი რედაქტორს ხსნის
+    var editor = document.getElementById('project-editor');
+    if (editor) {
+      new MutationObserver(function () { setTimeout(sync, 0); })
+        .observe(editor, { attributes: true, attributeFilter: ['hidden'] });
+    }
+
+    sync();
+  })();
+</script>
 </body>
 </html>
