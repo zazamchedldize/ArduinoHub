@@ -178,6 +178,518 @@
     href="style.css"
   >
 
+  <!-- =========================================
+       PROJECT DETAIL PAGE — REDESIGN
+       Scoped to body[data-page="detail"] so no other page is affected.
+       Uses the existing theme variables (--bg, --panel, --line, --text,
+       --muted, --green, --green2) – no new colors are introduced.
+  ========================================== -->
+
+  <style>
+
+    /* ---------- Page frame ---------- */
+
+    body[data-page="detail"] .detail-shell{
+      max-width:1216px;
+      padding:36px 32px 90px;
+    }
+
+    /* ---------- Back button ---------- */
+
+    body[data-page="detail"] .back-link{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin:0 0 30px;
+      padding:9px 16px 9px 12px;
+      min-height:40px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:#ffffff08;
+      color:var(--text);
+      font-size:13px;
+      font-weight:600;
+      transition:border-color .2s,color .2s,background .2s,box-shadow .2s;
+    }
+
+    body[data-page="detail"] .back-link svg{
+      width:16px;
+      height:16px;
+      color:var(--green);
+      transition:transform .2s;
+    }
+
+    body[data-page="detail"] .back-link:hover{
+      color:var(--green);
+      border-color:#36c596;
+      background:#22d39510;
+      box-shadow:0 0 20px #22d3950b;
+    }
+
+    body[data-page="detail"] .back-link:hover svg{
+      transform:translateX(-3px);
+    }
+
+    /* ---------- Article ---------- */
+
+    body[data-page="detail"] .detail{
+      min-width:0;
+    }
+
+    /* ---------- Hero: title, description, image, info cards ----------
+       The markup produced by script.js is:
+       .detail-hero > div > (.card-meta > span + time), h1, p, .author-line
+       plus img.detail-image. The wrapper elements use display:contents
+       so every piece becomes a direct grid item of .detail-hero.        */
+
+    body[data-page="detail"] .detail-hero{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      align-items:stretch;
+      padding:0;
+      border:0;
+    }
+
+    body[data-page="detail"] .detail-hero > div,
+    body[data-page="detail"] .detail-hero .card-meta{
+      display:contents;
+    }
+
+    body[data-page="detail"] .detail-hero h1{
+      order:1;
+      grid-column:1 / -1;
+      margin:0 0 6px;
+      font-size:clamp(34px,5.2vw,64px);
+      line-height:1.04;
+      overflow-wrap:anywhere;
+    }
+
+    body[data-page="detail"] .detail-hero h1::before{
+      content:"// PROJECT";
+      display:block;
+      margin-bottom:18px;
+      font:700 12px/1 "JetBrains Mono",monospace;
+      letter-spacing:.2em;
+      color:var(--green);
+    }
+
+    body[data-page="detail"] .detail-hero p{
+      order:2;
+      grid-column:1 / -1;
+      max-width:760px;
+      margin:0 0 14px;
+      padding-left:18px;
+      border-left:2px solid #22d39555;
+      font-size:clamp(15px,1.6vw,18px);
+      line-height:1.75;
+      overflow-wrap:anywhere;
+    }
+
+    body[data-page="detail"] .detail-image{
+      order:3;
+      grid-column:1 / -1;
+      display:block;
+      width:100%;
+      height:auto;
+      aspect-ratio:16 / 9;
+      max-height:560px;
+      object-fit:cover;
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow:0 18px 50px #0006;
+    }
+
+    /* Info cards: category / date / author */
+
+    body[data-page="detail"] .detail-hero .card-meta span,
+    body[data-page="detail"] .detail-hero .card-meta time,
+    body[data-page="detail"] .detail-hero .author-line{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:7px;
+      min-width:0;
+      padding:18px 20px;
+      background:linear-gradient(145deg,var(--panel),#0a1714);
+      border:1px solid var(--line);
+      border-radius:14px;
+      color:var(--text);
+      font:700 16px/1.3 Inter,FiraGO,sans-serif;
+      overflow-wrap:anywhere;
+      transition:border-color .2s,transform .2s;
+    }
+
+    body[data-page="detail"] .detail-hero .card-meta span:hover,
+    body[data-page="detail"] .detail-hero .card-meta time:hover,
+    body[data-page="detail"] .detail-hero .author-line:hover{
+      border-color:#2c6653;
+      transform:translateY(-2px);
+    }
+
+    body[data-page="detail"] .detail-hero .card-meta span{
+      order:4;
+      color:var(--green2);
+      text-transform:capitalize;
+    }
+
+    body[data-page="detail"] .detail-hero .card-meta time{
+      order:5;
+    }
+
+    body[data-page="detail"] .detail-hero .author-line{
+      order:6;
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr);
+      align-items:center;
+      column-gap:10px;
+      row-gap:7px;
+      color:var(--green2);
+    }
+
+    body[data-page="detail"] .detail-hero .author-line svg{
+      width:18px;
+      height:18px;
+      flex:none;
+    }
+
+    /* Small mono label on every info card */
+
+    body[data-page="detail"] .detail-hero .card-meta span::before,
+    body[data-page="detail"] .detail-hero .card-meta time::before,
+    body[data-page="detail"] .detail-hero .author-line::before{
+      display:block;
+      font:600 11px/1 "JetBrains Mono",monospace;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    body[data-page="detail"] .detail-hero .card-meta span::before{ content:"კატეგორია"; }
+    body[data-page="detail"] .detail-hero .card-meta time::before{ content:"თარიღი"; }
+    body[data-page="detail"] .detail-hero .author-line::before{
+      content:"ავტორი";
+      grid-column:1 / -1;
+    }
+
+    /* Desktop: image on the left, info cards stacked on the right */
+
+    @media (min-width:1024px){
+
+      body[data-page="detail"] .detail-hero:has(.detail-image){
+        grid-template-columns:minmax(0,1fr) 300px;
+      }
+
+      body[data-page="detail"] .detail-hero:has(.detail-image) h1{ grid-row:1; }
+      body[data-page="detail"] .detail-hero:has(.detail-image) p{ grid-row:2; }
+
+      body[data-page="detail"] .detail-hero:has(.detail-image) .detail-image{
+        grid-column:1;
+        grid-row:3 / span 3;
+        height:100%;
+        max-height:none;
+        align-self:stretch;
+      }
+
+      body[data-page="detail"] .detail-hero:has(.detail-image) .card-meta span{
+        grid-column:2;
+        grid-row:3;
+      }
+
+      body[data-page="detail"] .detail-hero:has(.detail-image) .card-meta time{
+        grid-column:2;
+        grid-row:4;
+      }
+
+      body[data-page="detail"] .detail-hero:has(.detail-image) .author-line{
+        grid-column:2;
+        grid-row:5;
+      }
+
+    }
+
+    /* ---------- Content sections ---------- */
+
+    body[data-page="detail"] .detail-content{
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      gap:20px;
+      max-width:none;
+      margin:28px 0 0;
+    }
+
+    body[data-page="detail"] .detail-section{
+      grid-column:1 / -1;
+      min-width:0;
+      margin:0;
+      padding:26px;
+      background:linear-gradient(145deg,var(--panel),#0a1714);
+      border:1px solid var(--line);
+      border-radius:14px;
+      transition:border-color .2s,box-shadow .2s;
+    }
+
+    body[data-page="detail"] .detail-section:hover{
+      border-color:#2c6653;
+      box-shadow:0 14px 35px #0004;
+    }
+
+    body[data-page="detail"] .detail-section h2{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:0 0 20px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+      font:700 20px/1.25 Inter,FiraGO,sans-serif;
+    }
+
+    body[data-page="detail"] .detail-section h2 svg{
+      box-sizing:border-box;
+      flex:none;
+      width:36px;
+      height:36px;
+      padding:8px;
+      border:1px solid #28dc9b40;
+      border-radius:10px;
+      background:#22d3950d;
+      color:var(--green);
+    }
+
+    /* Components (left, narrow) + How it was made (right, wide) */
+
+    @media (min-width:900px){
+
+      body[data-page="detail"] .detail-section:has([data-lucide="package"]):has(+ .detail-section [data-lucide="wrench"]){
+        grid-column:span 5;
+      }
+
+      body[data-page="detail"] .detail-section:has([data-lucide="package"]) + .detail-section:has([data-lucide="wrench"]){
+        grid-column:span 7;
+      }
+
+    }
+
+    /* Prose */
+
+    body[data-page="detail"] .prose{
+      max-width:68ch;
+      font-size:16px;
+      line-height:1.85;
+      overflow-wrap:anywhere;
+    }
+
+    /* Components list (built from the component lines by the helper script) */
+
+    body[data-page="detail"] .component-list{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:10px;
+      margin:0;
+      padding:0;
+      list-style:none;
+      counter-reset:component;
+      white-space:normal;
+    }
+
+    body[data-page="detail"] .prose:has(.component-list){
+      max-width:none;
+    }
+
+    body[data-page="detail"] .component-list li{
+      counter-increment:component;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      padding:12px 14px;
+      background:#ffffff05;
+      border:1px solid var(--line);
+      border-radius:10px;
+      color:var(--text);
+      font-size:15px;
+      line-height:1.45;
+      transition:border-color .2s,background .2s;
+    }
+
+    body[data-page="detail"] .component-list li::before{
+      content:counter(component,decimal-leading-zero);
+      flex:none;
+      min-width:34px;
+      padding:5px 0;
+      text-align:center;
+      border:1px solid #28dc9b40;
+      border-radius:7px;
+      background:#22d3950d;
+      color:var(--green2);
+      font:600 12px/1 "JetBrains Mono",monospace;
+    }
+
+    body[data-page="detail"] .component-list li:hover{
+      border-color:#2c6653;
+      background:#22d39508;
+    }
+
+    /* Video */
+
+    body[data-page="detail"] .media-section video{
+      display:block;
+      width:100%;
+      max-height:640px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#000;
+    }
+
+    /* ---------- Code section ---------- */
+
+    body[data-page="detail"] .detail-section:has(.code-heading){
+      padding:0;
+      overflow:hidden;
+      background:#06110e;
+      border-color:#25483d;
+    }
+
+    body[data-page="detail"] .code-heading{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:12px;
+      padding:14px 18px;
+      background:#0b1d18;
+      border-bottom:1px solid #25483d;
+    }
+
+    body[data-page="detail"] .code-heading h2{
+      margin:0;
+      padding:0;
+      border:0;
+      font:700 15px/1.25 "JetBrains Mono",Inter,monospace;
+      letter-spacing:.02em;
+    }
+
+    body[data-page="detail"] .code-heading h2 svg{
+      width:32px;
+      height:32px;
+      padding:7px;
+    }
+
+    body[data-page="detail"] .detail pre{
+      margin:0;
+      padding:20px 22px;
+      max-height:640px;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:0;
+      border-radius:0;
+      background:transparent;
+      color:#b7f5dc;
+      font:13px/1.7 "JetBrains Mono","SFMono-Regular",Consolas,monospace;
+      tab-size:2;
+    }
+
+    /* ---------- Tablet ---------- */
+
+    @media (max-width:900px){
+
+      body[data-page="detail"] .detail-shell{
+        padding:30px 22px 80px;
+      }
+
+      body[data-page="detail"] .detail-image{
+        max-height:460px;
+      }
+
+    }
+
+    /* ---------- Mobile ---------- */
+
+    @media (max-width:640px){
+
+      body[data-page="detail"] .detail-shell{
+        padding:22px 14px 64px;
+      }
+
+      body[data-page="detail"] .back-link{
+        margin-bottom:22px;
+      }
+
+      body[data-page="detail"] .detail-hero{
+        grid-template-columns:minmax(0,1fr);
+        gap:12px;
+      }
+
+      body[data-page="detail"] .detail-hero h1{
+        font-size:clamp(30px,9vw,38px);
+      }
+
+      body[data-page="detail"] .detail-hero p{
+        font-size:15px;
+        padding-left:14px;
+      }
+
+      body[data-page="detail"] .detail-image{
+        aspect-ratio:4 / 3;
+        border-radius:12px;
+      }
+
+      body[data-page="detail"] .detail-hero .card-meta span,
+      body[data-page="detail"] .detail-hero .card-meta time,
+      body[data-page="detail"] .detail-hero .author-line{
+        padding:14px 16px;
+        border-radius:12px;
+      }
+
+      body[data-page="detail"] .detail-content{
+        gap:14px;
+        margin-top:22px;
+      }
+
+      body[data-page="detail"] .detail-section{
+        padding:18px;
+        border-radius:12px;
+      }
+
+      body[data-page="detail"] .detail-section h2{
+        font-size:18px;
+        margin-bottom:16px;
+        padding-bottom:14px;
+      }
+
+      body[data-page="detail"] .prose{
+        font-size:15px;
+      }
+
+      body[data-page="detail"] .component-list{
+        grid-template-columns:minmax(0,1fr);
+      }
+
+      body[data-page="detail"] .detail-section:has(.code-heading){
+        padding:0;
+      }
+
+      body[data-page="detail"] .code-heading{
+        padding:12px 14px;
+      }
+
+      body[data-page="detail"] .code-heading h2{
+        font-size:14px;
+        margin:0;
+        padding:0;
+      }
+
+      body[data-page="detail"] .detail pre{
+        padding:16px;
+        max-height:520px;
+        font-size:12px;
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
@@ -337,6 +849,61 @@
     type="module"
     src="script.js"
   ></script>
+  <!-- =========================================
+       PRESENTATION HELPER
+       Does not touch data or queries. After script.js has rendered the
+       project it (1) turns the component lines into a tidy list and
+       (2) removes the template indentation that script.js leaves inside
+       the code block. script.js itself is unchanged.
+  ========================================== -->
+
+  <script>
+    (function () {
+      var root = document.getElementById('project-detail');
+      if (!root) return;
+
+      function enhance() {
+        var detail = root.querySelector('.detail');
+        if (!detail || detail.dataset.enhanced) return false;
+        detail.dataset.enhanced = '1';
+
+        var icon = detail.querySelector('.detail-section [data-lucide="package"]');
+        var section = icon && icon.closest('.detail-section');
+        var prose = section && section.querySelector('.prose');
+
+        if (prose) {
+          var lines = prose.textContent
+            .split(/\r?\n/)
+            .map(function (l) { return l.replace(/^\s*(?:[-•*·–—]+|\d+[.)])\s*/, '').trim(); })
+            .filter(Boolean);
+
+          if (lines.length) {
+            var list = document.createElement('ul');
+            list.className = 'component-list';
+            lines.forEach(function (text) {
+              var li = document.createElement('li');
+              li.textContent = text;
+              list.appendChild(li);
+            });
+            prose.textContent = '';
+            prose.appendChild(list);
+          }
+        }
+
+        var code = detail.querySelector('#arduino-code');
+        if (code) code.textContent = code.textContent.trim();
+
+        return true;
+      }
+
+      if (enhance()) return;
+
+      var observer = new MutationObserver(function () {
+        if (enhance()) observer.disconnect();
+      });
+      observer.observe(root, { childList: true, subtree: true });
+    })();
+  </script>
 <script src="hacker-fx.js"></script>
    <script src="/winter.js?v=3" defer></script>
 </body>
