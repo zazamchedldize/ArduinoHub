@@ -3446,6 +3446,26 @@
      <script src="ny-countdown.js?v=1" defer></script>
      <script src="winter.js?v=1" defer></script>
   <script src="hacker-fx.js"></script>
+  <audio id="doom-music" loop>
+  <source src="/doom.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const doomMusic = document.getElementById("doom-music")
+
+  doomMusic.volume = 0.35
+
+  function startDoomMusic() {
+    doomMusic.play().catch(() => {
+      document.addEventListener("click", function startMusic() {
+        doomMusic.play()
+        document.removeEventListener("click", startMusic)
+      }, { once: true })
+    })
+  }
+
+  startDoomMusic()
+</script>
 </body>
 
 </html>
