@@ -788,17 +788,34 @@
 
     .dd-num {
       position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
+      left: 50%;
+      bottom: -6px;
+      transform: translateX(-50%);
+      padding: 2px 12px 1px;
       font-family: "Rajdhani", sans-serif;
       font-weight: 700;
-      font-size: clamp(30px, 6.4vh, 48px);
+      font-size: clamp(14px, 2.6vh, 19px);
+      line-height: 1.1;
+      letter-spacing: .14em;
       color: var(--dd-white);
-      text-shadow: 0 0 12px var(--dd-green), 0 0 26px rgba(0, 255, 102, .6);
-      letter-spacing: .04em;
-      line-height: 1;
+      background: var(--dd-bg);
+      border: 1px solid rgba(0, 255, 102, .55);
+      text-shadow: 0 0 10px var(--dd-green);
+      box-shadow: 0 0 14px rgba(0, 255, 102, .25);
     }
+
+    /* ---------- original hooded sentinel (hologram) ---------- */
+    .dd-fig-hood { fill: #07110f; }
+    .dd-fig-shade { fill: rgba(34, 211, 149, .11); }
+    .dd-fig-rim { fill: none; stroke: var(--dd-green); stroke-width: 1.3; stroke-linejoin: round; filter: drop-shadow(0 0 4px rgba(0, 255, 102, .8)); }
+    .dd-fig-face { fill: #020603; stroke: rgba(0, 255, 102, .55); stroke-width: .8; stroke-linejoin: round; }
+    .dd-fig-line { fill: none; stroke: rgba(34, 211, 149, .7); stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; }
+    .dd-fig-eye { fill: var(--dd-red); filter: drop-shadow(0 0 3px var(--dd-red)) drop-shadow(0 0 7px rgba(255, 23, 68, .8)); animation: dd-eye 3.4s ease-in-out infinite; }
+    .dd-fig-scan { fill: rgba(0, 255, 102, .3); animation: dd-fig-scan 2.8s linear infinite; }
+    .dd-fig { animation: dd-holo 6s linear infinite; }
+    .dd-online .dd-fig-rim { stroke: var(--dd-white); filter: drop-shadow(0 0 7px var(--dd-green)); }
+    .dd-online .dd-fig-eye { animation: none; opacity: 1; filter: drop-shadow(0 0 5px var(--dd-red)) drop-shadow(0 0 12px var(--dd-red)); }
+
 
     .dd-online .dd-r-core { animation: dd-core-burst 1s ease-out forwards; }
     .dd-online .dd-r-red { stroke: var(--dd-green); filter: drop-shadow(0 0 6px var(--dd-green)); stroke-dasharray: 520 59; animation: dd-spin-rev 3s linear infinite; }
@@ -948,6 +965,9 @@
     }
 
     /* ---------- keyframes ---------- */
+    @keyframes dd-eye { 0%, 100% { opacity: 1; } 46% { opacity: 1; } 50% { opacity: .3; } 54% { opacity: 1; } }
+    @keyframes dd-fig-scan { from { transform: translateY(-4px); } to { transform: translateY(96px); } }
+    @keyframes dd-holo { 0%, 100% { opacity: 1; } 91% { opacity: 1; } 93% { opacity: .78; } 95% { opacity: 1; } 97% { opacity: .88; } }
     @keyframes dd-spin { to { transform: rotate(360deg); } }
     @keyframes dd-spin-rev { to { transform: rotate(-360deg); } }
     @keyframes dd-blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
@@ -1828,6 +1848,24 @@
           <circle class="r dd-r-mid" cx="100" cy="100" r="68"/>
           <polygon class="r dd-r-hex" points="100,52 141.6,76 141.6,124 100,148 58.4,124 58.4,76"/>
           <circle class="dd-r-core" cx="100" cy="100" r="46"/>
+          <defs>
+            <clipPath id="dd-fig-clip">
+              <path d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z"/>
+            </clipPath>
+          </defs>
+          <g class="dd-fig">
+            <path class="dd-fig-hood" d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z"/>
+            <g clip-path="url(#dd-fig-clip)">
+              <path class="dd-fig-shade" d="M100 55 L65 91 L59 131 L100 143 Z"/>
+              <rect class="dd-fig-scan" x="55" y="52" width="90" height="9"/>
+            </g>
+            <path class="dd-fig-face" d="M100 70 L83 79 L81 103 L91 121 L100 126 L109 121 L119 103 L117 79 Z"/>
+            <path class="dd-fig-line" d="M100 70 V86 M83 79 L91 86 M117 79 L109 86 M91 118 L100 111 L109 118"/>
+            <path class="dd-fig-line" d="M66 118 L78 125 M134 118 L122 125 M73 133 L100 138 L127 133"/>
+            <path class="dd-fig-eye" d="M85 95 L96 98 L96 101 L86 99.5 Z"/>
+            <path class="dd-fig-eye" d="M115 95 L104 98 L104 101 L114 99.5 Z"/>
+            <path class="dd-fig-rim" d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z"/>
+          </g>
           <path d="M100 4v16M100 180v16M4 100h16M180 100h16" stroke="rgba(0,255,102,.55)" stroke-width="1.5" fill="none"/>
         </svg>
         <div class="dd-num" id="dd-num">01</div>
