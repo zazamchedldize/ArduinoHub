@@ -692,12 +692,4 @@
     font-variant-numeric: tabular-nums;
 }
 
-.nyc-title em {
-    color: #ff1744;
-    font-style: normal;
-    text-shadow:
-        0 0 5px #ff1744,
-        0 0 12px #ff1744,
-        0 0 25px #ff1744,
-        0 0 45px rgba(255, 0, 60, 0.8);
-}
+
