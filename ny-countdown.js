@@ -9,7 +9,7 @@
 (function(){
   'use strict';
 
-  var TARGET = Date.UTC(2026, 11, 31, 20, 0, 0); // 2027-01-01T00:00:00+04:00
+  var TARGET = Date.UTC(2026, 11, 16, 20, 0, 0)
   var section = document.getElementById('nyc-section');
   if (!section) return;
 
