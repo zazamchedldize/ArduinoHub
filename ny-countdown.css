@@ -1,7 +1,7 @@
-
+```css
 /* =========================================================
    ArduinoHub — DOOMSDAY COUNTDOWN
-   Dark Green / Metal / Apocalypse
+   Doctor Doom Background / Dark Green / Metal
    ========================================================= */
 
 #nyc-section {
@@ -26,6 +26,8 @@
   box-sizing: border-box;
 }
 
+/* MAIN CARD */
+
 .nyc-card {
   position: relative;
   max-width: 980px;
@@ -37,29 +39,43 @@
   isolation: isolate;
   color: var(--nyc-snow);
 
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 102, .13), transparent 60%),
-    radial-gradient(ellipse at 0% 100%, rgba(31, 110, 57, .16), transparent 50%),
-    radial-gradient(ellipse at 100% 100%, rgba(0, 255, 102, .07), transparent 50%),
-    linear-gradient(145deg, #0b1b10, #030905 65%, #07150b);
+  background-color: #030905;
 
-  border: 1px solid rgba(83, 255, 139, .35);
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(2, 10, 5, .66),
+      rgba(2, 9, 4, .83)
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 25, 10, .30),
+      rgba(0, 0, 0, .12),
+      rgba(0, 25, 10, .30)
+    ),
+    url("doom.png");
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  border: 1px solid rgba(83, 255, 139, .4);
 
   box-shadow:
-    0 25px 80px rgba(0, 0, 0, .65),
-    0 0 35px rgba(0, 255, 102, .09),
-    inset 0 0 55px rgba(0, 255, 102, .035);
+    0 25px 80px rgba(0, 0, 0, .7),
+    0 0 40px rgba(0, 255, 102, .12),
+    inset 0 0 60px rgba(0, 255, 102, .06);
 
   animation: nycRise .9s cubic-bezier(.2, .8, .2, 1) both;
 }
 
-/* მეტალის ჩარჩო */
+/* METAL BORDER */
 
 .nyc-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 2;
   padding: 1.5px;
   border-radius: inherit;
 
@@ -79,34 +95,60 @@
     linear-gradient(#000 0 0);
 
   -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude,
-        linear-gradient(#000 0 0);
+
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
 
   animation: nycBorder 9s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
-/* მწვანე ენერგიის ფონური განათება */
+/* GREEN ENERGY LIGHT */
 
 .nyc-card::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 
   background:
-    radial-gradient(circle at 8% 20%, rgba(0,255,102,.25), transparent 2px),
-    radial-gradient(circle at 22% 75%, rgba(120,255,160,.16), transparent 3px),
-    radial-gradient(circle at 38% 15%, rgba(0,255,102,.18), transparent 2px),
-    radial-gradient(circle at 58% 85%, rgba(0,255,102,.15), transparent 3px),
-    radial-gradient(circle at 75% 25%, rgba(120,255,160,.18), transparent 2px),
-    radial-gradient(circle at 92% 70%, rgba(0,255,102,.18), transparent 3px);
+    radial-gradient(
+      circle at 8% 20%,
+      rgba(0,255,102,.22),
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 22% 75%,
+      rgba(120,255,160,.16),
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 38% 15%,
+      rgba(0,255,102,.18),
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 58% 85%,
+      rgba(0,255,102,.15),
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 75% 25%,
+      rgba(120,255,160,.18),
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 92% 70%,
+      rgba(0,255,102,.18),
+      transparent 4px
+    );
 
   animation: nycSparkle 4s ease-in-out infinite alternate;
 }
 
-/* ენერგიის მოძრავი ზოლი */
+/* MOVING ENERGY LIGHT */
 
 .nyc-sheen {
   position: absolute;
@@ -114,7 +156,7 @@
   bottom: 0;
   left: -45%;
   width: 30%;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 
   background: linear-gradient(
@@ -129,7 +171,7 @@
   animation: nycSheen 8s ease-in-out 1s infinite;
 }
 
-/* ზედა წარწერა */
+/* EYEBROW */
 
 .nyc-eyebrow {
   position: relative;
@@ -158,7 +200,7 @@
   animation-delay: 1.5s;
 }
 
-/* მთავარი სათაური */
+/* MAIN TITLE */
 
 .nyc-title {
   position: relative;
@@ -170,10 +212,11 @@
   line-height: 1.15;
   letter-spacing: 1px;
 
-  color: #eaffef;
+  color: #75ff9b;
 
   text-shadow:
-    0 0 20px rgba(0,255,102,.15),
+    0 0 10px rgba(0,255,102,.55),
+    0 0 25px rgba(0,255,102,.25),
     0 3px 15px rgba(0,0,0,.8);
 }
 
@@ -181,24 +224,24 @@
   font-style: normal;
 
   background: linear-gradient(
-    100deg,
-    #d7ffe2,
-    #38ff78 45%,
-    #a4ffbd 70%,
-    #21a94d
+    90deg,
+    #d8ffe2,
+    #00ff66,
+    #66ff99,
+    #00b83f
   );
 
-  background-size: 220% 100%;
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 
-  filter: drop-shadow(0 0 13px rgba(0,255,102,.35));
+  filter: drop-shadow(0 0 13px rgba(0,255,102,.4));
 
   animation: nycShimmer 7s ease-in-out infinite alternate;
 }
 
-/* ტაიმერის ბლოკები */
+/* TIMER */
 
 .nyc-timer {
   position: relative;
@@ -214,6 +257,8 @@
   list-style: none;
 }
 
+/* TIMER UNIT */
+
 .nyc-unit {
   position: relative;
   flex: 1 1 0;
@@ -224,15 +269,19 @@
   border-radius: 15px;
 
   background:
-    linear-gradient(145deg, rgba(255,255,255,.065), transparent 45%),
-    linear-gradient(160deg, #102519, #07120b 75%);
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.09),
+      rgba(255,255,255,.015)
+    ),
+    rgba(3, 17, 8, .78);
 
-  border: 1px solid rgba(92,255,143,.28);
+  border: 1px solid rgba(92,255,143,.35);
 
   box-shadow:
     0 12px 30px rgba(0,0,0,.5),
     inset 0 1px 0 rgba(255,255,255,.08),
-    inset 0 0 25px rgba(0,255,102,.035);
+    inset 0 0 25px rgba(0,255,102,.05);
 
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -250,11 +299,11 @@
 
   box-shadow:
     0 15px 40px rgba(0,0,0,.55),
-    0 0 25px rgba(0,255,102,.16),
+    0 0 25px rgba(0,255,102,.2),
     inset 0 1px 0 rgba(255,255,255,.12);
 }
 
-/* ბლოკის ზედა ენერგიის ხაზი */
+/* TOP ENERGY LINE */
 
 .nyc-unit::before {
   content: "";
@@ -277,14 +326,14 @@
   border-radius: 2px;
 }
 
-/* წამების ბლოკი */
+/* SECONDS */
 
 .nyc-unit[data-nyc="seconds"] {
   border-color: rgba(145,255,175,.55);
 
   box-shadow:
     0 10px 30px rgba(0,0,0,.45),
-    0 0 18px rgba(0,255,102,.08),
+    0 0 18px rgba(0,255,102,.12),
     inset 0 0 25px rgba(0,255,102,.07);
 }
 
@@ -300,7 +349,7 @@
   box-shadow: 0 0 15px rgba(0,255,102,.9);
 }
 
-/* ციფრები */
+/* NUMBERS */
 
 .nyc-num {
   display: block;
@@ -324,14 +373,14 @@
   background-clip: text;
   color: transparent;
 
-  filter: drop-shadow(0 0 13px rgba(0,255,102,.35));
+  filter: drop-shadow(0 0 13px rgba(0,255,102,.4));
 }
 
 .nyc-num.nyc-tick {
   animation: nycTick .5s cubic-bezier(.2,.9,.3,1.2);
 }
 
-/* ციფრების ქვედა ტექსტი */
+/* LABELS */
 
 .nyc-label {
   display: block;
@@ -342,11 +391,11 @@
   letter-spacing: 1.7px;
   text-transform: uppercase;
 
-  color: #a9c9b1;
-  opacity: .9;
+  color: #c1dfca;
+  opacity: .95;
 }
 
-/* გამყოფები */
+/* SEPARATORS */
 
 .nyc-sep {
   align-self: center;
@@ -363,7 +412,7 @@
   animation: nycBlink 1.3s steps(2,jump-none) infinite;
 }
 
-/* ქვედა ტექსტი */
+/* NOTE */
 
 .nyc-note {
   position: relative;
@@ -375,11 +424,11 @@
   font-weight: 600;
   letter-spacing: 1.2px;
 
-  color: #8da995;
-  opacity: .85;
+  color: #b0cdb8;
+  opacity: .9;
 }
 
-/* დასრულებული ათვლა */
+/* COUNTDOWN FINISHED */
 
 .nyc-greet {
   display: none;
@@ -447,7 +496,7 @@
   margin-bottom: 0;
 }
 
-/* ანიმაციები */
+/* ANIMATIONS */
 
 @keyframes nycRise {
   from {
@@ -535,7 +584,7 @@
   }
 }
 
-/* ტაბლეტი და მობილური */
+/* TABLET AND MOBILE */
 
 @media (max-width: 700px) {
   #nyc-section {
@@ -545,6 +594,8 @@
   .nyc-card {
     padding: 25px 14px 23px;
     border-radius: 18px;
+
+    background-position: center center;
   }
 
   .nyc-eyebrow {
@@ -596,7 +647,7 @@
   }
 }
 
-/* მოძრაობის შემცირება */
+/* REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {
   .nyc-card,
@@ -613,80 +664,8 @@
     animation: none !important;
   }
 
-
-/* DOCTOR DOOM MASK BACKGROUND */
-
-.nyc-card {
-  background:
-    radial-gradient(
-      ellipse at 50% 50%,
-      rgba(0, 255, 102, .10),
-      transparent 55%
-    ),
-    linear-gradient(145deg, #0b1b10, #020704 75%);
-}
-
-.nyc-card .nyc-doom-mask {
-  position: absolute;
-  z-index: 0;
-  top: 50%;
-  left: 50%;
-  width: min(340px, 65%);
-  height: 340px;
-  transform: translate(-50%, -50%);
-  opacity: .10;
-  pointer-events: none;
-  object-fit: contain;
-  filter:
-    grayscale(1)
-    sepia(1)
-    hue-rotate(75deg)
-    saturate(2)
-    brightness(.8);
-}
-
-/* GREEN DOOM TITLE */
-
-.nyc-title {
-  color: #75ff9b;
-  text-shadow:
-    0 0 10px rgba(0, 255, 102, .5),
-    0 0 25px rgba(0, 255, 102, .25);
-}
-
-.nyc-title em {
-  background: linear-gradient(
-    90deg,
-    #d8ffe2,
-    #00ff66,
-    #66ff99,
-    #00b83f
-  );
-
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* DOOM METAL GLOW */
-
-.nyc-card {
-  box-shadow:
-    0 25px 80px rgba(0, 0, 0, .7),
-    0 0 45px rgba(0, 255, 102, .12),
-    inset 0 0 60px rgba(0, 255, 102, .05);
-}
-
-@media (max-width: 700px) {
-  .nyc-card .nyc-doom-mask {
-    width: 75%;
-    height: 260px;
-  }
-}
-
-
   .nyc-unit {
     transition: none;
   }
 }
+```
