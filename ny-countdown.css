@@ -685,3 +685,9 @@
 .system-text {
     font-family: 'Share Tech Mono', monospace;
 }
+
+.nyc-num {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
