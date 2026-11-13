@@ -613,6 +613,79 @@
     animation: none !important;
   }
 
+
+/* DOCTOR DOOM MASK BACKGROUND */
+
+.nyc-card {
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(0, 255, 102, .10),
+      transparent 55%
+    ),
+    linear-gradient(145deg, #0b1b10, #020704 75%);
+}
+
+.nyc-card .nyc-doom-mask {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: min(340px, 65%);
+  height: 340px;
+  transform: translate(-50%, -50%);
+  opacity: .10;
+  pointer-events: none;
+  object-fit: contain;
+  filter:
+    grayscale(1)
+    sepia(1)
+    hue-rotate(75deg)
+    saturate(2)
+    brightness(.8);
+}
+
+/* GREEN DOOM TITLE */
+
+.nyc-title {
+  color: #75ff9b;
+  text-shadow:
+    0 0 10px rgba(0, 255, 102, .5),
+    0 0 25px rgba(0, 255, 102, .25);
+}
+
+.nyc-title em {
+  background: linear-gradient(
+    90deg,
+    #d8ffe2,
+    #00ff66,
+    #66ff99,
+    #00b83f
+  );
+
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* DOOM METAL GLOW */
+
+.nyc-card {
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, .7),
+    0 0 45px rgba(0, 255, 102, .12),
+    inset 0 0 60px rgba(0, 255, 102, .05);
+}
+
+@media (max-width: 700px) {
+  .nyc-card .nyc-doom-mask {
+    width: 75%;
+    height: 260px;
+  }
+}
+
+
   .nyc-unit {
     transition: none;
   }
