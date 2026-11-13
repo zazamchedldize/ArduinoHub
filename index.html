@@ -3948,6 +3948,224 @@
 
   startDoomMusic()
 </script>
+<!-- ===== GLITCH SENTINELS (decorative) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="dg-sentinel" viewBox="54 50 92 98">
+    <path d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z" fill="#07110f" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M100 55 L65 91 L59 131 L100 143 Z" fill="currentColor" opacity=".12"/>
+    <path d="M100 70 L83 79 L81 103 L91 121 L100 126 L109 121 L119 103 L117 79 Z" fill="#020603" stroke="currentColor" stroke-opacity=".6" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M100 70V86M83 79L91 86M117 79L109 86M91 118L100 111L109 118M66 118L78 125M134 118L122 125M73 133L100 138L127 133" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M85 95L96 98V101L86 99.5Z" fill="#ff1744"/>
+    <path d="M115 95L104 98V101L114 99.5Z" fill="#ff1744"/>
+  </symbol>
+</svg>
+
+<style>
+  #dg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  #dg-layer .dg-fig {
+    position: absolute;
+    width: var(--dg-s, 140px);
+    aspect-ratio: 92 / 98;
+    opacity: 0;
+    will-change: opacity, transform, clip-path;
+  }
+
+  #dg-layer .dg-fig svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  #dg-layer .dg-base {
+    color: #00ff66;
+    filter: drop-shadow(0 0 7px rgba(0, 255, 102, .55));
+  }
+
+  #dg-layer .dg-ghost {
+    color: #ff1744;
+    mix-blend-mode: screen;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px rgba(255, 23, 68, .6));
+  }
+
+  #dg-layer .dg-fig.on {
+    animation: dg-life var(--dg-dur, 3.4s) linear forwards;
+  }
+
+  #dg-layer .dg-fig.on .dg-ghost {
+    animation: dg-ghost var(--dg-dur, 3.4s) linear forwards;
+  }
+
+  @keyframes dg-life {
+    0%   { opacity: 0;    transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    3%   { opacity: .30;  transform: translateX(-7px);  clip-path: inset(12% 0 58% 0); }
+    6%   { opacity: 0;    transform: translateX(4px);   clip-path: inset(0 0 0 0); }
+    9%   { opacity: .28;  transform: translateX(6px);   clip-path: inset(58% 0 8% 0); }
+    12%  { opacity: .10;  transform: translateX(-3px);  clip-path: inset(0 0 0 0); }
+    16%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    32%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    34%  { opacity: .30;  transform: translateX(6px);   clip-path: inset(28% 0 42% 0); }
+    36%  { opacity: .22;  transform: translateX(-4px);  clip-path: inset(0 0 0 0); }
+    50%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    52%  { opacity: .04;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    54%  { opacity: .28;  transform: translateX(-5px);  clip-path: inset(46% 0 20% 0); }
+    57%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    72%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    75%  { opacity: .30;  transform: translateX(8px);   clip-path: inset(18% 0 50% 0); }
+    78%  { opacity: .06;  transform: translateX(-4px);  clip-path: inset(0 0 0 0); }
+    82%  { opacity: .24;  transform: translateX(5px);   clip-path: inset(52% 0 14% 0); }
+    86%  { opacity: 0;    transform: translateX(0);     clip-path: inset(0 0 0 0); }
+    90%  { opacity: .16;  transform: translateX(-6px);  clip-path: inset(34% 0 36% 0); }
+    94%, 100% { opacity: 0; transform: translateX(0);   clip-path: inset(0 0 0 0); }
+  }
+
+  @keyframes dg-ghost {
+    0%, 2%   { opacity: 0; transform: translateX(0); }
+    3%       { opacity: .9; transform: translateX(10px); }
+    6%       { opacity: 0; }
+    9%       { opacity: .8; transform: translateX(-9px); }
+    12%, 33% { opacity: 0; transform: translateX(0); }
+    34%      { opacity: .85; transform: translateX(-10px); }
+    37%, 53% { opacity: 0; }
+    54%      { opacity: .8; transform: translateX(9px); }
+    57%, 74% { opacity: 0; }
+    75%      { opacity: .9; transform: translateX(-11px); }
+    78%      { opacity: 0; }
+    82%      { opacity: .7; transform: translateX(8px); }
+    86%, 100% { opacity: 0; transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #dg-layer { display: none; }
+  }
+</style>
+
+<div id="dg-layer" aria-hidden="true">
+  <div class="dg-fig"><svg class="dg-ghost"><use href="#dg-sentinel"/></svg><svg class="dg-base"><use href="#dg-sentinel"/></svg></div>
+  <div class="dg-fig"><svg class="dg-ghost"><use href="#dg-sentinel"/></svg><svg class="dg-base"><use href="#dg-sentinel"/></svg></div>
+  <div class="dg-fig"><svg class="dg-ghost"><use href="#dg-sentinel"/></svg><svg class="dg-base"><use href="#dg-sentinel"/></svg></div>
+</div>
+
+<script>
+  /* Decorative glitch sentinels: appear at random edge spots, glitch, vanish.
+     Never intercepts clicks, starts only after the boot screen, pauses in background tabs. */
+  ;(function () {
+    var layer = document.getElementById("dg-layer")
+    if (!layer) return
+
+    var reduce = false
+    try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch (e) {}
+    if (reduce) { layer.parentNode && layer.parentNode.removeChild(layer); return }
+
+    var figs = Array.prototype.slice.call(layer.querySelectorAll(".dg-fig"))
+    var slots = [
+      { side: "l", top: 12 }, { side: "l", top: 42 }, { side: "l", top: 70 },
+      { side: "r", top: 16 }, { side: "r", top: 46 }, { side: "r", top: 72 }
+    ]
+    var usedSlots = {}
+    var timer = 0
+    var started = false
+    var running = 0
+
+    function rand(a, b) { return a + Math.random() * (b - a) }
+
+    function release(fig) {
+      if (!fig._on) return
+      fig._on = false
+      clearTimeout(fig._fallback)
+      fig.classList.remove("on")
+      delete usedSlots[fig._slot]
+      running--
+    }
+
+    figs.forEach(function (fig) {
+      fig.addEventListener("animationend", function (e) {
+        if (e.target === fig && e.animationName === "dg-life") release(fig)
+      })
+    })
+
+    function schedule(ms) {
+      clearTimeout(timer)
+      timer = setTimeout(spawn, ms == null ? rand(1800, 4200) : ms)
+    }
+
+    function spawn() {
+      timer = 0
+      if (document.hidden) return // resumes on visibilitychange
+
+      var small = window.innerWidth < 700
+      var max = small ? 1 : 2
+
+      if (running < max) {
+        var fig = figs.filter(function (f) { return !f._on })[0]
+        var free = []
+        for (var i = 0; i < slots.length; i++) if (!usedSlots[i]) free.push(i)
+
+        if (fig && free.length) {
+          var si = free[(Math.random() * free.length) | 0]
+          var slot = slots[si]
+          var size = small ? rand(72, 108) : rand(100, 190)
+          var dur = rand(2.8, 4.6)
+
+          fig._on = true
+          fig._slot = si
+          usedSlots[si] = true
+          running++
+
+          fig.style.setProperty("--dg-s", size + "px")
+          fig.style.setProperty("--dg-dur", dur + "s")
+          fig.style.top = slot.top + "%"
+          fig.style.left = slot.side === "l" ? "1.5vw" : "auto"
+          fig.style.right = slot.side === "r" ? "1.5vw" : "auto"
+
+          // restart animation reliably
+          fig.classList.remove("on")
+          void fig.offsetWidth
+          fig.classList.add("on")
+
+          fig._fallback = setTimeout(function () { release(fig) }, dur * 1000 + 600)
+        }
+      }
+      schedule()
+    }
+
+    function begin() {
+      if (started) return
+      started = true
+      schedule(1400)
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden && started && !timer) schedule(800)
+    })
+
+    function ready() { return !document.body.classList.contains("splash-active") }
+
+    if (ready()) {
+      begin()
+    } else {
+      var mo = new MutationObserver(function () {
+        if (ready()) { mo.disconnect(); begin() }
+      })
+      mo.observe(document.body, { attributes: true, attributeFilter: ["class"] })
+      setTimeout(function () { mo.disconnect(); begin() }, 9000)
+    }
+  })()
+</script>
+<!-- ===== / GLITCH SENTINELS ===== -->
+
 </body>
 
 </html>
