@@ -69,28 +69,14 @@ body.winter-mode::before{
   z-index:998;            /* header-ის (1000) ქვემოთ, კონტენტის ზემოთ */
 }
 
-/* გირლანდა: header-ის ზემოთ, ჩატის (1200) ქვემოთ */
+/* გირლანდა: header-ის ზემოთ, ჩატის (1200) ქვემოთ.
+   სადენი და ნათურები JS-ით შენდება (იხ. ქვემოთ, სექცია 17) */
 #winter-garland{
-  position:fixed; top:0; left:0; right:0; height:34px;
+  position:fixed; top:0; left:0; right:0; height:40px;
   pointer-events:none; z-index:1002;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'%3E%3Cpath d='M0 1.5 Q60 40 120 1.5' fill='none' stroke='%23467a56' stroke-width='2.4'/%3E%3C/svg%3E") repeat-x 0 0/120px 34px;
   animation:winterFade 1.2s ease both;
 }
-#winter-garland:before,#winter-garland:after{
-  content:""; position:absolute; inset:0;
-  background-repeat:repeat-x; background-size:120px 34px;
-  will-change:opacity;
-}
-#winter-garland:before{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'%3E%3Ccircle cx='20' cy='17' r='11' fill='%23ff5d6c' fill-opacity='.30'/%3E%3Crect x='18.3' y='7' width='3.4' height='5' rx='1' fill='%23222'/%3E%3Ccircle cx='20' cy='17' r='4.6' fill='%23ff4d5e'/%3E%3Ccircle cx='100' cy='17' r='11' fill='%2355e08a' fill-opacity='.28'/%3E%3Crect x='98.3' y='7' width='3.4' height='5' rx='1' fill='%23222'/%3E%3Ccircle cx='100' cy='17' r='4.6' fill='%2347d67c'/%3E%3C/svg%3E");
-  animation:winterTwinkleA 2.6s ease-in-out infinite;
-}
-#winter-garland:after{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'%3E%3Ccircle cx='60' cy='25' r='11' fill='%23f2c14e' fill-opacity='.34'/%3E%3Crect x='58.3' y='15' width='3.4' height='5' rx='1' fill='%23222'/%3E%3Ccircle cx='60' cy='25' r='4.6' fill='%23ffd966'/%3E%3C/svg%3E");
-  animation:winterTwinkleB 2.6s ease-in-out infinite;
-}
-@keyframes winterTwinkleA{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes winterTwinkleB{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes winterFadeOnly{from{opacity:0}to{opacity:1}}
 @keyframes winterFade{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 
 /* ნაძვის ტოტები: hero-სა და footer-ის კუთხეებში (JS ამატებს), არ ფარავს header-ს */
@@ -319,8 +305,7 @@ body.winter-mode .hs-terminal{ background:rgba(242,193,78,.05); text-shadow:none
 
 /* ---------- 11. მობილური ---------- */
 @media (max-width:700px){
-  #winter-garland{ height:24px; background-size:84px 24px; }
-  #winter-garland:before,#winter-garland:after{ background-size:84px 24px; }
+  #winter-garland{ height:30px; }
   .winter-branch{ width:112px; height:68px; }
   body.winter-mode .site-header{ padding-top:8px; }
   body.winter-mode::before{ background:radial-gradient(circle at 15% 10%,rgba(214,40,57,.12) 0,transparent 40%),radial-gradient(circle at 85% 90%,rgba(242,193,78,.08) 0,transparent 40%); }
@@ -328,7 +313,7 @@ body.winter-mode .hs-terminal{ background:rgba(242,193,78,.05); text-shadow:none
 
 /* ---------- 12. შემცირებული მოძრაობა ---------- */
 @media (prefers-reduced-motion:reduce){
-  #winter-garland,#winter-garland:before,#winter-garland:after,
+  #winter-garland,
   .winter-branch,body.winter-mode .brand-mark{ animation:none !important; }
   #winter-snow{ display:none; }
 }
@@ -578,4 +563,196 @@ body.winter-mode #public-attendance-modal{
 body.winter-mode #public-attendance-modal .att-title{
   color:var(--w-snow);
   text-shadow:0 0 22px rgba(242,193,78,.25);
+}
+
+/* =========================================================
+   17. v5 Premium: ნათურების გირლანდა, ხეები, ზარები, გვირგვინები, ბაფთები,
+   ტოტების გირლანდა, საჩუქრები, განათების ატმოსფერო
+   ყველა კლასი winter- პრეფიქსითაა და pointer-events:none
+   ========================================================= */
+
+/* --- სადენი და ნათურები (JS აგებს) --- */
+#winter-garland .winter-wire{
+  position:absolute; left:0; top:0; width:100%; height:40px; overflow:visible;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.35));
+}
+.winter-bulb{
+  position:absolute; width:0; height:0; display:block;
+  transform:rotate(var(--r,0deg)); transform-origin:0 0;
+  pointer-events:none;
+}
+.winter-bulb::before{                      /* ბუდე */
+  content:""; position:absolute; left:-2px; top:-1px; width:4px; height:5px; border-radius:1px;
+  background:linear-gradient(90deg,#161616,#4a4a4a 50%,#161616);
+}
+.winter-bulb::after{                       /* ნათურის კორპუსი */
+  content:""; position:absolute; top:3px;
+  left:calc(var(--bw,8px) / -2);
+  width:var(--bw,8px); height:calc(var(--bw,8px) * 1.35);
+  border-radius:50% 50% 50% 50% / 38% 38% 62% 62%;
+  background:
+    radial-gradient(circle at 36% 28%, rgba(255,255,255,.92) 0 9%, transparent 30%),
+    radial-gradient(circle at 50% 60%, var(--c,#ff4d5e) 0, var(--c2,#a91d2c) 100%);
+  box-shadow:0 0 5px var(--c,#ff4d5e);
+}
+.winter-bulb b{                            /* რბილი Glow — ციმციმებს მხოლოდ ეს (opacity/transform) */
+  position:absolute; left:-15px; top:-4px; width:30px; height:30px; border-radius:50%;
+  background:radial-gradient(circle, var(--c,#ff4d5e) 0, transparent 66%);
+  opacity:.9;
+  animation:winterBulbA var(--d,3s) ease-in-out var(--dl,0s) infinite;
+}
+.winter-bulb.v1 b{ animation-name:winterBulbB; }
+.winter-bulb.v2 b{ animation-name:winterBulbC; }
+@keyframes winterBulbA{0%,100%{opacity:.28;transform:scale(.78)}50%{opacity:.95;transform:scale(1.1)}}
+@keyframes winterBulbB{0%,100%{opacity:.2}18%{opacity:.95}34%{opacity:.35}52%{opacity:.9}74%{opacity:.25}}
+@keyframes winterBulbC{0%,100%{opacity:.55}45%{opacity:.15;transform:scale(.8)}70%{opacity:.85;transform:scale(1.05)}}
+
+/* ორნამენტები სადენის კვანძებზე (ძველი სტილი, ახალი მდებარეობა) */
+#winter-garland .winter-bauble{ top:3px; left:var(--x,50%); }
+#winter-garland .winter-bauble:nth-child(even){ display:block; }
+
+/* --- თბილი ოქროსფერი განათების ატმოსფერო --- */
+#winter-glow{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(62% 40% at 50% -8%, rgba(255,214,120,.17), transparent 70%),
+    radial-gradient(40% 32% at 0% 100%, rgba(255,170,80,.09), transparent 70%),
+    radial-gradient(40% 32% at 100% 100%, rgba(255,170,80,.09), transparent 70%);
+  animation:winterBreathe 9s ease-in-out infinite alternate;
+}
+@keyframes winterBreathe{from{opacity:.55}to{opacity:1}}
+
+/* --- ბაფთა ტოტებზე --- */
+.winter-branch .winter-bow{
+  position:absolute; left:58%; top:30%; width:32px; height:30px;
+  transform:translate(-50%,-30%); pointer-events:none;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));
+}
+.winter-branch .winter-bow svg{ display:block; width:100%; height:100%; overflow:visible; }
+
+/* --- ნაძვის ხეები --- */
+.winter-tree-wrap{
+  position:absolute; z-index:3; pointer-events:none;
+  width:var(--tw,clamp(86px,9.4vw,156px)); aspect-ratio:200/300;
+  transform-origin:50% 100%;
+  transition:transform 1.3s cubic-bezier(.2,.7,.2,1);
+  animation:winterFadeOnly 1.6s var(--fd,.5s) ease both;
+}
+.winter-tree-wrap::before{                 /* რბილი ოქროსფერი ნათება ხის უკან */
+  content:""; position:absolute; inset:-12% -16% -2%; z-index:-1;
+  background:radial-gradient(ellipse at 50% 58%, rgba(242,193,78,.2), rgba(214,40,57,.07) 46%, transparent 68%);
+  animation:winterBreathe 7s ease-in-out infinite alternate;
+}
+.winter-tree-in{ width:100%; height:100%; }
+.winter-tree-wrap svg{ display:block; width:100%; height:100%; overflow:visible; filter:drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
+.winter-tree-wrap.top{ bottom:calc(100% - 12px); }   /* დგას host-ის ზედა კიდეზე, თოვლის გროვაში */
+.winter-tree-wrap.in{ bottom:10px; }
+.winter-tree-wrap.l{ left:clamp(6px,2.2vw,44px); }
+.winter-tree-wrap.r{ right:clamp(6px,2.2vw,44px); }
+.winter-tree-wrap.lg{ --tw:clamp(100px,11vw,180px); }
+.winter-tree-wrap.md{ --tw:clamp(86px,8.6vw,146px); }
+.winter-tree-wrap.sm{ --tw:clamp(66px,6.8vw,112px); }
+
+/* ხის განათებები: 5 ჯგუფი, თითოეული საკუთარი ტემპით — მოდუნებული ციმციმი */
+.winter-tl{ animation:winterTreeBlink 3.2s ease-in-out infinite; }
+.winter-tl.g0{ animation-duration:2.7s; animation-delay:-.3s; }
+.winter-tl.g1{ animation-duration:3.5s; animation-delay:-1.5s; }
+.winter-tl.g2{ animation-duration:4.2s; animation-delay:-2.4s; }
+.winter-tl.g3{ animation-duration:3.1s; animation-delay:-.9s; }
+.winter-tl.g4{ animation-duration:4.9s; animation-delay:-3.2s; }
+@keyframes winterTreeBlink{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ვარსკვლავი ხის წვერზე */
+.winter-star-glow{
+  transform-box:fill-box; transform-origin:center;
+  animation:winterStarGlow 3.2s ease-in-out infinite alternate;
+}
+@keyframes winterStarGlow{from{opacity:.55;transform:scale(.86)}to{opacity:1;transform:scale(1.14)}}
+.winter-star-flare{
+  transform-box:fill-box; transform-origin:center; opacity:0;
+  animation:winterFlare 5.4s ease-in-out infinite;
+}
+.winter-star-flare.f2{ animation-delay:-2.7s; }
+@keyframes winterFlare{0%,100%{opacity:0;transform:scale(.4) rotate(0)}38%,58%{opacity:.9;transform:scale(1) rotate(14deg)}}
+
+/* --- ორნამენტები: ზარები, გვირგვინები --- */
+.winter-orn{
+  position:absolute; z-index:3; pointer-events:none;
+  width:var(--ow,40px);
+  transform-origin:50% 0;
+  transition:transform 1.4s cubic-bezier(.2,.7,.2,1);
+  animation:winterFadeOnly 1.4s ease both;
+}
+.winter-orn-in{
+  transform-origin:50% 0;
+  animation:winterOrnSwing var(--dur,4s) ease-in-out var(--dl,0s) infinite alternate;
+}
+.winter-orn svg{ display:block; width:100%; height:auto; overflow:visible; filter:drop-shadow(0 3px 4px rgba(0,0,0,.45)); }
+@keyframes winterOrnSwing{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.winter-glint{ animation:winterGlint 4.6s ease-in-out infinite; }
+@keyframes winterGlint{0%,100%{opacity:.35}50%{opacity:.95}}
+
+/* ზარები hero-ში (ტოტებიდან ჩამოკიდებული) */
+.winter-bell{ z-index:4; }
+.winter-bell.hb-l1{ left:116px; top:34px; }
+.winter-bell.hb-l2{ left:64px;  top:20px; }
+.winter-bell.hb-r1{ right:116px; top:34px; }
+.winter-bell.hb-r2{ right:64px;  top:20px; }
+
+/* გვირგვინები film სექციის გვერდებზე (ვიწრო ეკრანზე იმალება) */
+.winter-wreath{ top:36%; }
+.winter-wreath.wl{ left:14px; }
+.winter-wreath.wr{ right:14px; }
+
+/* ნაძვის ტოტების გირლანდა film სექციის ზემოთ (ტოტებს შორის) */
+.winter-swag{
+  position:absolute; top:0; left:210px; right:210px; height:56px;
+  z-index:2; pointer-events:none; opacity:.97;
+  filter:drop-shadow(0 4px 5px rgba(0,0,0,.4));
+  animation:winterFadeOnly 1.6s .3s ease both;
+}
+.winter-swag svg{ display:block; width:100%; height:56px; }
+
+/* საჩუქრების ჯგუფი footer-ზე */
+.winter-gifts{
+  position:absolute; bottom:calc(100% - 10px); right:clamp(120px,15vw,280px);
+  width:clamp(76px,7.4vw,124px); aspect-ratio:120/76;
+  z-index:3; pointer-events:none;
+  animation:winterFadeOnly 1.6s .9s ease both;
+}
+.winter-gifts svg{ display:block; width:100%; height:100%; overflow:visible; filter:drop-shadow(0 4px 6px rgba(0,0,0,.4)); }
+
+/* --- ტაბლეტი და მობილური: ოპტიმიზებული, არა გადატვირთული --- */
+@media (max-width:1099px){
+  .winter-wreath{ display:none; }
+}
+@media (max-width:900px){
+  .winter-swag{ display:none; }
+  .winter-tree-wrap.in{ display:none; }
+}
+@media (max-width:700px){
+  .winter-bell.hb-l1{ left:66px; top:20px; }
+  .winter-bell.hb-r1{ right:66px; top:20px; }
+  .winter-bell.hb-l2,.winter-bell.hb-r2{ display:none; }
+  .winter-bell{ --ow:24px !important; }
+  .winter-branch .winter-bow{ width:22px; height:21px; }
+  .winter-tree-wrap.r{ display:none; }
+  .winter-tree-wrap.top.l{ --tw:76px; left:10px; }
+  .winter-tree-wrap::before{ animation:none; }
+  .winter-gifts{ right:14px; width:64px; }
+  #winter-garland .winter-bauble:nth-child(even){ display:none; }
+  #winter-garland .winter-bauble{ top:3px; }
+  .winter-bulb b{ left:-12px; width:24px; height:24px; }
+  #winter-glow{ animation:none; opacity:.8; }
+}
+
+/* --- შემცირებული მოძრაობა: დეკორი რჩება, მოძრაობა ქრება --- */
+@media (prefers-reduced-motion:reduce){
+  .winter-bulb b,.winter-tl,.winter-star-glow,.winter-star-flare,
+  .winter-orn,.winter-orn-in,.winter-glint,.winter-tree-wrap,.winter-tree-wrap::before,
+  .winter-swag,.winter-gifts,#winter-glow{ animation:none !important; transition:none !important; }
+  .winter-bulb b{ opacity:.8; }
+  .winter-tl{ opacity:.85; }
+  .winter-star-flare{ opacity:0; }
+  #winter-glow{ opacity:.8; }
 }
