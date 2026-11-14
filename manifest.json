@@ -9,7 +9,7 @@
   "theme_color": "#07110f",
   "icons": [
     {
-      "src": "/arduinohub-icon.png?v=2",
+      "src": "/arduinohub1-icon.png?v=2",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
