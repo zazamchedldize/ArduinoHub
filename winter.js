@@ -1,17 +1,14 @@
 /* =========================================================
-   ArduinoHub — Winter Mode (winter.js) · v6 Christmas Experience
+   ArduinoHub — Winter Mode (winter.js) · v5 Premium Christmas Experience
    დამოუკიდებელი ფაილი: script.js-ს არ ეხება.
    - /winter და /winterstop (მხოლოდ ადმინისთვის, როგორც /poll)
-   - სინქრონი Supabase Realtime-ით (ცხრილი site_modes) + localStorage cache + storage event
-     (ტაბებს შორის), ამიტომ refresh-ის და გვერდებს შორის გადასვლის შემდეგაც
-     რეჟიმი სწორად განისაზღვრება
-   - Doomsday ჰოლოგრამები (#hero-update-panel, #nyc-section, #dg-layer) იმალება
-     მხოლოდ CSS-ით (html.winter-mode), კოდი და DOM უცვლელია → /winterstop-ზე
-     ისინი ზუსტად იმავე მდგომარეობით ბრუნდება
-   - თოვლი (canvas): 4 სიღრმის ფენა, კრისტალური ფიფქები (3D-ტრიალი), ქარის ტურბულენტობა,
-     ოქროსფერი მტვერი, მოციმციმე ვარსკვლავები, ნაპერწკლები, ფეიერვერკი
-   - სრული ნაძვის ხეები (ვარსკვლავი, ფერადი განათებები, ოქროსფერი/წითელი სათამაშოები,
-     საჩუქრები), ნათურები თოვლზე და რბილი "fairy" ნათურები. დაკიდებული დეკორი არ არის.
+   - სინქრონი Supabase Realtime-ით (ცხრილი site_modes) — უცვლელია
+   - მდგომარეობა რჩება refresh-ის შემდეგაც
+   - თოვლი (canvas): 4 სიღრმის ფენა, კრისტალური ფიფქები, ცოცხალი ქარი, ოქროსფერი
+     მტვერი, მოციმციმე ვარსკვლავები, მაუსის ნაპერწკლები, ცვივა ვარსკვლავი, ფეიერვერკი
+   - ინდივიდუალურად მოციმციმე ნათურების გირლანდა, ქანაობადი ორნამენტები,
+     დეკორირებული ნაძვის ხეები (ვარსკვლავი, განათებები, საჩუქრები), ოქროსფერი ზარები,
+     გვირგვინები, ბაფთები, ნაძვის ტოტების გირლანდა, ლოლოები, ყინვა, aurora
    - მუსიკა: ერთი გლობალური Audio, სხვა მუსიკის დათრგუნვა (/winter) და აღდგენა (/winterstop),
      გვერდებს შორის პოზიციის გაგრძელება, autoplay-ის დაცვა
    ========================================================= */
@@ -22,7 +19,6 @@
   window.__arduinoHubWinter = true
 
   const MODE_ID = 'winter'
-  const MODE_TABLE = 'site_modes'   // Supabase ცხრილი: ერთი ჩანაწერი (id='winter') = მთელი საიტის მდგომარეობა
   const CACHE_KEY = 'arduinohub_winter_mode'
   const POS_KEY = 'arduinohub_winter_pos'                   // ძველი ფორმატი (თავსებადობისთვის)
   const STATE_KEY = 'arduinohub_winter_music_state'         // {pos, ts, playing}
@@ -119,8 +115,6 @@
     if (!(el instanceof HTMLMediaElement)) return false
     if (el.__winterOwn || el === music) return false
     if (el.hasAttribute('data-winter-allow')) return false
-    // Doomsday ათვლის წიკწიკი (tick) /winter-ის დროს არ ისმის; /winterstop-ზე თავისით აღდგება
-    if (/tick/i.test(el.currentSrc || el.src || '')) return true
     if (el.tagName === 'AUDIO') {
       // გვერდზე ჩაწერილი <audio> = საიტის მუსიკა; უჯრედგარე Audio — მხოლოდ თუ loop-ია
       return el.isConnected ? true : el.loop
@@ -406,24 +400,23 @@
     } catch {}
   }
 
-    /* ---------- დეკორი: დამხმარე გენერატორები ---------- */
-  /*GEN-START*/
+  /* ---------- დეკორი: დამხმარე გენერატორები ---------- */
+
+  const BAUBLE_COLORS = [
+    ['#ff5d6c', '#a91d2c'],
+    ['#ffd966', '#b8902f'],
+    ['#6fe39a', '#1f8a4f'],
+    ['#9ad7ff', '#3b78b8'],
+    ['#f6efd8', '#9aa4a0']
+  ]
+  const BAUBLE_KINDS = ['ball', 'star', 'ball', 'drop', 'ball', 'star', 'drop', 'ball', 'star']
+
   // ნათურების ფერები: წითელი, მწვანე, ოქროსფერი, ლურჯი  [ძირითადი, მუქი]
   const BULB_COLORS = [
     ['#ff4d5e', '#a91d2c'],
     ['#5fe08f', '#17803f'],
     ['#ffd45c', '#b8860b'],
     ['#6cb8ff', '#2a62b0']
-  ]
-
-  // სათამაშოები: წითელი და ოქროსფერი ჭარბობს, ზოგჯერ ლურჯი/ვერცხლისფერი
-  const ORN_COLORS = [
-    ['#e63946', '#8f1422'],
-    ['#f2c14e', '#a97612'],
-    ['#e63946', '#8f1422'],
-    ['#f2c14e', '#a97612'],
-    ['#7cc4ff', '#2a62b0'],
-    ['#f6efd8', '#8e9a96']
   ]
 
   let uidN = 0
@@ -464,6 +457,10 @@
       <circle cx="-.8" cy="-.9" r="1" fill="#fff" opacity=".45"/>`
   }
 
+  function bowSVG(color = '#d62839', dark = '#8f1422') {
+    return `<svg viewBox="-20 -14 40 38" aria-hidden="true" focusable="false">${bowShape(color, dark)}</svg>`
+  }
+
   // საჩუქრის ყუთი: სხეული + თავსახური + ლენტი + ბაფთა
   function giftG(id, x, y, w, h, body, ribbon, bowDark) {
     const cx = x + w / 2
@@ -487,78 +484,66 @@
       <stop offset="1" stop-color="#000" stop-opacity=".30"/>
     </linearGradient>`
 
-  /* ----- სრული ნაძვის ხე: ხუთსართულიანი, თოვლიანი ტოტებით, სპირალური განათებებით,
-     ოქროსფერი/წითელი სათამაშოებით, მბზინავი ვარსკვლავით და საჩუქრებით ძირში ----- */
-  function treeSVG(seed, forceId) {
-    const id = forceId || uid()
+  /* ----- ნაძვის ხე ----- */
+  function treeSVG(seed) {
+    const id = uid()
     const rand = mulberry32(seed * 7919 + 13)
-    const cx = 120
+    const cx = 100
     const tiers = [
-      { top: 38, bot: 108, hw: 34 },
-      { top: 78, bot: 156, hw: 52 },
-      { top: 122, bot: 202, hw: 68 },
-      { top: 166, bot: 246, hw: 83 },
-      { top: 208, bot: 288, hw: 99 }
+      { top: 34, bot: 104, hw: 42 },
+      { top: 70, bot: 156, hw: 60 },
+      { top: 114, bot: 210, hw: 79 },
+      { top: 158, bot: 256, hw: 95 }
     ]
 
-    // ფენის კონტური: ქვედა კიდეზე დახრილი, წვეტიანი ტოტები (არარეგულარული სიღრმით)
-    const tierD = ({ top, bot, hw }, jitter) => {
-      const n = Math.max(5, Math.round(hw / 9))
+    const tierD = ({ top, bot, hw }) => {
+      const n = Math.max(4, Math.round(hw / 12))
       const step = (hw * 2) / n
       const mid = top + (bot - top) * 0.56
-      let d = `M${cx} ${top} Q${f1(cx + hw * 0.34)} ${f1(mid)} ${f1(cx + hw)} ${bot}`
+      let d = `M${cx} ${top} Q${f1(cx + hw * 0.36)} ${f1(mid)} ${cx + hw} ${bot}`
       for (let i = 0; i < n; i++) {
         const x1 = cx + hw - i * step
         const x2 = x1 - step
-        const tx = (x1 + x2) / 2 + (rand() - 0.5) * step * 0.3
-        const depth = 10 + rand() * 11 * jitter
-        d += ` Q${f1(x1 - step * 0.12)} ${f1(bot + depth * 0.8)} ${f1(tx)} ${f1(bot + depth)}`
-        d += ` Q${f1(x2 + step * 0.12)} ${f1(bot + depth * 0.8)} ${f1(x2)} ${bot}`
+        d += ` Q${f1((x1 + x2) / 2)} ${bot + 12} ${f1(x2)} ${bot}`
       }
-      return `${d} Q${f1(cx - hw * 0.34)} ${f1(mid)} ${cx} ${top}Z`
+      return `${d} Q${f1(cx - hw * 0.36)} ${f1(mid)} ${cx} ${top}Z`
     }
 
     let body = ''
     for (let ti = tiers.length - 1; ti >= 0; ti--) {
       const t = tiers[ti]
-      const back = tierD({ top: t.top + 5, bot: t.bot + 3, hw: t.hw * 1.06 }, 1.4)
-      const d = tierD(t, 1)
+      const d = tierD(t)
       let needles = ''
-      for (let k = 0; k < 16; k++) {
-        const y = t.top + (t.bot - t.top) * (0.28 + rand() * 0.66)
-        const half = t.hw * ((y - t.top) / (t.bot - t.top)) * 0.84
+      for (let k = 0; k < 9; k++) {
+        const y = t.top + (t.bot - t.top) * (0.3 + rand() * 0.62)
+        const half = t.hw * ((y - t.top) / (t.bot - t.top)) * 0.82
         const x = cx + (rand() * 2 - 1) * half
         const dir = x >= cx ? 1 : -1
-        needles += `M${f1(x)} ${f1(y)}l${f1(dir * (5 + rand() * 7))} ${f1(5 + rand() * 5)}`
+        const dx = dir * (5 + rand() * 6)
+        const dy = 5 + rand() * 4
+        needles += `M${f1(x)} ${f1(y)}l${f1(dx)} ${f1(dy)}`
       }
-      const mid = t.top + (t.bot - t.top) * 0.62
-      const snow = [-1, 1].map(s =>
-        `<ellipse cx="${f1(cx + s * t.hw * 0.44)}" cy="${f1(mid)}" rx="${f1(t.hw * 0.17)}" ry="2.4" transform="rotate(${s * 24} ${f1(cx + s * t.hw * 0.44)} ${f1(mid)})" fill="#fff" opacity=".78"/>`
-      ).join('')
-
       body += `
-        <path d="${back}" fill="url(#gb${id})"/>
         <path d="${d}" fill="url(#g${id})"/>
         <path d="${d}" fill="url(#h${id})"/>
-        <path d="${needles}" fill="none" stroke="#02150b" stroke-opacity=".3" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="${needles}" transform="translate(-1.6 -1.6)" fill="none" stroke="#8cf5b6" stroke-opacity=".17" stroke-width="1.1" stroke-linecap="round"/>
-        <path d="${d}" fill="none" stroke="#eaf6ff" stroke-opacity=".3" stroke-width="1.2" stroke-dasharray="14 9 5 11"/>
-        ${snow}`
+        <path d="${needles}" fill="none" stroke="#02150b" stroke-opacity=".28" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="${needles}" transform="translate(-1.6 -1.6)" fill="none" stroke="#7df0a8" stroke-opacity=".16" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="${d}" fill="none" stroke="#eaf6ff" stroke-opacity=".22" stroke-width="1"/>`
     }
 
-    // განათებები: სადენი + ნათურები. ციმციმი 5 ჯგუფად, თითოეულს საკუთარი ტემპი
+    // განათებები: სადენი + ნათურები. ციმციმი ჯგუფებად (5 ჯგუფი) → ცოტა ანიმაცია, ბუნებრივი შედეგი
     const glow = [[], [], [], [], []]
     let cores = ''
     let wires = ''
     let bulbN = 0
-    const swags = [[0.7], [0.74], [0.5, 0.84], [0.5, 0.84], [0.48, 0.82]]
+    const swags = [[0.66], [0.66], [0.5, 0.86], [0.5, 0.86]]
 
     tiers.forEach((t, ti) => {
       swags[ti].forEach((frac, si) => {
         const y0 = t.top + (t.bot - t.top) * frac
-        const halfW = t.hw * ((y0 - t.top) / (t.bot - t.top)) * 0.88
-        const sag = 7 + ti * 2
-        const n = 3 + ti + (si ? 1 : 0)
+        const halfW = t.hw * ((y0 - t.top) / (t.bot - t.top)) * 0.9
+        const sag = 8 + ti * 2
+        const n = [3, 4, 5, 6][ti] - (si ? 1 : 0)
         wires += `M${f1(cx - halfW)} ${f1(y0)}Q${cx} ${f1(y0 + sag * 2)} ${f1(cx + halfW)} ${f1(y0)}`
 
         for (let i = 0; i < n; i++) {
@@ -566,8 +551,9 @@
           const x = (1 - tt) * (1 - tt) * (cx - halfW) + 2 * (1 - tt) * tt * cx + tt * tt * (cx + halfW)
           const y = (1 - tt) * (1 - tt) * y0 + 2 * (1 - tt) * tt * (y0 + sag * 2) + tt * tt * y0 + 1.4
           const ci = (bulbN + ti + si) % 4
-          glow[(bulbN * 3 + ti) % 5].push(`<circle cx="${f1(x)}" cy="${f1(y)}" r="9" fill="url(#gl${ci}${id})"/>`)
-          cores += `<circle cx="${f1(x)}" cy="${f1(y)}" r="2.4" fill="${BULB_COLORS[ci][0]}"/><circle cx="${f1(x - .6)}" cy="${f1(y - .7)}" r=".75" fill="#fff" opacity=".85"/>`
+          const c = BULB_COLORS[ci][0]
+          glow[(bulbN * 3 + ti) % 5].push(`<circle cx="${f1(x)}" cy="${f1(y)}" r="8" fill="url(#gl${ci}${id})"/>`)
+          cores += `<circle cx="${f1(x)}" cy="${f1(y)}" r="2.3" fill="${c}"/><circle cx="${f1(x - .6)}" cy="${f1(y - .7)}" r=".7" fill="#fff" opacity=".85"/>`
           bulbN++
         }
       })
@@ -580,33 +566,17 @@
         <stop offset="1" stop-color="${c}" stop-opacity="0"/>
       </radialGradient>`).join('')
 
-    // სათამაშოები: ტოტების წვეროებთან, ბურთულები ოქროსფერი და წითელი აქცენტით
-    let orns = ''
-    let on = 0
-    tiers.forEach((t, ti) => {
-      if (!ti) return
-      for (let k = 0; k < 3; k++) {
-        const x = cx + (k - 1) * t.hw * 0.56 + (rand() - 0.5) * 8
-        const y = t.bot - 4 - rand() * 9
-        const [c1, c2] = ORN_COLORS[(on++ + ti) % ORN_COLORS.length]
-        const r = 4.6 + rand() * 1.8
-        orns += `
-          <g transform="translate(${f1(x)} ${f1(y)})">
-            <rect x="-1.4" y="${f1(-r - 2.6)}" width="2.8" height="2.4" rx=".6" fill="#d9a62e"/>
-            <circle r="${f1(r)}" fill="${c1}"/>
-            <circle r="${f1(r)}" fill="url(#bs${id})"/>
-            <circle r="${f1(r * .62)}" fill="none" stroke="${c2}" stroke-width=".7" opacity=".5"/>
-            <circle cx="${f1(-r * .36)}" cy="${f1(-r * .4)}" r="${f1(r * .26)}" fill="#fff" opacity=".85"/>
-          </g>`
-      }
-    })
-    // ზედა ფენაზე ერთი ოქროსფერი წვეთი
-    orns += `
-      <g transform="translate(${cx + 12} 88)">
-        <rect x="-1.2" y="-9" width="2.4" height="2.2" rx=".5" fill="#d9a62e"/>
-        <path d="M0 -7C5 -1 6 3 0 8C-6 3 -5 -1 0 -7Z" fill="#f2c14e"/>
-        <path d="M-1.8 -2C-2.6 0 -2.4 2 -1.2 3.4" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity=".8"/>
-      </g>`
+    // ბურთულები
+    const balls = [
+      [86, 94, '#ff4d5e'], [113, 128, '#f2c14e'], [79, 150, '#9ad7ff'], [123, 178, '#ff4d5e'],
+      [69, 198, '#f2c14e'], [132, 224, '#f6efd8'], [95, 240, '#ff4d5e'], [108, 64, '#f2c14e']
+    ].map(([x, y, c]) => `
+      <g transform="translate(${x} ${y})">
+        <rect x="-1.3" y="-6.6" width="2.6" height="2.2" rx=".6" fill="#d9a62e"/>
+        <circle r="4.6" fill="${c}"/>
+        <circle r="4.6" fill="url(#bs${id})"/>
+        <circle cx="-1.6" cy="-1.8" r="1.35" fill="#fff" opacity=".8"/>
+      </g>`).join('')
 
     // საჩუქრები ძირში (ფერები seed-ის მიხედვით ცვლება)
     const sets = [
@@ -615,44 +585,136 @@
     ]
     const [a1, a2, a3, b1, b2, b3] = sets[seed % 2]
     const gifts =
-      giftG(id, 20, 286, 34, 30, a1, a2, a3) +
-      giftG(id, 56, 298, 22, 18, '#f2c14e', '#d62839', '#8f1422') +
-      giftG(id, 164, 290, 32, 26, b1, b2, b3) +
-      giftG(id, 198, 300, 22, 16, '#f6efd8', '#d62839', '#8f1422')
+      giftG(id, 18, 252, 34, 28, a1, a2, a3) +
+      giftG(id, 144, 257, 30, 23, b1, b2, b3) +
+      giftG(id, 56, 264, 22, 16, '#f2c14e', '#d62839', '#8f1422') +
+      giftG(id, 160, 267, 20, 14, '#f6efd8', '#d62839', '#8f1422')
 
     return `
-<svg viewBox="0 -22 240 344" aria-hidden="true" focusable="false">
+<svg viewBox="0 -14 200 300" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id="g${id}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#2fae67"/><stop offset=".55" stop-color="#17703f"/><stop offset="1" stop-color="#0b3f24"/>
     </linearGradient>
-    <linearGradient id="gb${id}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#14683a"/><stop offset="1" stop-color="#062414"/>
-    </linearGradient>
     <linearGradient id="h${id}" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#9dffc2" stop-opacity=".24"/><stop offset=".5" stop-color="#9dffc2" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".36"/>
+      <stop offset="0" stop-color="#9dffc2" stop-opacity=".22"/><stop offset=".5" stop-color="#9dffc2" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".34"/>
     </linearGradient>
     <linearGradient id="tr${id}" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#6b4423"/><stop offset=".5" stop-color="#4a2c14"/><stop offset="1" stop-color="#2b1a0e"/>
     </linearGradient>
-    <radialGradient id="bs${id}"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".42"/></radialGradient>
+    <radialGradient id="bs${id}"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></radialGradient>
     <radialGradient id="sg${id}"><stop offset="0" stop-color="#fff2b8" stop-opacity=".95"/><stop offset=".4" stop-color="#f2c14e" stop-opacity=".38"/><stop offset="1" stop-color="#f2c14e" stop-opacity="0"/></radialGradient>
     <linearGradient id="sf${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7cf"/><stop offset=".5" stop-color="#ffd966"/><stop offset="1" stop-color="#c8921f"/></linearGradient>
     ${glowDefs}${GIFT_SHADE(id)}
   </defs>
-  <ellipse cx="120" cy="316" rx="100" ry="6.5" fill="#000" opacity=".34"/>
-  <rect x="107" y="284" width="26" height="32" fill="url(#tr${id})"/>
+  <ellipse cx="100" cy="278" rx="82" ry="6" fill="#000" opacity=".32"/>
+  <rect x="90" y="250" width="20" height="26" fill="url(#tr${id})"/>
   ${body}
-  <path d="${wires}" fill="none" stroke="#06150d" stroke-opacity=".72" stroke-width="1"/>
+  <path d="${wires}" fill="none" stroke="#06150d" stroke-opacity=".7" stroke-width="1"/>
   ${glow.map((g, k) => `<g class="winter-tl g${k}">${g.join('')}</g>`).join('')}
   ${cores}
-  ${orns}
-  <circle class="winter-star-glow" cx="120" cy="26" r="40" fill="url(#sg${id})"/>
-  <path class="winter-star-flare" d="M120 -16L122.4 26L120 68L117.6 26Z" fill="#fff7cf" opacity=".85"/>
-  <path class="winter-star-flare f2" d="M78 26L120 23.6L162 26L120 28.4Z" fill="#fff7cf" opacity=".85"/>
-  <path d="${starPath(120, 26, 15.5, 6.6)}" fill="url(#sf${id})" stroke="#b8821b" stroke-width=".6" stroke-linejoin="round"/>
-  <path d="${starPath(120, 26, 7.5, 3.2)}" fill="#fffbe6" opacity=".72"/>
+  ${balls}
+  <circle class="winter-star-glow" cx="100" cy="24" r="34" fill="url(#sg${id})"/>
+  <path class="winter-star-flare" d="M100 -8L102 24L100 56L98 24Z" fill="#fff7cf" opacity=".85"/>
+  <path class="winter-star-flare f2" d="M64 24L100 22L136 24L100 26Z" fill="#fff7cf" opacity=".85"/>
+  <path d="${starPath(100, 24, 14, 6)}" fill="url(#sf${id})" stroke="#b8821b" stroke-width=".6" stroke-linejoin="round"/>
+  <path d="${starPath(100, 24, 7, 3)}" fill="#fffbe6" opacity=".7"/>
   ${gifts}
+</svg>`
+  }
+
+  /* ----- ოქროსფერი ზარი ბაფთითა და ჰოლით ----- */
+  function bellSVG() {
+    const id = uid()
+    return `
+<svg viewBox="0 0 56 78" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="bg${id}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8a5f12"/><stop offset=".22" stop-color="#e0a92b"/><stop offset=".42" stop-color="#fff1b8"/>
+      <stop offset=".62" stop-color="#f2c14e"/><stop offset="1" stop-color="#7a520d"/>
+    </linearGradient>
+    <radialGradient id="bc${id}" cx=".35" cy=".3"><stop offset="0" stop-color="#fff1b8"/><stop offset=".6" stop-color="#e0a92b"/><stop offset="1" stop-color="#8a5f12"/></radialGradient>
+  </defs>
+  <circle cx="28" cy="8" r="5" fill="none" stroke="#d9a62e" stroke-width="2.2"/>
+  <path d="M28 12C17 12 14 24 14 34C14 46 9 50 6 59L50 59C47 50 42 46 42 34C42 24 39 12 28 12Z" fill="url(#bg${id})"/>
+  <path class="winter-glint" d="M21 21C18 29 18 38 17 47" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M6 59L50 59" stroke="#8a5f12" stroke-width="1.2" opacity=".5"/>
+  <ellipse cx="28" cy="59" rx="22" ry="4.6" fill="#b8821b"/>
+  <ellipse cx="28" cy="60" rx="18" ry="3" fill="#4d3206"/>
+  <circle cx="28" cy="65" r="5" fill="url(#bc${id})"/>
+  <g transform="translate(28 13) scale(.86)">${bowShape('#d62839', '#8f1422')}</g>
+  <path d="M28 14C33 9 40 9 41 13C37 16 31 16 28 14Z" fill="#1f8a4f"/>
+  <path d="M28 14C23 9 16 9 15 13C19 16 25 16 28 14Z" fill="#0f6a38"/>
+  <circle cx="28" cy="16" r="2" fill="#ff4d5e"/><circle cx="25" cy="17" r="1.6" fill="#d62839"/><circle cx="31" cy="17" r="1.6" fill="#d62839"/>
+</svg>`
+  }
+
+  /* ----- საშობაო გვირგვინი ----- */
+  function wreathSVG(seed) {
+    const id = uid()
+    const rand = mulberry32(seed * 104729 + 7)
+    const cx = 50
+    const cy = 58
+    const R = 31
+    let leaves = ''
+    const greens = ['#0f5a33', '#1f8a4f', '#2fae67', '#14683a']
+
+    for (let i = 0; i < 52; i++) {
+      const a = (i / 52) * 360 + rand() * 4
+      const rad = ((a - 90) * Math.PI) / 180
+      const rr = R + (rand() * 6 - 3)
+      const x = cx + Math.cos(rad) * rr
+      const y = cy + Math.sin(rad) * rr
+      leaves += `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${f1(8 + rand() * 3)}" ry="3.4" transform="rotate(${f1(a + rand() * 40 - 20)} ${f1(x)} ${f1(y)})" fill="${greens[i % 4]}"/>`
+    }
+    for (let i = 0; i < 30; i++) {
+      const a = (i / 30) * 360 + 6
+      const rad = ((a - 90) * Math.PI) / 180
+      const rr = R + (rand() * 5 - 2.5)
+      const x = cx + Math.cos(rad) * rr
+      const y = cy + Math.sin(rad) * rr
+      leaves += `<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="7" ry="2.6" transform="rotate(${f1(a + 70 + rand() * 30)} ${f1(x)} ${f1(y)})" fill="#47c985" opacity=".55"/>`
+    }
+
+    let berries = ''
+    for (let i = 0; i < 10; i++) {
+      const a = rand() * 360
+      const rad = ((a - 90) * Math.PI) / 180
+      const rr = R + (rand() * 8 - 4)
+      const x = cx + Math.cos(rad) * rr
+      const y = cy + Math.sin(rad) * rr
+      berries += `<circle cx="${f1(x)}" cy="${f1(y)}" r="2.3" fill="#e63946"/><circle cx="${f1(x - .6)}" cy="${f1(y - .7)}" r=".7" fill="#fff" opacity=".7"/>`
+    }
+
+    const golds = [200, 320, 95].map(a => {
+      const rad = ((a - 90) * Math.PI) / 180
+      const x = cx + Math.cos(rad) * R
+      const y = cy + Math.sin(rad) * R
+      return `<circle cx="${f1(x)}" cy="${f1(y)}" r="3.4" fill="#f2c14e"/><circle cx="${f1(x - 1)}" cy="${f1(y - 1.1)}" r="1" fill="#fff" opacity=".8"/>`
+    }).join('')
+
+    const lights = [[12, 0], [72, 1], [140, 2], [205, 3], [262, 0], [320, 1]].map(([a, ci], k) => {
+      const rad = ((a - 90) * Math.PI) / 180
+      const x = f1(cx + Math.cos(rad) * (R + 1))
+      const y = f1(cy + Math.sin(rad) * (R + 1))
+      return { k, svg: `<circle cx="${x}" cy="${y}" r="7.5" fill="url(#wl${ci}${id})"/>`, core: `<circle cx="${x}" cy="${y}" r="1.7" fill="${BULB_COLORS[ci][0]}"/>` }
+    })
+
+    const defs = BULB_COLORS.map(([c], ci) => `
+      <radialGradient id="wl${ci}${id}">
+        <stop offset="0" stop-color="${c}" stop-opacity=".95"/><stop offset=".45" stop-color="${c}" stop-opacity=".3"/><stop offset="1" stop-color="${c}" stop-opacity="0"/>
+      </radialGradient>`).join('')
+
+    return `
+<svg viewBox="0 0 100 122" aria-hidden="true" focusable="false">
+  <defs>${defs}</defs>
+  <path d="M50 0L50 ${cy - R + 3}" stroke="#d9a62e" stroke-width="1.5"/>
+  <path d="M46 ${cy - R + 6}L50 ${cy - R - 2}L54 ${cy - R + 6}Z" fill="#d9a62e"/>
+  ${leaves}${berries}${golds}
+  <g class="winter-tl g0">${lights.filter(l => l.k % 2 === 0).map(l => l.svg).join('')}</g>
+  <g class="winter-tl g3">${lights.filter(l => l.k % 2 === 1).map(l => l.svg).join('')}</g>
+  ${lights.map(l => l.core).join('')}
+  <g transform="translate(50 ${cy + R - 1}) scale(1.35)">${bowShape('#d62839', '#8f1422')}</g>
 </svg>`
   }
 
@@ -669,11 +731,63 @@
   ${giftG(id, 96, 56, 20, 14, '#f6efd8', '#d62839', '#8f1422')}
 </svg>`
   }
-  /*GEN-END*/
 
-  /* ---------- დეკორი: განთავსება ----------
-     ყველაფერი დგას (ხეები, საჩუქრები) ან ანათებს (ნათურები). არაფერი კიდია
-     ეკრანის კიდეებზე, header-ზე ან გვერდებზე. */
+  /* ----- ნაძვის ტოტების გირლანდა (გამეორებადი ნაჭერი) ----- */
+  function swagSVG() {
+    const id = uid()
+    const rand = mulberry32(51)
+    const greens = ['#0f5a33', '#1f8a4f', '#2fae67', '#14683a', '#3cc27a']
+    const pt = t => {
+      const x = (1 - t) * (1 - t) * -2 + 2 * (1 - t) * t * 80 + t * t * 162
+      const y = (1 - t) * (1 - t) * 3 + 2 * (1 - t) * t * 50 + t * t * 3
+      return [x, y]
+    }
+
+    let needles = ''
+    for (let i = 0; i < 90; i++) {
+      const t = 0.03 + rand() * 0.94
+      const [x, y] = pt(t)
+      const a = Math.PI / 2 + (rand() * 1.5 - 0.75) + (t < 0.5 ? -0.25 : 0.25)
+      const len = 8 + rand() * 7
+      needles += `<path d="M${f1(x)} ${f1(y)}l${f1(Math.cos(a) * len)} ${f1(Math.sin(a) * len)}" stroke="${greens[i % 5]}" stroke-width="2.1" stroke-linecap="round" fill="none"/>`
+    }
+
+    let berries = ''
+    for (let i = 0; i < 8; i++) {
+      const [x, y] = pt(0.08 + rand() * 0.84)
+      berries += `<circle cx="${f1(x)}" cy="${f1(y + 3 + rand() * 6)}" r="2.1" fill="#e63946"/>`
+    }
+
+    let snow = ''
+    for (let i = 0; i < 16; i++) {
+      const [x, y] = pt(0.05 + rand() * 0.9)
+      snow += `<path d="M${f1(x - 3)} ${f1(y + 1)}l${f1(5 + rand() * 3)} .6" stroke="#fff" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>`
+    }
+
+    const [mx, my] = pt(0.5)
+    const [lx, ly] = pt(0.22)
+    const [rx, ry] = pt(0.78)
+    const orn = (x, y, c, c2) => `
+      <path d="M${f1(x)} ${f1(y)}v5" stroke="#d9a62e" stroke-width=".9"/>
+      <circle cx="${f1(x)}" cy="${f1(y + 9)}" r="4.4" fill="${c}"/><circle cx="${f1(x)}" cy="${f1(y + 9)}" r="4.4" fill="url(#ob${id})"/>
+      <circle cx="${f1(x - 1.4)}" cy="${f1(y + 7.6)}" r="1.2" fill="#fff" opacity=".8"/>`
+
+    return `
+<svg width="100%" height="56" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="ob${id}"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient>
+    <pattern id="sw${id}" width="160" height="56" patternUnits="userSpaceOnUse">
+      <path d="M-2 3Q80 50 162 3" fill="none" stroke="#2b1a0e" stroke-width="3.2"/>
+      ${needles}${berries}${snow}
+      ${orn(lx, ly, '#f2c14e')}${orn(rx, ry, '#ff4d5e')}
+      <g transform="translate(${f1(mx)} ${f1(my + 1)}) scale(.9)">${bowShape('#d62839', '#8f1422')}</g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="56" fill="url(#sw${id})"/>
+</svg>`
+  }
+
+  /* ---------- დეკორი: განთავსება ---------- */
 
   const deco = (tag, cls, html, attrs = '') =>
     `<${tag} class="winter-deco ${cls}" aria-hidden="true" ${attrs}>${html}</${tag}>`
@@ -682,6 +796,117 @@
     deco('div', `winter-tree-wrap ${cls}`,
       `<div class="winter-tree-in">${treeSVG(seed)}</div>`,
       `data-winter-react=".5" style="--fd:${delay}s"`)
+
+  const orn = (cls, inner, strength, dur, dl, w) =>
+    deco('div', `winter-orn ${cls}`,
+      `<div class="winter-orn-in" style="--dur:${dur}s;--dl:${dl}s">${inner}</div>`,
+      `data-winter-react="${strength}" style="--ow:${w}px"`)
+
+  function addBranches(parent) {
+    if (!parent) return
+    ;['tl', 'tr'].forEach(pos => {
+      const branch = document.createElement('div')
+      branch.className = `winter-branch ${pos}`
+      branch.setAttribute('aria-hidden', 'true')
+      const bow = document.createElement('i')
+      bow.className = 'winter-bow'
+      bow.innerHTML = bowSVG()
+      branch.appendChild(bow)
+      parent.appendChild(branch)
+    })
+  }
+
+  // ორნამენტები გირლანდის სადენზე (მდებარეობა px-ებშია, ამიტომ resize-ზე თავიდან აიგება)
+  function addBaubles(garland, joints) {
+    joints.forEach((x, i) => {
+      const [c1, c2] = BAUBLE_COLORS[(i * 2 + Math.floor(Math.random() * 2)) % BAUBLE_COLORS.length]
+      const el = document.createElement('i')
+      el.className = `winter-bauble ${BAUBLE_KINDS[i % BAUBLE_KINDS.length]}`
+      el.setAttribute('aria-hidden', 'true')
+      el.style.setProperty('--x', `${x}px`)
+      el.style.setProperty('--len', `${7 + Math.random() * 7}px`)
+      el.style.setProperty('--size', `${12 + Math.random() * 4}px`)
+      el.style.setProperty('--c1', c1)
+      el.style.setProperty('--c2', c2)
+      el.style.setProperty('--dur', `${2.8 + Math.random() * 1.8}s`)
+      el.style.setProperty('--delay', `${-Math.random() * 3}s`)
+      garland.appendChild(el)
+    })
+  }
+
+  // სადენი + ინდივიდუალურად მოციმციმე ნათურები (ფერები, ტემპი და ციმციმის ტიპი თითოეულს განსხვავებული)
+  function buildGarland(garland) {
+    garland.textContent = ''
+
+    const w = window.innerWidth
+    const small = w < 700
+    const seg = small ? 92 : 150
+    const n = Math.max(2, Math.round(w / seg))
+    const segW = w / n
+    const sag = small ? 8 : 12
+    const y0 = 3
+    const yc = y0 + sag * 2
+    const perSeg = small ? 3 : 4
+    const bw = small ? 6.5 : 8.5
+
+    let d = `M0 ${y0}`
+    for (let i = 0; i < n; i++) {
+      d += ` Q${f1((i + 0.5) * segW)} ${yc} ${f1((i + 1) * segW)} ${y0}`
+    }
+
+    garland.insertAdjacentHTML(
+      'beforeend',
+      `<svg class="winter-wire" viewBox="0 0 ${w} 40" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="#467a56" stroke-width="1.7" stroke-linecap="round"/></svg>`
+    )
+
+    const frag = document.createDocumentFragment()
+    let ci = Math.floor(Math.random() * 4)
+
+    for (let i = 0; i < n; i++) {
+      const x0 = i * segW
+      const xc = x0 + segW / 2
+      const x2 = x0 + segW
+
+      for (let k = 1; k <= perSeg; k++) {
+        const t = k / (perSeg + 1)
+        const x = (1 - t) * (1 - t) * x0 + 2 * (1 - t) * t * xc + t * t * x2
+        const y = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * yc + t * t * y0
+        const dx = 2 * (1 - t) * (xc - x0) + 2 * t * (x2 - xc)
+        const dy = 2 * (1 - t) * (yc - y0) + 2 * t * (y0 - yc)
+        const angle = (Math.atan2(dy, dx) * 180) / Math.PI
+
+        ci = (ci + 1 + (Math.random() < 0.3 ? 1 : 0)) % 4
+        const [c1, c2] = BULB_COLORS[ci]
+
+        const bulb = document.createElement('i')
+        bulb.className = `winter-bulb v${Math.floor(Math.random() * 3)}`
+        bulb.setAttribute('aria-hidden', 'true')
+        bulb.style.cssText =
+          `left:${f1(x)}px;top:${f1(y)}px;--c:${c1};--c2:${c2};--bw:${bw}px;` +
+          `--r:${f1(angle * 0.5)}deg;--d:${f1(rnd(1.9, 5.4))}s;--dl:${f1(-rnd(0, 5))}s`
+        bulb.appendChild(document.createElement('b'))
+        frag.appendChild(bulb)
+      }
+    }
+    garland.appendChild(frag)
+
+    const joints = []
+    for (let i = 1; i < n; i += 2) joints.push(f1(i * segW))
+    addBaubles(garland, joints)
+  }
+
+  // ყინულის ლოლოები header-ის ქვედა კიდეზე
+  function addIcicles() {
+    const header = document.querySelector('.site-header')
+    if (!header || header.querySelector('.winter-icicles')) return
+
+    ensurePositioned(header)
+
+    const ice = document.createElement('div')
+    ice.className = 'winter-icicles'
+    ice.setAttribute('aria-hidden', 'true')
+    header.appendChild(ice)
+  }
 
   // position:static ელემენტს ვხდით relative-ად (და მერე უკან ვაბრუნებთ)
   function ensurePositioned(el) {
@@ -702,7 +927,7 @@
     mark.appendChild(hat)
   }
 
-  // თოვლის გროვა footer-ის ზედა კიდეზე (მიწა, რომელზეც ხეები დგას)
+  // თოვლის გროვა footer-ის ზედა კიდეზე
   function addDrift() {
     const footer = document.querySelector('footer')
     if (!footer || footer.querySelector('.winter-drift')) return
@@ -713,107 +938,105 @@
     footer.appendChild(drift)
   }
 
-  // ნათურების რიგი თოვლზე (მიწაზე დაგებული სადენი): ყოველი ნათურა საკუთარი ფერითა და ტემპით
-  function addLightRow(footer) {
-    const n = isSmall() ? 13 : 26
-    let pts = ''
-    let bulbs = ''
-    let ci = Math.floor(Math.random() * 4)
-
-    for (let i = 0; i <= n; i++) {
-      const x = (i / n) * 100
-      const y = 9 + Math.sin(i * 0.95) * 3
-      pts += `${i ? 'L' : 'M'}${f1(x)} ${f1(y)}`
-      if (i === 0 || i === n) continue
-      ci = (ci + 1 + (Math.random() < 0.3 ? 1 : 0)) % 4
-      const [c1, c2] = BULB_COLORS[ci]
-      bulbs += `<i class="winter-gl v${i % 3}" style="left:${f1(x)}%;top:${f1(y)}px;--c:${c1};--c2:${c2};--d:${f1(rnd(1.8, 5.6))}s;--dl:${f1(-rnd(0, 5))}s"></i>`
-    }
-
-    footer.insertAdjacentHTML('beforeend', deco('div', 'winter-lightrow',
-      `<svg viewBox="0 0 100 20" preserveAspectRatio="none"><path d="${pts}" fill="none" stroke="#2c4a38" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>${bulbs}`))
-  }
-
-  // მოციმციმე რბილი ნათურები გვერდის სხვადასხვა ადგილას — უმეტესად გვერდით არეებში,
-  // კონტენტის ქვემოთ/გვერდით; pointer-events გამორთულია და ტექსტს არ ფარავს
-  function buildFairyLights(layer) {
-    const n = isSmall() ? 9 : 18
-    let html = ''
-
-    for (let i = 0; i < n; i++) {
-      const edge = Math.random() < 0.62
-      const x = edge ? (Math.random() < 0.5 ? rnd(1, 5.5) : rnd(94.5, 99)) : rnd(8, 92)
-      const y = rnd(8, 94)
-      const [c1] = BULB_COLORS[i % 4]
-      html += `<i class="winter-fl v${i % 3}" style="left:${f1(x)}%;top:${f1(y)}%;--c:${c1};--s:${f1(rnd(5, 9.5))}px;--d:${f1(rnd(2.2, 6.4))}s;--dl:${f1(-rnd(0, 6))}s"></i>`
-    }
-    layer.innerHTML = html
-  }
-
-  // დიდი ნაძვის ხე hero-ში — იქ, სადაც Doomsday-ის ჰოლოგრამა იდგა
-  function addHeroStage() {
-    const hero = document.querySelector('.hero')
-    if (!hero || hero.querySelector('.winter-hero-stage')) return
-    ensurePositioned(hero)
-    hero.insertAdjacentHTML('beforeend', deco('div', 'winter-hero-stage',
-      `${tree('hero', 5, 0.3)}<p class="winter-hero-caption">ბედნიერ დღესასწაულებს</p>`))
-  }
-
-  // ხეები სექციებში: film სექციის ქვედა კუთხეებში და footer-ის თოვლზე
+  // დეკორაციები ცალკეულ სექციებში — თავმოყრილი არ არის, ყველა თავისი ადგილას დგას
   function addSectionDecor() {
+    const hero = document.querySelector('.hero')
     const film = document.querySelector('.arduinohub-film-section')
     const footer = document.querySelector('footer')
 
+    // hero: ზარები ტოტებიდან ჩამოკიდებული
+    if (hero) {
+      ensurePositioned(hero)
+      hero.insertAdjacentHTML('beforeend',
+        orn('winter-bell hb-l1', bellSVG(), 1.6, 4.2, -0.4, 36) +
+        orn('winter-bell hb-l2', bellSVG(), 1.2, 3.6, -1.9, 27) +
+        orn('winter-bell hb-r1', bellSVG(), 1.6, 4.8, -2.6, 36) +
+        orn('winter-bell hb-r2', bellSVG(), 1.2, 3.9, -0.9, 27))
+    }
+
+    // film სექცია: ტოტების გირლანდა ზემოთ, გვირგვინები გვერდებზე, პატარა ხეები ქვედა კუთხეებში
     if (film) {
       ensurePositioned(film)
       film.insertAdjacentHTML('beforeend',
+        deco('div', 'winter-swag', swagSVG()) +
+        orn('winter-wreath wl', wreathSVG(3), 1, 6.2, -1.2, 92) +
+        orn('winter-wreath wr', wreathSVG(8), 1, 7.1, -3.4, 84) +
         tree('in l sm', 3, 0.7) +
         tree('in r sm', 4, 0.9))
     }
 
+    // footer: ორი ხე თოვლის გროვაზე + საჩუქრების ჯგუფი
     if (footer) {
       ensurePositioned(footer)
       footer.insertAdjacentHTML('beforeend',
         tree('top l lg', 1, 0.5) +
         tree('top r md', 2, 0.8) +
         deco('div', 'winter-gifts', giftsSVG()))
-      addLightRow(footer)
     }
   }
 
+  let garlandResizeTimer = 0
+  let garlandWidth = 0
+  function onGarlandResize() {
+    clearTimeout(garlandResizeTimer)
+    garlandResizeTimer = setTimeout(() => {
+      const g = document.getElementById('winter-garland')
+      if (!g || window.innerWidth === garlandWidth) return
+      garlandWidth = window.innerWidth
+      buildGarland(g)
+    }, 250)
+  }
+
   function mountDecor() {
-    if (document.getElementById('winter-glow')) return
+    if (document.getElementById('winter-garland')) return
 
-    const make = id => {
-      const el = document.createElement('div')
-      el.id = id
-      el.setAttribute('aria-hidden', 'true')
-      return el
-    }
+    const garland = document.createElement('div')
+    garland.id = 'winter-garland'
+    garland.setAttribute('aria-hidden', 'true')
+    garlandWidth = window.innerWidth
+    buildGarland(garland)
 
-    const aurora = make('winter-aurora')
-    const glow = make('winter-glow')
-    const frost = make('winter-frost')
-    const lights = make('winter-lights')
-    buildFairyLights(lights)
+    const frost = document.createElement('div')
+    frost.id = 'winter-frost'
+    frost.setAttribute('aria-hidden', 'true')
+
+    const aurora = document.createElement('div')
+    aurora.id = 'winter-aurora'
+    aurora.setAttribute('aria-hidden', 'true')
+
+    const glow = document.createElement('div')
+    glow.id = 'winter-glow'
+    glow.setAttribute('aria-hidden', 'true')
 
     const canvas = document.createElement('canvas')
     canvas.id = 'winter-snow'
     canvas.setAttribute('aria-hidden', 'true')
 
-    document.body.append(aurora, glow, lights, frost, canvas)
+    document.body.append(aurora, glow, garland, frost, canvas)
 
+    // ტოტები hero-სა და footer-ის კუთხეებში (header-ს არ ფარავს)
+    addBranches(document.querySelector('.hero'))
+    addBranches(document.querySelector('footer'))
+    addBranches(document.querySelector('.arduinohub-film-section'))
+
+    addIcicles()
     addHat()
     addDrift()
-    addHeroStage()
     addSectionDecor()
+
+    window.addEventListener('resize', onGarlandResize, { passive: true })
   }
 
   function unmountDecor() {
-    ;['winter-frost', 'winter-aurora', 'winter-glow', 'winter-lights', 'winter-snow']
-      .forEach(id => document.getElementById(id)?.remove())
+    window.removeEventListener('resize', onGarlandResize)
+    clearTimeout(garlandResizeTimer)
 
-    document.querySelectorAll('.winter-hat, .winter-drift, .winter-deco').forEach(node => node.remove())
+    document.getElementById('winter-garland')?.remove()
+    document.getElementById('winter-frost')?.remove()
+    document.getElementById('winter-aurora')?.remove()
+    document.getElementById('winter-glow')?.remove()
+    document.getElementById('winter-snow')?.remove()
+    document.querySelectorAll('.winter-branch, .winter-icicles, .winter-hat, .winter-drift, .winter-deco').forEach(node => node.remove())
 
     document.querySelectorAll('[data-winter-pos]').forEach(el => {
       el.style.position = ''
@@ -821,7 +1044,7 @@
     })
   }
 
-/* ---------- თოვლი ---------- */
+  /* ---------- თოვლი ---------- */
 
   // სპრაიტები ერთხელ იხატება და მერე მხოლოდ drawImage-ით გამოიყენება → სწრაფია
   function makeSprite(size, draw) {
@@ -996,13 +1219,12 @@
         // ახლო ფენის ალფა შეზღუდულია, რომ ტექსტი და ღილაკები არ დაიფაროს
         alpha: crystal ? rnd(0.55, 0.85) : [rnd(0.28, 0.5), rnd(0.45, 0.75), rnd(0.28, 0.5), rnd(0.05, 0.12)][layer],
         rot: Math.random() * Math.PI * 2,
-        tilt: Math.random() * Math.PI * 2,
         vr: rnd(-0.02, 0.02)
       }
     }
 
     const targetCount = () => {
-      let n = Math.min(190, Math.max(48, w / 8))
+      let n = Math.min(150, Math.max(36, w / 10))
       if (w < 700) n *= 0.72
       if (lowEnd) n *= 0.75
       if (degraded) n *= 0.6
@@ -1137,9 +1359,7 @@
       for (const f of flakes) {
         f.phase += f.freq * dt
         f.y += f.speed * (1 - Math.min(0.12, Math.abs(gust) * 0.1)) * dt
-        // ქარის ტურბულენტობა: ფიფქები ადგილის მიხედვით სხვადასხვანაირად მოძრაობენ
-        const swirl = Math.sin(f.y * 0.006 + time * 0.0006) * 0.2 + Math.cos(f.x * 0.004 - time * 0.0004) * 0.12
-        f.x += (Math.sin(f.phase) * f.sway + (gust + swirl) * f.wind) * dt
+        f.x += (Math.sin(f.phase) * f.sway + gust * f.wind) * dt
 
         // მაუსი ფიფქებს ფრთხილად აცილებს
         if (finePointer && (f.layer === 1 || f.layer === 2)) {
@@ -1162,11 +1382,9 @@
 
         if (f.crystal) {
           f.rot += f.vr * dt
-          f.tilt += 0.018 * dt
           ctx.save()
           ctx.translate(f.x, f.y)
           ctx.rotate(f.rot)
-          ctx.scale(0.55 + 0.45 * Math.abs(Math.cos(f.tilt)), 1)   // 3D-ტრიალის ილუზია
           ctx.drawImage(f.sprite, -f.size / 2, -f.size / 2, f.size, f.size)
           ctx.restore()
         } else {
@@ -1439,8 +1657,6 @@
       removeMediaGuard()
       restoreOthers()
     }
-
-    window.dispatchEvent(new CustomEvent('winter:change', { detail: { enabled: on } }))
   }
 
   /* ---------- Supabase: მდგომარეობა და Realtime ---------- */
@@ -1450,7 +1666,7 @@
     if (!db) return
 
     const { data, error } = await db
-      .from(MODE_TABLE)
+      .from('site_modes')
       .select('enabled')
       .eq('id', MODE_ID)
       .maybeSingle()
@@ -1471,7 +1687,7 @@
       .channel('site-mode-winter')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: MODE_TABLE, filter: `id=eq.${MODE_ID}` },
+        { event: '*', schema: 'public', table: 'site_modes', filter: `id=eq.${MODE_ID}` },
         payload => {
           if (payload.eventType === 'DELETE') return apply(false)
           apply(Boolean(payload.new?.enabled))
@@ -1512,7 +1728,7 @@
       return
     }
 
-    const { error } = await db.from(MODE_TABLE).upsert({
+    const { error } = await db.from('site_modes').upsert({
       id: MODE_ID,
       enabled: turnOn,
       updated_at: new Date().toISOString(),
@@ -1562,11 +1778,6 @@
   })
 
   function init() {
-    // სხვა ტაბში /winter ან /winterstop → ეს ტაბიც მაშინვე იცვლება (Supabase-ს არ ელოდება)
-    window.addEventListener('storage', e => {
-      if (e.key === CACHE_KEY && e.newValue != null) apply(e.newValue === '1')
-    })
-
     // მყისიერად აღვადგინოთ ბოლო ცნობილი მდგომარეობა (ციმციმის გარეშე)
     if (readCache()) apply(true)
 
