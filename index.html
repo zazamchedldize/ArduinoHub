@@ -146,7 +146,11 @@
     .cm-time-ico svg{width:26px;height:26px}
     .cm-time small{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(234,255,240,.55);margin-bottom:2px}
     .cm-time strong{font-family:'Orbitron','Inter',sans-serif;font-size:clamp(28px,4vw,40px);color:#fff;letter-spacing:1px}
-   
+    .cm-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;
+      color:var(--cm-b);background:rgba(0,255,102,.08);border:1px solid rgba(0,255,102,.3)}
+    .cm-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;animation:cmPulse 2s infinite}
+    .cm-badge.done{color:#9aa7a3;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+    .cm-badge.done::before{animation:none}
 
     .cm-count-label{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(234,255,240,.55);margin:0 0 12px}
     .cm-count{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -168,7 +172,7 @@
       .cm-info{padding:28px 18px}
       .cm-count{gap:8px}
     }
-  
+    @media (prefers-reduced-motion:reduce){.cm-orb,.club-meet-eyebrow i,.cm-badge::before{animation:none}}
   </style>
 
 
@@ -652,471 +656,107 @@
 
     
     /* ================================================================
-       DOOMSDAY BOOT SEQUENCE — replaces the old loading screen
-       All rules are scoped under #arduino-splash.dd-boot
+       NEURAL BOOT LOADER — circuit-chip core, wordmark reveal, curtain exit
+       All rules are scoped under #arduino-splash.ld-boot
        ================================================================ */
-    #arduino-splash.dd-boot {
-      --dd-bg: #020603;
-      --dd-green: #00ff66;
-      --dd-green-2: #22d395;
-      --dd-dark: #07110f;
-      --dd-red: #ff1744;
-      --dd-white: #eafff0;
-      position: fixed;
-      inset: 0;
-      z-index: 9999999;
-      display: block;
-      width: 100%;
-      max-width: 100vw;
-      height: 100%;
-      overflow: hidden;
-      background: var(--dd-bg);
-      color: var(--dd-white);
-      font-family: "Share Tech Mono", ui-monospace, monospace;
-      opacity: 1;
-      visibility: visible;
-      clip-path: circle(150% at 50% 50%);
-      transition:
-        clip-path .95s cubic-bezier(.76, 0, .24, 1),
-        opacity .95s ease .05s,
-        visibility 0s linear .95s;
-      -webkit-tap-highlight-color: transparent;
+    #arduino-splash.ld-boot{
+      --ld-rgb:34,211,149; --ld-a:rgb(var(--ld-rgb)); --ld-b:#00ff66; --ld-text:#eafff0;
+      position:fixed; inset:0; z-index:9999999; overflow:hidden;
+      color:var(--ld-text);
+      font-family:"FiraGO","Noto Sans Georgian","Inter",system-ui,sans-serif;
+      visibility:visible; -webkit-tap-highlight-color:transparent;
     }
+    body.winter-mode #arduino-splash.ld-boot{ --ld-rgb:242,193,78; --ld-b:#ff5d6c; }
+    #arduino-splash.ld-boot.hidden{ pointer-events:none; visibility:hidden; transition:visibility 0s linear 1.25s; }
+    #arduino-splash.ld-boot *{ box-sizing:border-box; }
 
-    #arduino-splash.dd-boot.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      clip-path: circle(0% at 50% 50%);
+    .ld-half{position:absolute;left:0;right:0;height:50.3%;background:#03080a;
+      transition:transform .95s cubic-bezier(.76,0,.24,1) .3s;will-change:transform}
+    .ld-half.top{top:0;background:radial-gradient(ellipse 70% 100% at 50% 100%,rgba(var(--ld-rgb),.16),transparent 72%),#03080a}
+    .ld-half.bottom{bottom:0;background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(var(--ld-rgb),.16),transparent 72%),#03080a}
+    .hidden .ld-half.top{transform:translateY(-101%)}
+    .hidden .ld-half.bottom{transform:translateY(101%)}
+    .ld-seam{position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;opacity:0;transform:scaleX(.1);
+      background:linear-gradient(90deg,transparent,var(--ld-a),#fff,var(--ld-a),transparent);
+      box-shadow:0 0 24px 2px rgba(var(--ld-rgb),.8)}
+    .hidden .ld-seam{animation:ldSeam .75s ease-out forwards}
+    @keyframes ldSeam{0%{opacity:0;transform:scaleX(.1)}35%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
+
+    .ld-net{position:absolute;inset:0;width:100%;height:100%;opacity:.9;transition:opacity .35s ease}
+    .ld-grain{position:absolute;inset:0;pointer-events:none;opacity:.6;
+      background:radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(0,0,0,.65) 100%)}
+
+    .ld-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:clamp(14px,3vh,26px);padding:24px;text-align:center;transition:opacity .35s ease,transform .5s ease}
+    .hidden .ld-content,.hidden .ld-net,.hidden .ld-grain{opacity:0}
+    .hidden .ld-content{transform:scale(1.06)}
+
+    /* core */
+    .ld-core{position:relative;width:clamp(190px,34vh,260px);aspect-ratio:1;animation:ldIn .9s cubic-bezier(.2,.8,.2,1) both}
+    @keyframes ldIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+    .ld-core svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+    .ld-core::before{content:"";position:absolute;inset:14%;border-radius:50%;
+      background:radial-gradient(circle,rgba(var(--ld-rgb),.35),transparent 68%);filter:blur(18px);animation:ldBreath 2.8s ease-in-out infinite}
+    @keyframes ldBreath{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}
+    .ld-track{fill:none;stroke:rgba(var(--ld-rgb),.14);stroke-width:2}
+    .ld-prog{fill:none;stroke:url(#ld-grad);stroke-width:3;stroke-linecap:round;stroke-dasharray:678.58;stroke-dashoffset:678.58;
+      transform:rotate(-90deg);transform-origin:120px 120px;filter:drop-shadow(0 0 6px rgba(var(--ld-rgb),.9))}
+    .ld-spin1{fill:none;stroke:rgba(var(--ld-rgb),.55);stroke-width:1.5;stroke-dasharray:2 10;transform-origin:120px 120px;animation:ldSpin 22s linear infinite}
+    .ld-spin2{fill:none;stroke:rgba(var(--ld-rgb),.35);stroke-width:1.5;stroke-dasharray:34 16 8 16;transform-origin:120px 120px;animation:ldSpin 14s linear infinite reverse}
+    @keyframes ldSpin{to{transform:rotate(360deg)}}
+    .ld-pin{stroke:rgba(var(--ld-rgb),.9);stroke-width:2;stroke-linecap:round}
+    .ld-trace{stroke:rgba(var(--ld-rgb),.22);stroke-width:1.5;fill:none}
+    .ld-pulse{stroke:var(--ld-a);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-dasharray:7 60;
+      filter:drop-shadow(0 0 4px var(--ld-a));animation:ldPulse 1.8s linear infinite;animation-delay:calc(var(--i)*-.22s)}
+    @keyframes ldPulse{from{stroke-dashoffset:67}to{stroke-dashoffset:0}}
+    .ld-node{fill:var(--ld-a);animation:ldNode 1.8s ease-in-out infinite;animation-delay:calc(var(--i)*-.22s)}
+    @keyframes ldNode{0%,100%{opacity:.25}50%{opacity:1}}
+    .ld-body{fill:#050e0c;stroke:var(--ld-a);stroke-width:1.8;filter:drop-shadow(0 0 10px rgba(var(--ld-rgb),.55))}
+    .ld-die{fill:rgba(var(--ld-rgb),.1);stroke:rgba(var(--ld-rgb),.6);stroke-width:1.2}
+    .ld-grid{stroke:rgba(var(--ld-rgb),.28);stroke-width:1}
+    .ld-dot{fill:var(--ld-b);transform-origin:120px 120px;animation:ldDot 1.2s ease-in-out infinite;filter:drop-shadow(0 0 6px var(--ld-b))}
+    @keyframes ldDot{0%,100%{transform:scale(.75)}50%{transform:scale(1.35)}}
+    .ld-scan{fill:rgba(var(--ld-rgb),.55);animation:ldScan 2.2s ease-in-out infinite}
+    @keyframes ldScan{0%,100%{transform:translateY(0);opacity:0}15%{opacity:1}50%{transform:translateY(34px);opacity:.9}85%{opacity:0}}
+
+    /* wordmark */
+    .ld-word{font-family:"Orbitron","Inter",sans-serif;font-weight:800;font-size:clamp(24px,6.4vw,46px);letter-spacing:.3em;margin-right:-.3em;line-height:1;white-space:nowrap}
+    .ld-word span{display:inline-block;opacity:0;filter:blur(14px);transform:translateY(16px) scale(1.15);
+      animation:ldLetter .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(.45s + var(--i)*.07s);
+      text-shadow:0 0 22px rgba(var(--ld-rgb),.35)}
+    .ld-word span.hub{color:var(--ld-a);text-shadow:0 0 24px rgba(var(--ld-rgb),.8)}
+    @keyframes ldLetter{to{opacity:1;filter:blur(0);transform:none}}
+    .ld-tag{font-size:clamp(11px,2.6vw,13px);letter-spacing:.38em;text-transform:uppercase;color:rgba(234,255,240,.55);opacity:0;animation:ldFade .8s ease 1.3s forwards}
+    @keyframes ldFade{to{opacity:1}}
+
+    /* progress */
+    .ld-meter{width:min(78vw,360px);opacity:0;animation:ldFade .8s ease 1s forwards}
+    .ld-line{position:relative;height:3px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
+    .ld-fill{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);border-radius:3px;
+      background:linear-gradient(90deg,var(--ld-a),var(--ld-b));box-shadow:0 0 14px rgba(var(--ld-rgb),.9)}
+    .ld-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+      transform:translateX(-100%);animation:ldShine 1.4s linear infinite}
+    @keyframes ldShine{to{transform:translateX(100%)}}
+    .ld-info{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:12px;font-size:13px}
+    .ld-status{color:rgba(234,255,240,.78);text-align:left;min-height:1.3em}
+    .ld-status.swap{animation:ldSwap .45s ease}
+    @keyframes ldSwap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .ld-pct{font-family:"Orbitron",sans-serif;font-weight:700;font-size:15px;color:var(--ld-a);font-variant-numeric:tabular-nums}
+
+    .ld-skip{position:absolute;right:clamp(14px,3vw,28px);bottom:clamp(14px,3vh,26px);z-index:3;cursor:pointer;
+      padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);
+      color:rgba(234,255,240,.7);font:600 12px/1 "FiraGO","Inter",sans-serif;letter-spacing:.5px;backdrop-filter:blur(8px);
+      opacity:0;animation:ldFade .6s ease 1.8s forwards;transition:background .2s,color .2s,border-color .2s}
+    .ld-skip:hover,.ld-skip:focus-visible{color:#fff;border-color:var(--ld-a);background:rgba(var(--ld-rgb),.15);outline:0}
+    body.splash-active{overflow:hidden}
+
+    @media (max-height:520px) and (orientation:landscape){
+      .ld-content{gap:8px}.ld-core{width:112px}.ld-tag{display:none}
     }
-
-    #arduino-splash.dd-boot *,
-    #arduino-splash.dd-boot *::before,
-    #arduino-splash.dd-boot *::after {
-      box-sizing: border-box;
-    }
-
-    body.splash-active { overflow: hidden; }
-
-    /* ---------- atmosphere layers ---------- */
-    .dd-matrix {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: .26;
-    }
-
-    .dd-glow {
-      position: absolute;
-      left: 50%;
-      top: 44%;
-      width: min(120vw, 860px);
-      height: min(120vw, 860px);
-      transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(0, 255, 102, .16) 0%, rgba(34, 211, 149, .05) 32%, transparent 62%);
-      animation: dd-glow-pulse 4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .dd-scanlines {
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0,
-        rgba(0, 0, 0, 0) 2px,
-        rgba(0, 0, 0, .28) 3px,
-        rgba(0, 0, 0, 0) 4px
-      );
-      pointer-events: none;
-    }
-
-    .dd-beam {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 22vh;
-      background: linear-gradient(to bottom, transparent, rgba(0, 255, 102, .07) 70%, rgba(0, 255, 102, .16) 100%, transparent 100%);
-      transform: translateY(-30vh);
-      animation: dd-beam 5.2s linear infinite;
-      pointer-events: none;
-    }
-
-    .dd-vignette {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, transparent 38%, rgba(0, 0, 0, .82) 100%);
-      pointer-events: none;
-    }
-
-    .dd-alert {
-      position: absolute;
-      inset: 0;
-      box-shadow: inset 0 0 130px rgba(255, 23, 68, .38), inset 0 0 36px rgba(255, 23, 68, .22);
-      opacity: .15;
-      animation: dd-alert 2.6s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .dd-flash {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 44%, rgba(234, 255, 240, .9), rgba(0, 255, 102, .35) 38%, transparent 70%);
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .dd-online .dd-flash { animation: dd-flash .85s ease-out forwards; }
-
-    /* ---------- HUD frame ---------- */
-    .dd-corner {
-      position: absolute;
-      width: 26px;
-      height: 26px;
-      border: 0 solid rgba(0, 255, 102, .55);
-      pointer-events: none;
-    }
-
-    .dd-corner.tl { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); border-top-width: 2px; border-left-width: 2px; }
-    .dd-corner.tr { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); border-top-width: 2px; border-right-width: 2px; }
-    .dd-corner.bl { bottom: max(12px, env(safe-area-inset-bottom)); left: max(12px, env(safe-area-inset-left)); border-bottom-width: 2px; border-left-width: 2px; }
-    .dd-corner.br { bottom: max(12px, env(safe-area-inset-bottom)); right: max(12px, env(safe-area-inset-right)); border-bottom-width: 2px; border-right-width: 2px; }
-
-    .dd-bar {
-      position: absolute;
-      left: 0;
-      right: 0;
-      z-index: 4;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 0 max(46px, calc(env(safe-area-inset-left) + 40px));
-      font-size: 10px;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: rgba(234, 255, 240, .62);
-      white-space: nowrap;
-    }
-
-    .dd-bar.top { top: max(18px, calc(env(safe-area-inset-top) + 6px)); }
-    .dd-bar.bottom { bottom: max(16px, calc(env(safe-area-inset-bottom) + 4px)); }
-
-    .dd-bar span { display: inline-flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-
-    .dd-led {
-      flex: none;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--dd-green);
-      box-shadow: 0 0 8px var(--dd-green), 0 0 16px rgba(0, 255, 102, .5);
-      animation: dd-blink 1.8s ease-in-out infinite;
-    }
-
-    .dd-led.red {
-      background: var(--dd-red);
-      box-shadow: 0 0 8px var(--dd-red), 0 0 16px rgba(255, 23, 68, .55);
-      animation-duration: 1.1s;
-    }
-
-    .dd-skip {
-      appearance: none;
-      background: transparent;
-      border: 1px solid rgba(0, 255, 102, .3);
-      color: rgba(234, 255, 240, .7);
-      font: inherit;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      cursor: pointer;
-      transition: color .2s, border-color .2s, background .2s;
-    }
-
-    .dd-skip:hover,
-    .dd-skip:focus-visible {
-      color: var(--dd-bg);
-      background: var(--dd-green);
-      border-color: var(--dd-green);
-      outline: none;
-    }
-
-    /* ---------- central stage ---------- */
-    .dd-stage {
-      position: relative;
-      z-index: 3;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(10px, 2.2vh, 20px);
-      padding: 56px 16px 52px;
-      transition: opacity .45s ease, transform .6s ease;
-    }
-
-    .hidden .dd-stage { opacity: 0; transform: scale(.94); }
-
-    /* reactor */
-    .dd-reactor {
-      position: relative;
-      width: clamp(138px, 26vh, 210px);
-      aspect-ratio: 1;
-      flex: none;
-      filter: drop-shadow(0 0 14px rgba(0, 255, 102, .35));
-    }
-
-    .dd-reactor svg { width: 100%; height: 100%; overflow: visible; display: block; }
-
-    .dd-reactor .r { transform-box: fill-box; transform-origin: center; fill: none; }
-    .dd-r-outer { stroke: rgba(0, 255, 102, .38); stroke-width: 1; stroke-dasharray: 3 7; animation: dd-spin 30s linear infinite; }
-    .dd-r-red { stroke: var(--dd-red); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 70 509; filter: drop-shadow(0 0 5px var(--dd-red)); animation: dd-spin-rev 5.5s linear infinite; }
-    .dd-r-ticks { stroke: var(--dd-green-2); stroke-width: 7; stroke-dasharray: 1.6 11.4; opacity: .55; animation: dd-spin-rev 46s linear infinite; }
-    .dd-r-mid { stroke: var(--dd-green); stroke-width: 1.5; stroke-dasharray: 150 40 20 40; animation: dd-spin 14s linear infinite; }
-    .dd-r-hex { stroke: var(--dd-green-2); stroke-width: 1.4; animation: dd-spin-rev 22s linear infinite; }
-    .dd-r-core { fill: url(#dd-core-grad); transform-box: fill-box; transform-origin: center; animation: dd-core 2.4s ease-in-out infinite; }
-
-    .dd-num {
-      position: absolute;
-      left: 50%;
-      bottom: -6px;
-      transform: translateX(-50%);
-      padding: 2px 12px 1px;
-      font-family: "Rajdhani", sans-serif;
-      font-weight: 700;
-      font-size: clamp(14px, 2.6vh, 19px);
-      line-height: 1.1;
-      letter-spacing: .14em;
-      color: var(--dd-white);
-      background: var(--dd-bg);
-      border: 1px solid rgba(0, 255, 102, .55);
-      text-shadow: 0 0 10px var(--dd-green);
-      box-shadow: 0 0 14px rgba(0, 255, 102, .25);
-    }
-
-    /* ---------- original hooded sentinel (hologram) ---------- */
-    .dd-fig-hood { fill: #07110f; }
-    .dd-fig-shade { fill: rgba(34, 211, 149, .11); }
-    .dd-fig-rim { fill: none; stroke: var(--dd-green); stroke-width: 1.3; stroke-linejoin: round; filter: drop-shadow(0 0 4px rgba(0, 255, 102, .8)); }
-    .dd-fig-face { fill: #020603; stroke: rgba(0, 255, 102, .55); stroke-width: .8; stroke-linejoin: round; }
-    .dd-fig-line { fill: none; stroke: rgba(34, 211, 149, .7); stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; }
-    .dd-fig-eye { fill: var(--dd-red); filter: drop-shadow(0 0 3px var(--dd-red)) drop-shadow(0 0 7px rgba(255, 23, 68, .8)); animation: dd-eye 3.4s ease-in-out infinite; }
-    .dd-fig-scan { fill: rgba(0, 255, 102, .3); animation: dd-fig-scan 2.8s linear infinite; }
-    .dd-fig { animation: dd-holo 6s linear infinite; }
-    .dd-online .dd-fig-rim { stroke: var(--dd-white); filter: drop-shadow(0 0 7px var(--dd-green)); }
-    .dd-online .dd-fig-eye { animation: none; opacity: 1; filter: drop-shadow(0 0 5px var(--dd-red)) drop-shadow(0 0 12px var(--dd-red)); }
-
-
-    .dd-online .dd-r-core { animation: dd-core-burst 1s ease-out forwards; }
-    .dd-online .dd-r-red { stroke: var(--dd-green); filter: drop-shadow(0 0 6px var(--dd-green)); stroke-dasharray: 520 59; animation: dd-spin-rev 3s linear infinite; }
-    .dd-online .dd-reactor { animation: dd-reactor-burst .9s ease-out; }
-
-    /* brand */
-    .dd-brand {
-      text-align: center;
-      font-family: "Orbitron", sans-serif;
-      font-weight: 800;
-      font-size: clamp(17px, 4.6vw, 26px);
-      letter-spacing: .34em;
-      padding-left: .34em;
-      color: var(--dd-white);
-      text-shadow: 0 0 18px rgba(0, 255, 102, .35);
-      white-space: nowrap;
-    }
-
-    .dd-brand span { color: var(--dd-green); }
-
-    .dd-sub {
-      margin-top: 6px;
-      text-align: center;
-      font-size: 10px;
-      letter-spacing: .38em;
-      padding-left: .38em;
-      color: var(--dd-red);
-      text-transform: uppercase;
-      text-shadow: 0 0 10px rgba(255, 23, 68, .5);
-    }
-
-    /* terminal */
-    .dd-panel {
-      position: relative;
-      width: min(100%, 470px);
-      background: linear-gradient(180deg, rgba(7, 17, 15, .86), rgba(2, 6, 3, .86));
-      border: 1px solid rgba(0, 255, 102, .24);
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, .6), 0 0 40px rgba(0, 255, 102, .08), inset 0 0 30px rgba(0, 255, 102, .04);
-      -webkit-backdrop-filter: blur(3px);
-      backdrop-filter: blur(3px);
-    }
-
-    .dd-panel::before,
-    .dd-panel::after {
-      content: "";
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border: 0 solid var(--dd-green);
-      pointer-events: none;
-    }
-
-    .dd-panel::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
-    .dd-panel::after { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
-
-    .dd-panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 9px 14px;
-      border-bottom: 1px solid rgba(0, 255, 102, .16);
-      font-family: "Orbitron", sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--dd-green);
-    }
-
-    .dd-panel-head b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dd-panel-head em { font-style: normal; color: rgba(234, 255, 240, .5); white-space: nowrap; }
-
-    .dd-term {
-      height: 9.6rem;
-      padding: 12px 14px;
-      overflow: hidden;
-      font-size: clamp(11.5px, 3.3vw, 13.5px);
-      line-height: 1.62;
-      letter-spacing: .08em;
-      color: rgba(234, 255, 240, .82);
-      text-transform: uppercase;
-    }
-
-    .dd-line { display: flex; gap: 10px; min-height: 1.62em; white-space: nowrap; overflow: hidden; }
-    .dd-line.head { color: var(--dd-white); font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.22em; letter-spacing: .14em; text-shadow: 0 0 10px rgba(0, 255, 102, .45); }
-    .dd-line.dim { color: rgba(234, 255, 240, .6); }
-    .dd-line.warn { color: var(--dd-red); text-shadow: 0 0 10px rgba(255, 23, 68, .45); }
-    .dd-line.granted { color: var(--dd-green); font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.32em; letter-spacing: .2em; text-shadow: 0 0 12px var(--dd-green); }
-    .dd-line.live { color: var(--dd-green); text-shadow: 0 0 10px rgba(0, 255, 102, .5); }
-    .dd-line.typing::after { content: "▍"; color: var(--dd-green); margin-left: 2px; animation: dd-blink .8s steps(1) infinite; }
-
-    .dd-tag { flex: none; color: rgba(234, 255, 240, .45); transition: color .25s, text-shadow .25s; }
-    .dd-tag.ok { color: var(--dd-green); text-shadow: 0 0 10px rgba(0, 255, 102, .7); }
-    .dd-tag.pending { animation: dd-blink .7s steps(1) infinite; }
-
-    /* stage progress (segments — no numeric percentage) */
-    .dd-progress { width: min(100%, 470px); }
-
-    .dd-segs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-
-    .dd-seg {
-      position: relative;
-      height: 4px;
-      background: rgba(0, 255, 102, .12);
-      overflow: hidden;
-    }
-
-    .dd-seg::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: var(--dd-green);
-      box-shadow: 0 0 10px var(--dd-green);
-      transform: scaleX(0);
-      transform-origin: left center;
-      transition: transform .5s cubic-bezier(.2, .8, .2, 1);
-    }
-
-    .dd-seg.done::after { transform: scaleX(1); }
-
-    .dd-seg.on::after {
-      transform: scaleX(.34);
-      animation: dd-seg-sweep 1.3s ease-in-out infinite;
-    }
-
-    .dd-seg-label {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 10px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: rgba(234, 255, 240, .55);
-    }
-
-    .dd-seg-label span:first-child { color: var(--dd-green-2); }
-
-    .dd-sr {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      white-space: nowrap;
-    }
-
-    /* ---------- keyframes ---------- */
-    @keyframes dd-eye { 0%, 100% { opacity: 1; } 46% { opacity: 1; } 50% { opacity: .3; } 54% { opacity: 1; } }
-    @keyframes dd-fig-scan { from { transform: translateY(-4px); } to { transform: translateY(96px); } }
-    @keyframes dd-holo { 0%, 100% { opacity: 1; } 91% { opacity: 1; } 93% { opacity: .78; } 95% { opacity: 1; } 97% { opacity: .88; } }
-    @keyframes dd-spin { to { transform: rotate(360deg); } }
-    @keyframes dd-spin-rev { to { transform: rotate(-360deg); } }
-    @keyframes dd-blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
-    @keyframes dd-glow-pulse { 0%, 100% { opacity: .75; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); } }
-    @keyframes dd-beam { from { transform: translateY(-30vh); } to { transform: translateY(125vh); } }
-    @keyframes dd-alert { 0%, 100% { opacity: .1; } 50% { opacity: .6; } }
-    @keyframes dd-core { 0%, 100% { transform: scale(.94); opacity: .82; } 50% { transform: scale(1.06); opacity: 1; } }
-    @keyframes dd-core-burst { 0% { transform: scale(1); } 40% { transform: scale(1.55); opacity: 1; } 100% { transform: scale(1.12); opacity: 1; } }
-    @keyframes dd-reactor-burst { 0% { filter: drop-shadow(0 0 14px rgba(0, 255, 102, .35)); } 40% { filter: drop-shadow(0 0 46px rgba(0, 255, 102, .95)); } 100% { filter: drop-shadow(0 0 24px rgba(0, 255, 102, .6)); } }
-    @keyframes dd-flash { 0% { opacity: 0; } 25% { opacity: .55; } 100% { opacity: 0; } }
-    @keyframes dd-seg-sweep { 0% { transform: translateX(-100%) scaleX(.34); } 100% { transform: translateX(300%) scaleX(.34); } }
-
-    /* ---------- responsive ---------- */
-    @media (max-width: 520px) {
-      .dd-bar { padding: 0 44px; letter-spacing: .16em; font-size: 9px; }
-      .dd-hide-sm { display: none; }
-      .dd-panel-head { padding: 8px 11px; font-size: 9px; letter-spacing: .14em; }
-      .dd-term { padding: 10px 11px; }
-      .dd-brand { letter-spacing: .26em; padding-left: .26em; }
-      .dd-sub { letter-spacing: .26em; font-size: 9px; }
-    }
-
-    @media (max-height: 640px) {
-      .dd-stage { padding-top: 46px; padding-bottom: 44px; gap: 8px; }
-      .dd-term { height: 8.6rem; line-height: 1.5; }
-      .dd-sub { display: none; }
-    }
-
-    @media (max-height: 520px) and (orientation: landscape) {
-      .dd-reactor { width: 96px; }
-      .dd-brand { font-size: 14px; }
-      .dd-term { height: 7.4rem; }
-      .dd-seg-label { margin-top: 6px; }
-    }
-
-    /* ---------- reduced motion ---------- */
-    @media (prefers-reduced-motion: reduce) {
-      #arduino-splash.dd-boot,
-      #arduino-splash.dd-boot * ,
-      #arduino-splash.dd-boot *::before,
-      #arduino-splash.dd-boot *::after {
-        animation: none !important;
-      }
-
-      #arduino-splash.dd-boot {
-        clip-path: none;
-        transition: opacity .35s ease, visibility 0s linear .35s;
-      }
-
-      #arduino-splash.dd-boot.hidden { clip-path: none; }
-      .dd-matrix, .dd-beam { display: none; }
-      .dd-alert { opacity: .22; }
-      .dd-seg::after { transition: none; }
-      .dd-seg.on::after { transform: scaleX(.5); }
-      .dd-stage { transition: opacity .3s ease; }
-      .hidden .dd-stage { transform: none; }
+    @media (prefers-reduced-motion:reduce){
+      #arduino-splash.ld-boot *{animation:none !important}
+      .ld-word span,.ld-tag,.ld-meter,.ld-skip,.ld-core{opacity:1;filter:none;transform:none}
+      .ld-half{transition:none}.hidden .ld-seam{display:none}
     }
 
     .albums-home-btn {
@@ -1905,352 +1545,230 @@
 
 <body data-page="home">
 
-  <!-- ===== DOOMSDAY BOOT SEQUENCE ===== -->
-  <div id="arduino-splash" class="arduino-splash dd-boot" role="status" aria-busy="true" aria-label="ArduinoHub is loading">
-    <canvas class="dd-matrix" aria-hidden="true"></canvas>
-    <div class="dd-glow" aria-hidden="true"></div>
-    <div class="dd-beam" aria-hidden="true"></div>
-    <div class="dd-scanlines" aria-hidden="true"></div>
-    <div class="dd-alert" aria-hidden="true"></div>
-    <div class="dd-vignette" aria-hidden="true"></div>
-    <div class="dd-flash" aria-hidden="true"></div>
+  <!-- ===== NEURAL BOOT LOADER ===== -->
+  <div id="arduino-splash" class="ld-boot" role="status" aria-busy="true" aria-label="ArduinoHub is loading">
+    <div class="ld-half top" aria-hidden="true"></div>
+    <div class="ld-half bottom" aria-hidden="true"></div>
+    <canvas class="ld-net" aria-hidden="true"></canvas>
+    <div class="ld-grain" aria-hidden="true"></div>
+    <div class="ld-seam" aria-hidden="true"></div>
 
-    <i class="dd-corner tl" aria-hidden="true"></i>
-    <i class="dd-corner tr" aria-hidden="true"></i>
-    <i class="dd-corner bl" aria-hidden="true"></i>
-    <i class="dd-corner br" aria-hidden="true"></i>
-
-    <div class="dd-bar top" aria-hidden="true">
-      <span><i class="dd-led"></i>Secure channel<span class="dd-hide-sm">&nbsp;// DOOMSDAY-OS</span></span>
-      <span>Emergency<i class="dd-led red"></i></span>
-    </div>
-
-    <div class="dd-stage">
-      <div class="dd-reactor" aria-hidden="true">
-        <svg viewBox="0 0 200 200" focusable="false">
-          <defs>
-            <radialGradient id="dd-core-grad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#eafff0" stop-opacity=".95"/>
-              <stop offset="38%" stop-color="#00ff66" stop-opacity=".75"/>
-              <stop offset="100%" stop-color="#00ff66" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle class="r dd-r-outer" cx="100" cy="100" r="95"/>
-          <circle class="r dd-r-ticks" cx="100" cy="100" r="82"/>
-          <circle class="r dd-r-red" cx="100" cy="100" r="92"/>
-          <circle class="r dd-r-mid" cx="100" cy="100" r="68"/>
-          <polygon class="r dd-r-hex" points="100,52 141.6,76 141.6,124 100,148 58.4,124 58.4,76"/>
-          <circle class="dd-r-core" cx="100" cy="100" r="46"/>
-          <defs>
-            <clipPath id="dd-fig-clip">
-              <path d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z"/>
-            </clipPath>
-          </defs>
-          <g class="dd-fig">
-            <path class="dd-fig-hood" d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z"/>
-            <g clip-path="url(#dd-fig-clip)">
-              <path class="dd-fig-shade" d="M100 55 L65 91 L59 131 L100 143 Z"/>
-              <rect class="dd-fig-scan" x="55" y="52" width="90" height="9"/>
-            </g>
-            <path class="dd-fig-face" d="M100 70 L83 79 L81 103 L91 121 L100 126 L109 121 L119 103 L117 79 Z"/>
-            <path class="dd-fig-line" d="M100 70 V86 M83 79 L91 86 M117 79 L109 86 M91 118 L100 111 L109 118"/>
-            <path class="dd-fig-line" d="M66 118 L78 125 M134 118 L122 125 M73 133 L100 138 L127 133"/>
-            <path class="dd-fig-eye" d="M85 95 L96 98 L96 101 L86 99.5 Z"/>
-            <path class="dd-fig-eye" d="M115 95 L104 98 L104 101 L114 99.5 Z"/>
-            <path class="dd-fig-rim" d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z"/>
-          </g>
-          <path d="M100 4v16M100 180v16M4 100h16M180 100h16" stroke="rgba(0,255,102,.55)" stroke-width="1.5" fill="none"/>
+    <div class="ld-content">
+      <div class="ld-core" aria-hidden="true">
+        <svg viewBox="0 0 240 240" focusable="false">
+          <defs><linearGradient id="ld-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--ld-a)"/><stop offset="1" style="stop-color:var(--ld-b)"/></linearGradient></defs>
+          <circle class="ld-track" cx="120" cy="120" r="108"/>
+          <circle class="ld-prog" id="ld-ring" cx="120" cy="120" r="108"/>
+          <circle class="ld-spin1" cx="120" cy="120" r="96"/>
+          <circle class="ld-spin2" cx="120" cy="120" r="84"/>
+          <line class="ld-pin" x1="96" y1="72" x2="96" y2="84"/><line class="ld-pin" x1="96" y1="156" x2="96" y2="168"/><line class="ld-pin" x1="72" y1="96" x2="84" y2="96"/><line class="ld-pin" x1="156" y1="96" x2="168" y2="96"/><line class="ld-pin" x1="108" y1="72" x2="108" y2="84"/><line class="ld-pin" x1="108" y1="156" x2="108" y2="168"/><line class="ld-pin" x1="72" y1="108" x2="84" y2="108"/><line class="ld-pin" x1="156" y1="108" x2="168" y2="108"/><line class="ld-pin" x1="120" y1="72" x2="120" y2="84"/><line class="ld-pin" x1="120" y1="156" x2="120" y2="168"/><line class="ld-pin" x1="72" y1="120" x2="84" y2="120"/><line class="ld-pin" x1="156" y1="120" x2="168" y2="120"/><line class="ld-pin" x1="132" y1="72" x2="132" y2="84"/><line class="ld-pin" x1="132" y1="156" x2="132" y2="168"/><line class="ld-pin" x1="72" y1="132" x2="84" y2="132"/><line class="ld-pin" x1="156" y1="132" x2="168" y2="132"/><line class="ld-pin" x1="144" y1="72" x2="144" y2="84"/><line class="ld-pin" x1="144" y1="156" x2="144" y2="168"/><line class="ld-pin" x1="72" y1="144" x2="84" y2="144"/><line class="ld-pin" x1="156" y1="144" x2="168" y2="144"/>
+          <path class="ld-trace" d="M96 30 L96 72"/><path class="ld-pulse" style="--i:0" d="M96 30 L96 72"/><path class="ld-trace" d="M96 210 L96 168"/><path class="ld-pulse" style="--i:1" d="M96 210 L96 168"/><path class="ld-trace" d="M30 96 L72 96"/><path class="ld-pulse" style="--i:2" d="M30 96 L72 96"/><path class="ld-trace" d="M210 96 L168 96"/><path class="ld-pulse" style="--i:3" d="M210 96 L168 96"/><path class="ld-trace" d="M108 30 L108 72"/><path class="ld-pulse" style="--i:4" d="M108 30 L108 72"/><path class="ld-trace" d="M108 210 L108 168"/><path class="ld-pulse" style="--i:5" d="M108 210 L108 168"/><path class="ld-trace" d="M30 108 L72 108"/><path class="ld-pulse" style="--i:6" d="M30 108 L72 108"/><path class="ld-trace" d="M210 108 L168 108"/><path class="ld-pulse" style="--i:7" d="M210 108 L168 108"/><path class="ld-trace" d="M120 30 L120 72"/><path class="ld-pulse" style="--i:8" d="M120 30 L120 72"/><path class="ld-trace" d="M120 210 L120 168"/><path class="ld-pulse" style="--i:9" d="M120 210 L120 168"/><path class="ld-trace" d="M30 120 L72 120"/><path class="ld-pulse" style="--i:10" d="M30 120 L72 120"/><path class="ld-trace" d="M210 120 L168 120"/><path class="ld-pulse" style="--i:11" d="M210 120 L168 120"/><path class="ld-trace" d="M132 30 L132 72"/><path class="ld-pulse" style="--i:12" d="M132 30 L132 72"/><path class="ld-trace" d="M132 210 L132 168"/><path class="ld-pulse" style="--i:13" d="M132 210 L132 168"/><path class="ld-trace" d="M30 132 L72 132"/><path class="ld-pulse" style="--i:14" d="M30 132 L72 132"/><path class="ld-trace" d="M210 132 L168 132"/><path class="ld-pulse" style="--i:15" d="M210 132 L168 132"/><path class="ld-trace" d="M144 30 L144 72"/><path class="ld-pulse" style="--i:16" d="M144 30 L144 72"/><path class="ld-trace" d="M144 210 L144 168"/><path class="ld-pulse" style="--i:17" d="M144 210 L144 168"/><path class="ld-trace" d="M30 144 L72 144"/><path class="ld-pulse" style="--i:18" d="M30 144 L72 144"/><path class="ld-trace" d="M210 144 L168 144"/><path class="ld-pulse" style="--i:19" d="M210 144 L168 144"/>
+          <circle class="ld-node" style="--i:0" cx="96" cy="30" r="2.2"/><circle class="ld-node" style="--i:1" cx="96" cy="210" r="2.2"/><circle class="ld-node" style="--i:2" cx="30" cy="96" r="2.2"/><circle class="ld-node" style="--i:3" cx="210" cy="96" r="2.2"/><circle class="ld-node" style="--i:4" cx="108" cy="30" r="2.2"/><circle class="ld-node" style="--i:5" cx="108" cy="210" r="2.2"/><circle class="ld-node" style="--i:6" cx="30" cy="108" r="2.2"/><circle class="ld-node" style="--i:7" cx="210" cy="108" r="2.2"/><circle class="ld-node" style="--i:8" cx="120" cy="30" r="2.2"/><circle class="ld-node" style="--i:9" cx="120" cy="210" r="2.2"/><circle class="ld-node" style="--i:10" cx="30" cy="120" r="2.2"/><circle class="ld-node" style="--i:11" cx="210" cy="120" r="2.2"/><circle class="ld-node" style="--i:12" cx="132" cy="30" r="2.2"/><circle class="ld-node" style="--i:13" cx="132" cy="210" r="2.2"/><circle class="ld-node" style="--i:14" cx="30" cy="132" r="2.2"/><circle class="ld-node" style="--i:15" cx="210" cy="132" r="2.2"/><circle class="ld-node" style="--i:16" cx="144" cy="30" r="2.2"/><circle class="ld-node" style="--i:17" cx="144" cy="210" r="2.2"/><circle class="ld-node" style="--i:18" cx="30" cy="144" r="2.2"/><circle class="ld-node" style="--i:19" cx="210" cy="144" r="2.2"/>
+          <rect class="ld-body" x="84" y="84" width="72" height="72" rx="12"/>
+          <rect class="ld-die" x="100" y="100" width="40" height="40" rx="6"/>
+          <path class="ld-grid" d="M110 100v40M120 100v40M130 100v40M100 110h40M100 120h40M100 130h40"/>
+          <rect class="ld-scan" x="102" y="101" width="36" height="3" rx="1.5"/>
+          <circle class="ld-dot" cx="120" cy="120" r="4.5"/>
         </svg>
-        <div class="dd-num" id="dd-num">01</div>
       </div>
 
-      <div>
-        <div class="dd-brand" aria-hidden="true">ARDUINO<span>HUB</span></div>
-        <div class="dd-sub" aria-hidden="true">Classified // Command Center</div>
-      </div>
+      <div class="ld-word" id="ld-word" aria-hidden="true"></div>
+      <div class="ld-tag" aria-hidden="true">Arduino &amp; Chemistry</div>
 
-      <div class="dd-panel" aria-hidden="true">
-        <div class="dd-panel-head"><b id="dd-stage-title">System initialization</b><em id="dd-stage-count">01 / 04</em></div>
-        <div class="dd-term" id="dd-term"></div>
-      </div>
-
-      <div class="dd-progress" aria-hidden="true">
-        <div class="dd-segs">
-          <i class="dd-seg"></i><i class="dd-seg"></i><i class="dd-seg"></i><i class="dd-seg"></i>
+      <div class="ld-meter" aria-hidden="true">
+        <div class="ld-line"><div class="ld-fill" id="ld-fill"></div></div>
+        <div class="ld-info">
+          <span class="ld-status" id="ld-status">სისტემის ინიციალიზაცია</span>
+          <span class="ld-pct" id="ld-pct">0%</span>
         </div>
-        <div class="dd-seg-label"><span id="dd-seg-state">Booting</span><span class="dd-hide-sm">Protocol 5.0 // Level 5</span></div>
       </div>
     </div>
 
-    <div class="dd-bar bottom">
-      <span aria-hidden="true">ArduinoHub // Global monitoring</span>
-      <button type="button" class="dd-skip" id="dd-skip" aria-label="Skip intro">Skip ▸</button>
-    </div>
+    <button type="button" class="ld-skip" id="ld-skip" aria-label="გამოტოვება">გამოტოვება ▸</button>
   </div>
 
   <script>
-  /* DOOMSDAY BOOT SEQUENCE — staged animation (no fake percentage).
-     Real signal used: window "load". Hard failsafe guarantees the site is never blocked. */
+  /* NEURAL BOOT LOADER — honest progress: real signal is window "load".
+     The bar eases up to 92% and only completes after the page has really loaded.
+     Hard failsafe guarantees the site is never blocked. */
   ;(function () {
     var body = document.body
     var splash = document.getElementById("arduino-splash")
     body.classList.add("splash-active")
-
-    if (!splash) {
-      body.classList.remove("splash-active")
-      return
-    }
+    if (!splash) { body.classList.remove("splash-active"); return }
 
     var done = false
-    var timers = []
     var raf = 0
-    var resizeT = 0
-    var cleanupFns = []
+    var timers = []
+    var cleanup = []
 
     var reduce = false
     try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch (e) {}
-
     var seen = false
-    try { seen = sessionStorage.getItem("dd-boot-seen") === "1" } catch (e) {}
+    try { seen = sessionStorage.getItem("ld-boot-seen") === "1" } catch (e) {}
 
-    // pace: 1 = full cinematic, shorter for returning visitors / reduced motion
-    var K = reduce ? 0.3 : seen ? 0.45 : 1
-    var HARD_CAP = 7000 // ms — absolute maximum the splash may stay on screen
+    var MIN = reduce ? 500 : seen ? 1300 : 3000   // minimum on-screen time (ms)
+    var HARD_CAP = 7500                            // absolute maximum (ms)
 
-    var term = document.getElementById("dd-term")
-    var numEl = document.getElementById("dd-num")
-    var titleEl = document.getElementById("dd-stage-title")
-    var countEl = document.getElementById("dd-stage-count")
-    var stateEl = document.getElementById("dd-seg-state")
-    var segs = splash.querySelectorAll(".dd-seg")
-    var skipBtn = document.getElementById("dd-skip")
+    var ring = document.getElementById("ld-ring")
+    var fill = document.getElementById("ld-fill")
+    var pctEl = document.getElementById("ld-pct")
+    var statusEl = document.getElementById("ld-status")
+    var wordEl = document.getElementById("ld-word")
+    var canvas = splash.querySelector(".ld-net")
+    var skip = document.getElementById("ld-skip")
 
-    /* ---------- helpers ---------- */
-    function later(fn, ms) {
-      var id = setTimeout(function () {
-        if (!done) fn()
-      }, ms)
-      timers.push(id)
-      return id
+    function on(t, e, f) { t.addEventListener(e, f); cleanup.push(function () { t.removeEventListener(e, f) }) }
+    function later(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id }
+
+    /* wordmark letters */
+    var text = "ARDUINOHUB"
+    for (var i = 0; i < text.length; i++) {
+      var s = document.createElement("span")
+      s.textContent = text.charAt(i)
+      s.style.setProperty("--i", i)
+      if (i >= 7) s.className = "hub"
+      wordEl.appendChild(s)
     }
 
-    function wait(ms) {
-      return new Promise(function (res) { later(res, ms * K) })
-    }
-
-    function on(target, evt, fn, opts) {
-      target.addEventListener(evt, fn, opts)
-      cleanupFns.push(function () { target.removeEventListener(evt, fn, opts) })
-    }
-
-    /* ---------- real load signal ---------- */
+    /* real load signal */
     var loaded = document.readyState === "complete"
-    var loadedResolve
-    var loadedP = new Promise(function (r) { loadedResolve = r })
-    if (loaded) loadedResolve()
-    else on(window, "load", function () { loaded = true; loadedResolve() })
+    if (!loaded) on(window, "load", function () { loaded = true })
 
-    /* ---------- terminal ---------- */
-    function clearTerm() { term.textContent = "" }
-
-    function addLine(text, cls) {
-      var el = document.createElement("div")
-      el.className = "dd-line" + (cls ? " " + cls : "")
-      term.appendChild(el)
-      return el
+    /* status text */
+    var steps = [
+      [0,    "სისტემის ინიციალიზაცია"],
+      [0.25, "სქემების დაკავშირება"],
+      [0.5,  "პროექტების ჩატვირთვა"],
+      [0.78, "თითქმის მზადაა"],
+      [1,    "მზადაა"]
+    ]
+    var curStep = -1
+    function setStatus(p) {
+      var k = 0
+      for (var j = 0; j < steps.length; j++) if (p >= steps[j][0]) k = j
+      if (k === curStep) return
+      curStep = k
+      statusEl.textContent = steps[k][1]
+      statusEl.classList.remove("swap")
+      void statusEl.offsetWidth
+      statusEl.classList.add("swap")
     }
 
-    function typeLine(text, cls, speed) {
-      var el = addLine("", cls)
-      if (reduce || done) {
-        el.textContent = text
-        return Promise.resolve(el)
-      }
-      return new Promise(function (res) {
-        var i = 0
-        var step = Math.max(8, (speed || 22) * (seen ? 0.5 : 1))
-        el.classList.add("typing")
-        ;(function tick() {
-          el.textContent = text.slice(0, ++i)
-          if (i < text.length) later(tick, step)
-          else { el.classList.remove("typing"); res(el) }
-        })()
+    /* neural network canvas */
+    var ctx = null, pts = [], W = 0, H = 0, dpr = 1, rgb = "34,211,149"
+    function readColor() {
+      try {
+        var v = getComputedStyle(splash).getPropertyValue("--ld-rgb").trim()
+        if (v) rgb = v
+      } catch (e) {}
+    }
+    function size() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      W = window.innerWidth; H = window.innerHeight
+      canvas.width = W * dpr; canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      var n = Math.max(24, Math.min(70, Math.round(W * H / 18000)))
+      pts = []
+      for (var q = 0; q < n; q++) pts.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .35, vy: (Math.random() - .5) * .35,
+        r: Math.random() * 1.4 + .6
       })
     }
-
-    function setStage(n, title, state) {
-      numEl.textContent = "0" + n
-      titleEl.textContent = title
-      countEl.textContent = "0" + n + " / 04"
-      stateEl.textContent = state
-      for (var i = 0; i < segs.length; i++) {
-        segs[i].className = "dd-seg" + (i < n - 1 ? " done" : i === n - 1 ? " on" : "")
-      }
-      clearTerm()
+    if (!reduce) {
+      try {
+        ctx = canvas.getContext("2d")
+        size()
+        on(window, "resize", size)
+      } catch (e) { ctx = null }
+    } else {
+      canvas.style.display = "none"
     }
 
-    /* ---------- matrix background ---------- */
-    var cv = splash.querySelector(".dd-matrix")
-    var ctx = null
-    var cw = 0, ch = 0, fs = 16, drops = []
-    var glyphs = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/\\|=+*#"
-    var lastFrame = 0
-
-    function sizeMatrix() {
-      cw = cv.width = window.innerWidth
-      ch = cv.height = window.innerHeight
-      fs = cw < 520 ? 14 : 16
-      var cols = Math.ceil(cw / fs)
-      drops = []
-      for (var i = 0; i < cols; i++) drops.push(Math.floor(Math.random() * -40))
-      if (ctx) { ctx.fillStyle = "#020603"; ctx.fillRect(0, 0, cw, ch) }
-    }
-
-    function frame(t) {
-      raf = requestAnimationFrame(frame)
-      if (t - lastFrame < 50) return // ~20fps: subtle, cheap
-      lastFrame = t
-      ctx.fillStyle = "rgba(2,6,3,.16)"
-      ctx.fillRect(0, 0, cw, ch)
-      ctx.font = fs + "px 'Share Tech Mono', monospace"
-      for (var i = 0; i < drops.length; i++) {
-        var y = drops[i] * fs
-        if (y > 0) {
-          ctx.fillStyle = Math.random() > .96 ? "rgba(234,255,240,.95)" : "rgba(0,255,102,.85)"
-          ctx.fillText(glyphs.charAt((Math.random() * glyphs.length) | 0), i * fs, y)
+    function drawNet(p, t) {
+      if (!ctx) return
+      ctx.clearRect(0, 0, W, H)
+      var cx = W / 2, cy = H / 2
+      var link = 130 + p * 40
+      for (var a = 0; a < pts.length; a++) {
+        var A = pts[a]
+        // gentle pull toward the core as loading advances
+        A.vx += (cx - A.x) * 0.0000025 * (0.4 + p * 3)
+        A.vy += (cy - A.y) * 0.0000025 * (0.4 + p * 3)
+        A.x += A.vx; A.y += A.vy
+        if (A.x < -10) A.x = W + 10; else if (A.x > W + 10) A.x = -10
+        if (A.y < -10) A.y = H + 10; else if (A.y > H + 10) A.y = -10
+        for (var b = a + 1; b < pts.length; b++) {
+          var B = pts[b], dx = A.x - B.x, dy = A.y - B.y, d = dx * dx + dy * dy
+          if (d < link * link) {
+            var al = (1 - Math.sqrt(d) / link) * (.16 + p * .2)
+            ctx.strokeStyle = "rgba(" + rgb + "," + al + ")"
+            ctx.lineWidth = 1
+            ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke()
+          }
         }
-        if (y > ch && Math.random() > .975) drops[i] = 0
-        drops[i]++
+        ctx.fillStyle = "rgba(" + rgb + "," + (.35 + .3 * Math.sin(t / 700 + a)) + ")"
+        ctx.beginPath(); ctx.arc(A.x, A.y, A.r, 0, 6.2832); ctx.fill()
       }
     }
 
-    function startMatrix() {
-      if (raf || reduce || !ctx || done) return
+    /* main loop */
+    var C = 678.58, p = 0, t0 = performance.now(), last = t0, doneAt = 0, frames = 0
+    function frame(now) {
+      if (done) return
       raf = requestAnimationFrame(frame)
+      var dt = Math.min(now - last, 64); last = now
+      var el = now - t0
+      var timeP = Math.min(el / MIN, 1)
+      var target = loaded ? timeP : Math.min(timeP, .92)
+      p += (target - p) * Math.min(1, dt * 0.006)
+      if (target >= 1 && p > .995) p = 1
+
+      ring.style.strokeDashoffset = (C * (1 - p)).toFixed(2)
+      fill.style.transform = "scaleX(" + p.toFixed(4) + ")"
+      pctEl.textContent = Math.round(p * 100) + "%"
+      setStatus(p)
+
+      if ((++frames % 45) === 0) readColor()
+      drawNet(p, now)
+
+      if (p >= 1 && !doneAt) { doneAt = now; later(finish, reduce ? 150 : 450) }
     }
 
-    function stopMatrix() {
-      if (raf) { cancelAnimationFrame(raf); raf = 0 }
-    }
-
-    try {
-      ctx = cv.getContext("2d")
-      if (ctx && !reduce) {
-        sizeMatrix()
-        startMatrix()
-        on(window, "resize", function () {
-          clearTimeout(resizeT)
-          resizeT = setTimeout(function () { if (!done) sizeMatrix() }, 150)
-        })
-        on(document, "visibilitychange", function () {
-          if (document.hidden) stopMatrix()
-          else startMatrix()
-        })
-      }
-    } catch (e) { ctx = null }
-
-    /* ---------- finish / cleanup ---------- */
+    /* finish */
     function finish() {
       if (done) return
       done = true
-
+      cancelAnimationFrame(raf)
       for (var i = 0; i < timers.length; i++) clearTimeout(timers[i])
       timers = []
-      clearTimeout(resizeT)
+      try { sessionStorage.setItem("ld-boot-seen", "1") } catch (e) {}
 
-      try { sessionStorage.setItem("dd-boot-seen", "1") } catch (e) {}
+      ring.style.strokeDashoffset = 0
+      fill.style.transform = "scaleX(1)"
+      pctEl.textContent = "100%"
 
       splash.setAttribute("aria-busy", "false")
       splash.classList.add("hidden")
       body.classList.remove("splash-active")
 
-      // let the iris transition play, then tear everything down
       setTimeout(function () {
-        stopMatrix()
-        for (var j = 0; j < cleanupFns.length; j++) cleanupFns[j]()
-        cleanupFns = []
+        for (var j = 0; j < cleanup.length; j++) cleanup[j]()
+        cleanup = []
         if (splash.parentNode) splash.parentNode.removeChild(splash)
-      }, reduce ? 450 : 1050)
+      }, reduce ? 450 : 1350)
     }
 
-    on(skipBtn, "click", finish)
-    on(document, "keydown", function (e) {
-      if (e.key === "Escape") finish()
-    })
-
-    // absolute failsafe — the splash can never get stuck
+    on(skip, "click", finish)
+    on(document, "keydown", function (e) { if (e.key === "Escape") finish() })
     var hard = setTimeout(finish, HARD_CAP)
-    cleanupFns.push(function () { clearTimeout(hard) })
+    cleanup.push(function () { clearTimeout(hard) })
 
-    /* ---------- the sequence ---------- */
-    async function run() {
-      // STAGE 01 — SYSTEM INITIALIZATION
-      setStage(1, "System initialization", "Booting")
-      await typeLine("DOOMSDAY PROTOCOL", "head", 34)
-      await wait(150)
-      await typeLine("INITIALIZING GLOBAL SYSTEM...", "dim", 20)
-      await wait(520)
-
-      // STAGE 02 — SECURITY VERIFICATION
-      setStage(2, "Security verification", "Authenticating")
-      await typeLine("SECURITY CLEARANCE", "head", 30)
-      await wait(120)
-      await typeLine("VERIFYING ACCESS...", "dim", 22)
-      await wait(480)
-      await typeLine("ACCESS GRANTED", "granted", 38)
-      await wait(520)
-
-      // STAGE 03 — SYSTEM DIAGNOSTICS
-      setStage(3, "System diagnostics", "Scanning")
-      var checks = ["CORE SYSTEM", "DATABASE CONNECTION", "NETWORK STATUS", "SECURITY PROTOCOL", "GLOBAL MONITORING"]
-      for (var i = 0; i < checks.length; i++) {
-        var row = addLine("", "")
-        var tag = document.createElement("span")
-        tag.className = "dd-tag pending"
-        tag.textContent = "[ .. ]"
-        var txt = document.createElement("span")
-        txt.textContent = checks[i]
-        row.appendChild(tag)
-        row.appendChild(txt)
-        await wait(150)
-        tag.className = "dd-tag ok"
-        tag.textContent = "[OK]"
-        await wait(110)
-      }
-      await wait(260)
-
-      // Hold here (honestly) only if the page itself is still loading
-      if (!loaded) {
-        stateEl.textContent = "Synchronizing"
-        var sync = addLine("", "live")
-        sync.textContent = "SYNCHRONIZING LINK..."
-        sync.classList.add("typing")
-        await loadedP
-        sync.classList.remove("typing")
-        await wait(200)
-      }
-
-      // STAGE 04 — FINAL ACTIVATION
-      setStage(4, "Final activation", "Activating")
-      await typeLine("GLOBAL SYSTEM ONLINE", "head", 30)
-      await wait(140)
-      await typeLine("DOOMSDAY PROTOCOL ACTIVATED", "warn", 24)
-      segs[3].className = "dd-seg done"
-      stateEl.textContent = "Online"
-      splash.classList.add("dd-online")
-      await wait(850)
-
-      finish()
-    }
-
-    try {
-      run().catch(finish)
-    } catch (e) {
-      finish()
-    }
+    try { readColor(); raf = requestAnimationFrame(frame) } catch (e) { finish() }
   })()
   </script>
-  <!-- ===== / DOOMSDAY BOOT SEQUENCE ===== -->
+  <!-- ===== / NEURAL BOOT LOADER ===== -->
 
   <header class="site-header">
 
@@ -3986,223 +3504,7 @@
 
   startDoomMusic()
 </script>
-<!-- ===== GLITCH SENTINELS (decorative) ===== -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <symbol id="dg-sentinel" viewBox="54 50 92 98">
-    <path d="M100 55 C79 55 67 71 65 91 L59 131 L73 139 L100 143 L127 139 L141 131 L135 91 C133 71 121 55 100 55 Z" fill="#07110f" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    <path d="M100 55 L65 91 L59 131 L100 143 Z" fill="currentColor" opacity=".12"/>
-    <path d="M100 70 L83 79 L81 103 L91 121 L100 126 L109 121 L119 103 L117 79 Z" fill="#020603" stroke="currentColor" stroke-opacity=".6" stroke-width=".9" stroke-linejoin="round"/>
-    <path d="M100 70V86M83 79L91 86M117 79L109 86M91 118L100 111L109 118M66 118L78 125M134 118L122 125M73 133L100 138L127 133" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M85 95L96 98V101L86 99.5Z" fill="#ff1744"/>
-    <path d="M115 95L104 98V101L114 99.5Z" fill="#ff1744"/>
-  </symbol>
-</svg>
 
-<style>
-  #dg-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    overflow: hidden;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  #dg-layer .dg-fig {
-    position: absolute;
-    width: var(--dg-s, 140px);
-    aspect-ratio: 92 / 98;
-    opacity: 0;
-    will-change: opacity, transform, clip-path;
-  }
-
-  #dg-layer .dg-fig svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    overflow: visible;
-  }
-
-  #dg-layer .dg-base {
-    color: #00ff66;
-    filter: drop-shadow(0 0 7px rgba(0, 255, 102, .55));
-  }
-
-  #dg-layer .dg-ghost {
-    color: #ff1744;
-    mix-blend-mode: screen;
-    opacity: 0;
-    filter: drop-shadow(0 0 6px rgba(255, 23, 68, .6));
-  }
-
-  #dg-layer .dg-fig.on {
-    animation: dg-life var(--dg-dur, 3.4s) linear forwards;
-  }
-
-  #dg-layer .dg-fig.on .dg-ghost {
-    animation: dg-ghost var(--dg-dur, 3.4s) linear forwards;
-  }
-
-  @keyframes dg-life {
-    0%   { opacity: 0;    transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    3%   { opacity: .30;  transform: translateX(-7px);  clip-path: inset(12% 0 58% 0); }
-    6%   { opacity: 0;    transform: translateX(4px);   clip-path: inset(0 0 0 0); }
-    9%   { opacity: .28;  transform: translateX(6px);   clip-path: inset(58% 0 8% 0); }
-    12%  { opacity: .10;  transform: translateX(-3px);  clip-path: inset(0 0 0 0); }
-    16%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    32%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    34%  { opacity: .30;  transform: translateX(6px);   clip-path: inset(28% 0 42% 0); }
-    36%  { opacity: .22;  transform: translateX(-4px);  clip-path: inset(0 0 0 0); }
-    50%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    52%  { opacity: .04;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    54%  { opacity: .28;  transform: translateX(-5px);  clip-path: inset(46% 0 20% 0); }
-    57%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    72%  { opacity: .26;  transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    75%  { opacity: .30;  transform: translateX(8px);   clip-path: inset(18% 0 50% 0); }
-    78%  { opacity: .06;  transform: translateX(-4px);  clip-path: inset(0 0 0 0); }
-    82%  { opacity: .24;  transform: translateX(5px);   clip-path: inset(52% 0 14% 0); }
-    86%  { opacity: 0;    transform: translateX(0);     clip-path: inset(0 0 0 0); }
-    90%  { opacity: .16;  transform: translateX(-6px);  clip-path: inset(34% 0 36% 0); }
-    94%, 100% { opacity: 0; transform: translateX(0);   clip-path: inset(0 0 0 0); }
-  }
-
-  @keyframes dg-ghost {
-    0%, 2%   { opacity: 0; transform: translateX(0); }
-    3%       { opacity: .9; transform: translateX(10px); }
-    6%       { opacity: 0; }
-    9%       { opacity: .8; transform: translateX(-9px); }
-    12%, 33% { opacity: 0; transform: translateX(0); }
-    34%      { opacity: .85; transform: translateX(-10px); }
-    37%, 53% { opacity: 0; }
-    54%      { opacity: .8; transform: translateX(9px); }
-    57%, 74% { opacity: 0; }
-    75%      { opacity: .9; transform: translateX(-11px); }
-    78%      { opacity: 0; }
-    82%      { opacity: .7; transform: translateX(8px); }
-    86%, 100% { opacity: 0; transform: translateX(0); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #dg-layer { display: none; }
-  }
-</style>
-
-<div id="dg-layer" aria-hidden="true">
-  <div class="dg-fig"><svg class="dg-ghost"><use href="#dg-sentinel"/></svg><svg class="dg-base"><use href="#dg-sentinel"/></svg></div>
-  <div class="dg-fig"><svg class="dg-ghost"><use href="#dg-sentinel"/></svg><svg class="dg-base"><use href="#dg-sentinel"/></svg></div>
-  <div class="dg-fig"><svg class="dg-ghost"><use href="#dg-sentinel"/></svg><svg class="dg-base"><use href="#dg-sentinel"/></svg></div>
-</div>
-
-<script>
-  /* Decorative glitch sentinels: appear at random edge spots, glitch, vanish.
-     Never intercepts clicks, starts only after the boot screen, pauses in background tabs. */
-  ;(function () {
-    var layer = document.getElementById("dg-layer")
-    if (!layer) return
-
-    var reduce = false
-    try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches } catch (e) {}
-    if (reduce) { layer.parentNode && layer.parentNode.removeChild(layer); return }
-
-    var figs = Array.prototype.slice.call(layer.querySelectorAll(".dg-fig"))
-    var slots = [
-      { side: "l", top: 12 }, { side: "l", top: 42 }, { side: "l", top: 70 },
-      { side: "r", top: 16 }, { side: "r", top: 46 }, { side: "r", top: 72 }
-    ]
-    var usedSlots = {}
-    var timer = 0
-    var started = false
-    var running = 0
-
-    function rand(a, b) { return a + Math.random() * (b - a) }
-
-    function release(fig) {
-      if (!fig._on) return
-      fig._on = false
-      clearTimeout(fig._fallback)
-      fig.classList.remove("on")
-      delete usedSlots[fig._slot]
-      running--
-    }
-
-    figs.forEach(function (fig) {
-      fig.addEventListener("animationend", function (e) {
-        if (e.target === fig && e.animationName === "dg-life") release(fig)
-      })
-    })
-
-    function schedule(ms) {
-      clearTimeout(timer)
-      timer = setTimeout(spawn, ms == null ? rand(1800, 4200) : ms)
-    }
-
-    function spawn() {
-      timer = 0
-      if (document.hidden) return // resumes on visibilitychange
-
-      var small = window.innerWidth < 700
-      var max = small ? 1 : 2
-
-      if (running < max) {
-        var fig = figs.filter(function (f) { return !f._on })[0]
-        var free = []
-        for (var i = 0; i < slots.length; i++) if (!usedSlots[i]) free.push(i)
-
-        if (fig && free.length) {
-          var si = free[(Math.random() * free.length) | 0]
-          var slot = slots[si]
-          var size = small ? rand(72, 108) : rand(100, 190)
-          var dur = rand(2.8, 4.6)
-
-          fig._on = true
-          fig._slot = si
-          usedSlots[si] = true
-          running++
-
-          fig.style.setProperty("--dg-s", size + "px")
-          fig.style.setProperty("--dg-dur", dur + "s")
-          fig.style.top = slot.top + "%"
-          fig.style.left = slot.side === "l" ? "1.5vw" : "auto"
-          fig.style.right = slot.side === "r" ? "1.5vw" : "auto"
-
-          // restart animation reliably
-          fig.classList.remove("on")
-          void fig.offsetWidth
-          fig.classList.add("on")
-
-          fig._fallback = setTimeout(function () { release(fig) }, dur * 1000 + 600)
-        }
-      }
-      schedule()
-    }
-
-    function begin() {
-      if (started) return
-      started = true
-      schedule(1400)
-    }
-
-    document.addEventListener("visibilitychange", function () {
-      if (!document.hidden && started && !timer) schedule(800)
-    })
-
-    function ready() { return !document.body.classList.contains("splash-active") }
-
-    if (ready()) {
-      begin()
-    } else {
-      var mo = new MutationObserver(function () {
-        if (ready()) { mo.disconnect(); begin() }
-      })
-      mo.observe(document.body, { attributes: true, attributeFilter: ["class"] })
-      setTimeout(function () { mo.disconnect(); begin() }, 9000)
-    }
-  })()
-</script>
-<!-- ===== / GLITCH SENTINELS ===== -->
 
 </body>
 
