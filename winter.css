@@ -363,19 +363,26 @@ body.winter-mode .arduinohub-film-frame video{ background:#050d08; }
 
 
 /* ---------- 13b. კლუბის შეხვედრის სექცია (club-meet-section) ---------- */
-body.winter-mode .club-meet-card{
-  border-color:rgba(242,193,78,.55);
-  background:linear-gradient(135deg,rgba(242,193,78,.14),rgba(214,40,57,.10) 55%,rgba(31,138,79,.14)),#08180f;
-  box-shadow:0 25px 80px rgba(0,0,0,.5),0 0 45px rgba(214,40,57,.22),0 0 70px rgba(242,193,78,.12);
+body.winter-mode .club-meet-section{ --cm-a:#f2c14e; --cm-b:#ffe08a; }
+body.winter-mode .club-meet-eyebrow{ border-color:rgba(242,193,78,.4); background:rgba(242,193,78,.08); }
+body.winter-mode .club-meet-eyebrow i{ background:#ff5d6c; animation:none; box-shadow:0 0 12px rgba(255,93,108,.8); }
+body.winter-mode .club-meet-title span{
+  background:linear-gradient(100deg,#ff7a86,#f2c14e 55%,#fff0b8);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
 }
-body.winter-mode .club-meet-date{ color:var(--w-snow); text-shadow:0 0 14px rgba(242,193,78,.35); }
-body.winter-mode .club-meet-details>div,
-body.winter-mode .club-meet-countdown div{ background:rgba(0,0,0,.28); border-color:rgba(242,193,78,.28); }
-body.winter-mode .club-meet-details span,
-body.winter-mode .club-meet-countdown small{ color:var(--w-gold); opacity:.9; }
-body.winter-mode .club-meet-details strong,
-body.winter-mode .club-meet-countdown b{ color:var(--w-snow); }
-body.winter-mode .club-meet-note{ color:#d9d3c2; }
+body.winter-mode .cm-orb-a{ background:rgba(214,40,57,.28); }
+body.winter-mode .cm-orb-b{ background:rgba(31,138,79,.28); }
+body.winter-mode .cm-frame{
+  background:linear-gradient(135deg,rgba(242,193,78,.85),rgba(255,255,255,.08) 35%,rgba(214,40,57,.6) 70%,rgba(242,193,78,.7));
+  box-shadow:0 40px 100px rgba(0,0,0,.55),0 0 60px rgba(214,40,57,.2),0 0 80px rgba(242,193,78,.14);
+}
+body.winter-mode .club-meet-card{ background:linear-gradient(160deg,rgba(14,26,18,.97),rgba(7,16,11,.98)); }
+body.winter-mode .cm-date{ background:radial-gradient(circle at 50% 30%,rgba(214,40,57,.26),transparent 70%); }
+body.winter-mode .cm-day{ background:linear-gradient(180deg,#fff 20%,#f2c14e); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 24px rgba(242,193,78,.4)); }
+body.winter-mode .cm-weekday{ color:#2a0a0e; background:linear-gradient(100deg,#f2c14e,#ffe08a); }
+body.winter-mode .cm-time-ico{ background:rgba(242,193,78,.1); border-color:rgba(242,193,78,.35); }
+body.winter-mode .cm-badge{ color:#ffe08a; background:rgba(242,193,78,.1); border-color:rgba(242,193,78,.35); }
+body.winter-mode .cm-badge.done{ color:#9aa7a3; background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.14); }
 
 @media (prefers-reduced-motion:reduce){
   body.winter-mode .arduinohub-film-section::before{ animation:none; }
