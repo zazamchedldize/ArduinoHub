@@ -27,13 +27,18 @@ const keyOfDay = str => String(str).slice(0, 7) // 'YYYY-MM-DD' → 'YYYY-MM' (�
 const keyOfStamp = str => { const d = new Date(str); return Number.isNaN(d.getTime()) ? null : keyOfDate(d) }
 const labelOfKey = key => { const [y, m] = key.split('-'); return `${MONTHS[Number(m) - 1]} ${String(y).slice(2)}` }
 
+// Intl-ის ka-GE მხარდაჭერა გარემოზე დამოკიდებულია, ამიტომ თვეებს ხელით ვწერთ
+const MONTHS_FULL = ['იანვარი', 'თებერვალი', 'მარტი', 'აპრილი', 'მაისი', 'ივნისი', 'ივლისი', 'აგვისტო', 'სექტემბერი', 'ოქტომბერი', 'ნოემბერი', 'დეკემბერი']
+const longDate = d => `${d.getDate()} ${MONTHS_FULL[d.getMonth()]}, ${d.getFullYear()}`
+const shortDate = d => `${d.getDate()} ${MONTHS[d.getMonth()]}`
+
 function dayText(value) {
   const d = new Date(`${String(value).slice(0, 10)}T12:00:00`)
-  return Number.isNaN(d.getTime()) ? String(value) : new Intl.DateTimeFormat('ka-GE', { day: 'numeric', month: 'long', year: 'numeric' }).format(d)
+  return Number.isNaN(d.getTime()) ? String(value) : longDate(d)
 }
 function stampText(value) {
   const d = new Date(value)
-  return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat('ka-GE', { day: 'numeric', month: 'long', year: 'numeric' }).format(d)
+  return Number.isNaN(d.getTime()) ? '' : longDate(d)
 }
 
 function lastMonthKeys(count) {
@@ -45,20 +50,25 @@ function lastMonthKeys(count) {
 
 /* ----------------------------- მონაცემების ჩატვირთვა ----------------------------- */
 
-const isMissingColumn = error => error && (error.code === '42703' || /column .*does not exist/i.test(error.message || ''))
+const isMissingRelation = error => error && (
+  ['42P01', 'PGRST205'].includes(error.code) || /does not exist|could not find the table/i.test(error.message || '')
+)
 
 async function loadAttendance(db, uid) {
-  const memberRes = await db.from('club_members').select('id,full_name').eq('user_id', uid).maybeSingle()
+  // მომხმარებლის ↔ club_members კავშირი ინახება club_member_links-ში (RLS: მხოლოდ საკუთარი ჩანაწერი)
+  const linkRes = await db.from('club_member_links').select('member_id').eq('user_id', uid).maybeSingle()
 
-  if (memberRes.error) {
-    if (isMissingColumn(memberRes.error)) return { state: 'setup' }
-    throw memberRes.error
+  if (linkRes.error) {
+    if (isMissingRelation(linkRes.error)) return { state: 'setup' }
+    throw linkRes.error
   }
-  if (!memberRes.data) return { state: 'unlinked' }
+  if (!linkRes.data) return { state: 'unlinked' }
+
+  const memberId = linkRes.data.member_id
 
   const [meetingsRes, mineRes] = await Promise.all([
     db.from('club_attendance').select('id,meeting_date').eq('counted', true).order('meeting_date', { ascending: true }),
-    db.from('club_attendance_members').select('attendance_id').eq('member_id', memberRes.data.id)
+    db.from('club_attendance_members').select('attendance_id').eq('member_id', memberId)
   ])
   if (meetingsRes.error) throw meetingsRes.error
   if (mineRes.error) throw mineRes.error
@@ -66,7 +76,7 @@ async function loadAttendance(db, uid) {
   const attendedIds = new Set((mineRes.data || []).map(r => r.attendance_id))
   const meetings = (meetingsRes.data || []).map(m => ({ id: m.id, date: m.meeting_date, attended: attendedIds.has(m.id) }))
 
-  return { state: 'ok', member: memberRes.data, meetings }
+  return { state: 'ok', meetings }
 }
 
 async function loadQuiz(db, uid) {
@@ -134,8 +144,8 @@ async function loadProjects(db, uid) {
 
 /* ----------------------------- გათვლები ----------------------------- */
 
-function buildModel(att, quiz, proj) {
-  const m = { att, quiz, proj }
+function buildModel(att, quiz, proj, failed = 0) {
+  const m = { att, quiz, proj, failed }
 
   // დასწრება
   if (att?.state === 'ok') {
@@ -174,7 +184,7 @@ function buildModel(att, quiz, proj) {
       avg: scored.length ? Math.round(scored.reduce((a, r) => a + r.percent, 0) / scored.length) : null,
       best: scored.length ? Math.max(...scored.map(r => r.percent)) : null,
       series: scored.map(r => ({
-        label: new Intl.DateTimeFormat('ka-GE', { day: 'numeric', month: 'short' }).format(new Date(r.date)),
+        label: shortDate(new Date(r.date)),
         value: r.percent,
         tip: `<b>${esc(r.title)}</b><br>${esc(stampText(r.date))}<br>სწორი: ${r.correct} / ${r.total} (${r.percent}%)`
       })),
@@ -223,11 +233,13 @@ const PAD = { l: 38, r: 14, t: 14, b: 30 }
 function xLabels(points, xAt, plotW) {
   const maxLabels = Math.max(2, Math.floor(plotW / 62))
   const step = Math.max(1, Math.ceil(points.length / maxLabels))
-  return points.map((p, i) => (i % step === 0 || i === points.length - 1)
+  const last = points.length - 1
+  // ბოლო წარწერა ყოველთვის ჩანს; ახლოს მდგომი შუალედური გამოვტოვოთ, რომ არ გადაფარონ
+  return points.map((p, i) => (i === last || (i % step === 0 && last - i >= step))
     ? `<text class="ms-axis-text" x="${xAt(i)}" y="${SVG_H - 9}" text-anchor="middle">${esc(p.label)}</text>` : '').join('')
 }
 
-function lineSvg(points, w, animate) {
+function lineSvg(points, w, animate, gid) {
   const plotW = w - PAD.l - PAD.r
   const plotH = SVG_H - PAD.t - PAD.b
   const n = points.length
@@ -239,13 +251,13 @@ function lineSvg(points, w, animate) {
     <text class="ms-axis-text" x="${PAD.l - 8}" y="${yAt(v) + 3.5}" text-anchor="end">${v}%</text>`).join('')
 
   const path = points.map((p, i) => `${i ? 'L' : 'M'}${xAt(i).toFixed(1)} ${yAt(p.value).toFixed(1)}`).join(' ')
-  const area = n > 1 ? `<path d="${path} L${xAt(n - 1)} ${yAt(0)} L${xAt(0)} ${yAt(0)} Z" fill="url(#ms-area)" opacity=".9"/>` : ''
+  const area = n > 1 ? `<path d="${path} L${xAt(n - 1)} ${yAt(0)} L${xAt(0)} ${yAt(0)} Z" fill="url(#${gid})" opacity=".9"/>` : ''
   const dots = points.map((p, i) => `
     <circle class="ms-hit" data-i="${i}" tabindex="0" role="img" aria-label="${esc(p.label)}: ${p.value}%" cx="${xAt(i)}" cy="${yAt(p.value)}" r="15"/>
     <circle class="ms-dot" cx="${xAt(i)}" cy="${yAt(p.value)}" r="4" pointer-events="none"/>`).join('')
 
   return `<svg viewBox="0 0 ${w} ${SVG_H}" role="group">
-    <defs><linearGradient id="ms-area" x1="0" y1="0" x2="0" y2="1">
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#00ff66" stop-opacity=".28"/><stop offset="1" stop-color="#00ff66" stop-opacity="0"/>
     </linearGradient></defs>
     ${grid}${area}
@@ -281,18 +293,21 @@ function barSvg(points, w, animate) {
   return `<svg viewBox="0 0 ${w} ${SVG_H}" role="group">${grid}${bars}${xLabels(points, xAt, plotW)}</svg>`
 }
 
+let chartSeq = 0
+
 function mountChart(el, points, kind) {
   el.innerHTML = '<div class="ms-tip" hidden></div><div class="ms-svg"></div>'
   const host = el.querySelector('.ms-svg')
   const tip = el.querySelector('.ms-tip')
   let first = !reducedMotion()
   let lastW = 0
+  const gid = `ms-area-${++chartSeq}`
 
   const draw = () => {
     const w = Math.max(260, Math.round(el.clientWidth))
     if (w === lastW) return
     lastW = w
-    host.innerHTML = kind === 'line' ? lineSvg(points, w, first) : barSvg(points, w, first)
+    host.innerHTML = kind === 'line' ? lineSvg(points, w, first, gid) : barSvg(points, w, first)
     first = false
   }
 
@@ -306,7 +321,7 @@ function mountChart(el, points, kind) {
     const half = tip.offsetWidth / 2
     const x = Math.min(Math.max(r.left - box.left + r.width / 2, half + 4), box.width - half - 4)
     tip.style.left = `${x}px`
-    tip.style.top = `${r.top - box.top + (kind === 'bar' ? 24 : r.height / 2)}px`
+    tip.style.top = `${r.top - box.top + r.height / 2}px`
   }
   const hide = () => { tip.hidden = true }
 
@@ -361,7 +376,7 @@ function overviewHtml(m) {
   const total = parts.some(v => v !== null) ? parts.reduce((s, v) => s + (v || 0), 0) : null
 
   return [
-    card('დასწრებული შეხვედრები', a ? a.attended : null, { note: a ? '' : 'ანგარიში წევრს არ არის მიბმული' }),
+    card('დასწრებული შეხვედრები', a ? a.attended : null, { note: a ? '' : (m.att?.state === 'unlinked' ? 'ანგარიში წევრს არ არის მიბმული' : 'მონაცემი ჯერ მიუწვდომელია') }),
     card('ვიქტორინაში მონაწილეობა', q ? q.count : null),
     card('ვიქტორინის საშუალო შედეგი', q ? q.avg : null, { suffix: '%', note: q && q.avg === null ? 'დასრულებული შედეგი ჯერ არ არის' : '' }),
     card('გამოქვეყნებული პროექტები', p, { note: 'ცალკე „დასრულებულის“ სტატუსი არ ინახება' }),
@@ -373,7 +388,7 @@ function attendancePanel(m) {
   const head = '<h3 class="ms-panel-title"><i data-lucide="calendar-check"></i>დასწრების ანალიტიკა</h3>'
 
   if (m.att?.state === 'setup') {
-    return `${head}${emptyBox('database', 'დასწრების კავშირი ჯერ არ არის გააქტიურებული', 'ბაზას ჯერ არ აქვს <code>club_members.user_id</code>. გაუშვი მოწოდებული SQL.')}`
+    return `${head}${emptyBox('database', 'დასწრების კავშირი ჯერ არ არის გააქტიურებული', 'ბაზას ჯერ არ აქვს <code>club_member_links</code> ცხრილი. გაუშვი მოწოდებული SQL.')}`
   }
   if (m.att?.state === 'unlinked') {
     return `${head}${emptyBox('link-2-off', 'შენი ანგარიში წევრს არ არის მიბმული', 'დასწრების სტატისტიკის საჩვენებლად ადმინმა უნდა დაგაკავშიროს კლუბის წევრის ჩანაწერს.')}`
@@ -457,9 +472,11 @@ function render(root, m) {
 
     <div class="ms-cards">${overviewHtml(m)}</div>
 
-    ${anyActivity ? '' : emptyBox('radar', 'აქტივობა ჯერ არ გაქვს', 'დაესწარი შეხვედრას, ითამაშე ვიქტორინა ან გამოაქვეყნე პროექტი და შენი სტატისტიკა აქ გამოჩნდება.')}
+    ${m.failed ? '<div class="ms-error" role="alert" style="margin-bottom:14px">ზოგი მონაცემი ვერ ჩაიტვირთა, ამიტომ სტატისტიკა შეიძლება არასრული იყოს. სცადე „განახლება“.</div>' : ''}
 
-    <div class="ms-grid" style="${anyActivity ? '' : 'margin-top:14px'}">
+    ${anyActivity || m.failed ? '' : emptyBox('radar', 'აქტივობა ჯერ არ გაქვს', 'დაესწარი შეხვედრას, ითამაშე ვიქტორინა ან გამოაქვეყნე პროექტი და შენი სტატისტიკა აქ გამოჩნდება.')}
+
+    <div class="ms-grid" style="${anyActivity || m.failed ? '' : 'margin-top:14px'}">
       <section class="ms-panel">${attendancePanel(m)}</section>
       <section class="ms-panel">${quizPanel(m)}</section>
 
@@ -539,10 +556,13 @@ export async function initStats({ db, user, root }) {
 
       if ([att, quiz, proj].every(r => r.status === 'rejected')) throw new Error('all sources failed')
 
+      const failed = [att, quiz, proj].filter(r => r.status === 'rejected').length
+
       render(root, buildModel(
         att.status === 'fulfilled' ? att.value : null,
         quiz.status === 'fulfilled' ? quiz.value : null,
-        proj.status === 'fulfilled' ? proj.value : null
+        proj.status === 'fulfilled' ? proj.value : null,
+        failed
       ))
       root.querySelector('#ms-refresh')?.addEventListener('click', run)
     } catch (error) {
