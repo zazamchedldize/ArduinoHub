@@ -4272,6 +4272,110 @@ async function loadPublicMeeting() {
   )
 }
 
+
+let homeMeetingTimer = null
+
+function homeMeetingTarget(meeting) {
+  if (!meeting || !meeting.meeting_date) return null
+  const time = String(meeting.meeting_time || '00:00').slice(0, 5)
+  const d = new Date(`${meeting.meeting_date}T${time}:00`)
+  return Number.isNaN(d.getTime()) ? null : d
+}
+
+function renderHomeMeeting(meeting) {
+  const target = $('#home-meeting-content')
+  if (!target) return
+
+  clearInterval(homeMeetingTimer)
+  homeMeetingTimer = null
+
+  const when = homeMeetingTarget(meeting)
+
+  if (!meeting || !when) {
+    target.innerHTML = `
+      <div class="club-meet-empty">
+        <strong>თარიღი ჯერ არ არის გამოქვეყნებული</strong>
+        როგორც კი ადმინისტრატორი შეხვედრის დროს გამოაქვეყნებს, ინფორმაცია აქ გამოჩნდება.
+      </div>
+    `
+    return
+  }
+
+  target.innerHTML = `
+    <p class="club-meet-date">${esc(meetingDateText(meeting.meeting_date))}</p>
+
+    <div class="club-meet-details">
+      <div>
+        <span>დღე</span>
+        <strong>${esc(meetingDay(meeting.meeting_date))}</strong>
+      </div>
+      <div>
+        <span>დრო</span>
+        <strong>${esc(meetingTimeText(meeting.meeting_time))}</strong>
+      </div>
+    </div>
+
+    <div id="home-meeting-countdown"></div>
+  `
+
+  const box = $('#home-meeting-countdown')
+
+  const tick = () => {
+    const diff = when.getTime() - Date.now()
+
+    if (diff <= 0) {
+      box.innerHTML = `
+        <p class="club-meet-note">
+          ეს შეხვედრა უკვე გაიმართა. შემდეგი შეხვედრის თარიღი მალე გამოქვეყნდება.
+        </p>
+      `
+      clearInterval(homeMeetingTimer)
+      homeMeetingTimer = null
+      return
+    }
+
+    const s = Math.floor(diff / 1000)
+    const days = Math.floor(s / 86400)
+    const hours = Math.floor((s % 86400) / 3600)
+    const mins = Math.floor((s % 3600) / 60)
+    const secs = s % 60
+    const pad = n => String(n).padStart(2, '0')
+
+    box.innerHTML = `
+      <p class="club-meet-note">შეხვედრამდე დარჩა:</p>
+      <div class="club-meet-countdown">
+        <div><b>${days}</b><small>დღე</small></div>
+        <div><b>${pad(hours)}</b><small>საათი</small></div>
+        <div><b>${pad(mins)}</b><small>წუთი</small></div>
+        <div><b>${pad(secs)}</b><small>წამი</small></div>
+      </div>
+    `
+  }
+
+  tick()
+  homeMeetingTimer = setInterval(tick, 1000)
+}
+
+async function loadHomeMeeting() {
+  const target = $('#home-meeting-content')
+  if (!target) return
+
+  const { data, error } = await getMeeting()
+
+  if (error) {
+    console.error(error)
+    target.innerHTML = `
+      <div class="club-meet-empty">
+        <strong>ინფორმაციის ჩატვირთვა ვერ მოხერხდა</strong>
+        სცადეთ რამდენიმე წამში ხელახლა.
+      </div>
+    `
+    return
+  }
+
+  renderHomeMeeting(data)
+}
+
 function openMeetingModal() {
   const modal =
     $('#meeting-modal')
@@ -5962,6 +6066,7 @@ if (
   page === 'home'
 ) {
   initMeetingPublic()
+  loadHomeMeeting()
   initAIChat()
 }
 
