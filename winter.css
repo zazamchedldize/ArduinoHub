@@ -361,6 +361,22 @@ body.winter-mode .arduinohub-film-frame{
 }
 body.winter-mode .arduinohub-film-frame video{ background:#050d08; }
 
+
+/* ---------- 13b. კლუბის შეხვედრის სექცია (club-meet-section) ---------- */
+body.winter-mode .club-meet-card{
+  border-color:rgba(242,193,78,.55);
+  background:linear-gradient(135deg,rgba(242,193,78,.14),rgba(214,40,57,.10) 55%,rgba(31,138,79,.14)),#08180f;
+  box-shadow:0 25px 80px rgba(0,0,0,.5),0 0 45px rgba(214,40,57,.22),0 0 70px rgba(242,193,78,.12);
+}
+body.winter-mode .club-meet-date{ color:var(--w-snow); text-shadow:0 0 14px rgba(242,193,78,.35); }
+body.winter-mode .club-meet-details>div,
+body.winter-mode .club-meet-countdown div{ background:rgba(0,0,0,.28); border-color:rgba(242,193,78,.28); }
+body.winter-mode .club-meet-details span,
+body.winter-mode .club-meet-countdown small{ color:var(--w-gold); opacity:.9; }
+body.winter-mode .club-meet-details strong,
+body.winter-mode .club-meet-countdown b{ color:var(--w-snow); }
+body.winter-mode .club-meet-note{ color:#d9d3c2; }
+
 @media (prefers-reduced-motion:reduce){
   body.winter-mode .arduinohub-film-section::before{ animation:none; }
 }
