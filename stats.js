@@ -12,6 +12,11 @@
 const MONTHS = ['იან', 'თებ', 'მარ', 'აპრ', 'მაი', 'ივნ', 'ივლ', 'აგვ', 'სექ', 'ოქტ', 'ნოე', 'დეკ']
 const TIMELINE_STEP = 10
 
+// ვიქტორინისა და პროექტების სტატისტიკა ითვლება ამ მომენტიდან (თბილისის დრო, UTC+4).
+// დასწრება (კლუბის შეხვედრები) ამ თარიღზე არ არის დამოკიდებული.
+// ძველი მონაცემები ბაზაში რჩება; თარიღის გადაწევით/ამოღებით ისევ დაბრუნდება.
+const STATS_START = '2026-11-21T00:00:00+04:00'
+
 const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[ch])
@@ -81,7 +86,8 @@ async function loadAttendance(db, uid) {
 
 async function loadQuiz(db, uid) {
   const partRes = await db.from('quiz_participants')
-    .select('id,room_id,score,joined_at').eq('user_id', uid).order('joined_at', { ascending: true })
+    .select('id,room_id,score,joined_at').eq('user_id', uid).gte('joined_at', STATS_START)
+    .order('joined_at', { ascending: true })
   if (partRes.error) throw partRes.error
 
   const parts = partRes.data || []
@@ -137,7 +143,8 @@ async function loadQuiz(db, uid) {
 
 async function loadProjects(db, uid) {
   const { data, error } = await db.from('projects')
-    .select('id,title,created_at,published').eq('author_id', uid).eq('published', true).order('created_at', { ascending: true })
+    .select('id,title,created_at,published').eq('author_id', uid).eq('published', true)
+    .gte('created_at', STATS_START).order('created_at', { ascending: true })
   if (error) throw error
   return { state: 'ok', rows: data || [] }
 }
