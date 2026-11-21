@@ -666,7 +666,7 @@
       font-family:"FiraGO","Noto Sans Georgian","Inter",system-ui,sans-serif;
       visibility:visible; -webkit-tap-highlight-color:transparent;
     }
-    body.winter-mode #arduino-splash.ld-boot{ --ld-rgb:242,193,78; --ld-b:#ff5d6c; }
+    #arduino-splash.ld-boot.ld-winter{ --ld-rgb:242,193,78; --ld-b:#ff5d6c; --ld-text:#fff8e6; }
     #arduino-splash.ld-boot.hidden{ pointer-events:none; visibility:hidden; transition:visibility 0s linear 1.25s; }
     #arduino-splash.ld-boot *{ box-sizing:border-box; }
 
@@ -748,6 +748,28 @@
       color:rgba(234,255,240,.7);font:600 12px/1 "FiraGO","Inter",sans-serif;letter-spacing:.5px;backdrop-filter:blur(8px);
       opacity:0;animation:ldFade .6s ease 1.8s forwards;transition:background .2s,color .2s,border-color .2s}
     .ld-skip:hover,.ld-skip:focus-visible{color:#fff;border-color:var(--ld-a);background:rgba(var(--ld-rgb),.15);outline:0}
+
+    /* ---------- WINTER VARIANT (active only while the site is in winter mode) ---------- */
+    .ld-core .ld-tree{display:none}
+    .ld-winter .ld-core .ld-chip{display:none}
+    .ld-winter .ld-core .ld-tree{display:block}
+    .ld-winter .ld-half.top{background:radial-gradient(ellipse 70% 100% at 50% 100%,rgba(214,40,57,.17),transparent 72%),radial-gradient(ellipse 45% 100% at 0% 100%,rgba(31,138,79,.2),transparent 70%),radial-gradient(ellipse 45% 100% at 100% 100%,rgba(31,138,79,.2),transparent 70%),#050f09}
+    .ld-winter .ld-half.bottom{background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(214,40,57,.17),transparent 72%),radial-gradient(ellipse 45% 100% at 0% 0%,rgba(31,138,79,.2),transparent 70%),radial-gradient(ellipse 45% 100% at 100% 0%,rgba(31,138,79,.2),transparent 70%),#050f09}
+    .ld-winter .ld-word span.hub{color:var(--ld-a);text-shadow:0 0 24px rgba(242,193,78,.85)}
+    .ld-winter .ld-fill{background:linear-gradient(90deg,#f2c14e,#ff5d6c)}
+    .ld-winter .ld-prog{filter:drop-shadow(0 0 6px rgba(242,193,78,.9))}
+    .ld-winter .ld-grain{background:radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(2,10,5,.7) 100%)}
+
+    .lw-tier{fill:#0b3a22;stroke:#2fae6a;stroke-width:1.6;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(47,174,106,.45))}
+    .lw-trunk{fill:#6b3f1d;stroke:#b9763a;stroke-width:1}
+    .lw-snow{fill:rgba(255,255,255,.85);filter:drop-shadow(0 0 6px rgba(255,255,255,.6))}
+    .lw-garland{fill:none;stroke:rgba(242,193,78,.55);stroke-width:1.4;stroke-linecap:round;stroke-dasharray:3 4}
+    .lw-bulb{fill:var(--c,#f2c14e);opacity:.18;transition:opacity .45s ease,filter .45s ease}
+    .lw-bulb.on{opacity:1;filter:drop-shadow(0 0 5px var(--c,#f2c14e));animation:lwTwinkle 1.6s ease-in-out infinite;animation-delay:calc(var(--k)*-.17s)}
+    @keyframes lwTwinkle{0%,100%{opacity:1}50%{opacity:.45}}
+    .lw-star{fill:#ffe08a;stroke:#fff4c2;stroke-width:1;stroke-linejoin:round;transform-origin:120px 46px;opacity:.35;transition:opacity .5s ease}
+    .lw-full .lw-star{opacity:1;animation:lwStar 1.4s ease-in-out infinite;filter:drop-shadow(0 0 10px #ffd35c)}
+    @keyframes lwStar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.25) rotate(12deg)}}
     body.splash-active{overflow:hidden}
 
     @media (max-height:520px) and (orientation:landscape){
@@ -1561,7 +1583,7 @@
           <circle class="ld-prog" id="ld-ring" cx="120" cy="120" r="108"/>
           <circle class="ld-spin1" cx="120" cy="120" r="96"/>
           <circle class="ld-spin2" cx="120" cy="120" r="84"/>
-          <line class="ld-pin" x1="96" y1="72" x2="96" y2="84"/><line class="ld-pin" x1="96" y1="156" x2="96" y2="168"/><line class="ld-pin" x1="72" y1="96" x2="84" y2="96"/><line class="ld-pin" x1="156" y1="96" x2="168" y2="96"/><line class="ld-pin" x1="108" y1="72" x2="108" y2="84"/><line class="ld-pin" x1="108" y1="156" x2="108" y2="168"/><line class="ld-pin" x1="72" y1="108" x2="84" y2="108"/><line class="ld-pin" x1="156" y1="108" x2="168" y2="108"/><line class="ld-pin" x1="120" y1="72" x2="120" y2="84"/><line class="ld-pin" x1="120" y1="156" x2="120" y2="168"/><line class="ld-pin" x1="72" y1="120" x2="84" y2="120"/><line class="ld-pin" x1="156" y1="120" x2="168" y2="120"/><line class="ld-pin" x1="132" y1="72" x2="132" y2="84"/><line class="ld-pin" x1="132" y1="156" x2="132" y2="168"/><line class="ld-pin" x1="72" y1="132" x2="84" y2="132"/><line class="ld-pin" x1="156" y1="132" x2="168" y2="132"/><line class="ld-pin" x1="144" y1="72" x2="144" y2="84"/><line class="ld-pin" x1="144" y1="156" x2="144" y2="168"/><line class="ld-pin" x1="72" y1="144" x2="84" y2="144"/><line class="ld-pin" x1="156" y1="144" x2="168" y2="144"/>
+          <g class="ld-chip"><line class="ld-pin" x1="96" y1="72" x2="96" y2="84"/><line class="ld-pin" x1="96" y1="156" x2="96" y2="168"/><line class="ld-pin" x1="72" y1="96" x2="84" y2="96"/><line class="ld-pin" x1="156" y1="96" x2="168" y2="96"/><line class="ld-pin" x1="108" y1="72" x2="108" y2="84"/><line class="ld-pin" x1="108" y1="156" x2="108" y2="168"/><line class="ld-pin" x1="72" y1="108" x2="84" y2="108"/><line class="ld-pin" x1="156" y1="108" x2="168" y2="108"/><line class="ld-pin" x1="120" y1="72" x2="120" y2="84"/><line class="ld-pin" x1="120" y1="156" x2="120" y2="168"/><line class="ld-pin" x1="72" y1="120" x2="84" y2="120"/><line class="ld-pin" x1="156" y1="120" x2="168" y2="120"/><line class="ld-pin" x1="132" y1="72" x2="132" y2="84"/><line class="ld-pin" x1="132" y1="156" x2="132" y2="168"/><line class="ld-pin" x1="72" y1="132" x2="84" y2="132"/><line class="ld-pin" x1="156" y1="132" x2="168" y2="132"/><line class="ld-pin" x1="144" y1="72" x2="144" y2="84"/><line class="ld-pin" x1="144" y1="156" x2="144" y2="168"/><line class="ld-pin" x1="72" y1="144" x2="84" y2="144"/><line class="ld-pin" x1="156" y1="144" x2="168" y2="144"/>
           <path class="ld-trace" d="M96 30 L96 72"/><path class="ld-pulse" style="--i:0" d="M96 30 L96 72"/><path class="ld-trace" d="M96 210 L96 168"/><path class="ld-pulse" style="--i:1" d="M96 210 L96 168"/><path class="ld-trace" d="M30 96 L72 96"/><path class="ld-pulse" style="--i:2" d="M30 96 L72 96"/><path class="ld-trace" d="M210 96 L168 96"/><path class="ld-pulse" style="--i:3" d="M210 96 L168 96"/><path class="ld-trace" d="M108 30 L108 72"/><path class="ld-pulse" style="--i:4" d="M108 30 L108 72"/><path class="ld-trace" d="M108 210 L108 168"/><path class="ld-pulse" style="--i:5" d="M108 210 L108 168"/><path class="ld-trace" d="M30 108 L72 108"/><path class="ld-pulse" style="--i:6" d="M30 108 L72 108"/><path class="ld-trace" d="M210 108 L168 108"/><path class="ld-pulse" style="--i:7" d="M210 108 L168 108"/><path class="ld-trace" d="M120 30 L120 72"/><path class="ld-pulse" style="--i:8" d="M120 30 L120 72"/><path class="ld-trace" d="M120 210 L120 168"/><path class="ld-pulse" style="--i:9" d="M120 210 L120 168"/><path class="ld-trace" d="M30 120 L72 120"/><path class="ld-pulse" style="--i:10" d="M30 120 L72 120"/><path class="ld-trace" d="M210 120 L168 120"/><path class="ld-pulse" style="--i:11" d="M210 120 L168 120"/><path class="ld-trace" d="M132 30 L132 72"/><path class="ld-pulse" style="--i:12" d="M132 30 L132 72"/><path class="ld-trace" d="M132 210 L132 168"/><path class="ld-pulse" style="--i:13" d="M132 210 L132 168"/><path class="ld-trace" d="M30 132 L72 132"/><path class="ld-pulse" style="--i:14" d="M30 132 L72 132"/><path class="ld-trace" d="M210 132 L168 132"/><path class="ld-pulse" style="--i:15" d="M210 132 L168 132"/><path class="ld-trace" d="M144 30 L144 72"/><path class="ld-pulse" style="--i:16" d="M144 30 L144 72"/><path class="ld-trace" d="M144 210 L144 168"/><path class="ld-pulse" style="--i:17" d="M144 210 L144 168"/><path class="ld-trace" d="M30 144 L72 144"/><path class="ld-pulse" style="--i:18" d="M30 144 L72 144"/><path class="ld-trace" d="M210 144 L168 144"/><path class="ld-pulse" style="--i:19" d="M210 144 L168 144"/>
           <circle class="ld-node" style="--i:0" cx="96" cy="30" r="2.2"/><circle class="ld-node" style="--i:1" cx="96" cy="210" r="2.2"/><circle class="ld-node" style="--i:2" cx="30" cy="96" r="2.2"/><circle class="ld-node" style="--i:3" cx="210" cy="96" r="2.2"/><circle class="ld-node" style="--i:4" cx="108" cy="30" r="2.2"/><circle class="ld-node" style="--i:5" cx="108" cy="210" r="2.2"/><circle class="ld-node" style="--i:6" cx="30" cy="108" r="2.2"/><circle class="ld-node" style="--i:7" cx="210" cy="108" r="2.2"/><circle class="ld-node" style="--i:8" cx="120" cy="30" r="2.2"/><circle class="ld-node" style="--i:9" cx="120" cy="210" r="2.2"/><circle class="ld-node" style="--i:10" cx="30" cy="120" r="2.2"/><circle class="ld-node" style="--i:11" cx="210" cy="120" r="2.2"/><circle class="ld-node" style="--i:12" cx="132" cy="30" r="2.2"/><circle class="ld-node" style="--i:13" cx="132" cy="210" r="2.2"/><circle class="ld-node" style="--i:14" cx="30" cy="132" r="2.2"/><circle class="ld-node" style="--i:15" cx="210" cy="132" r="2.2"/><circle class="ld-node" style="--i:16" cx="144" cy="30" r="2.2"/><circle class="ld-node" style="--i:17" cx="144" cy="210" r="2.2"/><circle class="ld-node" style="--i:18" cx="30" cy="144" r="2.2"/><circle class="ld-node" style="--i:19" cx="210" cy="144" r="2.2"/>
           <rect class="ld-body" x="84" y="84" width="72" height="72" rx="12"/>
@@ -1569,7 +1591,7 @@
           <path class="ld-grid" d="M110 100v40M120 100v40M130 100v40M100 110h40M100 120h40M100 130h40"/>
           <rect class="ld-scan" x="102" y="101" width="36" height="3" rx="1.5"/>
           <circle class="ld-dot" cx="120" cy="120" r="4.5"/>
-        </svg>
+        </g><g class="ld-tree" id="ld-tree"><path class="lw-garland" d="M98 96 Q120 106 142 96M90 124 Q120 138 150 124M80 156 Q120 172 160 156"/><path class="lw-tier" d="M120 52 L92 98 L148 98 Z"/><path class="lw-tier" d="M120 74 L84 128 L156 128 Z"/><path class="lw-tier" d="M120 100 L74 160 L166 160 Z"/><rect class="lw-trunk" x="112" y="160" width="16" height="16" rx="2"/><ellipse class="lw-snow" cx="120" cy="178" rx="42" ry="5"/><circle class="lw-bulb" style="--c:#ff5d6c;--k:0" cx="112" cy="84" r="3.2"/><circle class="lw-bulb" style="--c:#fff4c2;--k:1" cx="128" cy="78" r="3.2"/><circle class="lw-bulb" style="--c:#f2c14e;--k:2" cx="131" cy="93" r="3.2"/><circle class="lw-bulb" style="--c:#6ec8ff;--k:3" cx="100" cy="113" r="3.2"/><circle class="lw-bulb" style="--c:#ff5d6c;--k:4" cx="119" cy="105" r="3.2"/><circle class="lw-bulb" style="--c:#fff4c2;--k:5" cx="137" cy="117" r="3.2"/><circle class="lw-bulb" style="--c:#f2c14e;--k:6" cx="108" cy="124" r="3.2"/><circle class="lw-bulb" style="--c:#6ec8ff;--k:7" cx="146" cy="124" r="3.2"/><circle class="lw-bulb" style="--c:#ff5d6c;--k:8" cx="94" cy="124" r="3.2"/><circle class="lw-bulb" style="--c:#f2c14e;--k:9" cx="96" cy="146" r="3.2"/><circle class="lw-bulb" style="--c:#6ec8ff;--k:10" cx="120" cy="130" r="3.2"/><circle class="lw-bulb" style="--c:#ff5d6c;--k:11" cx="144" cy="146" r="3.2"/><circle class="lw-bulb" style="--c:#fff4c2;--k:12" cx="108" cy="152" r="3.2"/><circle class="lw-bulb" style="--c:#f2c14e;--k:13" cx="132" cy="141" r="3.2"/><circle class="lw-bulb" style="--c:#6ec8ff;--k:14" cx="86" cy="156" r="3.2"/><circle class="lw-bulb" style="--c:#fff4c2;--k:15" cx="154" cy="156" r="3.2"/><polygon class="lw-star" points="120.0,37.0 122.4,42.8 128.6,43.2 123.8,47.2 125.3,53.3 120.0,50.0 114.7,53.3 116.2,47.2 111.4,43.2 117.6,42.8"/></g></svg>
       </div>
 
       <div class="ld-word" id="ld-word" aria-hidden="true"></div>
@@ -1636,13 +1658,21 @@
     if (!loaded) on(window, "load", function () { loaded = true })
 
     /* status text */
-    var steps = [
+    var stepsNormal = [
       [0,    "სისტემის ინიციალიზაცია"],
       [0.25, "სქემების დაკავშირება"],
       [0.5,  "პროექტების ჩატვირთვა"],
       [0.78, "თითქმის მზადაა"],
       [1,    "მზადაა"]
     ]
+    var stepsWinter = [
+      [0,    "ზამთრის ჯადოქრობის მომზადება"],
+      [0.25, "ნაძვის ხის მორთვა"],
+      [0.5,  "ნათურების ანთება"],
+      [0.78, "საჩუქრების შეფუთვა"],
+      [1,    "გილოცავთ ახალ წელს! ✦"]
+    ]
+    var steps = stepsNormal
     var curStep = -1
     function setStatus(p) {
       var k = 0
@@ -1655,7 +1685,45 @@
       statusEl.classList.add("swap")
     }
 
-    /* neural network canvas */
+    /* winter mode follows the site's own "winter-mode" body class (toggled by /winter and /winterstop) */
+    var winter = false
+    // same key winter.js uses to restore the last known mode instantly
+    var cached = false
+    try { cached = localStorage.getItem("arduinohub_winter_mode") === "1" } catch (e) {}
+    var domReady = false
+    document.addEventListener("DOMContentLoaded", function () { domReady = true; applyMode() }, { once: true })
+    var bulbs = splash.querySelectorAll(".lw-bulb")
+    var tree = document.getElementById("ld-tree")
+    var lit = 0
+
+    function winterClassOn() {
+      return body.classList.contains("winter-mode") || document.documentElement.classList.contains("winter-mode")
+    }
+
+    function applyMode() {
+      // before winter.js has run use its cached mode; afterwards the real body class
+      // (set by /winter, removed by /winterstop, also synced live via Supabase) decides
+      var next = domReady ? winterClassOn() : (winterClassOn() || cached)
+      if (next === winter && splash.classList.contains("ld-winter") === next) return
+      winter = next
+      splash.classList.toggle("ld-winter", winter)
+      steps = winter ? stepsWinter : stepsNormal
+      curStep = -1
+      readColor()
+    }
+
+    function updateTree(p) {
+      if (!bulbs.length) return
+      var want = Math.floor(p * (bulbs.length + 0.001))
+      if (want !== lit) {
+        for (var q = 0; q < bulbs.length; q++) bulbs[q].classList.toggle("on", q < want)
+        lit = want
+      }
+      if (tree) tree.classList.toggle("lw-full", p >= 1)
+    }
+
+    /* neural network / snow canvas */
+    var flakes = []
     var ctx = null, pts = [], W = 0, H = 0, dpr = 1, rgb = "34,211,149"
     function readColor() {
       try {
@@ -1669,6 +1737,13 @@
       canvas.width = W * dpr; canvas.height = H * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       var n = Math.max(24, Math.min(70, Math.round(W * H / 18000)))
+      var fn = Math.max(40, Math.min(110, Math.round(W * H / 9000)))
+      flakes = []
+      for (var f = 0; f < fn; f++) flakes.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: Math.random() * 2.2 + .8, vy: Math.random() * .9 + .35,
+        ph: Math.random() * 6.28, sw: Math.random() * .6 + .2
+      })
       pts = []
       for (var q = 0; q < n; q++) pts.push({
         x: Math.random() * W, y: Math.random() * H,
@@ -1686,8 +1761,23 @@
       canvas.style.display = "none"
     }
 
+    function drawSnow(p, t) {
+      ctx.clearRect(0, 0, W, H)
+      for (var i = 0; i < flakes.length; i++) {
+        var F = flakes[i]
+        F.y += F.vy * (1 + p * .4)
+        F.x += Math.sin(t / 900 + F.ph) * F.sw
+        if (F.y > H + 6) { F.y = -6; F.x = Math.random() * W }
+        if (F.x < -6) F.x = W + 6; else if (F.x > W + 6) F.x = -6
+        var warm = i % 7 === 0
+        ctx.fillStyle = warm ? "rgba(242,193,78," + (.5 + .3 * Math.sin(t / 400 + i)) + ")" : "rgba(255,255,255," + (.35 + F.r * .13) + ")"
+        ctx.beginPath(); ctx.arc(F.x, F.y, F.r, 0, 6.2832); ctx.fill()
+      }
+    }
+
     function drawNet(p, t) {
       if (!ctx) return
+      if (winter) { drawSnow(p, t); return }
       ctx.clearRect(0, 0, W, H)
       var cx = W / 2, cy = H / 2
       var link = 130 + p * 40
@@ -1730,7 +1820,9 @@
       pctEl.textContent = Math.round(p * 100) + "%"
       setStatus(p)
 
-      if ((++frames % 45) === 0) readColor()
+      if ((++frames % 6) === 0) applyMode()
+      if ((frames % 45) === 0) readColor()
+      updateTree(p)
       drawNet(p, now)
 
       if (p >= 1 && !doneAt) { doneAt = now; later(finish, reduce ? 150 : 450) }
@@ -1747,6 +1839,7 @@
 
       ring.style.strokeDashoffset = 0
       fill.style.transform = "scaleX(1)"
+      updateTree(1)
       pctEl.textContent = "100%"
 
       splash.setAttribute("aria-busy", "false")
@@ -1765,7 +1858,15 @@
     var hard = setTimeout(finish, HARD_CAP)
     cleanup.push(function () { clearTimeout(hard) })
 
-    try { readColor(); raf = requestAnimationFrame(frame) } catch (e) { finish() }
+    // react immediately when /winter or /winterstop flips the body class
+    try {
+      var mo = new MutationObserver(function () { applyMode() })
+      mo.observe(body, { attributes: true, attributeFilter: ["class"] })
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+      cleanup.push(function () { mo.disconnect() })
+    } catch (e) {}
+
+    try { applyMode(); readColor(); raf = requestAnimationFrame(frame) } catch (e) { finish() }
   })()
   </script>
   <!-- ===== / NEURAL BOOT LOADER ===== -->
