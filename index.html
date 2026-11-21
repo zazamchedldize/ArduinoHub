@@ -78,6 +78,34 @@
   >
 
   <link rel="stylesheet" href="style.css">
+  <style id="club-meet-styles">
+    .club-meet-section{position:relative;padding:72px 20px;text-align:center;overflow:hidden}
+    .club-meet-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+    .club-meet-eyebrow{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 10px}
+    .club-meet-title{font-size:clamp(28px,5vw,46px);line-height:1.2;margin:0 0 12px}
+    .club-meet-description{max-width:560px;margin:0 auto 32px;opacity:.85;line-height:1.6}
+    .club-meet-card{
+      padding:28px clamp(16px,4vw,36px);border-radius:24px;
+      border:1px solid rgba(148,163,184,.28);
+      background:rgba(255,255,255,.04);
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .club-meet-date{font-size:clamp(24px,4.5vw,38px);font-weight:800;margin:0 0 20px}
+    .club-meet-details{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:22px}
+    .club-meet-details>div{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(148,163,184,.18)}
+    .club-meet-details span{display:block;font-size:12px;opacity:.7;margin-bottom:4px;letter-spacing:1px;text-transform:uppercase}
+    .club-meet-details strong{font-size:clamp(18px,3vw,26px)}
+    .club-meet-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .club-meet-countdown div{padding:12px 6px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(148,163,184,.16)}
+    .club-meet-countdown b{display:block;font-size:clamp(22px,5vw,34px);font-variant-numeric:tabular-nums;line-height:1.1}
+    .club-meet-countdown small{font-size:11px;opacity:.7}
+    .club-meet-note{margin:0 0 18px;font-size:14px;opacity:.8}
+    .club-meet-empty,.club-meet-loading{padding:18px 8px;opacity:.85;line-height:1.6}
+    .club-meet-empty strong{display:block;font-size:20px;margin-bottom:6px}
+    .club-meet-caption{margin:26px 0 0;font-weight:600;letter-spacing:1px}
+    @media (max-width:480px){.club-meet-section{padding:52px 14px}.club-meet-details{gap:10px}}
+  </style>
+
 
   <script type="application/ld+json">
   {
@@ -2295,36 +2323,23 @@
  
     </section>
 
-<section class="arduinohub-film-section" id="arduinohub-film">
-  <div class="arduinohub-film-inner">
-    <p class="arduinohub-film-eyebrow">IDEA · TECHNOLOGY · FUTURE</p>
+<section class="club-meet-section arduinohub-film-section" id="arduinohub-film" aria-labelledby="club-meet-title">
+  <div class="club-meet-inner arduinohub-film-inner">
+    <p class="club-meet-eyebrow arduinohub-film-eyebrow">მოაზროვნე ქიმიკოსთა კლუბი</p>
 
-    <h2 class="arduinohub-film-title">
-      გაიცანი <span>ArduinoHub</span>
+    <h2 class="club-meet-title arduinohub-film-title" id="club-meet-title">
+      კლუბის <span>შეხვედრა</span>
     </h2>
 
-    <p class="arduinohub-film-description">
-      აღმოაჩინე ტექნოლოგიების, პროგრამირებისა და ქიმიის სამყარო
-      ჩვენს ერთიან საგანმანათლებლო პლატფორმაზე.
+    <p class="club-meet-description arduinohub-film-description">
+      შემოგვიერთდი შემდეგ შეხვედრაზე — ექსპერიმენტები, პროექტები და ახალი იდეები.
     </p>
 
-    <div class="arduinohub-film-frame">
-      <video
-        controls
-        playsinline
-        preload="metadata"
-        controlsList="nodownload"
-        aria-label="ArduinoHub-ის სარეკლამო ვიდეო"
-      >
-        <source
-          src="https://ywxunhvrwdtlqjfshiyj.supabase.co/storage/v1/object/public/videos/arduinohub-cinematic.mp4"
-          type="video/mp4"
-        >
-        შენი ბრაუზერი ვიდეოს დაკვრას ვერ ახერხებს.
-      </video>
+    <div class="club-meet-card" id="home-meeting-content" aria-live="polite">
+      <div class="club-meet-loading">მონაცემები იტვირთება...</div>
     </div>
 
-    <p class="arduinohub-film-caption">
+    <p class="club-meet-caption arduinohub-film-caption">
       შექმენი-ააწყვე-შთააგონე
     </p>
   </div>
