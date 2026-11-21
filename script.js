@@ -4301,59 +4301,86 @@ function renderHomeMeeting(meeting) {
     return
   }
 
-  target.innerHTML = `
-    <p class="club-meet-date">${esc(meetingDateText(meeting.meeting_date))}</p>
+  const monthName = new Intl.DateTimeFormat('ka-GE', { month: 'long' }).format(when)
 
-    <div class="club-meet-details">
-      <div>
-        <span>დღე</span>
-        <strong>${esc(meetingDay(meeting.meeting_date))}</strong>
+  target.innerHTML = `
+    <div class="cm-grid">
+      <div class="cm-date">
+        <span class="cm-month">${esc(monthName)}</span>
+        <span class="cm-day">${when.getDate()}</span>
+        <span class="cm-weekday">${esc(meetingDay(meeting.meeting_date))}</span>
+        <span class="cm-year">${when.getFullYear()}</span>
       </div>
-      <div>
-        <span>დრო</span>
-        <strong>${esc(meetingTimeText(meeting.meeting_time))}</strong>
+
+      <div class="cm-info">
+        <div class="cm-row">
+          <div class="cm-time">
+            <span class="cm-time-ico">${icon('clock-3')}</span>
+            <div>
+              <small>დაწყების დრო</small>
+              <strong>${esc(meetingTimeText(meeting.meeting_time))}</strong>
+            </div>
+          </div>
+          <span class="cm-badge" id="cm-badge">მალე იწყება</span>
+        </div>
+
+        <div id="cm-countdown"></div>
       </div>
     </div>
-
-    <div id="home-meeting-countdown"></div>
   `
 
-  const box = $('#home-meeting-countdown')
+  refreshIcons()
+
+  const box = $('#cm-countdown')
+  const badge = $('#cm-badge')
+  const pad = n => String(n).padStart(2, '0')
+
+  const showDone = () => {
+    badge.textContent = 'შეხვედრა გაიმართა'
+    badge.classList.add('done')
+    box.innerHTML = `
+      <p class="cm-done-note">
+        ეს შეხვედრა უკვე გაიმართა. შემდეგი შეხვედრის თარიღი მალე გამოქვეყნდება.
+      </p>
+    `
+  }
+
+  box.innerHTML = `
+    <p class="cm-count-label">შეხვედრამდე დარჩა</p>
+    <div class="cm-count">
+      <div class="cm-unit"><b data-u="d">0</b><small>დღე</small></div>
+      <div class="cm-unit"><b data-u="h">00</b><small>საათი</small></div>
+      <div class="cm-unit"><b data-u="m">00</b><small>წუთი</small></div>
+      <div class="cm-unit"><b data-u="s">00</b><small>წამი</small></div>
+    </div>
+  `
+
+  const set = (k, v) => {
+    const el = box.querySelector(`[data-u="${k}"]`)
+    if (el) el.textContent = v
+  }
 
   const tick = () => {
     const diff = when.getTime() - Date.now()
 
     if (diff <= 0) {
-      box.innerHTML = `
-        <p class="club-meet-note">
-          ეს შეხვედრა უკვე გაიმართა. შემდეგი შეხვედრის თარიღი მალე გამოქვეყნდება.
-        </p>
-      `
       clearInterval(homeMeetingTimer)
       homeMeetingTimer = null
+      showDone()
       return
     }
 
     const s = Math.floor(diff / 1000)
-    const days = Math.floor(s / 86400)
-    const hours = Math.floor((s % 86400) / 3600)
-    const mins = Math.floor((s % 3600) / 60)
-    const secs = s % 60
-    const pad = n => String(n).padStart(2, '0')
-
-    box.innerHTML = `
-      <p class="club-meet-note">შეხვედრამდე დარჩა:</p>
-      <div class="club-meet-countdown">
-        <div><b>${days}</b><small>დღე</small></div>
-        <div><b>${pad(hours)}</b><small>საათი</small></div>
-        <div><b>${pad(mins)}</b><small>წუთი</small></div>
-        <div><b>${pad(secs)}</b><small>წამი</small></div>
-      </div>
-    `
+    set('d', Math.floor(s / 86400))
+    set('h', pad(Math.floor((s % 86400) / 3600)))
+    set('m', pad(Math.floor((s % 3600) / 60)))
+    set('s', pad(s % 60))
   }
 
   tick()
-  homeMeetingTimer = setInterval(tick, 1000)
+  if (when.getTime() > Date.now()) {
+    homeMeetingTimer = setInterval(tick, 1000)
+  }
 }
 
 async function loadHomeMeeting() {
