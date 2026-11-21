@@ -299,7 +299,7 @@ body.winter-mode #fx-top{ background:rgba(6,20,13,.92); border-color:var(--w-gol
 body.winter-mode #fx-top:hover{ background:var(--w-gold); color:#1b0d08; }
 
 /* ჩატვირთვის ეკრანი (arduino-splash) */
-body.winter-mode #arduino-splash .ld-half{ background-color:#050f09; }
+/* loader-ის საახალწლო ვარიანტი იმართება index.html-ში (.ld-winter) */
 body.winter-mode .hs-progress i{ background:linear-gradient(90deg,#a91d2c,#f2c14e,#fff0b8); box-shadow:0 0 14px rgba(242,193,78,.6); }
 body.winter-mode .hs-terminal{ background:rgba(242,193,78,.05); text-shadow:none; }
 
