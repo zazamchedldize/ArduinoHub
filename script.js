@@ -4321,7 +4321,7 @@ function renderHomeMeeting(meeting) {
               <strong>${esc(meetingTimeText(meeting.meeting_time))}</strong>
             </div>
           </div>
-          <span class="cm-badge" id="cm-badge">მალე იწყება</span>
+
         </div>
 
         <div id="cm-countdown"></div>
