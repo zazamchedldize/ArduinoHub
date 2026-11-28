@@ -1763,6 +1763,77 @@ async function openAdManager() {
 
 
 
+// ---------- რეკლამის ვიდეოს დროს ფონური მუსიკის გათიშვა ----------
+// სანამ რეკლამა ხმას უშვებს, არცერთი ფონური მუსიკა არ უკრავს; რეკლამის
+// დახურვის ან ვიდეოს დასრულების შემდეგ გაჩერებული მუსიკა გრძელდება.
+let backgroundMusicBlocked = false
+const musicToResume = new Set()
+// აქ ინახება ყველა აუდიო, მათ შორის გვერდზე ჩაუსმელი (მაგ. winter.js-ის new Audio())
+const startedAudio = new Set()
+const originalMediaPlay = HTMLMediaElement.prototype.play
+
+function isBackgroundMedia(el) {
+  if (el.tagName === 'AUDIO') return true
+  return el.tagName === 'VIDEO' && el.loop && !el.muted
+}
+
+// winter.js script.js-ის შემდეგ იტვირთება, ამიტომ მისი play()-ც აქ გადის
+HTMLMediaElement.prototype.play = function () {
+  if (isBackgroundMedia(this)) {
+    startedAudio.add(this)
+
+    if (backgroundMusicBlocked) {
+      musicToResume.add(this)
+      this.pause()
+      return Promise.resolve()
+    }
+  }
+
+  return originalMediaPlay.apply(this, arguments)
+}
+
+// autoplay ატრიბუტით ან ბრაუზერის კონტროლებით ჩართული აუდიო
+document.addEventListener('play', event => {
+  const el = event.target
+  if (!backgroundMusicBlocked || !isBackgroundMedia(el)) return
+  musicToResume.add(el)
+  el.pause()
+}, true)
+
+function silenceBackgroundMusic() {
+  backgroundMusicBlocked = true
+
+  const all = new Set([...document.querySelectorAll('audio, video'), ...startedAudio])
+
+  all.forEach(el => {
+    if (!isBackgroundMedia(el) || el.paused) return
+    musicToResume.add(el)
+    el.pause()
+  })
+
+  // YouTube პლეერი: საიტის საკუთარი "გაჩერება" ღილაკი
+  const player = document.getElementById('music-youtube-player')
+  if (player?.getAttribute('src')) {
+    document.getElementById('music-stop')?.click()
+  }
+}
+
+function restoreBackgroundMusic() {
+  if (!backgroundMusicBlocked) return
+  backgroundMusicBlocked = false
+
+  const winterOn = document.documentElement.classList.contains('winter-mode')
+
+  musicToResume.forEach(el => {
+    // თუ რეკლამის დროს /winterstop შესრულდა, საახალწლო მუსიკა აღარ ირთვება
+    if (el.__winterOwn && !winterOn) return
+    el.play().catch(() => {})
+  })
+
+  musicToResume.clear()
+}
+
+
 // რეკლამის ჩვეულებრივი დიზაინი. მოქმედებს მხოლოდ მაშინ, როცა winter.js-ის
 // "winter-mode" კლასი არ დევს. Winter რეჟიმში ეს წესები ითიშება და რჩება
 // საახალწლო დიზაინი. ზომებსა და განლაგებას არ ცვლის.
@@ -1938,6 +2009,7 @@ async function showAdvertisement() {
     closed = true
     video.pause()
     overlay.remove()
+    restoreBackgroundMusic()
     document.body.style.overflow = ''
     document.removeEventListener('keydown', onKeyDown)
   }
@@ -1954,7 +2026,13 @@ async function showAdvertisement() {
 
   document.addEventListener('keydown', onKeyDown)
 
+  video.addEventListener('play', () => {
+    if (!closed) silenceBackgroundMusic()
+  })
+  video.addEventListener('ended', restoreBackgroundMusic)
+
   playButton.addEventListener('click', async () => {
+    silenceBackgroundMusic()
     video.muted = false
     video.volume = 1
     video.controls = true
@@ -1968,6 +2046,7 @@ async function showAdvertisement() {
       playButton.remove()
     } catch (error) {
       console.error('Advertisement playback error:', error)
+      restoreBackgroundMusic()
       status.textContent = 'ვიდეო ვერ ჩაირთო. სცადე ხელახლა.'
       playButton.disabled = false
       playButton.innerHTML = '<span>▶</span> ხელახლა ცდა'
@@ -12792,6 +12871,7 @@ function countdownIsOpen() {
     }
 
     function playNote(frequency) {
+      if (backgroundMusicBlocked) return
       if (!audioContext || !masterGain || audioContext.state !== "running") return
 
       const oscillator = audioContext.createOscillator()
