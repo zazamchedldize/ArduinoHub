@@ -1557,6 +1557,45 @@
   }
 }
 
+      /* ---------- DOOMSDAY (ჩვეულებრივი რეჟიმი; .ld-winter-ზე არ მოქმედებს) ---------- */
+    #arduino-splash.ld-boot:not(.ld-winter){ --ld-rgb:47,224,140; --ld-b:#b9ffd9; --ld-text:#e4ece8; }
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-half.top{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 500' preserveAspectRatio='none' fill='none' stroke='%232fe08c' stroke-linejoin='bevel'%3E%3Cpath stroke-opacity='.4' stroke-width='2' d='M0 70L90 105 135 180 230 205 270 300 350 345M1000 40L905 95 880 170 790 190 755 265'/%3E%3Cpath stroke-opacity='.22' d='M135 180L105 260 140 330M230 205L320 175 365 185M880 170L935 250 920 320'/%3E%3C/svg%3E") center/100% 100% no-repeat,radial-gradient(ellipse 70% 100% at 50% 100%,rgba(47,224,140,.2),transparent 72%),linear-gradient(180deg,#020403,#0b1411)}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-half.bottom{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 500' preserveAspectRatio='none' fill='none' stroke='%232fe08c' stroke-linejoin='bevel'%3E%3Cpath stroke-opacity='.4' stroke-width='2' d='M0 440L105 405 150 320 255 295 300 215M1000 465L890 400 865 330 760 300 710 210 640 175'/%3E%3Cpath stroke-opacity='.22' d='M150 320L90 270 100 200M865 330L940 280 1000 290M760 300L720 360 735 420'/%3E%3C/svg%3E") center/100% 100% no-repeat,radial-gradient(ellipse 70% 100% at 50% 0%,rgba(47,224,140,.2),transparent 72%),linear-gradient(0deg,#020403,#0b1411)}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-grain{background:radial-gradient(ellipse at 50% 50%,transparent 42%,rgba(0,0,0,.75) 100%)}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-spin1,#arduino-splash.ld-boot:not(.ld-winter) .ld-spin2{stroke:rgba(170,200,188,.5)}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-body{fill:#101a16;stroke:#9fc4b3}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-word span{color:#e4ece8;text-shadow:0 1px 0 #7d8f86,0 2px 0 #3b4b43,0 5px 12px rgba(0,0,0,.85),0 0 28px rgba(47,224,140,.4)}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-word span.hub{color:#5cf0a8;text-shadow:0 2px 0 #0b5a36,0 0 20px rgba(47,224,140,.9),0 0 48px rgba(47,224,140,.45)}
+    #arduino-splash.ld-boot:not(.ld-winter) .ld-fill{background:linear-gradient(90deg,#0f7a4a,#2fe08c,#d6ffe9)}
+
+    /* ---------- განლაგება (მხოლოდ პოზიციები; ფერები და სტილი უცვლელია) ---------- */
+
+    /* hero: სამი ღილაკი ერთ რიგში */
+    .hero .hero-buttons { flex-direction: row; flex-wrap: wrap; align-items: stretch; gap: 12px; }
+    .hero .hero-buttons-row,
+    .hero .hero-buttons-bottom { display: contents; }
+    .hero .hero-buttons > * > * { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin: 0; }
+
+    /* როგორ მუშაობს: 4 სვეტი → 2 → 1 */
+    #how-it-works .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+
+    /* აპის ორი ღილაკი ერთად */
+    .cta-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
+
+    /* ბმულით გადასვლისას header არ ფარავს სექციის დასაწყისს */
+    main section[id] { scroll-margin-top: 90px; }
+
+    @media (max-width: 1000px) {
+      #how-it-works .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      .hero .hero-buttons { flex-direction: column; width: 100%; }
+      .hero .hero-buttons > * > * { width: 100%; box-sizing: border-box; }
+      #how-it-works .steps { grid-template-columns: minmax(0, 1fr); }
+      .cta-actions { flex-direction: column; align-items: stretch; width: 100%; }
+      .cta-actions > * { justify-content: center; }
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
@@ -1660,9 +1699,9 @@
     /* status text */
     var stepsNormal = [
       [0,    "სისტემის ინიციალიზაცია"],
-      [0.25, "სქემების დაკავშირება"],
-      [0.5,  "პროექტების ჩატვირთვა"],
-      [0.78, "თითქმის მზადაა"],
+      [0.25, "ქარიშხალი იკრიბება"],
+      [0.5,  "ენერგია გროვდება"],
+      [0.78, "განკითხვის დღე ახლოვდება"],
       [1,    "მზადაა"]
     ]
     var stepsWinter = [
@@ -1775,31 +1814,56 @@
       }
     }
 
+    var bolt = null, nextBolt = 0
+
+    function makeBolt(t) {
+      var side = Math.random() < .5 ? .18 : .82   // გვერდებზე, რომ ლოგო არ დაფაროს
+      var x = W * (side + (Math.random() - .5) * .16), y = -10
+      var path = [[x, y]]
+      while (y < H * .72) {
+        x += (Math.random() - .5) * 70
+        y += 24 + Math.random() * 40
+        path.push([x, y])
+      }
+      return { path: path, born: t }
+    }
+
+    /* Doomsday ქარიშხალი: ამომავალი ნაპერწკლები და რბილი ელვა */
     function drawNet(p, t) {
       if (!ctx) return
       if (winter) { drawSnow(p, t); return }
       ctx.clearRect(0, 0, W, H)
-      var cx = W / 2, cy = H / 2
-      var link = 130 + p * 40
+
+      if (!nextBolt) nextBolt = t + 700
+      if (t > nextBolt) { bolt = makeBolt(t); nextBolt = t + 1600 + Math.random() * 900 }
+      if (bolt) {
+        var life = 1 - (t - bolt.born) / 700
+        if (life <= 0) bolt = null
+        else {
+          ctx.fillStyle = "rgba(" + rgb + "," + (.06 * life) + ")"
+          ctx.fillRect(0, 0, W, H)
+          ctx.strokeStyle = "rgba(214,255,233," + life + ")"
+          ctx.lineWidth = 2
+          ctx.shadowColor = "rgb(" + rgb + ")"
+          ctx.shadowBlur = 18
+          ctx.beginPath()
+          for (var k = 0; k < bolt.path.length; k++) {
+            var P = bolt.path[k]
+            if (k) ctx.lineTo(P[0], P[1]); else ctx.moveTo(P[0], P[1])
+          }
+          ctx.stroke()
+          ctx.shadowBlur = 0
+        }
+      }
+
       for (var a = 0; a < pts.length; a++) {
         var A = pts[a]
-        // gentle pull toward the core as loading advances
-        A.vx += (cx - A.x) * 0.0000025 * (0.4 + p * 3)
-        A.vy += (cy - A.y) * 0.0000025 * (0.4 + p * 3)
-        A.x += A.vx; A.y += A.vy
+        A.x += A.vx + Math.sin(t / 800 + a) * .3
+        A.y -= (Math.abs(A.vy) * 3 + .35) * (1 + p)
+        if (A.y < -10) { A.y = H + 10; A.x = Math.random() * W }
         if (A.x < -10) A.x = W + 10; else if (A.x > W + 10) A.x = -10
-        if (A.y < -10) A.y = H + 10; else if (A.y > H + 10) A.y = -10
-        for (var b = a + 1; b < pts.length; b++) {
-          var B = pts[b], dx = A.x - B.x, dy = A.y - B.y, d = dx * dx + dy * dy
-          if (d < link * link) {
-            var al = (1 - Math.sqrt(d) / link) * (.16 + p * .2)
-            ctx.strokeStyle = "rgba(" + rgb + "," + al + ")"
-            ctx.lineWidth = 1
-            ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke()
-          }
-        }
-        ctx.fillStyle = "rgba(" + rgb + "," + (.35 + .3 * Math.sin(t / 700 + a)) + ")"
-        ctx.beginPath(); ctx.arc(A.x, A.y, A.r, 0, 6.2832); ctx.fill()
+        ctx.fillStyle = "rgba(" + rgb + "," + (.45 + .35 * Math.sin(t / 300 + a)) + ")"
+        ctx.beginPath(); ctx.arc(A.x, A.y, A.r * 1.2, 0, 6.2832); ctx.fill()
       }
     }
 
@@ -2092,6 +2156,8 @@
         უკვე ხელმისაწვდომია! 📲
       </h2>
 
+      <div class="cta-actions">
+
       <a href="/downloads/ArduinoHub.apk" class="button primary" download="ArduinoHub.apk">
         <i data-lucide="download"></i>
         Android აპის ჩამოტვირთვა
@@ -2101,6 +2167,8 @@
         <i data-lucide="smartphone"></i>
         დაამატე iPhone-ზე
       </button>
+
+      </div>
 
     </section>
 
