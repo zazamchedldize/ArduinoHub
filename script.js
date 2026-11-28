@@ -1763,12 +1763,82 @@ async function openAdManager() {
 
 
 
+// რეკლამის ჩვეულებრივი დიზაინი. მოქმედებს მხოლოდ მაშინ, როცა winter.js-ის
+// "winter-mode" კლასი არ დევს. Winter რეჟიმში ეს წესები ითიშება და რჩება
+// საახალწლო დიზაინი. ზომებსა და განლაგებას არ ცვლის.
+function installAdThemeStyles() {
+  if (document.getElementById('arduinohub-ad-theme')) return
+
+  const off = 'html:not(.winter-mode) body:not(.winter-mode) #arduinohub-ad-overlay'
+  const style = document.createElement('style')
+  style.id = 'arduinohub-ad-theme'
+  style.textContent = `
+    ${off} {
+      background: rgba(2, 8, 6, .86) !important;
+    }
+    ${off}::before,
+    ${off}::after,
+    ${off} .arduinohub-ad-card::before,
+    ${off} .arduinohub-ad-card::after,
+    ${off} .arduinohub-ad-title::before,
+    ${off} .arduinohub-ad-title::after {
+      content: none !important;
+    }
+    ${off} .arduinohub-ad-decoration,
+    ${off} .arduinohub-ad-label,
+    ${off} .arduinohub-ad-footer {
+      display: none !important;
+    }
+    ${off} .arduinohub-ad-card {
+      background: linear-gradient(160deg, #0b1716, #050b0c) !important;
+      border: 1px solid rgba(34, 211, 149, .45) !important;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .75), 0 0 40px rgba(34, 211, 149, .16) !important;
+      color: #eafff0 !important;
+      animation: none !important;
+    }
+    ${off} .arduinohub-ad-title {
+      background: none !important;
+      color: #fff !important;
+      -webkit-text-fill-color: #fff !important;
+      text-shadow: 0 0 18px rgba(34, 211, 149, .3) !important;
+      filter: none !important;
+      animation: none !important;
+    }
+    ${off} .arduinohub-ad-description {
+      color: rgba(234, 255, 240, .75) !important;
+    }
+    ${off} .arduinohub-ad-video-wrap {
+      background: #000 !important;
+      border-color: rgba(34, 211, 149, .35) !important;
+      box-shadow: none !important;
+    }
+    ${off} .arduinohub-ad-close,
+    ${off} .arduinohub-ad-play {
+      background: #0b1f19 !important;
+      border: 1px solid rgba(34, 211, 149, .7) !important;
+      color: #22d395 !important;
+      box-shadow: 0 0 18px rgba(34, 211, 149, .25) !important;
+      text-shadow: none !important;
+      animation: none !important;
+    }
+    ${off} .arduinohub-ad-close:hover,
+    ${off} .arduinohub-ad-play:hover {
+      background: #22d395 !important;
+      color: #03130d !important;
+    }
+    ${off} .arduinohub-ad-play span {
+      color: inherit !important;
+    }
+    ${off} .arduinohub-ad-status {
+      color: #ff8a8a !important;
+    }
+  `
+  document.head.appendChild(style)
+}
+
 async function showAdvertisement() {
   if (typeof db === 'undefined' || !db) return
-
-  try {
-    if (sessionStorage.getItem('arduinohub_ad_shown') === '1') return
-  } catch {}
+  if (document.getElementById('arduinohub-ad-overlay')) return
 
   const { data: ad, error } = await db
   .from('advertisements')
@@ -1784,11 +1854,9 @@ async function showAdvertisement() {
     return
   }
 
-  if (!ad) return
+  if (!ad || document.getElementById('arduinohub-ad-overlay')) return
 
-  try {
-    sessionStorage.setItem('arduinohub_ad_shown', '1')
-  } catch {}
+  installAdThemeStyles()
 
   const isMobile = window.matchMedia('(max-width: 700px)').matches
   const videoUrl = isMobile ? ad.mobile_video : ad.desktop_video
@@ -1935,6 +2003,12 @@ if (document.readyState === 'complete') {
     setTimeout(initializeAdvertisement, 1200)
   }, { once: true })
 }
+
+
+// "უკან" ღილაკით დაბრუნებისას გვერდი ქეშიდან აღდგება და load აღარ ეშვება
+window.addEventListener('pageshow', event => {
+  if (event.persisted) initializeAdvertisement()
+})
 
 
 async function uploadCloudinaryVideo(file, kind) {
