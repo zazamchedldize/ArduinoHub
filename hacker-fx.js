@@ -1,42 +1,111 @@
 /* =====================================================
-   ARDUINOHUB — HACKER FX (hacker-fx.js)
+   ARDUINOHUB — DOOMSDAY FX (hacker-fx.js)
    ჩართე script.js-ის ქვემოთ, </body>-ის წინ
    ===================================================== */
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ===== Matrix rain + მაუსის ნათება ===== */
+  /* ===== Doomsday ქარიშხალი (ნაპერწკლები, ფერფლი, ელვა) + მაუსის ნათება ===== */
   if (!reduce) {
     const c = document.createElement("canvas");
-    c.id = "fx-rain";
+    c.id = "fx-rain"; // id უცვლელია: winter.css ამით თიშავს
     document.body.prepend(c);
     const ctx = c.getContext("2d");
-    const chars = "01アイウエオカキクケコサシスセソ<>/{}[]=+*#$%&ABCDEF".split("");
-    const size = 16;
-    let cols, drops;
+    let parts = [];
+    let bolt = null;
+    let nextBolt = performance.now() + 4000;
+    let last = 0;
+
+    const rnd = (min, max) => min + Math.random() * (max - min);
+
+    const spawn = (anywhere) => {
+      const ember = Math.random() < 0.6;
+      return {
+        ember,
+        x: rnd(0, c.width),
+        y: anywhere ? rnd(0, c.height) : ember ? c.height + 10 : -10,
+        r: ember ? rnd(0.8, 2.4) : rnd(0.6, 1.8),
+        vy: ember ? rnd(-1.4, -0.4) : rnd(0.3, 0.9),
+        phase: rnd(0, 6.28),
+      };
+    };
 
     const resize = () => {
       c.width = innerWidth;
       c.height = innerHeight;
-      cols = Math.floor(c.width / size);
-      drops = Array.from({ length: cols }, () => Math.random() * -50);
+      const count = Math.min(110, Math.round((c.width * c.height) / 14000));
+      parts = Array.from({ length: count }, () => spawn(true));
     };
     resize();
     addEventListener("resize", resize);
 
-       setInterval(() => {
-         if (document.body.classList.contains("winter-mode")) return;
-         ctx.fillStyle = "rgba(2, 10, 5, 0.12)";
-      ctx.fillRect(0, 0, c.width, c.height);
-      ctx.font = size + "px monospace";
-      for (let i = 0; i < cols; i++) {
-        const ch = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillStyle = Math.random() > 0.97 ? "#ffffff" : "#00ff66";
-        ctx.fillText(ch, i * size, drops[i] * size);
-        if (drops[i] * size > c.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
+    // დატოტვილი ელვა
+    const makeBolt = (now) => {
+      const paths = [];
+      const walk = (x, y, steps, width) => {
+        const path = { width, points: [[x, y]] };
+        for (let i = 0; i < steps; i++) {
+          x += rnd(-34, 34);
+          y += rnd(18, 46);
+          path.points.push([x, y]);
+          if (width > 1.5 && Math.random() < 0.18) walk(x, y, 4, 1);
+        }
+        paths.push(path);
+      };
+      walk(rnd(c.width * 0.1, c.width * 0.9), -10, Math.round(rnd(9, 15)), 2.2);
+      return { paths, born: now };
+    };
+
+    const frame = (now) => {
+      requestAnimationFrame(frame);
+      if (now - last < 33) return; // ~30 კადრი წამში
+      last = now;
+      if (document.body.classList.contains("winter-mode")) return;
+
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      if (now > nextBolt) {
+        bolt = makeBolt(now);
+        nextBolt = now + rnd(8000, 16000);
       }
-    }, 50);
+
+      if (bolt) {
+        const life = 1 - (now - bolt.born) / 700;
+        if (life <= 0) {
+          bolt = null;
+        } else {
+          // რბილი, ერთჯერადად ჩამქრალი ნათება (ციმციმის გარეშე)
+          ctx.fillStyle = `rgba(47, 224, 140, ${0.07 * life})`;
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.strokeStyle = `rgba(200, 255, 226, ${life})`;
+          ctx.shadowColor = "#2fe08c";
+          ctx.shadowBlur = 18;
+          bolt.paths.forEach((p) => {
+            ctx.lineWidth = p.width;
+            ctx.beginPath();
+            p.points.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+            ctx.stroke();
+          });
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      parts.forEach((p, i) => {
+        p.y += p.vy;
+        p.x += Math.sin(now / 900 + p.phase) * 0.5 + 0.25;
+        if (p.y < -12 || p.y > c.height + 12 || p.x > c.width + 12) {
+          parts[i] = spawn(false);
+          return;
+        }
+        ctx.fillStyle = p.ember
+          ? `rgba(92, 240, 168, ${0.55 + 0.35 * Math.sin(now / 300 + p.phase)})`
+          : "rgba(185, 199, 193, 0.4)";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+        ctx.fill();
+      });
+    };
+    requestAnimationFrame(frame);
 
     const glow = document.createElement("div");
     glow.id = "fx-cursor";
