@@ -1176,97 +1176,172 @@ body::after { display: none !important; }
 #fx-boot { display: none !important; }
 
 /* =====================================================
-   DOOMSDAY ფენა: ქარიშხალი, ლითონი, ბზარები
-   ყველა წესი html:not(.winter-mode)-ზეა მიბმული, ამიტომ
-   /winter რეჟიმზე არ მოქმედებს.
+   DOOMSDAY ფენა v2: ნათელი ზურმუხტი, ქარიშხალი, ლითონი
+   ყველა წესი winter-mode-ის გარეშე მოქმედებს, /winter-ს არ ეხება.
    ===================================================== */
 
-/* ცა: ზურმუხტისფერი ქარიშხალი და ბზარები კუთხეებში */
+html:not(.winter-mode) {
+  --h-bg: #07130f;
+  --h-bg2: #0d2119;
+  --h-green: #3dffa0;
+  --h-green-soft: #b4ffd9;
+  --h-line: rgba(110, 255, 185, .34);
+  --h-glow: 0 0 10px rgba(61, 255, 160, .6), 0 0 28px rgba(61, 255, 160, .28);
+}
+
+/* ცა: ნათელი ზურმუხტისფერი ქარიშხალი */
 html:not(.winter-mode) body {
+  color: #e6f7ee;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' fill='none' stroke='%232fe08c' stroke-linejoin='bevel'%3E%3Cpath stroke-opacity='.28' stroke-width='1.6' d='M0 62L58 80 91 131 152 142 178 205 236 229'/%3E%3Cpath stroke-opacity='.18' d='M58 80L103 61 139 24M91 131L72 190 94 244M152 142L214 118 247 126'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' fill='none' stroke='%232fe08c' stroke-linejoin='bevel'%3E%3Cpath stroke-opacity='.24' stroke-width='1.6' d='M420 351L360 338 322 290 262 284 231 226 180 211'/%3E%3Cpath stroke-opacity='.15' d='M360 338L331 381 336 420M322 290L343 232 320 191'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(47, 224, 140, .20), transparent 70%),
-    radial-gradient(ellipse 55% 40% at 8% 38%, rgba(80, 110, 100, .22), transparent 70%),
-    radial-gradient(ellipse 60% 45% at 96% 70%, rgba(15, 122, 74, .18), transparent 70%),
-    linear-gradient(180deg, #050807 0%, #0a1210 52%, #030504 100%);
+    radial-gradient(ellipse 85% 60% at 50% -8%, rgba(61, 255, 160, .34), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 4% 42%, rgba(24, 190, 170, .24), transparent 70%),
+    radial-gradient(ellipse 60% 48% at 98% 68%, rgba(120, 255, 130, .17), transparent 70%),
+    linear-gradient(180deg, #0a1c15 0%, #0e251c 50%, #07130f 100%);
   background-repeat: no-repeat;
   background-position: left top, right bottom, center, center, center, center;
   background-size: 420px 420px, 420px 420px, cover, cover, cover, cover;
   background-attachment: fixed;
 }
 
-/* ჰორიზონტზე ნელი ნათება (ძველი სკანერის ნაცვლად) */
 html:not(.winter-mode) body::before {
   top: auto;
   bottom: 0;
-  height: 32vh;
+  height: 38vh;
   z-index: 0;
-  background: radial-gradient(ellipse at 50% 100%, rgba(47, 224, 140, .16), transparent 70%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(61, 255, 160, .24), transparent 70%);
   animation: doomGlow 7s ease-in-out infinite alternate;
 }
 
-html:not(.winter-mode) #fx-rain { opacity: .75; }
+html:not(.winter-mode) #fx-rain { opacity: .85; }
 
-/* ლითონის სათაურები */
+/* სათაურები */
 html:not(.winter-mode) h1,
 html:not(.winter-mode) h2 {
-  color: #e4ece8;
-  text-shadow: 0 1px 0 #7d8f86, 0 2px 0 #3b4b43, 0 4px 10px rgba(0, 0, 0, .85), 0 0 28px rgba(47, 224, 140, .35);
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .45), 0 0 32px rgba(61, 255, 160, .38);
 }
 html:not(.winter-mode) h1 em {
-  color: #5cf0a8;
-  text-shadow: 0 2px 0 #0b5a36, 0 0 18px rgba(47, 224, 140, .75), 0 0 48px rgba(47, 224, 140, .35);
+  background: linear-gradient(100deg, #3dffa0, #d9ffec 45%, #35e8d0 75%, #3dffa0);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 18px rgba(61, 255, 160, .55));
+  animation: doomShine 6s ease-in-out infinite alternate;
 }
+html:not(.winter-mode) .hero-text,
+html:not(.winter-mode) .hero p { color: #d3ece0; }
 html:not(.winter-mode) .eyebrow::before { content: "◆ "; }
 html:not(.winter-mode) .eyebrow::after { content: " ◆"; animation: none; }
 
-/* ნაჭედი ლითონის ღილაკები */
-html:not(.winter-mode) button,
-html:not(.winter-mode) .btn,
-html:not(.winter-mode) a.button {
-  background: linear-gradient(180deg, #22302a, #0c1411 55%, #16211c) !important;
-  border-color: #5d8573 !important;
-  color: #b9ffd9 !important;
-  box-shadow: inset 0 1px 0 rgba(220, 240, 232, .18), inset 0 -2px 0 rgba(0, 0, 0, .55);
-  letter-spacing: .5px;
+/* ---------- ღილაკები ----------
+   :where() სპეციფიკურობას არ ზრდის, ამიტომ ცალკეული ღილაკების
+   (ჩატი, დახურვა, მუსიკა) საკუთარი სტილი შენარჩუნდება. */
+:where(html:not(.winter-mode)) button,
+:where(html:not(.winter-mode)) .btn,
+:where(html:not(.winter-mode)) a.button {
+  background: rgba(61, 255, 160, .16) !important;
+  border-color: rgba(125, 255, 192, .75) !important;
+  color: #eafff4 !important;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 6px 18px rgba(0, 0, 0, .22);
+  transition: transform .2s, box-shadow .25s, background .25s, color .25s, filter .25s;
 }
-html:not(.winter-mode) button:hover,
-html:not(.winter-mode) .btn:hover,
-html:not(.winter-mode) a.button:hover {
-  background: linear-gradient(180deg, #7dffbd, #1fb870) !important;
-  border-color: #c8ffe1 !important;
-  color: #02140b !important;
-  box-shadow: 0 0 24px rgba(47, 224, 140, .6);
+:where(html:not(.winter-mode)) button:hover,
+:where(html:not(.winter-mode)) .btn:hover,
+:where(html:not(.winter-mode)) a.button:hover {
+  background: #3dffa0 !important;
+  color: #032015 !important;
+  box-shadow: 0 0 26px rgba(61, 255, 160, .65);
 }
 
-/* ბარათები: დაფხაჭნილი ფოლადის ჩარჩო */
+/* მთავარი ღილაკები: კაშკაშა ზურმუხტი */
+html:not(.winter-mode) .button.primary {
+  background: linear-gradient(135deg, #7dffbe 0%, #2ff29a 45%, #14d6b4 100%) !important;
+  border-color: #c9ffe4 !important;
+  color: #02231a !important;
+  font-weight: 800;
+  text-shadow: none;
+  box-shadow: 0 8px 28px rgba(47, 242, 154, .45), inset 0 1px 0 rgba(255, 255, 255, .6);
+}
+html:not(.winter-mode) .button.primary:hover {
+  background: linear-gradient(135deg, #b9ffdc 0%, #5affb0 45%, #34ecd0 100%) !important;
+  color: #02231a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 38px rgba(61, 255, 160, .65), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+html:not(.winter-mode) .hero-attendance-btn:hover,
+html:not(.winter-mode) .albums-home-btn:hover { transform: translateY(-2px); }
+
+/* header */
+html:not(.winter-mode) .site-header {
+  background: rgba(9, 28, 20, .82) !important;
+  border-bottom-color: rgba(125, 255, 192, .5) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .25), 0 2px 22px rgba(61, 255, 160, .22);
+}
+html:not(.winter-mode) .site-header nav a { color: #d5ffea !important; }
+html:not(.winter-mode) .site-header nav a:hover,
+html:not(.winter-mode) .site-header nav a.active { color: #fff !important; }
+
+/* ბარათები და პანელები: უფრო ნათელი ზედაპირი */
+html:not(.winter-mode) .steps article,
+html:not(.winter-mode) .suggestion-card,
+html:not(.winter-mode) .cta {
+  background: linear-gradient(155deg, rgba(40, 100, 75, .62), rgba(14, 42, 31, .82));
+}
 html:not(.winter-mode) .team-card,
 html:not(.winter-mode) [class*="project-card"],
 html:not(.winter-mode) [class*="album-card"],
 html:not(.winter-mode) .card,
-html:not(.winter-mode) .steps article {
-  border-color: rgba(150, 185, 170, .35) !important;
-  box-shadow: inset 0 1px 0 rgba(220, 240, 232, .1), 0 14px 34px rgba(0, 0, 0, .55);
+html:not(.winter-mode) .steps article,
+html:not(.winter-mode) .suggestion-card,
+html:not(.winter-mode) .cta {
+  border: 1px solid var(--h-line) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .13), 0 16px 38px rgba(0, 0, 0, .3);
 }
 html:not(.winter-mode) .team-card:hover,
 html:not(.winter-mode) [class*="project-card"]:hover,
 html:not(.winter-mode) [class*="album-card"]:hover,
 html:not(.winter-mode) .card:hover,
 html:not(.winter-mode) .steps article:hover {
-  border-color: #2fe08c !important;
-  box-shadow: 0 0 0 1px #2fe08c, 0 16px 46px rgba(47, 224, 140, .28);
+  transform: translateY(-6px);
+  border-color: #7dffc0 !important;
+  box-shadow: 0 0 0 1px #3dffa0, 0 18px 50px rgba(61, 255, 160, .34);
 }
+html:not(.winter-mode) .steps article p,
+html:not(.winter-mode) .suggestion-card p,
+html:not(.winter-mode) footer p { color: #d0eadd; }
+html:not(.winter-mode) footer { background: rgba(8, 24, 17, .85); }
 
-html:not(.winter-mode) .site-header {
-  border-bottom-color: rgba(150, 185, 170, .45) !important;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, .6), 0 10px 34px rgba(47, 224, 140, .16);
-}
-
-@keyframes doomGlow { from { opacity: .45; } to { opacity: 1; } }
+@keyframes doomGlow { from { opacity: .55; } to { opacity: 1; } }
+@keyframes doomShine { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 
 @media (max-width: 900px) {
+  html:not(.winter-mode) .site-header { background: #0b2118 !important; }
   html:not(.winter-mode) body { background-size: 220px 220px, 220px 220px, cover, cover, cover, cover; }
   html:not(.winter-mode) body::before { display: none; }
-  html:not(.winter-mode) #fx-rain { opacity: .5; }
+  html:not(.winter-mode) #fx-rain { opacity: .6; }
 }
+
+/* შეხვედრის სექცია: იმავე ნათელ პალიტრაში */
+html:not(.winter-mode) .club-meet-section {
+  --cm-a: #5affb0;
+  --cm-b: #35e8d0;
+  background:
+    radial-gradient(ellipse at 50% -5%, rgba(61, 255, 160, .30), transparent 62%),
+    radial-gradient(ellipse at 8% 90%, rgba(24, 190, 170, .20), transparent 55%),
+    linear-gradient(180deg, #0d251b 0%, #102d21 55%, #0a1b14 100%);
+}
+html:not(.winter-mode) .cm-orb-a { background: rgba(61, 255, 160, .13); }
+html:not(.winter-mode) .cm-orb-b { background: rgba(53, 232, 208, .11); }
+html:not(.winter-mode) .club-meet-title span {
+  background: linear-gradient(100deg, #3dffa0, #d9ffec 50%, #35e8d0);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+html:not(.winter-mode) .club-meet-description { color: #d3ece0; }
+html:not(.winter-mode) .club-meet-card { background: linear-gradient(160deg, rgba(28, 70, 54, .96), rgba(12, 34, 26, .98)); }
