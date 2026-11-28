@@ -1,17 +1,17 @@
 /* =====================================================
-   ARDUINOHUB — HACKER THEME (theme.css)
+   ARDUINOHUB — DOOMSDAY THEME (theme.css)
    ჩართე style.css-ის ქვემოთ ყველა HTML გვერდზე
    ===================================================== */
 
 :root {
-  --h-bg: #020a05;
-  --h-bg2: #04140a;
-  --h-green: #00ff66;
-  --h-green-soft: #5dffa0;
-  --h-green-dim: rgba(0, 255, 102, 0.14);
-  --h-line: rgba(0, 255, 102, 0.28);
-  --h-glow: 0 0 8px rgba(0, 255, 102, 0.55), 0 0 24px rgba(0, 255, 102, 0.25);
-  --h-mono: "JetBrains Mono", "FiraGO", monospace;
+  --h-bg: #050807;
+  --h-bg2: #0a1210;
+  --h-green: #2fe08c;
+  --h-green-soft: #8ff0bf;
+  --h-green-dim: rgba(47, 224, 140, 0.14);
+  --h-line: rgba(47, 224, 140, 0.28);
+  --h-glow: 0 0 8px rgba(47, 224, 140, 0.55), 0 0 24px rgba(47, 224, 140, 0.25);
+  --h-mono: "Rajdhani", "FiraGO", "JetBrains Mono", sans-serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -23,7 +23,7 @@ body {
     linear-gradient(var(--h-green-dim) 1px, transparent 1px),
     linear-gradient(90deg, var(--h-green-dim) 1px, transparent 1px);
   background-size: 48px 48px;
-  color: #c9ffe0;
+  color: #d3e2db;
   animation: bootFlicker 0.9s ease-out;
 }
 
@@ -65,17 +65,17 @@ body::before {
   height: 18vh;
   z-index: 9997;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, rgba(0, 255, 102, 0.07), transparent);
+  background: linear-gradient(to bottom, transparent, rgba(47, 224, 140, 0.07), transparent);
   animation: scanSweep 7s linear infinite;
 }
 
 /* ---------- HEADER ---------- */
 .site-header {
-  background: rgba(2, 10, 5, 0.85) !important;
+  background: rgba(5, 8, 7, 0.85) !important;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--h-line) !important;
-  box-shadow: 0 0 22px rgba(0, 255, 102, 0.12);
+  box-shadow: 0 0 22px rgba(47, 224, 140, 0.12);
 }
 
 .brand {
@@ -120,7 +120,7 @@ body::before {
 /* ---------- სათაურები + GLITCH ---------- */
 h1, h2 {
   color: #eafff2;
-  text-shadow: 0 0 14px rgba(0, 255, 102, 0.35);
+  text-shadow: 0 0 14px rgba(47, 224, 140, 0.35);
 }
 
 h1 em {
@@ -149,14 +149,14 @@ h1 em {
 }
 
 .glitch::before {
-  color: #00ffd5;
+  color: #b9c7c1;
   left: 2px;
   clip-path: inset(0 0 60% 0);
   animation: glitchA 3.2s infinite steps(1);
 }
 
 .glitch::after {
-  color: #ff2bd6;
+  color: #0f7a4a;
   left: -2px;
   clip-path: inset(55% 0 0 0);
   animation: glitchB 2.7s infinite steps(1);
@@ -180,7 +180,7 @@ h1 em {
 .card:hover {
   transform: translateY(-6px);
   border-color: var(--h-green) !important;
-  box-shadow: 0 0 0 1px var(--h-green), 0 12px 40px rgba(0, 255, 102, 0.22);
+  box-shadow: 0 0 0 1px var(--h-green), 0 12px 40px rgba(47, 224, 140, 0.22);
 }
 .team-card { transform-style: preserve-3d; will-change: transform; }
 
@@ -197,12 +197,12 @@ h1 em {
 /* ---------- ტეგები ---------- */
 .team-tags span {
   border: 1px solid var(--h-line);
-  background: rgba(0, 255, 102, 0.06);
+  background: rgba(47, 224, 140, 0.06);
   transition: background 0.2s, box-shadow 0.2s;
 }
 
 .team-tags span:hover {
-  background: rgba(0, 255, 102, 0.16);
+  background: rgba(47, 224, 140, 0.16);
   box-shadow: var(--h-glow);
 }
 
@@ -214,7 +214,7 @@ a.button {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--h-green) !important;
-  background: rgba(0, 255, 102, 0.08) !important;
+  background: rgba(47, 224, 140, 0.08) !important;
   color: var(--h-green) !important;
   transition: box-shadow 0.25s, background 0.25s, color 0.25s;
 }
@@ -223,14 +223,14 @@ button:hover,
 .btn:hover,
 a.button:hover {
   background: var(--h-green) !important;
-  color: #001a08 !important;
+  color: #02140b !important;
   box-shadow: var(--h-glow);
 }
 
 /* ---------- FOOTER ---------- */
 footer {
   border-top: 1px solid var(--h-line);
-  background: rgba(2, 10, 5, 0.85);
+  background: rgba(5, 8, 7, 0.85);
 }
 
 /* ---------- scroll reveal ---------- */
@@ -254,7 +254,7 @@ footer {
   height: 320px;
   margin: -160px 0 0 -160px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 255, 102, 0.12), transparent 65%);
+  background: radial-gradient(circle, rgba(47, 224, 140, 0.12), transparent 65%);
   pointer-events: none;
   z-index: 1;
   left: 0;
@@ -269,8 +269,8 @@ footer {
   height: 3px;
   width: 0;
   z-index: 10000;
-  background: linear-gradient(90deg, #00ff66, #5dffa0, #00ffd5);
-  box-shadow: 0 0 12px #00ff66;
+  background: linear-gradient(90deg, #2fe08c, #8ff0bf, #b9c7c1);
+  box-shadow: 0 0 12px #2fe08c;
 }
 
 /* ---------- ზემოთ ასვლის ღილაკი ---------- */
@@ -287,7 +287,7 @@ footer {
   font-weight: 800;
   font-size: 18px;
   color: var(--h-green);
-  background: rgba(2, 10, 5, 0.9);
+  background: rgba(5, 8, 7, 0.9);
   border: 1px solid var(--h-green);
   border-radius: 12px;
   box-shadow: var(--h-glow);
@@ -306,7 +306,7 @@ footer {
 
 #fx-top:hover {
   background: var(--h-green);
-  color: #001a08;
+  color: #02140b;
 }
 
 /* ---------- ტერმინალის ლოუდერი ---------- */
@@ -314,7 +314,7 @@ footer {
   position: fixed;
   inset: 0;
   z-index: 10001;
-  background: #010603;
+  background: #030504;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -338,7 +338,7 @@ footer {
   display: block;
   height: 4px;
   margin-top: 14px;
-  background: rgba(0, 255, 102, 0.15);
+  background: rgba(47, 224, 140, 0.15);
   overflow: hidden;
 }
 
@@ -359,7 +359,7 @@ footer {
   box-shadow: var(--h-glow);
   border-radius: 6px;
 }
-::selection { background: var(--h-green); color: #001a08; }
+::selection { background: var(--h-green); color: #02140b; }
 
 /* =====================================================
    RESPONSIVE — მობილური მენიუ
@@ -368,7 +368,7 @@ footer {
   .site-header {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    background: #020a05 !important;
+    background: #050807 !important;
   }
 
   .menu-toggle {
@@ -380,10 +380,10 @@ footer {
   }
 
   .site-header nav {
-    background: #031208 !important;
+    background: #09100e !important;
     border: 1px solid var(--h-line);
     border-top: none;
-    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 255, 102, 0.15);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(47, 224, 140, 0.15);
     z-index: 1001;
   }
 
@@ -401,14 +401,14 @@ footer {
     top: 100%;
     left: 0;
     right: 0;
-    background: #031208 !important;
+    background: #09100e !important;
     animation: navDrop 0.3s ease both;
   }
 
   .site-header nav a {
     display: block;
     padding: 15px 22px;
-    border-bottom: 1px solid rgba(0, 255, 102, 0.12);
+    border-bottom: 1px solid rgba(47, 224, 140, 0.12);
     transition: padding 0.25s, background 0.25s, color 0.2s;
   }
 
@@ -416,7 +416,7 @@ footer {
 
   .site-header nav a:hover,
   .site-header nav a.active {
-    background: rgba(0, 255, 102, 0.1);
+    background: rgba(47, 224, 140, 0.1);
     padding-left: 30px;
   }
 
@@ -435,7 +435,7 @@ footer {
 
 @keyframes spinPulse {
   0%, 100% { text-shadow: var(--h-glow); }
-  50% { text-shadow: 0 0 16px #00ff66, 0 0 40px #00ff66; }
+  50% { text-shadow: 0 0 16px #2fe08c, 0 0 40px #2fe08c; }
 }
 
 @keyframes bootFlicker {
@@ -496,25 +496,25 @@ body::after { display: none !important; }
   height: 38px;
   padding: 0 !important;
   margin: 0 !important;
-  border: 1.5px solid var(--h-green, #00ff66) !important;
+  border: 1.5px solid var(--h-green, #2fe08c) !important;
   border-radius: 50% !important;
-  background: rgba(0, 255, 102, 0.08) !important;
-  color: var(--h-green, #00ff66) !important;
+  background: rgba(47, 224, 140, 0.08) !important;
+  color: var(--h-green, #2fe08c) !important;
   font-size: 22px !important;
   font-weight: 800;
   line-height: 1 !important;
   text-align: center;
-  text-shadow: 0 0 8px rgba(0, 255, 102, 0.7);
-  box-shadow: 0 0 12px rgba(0, 255, 102, 0.35), inset 0 0 8px rgba(0, 255, 102, 0.15);
+  text-shadow: 0 0 8px rgba(47, 224, 140, 0.7);
+  box-shadow: 0 0 12px rgba(47, 224, 140, 0.35), inset 0 0 8px rgba(47, 224, 140, 0.15);
   animation: brandPulse 3s ease-in-out infinite !important;
 }
 
 @keyframes brandPulse {
   0%, 100% {
-    box-shadow: 0 0 8px rgba(0, 255, 102, 0.3), inset 0 0 6px rgba(0, 255, 102, 0.12);
+    box-shadow: 0 0 8px rgba(47, 224, 140, 0.3), inset 0 0 6px rgba(47, 224, 140, 0.12);
   }
   50% {
-    box-shadow: 0 0 20px rgba(0, 255, 102, 0.65), inset 0 0 12px rgba(0, 255, 102, 0.25);
+    box-shadow: 0 0 20px rgba(47, 224, 140, 0.65), inset 0 0 12px rgba(47, 224, 140, 0.25);
   }
 }
 
@@ -532,10 +532,10 @@ body::after { display: none !important; }
 
 /* ===== მცურავი ღილაკი ===== */
 .ai-chat-toggle {
-  background: radial-gradient(circle at 30% 30%, #0b3a1e, #031208) !important;
+  background: radial-gradient(circle at 30% 30%, #0b3a1e, #09100e) !important;
   border: 1.5px solid var(--h-green) !important;
   color: var(--h-green) !important;
-  box-shadow: var(--h-glow), inset 0 0 14px rgba(0, 255, 102, 0.18) !important;
+  box-shadow: var(--h-glow), inset 0 0 14px rgba(47, 224, 140, 0.18) !important;
   transition: transform 0.25s, box-shadow 0.25s !important;
 }
 
@@ -543,7 +543,7 @@ body::after { display: none !important; }
   transform: scale(1.08) rotate(-4deg);
   background: radial-gradient(circle at 30% 30%, #0f5228, #04180c) !important;
   color: #fff !important;
-  box-shadow: 0 0 22px rgba(0, 255, 102, 0.8), 0 0 50px rgba(0, 255, 102, 0.35) !important;
+  box-shadow: 0 0 22px rgba(47, 224, 140, 0.8), 0 0 50px rgba(47, 224, 140, 0.35) !important;
 }
 
 .ai-chat-pulse {
@@ -554,7 +554,7 @@ body::after { display: none !important; }
 
 .ai-chat-badge {
   background: var(--h-green) !important;
-  color: #001a08 !important;
+  color: #02140b !important;
   font-family: var(--h-mono) !important;
   font-weight: 800 !important;
   border: none !important;
@@ -563,21 +563,21 @@ body::after { display: none !important; }
 
 /* ===== ჩატის ფანჯარა ===== */
 .ai-chat-window {
-  background: linear-gradient(165deg, rgba(3, 18, 8, 0.98), rgba(1, 7, 3, 0.99)) !important;
+  background: linear-gradient(165deg, rgba(11, 19, 16, 0.98), rgba(4, 7, 6, 0.99)) !important;
   border: 1px solid var(--h-green) !important;
   border-radius: 14px !important;
   box-shadow:
-    0 0 0 1px rgba(0, 255, 102, 0.12),
-    0 0 40px rgba(0, 255, 102, 0.25),
+    0 0 0 1px rgba(47, 224, 140, 0.12),
+    0 0 40px rgba(47, 224, 140, 0.25),
     0 30px 80px rgba(0, 0, 0, 0.85) !important;
-  color: #c9ffe0 !important;
+  color: #d3e2db !important;
   font-family: var(--h-mono);
   overflow: hidden;
 }
 
 /* ===== ჰედერი (ტერმინალის ზოლი) ===== */
 .ai-chat-header {
-  background: rgba(0, 255, 102, 0.08) !important;
+  background: rgba(47, 224, 140, 0.08) !important;
   border-bottom: 1px solid var(--h-line) !important;
   position: relative;
 }
@@ -614,7 +614,7 @@ body::after { display: none !important; }
 
 .ai-avatar,
 .ai-message-avatar {
-  background: rgba(0, 255, 102, 0.12) !important;
+  background: rgba(47, 224, 140, 0.12) !important;
   border: 1px solid var(--h-green) !important;
   color: var(--h-green) !important;
   box-shadow: var(--h-glow);
@@ -629,15 +629,15 @@ body::after { display: none !important; }
 
 .ai-chat-close:hover {
   background: var(--h-green) !important;
-  color: #001a08 !important;
+  color: #02140b !important;
   transform: rotate(90deg);
 }
 
 /* ===== შეტყობინებები ===== */
 .ai-chat-messages {
   background-image:
-    linear-gradient(rgba(0, 255, 102, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 102, 0.05) 1px, transparent 1px) !important;
+    linear-gradient(rgba(47, 224, 140, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 224, 140, 0.05) 1px, transparent 1px) !important;
   background-size: 28px 28px !important;
   scrollbar-width: thin;
   scrollbar-color: var(--h-green) transparent;
@@ -656,7 +656,7 @@ body::after { display: none !important; }
 /* ასისტენტის ბუშტი */
 .ai-message.assistant .ai-message-bubble {
   position: relative;
-  background: rgba(0, 255, 102, 0.07) !important;
+  background: rgba(47, 224, 140, 0.07) !important;
   border: 1px solid var(--h-line) !important;
   border-left: 3px solid var(--h-green) !important;
   border-radius: 4px 14px 14px 14px !important;
@@ -678,15 +678,15 @@ body::after { display: none !important; }
 /* მომხმარებლის ბუშტი */
 .ai-message.user .ai-message-bubble,
 .ai-message.user .ai-message-bubble p {
-  color: #001a08 !important;
+  color: #02140b !important;
 }
 
 .ai-message.user .ai-message-bubble {
-  background: linear-gradient(135deg, #00e65c, #5dffa0) !important;
+  background: linear-gradient(135deg, #27c97c, #8ff0bf) !important;
   border: 1px solid #b8ffd5 !important;
   border-radius: 14px 4px 14px 14px !important;
   font-weight: 600;
-  box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
+  box-shadow: 0 0 16px rgba(47, 224, 140, 0.35);
 }
 
 .ai-message-bubble strong { color: var(--h-green); }
@@ -699,7 +699,7 @@ body::after { display: none !important; }
 
 /* კოდის ბლოკები პასუხში */
 .ai-message-bubble pre {
-  background: #010603 !important;
+  background: #030504 !important;
   border: 1px solid var(--h-line);
   border-radius: 8px;
   padding: 10px 12px;
@@ -709,7 +709,7 @@ body::after { display: none !important; }
 .ai-message-bubble code {
   font-family: var(--h-mono) !important;
   color: var(--h-green) !important;
-  background: rgba(0, 255, 102, 0.1);
+  background: rgba(47, 224, 140, 0.1);
   border-radius: 4px;
   padding: 1px 5px;
 }
@@ -726,7 +726,7 @@ body::after { display: none !important; }
 
 /* ===== ფორმა ===== */
 .ai-chat-form {
-  background: rgba(1, 7, 3, 0.95) !important;
+  background: rgba(4, 7, 6, 0.95) !important;
   border-top: 1px solid var(--h-line) !important;
 }
 
@@ -748,7 +748,7 @@ body::after { display: none !important; }
 
 .ai-chat-input-wrap:focus-within {
   border-color: var(--h-green) !important;
-  box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.12), var(--h-glow);
+  box-shadow: 0 0 0 3px rgba(47, 224, 140, 0.12), var(--h-glow);
 }
 
 #ai-chat-input {
@@ -760,10 +760,10 @@ body::after { display: none !important; }
   caret-color: var(--h-green);
 }
 
-#ai-chat-input::placeholder { color: rgba(93, 255, 160, 0.4); }
+#ai-chat-input::placeholder { color: rgba(143, 240, 191, 0.4); }
 
 #ai-chat-send {
-  background: rgba(0, 255, 102, 0.12) !important;
+  background: rgba(47, 224, 140, 0.12) !important;
   border: 1px solid var(--h-green) !important;
   border-radius: 8px !important;
   color: var(--h-green) !important;
@@ -772,18 +772,18 @@ body::after { display: none !important; }
 
 #ai-chat-send:hover {
   background: var(--h-green) !important;
-  color: #001a08 !important;
+  color: #02140b !important;
   box-shadow: var(--h-glow);
 }
 
 .ai-chat-form small {
-  color: rgba(93, 255, 160, 0.45) !important;
+  color: rgba(143, 240, 191, 0.45) !important;
   font-size: 10.5px;
 }
 
 /* ===== მუსიკის ღილაკი (ჩატის გვერდით) ===== */
 #site-music-toggle {
-  background: radial-gradient(circle at 30% 30%, #0b3a1e, #031208) !important;
+  background: radial-gradient(circle at 30% 30%, #0b3a1e, #09100e) !important;
   border: 1.5px solid var(--h-green) !important;
   color: var(--h-green) !important;
   box-shadow: var(--h-glow) !important;
@@ -791,7 +791,7 @@ body::after { display: none !important; }
 
 #site-music-toggle:hover {
   background: var(--h-green) !important;
-  color: #001a08 !important;
+  color: #02140b !important;
 }
 
 /* ===== ანიმაციები ===== */
@@ -835,15 +835,15 @@ body::after { display: none !important; }
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 102, 0.14), transparent 55%),
-    linear-gradient(165deg, rgba(3, 18, 8, 0.96), rgba(1, 7, 3, 0.98)) !important;
+    radial-gradient(ellipse at 50% 0%, rgba(47, 224, 140, 0.14), transparent 55%),
+    linear-gradient(165deg, rgba(11, 19, 16, 0.96), rgba(4, 7, 6, 0.98)) !important;
   border: 1px solid var(--h-green) !important;
   border-radius: 16px !important;
   box-shadow:
-    0 0 0 1px rgba(0, 255, 102, 0.12),
-    0 0 40px rgba(0, 255, 102, 0.22),
-    inset 0 0 40px rgba(0, 255, 102, 0.05) !important;
-  color: #c9ffe0 !important;
+    0 0 0 1px rgba(47, 224, 140, 0.12),
+    0 0 40px rgba(47, 224, 140, 0.22),
+    inset 0 0 40px rgba(47, 224, 140, 0.05) !important;
+  color: #d3e2db !important;
   font-family: var(--h-mono);
   animation: holoFloat 5s ease-in-out infinite, holoFlicker 7s infinite;
 }
@@ -856,7 +856,7 @@ body::after { display: none !important; }
   right: 0;
   top: -30%;
   height: 28%;
-  background: linear-gradient(to bottom, transparent, rgba(0, 255, 102, 0.14), transparent);
+  background: linear-gradient(to bottom, transparent, rgba(47, 224, 140, 0.14), transparent);
   pointer-events: none;
   animation: holoScan 4s linear infinite;
   z-index: 1;
@@ -891,7 +891,7 @@ body::after { display: none !important; }
 }
 
 .hologram-version {
-  background: rgba(0, 255, 102, 0.1) !important;
+  background: rgba(47, 224, 140, 0.1) !important;
   border: 1px solid var(--h-green) !important;
   border-radius: 6px !important;
   color: var(--h-green) !important;
@@ -903,7 +903,7 @@ body::after { display: none !important; }
 /* სიმბოლო */
 .hologram-symbol {
   color: var(--h-green) !important;
-  text-shadow: 0 0 14px var(--h-green), 0 0 36px rgba(0, 255, 102, 0.6) !important;
+  text-shadow: 0 0 14px var(--h-green), 0 0 36px rgba(47, 224, 140, 0.6) !important;
   animation: holoSpin 8s linear infinite;
   display: inline-block;
 }
@@ -912,7 +912,7 @@ body::after { display: none !important; }
 #hero-update-title {
   color: #eafff2 !important;
   font-family: var(--h-mono);
-  text-shadow: 0 0 14px rgba(0, 255, 102, 0.45);
+  text-shadow: 0 0 14px rgba(47, 224, 140, 0.45);
 }
 
 #hero-update-title::before {
@@ -1029,8 +1029,8 @@ body::after { display: none !important; }
 
 .arduino-splash {
   background:
-    radial-gradient(ellipse at 50% 45%, rgba(0, 255, 102, 0.12), transparent 55%),
-    #010603 !important;
+    radial-gradient(ellipse at 50% 45%, rgba(47, 224, 140, 0.12), transparent 55%),
+    #030504 !important;
   font-family: var(--h-mono);
 }
 
@@ -1049,8 +1049,8 @@ body::after { display: none !important; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0, 255, 102, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 102, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(47, 224, 140, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 224, 140, 0.1) 1px, transparent 1px);
   background-size: 44px 44px;
   -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
   mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
@@ -1076,7 +1076,7 @@ body::after { display: none !important; }
   font-weight: 800;
   line-height: 1;
   color: var(--h-green);
-  text-shadow: 0 0 14px var(--h-green), 0 0 40px rgba(0, 255, 102, 0.6);
+  text-shadow: 0 0 14px var(--h-green), 0 0 40px rgba(47, 224, 140, 0.6);
   animation: hsPulse 2s ease-in-out infinite;
 }
 
@@ -1090,13 +1090,13 @@ body::after { display: none !important; }
 .hs-logo::before {
   inset: 0;
   border: 2px dashed var(--h-green);
-  box-shadow: 0 0 18px rgba(0, 255, 102, 0.4), inset 0 0 18px rgba(0, 255, 102, 0.15);
+  box-shadow: 0 0 18px rgba(47, 224, 140, 0.4), inset 0 0 18px rgba(47, 224, 140, 0.15);
   animation: hsSpin 6s linear infinite;
 }
 
 .hs-logo::after {
   inset: 12px;
-  border: 1px solid rgba(0, 255, 102, 0.45);
+  border: 1px solid rgba(47, 224, 140, 0.45);
   border-top-color: transparent;
   border-bottom-color: transparent;
   animation: hsSpin 3s linear infinite reverse;
@@ -1108,7 +1108,7 @@ body::after { display: none !important; }
   font-weight: 800;
   letter-spacing: -0.5px;
   color: #eafff2;
-  text-shadow: 0 0 16px rgba(0, 255, 102, 0.45);
+  text-shadow: 0 0 16px rgba(47, 224, 140, 0.45);
 }
 
 .hs-title span { color: var(--h-green); }
@@ -1119,15 +1119,15 @@ body::after { display: none !important; }
   min-height: 130px;
   margin: 24px 0 16px;
   padding: 14px 16px;
-  background: rgba(0, 255, 102, 0.05);
+  background: rgba(47, 224, 140, 0.05);
   border: 1px solid var(--h-line);
   border-radius: 10px;
-  box-shadow: inset 0 0 24px rgba(0, 255, 102, 0.06);
+  box-shadow: inset 0 0 24px rgba(47, 224, 140, 0.06);
   font-family: var(--h-mono);
   font-size: clamp(11.5px, 3vw, 13px);
   line-height: 1.85;
   color: var(--h-green-soft);
-  text-shadow: 0 0 8px rgba(0, 255, 102, 0.35);
+  text-shadow: 0 0 8px rgba(47, 224, 140, 0.35);
   white-space: pre-wrap;
 }
 
@@ -1141,7 +1141,7 @@ body::after { display: none !important; }
 .hs-progress {
   height: 6px;
   border-radius: 6px;
-  background: rgba(0, 255, 102, 0.12);
+  background: rgba(47, 224, 140, 0.12);
   border: 1px solid var(--h-line);
   overflow: hidden;
 }
@@ -1150,7 +1150,7 @@ body::after { display: none !important; }
   display: block;
   width: 0;
   height: 100%;
-  background: linear-gradient(90deg, #00b84a, #00ff66, #9dffc2);
+  background: linear-gradient(90deg, #0f8f55, #2fe08c, #9dffc2);
   box-shadow: 0 0 14px var(--h-green);
 }
 
@@ -1174,3 +1174,99 @@ body::after { display: none !important; }
 
 /* ჩემი ძველი ლოუდერი აღარ გვჭირდება */
 #fx-boot { display: none !important; }
+
+/* =====================================================
+   DOOMSDAY ფენა: ქარიშხალი, ლითონი, ბზარები
+   ყველა წესი html:not(.winter-mode)-ზეა მიბმული, ამიტომ
+   /winter რეჟიმზე არ მოქმედებს.
+   ===================================================== */
+
+/* ცა: ზურმუხტისფერი ქარიშხალი და ბზარები კუთხეებში */
+html:not(.winter-mode) body {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' fill='none' stroke='%232fe08c' stroke-linejoin='bevel'%3E%3Cpath stroke-opacity='.28' stroke-width='1.6' d='M0 62L58 80 91 131 152 142 178 205 236 229'/%3E%3Cpath stroke-opacity='.18' d='M58 80L103 61 139 24M91 131L72 190 94 244M152 142L214 118 247 126'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' fill='none' stroke='%232fe08c' stroke-linejoin='bevel'%3E%3Cpath stroke-opacity='.24' stroke-width='1.6' d='M420 351L360 338 322 290 262 284 231 226 180 211'/%3E%3Cpath stroke-opacity='.15' d='M360 338L331 381 336 420M322 290L343 232 320 191'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(47, 224, 140, .20), transparent 70%),
+    radial-gradient(ellipse 55% 40% at 8% 38%, rgba(80, 110, 100, .22), transparent 70%),
+    radial-gradient(ellipse 60% 45% at 96% 70%, rgba(15, 122, 74, .18), transparent 70%),
+    linear-gradient(180deg, #050807 0%, #0a1210 52%, #030504 100%);
+  background-repeat: no-repeat;
+  background-position: left top, right bottom, center, center, center, center;
+  background-size: 420px 420px, 420px 420px, cover, cover, cover, cover;
+  background-attachment: fixed;
+}
+
+/* ჰორიზონტზე ნელი ნათება (ძველი სკანერის ნაცვლად) */
+html:not(.winter-mode) body::before {
+  top: auto;
+  bottom: 0;
+  height: 32vh;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(47, 224, 140, .16), transparent 70%);
+  animation: doomGlow 7s ease-in-out infinite alternate;
+}
+
+html:not(.winter-mode) #fx-rain { opacity: .75; }
+
+/* ლითონის სათაურები */
+html:not(.winter-mode) h1,
+html:not(.winter-mode) h2 {
+  color: #e4ece8;
+  text-shadow: 0 1px 0 #7d8f86, 0 2px 0 #3b4b43, 0 4px 10px rgba(0, 0, 0, .85), 0 0 28px rgba(47, 224, 140, .35);
+}
+html:not(.winter-mode) h1 em {
+  color: #5cf0a8;
+  text-shadow: 0 2px 0 #0b5a36, 0 0 18px rgba(47, 224, 140, .75), 0 0 48px rgba(47, 224, 140, .35);
+}
+html:not(.winter-mode) .eyebrow::before { content: "◆ "; }
+html:not(.winter-mode) .eyebrow::after { content: " ◆"; animation: none; }
+
+/* ნაჭედი ლითონის ღილაკები */
+html:not(.winter-mode) button,
+html:not(.winter-mode) .btn,
+html:not(.winter-mode) a.button {
+  background: linear-gradient(180deg, #22302a, #0c1411 55%, #16211c) !important;
+  border-color: #5d8573 !important;
+  color: #b9ffd9 !important;
+  box-shadow: inset 0 1px 0 rgba(220, 240, 232, .18), inset 0 -2px 0 rgba(0, 0, 0, .55);
+  letter-spacing: .5px;
+}
+html:not(.winter-mode) button:hover,
+html:not(.winter-mode) .btn:hover,
+html:not(.winter-mode) a.button:hover {
+  background: linear-gradient(180deg, #7dffbd, #1fb870) !important;
+  border-color: #c8ffe1 !important;
+  color: #02140b !important;
+  box-shadow: 0 0 24px rgba(47, 224, 140, .6);
+}
+
+/* ბარათები: დაფხაჭნილი ფოლადის ჩარჩო */
+html:not(.winter-mode) .team-card,
+html:not(.winter-mode) [class*="project-card"],
+html:not(.winter-mode) [class*="album-card"],
+html:not(.winter-mode) .card,
+html:not(.winter-mode) .steps article {
+  border-color: rgba(150, 185, 170, .35) !important;
+  box-shadow: inset 0 1px 0 rgba(220, 240, 232, .1), 0 14px 34px rgba(0, 0, 0, .55);
+}
+html:not(.winter-mode) .team-card:hover,
+html:not(.winter-mode) [class*="project-card"]:hover,
+html:not(.winter-mode) [class*="album-card"]:hover,
+html:not(.winter-mode) .card:hover,
+html:not(.winter-mode) .steps article:hover {
+  border-color: #2fe08c !important;
+  box-shadow: 0 0 0 1px #2fe08c, 0 16px 46px rgba(47, 224, 140, .28);
+}
+
+html:not(.winter-mode) .site-header {
+  border-bottom-color: rgba(150, 185, 170, .45) !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .6), 0 10px 34px rgba(47, 224, 140, .16);
+}
+
+@keyframes doomGlow { from { opacity: .45; } to { opacity: 1; } }
+
+@media (max-width: 900px) {
+  html:not(.winter-mode) body { background-size: 220px 220px, 220px 220px, cover, cover, cover, cover; }
+  html:not(.winter-mode) body::before { display: none; }
+  html:not(.winter-mode) #fx-rain { opacity: .5; }
+}
